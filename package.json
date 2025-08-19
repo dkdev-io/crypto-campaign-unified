@@ -3,8 +3,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "dev": "cd frontend && vite",
+    "build": "cd frontend && vite build",
+    "preview": "cd frontend && vite preview",
+    "version:patch": "./scripts/version.sh patch",
+    "version:minor": "./scripts/version.sh minor",
+    "version:major": "./scripts/version.sh major",
+    "version:custom": "./scripts/version.sh custom",
+    "release": "./scripts/release.sh",
+    "changelog": "./scripts/changelog.sh",
+    "check-boundaries": "./scripts/check-boundaries.sh",
+    "platform-status": "./scripts/check-boundaries.sh status"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",

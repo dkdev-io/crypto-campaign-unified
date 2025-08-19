@@ -1,0 +1,63 @@
+# Platform Ownership Rules
+# Define which platform can modify which folders/files
+
+[claude-code]
+description = "Claude Code - Frontend Development & Configurations"
+allowed_paths = [
+  "frontend/**",
+  "shared/**", 
+  "scripts/**",
+  "*.md",
+  "*.json",
+  "*.js",
+  "*.sh",
+  ".gitignore",
+  ".gitattributes",
+  ".platform-rules",
+  "CHANGELOG.md",
+  "VERSIONING.md"
+]
+restricted_from = ["lovable/**", "contracts/**"]
+
+[lovable]
+description = "Lovable - UI/UX Design Platform" 
+allowed_paths = [
+  "lovable/**",
+  "shared/components/**",
+  "shared/styles/**"
+]
+restricted_from = ["frontend/**", "contracts/**", "scripts/**"]
+warning_message = "⚠️ Lovable should only modify lovable/ and shared/ design files"
+
+[replit]
+description = "Replit - Smart Contract Development"
+allowed_paths = [
+  "contracts/**",
+  "shared/types/**",
+  "shared/interfaces/**"
+]
+restricted_from = ["frontend/**", "lovable/**", "scripts/**"]
+warning_message = "⚠️ Replit should only modify contracts/ and shared contract interfaces"
+
+[shared]
+description = "Shared resources accessible by all platforms"
+paths = [
+  "shared/types/**",
+  "shared/interfaces/**", 
+  "shared/components/**",
+  "shared/styles/**",
+  "shared/utils/**"
+]
+rule = "Any platform can read, but changes require coordination"
+
+[protected]
+description = "Critical files requiring manual coordination"
+paths = [
+  "package.json",
+  ".git/**",
+  ".github/**",
+  "sync-*.sh",
+  "scripts/version.sh",
+  "scripts/release.sh"
+]
+rule = "Manual changes only - no automated modifications"
