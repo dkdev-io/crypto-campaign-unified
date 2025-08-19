@@ -1,20 +1,25 @@
 {
-  "name": "workspace",
+  "name": "crypto-campaign-setup",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cd frontend && vite",
+    "build": "cd frontend && vite build",
+    "preview": "cd frontend && vite preview",
+    "version:patch": "./scripts/version.sh patch",
+    "version:minor": "./scripts/version.sh minor",
+    "version:major": "./scripts/version.sh major",
+    "version:custom": "./scripts/version.sh custom",
+    "release": "./scripts/release.sh",
+    "changelog": "./scripts/changelog.sh",
+    "check-boundaries": "./scripts/check-boundaries.sh",
+    "platform-status": "./scripts/check-boundaries.sh status"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@openzeppelin/contracts": "^5.4.0",
-    "chart.js": "^4.5.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "solidity": "^0.0.1",
-    "web3": "^4.16.0"
+    "@supabase/supabase-js": "^2.55.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "vite": "^7.1.2"
   }
 }
