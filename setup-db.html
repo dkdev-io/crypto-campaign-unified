@@ -1,0 +1,191 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Schema Setup</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        .console { background: #000; color: #00ff00; padding: 1rem; border-radius: 4px; font-family: monospace; height: 400px; overflow-y: auto; }
+        .btn { background: #2a2a72; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; }
+        .btn:hover { background: #1f1f5a; }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa44; }
+    </style>
+</head>
+<body>
+    <h1>🗄️ Supabase Database Schema Setup</h1>
+    <p>This will create the required tables for your crypto campaign platform.</p>
+    
+    <button class="btn" onclick="setupSchema()">🚀 Setup Database Schema</button>
+    
+    <div class="console" id="console"></div>
+
+    <script>
+        const { createClient } = supabase
+        
+        const supabaseClient = createClient(
+            'https://kmepcdsklnnxokoimvzo.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.9gyw4TmPvtNYLz7_aNHBdkPSgUypmg5SCbLEwQKki-Q'
+        )
+
+        function log(message, type = 'info') {
+            const console = document.getElementById('console')
+            const span = document.createElement('div')
+            span.className = type
+            span.innerHTML = `${new Date().toLocaleTimeString()} - ${message}`
+            console.appendChild(span)
+            console.scrollTop = console.scrollHeight
+        }
+
+        async function setupSchema() {
+            log('🚀 Starting database schema setup...', 'warning')
+            
+            const schemas = [
+                {
+                    name: 'campaigns table',
+                    sql: `
+                    CREATE TABLE IF NOT EXISTS public.campaigns (
+                        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                        user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+                        email TEXT NOT NULL,
+                        full_name TEXT NOT NULL,
+                        campaign_name TEXT NOT NULL,
+                        website TEXT NOT NULL,
+                        candidate_name TEXT NOT NULL,
+                        mailing_street TEXT NOT NULL,
+                        mailing_city TEXT NOT NULL,
+                        mailing_state TEXT NOT NULL,
+                        mailing_zip TEXT NOT NULL,
+                        contact_name TEXT NOT NULL,
+                        contact_email TEXT NOT NULL,
+                        contact_phone TEXT NOT NULL,
+                        additional_contacts JSONB DEFAULT '[]'::jsonb,
+                        wallet_address TEXT NOT NULL,
+                        kyc_verification_status BOOLEAN DEFAULT false,
+                        compliance_acknowledgment BOOLEAN DEFAULT false,
+                        fec_disclaimer_acknowledgment BOOLEAN DEFAULT false,
+                        donor_requirements_acknowledgment BOOLEAN DEFAULT false,
+                        legal_responsibility_acknowledgment BOOLEAN DEFAULT false,
+                        theme_color TEXT DEFAULT '#2a2a72',
+                        logo_url TEXT,
+                        max_donation_limit INTEGER NOT NULL DEFAULT 3300,
+                        suggested_amounts INTEGER[] DEFAULT ARRAY[25, 50, 100, 250],
+                        supported_cryptos TEXT[] DEFAULT ARRAY['BTC', 'ETH', 'USDC'],
+                        custom_message TEXT,
+                        success_redirect_url TEXT,
+                        enable_test_mode BOOLEAN DEFAULT true,
+                        enable_analytics BOOLEAN DEFAULT true,
+                        setup_step_completed INTEGER DEFAULT 1,
+                        status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'live', 'paused', 'archived')),
+                        launch_date TIMESTAMPTZ,
+                        final_review_confirmation BOOLEAN DEFAULT false,
+                        compliance_responsibility_confirmation BOOLEAN DEFAULT false,
+                        testing_confirmation BOOLEAN DEFAULT false,
+                        go_live_confirmation BOOLEAN DEFAULT false,
+                        created_at TIMESTAMPTZ DEFAULT NOW(),
+                        updated_at TIMESTAMPTZ DEFAULT NOW()
+                    );`
+                },
+                {
+                    name: 'error_log table', 
+                    sql: `
+                    CREATE TABLE IF NOT EXISTS public.error_log (
+                        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                        error_name TEXT NOT NULL,
+                        date_time TIMESTAMPTZ DEFAULT NOW(),
+                        summary_of_work TEXT NOT NULL,
+                        current_status TEXT NOT NULL,
+                        technical_notes TEXT,
+                        campaign_id UUID REFERENCES campaigns(id) ON DELETE SET NULL,
+                        user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+                        created_at TIMESTAMPTZ DEFAULT NOW()
+                    );`
+                },
+                {
+                    name: 'form_submissions table',
+                    sql: `
+                    CREATE TABLE IF NOT EXISTS public.form_submissions (
+                        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                        campaign_id UUID NOT NULL REFERENCES campaigns(id) ON DELETE CASCADE,
+                        donor_full_name TEXT NOT NULL,
+                        donor_email TEXT NOT NULL,
+                        donor_phone TEXT,
+                        donor_street TEXT NOT NULL,
+                        donor_city TEXT NOT NULL,
+                        donor_state TEXT NOT NULL,
+                        donor_zip TEXT NOT NULL,
+                        donor_employer TEXT NOT NULL,
+                        donor_occupation TEXT NOT NULL,
+                        amount_usd DECIMAL(10,2) NOT NULL,
+                        cryptocurrency TEXT NOT NULL,
+                        crypto_amount DECIMAL(18,8) NOT NULL,
+                        wallet_address TEXT NOT NULL,
+                        transaction_hash TEXT,
+                        citizenship_confirmed BOOLEAN NOT NULL DEFAULT false,
+                        own_funds_confirmed BOOLEAN NOT NULL DEFAULT false,
+                        not_corporate_confirmed BOOLEAN NOT NULL DEFAULT false,
+                        not_contractor_confirmed BOOLEAN NOT NULL DEFAULT false,
+                        age_confirmed BOOLEAN NOT NULL DEFAULT false,
+                        status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed', 'refunded')),
+                        processed_at TIMESTAMPTZ,
+                        created_at TIMESTAMPTZ DEFAULT NOW(),
+                        updated_at TIMESTAMPTZ DEFAULT NOW()
+                    );`
+                }
+            ]
+
+            for (const schema of schemas) {
+                try {
+                    log(`🔄 Creating ${schema.name}...`)
+                    const { error } = await supabaseClient.rpc('exec_sql', { sql: schema.sql })
+                    
+                    if (error) {
+                        log(`❌ Failed to create ${schema.name}: ${error.message}`, 'error')
+                    } else {
+                        log(`✅ Successfully created ${schema.name}`, 'success')
+                    }
+                } catch (e) {
+                    log(`❌ Exception creating ${schema.name}: ${e.message}`, 'error')
+                }
+            }
+
+            // Test the setup
+            log('🔍 Testing database connection...', 'warning')
+            try {
+                const { data, error } = await supabaseClient.from('campaigns').select('count').limit(1)
+                if (error) {
+                    log(`❌ Database test failed: ${error.message}`, 'error')
+                } else {
+                    log('✅ Database connection test successful!', 'success')
+                }
+            } catch (e) {
+                log(`❌ Database test exception: ${e.message}`, 'error')
+            }
+
+            log('🎉 Database schema setup completed!', 'success')
+            log('📝 Next: Create .env.local file and install dependencies', 'warning')
+        }
+    </script>
+</body>
+</html>
+```
+
+### Step 2: Run the Database Setup
+
+1. **Find the file:** Navigate to your project folder where you saved `setup-db.html`
+2. **Open in browser:** Double-click `setup-db.html` OR right-click → "Open with" → your web browser
+3. **Run setup:** Click the blue "🚀 Setup Database Schema" button
+4. **Watch progress:** The black console will show green ✅ success messages for each table created
+5. **Wait for completion:** Should take 10-30 seconds
+
+### Step 3: Verify Setup (Optional)
+
+1. Go to [https://supabase.com/dashboard](https://supabase.com/dashboard)
+2. Click on your project
+3. Go to "Table Editor" in the left sidebar
+4. You should see 3 new tables:
+   - `campaigns`
+   - `error_log` 
+   - `form_submissions`
