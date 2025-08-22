@@ -4,6 +4,46 @@
   "description": "Unified cryptocurrency campaign donation system with Web3 integration and multi-platform sync support",
   "type": "module",
   "scripts": {
+<<<<<<< HEAD
+    "dev": "cd frontend && vite",
+    "build": "cd frontend && vite build",
+    "preview": "cd frontend && vite preview",
+    "test": "playwright test",
+    "test:visual": "playwright test tests/visual",
+    "test:e2e": "playwright test tests/e2e",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "test:live-site": "playwright test tests/e2e/live-site-monitoring.spec.js",
+    "test:responsiveness": "playwright test tests/visual/form-responsiveness.spec.js",
+    "test:wallet-states": "playwright test tests/visual/wallet-connection-states.spec.js",
+    "test:error-handling": "playwright test tests/visual/error-handling-ui.spec.js",
+    "test:success-screens": "playwright test tests/visual/success-confirmation-screens.spec.js",
+    "test:report": "playwright show-report",
+    "version:patch": "./scripts/version.sh patch",
+    "version:minor": "./scripts/version.sh minor",
+    "version:major": "./scripts/version.sh major",
+    "version:custom": "./scripts/version.sh custom",
+    "release": "./scripts/release.sh",
+    "changelog": "./scripts/changelog.sh",
+    "check-boundaries": "./scripts/check-boundaries.sh",
+    "platform-status": "./scripts/check-boundaries.sh status"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.55.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "ethers": "^6.15.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "vite": "^7.1.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "playwright": "^1.55.0"
+  }
+}
+=======
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
@@ -72,3 +112,4 @@
   "author": "",
   "license": "MIT"
 }
+>>>>>>> ed641141884f9405daab140d322b712728df23bf

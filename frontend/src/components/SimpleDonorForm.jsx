@@ -295,12 +295,21 @@ const SimpleDonorForm = ({ campaignId }) => {
               <button 
                 key={amount}
                 type="button"
+<<<<<<< HEAD
+                onClick={() => setFormData({...formData, amount: String(amount)})}
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  border: `2px solid ${themeColor}`, 
+                  background: formData.amount === String(amount) ? themeColor : 'white',
+                  color: formData.amount === String(amount) ? 'white' : themeColor,
+=======
                 onClick={() => setFormData({...formData, amount})}
                 style={{ 
                   padding: '0.5rem 1rem', 
                   border: `2px solid ${themeColor}`, 
                   background: formData.amount === amount ? themeColor : 'white',
                   color: formData.amount === amount ? 'white' : themeColor,
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
                   borderRadius: '4px',
                   cursor: 'pointer'
                 }}
@@ -317,12 +326,23 @@ const SimpleDonorForm = ({ campaignId }) => {
             style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
             value={formData.amount || ''}
             onChange={(e) => {
+<<<<<<< HEAD
+              const value = e.target.value;
+              const numValue = parseFloat(value);
+              if (numValue > maxDonation) {
+                setErrorMessage(`Maximum contribution is $${maxDonation}`);
+              } else {
+                setErrorMessage('');
+                // Store as string consistently with preset buttons
+                setFormData({...formData, amount: value});
+=======
               const value = parseFloat(e.target.value);
               if (value > maxDonation) {
                 setErrorMessage(`Maximum contribution is $${maxDonation}`);
               } else {
                 setErrorMessage('');
                 setFormData({...formData, amount: e.target.value});
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
               }
             }}
           />
