@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const LaunchConfirmation = ({ formData, updateFormData, onPrev }) => {
+const LaunchConfirmation = ({ formData, updateFormData, onPrev, campaignId }) => {
   const [isLaunched, setIsLaunched] = useState(false);
 
   const handleLaunch = () => {
@@ -9,13 +9,21 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev }) => {
   };
 
   if (isLaunched) {
-    const campaignId = 'demo-' + Date.now();
-    const embedCode = '<iframe src="http://localhost:5174/?campaign=' + campaignId + '" width="400" height="600" frameborder="0" style="border-radius: 8px;"></iframe>';
+    // Simple embed URL with just campaign ID
+    console.log('🚀 Launch screen - Campaign ID:', campaignId);
+    console.log('🚀 Launch screen - Form data:', formData);
+    const embedUrl = campaignId ? `http://localhost:5173/?campaign=${campaignId}` : 'http://localhost:5173/';
+    const embedCode = `<iframe src="${embedUrl}" width="400" height="600" frameborder="0" style="border-radius: 8px;"></iframe>`;
 
     return (
       <div style={{ textAlign: 'center' }}>
         <h2 style={{ color: '#28a745' }}>🎉 Campaign Successfully Launched!</h2>
         <p>Your donation form is now live and ready to accept contributions.</p>
+        {campaignId && (
+          <p style={{ background: '#e7f3ff', padding: '0.5rem', borderRadius: '4px', marginTop: '1rem' }}>
+            <strong>Campaign ID:</strong> {campaignId}
+          </p>
+        )}
         
         <div style={{ background: '#fff3cd', padding: '1.5rem', borderRadius: '8px', margin: '2rem 0' }}>
           <h3 style={{ marginBottom: '1rem' }}>📋 Your Embed Code</h3>
@@ -32,6 +40,20 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev }) => {
               borderRadius: '4px'
             }}
           />
+          <div style={{ marginTop: '1rem' }}>
+            <a 
+              href={embedUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                color: '#007bff', 
+                textDecoration: 'underline',
+                fontSize: '14px'
+              }}
+            >
+              🔗 Preview your contribution form in a new tab
+            </a>
+          </div>
         </div>
       </div>
     );

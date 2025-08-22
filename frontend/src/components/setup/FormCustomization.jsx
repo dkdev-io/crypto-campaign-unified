@@ -31,9 +31,13 @@ const FormCustomization = ({ formData, updateFormData, onNext, onPrev }) => {
         <input 
           className="form-input"
           value={formData.suggestedAmounts || '25, 50, 100, 250'}
-          onChange={(e) => updateFormData({ suggestedAmounts: e.target.value })}
+          onChange={(e) => {
+            console.log('🎯 User entered custom amounts:', e.target.value);
+            updateFormData({ suggestedAmounts: e.target.value });
+          }}
           placeholder="25, 50, 100, 250"
         />
+        <small>Current value: {formData.suggestedAmounts || '25, 50, 100, 250'}</small>
       </div>
 
       <div className="form-group">

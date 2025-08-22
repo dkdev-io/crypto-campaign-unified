@@ -1,7 +1,10 @@
 import React from 'react';
 
 const EmbedOptions = ({ formData, updateFormData, onNext, onPrev, campaignId }) => {
-  const embedUrl = campaignId ? `http://localhost:5174/?campaign=${campaignId}` : 'http://localhost:5174/';
+  // Simple embed URL with just campaign ID
+  console.log('EmbedOptions - Campaign ID:', campaignId);
+  console.log('EmbedOptions - Form Data:', formData);
+  const embedUrl = campaignId ? `http://localhost:5173/?campaign=${campaignId}` : 'http://localhost:5173/';
   const embedCode = `<iframe src="${embedUrl}" width="400" height="600" frameborder="0" style="border-radius: 8px;"></iframe>`;
   
    return (
