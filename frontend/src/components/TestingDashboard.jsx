@@ -18,22 +18,29 @@ const TestingDashboard = () => {
       alert('Please fill in all required fields');
       return;
     }
+<<<<<<< HEAD
     
     if (!testForm.acknowledgmentSigned) {
       alert('Please check the FEC compliance acknowledgment');
       return;
     }
+=======
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
 
     setIsRunning(true);
     console.log('🔬 Running smart contract test with your data...');
     
     try {
+<<<<<<< HEAD
       // Ensure all fields are properly passed
       const testData = {
         ...testForm,
         contributorWallet: testForm.walletAddress // Also include this field name
       };
       const result = await processContribution(testData, 'test-campaign-123');
+=======
+      const result = await processContribution(testForm, 'test-campaign-123');
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
       
       const testResult = {
         input: { ...testForm },

@@ -233,16 +233,22 @@ export async function processContribution(formData, campaignId) {
   try {
     console.log('Processing contribution through smart contract...', { formData, campaignId });
     
+<<<<<<< HEAD
     // Pass through all required fields for validation
+=======
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
     const contributionData = {
       amount: parseFloat(formData.amount),
       contributorWallet: formData.walletAddress || formData.contributorWallet,
       campaignId: campaignId,
+<<<<<<< HEAD
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       acknowledgmentSigned: formData.acknowledgmentSigned || formData.compliance || true, // Handle different checkbox field names
       // Additional fields for complete record
+=======
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
       contributorName: `${formData.firstName} ${formData.lastName}`,
       contributorEmail: formData.email
     };

@@ -1,0 +1,162 @@
+import React, { useState } from 'react';
+import { supabase } from '../../lib/supabase';
+import '../../styles/setup.css';
+
+const SetupWizard = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({});
+
+  return (
+    <div className="setup-container">
+      <div className="setup-card">
+        <div style={{ background: '#2a2a72', padding: '2rem', color: 'white', textAlign: 'center' }}>
+          <h1>Campaign Setup</h1>
+          <p>Step {currentStep} of 6</p>
+        </div>
+        <div style={{ padding: '2rem' }}>
+          <h2>Account Setup</h2>
+          <input placeholder="Email" style={{ padding: '0.5rem', margin: '0.5rem', width: '200px' }} />
+          <input placeholder="Full Name" style={{ padding: '0.5rem', margin: '0.5rem', width: '200px' }} />
+          <br/>
+          <button 
+            onClick={() => setCurrentStep(2)}
+            style={{ 
+              background: '#2a2a72', 
+              color: 'white', 
+              padding: '0.75rem 2rem', 
+              border: 'none', 
+              borderRadius: '4px', 
+              marginTop: '1rem' 
+            }}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SetupWizard;
+
+
+echo "SELECT campaign_name, suggested_amounts FROM campaigns ORDER BY created_at DESC LIMIT 5;" | psql -h kmepcdsklnnxokoimvzo.pooler.supabase.com -p 5432 -d postgres -U postgres.kmepcdsklnnxokoimvzoimport React, { useState } from 'react';
+import StepIndicator from './StepIndicator';
+import Signup from './Signup';
+import CampaignInfo from './CampaignInfo';
+import Compliance from './Compliance';
+import FormCustomization from './FormCustomization';
+import EmbedOptions from './EmbedOptions';
+import LaunchConfirmation from './LaunchConfirmation';
+import { supabase } from '../../lib/supabase';
+import '../../styles/setup.css';
+
+const SetupWizard = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({});
+  const [campaignId, setCampaignId] = useState(null);
+
+  const totalSteps = 6;
+
+  const updateFormData = async (newData) => {
+    const updatedData = { ...formData, ...newData };
+    setFormData(updatedData);
+    
+    // Save to database if we have a campaignId
+    if (campaignId) {
+      try {
+        const { error } = await supabase
+          .from('campaigns')
+          .update(updatedData)
+          .eq('id', campaignId);
+        
+        if (error) {
+          console.error('Failed to save campaign data:', error);
+        }
+      } catch (error) {
+        console.error('Save error:', error);
+      }
+    }
+  };
+
+  const nextStep = async () => {
+    // Create campaign record after signup (step 1)
+    if (currentStep === 1 && !campaignId) {
+      try {
+        const { data, error } = await supabase
+          .from('campaigns')
+          .insert([{
+            email: formData.email || 'test@test.com',
+            campaign_name: formData.campaignName || 'New Campaign',
+            website: 'https://temp.com',
+            wallet_address: 'temp-wallet'
+          }])
+          .select()
+          .single();
+        
+        if (!error) {
+          setCampaignId(data.id);
+          console.log('Campaign created with ID:', data.id);
+        } else {
+          console.error('Failed to create campaign:', error);
+        }
+      } catch (error) {
+        console.error('Campaign creation error:', error);
+      }
+    }
+    
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const renderStep = () => {
+    const stepProps = {
+      formData,
+      updateFormData,
+      onNext: nextStep,
+      onPrev: prevStep
+    };
+
+    switch (currentStep) {
+      case 1:
+        return <Signup {...stepProps} />;
+      case 2:
+        return <CampaignInfo {...stepProps} />;
+      case 3:
+        return <Compliance {...stepProps} />;
+      case 4:
+        return <FormCustomization {...stepProps} />;
+      case 5:
+        return <EmbedOptions {...stepProps} campaignId={campaignId} />;
+      case 6:
+        return <LaunchConfirmation {...stepProps} campaignId={campaignId} />;
+      default:
+        return <Signup {...stepProps} />;
+    }
+  };
+
+  return (
+    <div className="setup-container">
+      <div className="setup-card">
+        <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+        <div className="form-content">
+          {renderStep()}
+        </div>
+      </div>
+      {campaignId && (
+        <div style={{ position: 'fixed', bottom: '10px', right: '10px', background: '#2a2a72', color: 'white', padding: '0.5rem', borderRadius: '4px', fontSize: '0.8rem' }}>
+          Campaign ID: {campaignId}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SetupWizard;

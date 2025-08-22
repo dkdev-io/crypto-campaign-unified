@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "crypto-campaign-contracts",
   "version": "1.0.0",
   "description": "Smart contracts for FEC-compliant crypto campaign contributions",
@@ -22,5 +23,44 @@
   "devDependencies": {
     "hardhat": "^2.19.0",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+=======
+  "name": "@crypto-campaign/contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for FEC-compliant campaign donations",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "test:coverage": "npx hardhat coverage",
+    "test:gas": "REPORT_GAS=true npx hardhat test",
+    "node": "npx hardhat node",
+    "deploy:local": "npx hardhat run deploy/01-deploy-campaign.js --network localhost",
+    "deploy:testnet": "npx hardhat run deploy/01-deploy-campaign.js --network sepolia",
+    "deploy:mainnet": "npx hardhat run deploy/01-deploy-campaign.js --network mainnet",
+    "verify": "npx hardhat verify --network sepolia",
+    "flatten": "npx hardhat flatten contracts/src/CampaignContributions.sol > flattened/CampaignContributions.sol",
+    "size": "npx hardhat size-contracts",
+    "clean": "npx hardhat clean"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/chai": "^4.2.0",
+    "@types/mocha": ">=9.1.0",
+    "chai": "^4.2.0",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.19.4",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^1.0.8",
+    "solidity-coverage": "^0.8.5",
+    "typechain": "^8.3.0"
+>>>>>>> ed641141884f9405daab140d322b712728df23bf
   }
 }
