@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /**
  * @title CampaignContributions
@@ -160,7 +160,7 @@ contract CampaignContributions is Ownable, ReentrancyGuard, Pausable {
      * @param _campaignTreasury The address that will receive campaign contributions
      * @param _initialOwner The initial owner of the contract
      */
-    constructor(address _campaignTreasury, address _initialOwner) {
+    constructor(address _campaignTreasury, address _initialOwner) Ownable(_initialOwner) {
         require(_campaignTreasury != address(0), "CampaignContributions: campaign treasury cannot be zero address");
         require(_initialOwner != address(0), "CampaignContributions: initial owner cannot be zero address");
         
@@ -359,10 +359,10 @@ contract CampaignContributions is Ownable, ReentrancyGuard, Pausable {
      * @dev Check if an address can contribute a specific amount
      * @param _contributor The address to check
      * @param _amount The amount to check in wei
-     * @return canContribute Whether the contribution is allowed
+     * @return allowed Whether the contribution is allowed
      * @return reason The reason if contribution is not allowed
      */
-    function canContribute(address _contributor, uint256 _amount) external view returns (bool canContribute, string memory reason) {
+    function canContribute(address _contributor, uint256 _amount) external view returns (bool allowed, string memory reason) {
         if (_amount == 0) {
             return (false, "Contribution amount must be greater than zero");
         }
