@@ -1,5 +1,5 @@
 // Auto-generated contract configuration
-// Generated at: 2025-08-22T03:05:40.640Z
+// Generated at: 2025-08-22T16:28:08.965Z
 
 export const CAMPAIGN_CONTRACT_ABI = [
   {
@@ -701,9 +701,9 @@ export const CAMPAIGN_CONTRACT_ABI = [
 ];
 
 export const CONTRACT_CONFIG = {
-  CONTRACT_ADDRESS: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  CONTRACT_ADDRESS: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
   NETWORK_ID: "31337",
-  NETWORK_NAME: "localhost",
+  NETWORK_NAME: "hardhat",
   DEFAULT_ETH_PRICE_USD: 3000,
   MAX_CONTRIBUTION_USD: 3300
 };
