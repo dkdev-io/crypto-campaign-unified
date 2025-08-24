@@ -13,7 +13,7 @@ const puppeteer = require('puppeteer');
 // Configuration
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.BASE_URL || 'https://testy-pink-chancellor.lovable.app';
 
 class FormTestingAgent {
   constructor() {
