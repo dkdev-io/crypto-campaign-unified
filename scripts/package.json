@@ -1,0 +1,19 @@
+{
+  "name": "campaign-testing-scripts",
+  "version": "1.0.0",
+  "description": "Automated testing scripts for crypto campaign forms",
+  "main": "form-testing-agent.js",
+  "scripts": {
+    "test-forms": "node form-testing-agent.js",
+    "test-donors": "node form-testing-agent.js --type=donors --count=10",
+    "test-prospects": "node form-testing-agent.js --type=prospects --count=10",
+    "test-mixed": "node form-testing-agent.js --type=mixed --count=15"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "csv-parser": "^3.0.0",
+    "puppeteer": "^21.0.0"
+  },
+  "author": "Campaign Testing Team",
+  "license": "MIT"
+}

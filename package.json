@@ -41,7 +41,7 @@
     "start:frontend": "cd frontend && npm run preview",
     "start:backend": "cd backend && npm start",
     "sync:setup": "./sync-setup.sh",
-    "sync:start": "./sync-start.sh", 
+    "sync:start": "./sync-start.sh",
     "sync:save": "./sync-save.sh",
     "sync:fix": "./sync-fix.sh",
     "version:patch": "./scripts/version.sh patch",
@@ -51,17 +51,22 @@
     "release": "./scripts/release.sh",
     "changelog": "./scripts/changelog.sh",
     "check-boundaries": "./scripts/check-boundaries.sh",
-    "platform-status": "./scripts/check-boundaries.sh status"
+    "platform-status": "./scripts/check-boundaries.sh status",
+    "test-donors": "node scripts/form-testing-agent.js --count=10 --type=donors --payment=crypto",
+    "test-prospects": "node scripts/form-testing-agent.js --count=10 --type=prospects --payment=crypto",
+    "test-mixed": "node scripts/form-testing-agent.js --count=15 --type=mixed --payment=crypto"
   },
   "workspaces": [
     "frontend",
-    "backend", 
+    "backend",
     "contracts"
   ],
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "csv-parser": "^3.2.0",
     "ethers": "^6.15.0",
+    "puppeteer": "^24.17.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "vite": "^7.1.2"
