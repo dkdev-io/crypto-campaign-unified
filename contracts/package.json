@@ -1,29 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "crypto-campaign-contracts",
-  "version": "1.0.0",
-  "description": "Smart contracts for FEC-compliant crypto campaign contributions",
-  "main": "src/CampaignContributions.sol",
-  "scripts": {
-    "compile": "hardhat compile",
-    "test": "hardhat test",
-    "deploy": "hardhat run scripts/deploy.js",
-    "verify": "hardhat verify"
-  },
-  "keywords": ["blockchain", "ethereum", "campaign", "fec", "compliance"],
-  "author": "dkdev-io",
-  "license": "MIT",
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.4.0",
-    "chart.js": "^4.5.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "web3": "^4.16.0"
-  },
-  "devDependencies": {
-    "hardhat": "^2.19.0",
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
-=======
   "name": "@crypto-campaign/contracts",
   "version": "1.0.0",
   "description": "Smart contracts for FEC-compliant campaign donations",
@@ -41,6 +16,9 @@
     "size": "npx hardhat size-contracts",
     "clean": "npx hardhat clean"
   },
+  "keywords": ["blockchain", "ethereum", "campaign", "fec", "compliance"],
+  "author": "dkdev-io",
+  "license": "MIT",
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0"
   },
@@ -61,6 +39,5 @@
     "hardhat-gas-reporter": "^1.0.8",
     "solidity-coverage": "^0.8.5",
     "typechain": "^8.3.0"
->>>>>>> ed641141884f9405daab140d322b712728df23bf
   }
 }
