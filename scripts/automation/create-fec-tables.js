@@ -13,7 +13,6 @@ console.log('🚀 Creating FEC committee tables and test data...');
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function executeSQL(description, sql) {
-  console.log(`\n🔧 ${description}...`);
   
   try {
     // Try using a custom SQL execution function if available
@@ -40,7 +39,6 @@ async function createTables() {
   // First, let's check what we can do with the current permissions
   try {
     // Test basic connectivity
-    console.log('🔍 Testing database connectivity...');
     const { data: testData, error: testError } = await supabase
       .from('campaigns')
       .select('count')
@@ -54,7 +52,6 @@ async function createTables() {
     console.log('✅ Database connection successful');
     
     // Check current user permissions
-    console.log('🔍 Checking current user permissions...');
     
     // Since we can't create tables with anon key, let's create the test data
     // in the committee_test_data table (which might already exist)
@@ -66,7 +63,6 @@ async function createTables() {
 }
 
 async function addTestCommittees() {
-  console.log('\n📝 Adding test committee data...');
   
   // Check if committee_test_data table exists
   try {
@@ -76,7 +72,6 @@ async function addTestCommittees() {
       .limit(1);
     
     if (error) {
-      console.log('ℹ️  committee_test_data table does not exist, creating test data via alternate method...');
       await createFallbackTestData();
       return;
     }
@@ -106,7 +101,6 @@ async function addTestCommittees() {
         .single();
       
       if (existing) {
-        console.log(`ℹ️  Committee "${committee.committee_name}" already exists`);
         continue;
       }
       
@@ -120,7 +114,6 @@ async function addTestCommittees() {
       if (error) {
         console.error(`❌ Failed to add "${committee.committee_name}":`, error.message);
       } else {
-        console.log(`✅ Added test committee: "${committee.committee_name}"`);
       }
     }
     
@@ -130,7 +123,6 @@ async function addTestCommittees() {
 }
 
 async function createFallbackTestData() {
-  console.log('🔄 Creating fallback test data approach...');
   
   // Since we can't create the full FEC schema with anon permissions,
   // let's at least show how to create the test committee in the test data table
@@ -164,11 +156,9 @@ VALUES ('Testy Test for Chancellor', 'User requested test committee', 'admin@exa
 ON CONFLICT DO NOTHING;
 `;
   
-  console.log(fallbackInstructions);
 }
 
 async function verifySetup() {
-  console.log('\n🔍 Verifying setup...');
   
   try {
     // Check if we can find any test committees
@@ -180,12 +170,9 @@ async function verifySetup() {
     if (error) {
       console.log('⚠️  Could not verify test committees:', error.message);
     } else if (data && data.length > 0) {
-      console.log('🎉 Found test committees:');
       data.forEach(committee => {
-        console.log(`   📝 ${committee.committee_name} (${committee.test_purpose})`);
       });
     } else {
-      console.log('ℹ️  No test committees found');
     }
   } catch (error) {
     console.log('⚠️  Verification failed:', error.message);
@@ -196,9 +183,6 @@ async function verifySetup() {
 createTables()
   .then(() => verifySetup())
   .then(() => {
-    console.log('\n✨ Process completed!');
-    console.log('🔗 Test at: http://localhost:5173/committees');
-    console.log('💡 If tables need to be created, please run the SQL manually in Supabase dashboard');
   })
   .catch((error) => {
     console.error('\n💥 Process failed:', error);

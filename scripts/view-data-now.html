@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Data Viewer - Live Data</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; }
+        .controls { background: white; padding: 15px; border-bottom: 2px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 300px; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; }
+        .btn { padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; }
+        .btn:hover { background: #5a67d8; }
+        .stats { background: white; padding: 15px; display: flex; gap: 20px; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 150px; padding: 10px; text-align: center; background: #f8f9fa; border-radius: 5px; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #667eea; }
+        .data-container { background: white; margin: 20px; padding: 20px; border-radius: 5px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f5f5f5; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+        .valid { color: #10b981; font-weight: 600; }
+        .invalid { color: #ef4444; font-weight: 600; }
+        .loading { text-align: center; padding: 50px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Campaign Data - Live View</h1>
+        <p>All your data is already loaded - search and filter instantly</p>
+    </div>
+    
+    <div class="controls">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search any field (name, ID, amount, wallet, etc.)..." onkeyup="searchData()">
+        <select id="filterType" onchange="filterData()">
+            <option value="all">All Records (215)</option>
+            <option value="valid">✅ Valid Only (53)</option>
+            <option value="invalid">❌ Invalid Only (162)</option>
+            <option value="kyc_failed">KYC Failed</option>
+            <option value="high_value">Over $1000</option>
+        </select>
+        <button class="btn" onclick="downloadCurrentView()">📥 Download Results</button>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="showing">215</div>
+            <div>Showing</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #10b981;">53</div>
+            <div>Valid</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #ef4444;">162</div>
+            <div>Invalid</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">25%</div>
+            <div>Success Rate</div>
+        </div>
+    </div>
+    
+    <div class="data-container">
+        <div id="dataTable" class="loading">Loading your data...</div>
+    </div>
+    
+    <script>
+        // EMBEDDED DATA - Your actual campaign data
+        const campaignData = CAMPAIGN_DATA_PLACEHOLDER;
+        
+        let currentData = [...campaignData];
+        let filteredData = [...campaignData];
+        
+        function initializeTable() {
+            displayData(campaignData);
+        }
+        
+        function displayData(data) {
+            if (data.length === 0) {
+                document.getElementById('dataTable').innerHTML = '<p>No matching records found</p>';
+                document.getElementById('showing').textContent = '0';
+                return;
+            }
+            
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>KYC Status</th>
+                        <th>Decision</th>
+                        <th>Reason</th>
+                        <th>Wallet</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            data.forEach(row => {
+                const kycStatus = row.kyc_passed === 'YES' ? 
+                    '<span class="valid">✅ PASSED</span>' : 
+                    '<span class="invalid">❌ FAILED</span>';
+                
+                const decision = row.contract_decision === 'ACCEPTED' ? 
+                    '<span class="valid">ACCEPTED</span>' : 
+                    '<span class="invalid">REJECTED</span>';
+                
+                const wallet = row.wallet ? row.wallet.substring(0, 10) + '...' : '';
+                
+                html += `
+                    <tr>
+                        <td>${row.unique_id}</td>
+                        <td>${row.full_name}</td>
+                        <td>$${parseFloat(row.contribution_amount).toFixed(2)}</td>
+                        <td>${kycStatus}</td>
+                        <td>${decision}</td>
+                        <td>${row.contract_decision !== 'ACCEPTED' ? row.contract_decision : ''}</td>
+                        <td>${wallet}</td>
+                        <td>${row.contribution_date || ''}</td>
+                    </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('dataTable').innerHTML = html;
+            document.getElementById('showing').textContent = data.length;
+        }
+        
+        function searchData() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            if (!searchTerm) {
+                filteredData = [...currentData];
+            } else {
+                filteredData = currentData.filter(row => {
+                    return Object.values(row).some(value => 
+                        String(value).toLowerCase().includes(searchTerm)
+                    );
+                });
+            }
+            
+            displayData(filteredData);
+        }
+        
+        function filterData() {
+            const filterType = document.getElementById('filterType').value;
+            
+            switch(filterType) {
+                case 'all':
+                    currentData = [...campaignData];
+                    break;
+                case 'valid':
+                    currentData = campaignData.filter(row => row.contract_decision === 'ACCEPTED');
+                    break;
+                case 'invalid':
+                    currentData = campaignData.filter(row => row.contract_decision !== 'ACCEPTED');
+                    break;
+                case 'kyc_failed':
+                    currentData = campaignData.filter(row => row.kyc_passed !== 'YES');
+                    break;
+                case 'high_value':
+                    currentData = campaignData.filter(row => parseFloat(row.contribution_amount) > 1000);
+                    break;
+            }
+            
+            filteredData = [...currentData];
+            searchData(); // Re-apply search if any
+        }
+        
+        function downloadCurrentView() {
+            const dataToDownload = filteredData.length > 0 ? filteredData : currentData;
+            
+            // Convert to CSV
+            const headers = Object.keys(dataToDownload[0]);
+            let csv = headers.join(',') + '\n';
+            
+            dataToDownload.forEach(row => {
+                const values = headers.map(header => {
+                    const value = row[header] || '';
+                    return value.toString().includes(',') ? `"${value}"` : value;
+                });
+                csv += values.join(',') + '\n';
+            });
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `campaign_data_filtered_${Date.now()}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        
+        // Initialize on load
+        window.onload = initializeTable;
+    </script>
+</body>
+</html>

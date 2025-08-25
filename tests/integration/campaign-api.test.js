@@ -313,7 +313,6 @@ test.describe('Campaign API Integration Tests', () => {
         };
         
         // Trigger webhook processing
-        console.log('Mock webhook event:', mockEvent);
       }
     });
 

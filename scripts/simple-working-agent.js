@@ -22,7 +22,6 @@ class SimpleWorkingAgent {
 
   async initialize() {
     console.log('✅ Simple Working Agent - NO MORE EXCUSES');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     await this.loadCSVData();
     
@@ -42,7 +41,6 @@ class SimpleWorkingAgent {
     this.page = await this.browser.newPage();
     this.page.setDefaultTimeout(30000);
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -73,13 +71,11 @@ class SimpleWorkingAgent {
   }
 
   async testFormWithPersona(persona, testIndex, totalTests) {
-    console.log(`\\n🎯 TEST ${testIndex}/${totalTests}: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     const startTime = Date.now();
     
     try {
       // Navigate to site
-      console.log('🌐 Loading site...');
       await this.page.goto(BASE_URL, { 
         waitUntil: 'networkidle0',
         timeout: 30000 
@@ -148,7 +144,6 @@ class SimpleWorkingAgent {
   }
 
   async fillAnyForm(persona) {
-    console.log('📝 Filling forms with real data...');
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '250.00' };
@@ -168,14 +163,12 @@ class SimpleWorkingAgent {
       amount: donation.contribution_amount || '250.00'
     };
     
-    console.log(`📋 Using: ${testData.fullName}, ${testData.email}, $${testData.amount}`);
     
     let fieldsFilled = 0;
     
     try {
       // Get ALL inputs on the page - no more selective nonsense
       const allInputs = await this.page.$$('input, select, textarea');
-      console.log(`🔍 Found ${allInputs.length} total input elements`);
       
       // Try to fill every single input we can find
       for (let i = 0; i < allInputs.length; i++) {
@@ -206,7 +199,6 @@ class SimpleWorkingAgent {
           const value = this.determineValue(info, testData);
           
           if (value) {
-            console.log(`  ➤ FILLING: "${value}"`);
             
             // Scroll to input
             await input.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -231,12 +223,10 @@ class SimpleWorkingAgent {
             }
             
             fieldsFilled++;
-            console.log(`  ✅ FILLED!`);
             
             // Brief pause between fields
             await new Promise(resolve => setTimeout(resolve, 800));
           } else {
-            console.log(`  ⚠️  No matching value`);
           }
           
         } catch (inputError) {
@@ -244,7 +234,6 @@ class SimpleWorkingAgent {
         }
       }
       
-      console.log(`\\n✅ TOTAL FIELDS FILLED: ${fieldsFilled}`);
       
       return {
         fieldsFilled,
@@ -310,7 +299,6 @@ class SimpleWorkingAgent {
     try {
       // Find ALL possible submit buttons
       const submitElements = await this.page.$$('button, input[type="submit"], [role="button"], .btn, .button');
-      console.log(`🔍 Found ${submitElements.length} potential submit elements`);
       
       for (let i = 0; i < submitElements.length; i++) {
         try {
@@ -356,7 +344,6 @@ class SimpleWorkingAgent {
             
             // Check if page changed or form was processed
             const currentUrl = this.page.url();
-            console.log(`📍 Current URL: ${currentUrl}`);
             
             return {
               submitted: true,
@@ -387,7 +374,6 @@ class SimpleWorkingAgent {
   }
 
   async runSimpleTest(options = {}) {
-    console.log('\\n✅ SIMPLE WORKING TEST - NO EXCUSES\\n');
     
     const { count = 2, testType = 'mixed' } = options;
     
@@ -404,7 +390,6 @@ class SimpleWorkingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`🎯 Testing ${testPersonas.length} personas with NO EXCUSES`);
     
     fs.mkdirSync('test-results/screenshots', { recursive: true });
     
@@ -421,17 +406,13 @@ class SimpleWorkingAgent {
 
   generateSimpleReport() {
     console.log('\\n📊 SIMPLE WORKING RESULTS');
-    console.log('==========================================');
     
     const total = this.testResults.length;
     const successful = this.testResults.filter(r => r.success).length;
     const fieldsFilled = this.testResults.reduce((sum, r) => sum + (r.fillResult?.fieldsFilled || 0), 0);
     const submitted = this.testResults.filter(r => r.submitResult?.submitted).length;
     
-    console.log(`Total Tests: ${total}`);
     console.log(`Successful: ${successful}/${total} (${(successful/total*100).toFixed(1)}%)`);
-    console.log(`Total Fields Filled: ${fieldsFilled}`);
-    console.log(`Forms Submitted: ${submitted}/${total}`);
     
     console.log('\\n📋 INDIVIDUAL RESULTS:');
     this.testResults.forEach((result, i) => {
@@ -441,7 +422,6 @@ class SimpleWorkingAgent {
     // Save report
     const reportPath = `test-results/simple-working-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Report saved: ${reportPath}`);
     console.log('📸 Screenshots in test-results/screenshots/');
   }
 

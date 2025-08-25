@@ -22,7 +22,6 @@ class FixedFormTestingAgent {
 
   async initialize() {
     console.log('🚀 FIXED Form Testing Agent - Navigation & Selector Issues Resolved');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     await this.loadCSVData();
     
@@ -44,7 +43,6 @@ class FixedFormTestingAgent {
     this.page.setDefaultTimeout(60000);
     this.page.setDefaultNavigationTimeout(60000);
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -75,7 +73,6 @@ class FixedFormTestingAgent {
   }
 
   async navigateToSite() {
-    console.log('🌐 Navigating to site with robust settings...');
     
     try {
       // Use domcontentloaded instead of networkidle for faster loading
@@ -97,7 +94,6 @@ class FixedFormTestingAgent {
   }
 
   async findAndClickDonateButton() {
-    console.log('🎯 Looking for donate button...');
     
     // Multiple strategies to find donate button
     const strategies = [
@@ -133,7 +129,6 @@ class FixedFormTestingAgent {
       try {
         const success = await strategies[i]();
         if (success) {
-          console.log(`✅ Donate button clicked using strategy ${i + 1}`);
           return true;
         }
       } catch (error) {
@@ -146,7 +141,6 @@ class FixedFormTestingAgent {
   }
 
   async waitForModal() {
-    console.log('⏳ Waiting for modal/form to appear...');
     
     // Wait for modal indicators
     const modalSelectors = [
@@ -162,7 +156,6 @@ class FixedFormTestingAgent {
     
     const maxAttempts = 15;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      console.log(`Attempt ${attempt}/${maxAttempts}: Checking for modal...`);
       
       const modalFound = await this.page.evaluate((selectors) => {
         for (const selector of selectors) {
@@ -180,7 +173,6 @@ class FixedFormTestingAgent {
       }, modalSelectors);
       
       if (modalFound) {
-        console.log(`✅ Modal found: ${modalFound}`);
         await new Promise(resolve => setTimeout(resolve, 2000)); // Let it fully load
         return modalFound;
       }
@@ -193,7 +185,6 @@ class FixedFormTestingAgent {
   }
 
   async findFormInputs() {
-    console.log('🔍 Looking for form inputs...');
     
     const inputAnalysis = await this.page.evaluate(() => {
       const results = {
@@ -245,11 +236,8 @@ class FixedFormTestingAgent {
     });
     
     console.log('📊 Input Analysis:');
-    console.log(`Total inputs found: ${inputAnalysis.allInputs.length}`);
-    console.log(`Visible inputs: ${inputAnalysis.visibleInputs.length}`);
     
     if (inputAnalysis.visibleInputs.length === 0) {
-      console.log('🔍 No visible inputs found. Strategy breakdown:');
       Object.entries(inputAnalysis.strategies).forEach(([selector, result]) => {
         if (result.error) {
           console.log(`❌ ${selector}: Error - ${result.error}`);
@@ -258,9 +246,7 @@ class FixedFormTestingAgent {
         }
       });
       
-      console.log('🔍 All inputs detected:');
       inputAnalysis.allInputs.forEach((input, i) => {
-        console.log(`Input ${i + 1}:`, JSON.stringify(input, null, 2));
       });
     }
     
@@ -271,7 +257,6 @@ class FixedFormTestingAgent {
     const startTime = Date.now();
     const testId = `test-${persona.profile.unique_id}-${startTime}`;
     
-    console.log(`\n🧪 Testing: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     const testResult = {
       testId,
@@ -326,14 +311,12 @@ class FixedFormTestingAgent {
   }
 
   async runDiagnosticTests(count = 1) {
-    console.log(`\n🧪 Running Diagnostic Tests (${count} personas)\n`);
     
     const testPersonas = this.prospects
       .slice(0, count)
       .map(p => this.getPersonaById(p.unique_id));
     
     for (let i = 0; i < testPersonas.length; i++) {
-      console.log(`\n--- DIAGNOSTIC TEST ${i + 1}/${testPersonas.length} ---`);
       
       const result = await this.testFormInteraction(testPersonas[i]);
       this.testResults.push(result);
@@ -348,14 +331,11 @@ class FixedFormTestingAgent {
   }
 
   generateDiagnosticReport() {
-    console.log('\n📊 DIAGNOSTIC REPORT');
-    console.log('='.repeat(50));
     
     const successful = this.testResults.filter(r => r.success);
     const failed = this.testResults.filter(r => !r.success);
     
     console.log(`✅ Successful tests: ${successful.length}`);
-    console.log(`❌ Failed tests: ${failed.length}`);
     console.log(`📈 Success rate: ${((successful.length / this.testResults.length) * 100).toFixed(1)}%`);
     
     if (successful.length > 0) {
@@ -366,7 +346,6 @@ class FixedFormTestingAgent {
     }
     
     if (failed.length > 0) {
-      console.log('\n❌ FAILURE ANALYSIS:');
       failed.forEach(result => {
         console.log(`❌ ${result.persona}: ${result.error}`);
         console.log(`   Steps completed:`, Object.entries(result.steps)
@@ -380,7 +359,6 @@ class FixedFormTestingAgent {
     const reportPath = `test-results/diagnostic-report-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\n📁 Report saved: ${reportPath}`);
   }
 
   async cleanup() {
@@ -400,11 +378,6 @@ async function main() {
     // Run diagnostic test first
     await agent.runDiagnosticTests(1);
     
-    console.log('\n🎯 NEXT STEPS:');
-    console.log('If diagnostic shows visible inputs found:');
-    console.log('1. Update form filling logic with working selectors');
-    console.log('2. Add form submission and validation');
-    console.log('3. Run full test suite');
     
   } catch (error) {
     console.error('💥 Agent initialization failed:', error);

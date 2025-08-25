@@ -16,8 +16,6 @@ class ModalDiagnosticAgent {
   }
 
   async initialize() {
-    console.log('🔍 Modal Diagnostic Agent - DEEP INSPECTION MODE');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     this.browser = await puppeteer.launch({ 
       headless: false, 
@@ -31,7 +29,6 @@ class ModalDiagnosticAgent {
     
     // Enable console logging from page
     this.page.on('console', msg => {
-      console.log(`🖥️  PAGE LOG: ${msg.text()}`);
     });
     
     // Enable error logging
@@ -41,13 +38,11 @@ class ModalDiagnosticAgent {
   }
 
   async inspectSite() {
-    console.log('\n🕵️  PHASE 1: Site Navigation & Initial Inspection');
     
     await this.page.goto(BASE_URL, { waitUntil: 'networkidle0' });
     
     // Screenshot initial state
     await this.page.screenshot({ path: 'debug-1-initial.png' });
-    console.log('📸 Screenshot saved: debug-1-initial.png');
     
     // Check for any existing forms on homepage
     const homepageForms = await this.page.evaluate(() => {
@@ -70,11 +65,9 @@ class ModalDiagnosticAgent {
       };
     });
     
-    console.log('📋 Homepage Analysis:', JSON.stringify(homepageForms, null, 2));
   }
 
   async inspectDonateButton() {
-    console.log('\n🔘 PHASE 2: Donate Button Analysis');
     
     const donateButtons = await this.page.evaluate(() => {
       // Find all potential donate buttons
@@ -97,7 +90,6 @@ class ModalDiagnosticAgent {
       }));
     });
     
-    console.log('🎯 Donate Buttons Found:', JSON.stringify(donateButtons, null, 2));
     
     if (donateButtons.length === 0) {
       console.log('❌ NO DONATE BUTTONS FOUND!');
@@ -108,7 +100,6 @@ class ModalDiagnosticAgent {
   }
 
   async clickDonateAndInspectModal() {
-    console.log('\n🎭 PHASE 3: Modal Inspection After Click');
     
     const donateButtons = await this.inspectDonateButton();
     if (!donateButtons || donateButtons.length === 0) return;
@@ -120,7 +111,6 @@ class ModalDiagnosticAgent {
       return;
     }
     
-    console.log(`🎯 Clicking donate button: ${visibleButton.text}`);
     
     // Wait for any modals to appear and take screenshot before click
     await this.page.screenshot({ path: 'debug-2-before-click.png' });
@@ -137,7 +127,6 @@ class ModalDiagnosticAgent {
     
     // Take screenshot after click
     await this.page.screenshot({ path: 'debug-3-after-click.png' });
-    console.log('📸 Screenshots: debug-2-before-click.png, debug-3-after-click.png');
     
     // Deep modal inspection
     const modalAnalysis = await this.page.evaluate(() => {
@@ -221,31 +210,20 @@ class ModalDiagnosticAgent {
     });
     
     console.log('\n🎭 MODAL ANALYSIS RESULTS:');
-    console.log('='.repeat(50));
-    console.log('📦 Modals/Dialogs Found:', modalAnalysis.modals.length);
-    console.log('📋 Forms Found:', modalAnalysis.forms.length);
-    console.log('📝 Inputs Found:', modalAnalysis.inputs.length);
     
-    console.log('\n🔍 DETAILED BREAKDOWN:');
     
     if (modalAnalysis.modals.length > 0) {
-      console.log('\n📦 MODAL CONTAINERS:');
       modalAnalysis.modals.forEach((modal, i) => {
-        console.log(`Modal ${i + 1}:`, JSON.stringify(modal, null, 2));
       });
     }
     
     if (modalAnalysis.forms.length > 0) {
-      console.log('\n📋 FORMS:');
       modalAnalysis.forms.forEach((form, i) => {
-        console.log(`Form ${i + 1}:`, JSON.stringify(form, null, 2));
       });
     }
     
     if (modalAnalysis.inputs.length > 0) {
-      console.log('\n📝 INPUTS:');
       modalAnalysis.inputs.forEach((input, i) => {
-        console.log(`Input ${i + 1}:`, JSON.stringify(input, null, 2));
       });
     } else {
       console.log('❌ NO INPUTS FOUND AT ALL!');
@@ -255,7 +233,6 @@ class ModalDiagnosticAgent {
   }
 
   async testAlternativeSelectors() {
-    console.log('\n🔧 PHASE 4: Testing Alternative Selectors');
     
     const selectorTests = [
       // Standard form selectors
@@ -300,7 +277,6 @@ class ModalDiagnosticAgent {
         };
         
         if (elements.length > 0) {
-          console.log(`✅ ${selector}: ${elements.length} elements found`);
         }
       } catch (error) {
         results[selector] = {
@@ -315,13 +291,11 @@ class ModalDiagnosticAgent {
       .map(([selector, _]) => selector);
     
     console.log(`\n🎯 WORKING SELECTORS (${successfulSelectors.length}):`);
-    successfulSelectors.forEach(selector => console.log(`  ✅ ${selector}`));
     
     return successfulSelectors;
   }
 
   async generateFixedSelectors(workingSelectors) {
-    console.log('\n🛠️  PHASE 5: Generating Fixed Automation Code');
     
     if (workingSelectors.length === 0) {
       console.log('❌ No working selectors found! Manual inspection required.');
@@ -338,11 +312,9 @@ async function findFormInputs(page) {
     try {
       const elements = await page.$$(selector);
       if (elements.length > 0) {
-        console.log(\`✅ Found \${elements.length} inputs with selector: \${selector}\`);
         return { selector, elements };
       }
     } catch (error) {
-      console.log(\`❌ Selector failed: \${selector}\`);
     }
   }
   return null;
@@ -365,8 +337,6 @@ async function fillFormFields(page, persona) {
 }
 `;
     
-    console.log('💻 FIXED CODE:');
-    console.log(fixedCode);
     
     return fixedCode;
   }
@@ -380,11 +350,6 @@ async function fillFormFields(page, persona) {
       const workingSelectors = await this.testAlternativeSelectors();
       const fixedCode = await this.generateFixedSelectors(workingSelectors);
       
-      console.log('\n🎯 DIAGNOSTIC COMPLETE!');
-      console.log('Next steps:');
-      console.log('1. Review screenshots in current directory');
-      console.log('2. Update form testing agent with working selectors');
-      console.log('3. Test updated agent with actual form submission');
       
       return {
         modalAnalysis,

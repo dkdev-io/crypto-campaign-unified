@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Data Explorer - Search & Download</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        select {
+            padding: 10px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #10b981;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .stats {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .data-container {
+            padding: 20px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background: #e9ecef;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .valid {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .invalid {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+        
+        .file-drop {
+            border: 3px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-drop:hover, .file-drop.dragover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .filter-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .export-option {
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .export-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Campaign Data Explorer</h1>
+            <p>Search, filter, analyze, and download all campaign data</p>
+        </header>
+        
+        <div class="controls">
+            <input type="text" 
+                   class="search-box" 
+                   id="globalSearch" 
+                   placeholder="🔍 Search all data (name, ID, wallet, amount, etc.)..."
+                   onkeyup="performSearch()">
+            
+            <select id="datasetSelect" onchange="loadDataset()">
+                <option value="all">All Data</option>
+                <option value="prospects">Prospects Only</option>
+                <option value="donors">Donors Only</option>
+                <option value="kyc">KYC Records</option>
+                <option value="validation">Validation Results</option>
+            </select>
+            
+            <select id="filterSelect" onchange="applyFilter()">
+                <option value="">All Records</option>
+                <option value="valid">✅ Valid Only</option>
+                <option value="invalid">❌ Invalid Only</option>
+                <option value="kyc_passed">KYC Passed</option>
+                <option value="kyc_failed">KYC Failed</option>
+                <option value="high_value">High Value (>$1000)</option>
+            </select>
+            
+            <button class="btn btn-success" onclick="downloadFiltered()">
+                📥 Download Filtered Data
+            </button>
+            
+            <button class="btn" onclick="downloadAll()">
+                💾 Download All (ZIP)
+            </button>
+            
+            <button class="btn btn-danger" onclick="clearAll()">
+                🗑️ Clear
+            </button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="totalRecords">0</div>
+                <div class="stat-label">Total Records</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="filteredRecords">0</div>
+                <div class="stat-label">Filtered Results</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="validCount">0</div>
+                <div class="stat-label">Valid</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="invalidCount">0</div>
+                <div class="stat-label">Invalid</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="totalValue">$0</div>
+                <div class="stat-label">Total Value</div>
+            </div>
+        </div>
+        
+        <div class="file-drop" id="fileDrop" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <h3>📁 Drag & Drop CSV Files Here</h3>
+            <p>Or click to browse</p>
+            <input type="file" id="fileInput" multiple accept=".csv" style="display: none;" onchange="handleFiles(this.files)">
+        </div>
+        
+        <div class="data-container">
+            <div id="dataTable" class="loading">
+                <p>Loading data or drag & drop CSV files above...</p>
+            </div>
+        </div>
+        
+        <div class="pagination" id="pagination"></div>
+    </div>
+    
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h2>Export Options</h2>
+            <div class="export-option" onclick="exportCSV()">
+                📊 Export as CSV
+            </div>
+            <div class="export-option" onclick="exportJSON()">
+                📄 Export as JSON
+            </div>
+            <div class="export-option" onclick="exportExcel()">
+                📗 Export as Excel
+            </div>
+            <button class="btn" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+    
+    <script>
+        // Global data storage
+        let allData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const recordsPerPage = 50;
+        let currentDataset = 'all';
+        let sortColumn = null;
+        let sortDirection = 'asc';
+        
+        // Initialize with embedded data
+        const embeddedData = {
+            stats: {
+                totalContributions: 215,
+                validCount: 53,
+                invalidCount: 162,
+                successRate: 25,
+                totalValue: 194183.33,
+                validValue: 41340.13
+            }
+        };
+        
+        // File handling
+        document.getElementById('fileDrop').onclick = () => {
+            document.getElementById('fileInput').click();
+        };
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        }
+        
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+                    parseCSV(file);
+                }
+            }
+        }
+        
+        function parseCSV(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                const data = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i].trim()) {
+                        const values = parseCSVLine(lines[i]);
+                        const row = {};
+                        headers.forEach((header, index) => {
+                            row[header] = values[index] || '';
+                        });
+                        data.push(row);
+                    }
+                }
+                
+                allData = allData.concat(data);
+                updateDisplay();
+                document.getElementById('fileDrop').style.display = 'none';
+            };
+            reader.readAsText(file);
+        }
+        
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+        
+        // Search and filter functions
+        function performSearch() {
+            const searchTerm = document.getElementById('globalSearch').value.toLowerCase();
+            
+            if (!searchTerm) {
+                filteredData = [...allData];
+            } else {
+                filteredData = allData.filter(row => {
+                    return Object.values(row).some(value => 
+                        String(value).toLowerCase().includes(searchTerm)
+                    );
+                });
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+        }
+        
+        function applyFilter() {
+            const filter = document.getElementById('filterSelect').value;
+            
+            if (!filter) {
+                filteredData = [...allData];
+            } else {
+                switch(filter) {
+                    case 'valid':
+                        filteredData = allData.filter(row => 
+                            row.contract_decision === 'ACCEPTED' || 
+                            row.compliance_status === 'VALID'
+                        );
+                        break;
+                    case 'invalid':
+                        filteredData = allData.filter(row => 
+                            row.contract_decision !== 'ACCEPTED' || 
+                            row.compliance_status !== 'VALID'
+                        );
+                        break;
+                    case 'kyc_passed':
+                        filteredData = allData.filter(row => 
+                            row.kyc_passed === 'YES' || 
+                            row.kyc_passed === '1' || 
+                            row.kyc_status === 'PASSED'
+                        );
+                        break;
+                    case 'kyc_failed':
+                        filteredData = allData.filter(row => 
+                            row.kyc_passed === 'NO' || 
+                            row.kyc_passed === '0' || 
+                            row.kyc_status === 'FAILED'
+                        );
+                        break;
+                    case 'high_value':
+                        filteredData = allData.filter(row => 
+                            parseFloat(row.contribution_amount || row.amount || 0) > 1000
+                        );
+                        break;
+                }
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+        }
+        
+        // Display functions
+        function updateDisplay() {
+            updateStats();
+            displayTable();
+            updatePagination();
+        }
+        
+        function updateStats() {
+            document.getElementById('totalRecords').textContent = allData.length;
+            document.getElementById('filteredRecords').textContent = filteredData.length;
+            
+            const validCount = filteredData.filter(row => 
+                row.contract_decision === 'ACCEPTED' || 
+                row.compliance_status === 'VALID'
+            ).length;
+            
+            document.getElementById('validCount').textContent = validCount;
+            document.getElementById('invalidCount').textContent = filteredData.length - validCount;
+            
+            const totalValue = filteredData.reduce((sum, row) => {
+                return sum + parseFloat(row.contribution_amount || row.amount || 0);
+            }, 0);
+            
+            document.getElementById('totalValue').textContent = '$' + totalValue.toFixed(2);
+        }
+        
+        function displayTable() {
+            if (filteredData.length === 0) {
+                document.getElementById('dataTable').innerHTML = '<p class="loading">No data to display. Upload CSV files or adjust filters.</p>';
+                return;
+            }
+            
+            const start = (currentPage - 1) * recordsPerPage;
+            const end = start + recordsPerPage;
+            const pageData = filteredData.slice(start, end);
+            
+            // Get all unique headers
+            const headers = [...new Set(pageData.flatMap(row => Object.keys(row)))];
+            
+            let html = '<table><thead><tr>';
+            headers.forEach(header => {
+                html += `<th onclick="sortBy('${header}')">${header} ${sortColumn === header ? (sortDirection === 'asc' ? '↑' : '↓') : ''}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            pageData.forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => {
+                    let value = row[header] || '';
+                    
+                    // Format specific columns
+                    if (header.includes('amount') || header.includes('value')) {
+                        value = value ? '$' + parseFloat(value).toFixed(2) : '';
+                    } else if (header === 'kyc_passed' || header === 'kyc_status') {
+                        if (value === '1' || value === 'YES' || value === 'PASSED') {
+                            value = '<span class="valid">✅ PASSED</span>';
+                        } else if (value === '0' || value === 'NO' || value === 'FAILED') {
+                            value = '<span class="invalid">❌ FAILED</span>';
+                        }
+                    } else if (header === 'contract_decision' || header === 'compliance_status') {
+                        if (value === 'ACCEPTED' || value === 'VALID') {
+                            value = '<span class="valid">✅ ' + value + '</span>';
+                        } else if (value) {
+                            value = '<span class="invalid">❌ ' + value + '</span>';
+                        }
+                    } else if (header === 'wallet' && value) {
+                        value = value.substring(0, 10) + '...';
+                    }
+                    
+                    html += `<td>${value}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('dataTable').innerHTML = html;
+        }
+        
+        function sortBy(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
+            }
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column] || '';
+                let bVal = b[column] || '';
+                
+                // Try to parse as numbers
+                if (!isNaN(aVal) && !isNaN(bVal)) {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+                
+                if (sortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            updateDisplay();
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+            let html = '';
+            
+            if (totalPages > 1) {
+                if (currentPage > 1) {
+                    html += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">Previous</button>`;
+                }
+                
+                for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                }
+                
+                if (currentPage < totalPages) {
+                    html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">Next</button>`;
+                }
+            }
+            
+            document.getElementById('pagination').innerHTML = html;
+        }
+        
+        function goToPage(page) {
+            currentPage = page;
+            updateDisplay();
+            window.scrollTo(0, 0);
+        }
+        
+        // Export functions
+        function downloadFiltered() {
+            if (filteredData.length === 0) {
+                alert('No data to download');
+                return;
+            }
+            
+            const csv = convertToCSV(filteredData);
+            downloadFile(csv, 'filtered_data.csv', 'text/csv');
+        }
+        
+        function downloadAll() {
+            if (allData.length === 0) {
+                // Provide instructions for getting the data
+                alert('To download all data:\n\n1. Open Finder\n2. Navigate to: /Users/Danallovertheplace/crypto-campaign-unified/scripts/exported-data/\n3. You\'ll find all CSV files there\n\nOr drag & drop the CSV files into this window to load them.');
+                return;
+            }
+            
+            const csv = convertToCSV(allData);
+            downloadFile(csv, 'all_campaign_data.csv', 'text/csv');
+        }
+        
+        function convertToCSV(data) {
+            if (data.length === 0) return '';
+            
+            const headers = Object.keys(data[0]);
+            let csv = headers.join(',') + '\n';
+            
+            data.forEach(row => {
+                const values = headers.map(header => {
+                    const value = row[header] || '';
+                    // Escape quotes and wrap in quotes if contains comma
+                    if (String(value).includes(',') || String(value).includes('"')) {
+                        return '"' + String(value).replace(/"/g, '""') + '"';
+                    }
+                    return value;
+                });
+                csv += values.join(',') + '\n';
+            });
+            
+            return csv;
+        }
+        
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function exportJSON() {
+            const json = JSON.stringify(filteredData, null, 2);
+            downloadFile(json, 'campaign_data.json', 'application/json');
+            closeModal();
+        }
+        
+        function exportCSV() {
+            downloadFiltered();
+            closeModal();
+        }
+        
+        function exportExcel() {
+            alert('For Excel export:\n1. Download the CSV file\n2. Open Excel\n3. Import the CSV file\n\nExcel will automatically format the data.');
+            downloadFiltered();
+            closeModal();
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all loaded data?')) {
+                allData = [];
+                filteredData = [];
+                currentPage = 1;
+                document.getElementById('globalSearch').value = '';
+                document.getElementById('filterSelect').value = '';
+                document.getElementById('datasetSelect').value = 'all';
+                updateDisplay();
+                document.getElementById('fileDrop').style.display = 'block';
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('exportModal').style.display = 'none';
+        }
+        
+        // Initialize with instructions
+        window.onload = function() {
+            document.getElementById('dataTable').innerHTML = `
+                <div style="padding: 40px; text-align: center;">
+                    <h2>📊 Welcome to Campaign Data Explorer</h2>
+                    <p style="margin: 20px 0;">To start exploring your data:</p>
+                    <ol style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <li>Drag & drop the CSV files from <code>/Users/Danallovertheplace/crypto-campaign-unified/scripts/exported-data/</code> into the box above</li>
+                        <li>Or click the box to browse and select files</li>
+                        <li>Once loaded, use the search box to find specific records</li>
+                        <li>Use filters to narrow down results</li>
+                        <li>Click column headers to sort</li>
+                        <li>Download filtered results anytime</li>
+                    </ol>
+                    <p style="margin-top: 30px;">
+                        <strong>Available files to load:</strong><br>
+                        • campaign_prospects.csv (150 records)<br>
+                        • campaign_donors.csv (215 records)<br>
+                        • kyc.csv (150 records)<br>
+                        • validation_summary.csv (complete analysis)<br>
+                        • merged_donor_kyc_view.csv (all data combined)
+                    </p>
+                </div>
+            `;
+            
+            // Update initial stats
+            document.getElementById('totalRecords').textContent = embeddedData.stats.totalContributions;
+            document.getElementById('validCount').textContent = embeddedData.stats.validCount;
+            document.getElementById('invalidCount').textContent = embeddedData.stats.invalidCount;
+            document.getElementById('totalValue').textContent = '$' + embeddedData.stats.totalValue.toFixed(2);
+        };
+    </script>
+</body>
+</html>

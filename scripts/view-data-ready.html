@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Data Viewer - Live Data</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; }
+        .controls { background: white; padding: 15px; border-bottom: 2px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 300px; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 16px; }
+        .btn { padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; }
+        .btn:hover { background: #5a67d8; }
+        .stats { background: white; padding: 15px; display: flex; gap: 20px; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 150px; padding: 10px; text-align: center; background: #f8f9fa; border-radius: 5px; }
+        .stat-number { font-size: 24px; font-weight: bold; color: #667eea; }
+        .data-container { background: white; margin: 20px; padding: 20px; border-radius: 5px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f5f5f5; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+        .valid { color: #10b981; font-weight: 600; }
+        .invalid { color: #ef4444; font-weight: 600; }
+        .loading { text-align: center; padding: 50px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Campaign Data - Live View</h1>
+        <p>All your data is already loaded - search and filter instantly</p>
+    </div>
+    
+    <div class="controls">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search any field (name, ID, amount, wallet, etc.)..." onkeyup="searchData()">
+        <select id="filterType" onchange="filterData()">
+            <option value="all">All Records (215)</option>
+            <option value="valid">✅ Valid Only (53)</option>
+            <option value="invalid">❌ Invalid Only (162)</option>
+            <option value="kyc_failed">KYC Failed</option>
+            <option value="high_value">Over $1000</option>
+        </select>
+        <button class="btn" onclick="downloadCurrentView()">📥 Download Results</button>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="showing">215</div>
+            <div>Showing</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #10b981;">53</div>
+            <div>Valid</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #ef4444;">162</div>
+            <div>Invalid</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">25%</div>
+            <div>Success Rate</div>
+        </div>
+    </div>
+    
+    <div class="data-container">
+        <div id="dataTable" class="loading">Loading your data...</div>
+    </div>
+    
+    <script>
+        // EMBEDDED DATA - Your actual campaign data
+        const campaignData = [
+  {
+    "unique_id": "T8UUGKEH",
+    "full_name": "Julie Kim",
+    "contribution_amount": "3300",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3300",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x4fc80d6a55925a5b5b8e3ae9c6fa56c9cf9bff5b"
+  },
+  {
+    "unique_id": "J06OIXBQ",
+    "full_name": "Dennis Martin",
+    "contribution_amount": "1950.42",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1950.42",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xc9d6351894be064644e05fa77a3f3363070da9af"
+  },
+  {
+    "unique_id": "PYU7VDP8",
+    "full_name": "Christine Washington",
+    "contribution_amount": "1844.04",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1844.04",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x5246d0a65978e9bd34c7aa7a52354b9f49797a80"
+  },
+  {
+    "unique_id": "OX09YVNV",
+    "full_name": "Donna Myers",
+    "contribution_amount": "1833.98",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1833.98",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xa946121fef719d4f0692dd4f7fdfa1f93e03fed8"
+  },
+  {
+    "unique_id": "HXHX4VMR",
+    "full_name": "Denise Brown",
+    "contribution_amount": "1804.55",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1804.55",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x53598c1e45f207f550fe89ffc12ea5fa1074c6f5"
+  },
+  {
+    "unique_id": "M57JWYHO",
+    "full_name": "Mark Kim",
+    "contribution_amount": "1687.01",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1687.01",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x3a5054038cd2fc7a7853c57d8954649a7250c2e2"
+  },
+  {
+    "unique_id": "GHN1RBNW",
+    "full_name": "Douglas Long",
+    "contribution_amount": "1662.89",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1662.89",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x2da6ed35f23a97f2bcb70f9b04821754947703b5"
+  },
+  {
+    "unique_id": "LFU0TPM0",
+    "full_name": "Sara Coleman",
+    "contribution_amount": "1569.91",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1569.91",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x036c512f46d765956869b2d40e8accf9ff9c8613"
+  },
+  {
+    "unique_id": "BS2LMXM4",
+    "full_name": "James Powell",
+    "contribution_amount": "1529.07",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xbe3499ead82ee1b832ad617e920fcb9420d95c15"
+  },
+  {
+    "unique_id": "3BPC7AAP",
+    "full_name": "Barbara Alvarez",
+    "contribution_amount": "1493.94",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1493.94",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x7749e2a80b8ed640195638f4afdc45743decd62d"
+  },
+  {
+    "unique_id": "VXAQ4IID",
+    "full_name": "Noah Vasquez",
+    "contribution_amount": "1466.18",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1466.18",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x16f530f01f1116cfd3c5c022aab6f0441df82fbd"
+  },
+  {
+    "unique_id": "8M0BJ6U9",
+    "full_name": "Julia Mitchell",
+    "contribution_amount": "1274.1",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1274.1",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x25537341182677efd7b13297b9d158737b2c10c3"
+  },
+  {
+    "unique_id": "M13JF1JW",
+    "full_name": "Debra Anderson",
+    "contribution_amount": "1269.73",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1269.73",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x523a2ca6a5d61408a22071c45869970473e785a5"
+  },
+  {
+    "unique_id": "KMFOSQ9O",
+    "full_name": "Nicholas Hughes",
+    "contribution_amount": "1182.19",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1182.19",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c"
+  },
+  {
+    "unique_id": "ZBWLU9BD",
+    "full_name": "Nicholas Wright",
+    "contribution_amount": "1174.41",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1174.41",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xbc333228bdbf1ab6433082428f9f9ba4efaf6eef"
+  },
+  {
+    "unique_id": "UG1P460X",
+    "full_name": "Samuel Martin",
+    "contribution_amount": "1108.98",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1546.08",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xe2026c7617466af6b694e2f57ceee189ae685bdd"
+  },
+  {
+    "unique_id": "BELZFATP",
+    "full_name": "Dennis Campbell",
+    "contribution_amount": "1059.02",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1059.02",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x0eab408c7f6720241267bf93385746c0b09d8ab2"
+  },
+  {
+    "unique_id": "BS2LMXM4",
+    "full_name": "James Powell",
+    "contribution_amount": "985.14",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "985.14",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xbe3499ead82ee1b832ad617e920fcb9420d95c15"
+  },
+  {
+    "unique_id": "V3MEWMIB",
+    "full_name": "Richard Perry",
+    "contribution_amount": "863.96",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "863.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x1c76af4858fb2bf47d806117b433252f6df240cf"
+  },
+  {
+    "unique_id": "OTBEOGIR",
+    "full_name": "Amanda West",
+    "contribution_amount": "849.83",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "849.83",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xb40ac5b4fbb12a16a036cd2251524f74e67edf23"
+  },
+  {
+    "unique_id": "HYRZFLYY",
+    "full_name": "Carolyn Wright",
+    "contribution_amount": "830.56",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "830.56",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xb5da13c9a2e6c944909df341735971f35f159f4b"
+  },
+  {
+    "unique_id": "FCPJ4T0A",
+    "full_name": "Charles Reyes",
+    "contribution_amount": "811.88",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "858.12",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x4ca8c1ea0324538018d71b219d01121f44802ea4"
+  },
+  {
+    "unique_id": "Y7YXP2TQ",
+    "full_name": "Mason Taylor",
+    "contribution_amount": "801.54",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "801.54",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x1a266923ce883405ef40730b8973cd7781442039"
+  },
+  {
+    "unique_id": "BS2LMXM4",
+    "full_name": "James Powell",
+    "contribution_amount": "784.79",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1769.9299999999998",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xbe3499ead82ee1b832ad617e920fcb9420d95c15"
+  },
+  {
+    "unique_id": "D9CLQHB1",
+    "full_name": "Isabella Ellis",
+    "contribution_amount": "724.13",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1246.51",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f"
+  },
+  {
+    "unique_id": "GMC4HU1A",
+    "full_name": "Chloe Washington",
+    "contribution_amount": "603.7",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "603.7",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x72b6fbbefe9c2189db481e1d965db73185cf4ce6"
+  },
+  {
+    "unique_id": "M7SNFIY3",
+    "full_name": "Hannah Woods",
+    "contribution_amount": "573.22",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "573.22",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xa0248529dc5bf1a7ee913e470d88d4ed96744a6c"
+  },
+  {
+    "unique_id": "D9CLQHB1",
+    "full_name": "Isabella Ellis",
+    "contribution_amount": "522.38",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "522.38",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f"
+  },
+  {
+    "unique_id": "ZO41S71R",
+    "full_name": "David Perez",
+    "contribution_amount": "483.18",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "483.18",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x63a1ea1588480d7c126c336d05a4abbc10417600"
+  },
+  {
+    "unique_id": "PK7M5CYL",
+    "full_name": "Gregory Jenkins",
+    "contribution_amount": "483.13",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "483.13",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x451206a32e3cdb54034607fcc15ae4faa519cee6"
+  },
+  {
+    "unique_id": "UG1P460X",
+    "full_name": "Samuel Martin",
+    "contribution_amount": "437.1",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "437.1",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xe2026c7617466af6b694e2f57ceee189ae685bdd"
+  },
+  {
+    "unique_id": "PK7M5CYL",
+    "full_name": "Gregory Jenkins",
+    "contribution_amount": "433.12",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "916.25",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x451206a32e3cdb54034607fcc15ae4faa519cee6"
+  },
+  {
+    "unique_id": "WVD3JZ0S",
+    "full_name": "Janet Hamilton",
+    "contribution_amount": "402.09",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "402.09",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x5f29d7266520f905a7ed3dc31fee98e81cd72907"
+  },
+  {
+    "unique_id": "ZO41S71R",
+    "full_name": "David Perez",
+    "contribution_amount": "382.82",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "866",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x63a1ea1588480d7c126c336d05a4abbc10417600"
+  },
+  {
+    "unique_id": "G2EY457P",
+    "full_name": "Maria Patel",
+    "contribution_amount": "377.14",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "377.14",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x5bb8c5e66c45b686c8fcfe1dcf922b8be1c0cc65"
+  },
+  {
+    "unique_id": "QC3S78YD",
+    "full_name": "Jennifer Vargas",
+    "contribution_amount": "375.19",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "375.19",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x4c1e27a0b54c139d71fb26e36844d22f93aa4cf3"
+  },
+  {
+    "unique_id": "6H1RMG77",
+    "full_name": "Kelly Diaz",
+    "contribution_amount": "361.39",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "377.01",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a"
+  },
+  {
+    "unique_id": "H1TMJONR",
+    "full_name": "William Martinez",
+    "contribution_amount": "334.09",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "334.09",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x093d614695a5f341982eafec2535a8cf5b968706"
+  },
+  {
+    "unique_id": "F8M7G9DL",
+    "full_name": "Susan Diaz",
+    "contribution_amount": "262.73",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "262.73",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e"
+  },
+  {
+    "unique_id": "C99FD0WM",
+    "full_name": "Susan Ramirez",
+    "contribution_amount": "219.96",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "219.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xe0493f4d230fbb06510b6314e239317ece100144"
+  },
+  {
+    "unique_id": "BELZFATP",
+    "full_name": "Dennis Campbell",
+    "contribution_amount": "208.77",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1267.79",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x0eab408c7f6720241267bf93385746c0b09d8ab2"
+  },
+  {
+    "unique_id": "KMFOSQ9O",
+    "full_name": "Nicholas Hughes",
+    "contribution_amount": "195.89",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1378.08",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c"
+  },
+  {
+    "unique_id": "U6NQV6BX",
+    "full_name": "Joseph Edwards",
+    "contribution_amount": "179.71",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "179.71",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x90ec8941158a155fa43c5380f310082694f3350f"
+  },
+  {
+    "unique_id": "F8M7G9DL",
+    "full_name": "Susan Diaz",
+    "contribution_amount": "147.46",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "410.19000000000005",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e"
+  },
+  {
+    "unique_id": "V3MEWMIB",
+    "full_name": "Richard Perry",
+    "contribution_amount": "128.85",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "992.8100000000001",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x1c76af4858fb2bf47d806117b433252f6df240cf"
+  },
+  {
+    "unique_id": "BELZFATP",
+    "full_name": "Dennis Campbell",
+    "contribution_amount": "86.83",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1354.62",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x0eab408c7f6720241267bf93385746c0b09d8ab2"
+  },
+  {
+    "unique_id": "C99FD0WM",
+    "full_name": "Susan Ramirez",
+    "contribution_amount": "51.43",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "271.39",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xe0493f4d230fbb06510b6314e239317ece100144"
+  },
+  {
+    "unique_id": "FCPJ4T0A",
+    "full_name": "Charles Reyes",
+    "contribution_amount": "46.24",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "46.24",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x4ca8c1ea0324538018d71b219d01121f44802ea4"
+  },
+  {
+    "unique_id": "WVD3JZ0S",
+    "full_name": "Janet Hamilton",
+    "contribution_amount": "43.52",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "445.60999999999996",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x5f29d7266520f905a7ed3dc31fee98e81cd72907"
+  },
+  {
+    "unique_id": "I3CLB3U4",
+    "full_name": "Nathan Bailey",
+    "contribution_amount": "43.15",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "43.15",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x4a59d912a286645b5eb383d809755d8e03b383ae"
+  },
+  {
+    "unique_id": "EIBZFFHN",
+    "full_name": "Ruth Owens",
+    "contribution_amount": "41.83",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "41.83",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x72964cb2e2699a2dbbf456ceee7dacda44da9b80"
+  },
+  {
+    "unique_id": "EOA89JQR",
+    "full_name": "Kevin Cooper",
+    "contribution_amount": "37.34",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "37.34",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0x25a81d9a08710762512088f686cb2a11cb08d3aa"
+  },
+  {
+    "unique_id": "6H1RMG77",
+    "full_name": "Kelly Diaz",
+    "contribution_amount": "15.62",
+    "kyc_passed": "YES",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "15.62",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "ACCEPTED",
+    "wallet": "0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a"
+  },
+  {
+    "unique_id": "9R1LB52B",
+    "full_name": "Laura Ward",
+    "contribution_amount": "3300",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3300",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc81131c2206dcacd857c8fd22937b17a9edade8b"
+  },
+  {
+    "unique_id": "CFNVL7IY",
+    "full_name": "Mason Sullivan",
+    "contribution_amount": "3300",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3300",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5b1faa040d43e4421e1195310a7a7043cad76edd"
+  },
+  {
+    "unique_id": "89CM5WVC",
+    "full_name": "Brenda Young",
+    "contribution_amount": "3300",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3300",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x89050758df62c70764793ea4141dd83d0c29918f"
+  },
+  {
+    "unique_id": "GENYJC9J",
+    "full_name": "Peter Moreno",
+    "contribution_amount": "3300",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3300",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x36bf71066dd6fc93456d0643b228b8278086bdce"
+  },
+  {
+    "unique_id": "M91DV3DW",
+    "full_name": "Christine Harris",
+    "contribution_amount": "3299.95",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299.95",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x9e93a17d9105a0682c40ec8aa268897b68172689"
+  },
+  {
+    "unique_id": "O1SLGDF6",
+    "full_name": "Rachel Ortiz",
+    "contribution_amount": "3299.91",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299.91",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1a8964573d6d1d28b950996362d9f6da2b38885e"
+  },
+  {
+    "unique_id": "QNIK9137",
+    "full_name": "Ruth Castillo",
+    "contribution_amount": "3299.84",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299.84",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x429a00449459ca69b289186fd69bb8d99609959e"
+  },
+  {
+    "unique_id": "3ZKCNLYY",
+    "full_name": "Stephanie Evans",
+    "contribution_amount": "3299.55",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299.55",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7aa65b7fb0109ad848527a8f9771c29df78e6fd7"
+  },
+  {
+    "unique_id": "KQIIPUPB",
+    "full_name": "Andrea Watson",
+    "contribution_amount": "1953.69",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1953.69",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a"
+  },
+  {
+    "unique_id": "JPG2EBWF",
+    "full_name": "Brittany Hamilton",
+    "contribution_amount": "1947.9",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1947.9",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x05645b4fb088df89ea8e1312f7a3a10eeb785f6b"
+  },
+  {
+    "unique_id": "8WUVFN9T",
+    "full_name": "Nicholas Adams",
+    "contribution_amount": "1941.62",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1941.62",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4ac73ebf27790a9a4650d10ca0b146a30de89946"
+  },
+  {
+    "unique_id": "8HMDGSZC",
+    "full_name": "Michelle Jenkins",
+    "contribution_amount": "1939.77",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1939.77",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xce7368011f0d4c47c288448edd4b44236327976a"
+  },
+  {
+    "unique_id": "DMDT7SNV",
+    "full_name": "Dennis Jackson",
+    "contribution_amount": "1931.39",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2051.31",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2"
+  },
+  {
+    "unique_id": "5IHZRG4O",
+    "full_name": "Alexander Nguyen",
+    "contribution_amount": "1928.28",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1928.28",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x253388843aa51c720f6787dc35a3f541047a46a9"
+  },
+  {
+    "unique_id": "0ZAA8WA1",
+    "full_name": "Barbara Martin",
+    "contribution_amount": "1891.35",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1891.35",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf8939b634a74a54acc65e84e6b47b515e2e0ea25"
+  },
+  {
+    "unique_id": "WYMUMPQ6",
+    "full_name": "Grace Howard",
+    "contribution_amount": "1889.44",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1889.44",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0c1ef388200d522bf1daa07b7811942465b48600"
+  },
+  {
+    "unique_id": "U22P0A4G",
+    "full_name": "Charlotte Aguilar",
+    "contribution_amount": "1827.95",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1827.95",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x31eda11686c47c6ce67f545f67623e233a295489"
+  },
+  {
+    "unique_id": "INYIJ9SW",
+    "full_name": "James Jordan",
+    "contribution_amount": "1821.1",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1821.1",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xca18afa644b2bc0c608e8c1ad9698976221d56c3"
+  },
+  {
+    "unique_id": "9JPPXXZE",
+    "full_name": "Charlotte Wells",
+    "contribution_amount": "1816.72",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2356.7799999999997",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5cde675d9ed83380ca00a447ab984db9c0d3981a"
+  },
+  {
+    "unique_id": "BXCCT17O",
+    "full_name": "Sara Anderson",
+    "contribution_amount": "1801.93",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1801.93",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x23b85badc811ea5160612fee46fe033bcc842d54"
+  },
+  {
+    "unique_id": "FWYUH5HZ",
+    "full_name": "Sophia James",
+    "contribution_amount": "1796.63",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1796.63",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x69ce55f1b440b11a32cd7ebd657b981aa3a88aa8"
+  },
+  {
+    "unique_id": "T65M28Z3",
+    "full_name": "Brandon Wood",
+    "contribution_amount": "1790.27",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1790.27",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x71283c24e1df5073f8eb52feb48bd5680ffc3ecb"
+  },
+  {
+    "unique_id": "H3D8ZLEY",
+    "full_name": "Christian Butler",
+    "contribution_amount": "1786.01",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1786.01",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd9345816116cd600b4d2a3a78c37eee7551ba686"
+  },
+  {
+    "unique_id": "WTNAVWP5",
+    "full_name": "Debra Bell",
+    "contribution_amount": "1784.09",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1784.09",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x67a131c6035aba27743a288b9ea9638c735fb182"
+  },
+  {
+    "unique_id": "V6YR2VIQ",
+    "full_name": "George Patel",
+    "contribution_amount": "1770.13",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1770.13",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd26dd943f61a6c1254f148e1ff8971dccd051146"
+  },
+  {
+    "unique_id": "1VTXHOVE",
+    "full_name": "Mary Griffin",
+    "contribution_amount": "1739.8",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2445.35",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5d80f366d3e403f877023b8fef5b8db4421aa091"
+  },
+  {
+    "unique_id": "VLI8N7T0",
+    "full_name": "Dennis Roberts",
+    "contribution_amount": "1730.25",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1730.25",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x915cae980ea6f1dc227290e763860c6edfed97be"
+  },
+  {
+    "unique_id": "N6Z37BFH",
+    "full_name": "Joshua Hall",
+    "contribution_amount": "1699.53",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1699.53",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb"
+  },
+  {
+    "unique_id": "3MYBZPJ9",
+    "full_name": "Carol Johnson",
+    "contribution_amount": "1669.42",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1669.42",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4578861245ae03df3909d210842d467976291fe5"
+  },
+  {
+    "unique_id": "AP4SH8KJ",
+    "full_name": "Jack Hayes",
+    "contribution_amount": "1658.64",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1658.64",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4f7cbe911f229af59b59933f29d47d3294e1f910"
+  },
+  {
+    "unique_id": "7ZV3BEZO",
+    "full_name": "Joseph Murphy",
+    "contribution_amount": "1631.51",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1631.51",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7b224e8bbf01c624e0ca398b36d9ac9edfdf263c"
+  },
+  {
+    "unique_id": "3MYBZPJ9",
+    "full_name": "Carol Johnson",
+    "contribution_amount": "1629.58",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4578861245ae03df3909d210842d467976291fe5"
+  },
+  {
+    "unique_id": "Z9V2TMV2",
+    "full_name": "Olivia Hayes",
+    "contribution_amount": "1625.94",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1625.94",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd18e529ab2f0b718e2443b403698490da8b0b0a0"
+  },
+  {
+    "unique_id": "GUE158T6",
+    "full_name": "Donald Sanchez",
+    "contribution_amount": "1622.9",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1622.9",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0c3479ffedfce359043d0c52acfdbd734842db26"
+  },
+  {
+    "unique_id": "N6Z37BFH",
+    "full_name": "Joshua Hall",
+    "contribution_amount": "1599.47",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb"
+  },
+  {
+    "unique_id": "92CTKVF0",
+    "full_name": "Andrea White",
+    "contribution_amount": "1581.03",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1581.03",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x007c0582ff9ab4d26e63667de01513dfb4833739"
+  },
+  {
+    "unique_id": "K9DQG0A3",
+    "full_name": "Jeremy Griffin",
+    "contribution_amount": "1563.5",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1563.5",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x86cf43195ee25dab7e4b0da464fc250638be3462"
+  },
+  {
+    "unique_id": "NK71KXKQ",
+    "full_name": "Justin Murray",
+    "contribution_amount": "1526.06",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1526.06",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x9179e979c6f88a2e5bb7452b9184f81b2fc72b2e"
+  },
+  {
+    "unique_id": "GLSEX3RD",
+    "full_name": "Anthony Patel",
+    "contribution_amount": "1458.94",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1458.94",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x2a64f7bb981a38dac719b003e6b397db240abb4a"
+  },
+  {
+    "unique_id": "IZZZXXH2",
+    "full_name": "Brittany Cook",
+    "contribution_amount": "1433.53",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1433.53",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xa713dd62d42e06b1b4cb3f2f013c508b1e41da62"
+  },
+  {
+    "unique_id": "UULAEUSF",
+    "full_name": "Katherine Medina",
+    "contribution_amount": "1425.87",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1425.87",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401"
+  },
+  {
+    "unique_id": "9T7ZT14E",
+    "full_name": "Debra Alvarez",
+    "contribution_amount": "1394.56",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1394.56",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xcfc1fa19b3e0c3cac56d1bc975212aa5725b732b"
+  },
+  {
+    "unique_id": "V4IHMZWN",
+    "full_name": "Jordan Tran",
+    "contribution_amount": "1388.81",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1388.81",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xdce29b140ea98c1288fc73758b4b6789121e89ed"
+  },
+  {
+    "unique_id": "OWPDCNSA",
+    "full_name": "Michelle Hayes",
+    "contribution_amount": "1355.48",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1355.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xdfc346b38246a7f4e673a6d6304ba681057561b5"
+  },
+  {
+    "unique_id": "Y98W4QG0",
+    "full_name": "Emily Sanchez",
+    "contribution_amount": "1345.48",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1345.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x8ad1100b8fc3cf674adab8369d29dd583d37f6af"
+  },
+  {
+    "unique_id": "ID074SG0",
+    "full_name": "Peter Cruz",
+    "contribution_amount": "1288.96",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1288.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x87784d374dc663aa06c86e68be590d190a01a94b"
+  },
+  {
+    "unique_id": "R6OLX2YW",
+    "full_name": "Sara Sanders",
+    "contribution_amount": "1273.05",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1273.05",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4f182d7fca5d5db5a0b5179ff4b5e8afed6d6a04"
+  },
+  {
+    "unique_id": "8E8S8O5B",
+    "full_name": "Jacqueline Vasquez",
+    "contribution_amount": "1246.7",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1246.7",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x759e3024366f02ceef107a3a5836c10100349918"
+  },
+  {
+    "unique_id": "060BKHPG",
+    "full_name": "David Gray",
+    "contribution_amount": "1219.09",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1219.09",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x22c2d0b5f6a28ab00af5804b0ad8866f6a1af515"
+  },
+  {
+    "unique_id": "2PQUL5JZ",
+    "full_name": "Dennis Chen",
+    "contribution_amount": "1218.75",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1218.75",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x6017210e5d9d04bd0bee39ebbb4a25a7f9e4c0dd"
+  },
+  {
+    "unique_id": "Y0A4GCHY",
+    "full_name": "Brandon Kim",
+    "contribution_amount": "1144.44",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1144.44",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x8deb771df348a346e9665651642b84e7612a8cfa"
+  },
+  {
+    "unique_id": "ETQ4A0MC",
+    "full_name": "George Hayes",
+    "contribution_amount": "1116.27",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1116.27",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d"
+  },
+  {
+    "unique_id": "2TJUI40V",
+    "full_name": "Carolyn Williams",
+    "contribution_amount": "1108.07",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1108.07",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc314a1b0300b7bb183fa4fa72327b992d7b4c803"
+  },
+  {
+    "unique_id": "XW302M2V",
+    "full_name": "Emma Collins",
+    "contribution_amount": "1097.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1891.54",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3"
+  },
+  {
+    "unique_id": "8XQ3USL9",
+    "full_name": "Steven Simmons",
+    "contribution_amount": "1031.61",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1031.61",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf4b45c2c886e754735d3a925c01b646749f44422"
+  },
+  {
+    "unique_id": "RJ77OYU1",
+    "full_name": "Carol Ellis",
+    "contribution_amount": "1015.57",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1015.57",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x577785223d3bee101e0068ec4e2606dbdfb3dac4"
+  },
+  {
+    "unique_id": "5W2GH215",
+    "full_name": "Jacqueline Ruiz",
+    "contribution_amount": "1013.26",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1849.8600000000001",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36"
+  },
+  {
+    "unique_id": "D4KMZPDR",
+    "full_name": "John Marshall",
+    "contribution_amount": "1012.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1833.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac"
+  },
+  {
+    "unique_id": "QZJ4A5RX",
+    "full_name": "Andrea Gibson",
+    "contribution_amount": "1004.48",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1004.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4"
+  },
+  {
+    "unique_id": "U22P0A4G",
+    "full_name": "Charlotte Aguilar",
+    "contribution_amount": "993.85",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2821.8",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x31eda11686c47c6ce67f545f67623e233a295489"
+  },
+  {
+    "unique_id": "GLSEX3RD",
+    "full_name": "Anthony Patel",
+    "contribution_amount": "985.95",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "3299",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x2a64f7bb981a38dac719b003e6b397db240abb4a"
+  },
+  {
+    "unique_id": "RGBZX2ZV",
+    "full_name": "Rebecca Morgan",
+    "contribution_amount": "977.17",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "977.17",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x338e51a7036a2d062c4348f191c49423131b8e19"
+  },
+  {
+    "unique_id": "ETQ4A0MC",
+    "full_name": "George Hayes",
+    "contribution_amount": "956.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2682.15",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d"
+  },
+  {
+    "unique_id": "4376J1GV",
+    "full_name": "Walter Harrison",
+    "contribution_amount": "938.2",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "938.2",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x318effcab4ce638cece0d59287d60367a79f3b22"
+  },
+  {
+    "unique_id": "QZJ4A5RX",
+    "full_name": "Andrea Gibson",
+    "contribution_amount": "925.77",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1930.25",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4"
+  },
+  {
+    "unique_id": "BN9ZJEK0",
+    "full_name": "Benjamin Miller",
+    "contribution_amount": "914.5",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "914.5",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x84f9d70c91b2f60c448b97c20fb50065ed7f4cc2"
+  },
+  {
+    "unique_id": "EGCUQSJ6",
+    "full_name": "Nathan Jones",
+    "contribution_amount": "911.19",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "911.19",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe35eb7275294e6c56afcb2ce3631fd87ed16f91e"
+  },
+  {
+    "unique_id": "KQIIPUPB",
+    "full_name": "Andrea Watson",
+    "contribution_amount": "898.94",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2852.63",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a"
+  },
+  {
+    "unique_id": "8H68I9A7",
+    "full_name": "Zachary Simmons",
+    "contribution_amount": "896.38",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1079.6",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x8774d1c6bbf3c427725fd2b990f169f3792581ec"
+  },
+  {
+    "unique_id": "CNPVNIFW",
+    "full_name": "Jose Rivera",
+    "contribution_amount": "894.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "894.92",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7edb2abea6c22946711c2ae65ebbe4f88d419de7"
+  },
+  {
+    "unique_id": "AE6STQMB",
+    "full_name": "Laura Alvarez",
+    "contribution_amount": "865.48",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "865.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742"
+  },
+  {
+    "unique_id": "8KAP8OKK",
+    "full_name": "Jennifer Williams",
+    "contribution_amount": "859.96",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "859.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x947d80c2e24bddd798547911375235b11956d6e8"
+  },
+  {
+    "unique_id": "GLSEX3RD",
+    "full_name": "Anthony Patel",
+    "contribution_amount": "854.11",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2313.05",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x2a64f7bb981a38dac719b003e6b397db240abb4a"
+  },
+  {
+    "unique_id": "AMNKHZ1B",
+    "full_name": "Jennifer Mendoza",
+    "contribution_amount": "845.27",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "845.27",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1"
+  },
+  {
+    "unique_id": "9AFFUUV5",
+    "full_name": "Jessica Martin",
+    "contribution_amount": "838.63",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "880.89",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a"
+  },
+  {
+    "unique_id": "5W2GH215",
+    "full_name": "Jacqueline Ruiz",
+    "contribution_amount": "836.6",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "836.6",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36"
+  },
+  {
+    "unique_id": "TE036S5O",
+    "full_name": "Douglas Peterson",
+    "contribution_amount": "830.93",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "830.93",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x98c9e31d5cefdb7491465fa1ea6140a6eaa89f26"
+  },
+  {
+    "unique_id": "D4KMZPDR",
+    "full_name": "John Marshall",
+    "contribution_amount": "820.56",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "820.56",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac"
+  },
+  {
+    "unique_id": "89CMLQ63",
+    "full_name": "Rebecca Jordan",
+    "contribution_amount": "815.99",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "815.99",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537"
+  },
+  {
+    "unique_id": "GHV6TMP2",
+    "full_name": "Anna Romero",
+    "contribution_amount": "815.64",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "815.64",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5832e71d9dcb0825c177aaced9ba15a3635b698c"
+  },
+  {
+    "unique_id": "LT5YGESQ",
+    "full_name": "Heather Watson",
+    "contribution_amount": "811.15",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "811.15",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0ef0a3cf41099ff0370fec537266e33bb193ffcf"
+  },
+  {
+    "unique_id": "XW302M2V",
+    "full_name": "Emma Collins",
+    "contribution_amount": "793.62",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "793.62",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3"
+  },
+  {
+    "unique_id": "Y0A4GCHY",
+    "full_name": "Brandon Kim",
+    "contribution_amount": "789.78",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1934.22",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x8deb771df348a346e9665651642b84e7612a8cfa"
+  },
+  {
+    "unique_id": "GR57OCIL",
+    "full_name": "Kevin Marshall",
+    "contribution_amount": "785.86",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1132.41",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xaf6893930cf70d8e426d0974d7b6532cd5d29636"
+  },
+  {
+    "unique_id": "5IHZRG4O",
+    "full_name": "Alexander Nguyen",
+    "contribution_amount": "767.81",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2696.09",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x253388843aa51c720f6787dc35a3f541047a46a9"
+  },
+  {
+    "unique_id": "M22SMOJS",
+    "full_name": "Stephen Ward",
+    "contribution_amount": "764.13",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "764.13",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x813389e2380a9b638316362b070c19bca9955689"
+  },
+  {
+    "unique_id": "VPRPDFRK",
+    "full_name": "Dennis Kennedy",
+    "contribution_amount": "747",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1341.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5"
+  },
+  {
+    "unique_id": "T3OAEB3E",
+    "full_name": "Charlotte Kelly",
+    "contribution_amount": "717.55",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1772.93",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1e64dd35f4defceea0351705533b6fe4d4a54d1a"
+  },
+  {
+    "unique_id": "BXCCT17O",
+    "full_name": "Sara Anderson",
+    "contribution_amount": "707.31",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2509.24",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x23b85badc811ea5160612fee46fe033bcc842d54"
+  },
+  {
+    "unique_id": "1VTXHOVE",
+    "full_name": "Mary Griffin",
+    "contribution_amount": "705.55",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "705.55",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5d80f366d3e403f877023b8fef5b8db4421aa091"
+  },
+  {
+    "unique_id": "SJTVFVB0",
+    "full_name": "Deborah Nguyen",
+    "contribution_amount": "703.3",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "703.3",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1faa993bad304b35f13dcee234392df2f3b90617"
+  },
+  {
+    "unique_id": "6OFTWGZ6",
+    "full_name": "Mark Gray",
+    "contribution_amount": "694.9",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "694.9",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1bc03a152f48c8cdd240a373b79fa1fd6d46b0f5"
+  },
+  {
+    "unique_id": "NPUEXHGC",
+    "full_name": "Aaron Foster",
+    "contribution_amount": "680.57",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1001.3700000000001",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x062be612223a13602911e0c645268933d7c2afad"
+  },
+  {
+    "unique_id": "YDJM4G6H",
+    "full_name": "Eugene Nelson",
+    "contribution_amount": "639.1",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "889.24",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x718113be3ad96f60385ff9344640c73e25d25765"
+  },
+  {
+    "unique_id": "ZF5RXT8R",
+    "full_name": "Kevin Jackson",
+    "contribution_amount": "630.77",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "630.77",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4370343fee9ccbba3333a74348800b5e05ebe661"
+  },
+  {
+    "unique_id": "C3Z2QOV8",
+    "full_name": "Kyle Rivera",
+    "contribution_amount": "626.8",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "881.9399999999999",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe"
+  },
+  {
+    "unique_id": "T3OAEB3E",
+    "full_name": "Charlotte Kelly",
+    "contribution_amount": "626.71",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1055.38",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1e64dd35f4defceea0351705533b6fe4d4a54d1a"
+  },
+  {
+    "unique_id": "ES2FK5CG",
+    "full_name": "Heather Gonzalez",
+    "contribution_amount": "613.34",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "613.34",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf4b66f6222fa72269483a2db98ccc67ba33e2488"
+  },
+  {
+    "unique_id": "ETQ4A0MC",
+    "full_name": "George Hayes",
+    "contribution_amount": "608.96",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1725.23",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d"
+  },
+  {
+    "unique_id": "BIKJ52AQ",
+    "full_name": "Charlotte Chen",
+    "contribution_amount": "604.32",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1034.8700000000001",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0f35d7146c2e374b0937ce698d42bb632c70ed81"
+  },
+  {
+    "unique_id": "VPRPDFRK",
+    "full_name": "Dennis Kennedy",
+    "contribution_amount": "594.96",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "594.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5"
+  },
+  {
+    "unique_id": "HOMDYJ6X",
+    "full_name": "Jessica Hernandez",
+    "contribution_amount": "592.48",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "592.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4fe076c393985d328c46384018b77ec09fadb831"
+  },
+  {
+    "unique_id": "EOP0RWRO",
+    "full_name": "Helen Baker",
+    "contribution_amount": "589.23",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "589.23",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf0a6904f179b5cccd9abb57ce3890745e1bb6cf2"
+  },
+  {
+    "unique_id": "OWPDCNSA",
+    "full_name": "Michelle Hayes",
+    "contribution_amount": "587.14",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2480.99",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xdfc346b38246a7f4e673a6d6304ba681057561b5"
+  },
+  {
+    "unique_id": "0ZSA683Z",
+    "full_name": "Christopher McDonald",
+    "contribution_amount": "579.38",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "579.38",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x62ce8019d99f1200de3aeac4442318d5f0b43a95"
+  },
+  {
+    "unique_id": "WTKHNAZW",
+    "full_name": "Tyler Adams",
+    "contribution_amount": "575.65",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "575.65",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe23ce54ff4ff2439fdde6fbc43f32cf76277bbf3"
+  },
+  {
+    "unique_id": "9JPPXXZE",
+    "full_name": "Charlotte Wells",
+    "contribution_amount": "540.06",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "540.06",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5cde675d9ed83380ca00a447ab984db9c0d3981a"
+  },
+  {
+    "unique_id": "OWPDCNSA",
+    "full_name": "Michelle Hayes",
+    "contribution_amount": "538.37",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1893.85",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xdfc346b38246a7f4e673a6d6304ba681057561b5"
+  },
+  {
+    "unique_id": "ZE770A29",
+    "full_name": "Joshua Stewart",
+    "contribution_amount": "533.04",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "533.04",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x6d6de9a618f8838c8eb7581594cfa3bcca2caf83"
+  },
+  {
+    "unique_id": "89CMLQ63",
+    "full_name": "Rebecca Jordan",
+    "contribution_amount": "518.18",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1334.17",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537"
+  },
+  {
+    "unique_id": "KMN9ELGG",
+    "full_name": "Sara Vasquez",
+    "contribution_amount": "507.67",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "507.67",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc6e6bd0e707daa49a2b682a80d8a57e607c9e38e"
+  },
+  {
+    "unique_id": "AE6STQMB",
+    "full_name": "Laura Alvarez",
+    "contribution_amount": "489.5",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1354.98",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742"
+  },
+  {
+    "unique_id": "SKTN9UM4",
+    "full_name": "Ashley Gutierrez",
+    "contribution_amount": "464.8",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "464.8",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x5479e4c84180af2d1c1ea285377cd6a0834567e2"
+  },
+  {
+    "unique_id": "8KAP8OKK",
+    "full_name": "Jennifer Williams",
+    "contribution_amount": "460",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1319.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x947d80c2e24bddd798547911375235b11956d6e8"
+  },
+  {
+    "unique_id": "OHFLU3OH",
+    "full_name": "Zachary Medina",
+    "contribution_amount": "445.01",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "445.01",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1e76a2f53f0432153de523b6f533dbcb89014a66"
+  },
+  {
+    "unique_id": "M22SMOJS",
+    "full_name": "Stephen Ward",
+    "contribution_amount": "436.81",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1349.97",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x813389e2380a9b638316362b070c19bca9955689"
+  },
+  {
+    "unique_id": "BIKJ52AQ",
+    "full_name": "Charlotte Chen",
+    "contribution_amount": "430.55",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "430.55",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0f35d7146c2e374b0937ce698d42bb632c70ed81"
+  },
+  {
+    "unique_id": "T3OAEB3E",
+    "full_name": "Charlotte Kelly",
+    "contribution_amount": "428.67",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "428.67",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1e64dd35f4defceea0351705533b6fe4d4a54d1a"
+  },
+  {
+    "unique_id": "0ZSA683Z",
+    "full_name": "Christopher McDonald",
+    "contribution_amount": "377.72",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "957.1",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x62ce8019d99f1200de3aeac4442318d5f0b43a95"
+  },
+  {
+    "unique_id": "AP4SH8KJ",
+    "full_name": "Jack Hayes",
+    "contribution_amount": "352.64",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "2011.2800000000002",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4f7cbe911f229af59b59933f29d47d3294e1f910"
+  },
+  {
+    "unique_id": "GR57OCIL",
+    "full_name": "Kevin Marshall",
+    "contribution_amount": "346.55",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "346.55",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xaf6893930cf70d8e426d0974d7b6532cd5d29636"
+  },
+  {
+    "unique_id": "VS0R6KCH",
+    "full_name": "Madison Hughes",
+    "contribution_amount": "327.77",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "327.77",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x08a91a373f93252ed01e9aeeb76adf3fff5f09b3"
+  },
+  {
+    "unique_id": "FZY1OK53",
+    "full_name": "Gerald Bailey",
+    "contribution_amount": "327.56",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "327.56",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4dcbbb517db46434d86ab320d7f33c5b7b24c8e9"
+  },
+  {
+    "unique_id": "NPUEXHGC",
+    "full_name": "Aaron Foster",
+    "contribution_amount": "320.8",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "320.8",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x062be612223a13602911e0c645268933d7c2afad"
+  },
+  {
+    "unique_id": "BIKJ52AQ",
+    "full_name": "Charlotte Chen",
+    "contribution_amount": "302.15",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1337.02",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x0f35d7146c2e374b0937ce698d42bb632c70ed81"
+  },
+  {
+    "unique_id": "UULAEUSF",
+    "full_name": "Katherine Medina",
+    "contribution_amount": "291.28",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1717.1499999999999",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401"
+  },
+  {
+    "unique_id": "FDMKQED8",
+    "full_name": "Victoria Johnson",
+    "contribution_amount": "273.43",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "273.43",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xa0e522d400abacda16bc0f23af0ea42ec991324e"
+  },
+  {
+    "unique_id": "C3Z2QOV8",
+    "full_name": "Kyle Rivera",
+    "contribution_amount": "255.14",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "255.14",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe"
+  },
+  {
+    "unique_id": "YDJM4G6H",
+    "full_name": "Eugene Nelson",
+    "contribution_amount": "250.14",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "250.14",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x718113be3ad96f60385ff9344640c73e25d25765"
+  },
+  {
+    "unique_id": "ZDLSNM46",
+    "full_name": "Dennis Lee",
+    "contribution_amount": "242.39",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "242.39",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xd3dedbb4a6bce1644f25ba9ceb57e31d515376c1"
+  },
+  {
+    "unique_id": "C3Z2QOV8",
+    "full_name": "Kyle Rivera",
+    "contribution_amount": "238.57",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1120.51",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe"
+  },
+  {
+    "unique_id": "N7YMXCEN",
+    "full_name": "Kenneth Woods",
+    "contribution_amount": "230.37",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "230.37",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x576b1cec6392e4828d9265580b0f4386f5da9a38"
+  },
+  {
+    "unique_id": "AMNKHZ1B",
+    "full_name": "Jennifer Mendoza",
+    "contribution_amount": "192.5",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1079.95",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1"
+  },
+  {
+    "unique_id": "8H68I9A7",
+    "full_name": "Zachary Simmons",
+    "contribution_amount": "183.22",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "183.22",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x8774d1c6bbf3c427725fd2b990f169f3792581ec"
+  },
+  {
+    "unique_id": "M22SMOJS",
+    "full_name": "Stephen Ward",
+    "contribution_amount": "149.03",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "913.16",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x813389e2380a9b638316362b070c19bca9955689"
+  },
+  {
+    "unique_id": "7Y6HI04S",
+    "full_name": "Scott Bell",
+    "contribution_amount": "128.88",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "188.82999999999998",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc35a158bfc9957ec35229112741f64942abbb36b"
+  },
+  {
+    "unique_id": "Q59TWRLG",
+    "full_name": "Lisa Stewart",
+    "contribution_amount": "119.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "119.92",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x664f7d7d8fa5764f4b78e5931613aaea385ce77d"
+  },
+  {
+    "unique_id": "DMDT7SNV",
+    "full_name": "Dennis Jackson",
+    "contribution_amount": "119.92",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "119.92",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2"
+  },
+  {
+    "unique_id": "6KMNDSDD",
+    "full_name": "Julie Jenkins",
+    "contribution_amount": "103.39",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "103.39",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3426886ae6468b24e157deed18c2b7903bac517b"
+  },
+  {
+    "unique_id": "SJTVFVB0",
+    "full_name": "Deborah Nguyen",
+    "contribution_amount": "69.8",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "773.0999999999999",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1faa993bad304b35f13dcee234392df2f3b90617"
+  },
+  {
+    "unique_id": "RGBZX2ZV",
+    "full_name": "Rebecca Morgan",
+    "contribution_amount": "61.91",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1039.08",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x338e51a7036a2d062c4348f191c49423131b8e19"
+  },
+  {
+    "unique_id": "7Y6HI04S",
+    "full_name": "Scott Bell",
+    "contribution_amount": "59.95",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "59.95",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc35a158bfc9957ec35229112741f64942abbb36b"
+  },
+  {
+    "unique_id": "2TJUI40V",
+    "full_name": "Carolyn Williams",
+    "contribution_amount": "58.07",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1166.1399999999999",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xc314a1b0300b7bb183fa4fa72327b992d7b4c803"
+  },
+  {
+    "unique_id": "UWTXU6QO",
+    "full_name": "Julia Moore",
+    "contribution_amount": "48.2",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "48.2",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1ef9abf4c32324319db56d3c97a2f2b675654f31"
+  },
+  {
+    "unique_id": "NPRNMY4U",
+    "full_name": "Amanda Fernandez",
+    "contribution_amount": "45.26",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "45.26",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xb3e7c95cc76bd535b1369a9d48ffe8a8a4a3a6b7"
+  },
+  {
+    "unique_id": "122TZVNB",
+    "full_name": "Denise Owens",
+    "contribution_amount": "43.73",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "43.73",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x28ce14913a41d6858cff2780bab2dac19ac53102"
+  },
+  {
+    "unique_id": "FQJB26BY",
+    "full_name": "Maria Wallace",
+    "contribution_amount": "42.73",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "42.73",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xb3e6b4fa848d8c51f2a143379e76b27f5304455d"
+  },
+  {
+    "unique_id": "9AFFUUV5",
+    "full_name": "Jessica Martin",
+    "contribution_amount": "42.26",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "42.26",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a"
+  },
+  {
+    "unique_id": "AMNKHZ1B",
+    "full_name": "Jennifer Mendoza",
+    "contribution_amount": "42.18",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "887.4499999999999",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1"
+  },
+  {
+    "unique_id": "GJ360Y0R",
+    "full_name": "Patricia Simmons",
+    "contribution_amount": "38.28",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "38.28",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4aef4b40363280778215fedef79b1f52fc74cc68"
+  },
+  {
+    "unique_id": "YFAU1TBD",
+    "full_name": "Amy Reed",
+    "contribution_amount": "36.96",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "36.96",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x73f8cd6698ad884f40e02888691e0096c62883e8"
+  },
+  {
+    "unique_id": "W94BZF6D",
+    "full_name": "Christina Parker",
+    "contribution_amount": "34.18",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "34.18",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe0538f86fe2ca2184330103e34d4de7daea201af"
+  },
+  {
+    "unique_id": "6KMNDSDD",
+    "full_name": "Julie Jenkins",
+    "contribution_amount": "28.38",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "131.77",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3426886ae6468b24e157deed18c2b7903bac517b"
+  },
+  {
+    "unique_id": "W16RO41P",
+    "full_name": "Willie Myers",
+    "contribution_amount": "27.51",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "27.51",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe28eb12c0381ce4f4b121a6c6816b448f569bbf9"
+  },
+  {
+    "unique_id": "HX1TJEQY",
+    "full_name": "Keith Vargas",
+    "contribution_amount": "27",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "27",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe5e7c4760c8ff66f4cfc648aad78ec321e41622f"
+  },
+  {
+    "unique_id": "YDJM4G6H",
+    "full_name": "Eugene Nelson",
+    "contribution_amount": "20.04",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "909.28",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x718113be3ad96f60385ff9344640c73e25d25765"
+  },
+  {
+    "unique_id": "E0QIM197",
+    "full_name": "Raymond Tran",
+    "contribution_amount": "19.32",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "19.32",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0xe9cd7aa390c37c805be81281d2dbcc2f87a6b8a4"
+  },
+  {
+    "unique_id": "NGX9HRGV",
+    "full_name": "Diane Morales",
+    "contribution_amount": "16.83",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "16.83",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x2f9aa73566c8e49df152e96c4fdf6405e02938a2"
+  },
+  {
+    "unique_id": "HOMDYJ6X",
+    "full_name": "Jessica Hernandez",
+    "contribution_amount": "16",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "608.48",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x4fe076c393985d328c46384018b77ec09fadb831"
+  },
+  {
+    "unique_id": "EWTKJQKB",
+    "full_name": "Abigail Rogers",
+    "contribution_amount": "14.14",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "14.14",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x7af1ee0eb41c03b1e8c9a97ab204c0518581c95e"
+  },
+  {
+    "unique_id": "T3OAEB3E",
+    "full_name": "Charlotte Kelly",
+    "contribution_amount": "10.73",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "1783.66",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x1e64dd35f4defceea0351705533b6fe4d4a54d1a"
+  },
+  {
+    "unique_id": "CPE2M3BW",
+    "full_name": "Brenda Cruz",
+    "contribution_amount": "10.47",
+    "kyc_passed": "NO_RECORD",
+    "exceeds_single_limit": "NO",
+    "cumulative_total": "10.47",
+    "exceeds_cumulative_limit": "NO",
+    "contract_decision": "REJECTED: KYC Failed",
+    "wallet": "0x3214a9b9e68f3fc25f06df837bb5036fbcb9c60f"
+  }
+];
+        
+        let currentData = [...campaignData];
+        let filteredData = [...campaignData];
+        
+        function initializeTable() {
+            displayData(campaignData);
+        }
+        
+        function displayData(data) {
+            if (data.length === 0) {
+                document.getElementById('dataTable').innerHTML = '<p>No matching records found</p>';
+                document.getElementById('showing').textContent = '0';
+                return;
+            }
+            
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>KYC Status</th>
+                        <th>Decision</th>
+                        <th>Reason</th>
+                        <th>Wallet</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            data.forEach(row => {
+                const kycStatus = row.kyc_passed === 'YES' ? 
+                    '<span class="valid">✅ PASSED</span>' : 
+                    '<span class="invalid">❌ FAILED</span>';
+                
+                const decision = row.contract_decision === 'ACCEPTED' ? 
+                    '<span class="valid">ACCEPTED</span>' : 
+                    '<span class="invalid">REJECTED</span>';
+                
+                const wallet = row.wallet ? row.wallet.substring(0, 10) + '...' : '';
+                
+                html += `
+                    <tr>
+                        <td>${row.unique_id}</td>
+                        <td>${row.full_name}</td>
+                        <td>$${parseFloat(row.contribution_amount).toFixed(2)}</td>
+                        <td>${kycStatus}</td>
+                        <td>${decision}</td>
+                        <td>${row.contract_decision !== 'ACCEPTED' ? row.contract_decision : ''}</td>
+                        <td>${wallet}</td>
+                        <td>${row.contribution_date || ''}</td>
+                    </tr>`;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('dataTable').innerHTML = html;
+            document.getElementById('showing').textContent = data.length;
+        }
+        
+        function searchData() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            if (!searchTerm) {
+                filteredData = [...currentData];
+            } else {
+                filteredData = currentData.filter(row => {
+                    return Object.values(row).some(value => 
+                        String(value).toLowerCase().includes(searchTerm)
+                    );
+                });
+            }
+            
+            displayData(filteredData);
+        }
+        
+        function filterData() {
+            const filterType = document.getElementById('filterType').value;
+            
+            switch(filterType) {
+                case 'all':
+                    currentData = [...campaignData];
+                    break;
+                case 'valid':
+                    currentData = campaignData.filter(row => row.contract_decision === 'ACCEPTED');
+                    break;
+                case 'invalid':
+                    currentData = campaignData.filter(row => row.contract_decision !== 'ACCEPTED');
+                    break;
+                case 'kyc_failed':
+                    currentData = campaignData.filter(row => row.kyc_passed !== 'YES');
+                    break;
+                case 'high_value':
+                    currentData = campaignData.filter(row => parseFloat(row.contribution_amount) > 1000);
+                    break;
+            }
+            
+            filteredData = [...currentData];
+            searchData(); // Re-apply search if any
+        }
+        
+        function downloadCurrentView() {
+            const dataToDownload = filteredData.length > 0 ? filteredData : currentData;
+            
+            // Convert to CSV
+            const headers = Object.keys(dataToDownload[0]);
+            let csv = headers.join(',') + '\n';
+            
+            dataToDownload.forEach(row => {
+                const values = headers.map(header => {
+                    const value = row[header] || '';
+                    return value.toString().includes(',') ? `"${value}"` : value;
+                });
+                csv += values.join(',') + '\n';
+            });
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `campaign_data_filtered_${Date.now()}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        
+        // Initialize on load
+        window.onload = initializeTable;
+    </script>
+</body>
+</html>

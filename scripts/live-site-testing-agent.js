@@ -23,8 +23,6 @@ class LiveSiteTestingAgent {
   }
 
   async initialize() {
-    console.log('🤖 Initializing Live Site Testing Agent...');
-    console.log(`🎯 Target URL: ${BASE_URL}`);
     
     // Load CSV data
     await this.loadCSVData();
@@ -38,7 +36,6 @@ class LiveSiteTestingAgent {
     });
     this.page = await this.browser.newPage();
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -79,7 +76,6 @@ class LiveSiteTestingAgent {
   }
 
   async inspectPageStructure() {
-    console.log('🔍 Analyzing page structure...');
     
     try {
       // Get all form elements
@@ -112,7 +108,6 @@ class LiveSiteTestingAgent {
         };
       });
       
-      console.log('📋 Page Structure Analysis:');
       console.log(`Forms found: ${formInfo.forms.length}`);
       console.log(`Input fields: ${formInfo.inputs.length}`);
       console.log(`Buttons: ${formInfo.buttons.length}`);
@@ -129,11 +124,9 @@ class LiveSiteTestingAgent {
     const startTime = Date.now();
     const testId = `test-${persona.profile.unique_id}-${startTime}`;
     
-    console.log(`\\n🧪 Testing form for: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     try {
       // Navigate to the site
-      console.log(`🌐 Navigating to: ${BASE_URL}`);
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 30000 });
       
       // Take screenshot of initial page
@@ -186,9 +179,7 @@ class LiveSiteTestingAgent {
       this.testResults.push(testResult);
       
       if (testResult.success) {
-        console.log(`✅ Test passed for ${persona.profile.first_name} ${persona.profile.last_name}`);
       } else {
-        console.log(`❌ Test failed for ${persona.profile.first_name} ${persona.profile.last_name}`);
       }
       
       return testResult;
@@ -225,7 +216,6 @@ class LiveSiteTestingAgent {
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
     
-    console.log('📝 Smart form filling...');
     
     try {
       let fieldsFound = 0;
@@ -269,7 +259,6 @@ class LiveSiteTestingAgent {
           try {
             const element = await this.page.$(selector);
             if (element) {
-              console.log(`📍 Found ${fieldType} field: ${selector}`);
               await this.page.focus(selector);
               await this.page.click(selector);
               await this.page.keyboard.down('Control');
@@ -287,11 +276,9 @@ class LiveSiteTestingAgent {
         }
         
         if (!filled) {
-          console.log(`⚠️  Could not find ${fieldType} field`);
         }
       }
       
-      console.log(`✅ Form filling complete: ${fieldsFilled}/${fieldsFound} fields filled`);
       
       return {
         success: fieldsFilled > 0,
@@ -327,7 +314,6 @@ class LiveSiteTestingAgent {
         try {
           const button = await this.page.$(selector);
           if (button) {
-            console.log(`🎯 Found submit button: ${selector}`);
             await button.click();
             
             // Wait for navigation or response
@@ -367,7 +353,6 @@ class LiveSiteTestingAgent {
   }
 
   async runTestSuite(options = {}) {
-    console.log('\\n🧪 Starting Live Site Testing Suite...\\n');
     
     const {
       count = 5,
@@ -397,12 +382,10 @@ class LiveSiteTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`Testing ${testPersonas.length} personas (${testType} mode)`);
     
     // Run tests
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
-      console.log(`\\n--- Test ${i + 1}/${testPersonas.length} ---`);
       
       await this.testFormSubmission(persona, {});
       
@@ -415,21 +398,15 @@ class LiveSiteTestingAgent {
   }
 
   generateTestReport() {
-    console.log('\\n📊 Live Site Test Report');
-    console.log('==========================================');
     
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter(r => r.success).length;
     const failedTests = totalTests - passedTests;
     const successRate = totalTests > 0 ? ((passedTests / totalTests) * 100).toFixed(1) : '0.0';
     
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${passedTests} ✅`);
-    console.log(`Failed: ${failedTests} ❌`);
     console.log(`Success Rate: ${successRate}%`);
     
     if (failedTests > 0) {
-      console.log('\\nFailed Tests:');
       this.testResults
         .filter(r => !r.success)
         .forEach(r => {
@@ -441,7 +418,6 @@ class LiveSiteTestingAgent {
     const reportPath = `test-results/live-site-test-report-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Detailed report saved: ${reportPath}`);
     
     // Summary for screenshots
     console.log('\\n📸 Screenshots saved in test-results/screenshots/');

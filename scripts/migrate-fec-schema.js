@@ -22,14 +22,12 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function executeMigration() {
   try {
-    console.log('📋 Reading migration file...');
     
     // Read the SQL migration file
     const sqlFilePath = path.join(__dirname, '../docs/fec-committees-schema.sql');
     const sqlContent = fs.readFileSync(sqlFilePath, 'utf8');
     
     console.log('📊 Migration file loaded, executing SQL...');
-    console.log(`📝 SQL Length: ${sqlContent.length} characters`);
     
     // Split SQL into individual statements (basic approach)
     const statements = sqlContent
@@ -37,7 +35,6 @@ async function executeMigration() {
       .map(stmt => stmt.trim())
       .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
     
-    console.log(`🔧 Found ${statements.length} SQL statements to execute`);
     
     let successCount = 0;
     let errorCount = 0;
@@ -48,8 +45,6 @@ async function executeMigration() {
       
       if (statement.length < 10) continue; // Skip very short statements
       
-      console.log(`\n⚡ Executing statement ${i + 1}/${statements.length}:`);
-      console.log(`   ${statement.substring(0, 100)}${statement.length > 100 ? '...' : ''}`);
       
       try {
         const { data, error } = await supabase.rpc('exec_sql', { 
@@ -60,7 +55,6 @@ async function executeMigration() {
           console.error(`❌ Error in statement ${i + 1}:`, error);
           
           // Try direct query if RPC fails
-          console.log('🔄 Trying direct query...');
           const { data: directData, error: directError } = await supabase
             .from('_supabase_migrations')
             .select('*')
@@ -92,7 +86,6 @@ async function executeMigration() {
     console.log(`   ❌ Errors: ${errorCount}`);
     
     // Verify the "Testy Test for Chancellor" committee was created
-    console.log('\n🔍 Verifying test committee creation...');
     await verifyTestCommittee();
     
   } catch (error) {
@@ -126,11 +119,6 @@ async function verifyTestCommittee() {
       }
     } else if (data) {
       console.log('🎉 SUCCESS! "Testy Test for Chancellor" committee found:');
-      console.log(`   📍 Committee ID: ${data.fec_committee_id}`);
-      console.log(`   🏛️  Name: ${data.committee_name}`);
-      console.log(`   👤 Candidate: ${data.candidate_name}`);
-      console.log(`   📍 Location: ${data.city}, ${data.state}`);
-      console.log(`   💼 Treasurer: ${data.treasurer_name}`);
     } else {
       console.log('⚠️  Test committee not found in database');
     }
@@ -141,7 +129,6 @@ async function verifyTestCommittee() {
 
 // Alternative approach: Insert test committee directly
 async function insertTestCommitteeDirectly() {
-  console.log('\n🎯 Attempting direct insert of test committee...');
   
   try {
     const testCommittee = {
@@ -176,12 +163,9 @@ async function insertTestCommitteeDirectly() {
 }
 
 // Main execution
-console.log('🔑 Using Supabase URL:', supabaseUrl);
-console.log('🔑 Service key configured:', supabaseServiceKey ? 'Yes' : 'No');
 
 executeMigration()
   .then(() => {
-    console.log('\n✨ Migration process completed!');
     console.log('🔗 Test the results at: http://localhost:5173/fec-test');
     process.exit(0);
   })

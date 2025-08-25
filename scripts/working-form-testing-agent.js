@@ -21,8 +21,6 @@ class WorkingFormTestingAgent {
   }
 
   async initialize() {
-    console.log('🤖 Working Form Testing Agent - FIXED VERSION');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     await this.loadCSVData();
     
@@ -38,7 +36,6 @@ class WorkingFormTestingAgent {
     this.page.setDefaultTimeout(30000);
     this.page.setDefaultNavigationTimeout(30000);
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -69,7 +66,6 @@ class WorkingFormTestingAgent {
   }
 
   async testBothForms(persona, testIndex, totalTests) {
-    console.log(`\\n=== TEST ${testIndex}/${totalTests}: ${persona.profile.first_name} ${persona.profile.last_name} ===`);
     
     const results = {
       persona: `${persona.profile.first_name} ${persona.profile.last_name}`,
@@ -91,7 +87,6 @@ class WorkingFormTestingAgent {
   }
 
   async testHomepageForm(persona) {
-    console.log('🏠 Testing Homepage Form...');
     
     try {
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
@@ -114,7 +109,6 @@ class WorkingFormTestingAgent {
         };
       });
       
-      console.log(`📋 Homepage: Found ${formElements.inputCount} total inputs, ${formElements.inputs.filter(i => i.visible).length} visible`);
       
       if (formElements.inputs.filter(i => i.visible).length === 0) {
         return {
@@ -147,13 +141,11 @@ class WorkingFormTestingAgent {
   }
 
   async testModalForm(persona) {
-    console.log('🔘 Testing Modal Form...');
     
     try {
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      console.log('🎯 Clicking Donate button...');
       
       // Multiple strategies to click donate
       let donateClicked = false;
@@ -172,7 +164,6 @@ class WorkingFormTestingAgent {
         }));
       });
       
-      console.log(`Found ${donateButtons.length} donate buttons:`, donateButtons);
       
       // Try clicking the first donate button
       if (donateButtons.length > 0) {
@@ -205,7 +196,6 @@ class WorkingFormTestingAgent {
       }
       
       // Wait for modal to appear and form to load
-      console.log('⏳ Waiting for modal and form to load...');
       
       // Wait longer and check multiple times
       let modalFound = false;
@@ -239,11 +229,9 @@ class WorkingFormTestingAgent {
           };
         });
         
-        console.log(`Attempt ${attempts}: Modals: ${modalCheck.modals}, Visible inputs: ${modalCheck.visibleInputs}`);
         
         if (modalCheck.visibleInputs > 0) {
           modalFound = true;
-          console.log('🎉 Form found in modal!', modalCheck.inputDetails);
           break;
         }
       }
@@ -283,7 +271,6 @@ class WorkingFormTestingAgent {
           fullPage: true 
         });
       } catch (screenshotError) {
-        console.log('Could not take debug screenshot');
       }
       
       return {
@@ -295,7 +282,6 @@ class WorkingFormTestingAgent {
   }
 
   async fillVisibleForm(persona, context) {
-    console.log(`📝 Filling ${context} form with real data...`);
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
@@ -314,7 +300,6 @@ class WorkingFormTestingAgent {
       amount: donation.contribution_amount || '100.00'
     };
     
-    console.log(`Using data: ${formData.first} ${formData.last}, ${formData.email}, $${formData.amount}`);
     
     try {
       let fieldsFilled = 0;
@@ -413,7 +398,6 @@ class WorkingFormTestingAgent {
   }
 
   async submitForm(context) {
-    console.log(`🚀 Submitting ${context} form...`);
     
     try {
       // Look for submit buttons with multiple strategies
@@ -442,7 +426,6 @@ class WorkingFormTestingAgent {
             });
             
             if (isVisible) {
-              console.log(`🎯 Found submit button: ${selector}`);
               await submitBtn.scrollIntoView();
               await submitBtn.click();
               submitted = true;
@@ -517,7 +500,6 @@ class WorkingFormTestingAgent {
   }
 
   async runTestSuite(options = {}) {
-    console.log('\\n🧪 Starting WORKING Form Testing Suite\\n');
     
     const { count = 2, testType = 'mixed' } = options;
     
@@ -540,7 +522,6 @@ class WorkingFormTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`🎯 Testing ${testPersonas.length} personas with WORKING automation`);
     
     fs.mkdirSync('test-results/screenshots', { recursive: true });
     
@@ -556,7 +537,6 @@ class WorkingFormTestingAgent {
 
   generateReport() {
     console.log('\\n📊 WORKING FORM TESTING RESULTS');
-    console.log('==========================================');
     
     const totalPersonas = this.testResults.length;
     let homepageSuccess = 0;
@@ -570,10 +550,8 @@ class WorkingFormTestingAgent {
       if (result.modalTest?.submitResult?.submitted) submissions++;
     });
     
-    console.log(`Total Personas: ${totalPersonas}`);
     console.log(`Homepage Success: ${homepageSuccess}/${totalPersonas}`);
     console.log(`Modal Success: ${modalSuccess}/${totalPersonas}`);
-    console.log(`Form Submissions: ${submissions}`);
     
     console.log('\\n📋 DETAILED RESULTS:');
     this.testResults.forEach((result, i) => {
@@ -585,7 +563,6 @@ class WorkingFormTestingAgent {
     // Save report
     const reportPath = `test-results/working-form-test-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Report saved: ${reportPath}`);
   }
 
   async cleanup() {

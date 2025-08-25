@@ -23,9 +23,6 @@ class DualFormTestingAgent {
   }
 
   async initialize() {
-    console.log('🤖 Initializing Dual Form Testing Agent...');
-    console.log(`🎯 Target URL: ${BASE_URL}`);
-    console.log('📋 Testing Strategy: Homepage Form + Modal Form for each persona');
     
     await this.loadCSVData();
     
@@ -37,7 +34,6 @@ class DualFormTestingAgent {
     });
     this.page = await this.browser.newPage();
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -73,7 +69,6 @@ class DualFormTestingAgent {
   }
 
   async testPersonaOnBothForms(persona, testIndex, totalTests) {
-    console.log(`\\n=== PERSONA ${testIndex}/${totalTests}: ${persona.profile.first_name} ${persona.profile.last_name} ===`);
     
     const results = {
       persona: `${persona.profile.first_name} ${persona.profile.last_name}`,
@@ -84,14 +79,12 @@ class DualFormTestingAgent {
     };
 
     // Test 1: Homepage Form
-    console.log('\\n🏠 TEST 1: Homepage Embedded Form');
     results.homepageForm = await this.testHomepageForm(persona, testIndex);
     
     // Wait between tests
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Test 2: Modal Form (after clicking Donate button)
-    console.log('\\n🔘 TEST 2: Modal Form (via Donate Button)');
     results.modalForm = await this.testModalForm(persona, testIndex);
     
     this.testResults.push(results);
@@ -112,7 +105,6 @@ class DualFormTestingAgent {
     const testId = `homepage-${persona.profile.unique_id}-${startTime}`;
     
     try {
-      console.log(`🌐 Loading homepage: ${BASE_URL}`);
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 30000 });
       
       // Screenshot of initial page
@@ -123,7 +115,6 @@ class DualFormTestingAgent {
       });
       
       // Look for forms already on the page (not in modals)
-      console.log('🔍 Scanning for homepage forms...');
       await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for any dynamic loading
       
       const pageAnalysis = await this.analyzeFormsOnPage('homepage');
@@ -139,7 +130,6 @@ class DualFormTestingAgent {
         };
       }
       
-      console.log(`📝 Found ${pageAnalysis.inputs.length} form inputs on homepage`);
       
       // Fill the homepage form
       const fillResult = await this.smartFormFill(persona, 'homepage');
@@ -199,7 +189,6 @@ class DualFormTestingAgent {
     const testId = `modal-${persona.profile.unique_id}-${startTime}`;
     
     try {
-      console.log(`🌐 Loading homepage for modal test: ${BASE_URL}`);
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 30000 });
       
       // Screenshot before clicking donate
@@ -209,7 +198,6 @@ class DualFormTestingAgent {
       });
       
       // Find and click the "Donate" button
-      console.log('🔘 Looking for Donate button...');
       const donateClicked = await this.clickDonateButton();
       
       if (!donateClicked) {
@@ -246,7 +234,6 @@ class DualFormTestingAgent {
         };
       }
       
-      console.log(`📝 Found ${pageAnalysis.inputs.length} form inputs in modal/new form`);
       
       // Fill the modal form
       const fillResult = await this.smartFormFill(persona, 'modal');
@@ -346,7 +333,6 @@ class DualFormTestingAgent {
   }
 
   async analyzeFormsOnPage(context) {
-    console.log(`🔍 Analyzing ${context} forms...`);
     
     try {
       const analysis = await this.page.evaluate(() => {
@@ -390,7 +376,6 @@ class DualFormTestingAgent {
         };
       });
       
-      console.log(`📋 ${context.toUpperCase()} Analysis: ${analysis.visibleInputs}/${analysis.totalInputs} visible inputs, ${analysis.buttons.length} buttons`);
       
       return analysis;
       
@@ -401,7 +386,6 @@ class DualFormTestingAgent {
   }
 
   async smartFormFill(persona, context) {
-    console.log(`📝 Filling ${context} form...`);
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
@@ -425,7 +409,6 @@ class DualFormTestingAgent {
       
       // Get all visible inputs
       const inputs = await this.page.$$('input:not([type="hidden"]), select, textarea');
-      console.log(`🎯 Found ${inputs.length} fillable inputs`);
       
       for (let i = 0; i < inputs.length; i++) {
         try {
@@ -467,7 +450,6 @@ class DualFormTestingAgent {
         }
       }
       
-      console.log(`✅ ${context} form filling complete: ${fieldsFilled} fields filled`);
       
       return {
         success: fieldsFilled > 0,
@@ -506,7 +488,6 @@ class DualFormTestingAgent {
   }
 
   async smartFormSubmit(context) {
-    console.log(`🚀 Attempting ${context} form submission...`);
     
     try {
       // Look for submit buttons
@@ -527,7 +508,6 @@ class DualFormTestingAgent {
           if (button) {
             const isVisible = await this.page.evaluate(el => el.offsetParent !== null, button);
             if (isVisible) {
-              console.log(`🎯 Found submit button: ${selector}`);
               await button.click();
               
               // Wait for response/navigation
@@ -549,10 +529,6 @@ class DualFormTestingAgent {
   }
 
   async runTestSuite(options = {}) {
-    console.log('\\n🧪 Starting Dual Form Testing Suite...\\n');
-    console.log('📋 Each persona will be tested on BOTH forms:');
-    console.log('   1️⃣  Homepage embedded form');
-    console.log('   2️⃣  Modal form (after clicking Donate)\\n');
     
     const { count = 3, testType = 'mixed' } = options;
     
@@ -575,8 +551,6 @@ class DualFormTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`🎯 Testing ${testPersonas.length} personas (${testType} mode)`);
-    console.log(`📊 Total tests: ${testPersonas.length * 2} (${testPersonas.length} × 2 forms each)\\n`);
     
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
@@ -590,8 +564,6 @@ class DualFormTestingAgent {
   }
 
   generateTestReport() {
-    console.log('\\n📊 DUAL FORM TEST REPORT');
-    console.log('==========================================');
     
     const totalPersonas = this.testResults.length;
     const totalTests = totalPersonas * 2; // 2 forms per persona
@@ -606,8 +578,6 @@ class DualFormTestingAgent {
       if (result.homepageForm?.success && result.modalForm?.success) bothFormsPasses++;
     });
     
-    console.log(`Total Personas Tested: ${totalPersonas}`);
-    console.log(`Total Individual Tests: ${totalTests} (${totalPersonas} × 2 forms)`);
     console.log(`\\n📋 FORM-SPECIFIC RESULTS:`);
     console.log(`Homepage Form Success: ${homepagePasses}/${totalPersonas} (${((homepagePasses/totalPersonas) * 100).toFixed(1)}%)`);
     console.log(`Modal Form Success: ${modalPasses}/${totalPersonas} (${((modalPasses/totalPersonas) * 100).toFixed(1)}%)`);
@@ -624,7 +594,6 @@ class DualFormTestingAgent {
     const reportPath = `test-results/dual-form-test-report-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Detailed report saved: ${reportPath}`);
     console.log('📸 Screenshots saved in test-results/screenshots/');
   }
 

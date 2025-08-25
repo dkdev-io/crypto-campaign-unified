@@ -1,0 +1,946 @@
+address_line_1,address_line_2,city,compliance_status,contract_decision,contribution_amount,contribution_date,cumulative_total,dataset_source,employer,exceeds_cumulative_limit,exceeds_single_limit,first_name,full_name,id,kyc_passed,kyc_status,last_name,occupation,phone,state,unique_id,wallet,zip
+867 Spruce Boulevard,Unit 6A,Minneapolis,,,,,,prospects,Logistics Co,,,Marie,,1,,,Ford,CPA,555-8727,MN,528KDAEQ,0x389823300130cdcaf022b7d3d1c878ce15441133,55401
+443 Birch Drive,,San Antonio,,,,,,prospects,Healthcare Partners,,,Kenneth,,2,,,Hughes,Network Engineer,555-4882,TX,KGXWR2WG,0xcaf899f8d2a7c35cbb337507657ae93ddd4cab77,78201
+205 Elm Way,,Fresno,,,,,,prospects,Security Firm,,,Keith,,3,,,Herrera,Designer,555-5504,CA,N8L248JX,0x1c15b273a40f0ec7156240ef5649957a91c3be31,93701
+137 Elm Road,,Houston,,,,,,prospects,Hospital Network,,,Chloe,,4,,,Washington,Real Estate Agent,555-8722,TX,GMC4HU1A,0x72b6fbbefe9c2189db481e1d965db73185cf4ce6,77001
+591 Ash Avenue,Suite 7A,Detroit,,,,,,prospects,Education First,,,Nathan,,5,,,Harrison,Real Estate Agent,555-5954,MI,FPZLFMHR,0x3d952cd9aa7983084912522abd41abd9caa1c11a,48201
+103 Cedar Way,,Minneapolis,,,,,,prospects,Architecture Firm,,,Larry,,6,,,Washington,Producer,555-2965,MN,M65RJT76,0x29e23b3764a9a3fa6d1d8b9db63ea2cbcd964090,55401
+658 Oak Street,,Oakland,,,,,,prospects,Accounting Firm,,,Richard,,7,,,James,Product Manager,555-8020,CA,0R17I15A,0x511446388a9ec4cac4672ae181f1b12410db5150,94601
+676 Birch Avenue,,Raleigh,,,,,,prospects,Consulting Firm,,,Katherine,,8,,,Morales,Teacher,555-1281,NC,JTFTYIIW,0xa1a3f04ca212c098bc5b61c33ad20991cf2a5aa5,27601
+904 Willow Road,,San Diego,,,,,,prospects,Investment Bank,,,William,,9,,,Martinez,Operations Manager,555-6708,CA,H1TMJONR,0x093d614695a5f341982eafec2535a8cf5b968706,92101
+228 Birch Avenue,Suite 14,Portland,,,,,,prospects,Tech Startup,,,Benjamin,,10,,,Gonzalez,Pharmacist,555-2045,OR,GKFZ8VML,0xd31d13c11820e496c395ccc87d0f9e3521a457bb,97201
+499 Spruce Avenue,,Las Vegas,,,,,,prospects,University,,,Roger,,11,,,Simmons,Designer,555-4838,NV,SHCMURR9,0x81dc2a10585031750230116e9f3af7cdb76f19c4,89101
+943 Cedar Way,,New York,,,,,,prospects,Publishing House,,,Kyle,,12,,,Aguilar,Underwriter,555-2487,NY,5CGDJPQM,0x95cdc33cd55a73f43c543223cfd76c6ab14c8d78,10001
+354 Cedar Boulevard,Unit 7B,Jacksonville,,,,,,prospects,Aerospace Corp,,,Denise,,13,,,Walker,Pilot,555-1048,FL,AKFNUF1V,0xd4b964e186fa469c3c7a2de8a135d1b211d2b063,32201
+469 Maple Place,,Chicago,,,,,,prospects,Global Marketing Corp,,,Janet,,14,,,Butler,Director,555-4113,IL,AYS92TUR,0xcfb51711a19426a0ada164d078f3e4f75005bcf5,60601
+108 Cedar Avenue,,Detroit,,,,,,prospects,Healthcare Partners,,,Joseph,,15,,,Edwards,Network Engineer,555-3979,MI,U6NQV6BX,0x90ec8941158a155fa43c5380f310082694f3350f,48201
+971 Spruce Court,,Tampa,,,,,,prospects,Auto Industries,,,Susan,,16,,,Ramirez,Project Manager,555-1572,FL,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,33601
+938 Maple Drive,Floor 4B,San Diego,,,,,,prospects,Tech Solutions Inc,,,Dorothy,,17,,,Chen,Partner,555-3695,CA,YPJMUPXG,0x873671db63dd44fa0122b173e11a9243bee13f1d,92101
+688 Ash Road,,Milwaukee,,,,,,prospects,Global Marketing Corp,,,Deborah,,18,,,Hamilton,Site Supervisor,555-5316,WI,Y6GLY6OI,0x6e03c67550c7202db0791a948ad7aeb4f35083b8,53201
+616 Poplar Way,,Detroit,,,,,,prospects,Media Productions,,,Janet,,19,,,Hamilton,Network Engineer,555-5176,MI,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,48201
+328 Pine Road,,Denver,,,,,,prospects,Hotel Chain,,,Nancy,,20,,,Wood,Mechanical Engineer,555-8793,CO,RVH47UAR,0x5b5217434abc0285bc3bfabfd4a86d5ef1aab382,80201
+682 Willow Road,Unit 10B,Anaheim,,,,,,prospects,Logistics Co,,,Dorothy,,21,,,Nguyen,Engineer,555-6003,CA,RO8MLSLJ,0x5e704f4ffe03c484b389e71c4148eed9596195db,92801
+887 Spruce Place,Floor 1D,Milwaukee,,,,,,prospects,Art Gallery,,,Joseph,,22,,,Hamilton,Editor,555-3108,WI,WFRQN256,0xc28211cd684e6aacd6c870fdbd8e2eadd26a4d1b,53201
+774 Poplar Way,,San Jose,,,,,,prospects,Telecom Company,,,Scott,,23,,,Parker,Product Manager,555-9946,CA,RHYYRN52,0xd9c2b554264354ab4d848973bb94f8833194a3dd,95101
+589 Maple Road,,Houston,,,,,,prospects,Retail Chain,,,Carol,,24,,,Lewis,Project Manager,555-7248,TX,OW0EVOMW,0xc89a538d92fcdfb3898a129212d42b9b3527448a,77001
+429 Pine Avenue,Unit 6B,Denver,,,,,,prospects,Accounting Firm,,,Nicholas,,25,,,Anderson,Producer,555-6182,CO,N1K17R1C,0x7f1f1ad49342f1014031d75e68def22405c199e0,80201
+289 Poplar Drive,,Virginia Beach,,,,,,prospects,Tech Startup,,,Mason,,26,,,Jackson,CPA,555-2761,VA,ATY1MTAX,0xe72a9b0a646bbd26834bc1375e5190f0d59bf2f7,23451
+220 Willow Way,,Indianapolis,,,,,,prospects,Nonprofit Org,,,Julie,,27,,,Kim,Security Consultant,555-3716,IN,T8UUGKEH,0x4fc80d6a55925a5b5b8e3ae9c6fa56c9cf9bff5b,46201
+101 Oak Place,Floor 5,Austin,,,,,,prospects,Food Services,,,Susan,,28,,,Thomas,Operations Manager,555-5566,TX,09YZMK00,0xdb2581b00532cc8d7dade56ecbe882f407f8dafd,78701
+147 Elm Circle,,Washington,,,,,,prospects,Telecom Company,,,Gary,,29,,,Fernandez,Site Supervisor,555-2732,DC,R777W9HK,0xc1ab1b721127e5f5979f1ac7b13c8b641d512736,20001
+509 Pine Circle,,Atlanta,,,,,,prospects,Hospital Network,,,Kelly,,30,,,Diaz,Systems Analyst,555-6981,GA,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,30301
+152 Birch Road,,San Francisco,,,,,,prospects,Sports Management,,,Diane,,31,,,Castro,Designer,555-1388,CA,56ZDXBGG,0xd5c3f5602692ee8ca8591ce4aef064338dd8db52,94102
+555 Willow Circle,Floor 17C,Houston,,,,,,prospects,Energy Company,,,Sara,,32,,,Henry,Travel Agent,555-6106,TX,OZFQJHBH,0x9f70bcd17cd3dde199eceac070dd4333cfeb2b9b,77001
+911 Oak Court,,Fresno,,,,,,prospects,Auto Industries,,,Dorothy,,33,,,Thompson,Editor,555-1689,CA,D642SV9S,0x4b7c56f48a7c6f247dfdaa847200b9a6734f80cb,93701
+240 Maple Lane,,Denver,,,,,,prospects,Accounting Firm,,,Mia,,34,,,Wallace,Editor,555-3479,CO,3KNRV10C,0xbf3310854a0698b75b94a53fbb1b103bd74452da,80201
+629 Oak Lane,,Virginia Beach,,,,,,prospects,University,,,Nicholas,,35,,,Nguyen,Restaurant Owner,555-8654,VA,0BDMAU6J,0xbffd588a983db6eeb7f45db56de275b0a1ff3d51,23451
+629 Willow Way,Suite 7,San Diego,,,,,,prospects,Insurance Corp,,,Jacob,,36,,,Price,Consultant,555-8692,CA,NJ6HCP2U,0xf7d49586e5950b57a0a1a27ff2132256ade4c2e4,92101
+500 Cedar Circle,,Houston,,,,,,prospects,Consulting Firm,,,Dennis,,37,,,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+216 Spruce Way,,Boston,,,,,,prospects,Hotel Chain,,,Hannah,,38,,,Woods,Underwriter,555-1214,MA,M7SNFIY3,0xa0248529dc5bf1a7ee913e470d88d4ed96744a6c,02101
+498 Pine Circle,,Chicago,,,,,,prospects,Food Services,,,Samuel,,39,,,Martin,Security Consultant,555-4625,IL,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,60601
+175 Poplar Boulevard,,Charlotte,,,,,,prospects,Sports Management,,,Susan,,40,,,Scott,Software Engineer,555-9315,NC,O519XXZ0,0x9438b6338433c17b9923cd46fe6fce408257e854,28201
+556 Maple Street,,Washington,,,,,,prospects,Real Estate Group,,,Joseph,,41,,,Chen,Director,555-6047,DC,BGMOP7U9,0x123aea2d83f33f9639ec7ab0f6308bfd804d4e59,20001
+343 Cedar Drive,,Portland,,,,,,prospects,Auto Industries,,,Frank,,42,,,Baker,Systems Analyst,555-7811,OR,VI4XLMGC,0xb0e02414ca276ec9025174a41c9f5d7c393d3735,97201
+208 Elm Boulevard,,Columbus,,,,,,prospects,Music Label,,,Mark,,43,,,Moore,Systems Analyst,555-6503,OH,Z3BKXSJK,0x3d7fac4b6a60d79a8c3056174abcd70de2aa7178,43201
+104 Pine Drive,Unit 15A,Charlotte,,,,,,prospects,Nonprofit Org,,,Christine,,44,,,Washington,Producer,555-5974,NC,PYU7VDP8,0x5246d0a65978e9bd34c7aa7a52354b9f49797a80,28201
+284 Poplar Lane,Apt 16,Milwaukee,,,,,,prospects,Film Studio,,,Anthony,,45,,,Flores,Security Consultant,555-1107,WI,B2NUAT8F,0xc47c735676f830266f075500607c8b6dcf74100d,53201
+437 Willow Place,,Boston,,,,,,prospects,Healthcare Partners,,,Evelyn,,46,,,Morgan,Agent,555-5917,MA,SR0XIYE7,0x8e6c80e2ca5ea6ce98f0d1e345de35833f3c6daf,02101
+922 Willow Lane,Floor 10B,Chicago,,,,,,prospects,Healthcare Partners,,,Peter,,47,,,Flores,Administrator,555-7069,IL,J22GVCNA,0xb3da7e4ebf6ffd2af197ee1c07f82a269975900b,60601
+855 Poplar Way,,Tucson,,,,,,prospects,Retail Giants,,,Mark,,48,,,Kim,Director,555-3690,AZ,M57JWYHO,0x3a5054038cd2fc7a7853c57d8954649a7250c2e2,85701
+627 Cedar Boulevard,Unit 10D,Nashville,,,,,,prospects,Logistics Co,,,John,,49,,,Graham,Editor,555-6740,TN,88V3LGC5,0x62ed640cbb563552f7b7fe4bceea4e207e63ac12,37201
+381 Willow Drive,Suite 15B,San Jose,,,,,,prospects,Education First,,,Albert,,50,,,Baker,Financial Analyst,555-7631,CA,LZ5I9SHV,0x59324ae958fcda4f8da60947a4b7b7b61d0d8c95,95101
+749 Pine Court,Unit 2,Houston,,,,,,prospects,Food Services,,,Richard,,51,,,Perry,Attorney,555-7200,TX,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,77001
+173 Birch Court,,Milwaukee,,,,,,prospects,Tech Startup,,,Nicholas,,52,,,Hughes,Software Engineer,555-7691,WI,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,53201
+731 Oak Way,,Seattle,,,,,,prospects,Logistics Co,,,Nathan,,53,,,Bailey,CEO,555-1803,WA,I3CLB3U4,0x4a59d912a286645b5eb383d809755d8e03b383ae,98101
+287 Poplar Way,Unit 7A,Las Vegas,,,,,,prospects,Aerospace Corp,,,Maria,,54,,,Lopez,Software Engineer,555-4347,NV,Z7D01HCO,0x91032e1c241eb232473f3207c126a8ad63142151,89101
+774 Ash Street,Floor 12B,Charlotte,,,,,,prospects,Film Studio,,,Amanda,,55,,,West,Teacher,555-5523,NC,OTBEOGIR,0xb40ac5b4fbb12a16a036cd2251524f74e67edf23,28201
+813 Ash Boulevard,,San Francisco,,,,,,prospects,Telecom Company,,,Noah,,56,,,Vasquez,Teacher,555-3650,CA,VXAQ4IID,0x16f530f01f1116cfd3c5c022aab6f0441df82fbd,94102
+365 Poplar Drive,,Sacramento,,,,,,prospects,Pharmacy Chain,,,Martha,,57,,,Griffin,Product Manager,555-1364,CA,IWDDS5E2,0x56dbb7022afe7471367af04b2e335b6933347610,95801
+338 Willow Circle,,Tucson,,,,,,prospects,Airlines,,,Gary,,58,,,Richardson,Attorney,555-5831,AZ,PRQ7DN55,0xa4c74717998c823cecf4c2c3a33090f19d4c42bf,85701
+939 Poplar Avenue,,Los Angeles,,,,,,prospects,Music Label,,,Gregory,,59,,,Jenkins,Professor,555-8430,CA,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,90001
+678 Maple Circle,,Seattle,,,,,,prospects,Energy Company,,,Rachel,,60,,,Rivera,CPA,555-1161,WA,88WA7AE6,0xc48b54d557d3c9529c23d177cfffed245a7d2d84,98101
+770 Elm Avenue,,Nashville,,,,,,prospects,Telecom Company,,,Charlotte,,61,,,Thomas,Security Consultant,555-8609,TN,6B79XWGZ,0x2927d35d2a3924e9c512cdd57324ab667d9b5240,37201
+203 Pine Way,,Phoenix,,,,,,prospects,Fashion House,,,Sarah,,62,,,Stewart,Underwriter,555-9630,AZ,G3X14JZS,0xd12ebf99165be63efdae3643b594908a5ba40f94,85001
+157 Cedar Street,,Houston,,,,,,prospects,Investment Bank,,,Harold,,63,,,Kelly,Director,555-9405,TX,A6PP7PTU,0x4c68a3c25f3972a52ee41fcc206a491d10a86093,77001
+864 Oak Lane,Unit 15B,Austin,,,,,,prospects,Construction Co,,,Sara,,64,,,Coleman,Software Engineer,555-5254,TX,LFU0TPM0,0x036c512f46d765956869b2d40e8accf9ff9c8613,78701
+740 Pine Place,Unit 1C,Las Vegas,,,,,,prospects,Financial Advisory LLC,,,Helen,,65,,,Marshall,Pharmacist,555-8336,NV,SM4CDJVD,0xc58fab270324ae5f7cb4ec889b9556ebdcc82ff0,89101
+197 Spruce Court,,Washington,,,,,,prospects,Investment Bank,,,Ruth,,66,,,Reynolds,Attorney,555-8006,DC,E74CP3JL,0x6e83310679316490554256c2ebe2794384f696b4,20001
+871 Poplar Place,Apt 3B,Washington,,,,,,prospects,Publishing House,,,Ruth,,67,,,Ward,Network Engineer,555-9507,DC,CLXQWT3A,0xdffab27435ec99602c08bbbceeb6b8965111e380,20001
+304 Birch Lane,,Virginia Beach,,,,,,prospects,Pharmacy Chain,,,Janet,,68,,,Medina,Creative Director,555-6835,VA,K0BXXNX8,0x0414ee77c70a4b177476bb8a62030ad6e7a9c903,23451
+689 Oak Circle,,Portland,,,,,,prospects,Energy Company,,,Eugene,,69,,,Lopez,Producer,555-6499,OR,SZ0U7SDI,0x2ed80c2060b0bcb884633300a5f0c022d13c55c4,97201
+567 Cedar Street,Unit 8A,Omaha,,,,,,prospects,University,,,Nathan,,70,,,Henry,Regional Manager,555-3632,NE,FTOU2TAA,0x6dd2aafaa2c1bddf8e3244e7dba080840dc303f6,68101
+473 Pine Road,,Albuquerque,,,,,,prospects,Telecom Company,,,Hannah,,71,,,Murray,Operations Manager,555-3790,NM,YU6YB70U,0xaad6f2d05b4a8dd79a235aac79bd0cb66fc902b4,87101
+825 Birch Drive,Unit 2B,San Jose,,,,,,prospects,Airlines,,,Mason,,72,,,Taylor,Mechanical Engineer,555-3169,CA,Y7YXP2TQ,0x1a266923ce883405ef40730b8973cd7781442039,95101
+520 Ash Way,,Fresno,,,,,,prospects,Accounting Firm,,,Carolyn,,73,,,Wright,Software Engineer,555-2360,CA,HYRZFLYY,0xb5da13c9a2e6c944909df341735971f35f159f4b,93701
+798 Cedar Drive,,Los Angeles,,,,,,prospects,Telecom Company,,,Mary,,74,,,Hill,Director,555-7071,CA,FL9JAHD9,0x8dddd92fe0c41f9bcd1c691d0c5ad6dde2b041f7,90001
+658 Poplar Court,Apt 9B,Columbus,,,,,,prospects,Investment Bank,,,Willie,,75,,,Cole,Director,555-1146,OH,FVLTKA72,0x4bcf2ec29162839ee2ca8a0f8e211fd93fad0c39,43201
+600 Ash Lane,,Honolulu,,,,,,prospects,Airlines,,,Janet,,76,,,Davis,Security Consultant,555-8515,HI,3W5ALWRR,0xa5b8713b30d61efa45a5aa1bee886114e7285ae5,96801
+312 Poplar Lane,,Austin,,,,,,prospects,Aerospace Corp,,,Douglas,,77,,,Long,Systems Analyst,555-7641,TX,GHN1RBNW,0x2da6ed35f23a97f2bcb70f9b04821754947703b5,78701
+914 Birch Boulevard,Floor 11,Seattle,,,,,,prospects,Airlines,,,Nicole,,78,,,Barnes,Designer,555-3394,WA,8PJKSA9T,0x9a06e55450010b14dde2dcf2b53a154a280f48d8,98101
+266 Birch Lane,,Austin,,,,,,prospects,Food Services,,,Kevin,,79,,,Moreno,Director,555-8408,TX,5CMFBIGJ,0xa86ebf5c6e1798670eddfc617571f0f66012443c,78701
+107 Maple Street,Unit 14A,Seattle,,,,,,prospects,Insurance Corp,,,Betty,,80,,,Chen,Partner,555-8731,WA,7JANJW8N,0x38e4b0a6a588e9d74cabb09e47c97fecb88bcc77,98101
+595 Birch Avenue,,San Diego,,,,,,prospects,Security Firm,,,Brandon,,81,,,Wilson,Network Engineer,555-3565,CA,HQJAMOKJ,0x740ffb0b40dc0657755d032015c4db9ad64b3976,92101
+954 Elm Boulevard,,Nashville,,,,,,prospects,Music Label,,,Susan,,82,,,Diaz,Research Scientist,555-2828,TN,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,37201
+825 Willow Boulevard,Suite 6A,Omaha,,,,,,prospects,Tech Startup,,,Stephanie,,83,,,Scott,Creative Director,555-9076,NE,PCD1I21G,0xd3d98a75220621db18d57b5b07fa9cee7ba57e5b,68101
+911 Birch Boulevard,,New York,,,,,,prospects,Food Services,,,Charles,,84,,,Mendoza,CPA,555-9302,NY,GSUUB5TR,0xe2c706cfd225c0cf831d08c31bb37354af2c8919,10001
+925 Birch Court,,Milwaukee,,,,,,prospects,Hospital Network,,,Michael,,85,,,Jimenez,Pharmacist,555-7770,WI,SHE614ID,0x8667d73fe41a5e3be9060bb3054afc3abca4c0d4,53201
+525 Maple Road,Apt 19B,Denver,,,,,,prospects,Hospital Network,,,Samantha,,86,,,Gray,Marketing Director,555-1403,CO,EDE258YS,0x4553981961ac4e9ff9ecc2dc292065f533706b07,80201
+805 Cedar Boulevard,,Las Vegas,,,,,,prospects,Aerospace Corp,,,Mary,,87,,,Martinez,Administrator,555-3901,NV,36N9US4W,0xdfe04bdda2edaf4d70a54280e670539c895b666b,89101
+657 Elm Boulevard,,Cleveland,,,,,,prospects,Tech Solutions Inc,,,Ruth,,88,,,Owens,Restaurant Owner,555-4789,OH,EIBZFFHN,0x72964cb2e2699a2dbbf456ceee7dacda44da9b80,44101
+573 Ash Court,,Philadelphia,,,,,,prospects,University,,,Rebecca,,89,,,Stewart,CEO,555-9327,PA,RVU5VEGQ,0x36f1090b91b3b445043ed991bc03a5131de73a5c,19101
+603 Ash Street,Unit 10D,Kansas City,,,,,,prospects,Art Gallery,,,Julia,,90,,,Mitchell,Game Developer,555-3396,MO,8M0BJ6U9,0x25537341182677efd7b13297b9d158737b2c10c3,64101
+120 Spruce Court,,Fort Worth,,,,,,prospects,Consulting Firm,,,Donna,,91,,,Watson,Pharmacist,555-1244,TX,JDXXXWYL,0x5ec2e3f1778578e5e4787688687d7bce48ddffc8,76101
+409 Ash Avenue,,Fresno,,,,,,prospects,Logistics Co,,,Mia,,92,,,Flores,Director,555-6448,CA,MU05EHN8,0x788e786a84e2741f0d3a03bc438f46eac5480457,93701
+543 Ash Road,Unit 1B,San Diego,,,,,,prospects,University,,,Christopher,,93,,,Brooks,Financial Analyst,555-9273,CA,RKW0PCWC,0xd7127c4f05d392241115159664e3001d27e30d00,92101
+589 Ash Road,,San Jose,,,,,,prospects,Security Firm,,,Dennis,,94,,,Martin,Creative Director,555-4154,CA,J06OIXBQ,0xc9d6351894be064644e05fa77a3f3363070da9af,95101
+779 Birch Avenue,Unit 1,Nashville,,,,,,prospects,Publishing House,,,Wayne,,95,,,Moreno,Producer,555-7508,TN,EDNEHHZM,0x212a27e3197e1bf2d1028ed9e5e73b0bf992c49b,37201
+568 Birch Drive,,Charlotte,,,,,,prospects,Real Estate Group,,,Kevin,,96,,,Cooper,Creative Director,555-7208,NC,EOA89JQR,0x25a81d9a08710762512088f686cb2a11cb08d3aa,28201
+823 Oak Way,,Portland,,,,,,prospects,Investment Bank,,,Richard,,97,,,Clark,Network Engineer,555-9050,OR,7VJ3FRR4,0x3db649759a4d043e67df1f4322b1bf316ee3d350,97201
+517 Poplar Lane,Unit 19C,Philadelphia,,,,,,prospects,Logistics Co,,,Christine,,98,,,Rodriguez,Architect,555-7928,PA,WUQZ5J7M,0xd24c03d9eb68cb0ca673e3b804a64d5ff92f50fe,19101
+524 Pine Court,,Seattle,,,,,,prospects,Nonprofit Org,,,Debra,,99,,,Anderson,Operations Manager,555-9600,WA,M13JF1JW,0x523a2ca6a5d61408a22071c45869970473e785a5,98101
+722 Elm Street,Unit 9A,San Francisco,,,,,,prospects,Art Gallery,,,Nicholas,,100,,,Bennett,Administrator,555-1287,CA,GVS9G194,0xa582e71a8641b4387fd9b19f2ea2466f57057cb7,94102
+102 Oak Drive,,Indianapolis,,,,,,prospects,Tech Startup,,,Abigail,,101,,,Tran,Attorney,555-1844,IN,Z49IUHZ7,0xf130e0863163c0b826401aabb357abe76423e64d,46201
+151 Elm Road,Apt 18C,Philadelphia,,,,,,prospects,Food Services,,,Barbara,,102,,,Alvarez,Real Estate Agent,555-1041,PA,3BPC7AAP,0x7749e2a80b8ed640195638f4afdc45743decd62d,19101
+516 Birch Street,,Dallas,,,,,,prospects,Art Gallery,,,Stephanie,,103,,,Rodriguez,Restaurant Owner,555-8511,TX,S93BYRRL,0x331c7d493a47bc61c5ef43b909197f57473a2823,75201
+271 Pine Way,,Charlotte,,,,,,prospects,Media Productions,,,Nancy,,104,,,Owens,Editor,555-4114,NC,HHQ0QK7W,0xeed6e464946c984cd8627f9b4ce7bd6386024883,28201
+648 Spruce Circle,Unit 1A,Honolulu,,,,,,prospects,Hospital Network,,,Jacqueline,,105,,,Lee,Physician,555-4514,HI,11UM2Q0N,0x9b66d0239103566ea3ca10d51b070535f61e4080,96801
+572 Elm Lane,,Charlotte,,,,,,prospects,Retail Chain,,,Eric,,106,,,Hayes,Creative Director,555-5491,NC,3KNFKO94,0x058b6a2bce0cffccfcaa636fd576ee0088d0968c,28201
+170 Poplar Road,,Denver,,,,,,prospects,Financial Advisory LLC,,,Megan,,107,,,Jones,Administrator,555-7212,CO,QP9MKOB3,0xe7afe666dd25a85a3697b758599e7e4aefb2b916,80201
+601 Cedar Street,Floor 3D,Tampa,,,,,,prospects,Real Estate Group,,,Nicholas,,108,,,Wright,CEO,555-4533,FL,ZBWLU9BD,0xbc333228bdbf1ab6433082428f9f9ba4efaf6eef,33601
+876 Elm Court,Floor 8A,Denver,,,,,,prospects,Tech Solutions Inc,,,Stephanie,,109,,,Davis,Physician,555-6031,CO,9657FN0X,0x071f54373afe3435fa757ffd28267866df96f0ea,80201
+804 Oak Road,,Raleigh,,,,,,prospects,Telecom Company,,,Douglas,,110,,,Adams,Game Developer,555-8461,NC,6N9ER1BL,0x83b6074d0ce3563d1bf260b43c53e203875f1508,27601
+633 Elm Avenue,,Raleigh,,,,,,prospects,Hospital Network,,,Lisa,,111,,,Vargas,Professor,555-9290,NC,OQ8REGOO,0x2af4f45337748ab94ea48c9ee265c6e5d86c75d3,27601
+336 Oak Boulevard,,Los Angeles,,,,,,prospects,Travel Agency,,,Isabella,,112,,,Ellis,Producer,555-6167,CA,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,90001
+909 Maple Street,Apt 14A,Boston,,,,,,prospects,Sports Management,,,Peter,,113,,,Harris,Store Manager,555-7305,MA,OSULX20W,0x1cd6698f0bb2e9f00a28d60182790251a6fc32cd,02101
+816 Cedar Court,,Indianapolis,,,,,,prospects,Telecom Company,,,Roger,,114,,,Patterson,Consultant,555-4889,IN,A88B4W6U,0x945fd30073025c83b7d5e0a2f52cd8c99f1b3c41,46201
+859 Elm Drive,,Minneapolis,,,,,,prospects,Security Firm,,,Jordan,,115,,,Murray,Real Estate Agent,555-1428,MN,XMLRSNUU,0x686331fa40a50fe951fbcaee3c01aa5788209fc3,55401
+529 Pine Way,Floor 13A,Tampa,,,,,,prospects,Publishing House,,,Rachel,,116,,,Washington,Regional Manager,555-7605,FL,DPU4LFH5,0xec40ecaa21c830eb220aec6bdd61f20f4d8d0902,33601
+594 Elm Drive,,Denver,,,,,,prospects,Logistics Co,,,Brittany,,117,,,Coleman,Financial Analyst,555-6745,CO,59W1P4OK,0xda2bdc821245ad09e7ab40fcdd6d819b3085deaa,80201
+114 Birch Circle,Floor 10,Portland,,,,,,prospects,Retail Chain,,,Timothy,,118,,,Davis,Creative Director,555-1117,OR,CW9F2S7B,0xd4dfa25dfa0ebb7f7d4dc6517e13480c53310602,97201
+684 Ash Drive,,Honolulu,,,,,,prospects,Music Label,,,Olivia,,119,,,Flores,Restaurant Owner,555-2278,HI,9UKB5II8,0x0f159d25fdeb495ceca6ab96b777f70bf9689087,96801
+680 Elm Circle,,Boston,,,,,,prospects,Healthcare Partners,,,Brian,,120,,,Bennett,Mechanical Engineer,555-8208,MA,IXE2CDCX,0xe59dac08957848aa86a4089a1abbc6b06b2f4669,02101
+132 Pine Boulevard,,Jacksonville,,,,,,prospects,Consulting Firm,,,Chloe,,121,,,Coleman,Mechanical Engineer,555-7646,FL,RGC5FGYK,0x4b5f1e6182ef75c6523bf5788593174d0c3a39bb,32201
+190 Birch Avenue,,Honolulu,,,,,,prospects,Telecom Company,,,Carol,,122,,,Taylor,Systems Analyst,555-6953,HI,IO05GNHO,0x3f8d7a8fb22c72bbe5ac802b4507b450ba2c02c5,96801
+694 Poplar Road,Unit 5C,Charlotte,,,,,,prospects,Pharmacy Chain,,,Jason,,123,,,Alexander,Attorney,555-3078,NC,0GRFGDDN,0xc55ff96fd57ff0b9bb879d9889e5b8ed63e6f76a,28201
+212 Ash Place,,Honolulu,,,,,,prospects,Gaming Studio,,,Larry,,124,,,Lopez,Research Scientist,555-5006,HI,58XSMTBA,0x541695a4beb314874209114217a5b9abc8327371,96801
+861 Elm Lane,,Honolulu,,,,,,prospects,Tech Startup,,,Carol,,125,,,Vargas,Professor,555-8673,HI,XZR76Y7I,0x8b05af7f1b29103d4c76e0f4e03059c923b3bd34,96801
+466 Elm Lane,,Austin,,,,,,prospects,Biotech Labs,,,Douglas,,126,,,Johnson,Project Manager,555-3359,TX,V2VYVVO0,0xac9132a4f62978467609c50650313e0ea30ff3ea,78701
+530 Maple Avenue,,Detroit,,,,,,prospects,Insurance Corp,,,Jack,,127,,,Chavez,Research Scientist,555-4643,MI,HLF0DYXX,0xc370901828aa50a916dfe7653499953116b4dcae,48201
+378 Poplar Street,,Tucson,,,,,,prospects,Telecom Company,,,Carolyn,,128,,,Phillips,Research Scientist,555-4813,AZ,4M0JKQ3B,0xfb982a3b95dad8098e918f57871d2e3c3a5281f8,85701
+765 Elm Place,Suite 2D,Miami,,,,,,prospects,Tech Solutions Inc,,,James,,129,,,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+793 Birch Avenue,,Phoenix,,,,,,prospects,Gaming Studio,,,Denise,,130,,,Brown,Engineer,555-1457,AZ,HXHX4VMR,0x53598c1e45f207f550fe89ffc12ea5fa1074c6f5,85001
+980 Poplar Place,,Tampa,,,,,,prospects,Financial Advisory LLC,,,James,,131,,,Young,Teacher,555-7230,FL,F7373NAP,0x2b1b87da659c2a97a380059329f8abca3d433cff,33601
+585 Ash Road,Unit 16C,Philadelphia,,,,,,prospects,Travel Agency,,,Maria,,132,,,Patel,Software Engineer,555-3900,PA,G2EY457P,0x5bb8c5e66c45b686c8fcfe1dcf922b8be1c0cc65,19101
+505 Pine Avenue,,Virginia Beach,,,,,,prospects,Global Marketing Corp,,,Anna,,133,,,Fisher,Software Engineer,555-2683,VA,61R02LE0,0xf8a9a9456b79e71dd0fa744aff14050f24f76ddf,23451
+885 Poplar Road,Apt 2A,Seattle,,,,,,prospects,Construction Co,,,Janet,,134,,,Smith,Agent,555-8030,WA,HB0KZGZV,0x23f734463c3f9de09b89f973345d59d07823471f,98101
+613 Pine Way,,Miami,,,,,,prospects,Pharmacy Chain,,,Jennifer,,135,,,Vargas,CPA,555-7513,FL,QC3S78YD,0x4c1e27a0b54c139d71fb26e36844d22f93aa4cf3,33101
+217 Spruce Street,,Miami,,,,,,prospects,Film Studio,,,Michelle,,136,,,Howard,Attorney,555-8241,FL,GAVDF2JW,0x2b44efbf555afa30543e56958095d15d05180e1f,33101
+479 Oak Place,,Atlanta,,,,,,prospects,Nonprofit Org,,,David,,137,,,Perez,Store Manager,555-6532,GA,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,30301
+761 Spruce Street,,Philadelphia,,,,,,prospects,Consulting Firm,,,Dorothy,,138,,,Henderson,Operations Manager,555-3851,PA,X7EJVPUI,0x76495a8d986977c62e334cec1a2126785f357d99,19101
+696 Pine Circle,Apt 19A,Tampa,,,,,,prospects,Food Services,,,Christina,,139,,,Richardson,Pilot,555-5594,FL,JFPK0JBX,0x8fe5b8e7599f87610b43f64537186a9da4a05b31,33601
+885 Spruce Avenue,,Austin,,,,,,prospects,Hospital Network,,,Gregory,,140,,,Henry,Banker,555-8012,TX,18QL8MLY,0xcaf3a68da383816a78f910a87e4e8346948030c0,78701
+273 Cedar Court,Apt 17,Boston,,,,,,prospects,Travel Agency,,,Charles,,141,,,Reyes,Security Consultant,555-2109,MA,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,02101
+619 Elm Place,Suite 5D,Charlotte,,,,,,prospects,Investment Bank,,,Jennifer,,142,,,Green,Pilot,555-3657,NC,PEDKQ7XI,0x80158c8aa850f8a497c8062d26f795c00993798e,28201
+340 Cedar Street,,Charlotte,,,,,,prospects,Law Associates,,,Carolyn,,143,,,Russell,Security Consultant,555-7228,NC,AVMDYV3T,0x691874a905ac46e7750f632fb97076df03aeccaa,28201
+189 Poplar Circle,,Albuquerque,,,,,,prospects,Insurance Corp,,,Charles,,144,,,Alexander,Physician,555-7969,NM,Y3XILU2G,0x0bdf47a6a3e6b7f1cedcf414709880a089e34f20,87101
+989 Spruce Way,,Oakland,,,,,,prospects,Aerospace Corp,,,Deborah,,145,,,James,Security Consultant,555-6419,CA,8SXUJPIL,0xbc2cc7aab2b6937406c5138816f4d9bee7f3cf70,94601
+671 Oak Road,,Fort Worth,,,,,,prospects,Insurance Corp,,,Teresa,,146,,,Gonzalez,Architect,555-1489,TX,6BP7TQGA,0xf045228a69d2c5af0987a863e22d3c9854693f75,76101
+339 Birch Court,Unit 20A,Charlotte,,,,,,prospects,Financial Advisory LLC,,,Donna,,147,,,Myers,Professor,555-6145,NC,OX09YVNV,0xa946121fef719d4f0692dd4f7fdfa1f93e03fed8,28201
+834 Maple Court,Apt 15,Dallas,,,,,,prospects,Architecture Firm,,,John,,148,,,Wright,Attorney,555-6933,TX,6ZMX83DT,0x0acc3797987063e949a5375540f6b825fccc888b,75201
+789 Pine Way,,San Diego,,,,,,prospects,Architecture Firm,,,Patricia,,149,,,Murray,Mechanical Engineer,555-1149,CA,8HV6FTUV,0x38c18c8b58077f27e0ba0ee8dd14b4514853854f,92101
+280 Maple Circle,,Boston,,,,,,prospects,Biotech Labs,,,Janice,,150,,,Long,Professor,555-1400,MA,YMTV5RNA,0x826d19f6cf50fa12bdf4e2572b82c2ffc108bfc9,02101
+125 Pine Place,,Atlanta,,,3300,2024-01-07,,donors,Consulting Firm,,,Laura,,1,,,Ward,Pilot,555-3473,GA,9R1LB52B,0xc81131c2206dcacd857c8fd22937b17a9edade8b,30301
+765 Elm Place,Suite 2D,Miami,,,985.14,2024-01-07,,donors,Tech Solutions Inc,,,James,,2,,,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+524 Pine Court,,Seattle,,,1269.73,2024-01-07,,donors,Nonprofit Org,,,Debra,,3,,,Anderson,Operations Manager,555-9600,WA,M13JF1JW,0x523a2ca6a5d61408a22071c45869970473e785a5,98101
+620 Birch Lane,Unit 17B,San Antonio,,,764.13,2024-01-07,,donors,Consulting Firm,,,Stephen,,4,,,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+354 Ash Street,Apt 19B,New York,,,894.92,2024-01-11,,donors,Law Associates,,,Jose,,5,,,Rivera,Agent,555-2452,NY,CNPVNIFW,0x7edb2abea6c22946711c2ae65ebbe4f88d419de7,10001
+776 Oak Place,,Anaheim,,,1827.95,2024-01-11,,donors,Sports Management,,,Charlotte,,6,,,Aguilar,Project Manager,555-2564,CA,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,92801
+765 Elm Place,Suite 2D,Miami,,,784.79,2024-01-18,,donors,Tech Solutions Inc,,,James,,7,,,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+634 Maple Drive,,Minneapolis,,,836.6,2024-01-20,,donors,Consulting Firm,,,Jacqueline,,8,,,Ruiz,Site Supervisor,555-2653,MN,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,55401
+953 Willow Lane,Unit 1B,Austin,,,1786.01,2024-01-23,,donors,Financial Advisory LLC,,,Christian,,9,,,Butler,Director,555-3971,TX,H3D8ZLEY,0xd9345816116cd600b4d2a3a78c37eee7551ba686,78701
+145 Pine Place,,Detroit,,,1581.03,2024-01-24,,donors,University,,,Andrea,,10,,,White,Product Manager,555-4875,MI,92CTKVF0,0x007c0582ff9ab4d26e63667de01513dfb4833739,48201
+124 Pine Way,,Milwaukee,,,845.27,2024-01-24,,donors,Food Services,,,Jennifer,,11,,,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+788 Oak Street,,Philadelphia,,,1116.27,2024-02-02,,donors,Retail Chain,,,George,,12,,,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+323 Ash Way,,Milwaukee,,,1108.07,2024-02-02,,donors,Tech Startup,,,Carolyn,,13,,,Williams,Designer,555-8189,WI,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,53201
+509 Pine Circle,,Atlanta,,,15.62,2024-02-03,,donors,Hospital Network,,,Kelly,,14,,,Diaz,Systems Analyst,555-6981,GA,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,30301
+985 Ash Street,,San Jose,,,1015.57,2024-02-04,,donors,Insurance Corp,,,Carol,,15,,,Ellis,Consultant,555-3617,CA,RJ77OYU1,0x577785223d3bee101e0068ec4e2606dbdfb3dac4,95101
+885 Cedar Avenue,Floor 18D,Indianapolis,,,1219.09,2024-02-07,,donors,Financial Advisory LLC,,,David,,16,,,Gray,Professor,555-3595,IN,060BKHPG,0x22c2d0b5f6a28ab00af5804b0ad8866f6a1af515,46201
+145 Willow Drive,,Phoenix,,,119.92,2024-02-09,,donors,Publishing House,,,Lisa,,17,,,Stewart,Real Estate Agent,555-3950,AZ,Q59TWRLG,0x664f7d7d8fa5764f4b78e5931613aaea385ce77d,85001
+958 Spruce Place,,Tampa,,,1625.94,2024-02-12,,donors,Pharmacy Chain,,,Olivia,,18,,,Hayes,Financial Analyst,555-6908,FL,Z9V2TMV2,0xd18e529ab2f0b718e2443b403698490da8b0b0a0,33601
+395 Spruce Circle,Unit 17A,San Antonio,,,1144.44,2024-02-14,,donors,Construction Co,,,Brandon,,19,,,Kim,Agent,555-5033,TX,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,78201
+392 Maple Circle,,Kansas City,,,1425.87,2024-02-14,,donors,Financial Advisory LLC,,,Katherine,,20,,,Medina,Physician,555-6505,MO,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,64101
+921 Poplar Circle,Apt 5C,Minneapolis,,,977.17,2024-02-16,,donors,Aerospace Corp,,,Rebecca,,21,,,Morgan,Pharmacist,555-4983,MN,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,55401
+593 Cedar Place,,Las Vegas,,,3300,2024-02-17,,donors,Aerospace Corp,,,Mason,,22,,,Sullivan,Producer,555-8086,NV,CFNVL7IY,0x5b1faa040d43e4421e1195310a7a7043cad76edd,89101
+993 Oak Boulevard,,Oakland,,,1526.06,2024-02-19,,donors,Education First,,,Justin,,23,,,Murray,CPA,555-8023,CA,NK71KXKQ,0x9179e979c6f88a2e5bb7452b9184f81b2fc72b2e,94601
+758 Cedar Drive,,New York,,,705.55,2024-02-19,,donors,Tech Solutions Inc,,,Mary,,24,,,Griffin,Attorney,555-9965,NY,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,10001
+577 Oak Lane,,Indianapolis,,,34.18,2024-02-20,,donors,Telecom Company,,,Christina,,25,,,Parker,Systems Analyst,555-5078,IN,W94BZF6D,0xe0538f86fe2ca2184330103e34d4de7daea201af,46201
+173 Pine Court,,Sacramento,,,859.96,2024-02-21,,donors,Energy Company,,,Jennifer,,26,,,Williams,Software Engineer,555-5736,CA,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,95801
+898 Ash Court,,Honolulu,,,327.77,2024-02-23,,donors,Media Productions,,,Madison,,27,,,Hughes,Site Supervisor,555-3268,HI,VS0R6KCH,0x08a91a373f93252ed01e9aeeb76adf3fff5f09b3,96801
+500 Cedar Circle,,Houston,,,1059.02,2024-02-24,,donors,Consulting Firm,,,Dennis,,28,,,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+903 Elm Circle,Apt 18B,Jacksonville,,,1889.44,2024-02-29,,donors,Retail Giants,,,Grace,,29,,,Howard,Producer,555-8412,FL,WYMUMPQ6,0x0c1ef388200d522bf1daa07b7811942465b48600,32201
+297 Birch Court,,Phoenix,,,1821.1,2024-03-02,,donors,Insurance Corp,,,James,,30,,,Jordan,Physician,555-6346,AZ,INYIJ9SW,0xca18afa644b2bc0c608e8c1ad9698976221d56c3,85001
+466 Spruce Avenue,Floor 15D,Washington,,,1388.81,2024-03-05,,donors,Consulting Firm,,,Jordan,,31,,,Tran,Operations Manager,555-9913,DC,V4IHMZWN,0xdce29b140ea98c1288fc73758b4b6789121e89ed,20001
+601 Cedar Street,Floor 3D,Tampa,,,1174.41,2024-03-07,,donors,Real Estate Group,,,Nicholas,,32,,,Wright,CEO,555-4533,FL,ZBWLU9BD,0xbc333228bdbf1ab6433082428f9f9ba4efaf6eef,33601
+573 Oak Circle,,Jacksonville,,,592.48,2024-03-10,,donors,Music Label,,,Jessica,,33,,,Hernandez,Mechanical Engineer,555-2695,FL,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,32201
+831 Pine Boulevard,Floor 18C,Fort Worth,,,230.37,2024-03-12,,donors,Pharmacy Chain,,,Kenneth,,34,,,Woods,Banker,555-9256,TX,N7YMXCEN,0x576b1cec6392e4828d9265580b0f4386f5da9a38,76101
+520 Ash Way,,Fresno,,,830.56,2024-03-12,,donors,Accounting Firm,,,Carolyn,,35,,,Wright,Software Engineer,555-2360,CA,HYRZFLYY,0xb5da13c9a2e6c944909df341735971f35f159f4b,93701
+396 Spruce Street,,San Jose,,,445.01,2024-03-19,,donors,Pharmacy Chain,,,Zachary,,36,,,Medina,Financial Analyst,555-8426,CA,OHFLU3OH,0x1e76a2f53f0432153de523b6f533dbcb89014a66,95101
+659 Birch Street,,Boston,,,1458.94,2024-03-22,,donors,Pharmacy Chain,,,Anthony,,37,,,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+859 Cedar Place,,Washington,,,1345.48,2024-03-22,,donors,Investment Bank,,,Emily,,38,,,Sanchez,Administrator,555-7261,DC,Y98W4QG0,0x8ad1100b8fc3cf674adab8369d29dd583d37f6af,20001
+448 Birch Way,,Dallas,,,938.2,2024-03-24,,donors,Accounting Firm,,,Walter,,39,,,Harrison,Real Estate Agent,555-5890,TX,4376J1GV,0x318effcab4ce638cece0d59287d60367a79f3b22,75201
+223 Cedar Road,Suite 9,Raleigh,,,346.55,2024-03-26,,donors,Real Estate Group,,,Kevin,,40,,,Marshall,Security Consultant,555-7242,NC,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,27601
+336 Oak Boulevard,,Los Angeles,,,522.38,2024-03-26,,donors,Travel Agency,,,Isabella,,41,,,Ellis,Producer,555-6167,CA,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,90001
+812 Spruce Boulevard,,Atlanta,,,865.48,2024-03-28,,donors,Sports Management,,,Laura,,42,,,Alvarez,Network Engineer,555-8531,GA,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,30301
+918 Oak Place,,Indianapolis,,,1288.96,2024-03-28,,donors,Biotech Labs,,,Peter,,43,,,Cruz,Project Manager,555-3357,IN,ID074SG0,0x87784d374dc663aa06c86e68be590d190a01a94b,46201
+631 Oak Boulevard,,Columbus,,,1031.61,2024-03-29,,donors,Insurance Corp,,,Steven,,44,,,Simmons,Partner,555-2086,OH,8XQ3USL9,0xf4b45c2c886e754735d3a925c01b646749f44422,43201
+609 Pine Circle,,Charlotte,,,703.3,2024-03-29,,donors,Education First,,,Deborah,,45,,,Nguyen,Software Engineer,555-7868,NC,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,28201
+765 Elm Place,Suite 2D,Miami,,,1529.07,2024-04-01,,donors,Tech Solutions Inc,,,James,,46,,,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+312 Poplar Lane,,Austin,,,1662.89,2024-04-03,,donors,Aerospace Corp,,,Douglas,,47,,,Long,Systems Analyst,555-7641,TX,GHN1RBNW,0x2da6ed35f23a97f2bcb70f9b04821754947703b5,78701
+500 Cedar Circle,,Houston,,,208.77,2024-04-03,,donors,Consulting Firm,,,Dennis,,48,,,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+793 Birch Avenue,,Phoenix,,,1804.55,2024-04-06,,donors,Gaming Studio,,,Denise,,49,,,Brown,Engineer,555-1457,AZ,HXHX4VMR,0x53598c1e45f207f550fe89ffc12ea5fa1074c6f5,85001
+339 Birch Court,Unit 20A,Charlotte,,,1833.98,2024-04-06,,donors,Financial Advisory LLC,,,Donna,,50,,,Myers,Professor,555-6145,NC,OX09YVNV,0xa946121fef719d4f0692dd4f7fdfa1f93e03fed8,28201
+944 Spruce Boulevard,,Omaha,,,1631.51,2024-04-07,,donors,Construction Co,,,Joseph,,51,,,Murphy,Security Consultant,555-2711,NE,7ZV3BEZO,0x7b224e8bbf01c624e0ca398b36d9ac9edfdf263c,68101
+616 Poplar Way,,Detroit,,,402.09,2024-04-09,,donors,Media Productions,,,Janet,,52,,,Hamilton,Network Engineer,555-5176,MI,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,48201
+816 Elm Circle,Unit 7C,Phoenix,,,320.8,2024-04-11,,donors,Telecom Company,,,Aaron,,53,,,Foster,Director,555-4072,AZ,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,85001
+176 Elm Boulevard,,Dallas,,,579.38,2024-04-20,,donors,Retail Chain,,,Christopher,,54,,,McDonald,Regional Manager,555-8841,TX,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,75201
+223 Cedar Road,Suite 9,Raleigh,,,785.86,2024-04-20,,donors,Real Estate Group,,,Kevin,,55,,,Marshall,Security Consultant,555-7242,NC,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,27601
+472 Maple Court,Unit 13D,Chicago,,,430.55,2024-04-22,,donors,Sports Management,,,Charlotte,,56,,,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+450 Oak Circle,,Houston,,,1394.56,2024-04-24,,donors,Pharmacy Chain,,,Debra,,57,,,Alvarez,Editor,555-6510,TX,9T7ZT14E,0xcfc1fa19b3e0c3cac56d1bc975212aa5725b732b,77001
+814 Oak Avenue,Suite 4B,Fresno,,,613.34,2024-04-27,,donors,Healthcare Partners,,,Heather,,58,,,Gonzalez,Site Supervisor,555-7715,CA,ES2FK5CG,0xf4b66f6222fa72269483a2db98ccc67ba33e2488,93701
+731 Oak Way,,Seattle,,,43.15,2024-04-30,,donors,Logistics Co,,,Nathan,,59,,,Bailey,CEO,555-1803,WA,I3CLB3U4,0x4a59d912a286645b5eb383d809755d8e03b383ae,98101
+420 Spruce Place,,Tampa,,,3300,2024-05-01,,donors,Energy Company,,,Brenda,,60,,,Young,Mechanical Engineer,555-4284,FL,89CM5WVC,0x89050758df62c70764793ea4141dd83d0c29918f,33601
+928 Oak Way,,Houston,,,428.67,2024-05-01,,donors,Art Gallery,,,Charlotte,,61,,,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+788 Oak Street,,Philadelphia,,,608.96,2024-05-04,,donors,Retail Chain,,,George,,62,,,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+415 Pine Lane,Apt 3,Raleigh,,,42.26,2024-05-05,,donors,Biotech Labs,,,Jessica,,63,,,Martin,Engineer,555-5388,NC,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,27601
+939 Poplar Avenue,,Los Angeles,,,483.13,2024-05-05,,donors,Music Label,,,Gregory,,64,,,Jenkins,Professor,555-8430,CA,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,90001
+689 Willow Road,Unit 11B,San Jose,,,255.14,2024-05-09,,donors,Real Estate Group,,,Kyle,,65,,,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+472 Maple Court,Unit 13D,Chicago,,,604.32,2024-05-10,,donors,Sports Management,,,Charlotte,,66,,,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+616 Poplar Way,,Detroit,,,43.52,2024-05-11,,donors,Media Productions,,,Janet,,67,,,Hamilton,Network Engineer,555-5176,MI,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,48201
+393 Elm Boulevard,Floor 11D,Chicago,,,1891.35,2024-05-12,,donors,Logistics Co,,,Barbara,,68,,,Martin,Partner,555-8290,IL,0ZAA8WA1,0xf8939b634a74a54acc65e84e6b47b515e2e0ea25,60601
+165 Oak Lane,Unit 16A,San Diego,,,1801.93,2024-05-13,,donors,Film Studio,,,Sara,,69,,,Anderson,Operations Manager,555-5573,CA,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,92101
+498 Pine Circle,,Chicago,,,437.1,2024-05-13,,donors,Food Services,,,Samuel,,70,,,Martin,Security Consultant,555-4625,IL,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,60601
+479 Oak Place,,Atlanta,,,483.18,2024-05-14,,donors,Nonprofit Org,,,David,,71,,,Perez,Store Manager,555-6532,GA,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,30301
+470 Maple Way,Suite 10B,Minneapolis,,,103.39,2024-05-15,,donors,Hospital Network,,,Julie,,72,,,Jenkins,Security Consultant,555-3576,MN,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,55401
+382 Ash Way,,Phoenix,,,464.8,2024-05-16,,donors,Film Studio,,,Ashley,,73,,,Gutierrez,Restaurant Owner,555-7757,AZ,SKTN9UM4,0x5479e4c84180af2d1c1ea285377cd6a0834567e2,85001
+500 Cedar Circle,,Houston,,,86.83,2024-05-16,,donors,Consulting Firm,,,Dennis,,74,,,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+358 Pine Road,Floor 2B,Seattle,,,1246.7,2024-05-17,,donors,Pharmacy Chain,,,Jacqueline,,75,,,Vasquez,Marketing Director,555-3929,WA,8E8S8O5B,0x759e3024366f02ceef107a3a5836c10100349918,98101
+470 Maple Way,Suite 10B,Minneapolis,,,28.38,2024-05-18,,donors,Hospital Network,,,Julie,,76,,,Jenkins,Security Consultant,555-3576,MN,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,55401
+151 Elm Road,Apt 18C,Philadelphia,,,1493.94,2024-05-19,,donors,Food Services,,,Barbara,,77,,,Alvarez,Real Estate Agent,555-1041,PA,3BPC7AAP,0x7749e2a80b8ed640195638f4afdc45743decd62d,19101
+954 Elm Boulevard,,Nashville,,,262.73,2024-05-20,,donors,Music Label,,,Susan,,78,,,Diaz,Research Scientist,555-2828,TN,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,37201
+137 Elm Road,,Houston,,,603.7,2024-05-22,,donors,Hospital Network,,,Chloe,,79,,,Washington,Real Estate Agent,555-8722,TX,GMC4HU1A,0x72b6fbbefe9c2189db481e1d965db73185cf4ce6,77001
+721 Poplar Avenue,Unit 12C,Minneapolis,,,815.64,2024-05-22,,donors,Retail Giants,,,Anna,,80,,,Romero,Real Estate Agent,555-6488,MN,GHV6TMP2,0x5832e71d9dcb0825c177aaced9ba15a3635b698c,55401
+333 Poplar Boulevard,Apt 4C,Portland,,,3299.95,2024-05-24,,donors,Tech Solutions Inc,,,Christine,,81,,,Harris,Marketing Director,555-5836,OR,M91DV3DW,0x9e93a17d9105a0682c40ec8aa268897b68172689,97201
+334 Ash Drive,,San Antonio,,,27,2024-05-25,,donors,Biotech Labs,,,Keith,,82,,,Vargas,Network Engineer,555-4237,TX,HX1TJEQY,0xe5e7c4760c8ff66f4cfc648aad78ec321e41622f,78201
+613 Ash Place,Unit 4C,Albuquerque,,,27.51,2024-05-28,,donors,Financial Advisory LLC,,,Willie,,83,,,Myers,Partner,555-6084,NM,W16RO41P,0xe28eb12c0381ce4f4b121a6c6816b448f569bbf9,87101
+554 Pine Place,,Portland,,,183.22,2024-05-28,,donors,Media Productions,,,Zachary,,84,,,Simmons,Designer,555-7442,OR,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,97201
+812 Spruce Boulevard,,Atlanta,,,489.5,2024-05-29,,donors,Sports Management,,,Laura,,85,,,Alvarez,Network Engineer,555-8531,GA,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,30301
+921 Poplar Circle,Apt 5C,Minneapolis,,,61.91,2024-05-30,,donors,Aerospace Corp,,,Rebecca,,86,,,Morgan,Pharmacist,555-4983,MN,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,55401
+855 Ash Road,,Portland,,,250.14,2024-05-31,,donors,Retail Giants,,,Eugene,,87,,,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+816 Elm Circle,Unit 7C,Phoenix,,,680.57,2024-06-03,,donors,Telecom Company,,,Aaron,,88,,,Foster,Director,555-4072,AZ,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,85001
+528 Birch Street,Unit 19C,Fresno,,,1953.69,2024-06-05,,donors,Tech Solutions Inc,,,Andrea,,89,,,Watson,Producer,555-4895,CA,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,93701
+689 Willow Road,Unit 11B,San Jose,,,626.8,2024-06-08,,donors,Real Estate Group,,,Kyle,,90,,,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+176 Elm Boulevard,,Dallas,,,377.72,2024-06-08,,donors,Retail Chain,,,Christopher,,91,,,McDonald,Regional Manager,555-8841,TX,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,75201
+765 Pine Circle,,Boston,,,1699.53,2024-06-09,,donors,Travel Agency,,,Joshua,,92,,,Hall,Restaurant Owner,555-9828,MA,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,02101
+653 Cedar Place,,Fresno,,,119.92,2024-06-10,,donors,Architecture Firm,,,Dennis,,93,,,Jackson,Financial Analyst,555-5858,CA,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,93701
+620 Birch Lane,Unit 17B,San Antonio,,,149.03,2024-06-11,,donors,Consulting Firm,,,Stephen,,94,,,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+935 Oak Circle,,Virginia Beach,,,1273.05,2024-06-12,,donors,Music Label,,,Sara,,95,,,Sanders,Professor,555-7493,VA,R6OLX2YW,0x4f182d7fca5d5db5a0b5179ff4b5e8afed6d6a04,23451
+173 Birch Court,,Milwaukee,,,1182.19,2024-06-13,,donors,Tech Startup,,,Nicholas,,96,,,Hughes,Software Engineer,555-7691,WI,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,53201
+273 Cedar Court,Apt 17,Boston,,,46.24,2024-06-14,,donors,Travel Agency,,,Charles,,97,,,Reyes,Security Consultant,555-2109,MA,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,02101
+855 Ash Road,,Portland,,,639.1,2024-06-16,,donors,Retail Giants,,,Eugene,,98,,,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+509 Pine Circle,,Atlanta,,,361.39,2024-06-16,,donors,Hospital Network,,,Kelly,,99,,,Diaz,Systems Analyst,555-6981,GA,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,30301
+124 Pine Way,,Milwaukee,,,42.18,2024-06-17,,donors,Food Services,,,Jennifer,,100,,,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+104 Pine Drive,Unit 15A,Charlotte,,,1844.04,2024-06-17,,donors,Nonprofit Org,,,Christine,,101,,,Washington,Producer,555-5974,NC,PYU7VDP8,0x5246d0a65978e9bd34c7aa7a52354b9f49797a80,28201
+415 Pine Lane,Apt 3,Raleigh,,,838.63,2024-06-17,,donors,Biotech Labs,,,Jessica,,102,,,Martin,Engineer,555-5388,NC,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,27601
+928 Oak Way,,Houston,,,626.71,2024-06-22,,donors,Art Gallery,,,Charlotte,,103,,,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+827 Oak Road,,Indianapolis,,,533.04,2024-06-23,,donors,Accounting Firm,,,Joshua,,104,,,Stewart,Director,555-4815,IN,ZE770A29,0x6d6de9a618f8838c8eb7581594cfa3bcca2caf83,46201
+928 Oak Way,,Houston,,,717.55,2024-06-23,,donors,Art Gallery,,,Charlotte,,105,,,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+998 Oak Court,,Fresno,,,43.73,2024-06-27,,donors,Education First,,,Denise,,106,,,Owens,Network Engineer,555-5673,CA,122TZVNB,0x28ce14913a41d6858cff2780bab2dac19ac53102,93701
+120 Cedar Court,,Columbus,,,59.95,2024-06-27,,donors,Logistics Co,,,Scott,,107,,,Bell,Product Manager,555-1727,OH,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,43201
+589 Ash Road,,San Jose,,,1950.42,2024-06-30,,donors,Security Firm,,,Dennis,,108,,,Martin,Creative Director,555-4154,CA,J06OIXBQ,0xc9d6351894be064644e05fa77a3f3363070da9af,95101
+636 Maple Way,,New York,,,1928.28,2024-07-01,,donors,Auto Industries,,,Alexander,,109,,,Nguyen,CEO,555-6943,NY,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,10001
+110 Spruce Road,,Houston,,,1004.48,2024-07-04,,donors,Hotel Chain,,,Andrea,,110,,,Gibson,Teacher,555-8892,TX,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,77001
+479 Oak Place,,Atlanta,,,382.82,2024-07-04,,donors,Nonprofit Org,,,David,,111,,,Perez,Store Manager,555-6532,GA,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,30301
+603 Ash Street,Unit 10D,Kansas City,,,1274.1,2024-07-07,,donors,Art Gallery,,,Julia,,112,,,Mitchell,Game Developer,555-3396,MO,8M0BJ6U9,0x25537341182677efd7b13297b9d158737b2c10c3,64101
+590 Birch Avenue,,Columbus,,,42.73,2024-07-08,,donors,Media Productions,,,Maria,,113,,,Wallace,Editor,555-5668,OH,FQJB26BY,0xb3e6b4fa848d8c51f2a143379e76b27f5304455d,43201
+241 Poplar Lane,,Detroit,,,1941.62,2024-07-09,,donors,Construction Co,,,Nicholas,,114,,,Adams,Designer,555-5961,MI,8WUVFN9T,0x4ac73ebf27790a9a4650d10ca0b146a30de89946,48201
+622 Maple Road,,Philadelphia,,,815.99,2024-07-10,,donors,Healthcare Partners,,,Rebecca,,115,,,Jordan,Professor,555-6364,PA,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,19101
+904 Willow Road,,San Diego,,,334.09,2024-07-13,,donors,Investment Bank,,,William,,116,,,Martinez,Operations Manager,555-6708,CA,H1TMJONR,0x093d614695a5f341982eafec2535a8cf5b968706,92101
+189 Spruce Way,,Austin,,,1218.75,2024-07-17,,donors,Tech Startup,,,Dennis,,117,,,Chen,Site Supervisor,555-2357,TX,2PQUL5JZ,0x6017210e5d9d04bd0bee39ebbb4a25a7f9e4c0dd,78701
+739 Birch Street,,San Jose,,,914.5,2024-07-19,,donors,Telecom Company,,,Benjamin,,118,,,Miller,Real Estate Agent,555-3542,CA,BN9ZJEK0,0x84f9d70c91b2f60c448b97c20fb50065ed7f4cc2,95101
+954 Elm Boulevard,,Nashville,,,147.46,2024-07-22,,donors,Music Label,,,Susan,,119,,,Diaz,Research Scientist,555-2828,TN,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,37201
+973 Ash Court,,Fort Worth,,,1355.48,2024-07-23,,donors,Investment Bank,,,Michelle,,120,,,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+472 Maple Court,Unit 13D,Chicago,,,302.15,2024-07-23,,donors,Sports Management,,,Charlotte,,121,,,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+949 Willow Drive,,Milwaukee,,,507.67,2024-07-24,,donors,Music Label,,,Sara,,122,,,Vasquez,Software Engineer,555-4727,WI,KMN9ELGG,0xc6e6bd0e707daa49a2b682a80d8a57e607c9e38e,53201
+813 Ash Boulevard,,San Francisco,,,1466.18,2024-07-24,,donors,Telecom Company,,,Noah,,123,,,Vasquez,Teacher,555-3650,CA,VXAQ4IID,0x16f530f01f1116cfd3c5c022aab6f0441df82fbd,94102
+314 Pine Lane,,Philadelphia,,,1669.42,2024-07-25,,donors,Sports Management,,,Carol,,124,,,Johnson,Engineer,555-6041,PA,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,19101
+776 Oak Place,,Anaheim,,,993.85,2024-07-25,,donors,Sports Management,,,Charlotte,,125,,,Aguilar,Project Manager,555-2564,CA,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,92801
+224 Elm Lane,,Fresno,,,3299.55,2024-07-29,,donors,Gaming Studio,,,Stephanie,,126,,,Evans,Attorney,555-3524,CA,3ZKCNLYY,0x7aa65b7fb0109ad848527a8f9771c29df78e6fd7,93701
+749 Pine Court,Unit 2,Houston,,,863.96,2024-08-02,,donors,Food Services,,,Richard,,127,,,Perry,Attorney,555-7200,TX,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,77001
+605 Cedar Place,Suite 11B,Raleigh,,,811.15,2024-08-05,,donors,Tech Solutions Inc,,,Heather,,128,,,Watson,Creative Director,555-8982,NC,LT5YGESQ,0x0ef0a3cf41099ff0370fec537266e33bb193ffcf,27601
+528 Birch Street,Unit 19C,Fresno,,,898.94,2024-08-05,,donors,Tech Solutions Inc,,,Andrea,,129,,,Watson,Producer,555-4895,CA,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,93701
+869 Willow Street,Apt 3A,San Jose,,,1796.63,2024-08-10,,donors,Healthcare Partners,,,Sophia,,130,,,James,CEO,555-9503,CA,FWYUH5HZ,0x69ce55f1b440b11a32cd7ebd657b981aa3a88aa8,95101
+340 Willow Place,Unit 12,Denver,,,1770.13,2024-08-11,,donors,Hospital Network,,,George,,131,,,Patel,Pharmacist,555-4765,CO,V6YR2VIQ,0xd26dd943f61a6c1254f148e1ff8971dccd051146,80201
+536 Elm Street,,Las Vegas,,,594.96,2024-08-12,,donors,Fashion House,,,Dennis,,132,,,Kennedy,Teacher,555-6049,NV,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,89101
+928 Oak Way,,Houston,,,10.73,2024-08-15,,donors,Art Gallery,,,Charlotte,,133,,,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+395 Spruce Circle,Unit 17A,San Antonio,,,789.78,2024-08-15,,donors,Construction Co,,,Brandon,,134,,,Kim,Agent,555-5033,TX,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,78201
+314 Pine Lane,,Philadelphia,,,1629.58,2024-08-17,,donors,Sports Management,,,Carol,,135,,,Johnson,Engineer,555-6041,PA,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,19101
+273 Cedar Court,Apt 17,Boston,,,811.88,2024-08-17,,donors,Travel Agency,,,Charles,,136,,,Reyes,Security Consultant,555-2109,MA,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,02101
+554 Pine Place,,Portland,,,896.38,2024-08-19,,donors,Media Productions,,,Zachary,,137,,,Simmons,Designer,555-7442,OR,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,97201
+758 Cedar Drive,,New York,,,1739.8,2024-08-20,,donors,Tech Solutions Inc,,,Mary,,138,,,Griffin,Attorney,555-9965,NY,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,10001
+788 Oak Street,,Philadelphia,,,956.92,2024-08-20,,donors,Retail Chain,,,George,,139,,,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+568 Birch Drive,,Charlotte,,,37.34,2024-08-23,,donors,Real Estate Group,,,Kevin,,140,,,Cooper,Creative Director,555-7208,NC,EOA89JQR,0x25a81d9a08710762512088f686cb2a11cb08d3aa,28201
+657 Elm Boulevard,,Cleveland,,,41.83,2024-08-24,,donors,Tech Solutions Inc,,,Ruth,,141,,,Owens,Restaurant Owner,555-4789,OH,EIBZFFHN,0x72964cb2e2699a2dbbf456ceee7dacda44da9b80,44101
+659 Birch Street,,Boston,,,854.11,2024-08-25,,donors,Pharmacy Chain,,,Anthony,,142,,,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+622 Maple Road,,Philadelphia,,,518.18,2024-08-25,,donors,Healthcare Partners,,,Rebecca,,143,,,Jordan,Professor,555-6364,PA,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,19101
+727 Willow Boulevard,,Omaha,,,793.62,2024-08-29,,donors,Insurance Corp,,,Emma,,144,,,Collins,Restaurant Owner,555-7411,NE,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,68101
+774 Ash Street,Floor 12B,Charlotte,,,849.83,2024-08-30,,donors,Film Studio,,,Amanda,,145,,,West,Teacher,555-5523,NC,OTBEOGIR,0xb40ac5b4fbb12a16a036cd2251524f74e67edf23,28201
+971 Spruce Court,,Tampa,,,219.96,2024-09-02,,donors,Auto Industries,,,Susan,,146,,,Ramirez,Project Manager,555-1572,FL,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,33601
+799 Ash Place,,Minneapolis,,,911.19,2024-09-04,,donors,Art Gallery,,,Nathan,,147,,,Jones,Project Manager,555-6887,MN,EGCUQSJ6,0xe35eb7275294e6c56afcb2ce3631fd87ed16f91e,55401
+733 Poplar Circle,Apt 2C,Las Vegas,,,820.56,2024-09-11,,donors,Construction Co,,,John,,148,,,Marshall,Director,555-9207,NV,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,89101
+538 Pine Drive,,Honolulu,,,575.65,2024-09-13,,donors,Healthcare Partners,,,Tyler,,149,,,Adams,Engineer,555-9026,HI,WTKHNAZW,0xe23ce54ff4ff2439fdde6fbc43f32cf76277bbf3,96801
+295 Willow Way,,Sacramento,,,3299.84,2024-09-14,,donors,Nonprofit Org,,,Ruth,,150,,,Castillo,Architect,555-6299,CA,QNIK9137,0x429a00449459ca69b289186fd69bb8d99609959e,95801
+653 Cedar Place,,Fresno,,,1931.39,2024-09-15,,donors,Architecture Firm,,,Dennis,,151,,,Jackson,Financial Analyst,555-5858,CA,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,93701
+294 Willow Drive,,Omaha,,,45.26,2024-09-17,,donors,Tech Solutions Inc,,,Amanda,,152,,,Fernandez,Attorney,555-7425,NE,NPRNMY4U,0xb3e7c95cc76bd535b1369a9d48ffe8a8a4a3a6b7,68101
+216 Spruce Way,,Boston,,,573.22,2024-09-17,,donors,Hotel Chain,,,Hannah,,153,,,Woods,Underwriter,555-1214,MA,M7SNFIY3,0xa0248529dc5bf1a7ee913e470d88d4ed96744a6c,02101
+593 Birch Circle,,Cleveland,,,36.96,2024-09-26,,donors,Telecom Company,,,Amy,,154,,,Reed,Attorney,555-4412,OH,YFAU1TBD,0x73f8cd6698ad884f40e02888691e0096c62883e8,44101
+296 Maple Boulevard,Unit 15B,New York,,,1433.53,2024-09-27,,donors,Sports Management,,,Brittany,,155,,,Cook,Producer,555-2747,NY,IZZZXXH2,0xa713dd62d42e06b1b4cb3f2f013c508b1e41da62,10001
+120 Cedar Court,,Columbus,,,128.88,2024-09-28,,donors,Logistics Co,,,Scott,,156,,,Bell,Product Manager,555-1727,OH,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,43201
+159 Elm Boulevard,,Portland,,,1947.9,2024-09-28,,donors,Airlines,,,Brittany,,157,,,Hamilton,CEO,555-2936,OR,JPG2EBWF,0x05645b4fb088df89ea8e1312f7a3a10eeb785f6b,97201
+165 Oak Lane,Unit 16A,San Diego,,,707.31,2024-09-28,,donors,Film Studio,,,Sara,,158,,,Anderson,Operations Manager,555-5573,CA,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,92101
+591 Poplar Way,,Charlotte,,,19.32,2024-09-29,,donors,Hospital Network,,,Raymond,,159,,,Tran,Consultant,555-6800,NC,E0QIM197,0xe9cd7aa390c37c805be81281d2dbcc2f87a6b8a4,28201
+490 Spruce Road,Floor 6,Detroit,,,1658.64,2024-09-30,,donors,Architecture Firm,,,Jack,,160,,,Hayes,Creative Director,555-3058,MI,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,48201
+864 Oak Lane,Unit 15B,Austin,,,1569.91,2024-10-01,,donors,Construction Co,,,Sara,,161,,,Coleman,Software Engineer,555-5254,TX,LFU0TPM0,0x036c512f46d765956869b2d40e8accf9ff9c8613,78701
+620 Birch Lane,Unit 17B,San Antonio,,,436.81,2024-10-02,,donors,Consulting Firm,,,Stephen,,162,,,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+659 Birch Street,,Boston,,,985.95,2024-10-07,,donors,Pharmacy Chain,,,Anthony,,163,,,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+963 Maple Avenue,Suite 5,Raleigh,,,1563.5,2024-10-07,,donors,Accounting Firm,,,Jeremy,,164,,,Griffin,Software Engineer,555-4910,NC,K9DQG0A3,0x86cf43195ee25dab7e4b0da464fc250638be3462,27601
+733 Poplar Circle,Apt 2C,Las Vegas,,,1012.92,2024-10-09,,donors,Construction Co,,,John,,165,,,Marshall,Director,555-9207,NV,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,89101
+609 Pine Circle,,Charlotte,,,69.8,2024-10-13,,donors,Education First,,,Deborah,,166,,,Nguyen,Software Engineer,555-7868,NC,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,28201
+855 Ash Road,,Portland,,,20.04,2024-10-15,,donors,Retail Giants,,,Eugene,,167,,,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+613 Pine Way,,Miami,,,375.19,2024-10-15,,donors,Pharmacy Chain,,,Jennifer,,168,,,Vargas,CPA,555-7513,FL,QC3S78YD,0x4c1e27a0b54c139d71fb26e36844d22f93aa4cf3,33101
+173 Birch Court,,Milwaukee,,,195.89,2024-10-15,,donors,Tech Startup,,,Nicholas,,169,,,Hughes,Software Engineer,555-7691,WI,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,53201
+490 Spruce Road,Floor 6,Detroit,,,352.64,2024-10-16,,donors,Architecture Firm,,,Jack,,170,,,Hayes,Creative Director,555-3058,MI,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,48201
+727 Willow Boulevard,,Omaha,,,1097.92,2024-10-22,,donors,Insurance Corp,,,Emma,,171,,,Collins,Restaurant Owner,555-7411,NE,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,68101
+538 Spruce Avenue,,Chicago,,,540.06,2024-10-22,,donors,University,,,Charlotte,,172,,,Wells,Consultant,555-1134,IL,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,60601
+538 Spruce Avenue,,Chicago,,,1816.72,2024-10-24,,donors,University,,,Charlotte,,173,,,Wells,Consultant,555-1134,IL,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,60601
+116 Elm Avenue,,Charlotte,,,589.23,2024-10-26,,donors,Film Studio,,,Helen,,174,,,Baker,Agent,555-1093,NC,EOP0RWRO,0xf0a6904f179b5cccd9abb57ce3890745e1bb6cf2,28201
+636 Maple Way,,New York,,,767.81,2024-10-27,,donors,Auto Industries,,,Alexander,,175,,,Nguyen,CEO,555-6943,NY,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,10001
+939 Poplar Avenue,,Los Angeles,,,433.12,2024-11-02,,donors,Music Label,,,Gregory,,176,,,Jenkins,Professor,555-8430,CA,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,90001
+220 Willow Way,,Indianapolis,,,3300,2024-11-07,,donors,Nonprofit Org,,,Julie,,177,,,Kim,Security Consultant,555-3716,IN,T8UUGKEH,0x4fc80d6a55925a5b5b8e3ae9c6fa56c9cf9bff5b,46201
+749 Pine Court,Unit 2,Houston,,,128.85,2024-11-08,,donors,Food Services,,,Richard,,178,,,Perry,Attorney,555-7200,TX,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,77001
+316 Birch Lane,,New York,,,327.56,2024-11-09,,donors,Film Studio,,,Gerald,,179,,,Bailey,Underwriter,555-4231,NY,FZY1OK53,0x4dcbbb517db46434d86ab320d7f33c5b7b24c8e9,10001
+108 Cedar Avenue,,Detroit,,,179.71,2024-11-10,,donors,Healthcare Partners,,,Joseph,,180,,,Edwards,Network Engineer,555-3979,MI,U6NQV6BX,0x90ec8941158a155fa43c5380f310082694f3350f,48201
+392 Maple Circle,,Kansas City,,,291.28,2024-11-10,,donors,Financial Advisory LLC,,,Katherine,,181,,,Medina,Physician,555-6505,MO,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,64101
+323 Ash Way,,Milwaukee,,,58.07,2024-11-11,,donors,Tech Startup,,,Carolyn,,182,,,Williams,Designer,555-8189,WI,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,53201
+593 Oak Circle,,Miami,,,1622.9,2024-11-12,,donors,Gaming Studio,,,Donald,,183,,,Sanchez,CPA,555-4116,FL,GUE158T6,0x0c3479ffedfce359043d0c52acfdbd734842db26,33101
+782 Oak Circle,Suite 17B,Charlotte,,,1790.27,2024-11-13,,donors,Music Label,,,Brandon,,184,,,Wood,Engineer,555-3539,NC,T65M28Z3,0x71283c24e1df5073f8eb52feb48bd5680ffc3ecb,28201
+336 Oak Boulevard,,Los Angeles,,,724.13,2024-11-14,,donors,Travel Agency,,,Isabella,,185,,,Ellis,Producer,555-6167,CA,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,90001
+388 Pine Street,,San Francisco,,,1939.77,2024-11-19,,donors,Logistics Co,,,Michelle,,186,,,Jenkins,Game Developer,555-5756,CA,8HMDGSZC,0xce7368011f0d4c47c288448edd4b44236327976a,94102
+435 Cedar Way,Suite 3A,Sacramento,,,273.43,2024-11-25,,donors,Publishing House,,,Victoria,,187,,,Johnson,Systems Analyst,555-7872,CA,FDMKQED8,0xa0e522d400abacda16bc0f23af0ea42ec991324e,95801
+124 Pine Way,,Milwaukee,,,192.5,2024-11-25,,donors,Food Services,,,Jennifer,,188,,,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+765 Pine Circle,,Boston,,,1599.47,2024-11-26,,donors,Travel Agency,,,Joshua,,189,,,Hall,Restaurant Owner,555-9828,MA,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,02101
+585 Ash Road,Unit 16C,Philadelphia,,,377.14,2024-11-27,,donors,Travel Agency,,,Maria,,190,,,Patel,Software Engineer,555-3900,PA,G2EY457P,0x5bb8c5e66c45b686c8fcfe1dcf922b8be1c0cc65,19101
+634 Maple Drive,,Minneapolis,,,1013.26,2024-11-27,,donors,Consulting Firm,,,Jacqueline,,191,,,Ruiz,Site Supervisor,555-2653,MN,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,55401
+855 Poplar Way,,Tucson,,,1687.01,2024-11-28,,donors,Retail Giants,,,Mark,,192,,,Kim,Director,555-3690,AZ,M57JWYHO,0x3a5054038cd2fc7a7853c57d8954649a7250c2e2,85701
+110 Spruce Road,,Houston,,,925.77,2024-11-28,,donors,Hotel Chain,,,Andrea,,193,,,Gibson,Teacher,555-8892,TX,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,77001
+396 Oak Road,Apt 4C,Portland,,,16.83,2024-11-30,,donors,Retail Chain,,,Diane,,194,,,Morales,Producer,555-3456,OR,NGX9HRGV,0x2f9aa73566c8e49df152e96c4fdf6405e02938a2,97201
+973 Ash Court,,Fort Worth,,,538.37,2024-11-30,,donors,Investment Bank,,,Michelle,,195,,,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+498 Pine Circle,,Chicago,,,1108.98,2024-12-04,,donors,Food Services,,,Samuel,,196,,,Martin,Security Consultant,555-4625,IL,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,60601
+659 Birch Drive,,Detroit,,,3299.91,2024-12-05,,donors,Fashion House,,,Rachel,,197,,,Ortiz,Partner,555-8672,MI,O1SLGDF6,0x1a8964573d6d1d28b950996362d9f6da2b38885e,48201
+790 Willow Lane,,Oakland,,,630.77,2024-12-06,,donors,Education First,,,Kevin,,198,,,Jackson,Research Scientist,555-7366,CA,ZF5RXT8R,0x4370343fee9ccbba3333a74348800b5e05ebe661,94601
+348 Pine Street,,Austin,,,10.47,2024-12-07,,donors,Consulting Firm,,,Brenda,,199,,,Cruz,CEO,555-6380,TX,CPE2M3BW,0x3214a9b9e68f3fc25f06df837bb5036fbcb9c60f,78701
+173 Pine Court,,Sacramento,,,460,2024-12-08,,donors,Energy Company,,,Jennifer,,200,,,Williams,Software Engineer,555-5736,CA,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,95801
+919 Ash Way,,Phoenix,,,3300,2024-12-10,,donors,Construction Co,,,Peter,,201,,,Moreno,Editor,555-6819,AZ,GENYJC9J,0x36bf71066dd6fc93456d0643b228b8278086bdce,85001
+892 Pine Avenue,,Albuquerque,,,1784.09,2024-12-10,,donors,Music Label,,,Debra,,202,,,Bell,Engineer,555-7800,NM,WTNAVWP5,0x67a131c6035aba27743a288b9ea9638c735fb182,87101
+536 Elm Street,,Las Vegas,,,747,2024-12-10,,donors,Fashion House,,,Dennis,,203,,,Kennedy,Teacher,555-6049,NV,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,89101
+806 Poplar Drive,,San Jose,,,38.28,2024-12-11,,donors,Pharmacy Chain,,,Patricia,,204,,,Simmons,Partner,555-8119,CA,GJ360Y0R,0x4aef4b40363280778215fedef79b1f52fc74cc68,95101
+634 Willow Way,,San Francisco,,,48.2,2024-12-13,,donors,Construction Co,,,Julia,,205,,,Moore,Director,555-7038,CA,UWTXU6QO,0x1ef9abf4c32324319db56d3c97a2f2b675654f31,94102
+858 Willow Place,Unit 2A,Virginia Beach,,,1730.25,2024-12-14,,donors,Construction Co,,,Dennis,,206,,,Roberts,Engineer,555-8252,VA,VLI8N7T0,0x915cae980ea6f1dc227290e763860c6edfed97be,23451
+354 Maple Road,,San Antonio,,,694.9,2024-12-16,,donors,Airlines,,,Mark,,207,,,Gray,Engineer,555-1588,TX,6OFTWGZ6,0x1bc03a152f48c8cdd240a373b79fa1fd6d46b0f5,78201
+689 Willow Road,Unit 11B,San Jose,,,238.57,2024-12-18,,donors,Real Estate Group,,,Kyle,,208,,,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+973 Ash Court,,Fort Worth,,,587.14,2024-12-22,,donors,Investment Bank,,,Michelle,,209,,,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+573 Oak Circle,,Jacksonville,,,16,2024-12-23,,donors,Music Label,,,Jessica,,210,,,Hernandez,Mechanical Engineer,555-2695,FL,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,32201
+686 Cedar Boulevard,,Kansas City,,,14.14,2024-12-24,,donors,Accounting Firm,,,Abigail,,211,,,Rogers,Creative Director,555-6400,MO,EWTKJQKB,0x7af1ee0eb41c03b1e8c9a97ab204c0518581c95e,64101
+309 Willow Place,,Atlanta,,,830.93,2024-12-25,,donors,Tech Solutions Inc,,,Douglas,,212,,,Peterson,Agent,555-7360,GA,TE036S5O,0x98c9e31d5cefdb7491465fa1ea6140a6eaa89f26,30301
+177 Poplar Way,Apt 12A,Omaha,,,242.39,2024-12-25,,donors,Law Associates,,,Dennis,,213,,,Lee,Editor,555-2455,NE,ZDLSNM46,0xd3dedbb4a6bce1644f25ba9ceb57e31d515376c1,68101
+825 Birch Drive,Unit 2B,San Jose,,,801.54,2024-12-27,,donors,Airlines,,,Mason,,214,,,Taylor,Mechanical Engineer,555-3169,CA,Y7YXP2TQ,0x1a266923ce883405ef40730b8973cd7781442039,95101
+971 Spruce Court,,Tampa,,,51.43,2024-12-27,,donors,Auto Industries,,,Susan,,215,,,Ramirez,Project Manager,555-1572,FL,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,33601
+,,,,,,,,kyc,,,,Susan,,1,1,,Thomas,,,,09YZMK00,,
+,,,,,,,,kyc,,,,Nicholas,,2,1,,Nguyen,,,,0BDMAU6J,,
+,,,,,,,,kyc,,,,Jason,,3,1,,Alexander,,,,0GRFGDDN,,
+,,,,,,,,kyc,,,,Richard,,4,1,,James,,,,0R17I15A,,
+,,,,,,,,kyc,,,,Jacqueline,,5,1,,Lee,,,,11UM2Q0N,,
+,,,,,,,,kyc,,,,Gregory,,6,1,,Henry,,,,18QL8MLY,,
+,,,,,,,,kyc,,,,Mary,,7,1,,Martinez,,,,36N9US4W,,
+,,,,,,,,kyc,,,,Barbara,,8,1,,Alvarez,,,,3BPC7AAP,,
+,,,,,,,,kyc,,,,Eric,,9,1,,Hayes,,,,3KNFKO94,,
+,,,,,,,,kyc,,,,Mia,,10,0,,Wallace,,,,3KNRV10C,,
+,,,,,,,,kyc,,,,Janet,,11,1,,Davis,,,,3W5ALWRR,,
+,,,,,,,,kyc,,,,Carolyn,,12,1,,Phillips,,,,4M0JKQ3B,,
+,,,,,,,,kyc,,,,Marie,,13,1,,Ford,,,,528KDAEQ,,
+,,,,,,,,kyc,,,,Diane,,14,1,,Castro,,,,56ZDXBGG,,
+,,,,,,,,kyc,,,,Larry,,15,1,,Lopez,,,,58XSMTBA,,
+,,,,,,,,kyc,,,,Brittany,,16,1,,Coleman,,,,59W1P4OK,,
+,,,,,,,,kyc,,,,Kyle,,17,1,,Aguilar,,,,5CGDJPQM,,
+,,,,,,,,kyc,,,,Kevin,,18,1,,Moreno,,,,5CMFBIGJ,,
+,,,,,,,,kyc,,,,Anna,,19,1,,Fisher,,,,61R02LE0,,
+,,,,,,,,kyc,,,,Charlotte,,20,1,,Thomas,,,,6B79XWGZ,,
+,,,,,,,,kyc,,,,Teresa,,21,0,,Gonzalez,,,,6BP7TQGA,,
+,,,,,,,,kyc,,,,Kelly,,22,1,,Diaz,,,,6H1RMG77,,
+,,,,,,,,kyc,,,,Douglas,,23,1,,Adams,,,,6N9ER1BL,,
+,,,,,,,,kyc,,,,John,,24,1,,Wright,,,,6ZMX83DT,,
+,,,,,,,,kyc,,,,Betty,,25,1,,Chen,,,,7JANJW8N,,
+,,,,,,,,kyc,,,,Richard,,26,1,,Clark,,,,7VJ3FRR4,,
+,,,,,,,,kyc,,,,John,,27,1,,Graham,,,,88V3LGC5,,
+,,,,,,,,kyc,,,,Rachel,,28,1,,Rivera,,,,88WA7AE6,,
+,,,,,,,,kyc,,,,Patricia,,29,1,,Murray,,,,8HV6FTUV,,
+,,,,,,,,kyc,,,,Julia,,30,1,,Mitchell,,,,8M0BJ6U9,,
+,,,,,,,,kyc,,,,Nicole,,31,1,,Barnes,,,,8PJKSA9T,,
+,,,,,,,,kyc,,,,Deborah,,32,1,,James,,,,8SXUJPIL,,
+,,,,,,,,kyc,,,,Stephanie,,33,1,,Davis,,,,9657FN0X,,
+,,,,,,,,kyc,,,,Olivia,,34,1,,Flores,,,,9UKB5II8,,
+,,,,,,,,kyc,,,,Harold,,35,1,,Kelly,,,,A6PP7PTU,,
+,,,,,,,,kyc,,,,Roger,,36,1,,Patterson,,,,A88B4W6U,,
+,,,,,,,,kyc,,,,Denise,,37,1,,Walker,,,,AKFNUF1V,,
+,,,,,,,,kyc,,,,Mason,,38,1,,Jackson,,,,ATY1MTAX,,
+,,,,,,,,kyc,,,,Carolyn,,39,1,,Russell,,,,AVMDYV3T,,
+,,,,,,,,kyc,,,,Janet,,40,1,,Butler,,,,AYS92TUR,,
+,,,,,,,,kyc,,,,Anthony,,41,1,,Flores,,,,B2NUAT8F,,
+,,,,,,,,kyc,,,,Dennis,,42,1,,Campbell,,,,BELZFATP,,
+,,,,,,,,kyc,,,,Joseph,,43,1,,Chen,,,,BGMOP7U9,,
+,,,,,,,,kyc,,,,James,,44,1,,Powell,,,,BS2LMXM4,,
+,,,,,,,,kyc,,,,Susan,,45,1,,Ramirez,,,,C99FD0WM,,
+,,,,,,,,kyc,,,,Ruth,,46,1,,Ward,,,,CLXQWT3A,,
+,,,,,,,,kyc,,,,Timothy,,47,1,,Davis,,,,CW9F2S7B,,
+,,,,,,,,kyc,,,,Dorothy,,48,1,,Thompson,,,,D642SV9S,,
+,,,,,,,,kyc,,,,Isabella,,49,1,,Ellis,,,,D9CLQHB1,,
+,,,,,,,,kyc,,,,Rachel,,50,1,,Washington,,,,DPU4LFH5,,
+,,,,,,,,kyc,,,,Ruth,,51,1,,Reynolds,,,,E74CP3JL,,
+,,,,,,,,kyc,,,,Samantha,,52,1,,Gray,,,,EDE258YS,,
+,,,,,,,,kyc,,,,Wayne,,53,1,,Moreno,,,,EDNEHHZM,,
+,,,,,,,,kyc,,,,Ruth,,54,1,,Owens,,,,EIBZFFHN,,
+,,,,,,,,kyc,,,,Kevin,,55,1,,Cooper,,,,EOA89JQR,,
+,,,,,,,,kyc,,,,James,,56,1,,Young,,,,F7373NAP,,
+,,,,,,,,kyc,,,,Susan,,57,1,,Diaz,,,,F8M7G9DL,,
+,,,,,,,,kyc,,,,Charles,,58,1,,Reyes,,,,FCPJ4T0A,,
+,,,,,,,,kyc,,,,Mary,,59,1,,Hill,,,,FL9JAHD9,,
+,,,,,,,,kyc,,,,Nathan,,60,1,,Harrison,,,,FPZLFMHR,,
+,,,,,,,,kyc,,,,Nathan,,61,1,,Henry,,,,FTOU2TAA,,
+,,,,,,,,kyc,,,,Willie,,62,1,,Cole,,,,FVLTKA72,,
+,,,,,,,,kyc,,,,Maria,,63,1,,Patel,,,,G2EY457P,,
+,,,,,,,,kyc,,,,Sarah,,64,1,,Stewart,,,,G3X14JZS,,
+,,,,,,,,kyc,,,,Michelle,,65,1,,Howard,,,,GAVDF2JW,,
+,,,,,,,,kyc,,,,Douglas,,66,1,,Long,,,,GHN1RBNW,,
+,,,,,,,,kyc,,,,Benjamin,,67,0,,Gonzalez,,,,GKFZ8VML,,
+,,,,,,,,kyc,,,,Chloe,,68,1,,Washington,,,,GMC4HU1A,,
+,,,,,,,,kyc,,,,Charles,,69,1,,Mendoza,,,,GSUUB5TR,,
+,,,,,,,,kyc,,,,Nicholas,,70,1,,Bennett,,,,GVS9G194,,
+,,,,,,,,kyc,,,,William,,71,1,,Martinez,,,,H1TMJONR,,
+,,,,,,,,kyc,,,,Janet,,72,1,,Smith,,,,HB0KZGZV,,
+,,,,,,,,kyc,,,,Nancy,,73,1,,Owens,,,,HHQ0QK7W,,
+,,,,,,,,kyc,,,,Jack,,74,0,,Chavez,,,,HLF0DYXX,,
+,,,,,,,,kyc,,,,Brandon,,75,1,,Wilson,,,,HQJAMOKJ,,
+,,,,,,,,kyc,,,,Denise,,76,1,,Brown,,,,HXHX4VMR,,
+,,,,,,,,kyc,,,,Carolyn,,77,1,,Wright,,,,HYRZFLYY,,
+,,,,,,,,kyc,,,,Nathan,,78,1,,Bailey,,,,I3CLB3U4,,
+,,,,,,,,kyc,,,,Carol,,79,1,,Taylor,,,,IO05GNHO,,
+,,,,,,,,kyc,,,,Martha,,80,1,,Griffin,,,,IWDDS5E2,,
+,,,,,,,,kyc,,,,Brian,,81,1,,Bennett,,,,IXE2CDCX,,
+,,,,,,,,kyc,,,,Dennis,,82,1,,Martin,,,,J06OIXBQ,,
+,,,,,,,,kyc,,,,Peter,,83,1,,Flores,,,,J22GVCNA,,
+,,,,,,,,kyc,,,,Donna,,84,1,,Watson,,,,JDXXXWYL,,
+,,,,,,,,kyc,,,,Christina,,85,1,,Richardson,,,,JFPK0JBX,,
+,,,,,,,,kyc,,,,Katherine,,86,1,,Morales,,,,JTFTYIIW,,
+,,,,,,,,kyc,,,,Janet,,87,1,,Medina,,,,K0BXXNX8,,
+,,,,,,,,kyc,,,,Kenneth,,88,0,,Hughes,,,,KGXWR2WG,,
+,,,,,,,,kyc,,,,Nicholas,,89,1,,Hughes,,,,KMFOSQ9O,,
+,,,,,,,,kyc,,,,Sara,,90,1,,Coleman,,,,LFU0TPM0,,
+,,,,,,,,kyc,,,,Albert,,91,1,,Baker,,,,LZ5I9SHV,,
+,,,,,,,,kyc,,,,Debra,,92,1,,Anderson,,,,M13JF1JW,,
+,,,,,,,,kyc,,,,Mark,,93,1,,Kim,,,,M57JWYHO,,
+,,,,,,,,kyc,,,,Larry,,94,1,,Washington,,,,M65RJT76,,
+,,,,,,,,kyc,,,,Hannah,,95,1,,Woods,,,,M7SNFIY3,,
+,,,,,,,,kyc,,,,Mia,,96,1,,Flores,,,,MU05EHN8,,
+,,,,,,,,kyc,,,,Nicholas,,97,1,,Anderson,,,,N1K17R1C,,
+,,,,,,,,kyc,,,,Keith,,98,1,,Herrera,,,,N8L248JX,,
+,,,,,,,,kyc,,,,Jacob,,99,1,,Price,,,,NJ6HCP2U,,
+,,,,,,,,kyc,,,,Susan,,100,1,,Scott,,,,O519XXZ0,,
+,,,,,,,,kyc,,,,Lisa,,101,1,,Vargas,,,,OQ8REGOO,,
+,,,,,,,,kyc,,,,Peter,,102,1,,Harris,,,,OSULX20W,,
+,,,,,,,,kyc,,,,Amanda,,103,1,,West,,,,OTBEOGIR,,
+,,,,,,,,kyc,,,,Carol,,104,1,,Lewis,,,,OW0EVOMW,,
+,,,,,,,,kyc,,,,Donna,,105,1,,Myers,,,,OX09YVNV,,
+,,,,,,,,kyc,,,,Sara,,106,1,,Henry,,,,OZFQJHBH,,
+,,,,,,,,kyc,,,,Stephanie,,107,1,,Scott,,,,PCD1I21G,,
+,,,,,,,,kyc,,,,Jennifer,,108,1,,Green,,,,PEDKQ7XI,,
+,,,,,,,,kyc,,,,Gregory,,109,1,,Jenkins,,,,PK7M5CYL,,
+,,,,,,,,kyc,,,,Gary,,110,0,,Richardson,,,,PRQ7DN55,,
+,,,,,,,,kyc,,,,Christine,,111,1,,Washington,,,,PYU7VDP8,,
+,,,,,,,,kyc,,,,Jennifer,,112,1,,Vargas,,,,QC3S78YD,,
+,,,,,,,,kyc,,,,Megan,,113,1,,Jones,,,,QP9MKOB3,,
+,,,,,,,,kyc,,,,Gary,,114,1,,Fernandez,,,,R777W9HK,,
+,,,,,,,,kyc,,,,Chloe,,115,1,,Coleman,,,,RGC5FGYK,,
+,,,,,,,,kyc,,,,Scott,,116,1,,Parker,,,,RHYYRN52,,
+,,,,,,,,kyc,,,,Christopher,,117,1,,Brooks,,,,RKW0PCWC,,
+,,,,,,,,kyc,,,,Dorothy,,118,0,,Nguyen,,,,RO8MLSLJ,,
+,,,,,,,,kyc,,,,Nancy,,119,1,,Wood,,,,RVH47UAR,,
+,,,,,,,,kyc,,,,Rebecca,,120,1,,Stewart,,,,RVU5VEGQ,,
+,,,,,,,,kyc,,,,Stephanie,,121,1,,Rodriguez,,,,S93BYRRL,,
+,,,,,,,,kyc,,,,Roger,,122,0,,Simmons,,,,SHCMURR9,,
+,,,,,,,,kyc,,,,Michael,,123,1,,Jimenez,,,,SHE614ID,,
+,,,,,,,,kyc,,,,Helen,,124,1,,Marshall,,,,SM4CDJVD,,
+,,,,,,,,kyc,,,,Evelyn,,125,1,,Morgan,,,,SR0XIYE7,,
+,,,,,,,,kyc,,,,Eugene,,126,1,,Lopez,,,,SZ0U7SDI,,
+,,,,,,,,kyc,,,,Julie,,127,1,,Kim,,,,T8UUGKEH,,
+,,,,,,,,kyc,,,,Joseph,,128,1,,Edwards,,,,U6NQV6BX,,
+,,,,,,,,kyc,,,,Samuel,,129,1,,Martin,,,,UG1P460X,,
+,,,,,,,,kyc,,,,Douglas,,130,1,,Johnson,,,,V2VYVVO0,,
+,,,,,,,,kyc,,,,Richard,,131,1,,Perry,,,,V3MEWMIB,,
+,,,,,,,,kyc,,,,Frank,,132,1,,Baker,,,,VI4XLMGC,,
+,,,,,,,,kyc,,,,Noah,,133,1,,Vasquez,,,,VXAQ4IID,,
+,,,,,,,,kyc,,,,Joseph,,134,1,,Hamilton,,,,WFRQN256,,
+,,,,,,,,kyc,,,,Christine,,135,1,,Rodriguez,,,,WUQZ5J7M,,
+,,,,,,,,kyc,,,,Janet,,136,1,,Hamilton,,,,WVD3JZ0S,,
+,,,,,,,,kyc,,,,Dorothy,,137,0,,Henderson,,,,X7EJVPUI,,
+,,,,,,,,kyc,,,,Jordan,,138,0,,Murray,,,,XMLRSNUU,,
+,,,,,,,,kyc,,,,Carol,,139,1,,Vargas,,,,XZR76Y7I,,
+,,,,,,,,kyc,,,,Charles,,140,1,,Alexander,,,,Y3XILU2G,,
+,,,,,,,,kyc,,,,Deborah,,141,1,,Hamilton,,,,Y6GLY6OI,,
+,,,,,,,,kyc,,,,Mason,,142,1,,Taylor,,,,Y7YXP2TQ,,
+,,,,,,,,kyc,,,,Janice,,143,1,,Long,,,,YMTV5RNA,,
+,,,,,,,,kyc,,,,Dorothy,,144,1,,Chen,,,,YPJMUPXG,,
+,,,,,,,,kyc,,,,Hannah,,145,1,,Murray,,,,YU6YB70U,,
+,,,,,,,,kyc,,,,Mark,,146,1,,Moore,,,,Z3BKXSJK,,
+,,,,,,,,kyc,,,,Abigail,,147,1,,Tran,,,,Z49IUHZ7,,
+,,,,,,,,kyc,,,,Maria,,148,0,,Lopez,,,,Z7D01HCO,,
+,,,,,,,,kyc,,,,Nicholas,,149,1,,Wright,,,,ZBWLU9BD,,
+,,,,,,,,kyc,,,,David,,150,1,,Perez,,,,ZO41S71R,,
+,,,,ACCEPTED,3300,,3300,validation,,NO,NO,,Julie Kim,,YES,,,,,,T8UUGKEH,0x4fc80d6a55925a5b5b8e3ae9c6fa56c9cf9bff5b,
+,,,,ACCEPTED,1950.42,,1950.42,validation,,NO,NO,,Dennis Martin,,YES,,,,,,J06OIXBQ,0xc9d6351894be064644e05fa77a3f3363070da9af,
+,,,,ACCEPTED,1844.04,,1844.04,validation,,NO,NO,,Christine Washington,,YES,,,,,,PYU7VDP8,0x5246d0a65978e9bd34c7aa7a52354b9f49797a80,
+,,,,ACCEPTED,1833.98,,1833.98,validation,,NO,NO,,Donna Myers,,YES,,,,,,OX09YVNV,0xa946121fef719d4f0692dd4f7fdfa1f93e03fed8,
+,,,,ACCEPTED,1804.55,,1804.55,validation,,NO,NO,,Denise Brown,,YES,,,,,,HXHX4VMR,0x53598c1e45f207f550fe89ffc12ea5fa1074c6f5,
+,,,,ACCEPTED,1687.01,,1687.01,validation,,NO,NO,,Mark Kim,,YES,,,,,,M57JWYHO,0x3a5054038cd2fc7a7853c57d8954649a7250c2e2,
+,,,,ACCEPTED,1662.89,,1662.89,validation,,NO,NO,,Douglas Long,,YES,,,,,,GHN1RBNW,0x2da6ed35f23a97f2bcb70f9b04821754947703b5,
+,,,,ACCEPTED,1569.91,,1569.91,validation,,NO,NO,,Sara Coleman,,YES,,,,,,LFU0TPM0,0x036c512f46d765956869b2d40e8accf9ff9c8613,
+,,,,ACCEPTED,1529.07,,3299,validation,,NO,NO,,James Powell,,YES,,,,,,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,
+,,,,ACCEPTED,1493.94,,1493.94,validation,,NO,NO,,Barbara Alvarez,,YES,,,,,,3BPC7AAP,0x7749e2a80b8ed640195638f4afdc45743decd62d,
+,,,,ACCEPTED,1466.18,,1466.18,validation,,NO,NO,,Noah Vasquez,,YES,,,,,,VXAQ4IID,0x16f530f01f1116cfd3c5c022aab6f0441df82fbd,
+,,,,ACCEPTED,1274.1,,1274.1,validation,,NO,NO,,Julia Mitchell,,YES,,,,,,8M0BJ6U9,0x25537341182677efd7b13297b9d158737b2c10c3,
+,,,,ACCEPTED,1269.73,,1269.73,validation,,NO,NO,,Debra Anderson,,YES,,,,,,M13JF1JW,0x523a2ca6a5d61408a22071c45869970473e785a5,
+,,,,ACCEPTED,1182.19,,1182.19,validation,,NO,NO,,Nicholas Hughes,,YES,,,,,,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,
+,,,,ACCEPTED,1174.41,,1174.41,validation,,NO,NO,,Nicholas Wright,,YES,,,,,,ZBWLU9BD,0xbc333228bdbf1ab6433082428f9f9ba4efaf6eef,
+,,,,ACCEPTED,1108.98,,1546.08,validation,,NO,NO,,Samuel Martin,,YES,,,,,,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,
+,,,,ACCEPTED,1059.02,,1059.02,validation,,NO,NO,,Dennis Campbell,,YES,,,,,,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,
+,,,,ACCEPTED,985.14,,985.14,validation,,NO,NO,,James Powell,,YES,,,,,,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,
+,,,,ACCEPTED,863.96,,863.96,validation,,NO,NO,,Richard Perry,,YES,,,,,,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,
+,,,,ACCEPTED,849.83,,849.83,validation,,NO,NO,,Amanda West,,YES,,,,,,OTBEOGIR,0xb40ac5b4fbb12a16a036cd2251524f74e67edf23,
+,,,,ACCEPTED,830.56,,830.56,validation,,NO,NO,,Carolyn Wright,,YES,,,,,,HYRZFLYY,0xb5da13c9a2e6c944909df341735971f35f159f4b,
+,,,,ACCEPTED,811.88,,858.12,validation,,NO,NO,,Charles Reyes,,YES,,,,,,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,
+,,,,ACCEPTED,801.54,,801.54,validation,,NO,NO,,Mason Taylor,,YES,,,,,,Y7YXP2TQ,0x1a266923ce883405ef40730b8973cd7781442039,
+,,,,ACCEPTED,784.79,,1769.9299999999998,validation,,NO,NO,,James Powell,,YES,,,,,,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,
+,,,,ACCEPTED,724.13,,1246.51,validation,,NO,NO,,Isabella Ellis,,YES,,,,,,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,
+,,,,ACCEPTED,603.7,,603.7,validation,,NO,NO,,Chloe Washington,,YES,,,,,,GMC4HU1A,0x72b6fbbefe9c2189db481e1d965db73185cf4ce6,
+,,,,ACCEPTED,573.22,,573.22,validation,,NO,NO,,Hannah Woods,,YES,,,,,,M7SNFIY3,0xa0248529dc5bf1a7ee913e470d88d4ed96744a6c,
+,,,,ACCEPTED,522.38,,522.38,validation,,NO,NO,,Isabella Ellis,,YES,,,,,,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,
+,,,,ACCEPTED,483.18,,483.18,validation,,NO,NO,,David Perez,,YES,,,,,,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,
+,,,,ACCEPTED,483.13,,483.13,validation,,NO,NO,,Gregory Jenkins,,YES,,,,,,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,
+,,,,ACCEPTED,437.1,,437.1,validation,,NO,NO,,Samuel Martin,,YES,,,,,,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,
+,,,,ACCEPTED,433.12,,916.25,validation,,NO,NO,,Gregory Jenkins,,YES,,,,,,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,
+,,,,ACCEPTED,402.09,,402.09,validation,,NO,NO,,Janet Hamilton,,YES,,,,,,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,
+,,,,ACCEPTED,382.82,,866,validation,,NO,NO,,David Perez,,YES,,,,,,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,
+,,,,ACCEPTED,377.14,,377.14,validation,,NO,NO,,Maria Patel,,YES,,,,,,G2EY457P,0x5bb8c5e66c45b686c8fcfe1dcf922b8be1c0cc65,
+,,,,ACCEPTED,375.19,,375.19,validation,,NO,NO,,Jennifer Vargas,,YES,,,,,,QC3S78YD,0x4c1e27a0b54c139d71fb26e36844d22f93aa4cf3,
+,,,,ACCEPTED,361.39,,377.01,validation,,NO,NO,,Kelly Diaz,,YES,,,,,,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,
+,,,,ACCEPTED,334.09,,334.09,validation,,NO,NO,,William Martinez,,YES,,,,,,H1TMJONR,0x093d614695a5f341982eafec2535a8cf5b968706,
+,,,,ACCEPTED,262.73,,262.73,validation,,NO,NO,,Susan Diaz,,YES,,,,,,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,
+,,,,ACCEPTED,219.96,,219.96,validation,,NO,NO,,Susan Ramirez,,YES,,,,,,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,
+,,,,ACCEPTED,208.77,,1267.79,validation,,NO,NO,,Dennis Campbell,,YES,,,,,,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,
+,,,,ACCEPTED,195.89,,1378.08,validation,,NO,NO,,Nicholas Hughes,,YES,,,,,,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,
+,,,,ACCEPTED,179.71,,179.71,validation,,NO,NO,,Joseph Edwards,,YES,,,,,,U6NQV6BX,0x90ec8941158a155fa43c5380f310082694f3350f,
+,,,,ACCEPTED,147.46,,410.19000000000005,validation,,NO,NO,,Susan Diaz,,YES,,,,,,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,
+,,,,ACCEPTED,128.85,,992.8100000000001,validation,,NO,NO,,Richard Perry,,YES,,,,,,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,
+,,,,ACCEPTED,86.83,,1354.62,validation,,NO,NO,,Dennis Campbell,,YES,,,,,,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,
+,,,,ACCEPTED,51.43,,271.39,validation,,NO,NO,,Susan Ramirez,,YES,,,,,,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,
+,,,,ACCEPTED,46.24,,46.24,validation,,NO,NO,,Charles Reyes,,YES,,,,,,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,
+,,,,ACCEPTED,43.52,,445.60999999999996,validation,,NO,NO,,Janet Hamilton,,YES,,,,,,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,
+,,,,ACCEPTED,43.15,,43.15,validation,,NO,NO,,Nathan Bailey,,YES,,,,,,I3CLB3U4,0x4a59d912a286645b5eb383d809755d8e03b383ae,
+,,,,ACCEPTED,41.83,,41.83,validation,,NO,NO,,Ruth Owens,,YES,,,,,,EIBZFFHN,0x72964cb2e2699a2dbbf456ceee7dacda44da9b80,
+,,,,ACCEPTED,37.34,,37.34,validation,,NO,NO,,Kevin Cooper,,YES,,,,,,EOA89JQR,0x25a81d9a08710762512088f686cb2a11cb08d3aa,
+,,,,ACCEPTED,15.62,,15.62,validation,,NO,NO,,Kelly Diaz,,YES,,,,,,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,
+,,,,REJECTED: KYC Failed,3300,,3300,validation,,NO,NO,,Laura Ward,,NO_RECORD,,,,,,9R1LB52B,0xc81131c2206dcacd857c8fd22937b17a9edade8b,
+,,,,REJECTED: KYC Failed,3300,,3300,validation,,NO,NO,,Mason Sullivan,,NO_RECORD,,,,,,CFNVL7IY,0x5b1faa040d43e4421e1195310a7a7043cad76edd,
+,,,,REJECTED: KYC Failed,3300,,3300,validation,,NO,NO,,Brenda Young,,NO_RECORD,,,,,,89CM5WVC,0x89050758df62c70764793ea4141dd83d0c29918f,
+,,,,REJECTED: KYC Failed,3300,,3300,validation,,NO,NO,,Peter Moreno,,NO_RECORD,,,,,,GENYJC9J,0x36bf71066dd6fc93456d0643b228b8278086bdce,
+,,,,REJECTED: KYC Failed,3299.95,,3299.95,validation,,NO,NO,,Christine Harris,,NO_RECORD,,,,,,M91DV3DW,0x9e93a17d9105a0682c40ec8aa268897b68172689,
+,,,,REJECTED: KYC Failed,3299.91,,3299.91,validation,,NO,NO,,Rachel Ortiz,,NO_RECORD,,,,,,O1SLGDF6,0x1a8964573d6d1d28b950996362d9f6da2b38885e,
+,,,,REJECTED: KYC Failed,3299.84,,3299.84,validation,,NO,NO,,Ruth Castillo,,NO_RECORD,,,,,,QNIK9137,0x429a00449459ca69b289186fd69bb8d99609959e,
+,,,,REJECTED: KYC Failed,3299.55,,3299.55,validation,,NO,NO,,Stephanie Evans,,NO_RECORD,,,,,,3ZKCNLYY,0x7aa65b7fb0109ad848527a8f9771c29df78e6fd7,
+,,,,REJECTED: KYC Failed,1953.69,,1953.69,validation,,NO,NO,,Andrea Watson,,NO_RECORD,,,,,,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,
+,,,,REJECTED: KYC Failed,1947.9,,1947.9,validation,,NO,NO,,Brittany Hamilton,,NO_RECORD,,,,,,JPG2EBWF,0x05645b4fb088df89ea8e1312f7a3a10eeb785f6b,
+,,,,REJECTED: KYC Failed,1941.62,,1941.62,validation,,NO,NO,,Nicholas Adams,,NO_RECORD,,,,,,8WUVFN9T,0x4ac73ebf27790a9a4650d10ca0b146a30de89946,
+,,,,REJECTED: KYC Failed,1939.77,,1939.77,validation,,NO,NO,,Michelle Jenkins,,NO_RECORD,,,,,,8HMDGSZC,0xce7368011f0d4c47c288448edd4b44236327976a,
+,,,,REJECTED: KYC Failed,1931.39,,2051.31,validation,,NO,NO,,Dennis Jackson,,NO_RECORD,,,,,,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,
+,,,,REJECTED: KYC Failed,1928.28,,1928.28,validation,,NO,NO,,Alexander Nguyen,,NO_RECORD,,,,,,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,
+,,,,REJECTED: KYC Failed,1891.35,,1891.35,validation,,NO,NO,,Barbara Martin,,NO_RECORD,,,,,,0ZAA8WA1,0xf8939b634a74a54acc65e84e6b47b515e2e0ea25,
+,,,,REJECTED: KYC Failed,1889.44,,1889.44,validation,,NO,NO,,Grace Howard,,NO_RECORD,,,,,,WYMUMPQ6,0x0c1ef388200d522bf1daa07b7811942465b48600,
+,,,,REJECTED: KYC Failed,1827.95,,1827.95,validation,,NO,NO,,Charlotte Aguilar,,NO_RECORD,,,,,,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,
+,,,,REJECTED: KYC Failed,1821.1,,1821.1,validation,,NO,NO,,James Jordan,,NO_RECORD,,,,,,INYIJ9SW,0xca18afa644b2bc0c608e8c1ad9698976221d56c3,
+,,,,REJECTED: KYC Failed,1816.72,,2356.7799999999997,validation,,NO,NO,,Charlotte Wells,,NO_RECORD,,,,,,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,
+,,,,REJECTED: KYC Failed,1801.93,,1801.93,validation,,NO,NO,,Sara Anderson,,NO_RECORD,,,,,,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,
+,,,,REJECTED: KYC Failed,1796.63,,1796.63,validation,,NO,NO,,Sophia James,,NO_RECORD,,,,,,FWYUH5HZ,0x69ce55f1b440b11a32cd7ebd657b981aa3a88aa8,
+,,,,REJECTED: KYC Failed,1790.27,,1790.27,validation,,NO,NO,,Brandon Wood,,NO_RECORD,,,,,,T65M28Z3,0x71283c24e1df5073f8eb52feb48bd5680ffc3ecb,
+,,,,REJECTED: KYC Failed,1786.01,,1786.01,validation,,NO,NO,,Christian Butler,,NO_RECORD,,,,,,H3D8ZLEY,0xd9345816116cd600b4d2a3a78c37eee7551ba686,
+,,,,REJECTED: KYC Failed,1784.09,,1784.09,validation,,NO,NO,,Debra Bell,,NO_RECORD,,,,,,WTNAVWP5,0x67a131c6035aba27743a288b9ea9638c735fb182,
+,,,,REJECTED: KYC Failed,1770.13,,1770.13,validation,,NO,NO,,George Patel,,NO_RECORD,,,,,,V6YR2VIQ,0xd26dd943f61a6c1254f148e1ff8971dccd051146,
+,,,,REJECTED: KYC Failed,1739.8,,2445.35,validation,,NO,NO,,Mary Griffin,,NO_RECORD,,,,,,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,
+,,,,REJECTED: KYC Failed,1730.25,,1730.25,validation,,NO,NO,,Dennis Roberts,,NO_RECORD,,,,,,VLI8N7T0,0x915cae980ea6f1dc227290e763860c6edfed97be,
+,,,,REJECTED: KYC Failed,1699.53,,1699.53,validation,,NO,NO,,Joshua Hall,,NO_RECORD,,,,,,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,
+,,,,REJECTED: KYC Failed,1669.42,,1669.42,validation,,NO,NO,,Carol Johnson,,NO_RECORD,,,,,,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,
+,,,,REJECTED: KYC Failed,1658.64,,1658.64,validation,,NO,NO,,Jack Hayes,,NO_RECORD,,,,,,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,
+,,,,REJECTED: KYC Failed,1631.51,,1631.51,validation,,NO,NO,,Joseph Murphy,,NO_RECORD,,,,,,7ZV3BEZO,0x7b224e8bbf01c624e0ca398b36d9ac9edfdf263c,
+,,,,REJECTED: KYC Failed,1629.58,,3299,validation,,NO,NO,,Carol Johnson,,NO_RECORD,,,,,,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,
+,,,,REJECTED: KYC Failed,1625.94,,1625.94,validation,,NO,NO,,Olivia Hayes,,NO_RECORD,,,,,,Z9V2TMV2,0xd18e529ab2f0b718e2443b403698490da8b0b0a0,
+,,,,REJECTED: KYC Failed,1622.9,,1622.9,validation,,NO,NO,,Donald Sanchez,,NO_RECORD,,,,,,GUE158T6,0x0c3479ffedfce359043d0c52acfdbd734842db26,
+,,,,REJECTED: KYC Failed,1599.47,,3299,validation,,NO,NO,,Joshua Hall,,NO_RECORD,,,,,,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,
+,,,,REJECTED: KYC Failed,1581.03,,1581.03,validation,,NO,NO,,Andrea White,,NO_RECORD,,,,,,92CTKVF0,0x007c0582ff9ab4d26e63667de01513dfb4833739,
+,,,,REJECTED: KYC Failed,1563.5,,1563.5,validation,,NO,NO,,Jeremy Griffin,,NO_RECORD,,,,,,K9DQG0A3,0x86cf43195ee25dab7e4b0da464fc250638be3462,
+,,,,REJECTED: KYC Failed,1526.06,,1526.06,validation,,NO,NO,,Justin Murray,,NO_RECORD,,,,,,NK71KXKQ,0x9179e979c6f88a2e5bb7452b9184f81b2fc72b2e,
+,,,,REJECTED: KYC Failed,1458.94,,1458.94,validation,,NO,NO,,Anthony Patel,,NO_RECORD,,,,,,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,
+,,,,REJECTED: KYC Failed,1433.53,,1433.53,validation,,NO,NO,,Brittany Cook,,NO_RECORD,,,,,,IZZZXXH2,0xa713dd62d42e06b1b4cb3f2f013c508b1e41da62,
+,,,,REJECTED: KYC Failed,1425.87,,1425.87,validation,,NO,NO,,Katherine Medina,,NO_RECORD,,,,,,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,
+,,,,REJECTED: KYC Failed,1394.56,,1394.56,validation,,NO,NO,,Debra Alvarez,,NO_RECORD,,,,,,9T7ZT14E,0xcfc1fa19b3e0c3cac56d1bc975212aa5725b732b,
+,,,,REJECTED: KYC Failed,1388.81,,1388.81,validation,,NO,NO,,Jordan Tran,,NO_RECORD,,,,,,V4IHMZWN,0xdce29b140ea98c1288fc73758b4b6789121e89ed,
+,,,,REJECTED: KYC Failed,1355.48,,1355.48,validation,,NO,NO,,Michelle Hayes,,NO_RECORD,,,,,,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,
+,,,,REJECTED: KYC Failed,1345.48,,1345.48,validation,,NO,NO,,Emily Sanchez,,NO_RECORD,,,,,,Y98W4QG0,0x8ad1100b8fc3cf674adab8369d29dd583d37f6af,
+,,,,REJECTED: KYC Failed,1288.96,,1288.96,validation,,NO,NO,,Peter Cruz,,NO_RECORD,,,,,,ID074SG0,0x87784d374dc663aa06c86e68be590d190a01a94b,
+,,,,REJECTED: KYC Failed,1273.05,,1273.05,validation,,NO,NO,,Sara Sanders,,NO_RECORD,,,,,,R6OLX2YW,0x4f182d7fca5d5db5a0b5179ff4b5e8afed6d6a04,
+,,,,REJECTED: KYC Failed,1246.7,,1246.7,validation,,NO,NO,,Jacqueline Vasquez,,NO_RECORD,,,,,,8E8S8O5B,0x759e3024366f02ceef107a3a5836c10100349918,
+,,,,REJECTED: KYC Failed,1219.09,,1219.09,validation,,NO,NO,,David Gray,,NO_RECORD,,,,,,060BKHPG,0x22c2d0b5f6a28ab00af5804b0ad8866f6a1af515,
+,,,,REJECTED: KYC Failed,1218.75,,1218.75,validation,,NO,NO,,Dennis Chen,,NO_RECORD,,,,,,2PQUL5JZ,0x6017210e5d9d04bd0bee39ebbb4a25a7f9e4c0dd,
+,,,,REJECTED: KYC Failed,1144.44,,1144.44,validation,,NO,NO,,Brandon Kim,,NO_RECORD,,,,,,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,
+,,,,REJECTED: KYC Failed,1116.27,,1116.27,validation,,NO,NO,,George Hayes,,NO_RECORD,,,,,,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,
+,,,,REJECTED: KYC Failed,1108.07,,1108.07,validation,,NO,NO,,Carolyn Williams,,NO_RECORD,,,,,,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,
+,,,,REJECTED: KYC Failed,1097.92,,1891.54,validation,,NO,NO,,Emma Collins,,NO_RECORD,,,,,,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,
+,,,,REJECTED: KYC Failed,1031.61,,1031.61,validation,,NO,NO,,Steven Simmons,,NO_RECORD,,,,,,8XQ3USL9,0xf4b45c2c886e754735d3a925c01b646749f44422,
+,,,,REJECTED: KYC Failed,1015.57,,1015.57,validation,,NO,NO,,Carol Ellis,,NO_RECORD,,,,,,RJ77OYU1,0x577785223d3bee101e0068ec4e2606dbdfb3dac4,
+,,,,REJECTED: KYC Failed,1013.26,,1849.8600000000001,validation,,NO,NO,,Jacqueline Ruiz,,NO_RECORD,,,,,,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,
+,,,,REJECTED: KYC Failed,1012.92,,1833.48,validation,,NO,NO,,John Marshall,,NO_RECORD,,,,,,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,
+,,,,REJECTED: KYC Failed,1004.48,,1004.48,validation,,NO,NO,,Andrea Gibson,,NO_RECORD,,,,,,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,
+,,,,REJECTED: KYC Failed,993.85,,2821.8,validation,,NO,NO,,Charlotte Aguilar,,NO_RECORD,,,,,,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,
+,,,,REJECTED: KYC Failed,985.95,,3299,validation,,NO,NO,,Anthony Patel,,NO_RECORD,,,,,,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,
+,,,,REJECTED: KYC Failed,977.17,,977.17,validation,,NO,NO,,Rebecca Morgan,,NO_RECORD,,,,,,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,
+,,,,REJECTED: KYC Failed,956.92,,2682.15,validation,,NO,NO,,George Hayes,,NO_RECORD,,,,,,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,
+,,,,REJECTED: KYC Failed,938.2,,938.2,validation,,NO,NO,,Walter Harrison,,NO_RECORD,,,,,,4376J1GV,0x318effcab4ce638cece0d59287d60367a79f3b22,
+,,,,REJECTED: KYC Failed,925.77,,1930.25,validation,,NO,NO,,Andrea Gibson,,NO_RECORD,,,,,,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,
+,,,,REJECTED: KYC Failed,914.5,,914.5,validation,,NO,NO,,Benjamin Miller,,NO_RECORD,,,,,,BN9ZJEK0,0x84f9d70c91b2f60c448b97c20fb50065ed7f4cc2,
+,,,,REJECTED: KYC Failed,911.19,,911.19,validation,,NO,NO,,Nathan Jones,,NO_RECORD,,,,,,EGCUQSJ6,0xe35eb7275294e6c56afcb2ce3631fd87ed16f91e,
+,,,,REJECTED: KYC Failed,898.94,,2852.63,validation,,NO,NO,,Andrea Watson,,NO_RECORD,,,,,,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,
+,,,,REJECTED: KYC Failed,896.38,,1079.6,validation,,NO,NO,,Zachary Simmons,,NO_RECORD,,,,,,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,
+,,,,REJECTED: KYC Failed,894.92,,894.92,validation,,NO,NO,,Jose Rivera,,NO_RECORD,,,,,,CNPVNIFW,0x7edb2abea6c22946711c2ae65ebbe4f88d419de7,
+,,,,REJECTED: KYC Failed,865.48,,865.48,validation,,NO,NO,,Laura Alvarez,,NO_RECORD,,,,,,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,
+,,,,REJECTED: KYC Failed,859.96,,859.96,validation,,NO,NO,,Jennifer Williams,,NO_RECORD,,,,,,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,
+,,,,REJECTED: KYC Failed,854.11,,2313.05,validation,,NO,NO,,Anthony Patel,,NO_RECORD,,,,,,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,
+,,,,REJECTED: KYC Failed,845.27,,845.27,validation,,NO,NO,,Jennifer Mendoza,,NO_RECORD,,,,,,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,
+,,,,REJECTED: KYC Failed,838.63,,880.89,validation,,NO,NO,,Jessica Martin,,NO_RECORD,,,,,,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,
+,,,,REJECTED: KYC Failed,836.6,,836.6,validation,,NO,NO,,Jacqueline Ruiz,,NO_RECORD,,,,,,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,
+,,,,REJECTED: KYC Failed,830.93,,830.93,validation,,NO,NO,,Douglas Peterson,,NO_RECORD,,,,,,TE036S5O,0x98c9e31d5cefdb7491465fa1ea6140a6eaa89f26,
+,,,,REJECTED: KYC Failed,820.56,,820.56,validation,,NO,NO,,John Marshall,,NO_RECORD,,,,,,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,
+,,,,REJECTED: KYC Failed,815.99,,815.99,validation,,NO,NO,,Rebecca Jordan,,NO_RECORD,,,,,,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,
+,,,,REJECTED: KYC Failed,815.64,,815.64,validation,,NO,NO,,Anna Romero,,NO_RECORD,,,,,,GHV6TMP2,0x5832e71d9dcb0825c177aaced9ba15a3635b698c,
+,,,,REJECTED: KYC Failed,811.15,,811.15,validation,,NO,NO,,Heather Watson,,NO_RECORD,,,,,,LT5YGESQ,0x0ef0a3cf41099ff0370fec537266e33bb193ffcf,
+,,,,REJECTED: KYC Failed,793.62,,793.62,validation,,NO,NO,,Emma Collins,,NO_RECORD,,,,,,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,
+,,,,REJECTED: KYC Failed,789.78,,1934.22,validation,,NO,NO,,Brandon Kim,,NO_RECORD,,,,,,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,
+,,,,REJECTED: KYC Failed,785.86,,1132.41,validation,,NO,NO,,Kevin Marshall,,NO_RECORD,,,,,,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,
+,,,,REJECTED: KYC Failed,767.81,,2696.09,validation,,NO,NO,,Alexander Nguyen,,NO_RECORD,,,,,,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,
+,,,,REJECTED: KYC Failed,764.13,,764.13,validation,,NO,NO,,Stephen Ward,,NO_RECORD,,,,,,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,
+,,,,REJECTED: KYC Failed,747,,1341.96,validation,,NO,NO,,Dennis Kennedy,,NO_RECORD,,,,,,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,
+,,,,REJECTED: KYC Failed,717.55,,1772.93,validation,,NO,NO,,Charlotte Kelly,,NO_RECORD,,,,,,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,
+,,,,REJECTED: KYC Failed,707.31,,2509.24,validation,,NO,NO,,Sara Anderson,,NO_RECORD,,,,,,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,
+,,,,REJECTED: KYC Failed,705.55,,705.55,validation,,NO,NO,,Mary Griffin,,NO_RECORD,,,,,,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,
+,,,,REJECTED: KYC Failed,703.3,,703.3,validation,,NO,NO,,Deborah Nguyen,,NO_RECORD,,,,,,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,
+,,,,REJECTED: KYC Failed,694.9,,694.9,validation,,NO,NO,,Mark Gray,,NO_RECORD,,,,,,6OFTWGZ6,0x1bc03a152f48c8cdd240a373b79fa1fd6d46b0f5,
+,,,,REJECTED: KYC Failed,680.57,,1001.3700000000001,validation,,NO,NO,,Aaron Foster,,NO_RECORD,,,,,,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,
+,,,,REJECTED: KYC Failed,639.1,,889.24,validation,,NO,NO,,Eugene Nelson,,NO_RECORD,,,,,,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,
+,,,,REJECTED: KYC Failed,630.77,,630.77,validation,,NO,NO,,Kevin Jackson,,NO_RECORD,,,,,,ZF5RXT8R,0x4370343fee9ccbba3333a74348800b5e05ebe661,
+,,,,REJECTED: KYC Failed,626.8,,881.9399999999999,validation,,NO,NO,,Kyle Rivera,,NO_RECORD,,,,,,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,
+,,,,REJECTED: KYC Failed,626.71,,1055.38,validation,,NO,NO,,Charlotte Kelly,,NO_RECORD,,,,,,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,
+,,,,REJECTED: KYC Failed,613.34,,613.34,validation,,NO,NO,,Heather Gonzalez,,NO_RECORD,,,,,,ES2FK5CG,0xf4b66f6222fa72269483a2db98ccc67ba33e2488,
+,,,,REJECTED: KYC Failed,608.96,,1725.23,validation,,NO,NO,,George Hayes,,NO_RECORD,,,,,,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,
+,,,,REJECTED: KYC Failed,604.32,,1034.8700000000001,validation,,NO,NO,,Charlotte Chen,,NO_RECORD,,,,,,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,
+,,,,REJECTED: KYC Failed,594.96,,594.96,validation,,NO,NO,,Dennis Kennedy,,NO_RECORD,,,,,,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,
+,,,,REJECTED: KYC Failed,592.48,,592.48,validation,,NO,NO,,Jessica Hernandez,,NO_RECORD,,,,,,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,
+,,,,REJECTED: KYC Failed,589.23,,589.23,validation,,NO,NO,,Helen Baker,,NO_RECORD,,,,,,EOP0RWRO,0xf0a6904f179b5cccd9abb57ce3890745e1bb6cf2,
+,,,,REJECTED: KYC Failed,587.14,,2480.99,validation,,NO,NO,,Michelle Hayes,,NO_RECORD,,,,,,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,
+,,,,REJECTED: KYC Failed,579.38,,579.38,validation,,NO,NO,,Christopher McDonald,,NO_RECORD,,,,,,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,
+,,,,REJECTED: KYC Failed,575.65,,575.65,validation,,NO,NO,,Tyler Adams,,NO_RECORD,,,,,,WTKHNAZW,0xe23ce54ff4ff2439fdde6fbc43f32cf76277bbf3,
+,,,,REJECTED: KYC Failed,540.06,,540.06,validation,,NO,NO,,Charlotte Wells,,NO_RECORD,,,,,,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,
+,,,,REJECTED: KYC Failed,538.37,,1893.85,validation,,NO,NO,,Michelle Hayes,,NO_RECORD,,,,,,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,
+,,,,REJECTED: KYC Failed,533.04,,533.04,validation,,NO,NO,,Joshua Stewart,,NO_RECORD,,,,,,ZE770A29,0x6d6de9a618f8838c8eb7581594cfa3bcca2caf83,
+,,,,REJECTED: KYC Failed,518.18,,1334.17,validation,,NO,NO,,Rebecca Jordan,,NO_RECORD,,,,,,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,
+,,,,REJECTED: KYC Failed,507.67,,507.67,validation,,NO,NO,,Sara Vasquez,,NO_RECORD,,,,,,KMN9ELGG,0xc6e6bd0e707daa49a2b682a80d8a57e607c9e38e,
+,,,,REJECTED: KYC Failed,489.5,,1354.98,validation,,NO,NO,,Laura Alvarez,,NO_RECORD,,,,,,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,
+,,,,REJECTED: KYC Failed,464.8,,464.8,validation,,NO,NO,,Ashley Gutierrez,,NO_RECORD,,,,,,SKTN9UM4,0x5479e4c84180af2d1c1ea285377cd6a0834567e2,
+,,,,REJECTED: KYC Failed,460,,1319.96,validation,,NO,NO,,Jennifer Williams,,NO_RECORD,,,,,,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,
+,,,,REJECTED: KYC Failed,445.01,,445.01,validation,,NO,NO,,Zachary Medina,,NO_RECORD,,,,,,OHFLU3OH,0x1e76a2f53f0432153de523b6f533dbcb89014a66,
+,,,,REJECTED: KYC Failed,436.81,,1349.97,validation,,NO,NO,,Stephen Ward,,NO_RECORD,,,,,,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,
+,,,,REJECTED: KYC Failed,430.55,,430.55,validation,,NO,NO,,Charlotte Chen,,NO_RECORD,,,,,,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,
+,,,,REJECTED: KYC Failed,428.67,,428.67,validation,,NO,NO,,Charlotte Kelly,,NO_RECORD,,,,,,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,
+,,,,REJECTED: KYC Failed,377.72,,957.1,validation,,NO,NO,,Christopher McDonald,,NO_RECORD,,,,,,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,
+,,,,REJECTED: KYC Failed,352.64,,2011.2800000000002,validation,,NO,NO,,Jack Hayes,,NO_RECORD,,,,,,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,
+,,,,REJECTED: KYC Failed,346.55,,346.55,validation,,NO,NO,,Kevin Marshall,,NO_RECORD,,,,,,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,
+,,,,REJECTED: KYC Failed,327.77,,327.77,validation,,NO,NO,,Madison Hughes,,NO_RECORD,,,,,,VS0R6KCH,0x08a91a373f93252ed01e9aeeb76adf3fff5f09b3,
+,,,,REJECTED: KYC Failed,327.56,,327.56,validation,,NO,NO,,Gerald Bailey,,NO_RECORD,,,,,,FZY1OK53,0x4dcbbb517db46434d86ab320d7f33c5b7b24c8e9,
+,,,,REJECTED: KYC Failed,320.8,,320.8,validation,,NO,NO,,Aaron Foster,,NO_RECORD,,,,,,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,
+,,,,REJECTED: KYC Failed,302.15,,1337.02,validation,,NO,NO,,Charlotte Chen,,NO_RECORD,,,,,,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,
+,,,,REJECTED: KYC Failed,291.28,,1717.1499999999999,validation,,NO,NO,,Katherine Medina,,NO_RECORD,,,,,,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,
+,,,,REJECTED: KYC Failed,273.43,,273.43,validation,,NO,NO,,Victoria Johnson,,NO_RECORD,,,,,,FDMKQED8,0xa0e522d400abacda16bc0f23af0ea42ec991324e,
+,,,,REJECTED: KYC Failed,255.14,,255.14,validation,,NO,NO,,Kyle Rivera,,NO_RECORD,,,,,,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,
+,,,,REJECTED: KYC Failed,250.14,,250.14,validation,,NO,NO,,Eugene Nelson,,NO_RECORD,,,,,,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,
+,,,,REJECTED: KYC Failed,242.39,,242.39,validation,,NO,NO,,Dennis Lee,,NO_RECORD,,,,,,ZDLSNM46,0xd3dedbb4a6bce1644f25ba9ceb57e31d515376c1,
+,,,,REJECTED: KYC Failed,238.57,,1120.51,validation,,NO,NO,,Kyle Rivera,,NO_RECORD,,,,,,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,
+,,,,REJECTED: KYC Failed,230.37,,230.37,validation,,NO,NO,,Kenneth Woods,,NO_RECORD,,,,,,N7YMXCEN,0x576b1cec6392e4828d9265580b0f4386f5da9a38,
+,,,,REJECTED: KYC Failed,192.5,,1079.95,validation,,NO,NO,,Jennifer Mendoza,,NO_RECORD,,,,,,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,
+,,,,REJECTED: KYC Failed,183.22,,183.22,validation,,NO,NO,,Zachary Simmons,,NO_RECORD,,,,,,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,
+,,,,REJECTED: KYC Failed,149.03,,913.16,validation,,NO,NO,,Stephen Ward,,NO_RECORD,,,,,,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,
+,,,,REJECTED: KYC Failed,128.88,,188.82999999999998,validation,,NO,NO,,Scott Bell,,NO_RECORD,,,,,,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,
+,,,,REJECTED: KYC Failed,119.92,,119.92,validation,,NO,NO,,Lisa Stewart,,NO_RECORD,,,,,,Q59TWRLG,0x664f7d7d8fa5764f4b78e5931613aaea385ce77d,
+,,,,REJECTED: KYC Failed,119.92,,119.92,validation,,NO,NO,,Dennis Jackson,,NO_RECORD,,,,,,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,
+,,,,REJECTED: KYC Failed,103.39,,103.39,validation,,NO,NO,,Julie Jenkins,,NO_RECORD,,,,,,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,
+,,,,REJECTED: KYC Failed,69.8,,773.0999999999999,validation,,NO,NO,,Deborah Nguyen,,NO_RECORD,,,,,,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,
+,,,,REJECTED: KYC Failed,61.91,,1039.08,validation,,NO,NO,,Rebecca Morgan,,NO_RECORD,,,,,,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,
+,,,,REJECTED: KYC Failed,59.95,,59.95,validation,,NO,NO,,Scott Bell,,NO_RECORD,,,,,,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,
+,,,,REJECTED: KYC Failed,58.07,,1166.1399999999999,validation,,NO,NO,,Carolyn Williams,,NO_RECORD,,,,,,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,
+,,,,REJECTED: KYC Failed,48.2,,48.2,validation,,NO,NO,,Julia Moore,,NO_RECORD,,,,,,UWTXU6QO,0x1ef9abf4c32324319db56d3c97a2f2b675654f31,
+,,,,REJECTED: KYC Failed,45.26,,45.26,validation,,NO,NO,,Amanda Fernandez,,NO_RECORD,,,,,,NPRNMY4U,0xb3e7c95cc76bd535b1369a9d48ffe8a8a4a3a6b7,
+,,,,REJECTED: KYC Failed,43.73,,43.73,validation,,NO,NO,,Denise Owens,,NO_RECORD,,,,,,122TZVNB,0x28ce14913a41d6858cff2780bab2dac19ac53102,
+,,,,REJECTED: KYC Failed,42.73,,42.73,validation,,NO,NO,,Maria Wallace,,NO_RECORD,,,,,,FQJB26BY,0xb3e6b4fa848d8c51f2a143379e76b27f5304455d,
+,,,,REJECTED: KYC Failed,42.26,,42.26,validation,,NO,NO,,Jessica Martin,,NO_RECORD,,,,,,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,
+,,,,REJECTED: KYC Failed,42.18,,887.4499999999999,validation,,NO,NO,,Jennifer Mendoza,,NO_RECORD,,,,,,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,
+,,,,REJECTED: KYC Failed,38.28,,38.28,validation,,NO,NO,,Patricia Simmons,,NO_RECORD,,,,,,GJ360Y0R,0x4aef4b40363280778215fedef79b1f52fc74cc68,
+,,,,REJECTED: KYC Failed,36.96,,36.96,validation,,NO,NO,,Amy Reed,,NO_RECORD,,,,,,YFAU1TBD,0x73f8cd6698ad884f40e02888691e0096c62883e8,
+,,,,REJECTED: KYC Failed,34.18,,34.18,validation,,NO,NO,,Christina Parker,,NO_RECORD,,,,,,W94BZF6D,0xe0538f86fe2ca2184330103e34d4de7daea201af,
+,,,,REJECTED: KYC Failed,28.38,,131.77,validation,,NO,NO,,Julie Jenkins,,NO_RECORD,,,,,,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,
+,,,,REJECTED: KYC Failed,27.51,,27.51,validation,,NO,NO,,Willie Myers,,NO_RECORD,,,,,,W16RO41P,0xe28eb12c0381ce4f4b121a6c6816b448f569bbf9,
+,,,,REJECTED: KYC Failed,27,,27,validation,,NO,NO,,Keith Vargas,,NO_RECORD,,,,,,HX1TJEQY,0xe5e7c4760c8ff66f4cfc648aad78ec321e41622f,
+,,,,REJECTED: KYC Failed,20.04,,909.28,validation,,NO,NO,,Eugene Nelson,,NO_RECORD,,,,,,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,
+,,,,REJECTED: KYC Failed,19.32,,19.32,validation,,NO,NO,,Raymond Tran,,NO_RECORD,,,,,,E0QIM197,0xe9cd7aa390c37c805be81281d2dbcc2f87a6b8a4,
+,,,,REJECTED: KYC Failed,16.83,,16.83,validation,,NO,NO,,Diane Morales,,NO_RECORD,,,,,,NGX9HRGV,0x2f9aa73566c8e49df152e96c4fdf6405e02938a2,
+,,,,REJECTED: KYC Failed,16,,608.48,validation,,NO,NO,,Jessica Hernandez,,NO_RECORD,,,,,,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,
+,,,,REJECTED: KYC Failed,14.14,,14.14,validation,,NO,NO,,Abigail Rogers,,NO_RECORD,,,,,,EWTKJQKB,0x7af1ee0eb41c03b1e8c9a97ab204c0518581c95e,
+,,,,REJECTED: KYC Failed,10.73,,1783.66,validation,,NO,NO,,Charlotte Kelly,,NO_RECORD,,,,,,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,
+,,,,REJECTED: KYC Failed,10.47,,10.47,validation,,NO,NO,,Brenda Cruz,,NO_RECORD,,,,,,CPE2M3BW,0x3214a9b9e68f3fc25f06df837bb5036fbcb9c60f,
+145 Pine Place,,Detroit,NO_KYC_RECORD,,1581.03,2024-01-24,,merged,University,,,Andrea,,,,NOT_FOUND,White,Product Manager,555-4875,MI,92CTKVF0,0x007c0582ff9ab4d26e63667de01513dfb4833739,48201
+864 Oak Lane,,Austin,VALID,,1569.91,2024-10-01,,merged,Construction Co,,,Sara,,,,PASSED,Coleman,Software Engineer,555-5254,TX,LFU0TPM0,0x036c512f46d765956869b2d40e8accf9ff9c8613,78701
+159 Elm Boulevard,,Portland,NO_KYC_RECORD,,1947.9,2024-09-28,,merged,Airlines,,,Brittany,,,,NOT_FOUND,Hamilton,CEO,555-2936,OR,JPG2EBWF,0x05645b4fb088df89ea8e1312f7a3a10eeb785f6b,97201
+415 Pine Lane,,Raleigh,NO_KYC_RECORD,,42.26,2024-05-05,,merged,Biotech Labs,,,Jessica,,,,NOT_FOUND,Martin,Engineer,555-5388,NC,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,27601
+415 Pine Lane,,Raleigh,NO_KYC_RECORD,,838.63,2024-06-17,,merged,Biotech Labs,,,Jessica,,,,NOT_FOUND,Martin,Engineer,555-5388,NC,9AFFUUV5,0x05799cd6cebb2440a422ca35fc5ea0b9fbbd925a,27601
+816 Elm Circle,,Phoenix,NO_KYC_RECORD,,320.8,2024-04-11,,merged,Telecom Company,,,Aaron,,,,NOT_FOUND,Foster,Director,555-4072,AZ,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,85001
+816 Elm Circle,,Phoenix,NO_KYC_RECORD,,680.57,2024-06-03,,merged,Telecom Company,,,Aaron,,,,NOT_FOUND,Foster,Director,555-4072,AZ,NPUEXHGC,0x062be612223a13602911e0c645268933d7c2afad,85001
+898 Ash Court,,Honolulu,NO_KYC_RECORD,,327.77,2024-02-23,,merged,Media Productions,,,Madison,,,,NOT_FOUND,Hughes,Site Supervisor,555-3268,HI,VS0R6KCH,0x08a91a373f93252ed01e9aeeb76adf3fff5f09b3,96801
+904 Willow Road,,San Diego,VALID,,334.09,2024-07-13,,merged,Investment Bank,,,William,,,,PASSED,Martinez,Operations Manager,555-6708,CA,H1TMJONR,0x093d614695a5f341982eafec2535a8cf5b968706,92101
+903 Elm Circle,,Jacksonville,NO_KYC_RECORD,,1889.44,2024-02-29,,merged,Retail Giants,,,Grace,,,,NOT_FOUND,Howard,Producer,555-8412,FL,WYMUMPQ6,0x0c1ef388200d522bf1daa07b7811942465b48600,32201
+593 Oak Circle,,Miami,NO_KYC_RECORD,,1622.9,2024-11-12,,merged,Gaming Studio,,,Donald,,,,NOT_FOUND,Sanchez,CPA,555-4116,FL,GUE158T6,0x0c3479ffedfce359043d0c52acfdbd734842db26,33101
+500 Cedar Circle,,Houston,VALID,,1059.02,2024-02-24,,merged,Consulting Firm,,,Dennis,,,,PASSED,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+500 Cedar Circle,,Houston,VALID,,208.77,2024-04-03,,merged,Consulting Firm,,,Dennis,,,,PASSED,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+500 Cedar Circle,,Houston,VALID,,86.83,2024-05-16,,merged,Consulting Firm,,,Dennis,,,,PASSED,Campbell,Editor,555-5231,TX,BELZFATP,0x0eab408c7f6720241267bf93385746c0b09d8ab2,77001
+605 Cedar Place,,Raleigh,NO_KYC_RECORD,,811.15,2024-08-05,,merged,Tech Solutions Inc,,,Heather,,,,NOT_FOUND,Watson,Creative Director,555-8982,NC,LT5YGESQ,0x0ef0a3cf41099ff0370fec537266e33bb193ffcf,27601
+472 Maple Court,,Chicago,NO_KYC_RECORD,,430.55,2024-04-22,,merged,Sports Management,,,Charlotte,,,,NOT_FOUND,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+472 Maple Court,,Chicago,NO_KYC_RECORD,,604.32,2024-05-10,,merged,Sports Management,,,Charlotte,,,,NOT_FOUND,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+472 Maple Court,,Chicago,NO_KYC_RECORD,,302.15,2024-07-23,,merged,Sports Management,,,Charlotte,,,,NOT_FOUND,Chen,Real Estate Agent,555-8618,IL,BIKJ52AQ,0x0f35d7146c2e374b0937ce698d42bb632c70ed81,60601
+813 Ash Boulevard,,San Francisco,VALID,,1466.18,2024-07-24,,merged,Telecom Company,,,Noah,,,,PASSED,Vasquez,Teacher,555-3650,CA,VXAQ4IID,0x16f530f01f1116cfd3c5c022aab6f0441df82fbd,94102
+825 Birch Drive,,San Jose,VALID,,801.54,2024-12-27,,merged,Airlines,,,Mason,,,,PASSED,Taylor,Mechanical Engineer,555-3169,CA,Y7YXP2TQ,0x1a266923ce883405ef40730b8973cd7781442039,95101
+659 Birch Drive,,Detroit,NO_KYC_RECORD,,3299.91,2024-12-05,,merged,Fashion House,,,Rachel,,,,NOT_FOUND,Ortiz,Partner,555-8672,MI,O1SLGDF6,0x1a8964573d6d1d28b950996362d9f6da2b38885e,48201
+354 Maple Road,,San Antonio,NO_KYC_RECORD,,694.9,2024-12-16,,merged,Airlines,,,Mark,,,,NOT_FOUND,Gray,Engineer,555-1588,TX,6OFTWGZ6,0x1bc03a152f48c8cdd240a373b79fa1fd6d46b0f5,78201
+749 Pine Court,,Houston,VALID,,863.96,2024-08-02,,merged,Food Services,,,Richard,,,,PASSED,Perry,Attorney,555-7200,TX,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,77001
+749 Pine Court,,Houston,VALID,,128.85,2024-11-08,,merged,Food Services,,,Richard,,,,PASSED,Perry,Attorney,555-7200,TX,V3MEWMIB,0x1c76af4858fb2bf47d806117b433252f6df240cf,77001
+928 Oak Way,,Houston,NO_KYC_RECORD,,428.67,2024-05-01,,merged,Art Gallery,,,Charlotte,,,,NOT_FOUND,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+928 Oak Way,,Houston,NO_KYC_RECORD,,626.71,2024-06-22,,merged,Art Gallery,,,Charlotte,,,,NOT_FOUND,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+928 Oak Way,,Houston,NO_KYC_RECORD,,717.55,2024-06-23,,merged,Art Gallery,,,Charlotte,,,,NOT_FOUND,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+928 Oak Way,,Houston,NO_KYC_RECORD,,10.73,2024-08-15,,merged,Art Gallery,,,Charlotte,,,,NOT_FOUND,Kelly,CPA,555-2503,TX,T3OAEB3E,0x1e64dd35f4defceea0351705533b6fe4d4a54d1a,77001
+396 Spruce Street,,San Jose,NO_KYC_RECORD,,445.01,2024-03-19,,merged,Pharmacy Chain,,,Zachary,,,,NOT_FOUND,Medina,Financial Analyst,555-8426,CA,OHFLU3OH,0x1e76a2f53f0432153de523b6f533dbcb89014a66,95101
+634 Willow Way,,San Francisco,NO_KYC_RECORD,,48.2,2024-12-13,,merged,Construction Co,,,Julia,,,,NOT_FOUND,Moore,Director,555-7038,CA,UWTXU6QO,0x1ef9abf4c32324319db56d3c97a2f2b675654f31,94102
+609 Pine Circle,,Charlotte,NO_KYC_RECORD,,703.3,2024-03-29,,merged,Education First,,,Deborah,,,,NOT_FOUND,Nguyen,Software Engineer,555-7868,NC,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,28201
+609 Pine Circle,,Charlotte,NO_KYC_RECORD,,69.8,2024-10-13,,merged,Education First,,,Deborah,,,,NOT_FOUND,Nguyen,Software Engineer,555-7868,NC,SJTVFVB0,0x1faa993bad304b35f13dcee234392df2f3b90617,28201
+885 Cedar Avenue,,Indianapolis,NO_KYC_RECORD,,1219.09,2024-02-07,,merged,Financial Advisory LLC,,,David,,,,NOT_FOUND,Gray,Professor,555-3595,IN,060BKHPG,0x22c2d0b5f6a28ab00af5804b0ad8866f6a1af515,46201
+165 Oak Lane,,San Diego,NO_KYC_RECORD,,1801.93,2024-05-13,,merged,Film Studio,,,Sara,,,,NOT_FOUND,Anderson,Operations Manager,555-5573,CA,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,92101
+165 Oak Lane,,San Diego,NO_KYC_RECORD,,707.31,2024-09-28,,merged,Film Studio,,,Sara,,,,NOT_FOUND,Anderson,Operations Manager,555-5573,CA,BXCCT17O,0x23b85badc811ea5160612fee46fe033bcc842d54,92101
+636 Maple Way,,New York,NO_KYC_RECORD,,1928.28,2024-07-01,,merged,Auto Industries,,,Alexander,,,,NOT_FOUND,Nguyen,CEO,555-6943,NY,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,10001
+636 Maple Way,,New York,NO_KYC_RECORD,,767.81,2024-10-27,,merged,Auto Industries,,,Alexander,,,,NOT_FOUND,Nguyen,CEO,555-6943,NY,5IHZRG4O,0x253388843aa51c720f6787dc35a3f541047a46a9,10001
+603 Ash Street,,Kansas City,VALID,,1274.1,2024-07-07,,merged,Art Gallery,,,Julia,,,,PASSED,Mitchell,Game Developer,555-3396,MO,8M0BJ6U9,0x25537341182677efd7b13297b9d158737b2c10c3,64101
+568 Birch Drive,,Charlotte,VALID,,37.34,2024-08-23,,merged,Real Estate Group,,,Kevin,,,,PASSED,Cooper,Creative Director,555-7208,NC,EOA89JQR,0x25a81d9a08710762512088f686cb2a11cb08d3aa,28201
+998 Oak Court,,Fresno,NO_KYC_RECORD,,43.73,2024-06-27,,merged,Education First,,,Denise,,,,NOT_FOUND,Owens,Network Engineer,555-5673,CA,122TZVNB,0x28ce14913a41d6858cff2780bab2dac19ac53102,93701
+659 Birch Street,,Boston,NO_KYC_RECORD,,1458.94,2024-03-22,,merged,Pharmacy Chain,,,Anthony,,,,NOT_FOUND,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+659 Birch Street,,Boston,NO_KYC_RECORD,,854.11,2024-08-25,,merged,Pharmacy Chain,,,Anthony,,,,NOT_FOUND,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+659 Birch Street,,Boston,NO_KYC_RECORD,,985.95,2024-10-07,,merged,Pharmacy Chain,,,Anthony,,,,NOT_FOUND,Patel,Designer,555-2854,MA,GLSEX3RD,0x2a64f7bb981a38dac719b003e6b397db240abb4a,02101
+312 Poplar Lane,,Austin,VALID,,1662.89,2024-04-03,,merged,Aerospace Corp,,,Douglas,,,,PASSED,Long,Systems Analyst,555-7641,TX,GHN1RBNW,0x2da6ed35f23a97f2bcb70f9b04821754947703b5,78701
+396 Oak Road,,Portland,NO_KYC_RECORD,,16.83,2024-11-30,,merged,Retail Chain,,,Diane,,,,NOT_FOUND,Morales,Producer,555-3456,OR,NGX9HRGV,0x2f9aa73566c8e49df152e96c4fdf6405e02938a2,97201
+448 Birch Way,,Dallas,NO_KYC_RECORD,,938.2,2024-03-24,,merged,Accounting Firm,,,Walter,,,,NOT_FOUND,Harrison,Real Estate Agent,555-5890,TX,4376J1GV,0x318effcab4ce638cece0d59287d60367a79f3b22,75201
+776 Oak Place,,Anaheim,NO_KYC_RECORD,,1827.95,2024-01-11,,merged,Sports Management,,,Charlotte,,,,NOT_FOUND,Aguilar,Project Manager,555-2564,CA,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,92801
+776 Oak Place,,Anaheim,NO_KYC_RECORD,,993.85,2024-07-25,,merged,Sports Management,,,Charlotte,,,,NOT_FOUND,Aguilar,Project Manager,555-2564,CA,U22P0A4G,0x31eda11686c47c6ce67f545f67623e233a295489,92801
+348 Pine Street,,Austin,NO_KYC_RECORD,,10.47,2024-12-07,,merged,Consulting Firm,,,Brenda,,,,NOT_FOUND,Cruz,CEO,555-6380,TX,CPE2M3BW,0x3214a9b9e68f3fc25f06df837bb5036fbcb9c60f,78701
+921 Poplar Circle,,Minneapolis,NO_KYC_RECORD,,977.17,2024-02-16,,merged,Aerospace Corp,,,Rebecca,,,,NOT_FOUND,Morgan,Pharmacist,555-4983,MN,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,55401
+921 Poplar Circle,,Minneapolis,NO_KYC_RECORD,,61.91,2024-05-30,,merged,Aerospace Corp,,,Rebecca,,,,NOT_FOUND,Morgan,Pharmacist,555-4983,MN,RGBZX2ZV,0x338e51a7036a2d062c4348f191c49423131b8e19,55401
+470 Maple Way,,Minneapolis,NO_KYC_RECORD,,103.39,2024-05-15,,merged,Hospital Network,,,Julie,,,,NOT_FOUND,Jenkins,Security Consultant,555-3576,MN,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,55401
+470 Maple Way,,Minneapolis,NO_KYC_RECORD,,28.38,2024-05-18,,merged,Hospital Network,,,Julie,,,,NOT_FOUND,Jenkins,Security Consultant,555-3576,MN,6KMNDSDD,0x3426886ae6468b24e157deed18c2b7903bac517b,55401
+919 Ash Way,,Phoenix,NO_KYC_RECORD,,3300,2024-12-10,,merged,Construction Co,,,Peter,,,,NOT_FOUND,Moreno,Editor,555-6819,AZ,GENYJC9J,0x36bf71066dd6fc93456d0643b228b8278086bdce,85001
+855 Poplar Way,,Tucson,VALID,,1687.01,2024-11-28,,merged,Retail Giants,,,Mark,,,,PASSED,Kim,Director,555-3690,AZ,M57JWYHO,0x3a5054038cd2fc7a7853c57d8954649a7250c2e2,85701
+788 Oak Street,,Philadelphia,NO_KYC_RECORD,,1116.27,2024-02-02,,merged,Retail Chain,,,George,,,,NOT_FOUND,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+788 Oak Street,,Philadelphia,NO_KYC_RECORD,,608.96,2024-05-04,,merged,Retail Chain,,,George,,,,NOT_FOUND,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+788 Oak Street,,Philadelphia,NO_KYC_RECORD,,956.92,2024-08-20,,merged,Retail Chain,,,George,,,,NOT_FOUND,Hayes,Underwriter,555-9837,PA,ETQ4A0MC,0x3ad706f1fb16f02d574548d6ece4cdc7c4b71c7d,19101
+124 Pine Way,,Milwaukee,NO_KYC_RECORD,,845.27,2024-01-24,,merged,Food Services,,,Jennifer,,,,NOT_FOUND,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+124 Pine Way,,Milwaukee,NO_KYC_RECORD,,42.18,2024-06-17,,merged,Food Services,,,Jennifer,,,,NOT_FOUND,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+124 Pine Way,,Milwaukee,NO_KYC_RECORD,,192.5,2024-11-25,,merged,Food Services,,,Jennifer,,,,NOT_FOUND,Mendoza,Operations Manager,555-6978,WI,AMNKHZ1B,0x3db59b0ecfdccda46e37fca7df83f9f66f45f2c1,53201
+295 Willow Way,,Sacramento,NO_KYC_RECORD,,3299.84,2024-09-14,,merged,Nonprofit Org,,,Ruth,,,,NOT_FOUND,Castillo,Architect,555-6299,CA,QNIK9137,0x429a00449459ca69b289186fd69bb8d99609959e,95801
+790 Willow Lane,,Oakland,NO_KYC_RECORD,,630.77,2024-12-06,,merged,Education First,,,Kevin,,,,NOT_FOUND,Jackson,Research Scientist,555-7366,CA,ZF5RXT8R,0x4370343fee9ccbba3333a74348800b5e05ebe661,94601
+939 Poplar Avenue,,Los Angeles,VALID,,483.13,2024-05-05,,merged,Music Label,,,Gregory,,,,PASSED,Jenkins,Professor,555-8430,CA,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,90001
+939 Poplar Avenue,,Los Angeles,VALID,,433.12,2024-11-02,,merged,Music Label,,,Gregory,,,,PASSED,Jenkins,Professor,555-8430,CA,PK7M5CYL,0x451206a32e3cdb54034607fcc15ae4faa519cee6,90001
+314 Pine Lane,,Philadelphia,NO_KYC_RECORD,,1669.42,2024-07-25,,merged,Sports Management,,,Carol,,,,NOT_FOUND,Johnson,Engineer,555-6041,PA,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,19101
+314 Pine Lane,,Philadelphia,NO_KYC_RECORD,,1629.58,2024-08-17,,merged,Sports Management,,,Carol,,,,NOT_FOUND,Johnson,Engineer,555-6041,PA,3MYBZPJ9,0x4578861245ae03df3909d210842d467976291fe5,19101
+622 Maple Road,,Philadelphia,NO_KYC_RECORD,,815.99,2024-07-10,,merged,Healthcare Partners,,,Rebecca,,,,NOT_FOUND,Jordan,Professor,555-6364,PA,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,19101
+622 Maple Road,,Philadelphia,NO_KYC_RECORD,,518.18,2024-08-25,,merged,Healthcare Partners,,,Rebecca,,,,NOT_FOUND,Jordan,Professor,555-6364,PA,89CMLQ63,0x4a34c7bdb12ba3930b4f2801cb5b0c93af56b537,19101
+731 Oak Way,,Seattle,VALID,,43.15,2024-04-30,,merged,Logistics Co,,,Nathan,,,,PASSED,Bailey,CEO,555-1803,WA,I3CLB3U4,0x4a59d912a286645b5eb383d809755d8e03b383ae,98101
+241 Poplar Lane,,Detroit,NO_KYC_RECORD,,1941.62,2024-07-09,,merged,Construction Co,,,Nicholas,,,,NOT_FOUND,Adams,Designer,555-5961,MI,8WUVFN9T,0x4ac73ebf27790a9a4650d10ca0b146a30de89946,48201
+806 Poplar Drive,,San Jose,NO_KYC_RECORD,,38.28,2024-12-11,,merged,Pharmacy Chain,,,Patricia,,,,NOT_FOUND,Simmons,Partner,555-8119,CA,GJ360Y0R,0x4aef4b40363280778215fedef79b1f52fc74cc68,95101
+613 Pine Way,,Miami,VALID,,375.19,2024-10-15,,merged,Pharmacy Chain,,,Jennifer,,,,PASSED,Vargas,CPA,555-7513,FL,QC3S78YD,0x4c1e27a0b54c139d71fb26e36844d22f93aa4cf3,33101
+273 Cedar Court,,Boston,VALID,,46.24,2024-06-14,,merged,Travel Agency,,,Charles,,,,PASSED,Reyes,Security Consultant,555-2109,MA,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,02101
+273 Cedar Court,,Boston,VALID,,811.88,2024-08-17,,merged,Travel Agency,,,Charles,,,,PASSED,Reyes,Security Consultant,555-2109,MA,FCPJ4T0A,0x4ca8c1ea0324538018d71b219d01121f44802ea4,02101
+316 Birch Lane,,New York,NO_KYC_RECORD,,327.56,2024-11-09,,merged,Film Studio,,,Gerald,,,,NOT_FOUND,Bailey,Underwriter,555-4231,NY,FZY1OK53,0x4dcbbb517db46434d86ab320d7f33c5b7b24c8e9,10001
+733 Poplar Circle,,Las Vegas,NO_KYC_RECORD,,820.56,2024-09-11,,merged,Construction Co,,,John,,,,NOT_FOUND,Marshall,Director,555-9207,NV,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,89101
+733 Poplar Circle,,Las Vegas,NO_KYC_RECORD,,1012.92,2024-10-09,,merged,Construction Co,,,John,,,,NOT_FOUND,Marshall,Director,555-9207,NV,D4KMZPDR,0x4e2610b1417a9e4a332dfd2f7c9cd7a71e09cdac,89101
+935 Oak Circle,,Virginia Beach,NO_KYC_RECORD,,1273.05,2024-06-12,,merged,Music Label,,,Sara,,,,NOT_FOUND,Sanders,Professor,555-7493,VA,R6OLX2YW,0x4f182d7fca5d5db5a0b5179ff4b5e8afed6d6a04,23451
+490 Spruce Road,,Detroit,NO_KYC_RECORD,,1658.64,2024-09-30,,merged,Architecture Firm,,,Jack,,,,NOT_FOUND,Hayes,Creative Director,555-3058,MI,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,48201
+490 Spruce Road,,Detroit,NO_KYC_RECORD,,352.64,2024-10-16,,merged,Architecture Firm,,,Jack,,,,NOT_FOUND,Hayes,Creative Director,555-3058,MI,AP4SH8KJ,0x4f7cbe911f229af59b59933f29d47d3294e1f910,48201
+220 Willow Way,,Indianapolis,VALID,,3300,2024-11-07,,merged,Nonprofit Org,,,Julie,,,,PASSED,Kim,Security Consultant,555-3716,IN,T8UUGKEH,0x4fc80d6a55925a5b5b8e3ae9c6fa56c9cf9bff5b,46201
+573 Oak Circle,,Jacksonville,NO_KYC_RECORD,,592.48,2024-03-10,,merged,Music Label,,,Jessica,,,,NOT_FOUND,Hernandez,Mechanical Engineer,555-2695,FL,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,32201
+573 Oak Circle,,Jacksonville,NO_KYC_RECORD,,16,2024-12-23,,merged,Music Label,,,Jessica,,,,NOT_FOUND,Hernandez,Mechanical Engineer,555-2695,FL,HOMDYJ6X,0x4fe076c393985d328c46384018b77ec09fadb831,32201
+524 Pine Court,,Seattle,VALID,,1269.73,2024-01-07,,merged,Nonprofit Org,,,Debra,,,,PASSED,Anderson,Operations Manager,555-9600,WA,M13JF1JW,0x523a2ca6a5d61408a22071c45869970473e785a5,98101
+104 Pine Drive,,Charlotte,VALID,,1844.04,2024-06-17,,merged,Nonprofit Org,,,Christine,,,,PASSED,Washington,Producer,555-5974,NC,PYU7VDP8,0x5246d0a65978e9bd34c7aa7a52354b9f49797a80,28201
+793 Birch Avenue,,Phoenix,VALID,,1804.55,2024-04-06,,merged,Gaming Studio,,,Denise,,,,PASSED,Brown,Engineer,555-1457,AZ,HXHX4VMR,0x53598c1e45f207f550fe89ffc12ea5fa1074c6f5,85001
+382 Ash Way,,Phoenix,NO_KYC_RECORD,,464.8,2024-05-16,,merged,Film Studio,,,Ashley,,,,NOT_FOUND,Gutierrez,Restaurant Owner,555-7757,AZ,SKTN9UM4,0x5479e4c84180af2d1c1ea285377cd6a0834567e2,85001
+831 Pine Boulevard,,Fort Worth,NO_KYC_RECORD,,230.37,2024-03-12,,merged,Pharmacy Chain,,,Kenneth,,,,NOT_FOUND,Woods,Banker,555-9256,TX,N7YMXCEN,0x576b1cec6392e4828d9265580b0f4386f5da9a38,76101
+985 Ash Street,,San Jose,NO_KYC_RECORD,,1015.57,2024-02-04,,merged,Insurance Corp,,,Carol,,,,NOT_FOUND,Ellis,Consultant,555-3617,CA,RJ77OYU1,0x577785223d3bee101e0068ec4e2606dbdfb3dac4,95101
+721 Poplar Avenue,,Minneapolis,NO_KYC_RECORD,,815.64,2024-05-22,,merged,Retail Giants,,,Anna,,,,NOT_FOUND,Romero,Real Estate Agent,555-6488,MN,GHV6TMP2,0x5832e71d9dcb0825c177aaced9ba15a3635b698c,55401
+765 Pine Circle,,Boston,NO_KYC_RECORD,,1699.53,2024-06-09,,merged,Travel Agency,,,Joshua,,,,NOT_FOUND,Hall,Restaurant Owner,555-9828,MA,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,02101
+765 Pine Circle,,Boston,NO_KYC_RECORD,,1599.47,2024-11-26,,merged,Travel Agency,,,Joshua,,,,NOT_FOUND,Hall,Restaurant Owner,555-9828,MA,N6Z37BFH,0x5a7484093ea1c9f0ba6f92ecb04c5d31855b5edb,02101
+593 Cedar Place,,Las Vegas,NO_KYC_RECORD,,3300,2024-02-17,,merged,Aerospace Corp,,,Mason,,,,NOT_FOUND,Sullivan,Producer,555-8086,NV,CFNVL7IY,0x5b1faa040d43e4421e1195310a7a7043cad76edd,89101
+585 Ash Road,,Philadelphia,VALID,,377.14,2024-11-27,,merged,Travel Agency,,,Maria,,,,PASSED,Patel,Software Engineer,555-3900,PA,G2EY457P,0x5bb8c5e66c45b686c8fcfe1dcf922b8be1c0cc65,19101
+538 Spruce Avenue,,Chicago,NO_KYC_RECORD,,540.06,2024-10-22,,merged,University,,,Charlotte,,,,NOT_FOUND,Wells,Consultant,555-1134,IL,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,60601
+538 Spruce Avenue,,Chicago,NO_KYC_RECORD,,1816.72,2024-10-24,,merged,University,,,Charlotte,,,,NOT_FOUND,Wells,Consultant,555-1134,IL,9JPPXXZE,0x5cde675d9ed83380ca00a447ab984db9c0d3981a,60601
+758 Cedar Drive,,New York,NO_KYC_RECORD,,705.55,2024-02-19,,merged,Tech Solutions Inc,,,Mary,,,,NOT_FOUND,Griffin,Attorney,555-9965,NY,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,10001
+758 Cedar Drive,,New York,NO_KYC_RECORD,,1739.8,2024-08-20,,merged,Tech Solutions Inc,,,Mary,,,,NOT_FOUND,Griffin,Attorney,555-9965,NY,1VTXHOVE,0x5d80f366d3e403f877023b8fef5b8db4421aa091,10001
+616 Poplar Way,,Detroit,VALID,,402.09,2024-04-09,,merged,Media Productions,,,Janet,,,,PASSED,Hamilton,Network Engineer,555-5176,MI,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,48201
+616 Poplar Way,,Detroit,VALID,,43.52,2024-05-11,,merged,Media Productions,,,Janet,,,,PASSED,Hamilton,Network Engineer,555-5176,MI,WVD3JZ0S,0x5f29d7266520f905a7ed3dc31fee98e81cd72907,48201
+189 Spruce Way,,Austin,NO_KYC_RECORD,,1218.75,2024-07-17,,merged,Tech Startup,,,Dennis,,,,NOT_FOUND,Chen,Site Supervisor,555-2357,TX,2PQUL5JZ,0x6017210e5d9d04bd0bee39ebbb4a25a7f9e4c0dd,78701
+176 Elm Boulevard,,Dallas,NO_KYC_RECORD,,579.38,2024-04-20,,merged,Retail Chain,,,Christopher,,,,NOT_FOUND,McDonald,Regional Manager,555-8841,TX,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,75201
+176 Elm Boulevard,,Dallas,NO_KYC_RECORD,,377.72,2024-06-08,,merged,Retail Chain,,,Christopher,,,,NOT_FOUND,McDonald,Regional Manager,555-8841,TX,0ZSA683Z,0x62ce8019d99f1200de3aeac4442318d5f0b43a95,75201
+479 Oak Place,,Atlanta,VALID,,483.18,2024-05-14,,merged,Nonprofit Org,,,David,,,,PASSED,Perez,Store Manager,555-6532,GA,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,30301
+479 Oak Place,,Atlanta,VALID,,382.82,2024-07-04,,merged,Nonprofit Org,,,David,,,,PASSED,Perez,Store Manager,555-6532,GA,ZO41S71R,0x63a1ea1588480d7c126c336d05a4abbc10417600,30301
+110 Spruce Road,,Houston,NO_KYC_RECORD,,1004.48,2024-07-04,,merged,Hotel Chain,,,Andrea,,,,NOT_FOUND,Gibson,Teacher,555-8892,TX,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,77001
+110 Spruce Road,,Houston,NO_KYC_RECORD,,925.77,2024-11-28,,merged,Hotel Chain,,,Andrea,,,,NOT_FOUND,Gibson,Teacher,555-8892,TX,QZJ4A5RX,0x6488c9349a0ac14172e8cc8672b8c5373d79ebf4,77001
+145 Willow Drive,,Phoenix,NO_KYC_RECORD,,119.92,2024-02-09,,merged,Publishing House,,,Lisa,,,,NOT_FOUND,Stewart,Real Estate Agent,555-3950,AZ,Q59TWRLG,0x664f7d7d8fa5764f4b78e5931613aaea385ce77d,85001
+892 Pine Avenue,,Albuquerque,NO_KYC_RECORD,,1784.09,2024-12-10,,merged,Music Label,,,Debra,,,,NOT_FOUND,Bell,Engineer,555-7800,NM,WTNAVWP5,0x67a131c6035aba27743a288b9ea9638c735fb182,87101
+869 Willow Street,,San Jose,NO_KYC_RECORD,,1796.63,2024-08-10,,merged,Healthcare Partners,,,Sophia,,,,NOT_FOUND,James,CEO,555-9503,CA,FWYUH5HZ,0x69ce55f1b440b11a32cd7ebd657b981aa3a88aa8,95101
+827 Oak Road,,Indianapolis,NO_KYC_RECORD,,533.04,2024-06-23,,merged,Accounting Firm,,,Joshua,,,,NOT_FOUND,Stewart,Director,555-4815,IN,ZE770A29,0x6d6de9a618f8838c8eb7581594cfa3bcca2caf83,46201
+173 Birch Court,,Milwaukee,VALID,,1182.19,2024-06-13,,merged,Tech Startup,,,Nicholas,,,,PASSED,Hughes,Software Engineer,555-7691,WI,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,53201
+173 Birch Court,,Milwaukee,VALID,,195.89,2024-10-15,,merged,Tech Startup,,,Nicholas,,,,PASSED,Hughes,Software Engineer,555-7691,WI,KMFOSQ9O,0x70ec3b64e8ecfb732b3eeea4ee8d0cc5a050055c,53201
+782 Oak Circle,,Charlotte,NO_KYC_RECORD,,1790.27,2024-11-13,,merged,Music Label,,,Brandon,,,,NOT_FOUND,Wood,Engineer,555-3539,NC,T65M28Z3,0x71283c24e1df5073f8eb52feb48bd5680ffc3ecb,28201
+855 Ash Road,,Portland,NO_KYC_RECORD,,250.14,2024-05-31,,merged,Retail Giants,,,Eugene,,,,NOT_FOUND,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+855 Ash Road,,Portland,NO_KYC_RECORD,,639.1,2024-06-16,,merged,Retail Giants,,,Eugene,,,,NOT_FOUND,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+855 Ash Road,,Portland,NO_KYC_RECORD,,20.04,2024-10-15,,merged,Retail Giants,,,Eugene,,,,NOT_FOUND,Nelson,Architect,555-8956,OR,YDJM4G6H,0x718113be3ad96f60385ff9344640c73e25d25765,97201
+657 Elm Boulevard,,Cleveland,VALID,,41.83,2024-08-24,,merged,Tech Solutions Inc,,,Ruth,,,,PASSED,Owens,Restaurant Owner,555-4789,OH,EIBZFFHN,0x72964cb2e2699a2dbbf456ceee7dacda44da9b80,44101
+137 Elm Road,,Houston,VALID,,603.7,2024-05-22,,merged,Hospital Network,,,Chloe,,,,PASSED,Washington,Real Estate Agent,555-8722,TX,GMC4HU1A,0x72b6fbbefe9c2189db481e1d965db73185cf4ce6,77001
+593 Birch Circle,,Cleveland,NO_KYC_RECORD,,36.96,2024-09-26,,merged,Telecom Company,,,Amy,,,,NOT_FOUND,Reed,Attorney,555-4412,OH,YFAU1TBD,0x73f8cd6698ad884f40e02888691e0096c62883e8,44101
+358 Pine Road,,Seattle,NO_KYC_RECORD,,1246.7,2024-05-17,,merged,Pharmacy Chain,,,Jacqueline,,,,NOT_FOUND,Vasquez,Marketing Director,555-3929,WA,8E8S8O5B,0x759e3024366f02ceef107a3a5836c10100349918,98101
+151 Elm Road,,Philadelphia,VALID,,1493.94,2024-05-19,,merged,Food Services,,,Barbara,,,,PASSED,Alvarez,Real Estate Agent,555-1041,PA,3BPC7AAP,0x7749e2a80b8ed640195638f4afdc45743decd62d,19101
+224 Elm Lane,,Fresno,NO_KYC_RECORD,,3299.55,2024-07-29,,merged,Gaming Studio,,,Stephanie,,,,NOT_FOUND,Evans,Attorney,555-3524,CA,3ZKCNLYY,0x7aa65b7fb0109ad848527a8f9771c29df78e6fd7,93701
+686 Cedar Boulevard,,Kansas City,NO_KYC_RECORD,,14.14,2024-12-24,,merged,Accounting Firm,,,Abigail,,,,NOT_FOUND,Rogers,Creative Director,555-6400,MO,EWTKJQKB,0x7af1ee0eb41c03b1e8c9a97ab204c0518581c95e,64101
+944 Spruce Boulevard,,Omaha,NO_KYC_RECORD,,1631.51,2024-04-07,,merged,Construction Co,,,Joseph,,,,NOT_FOUND,Murphy,Security Consultant,555-2711,NE,7ZV3BEZO,0x7b224e8bbf01c624e0ca398b36d9ac9edfdf263c,68101
+689 Willow Road,,San Jose,NO_KYC_RECORD,,255.14,2024-05-09,,merged,Real Estate Group,,,Kyle,,,,NOT_FOUND,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+689 Willow Road,,San Jose,NO_KYC_RECORD,,626.8,2024-06-08,,merged,Real Estate Group,,,Kyle,,,,NOT_FOUND,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+689 Willow Road,,San Jose,NO_KYC_RECORD,,238.57,2024-12-18,,merged,Real Estate Group,,,Kyle,,,,NOT_FOUND,Rivera,Physician,555-5266,CA,C3Z2QOV8,0x7b4e9fcadf8ca8d10d80f3fe649d7329efd1dffe,95101
+354 Ash Street,,New York,NO_KYC_RECORD,,894.92,2024-01-11,,merged,Law Associates,,,Jose,,,,NOT_FOUND,Rivera,Agent,555-2452,NY,CNPVNIFW,0x7edb2abea6c22946711c2ae65ebbe4f88d419de7,10001
+620 Birch Lane,,San Antonio,NO_KYC_RECORD,,764.13,2024-01-07,,merged,Consulting Firm,,,Stephen,,,,NOT_FOUND,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+620 Birch Lane,,San Antonio,NO_KYC_RECORD,,149.03,2024-06-11,,merged,Consulting Firm,,,Stephen,,,,NOT_FOUND,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+620 Birch Lane,,San Antonio,NO_KYC_RECORD,,436.81,2024-10-02,,merged,Consulting Firm,,,Stephen,,,,NOT_FOUND,Ward,Engineer,555-1782,TX,M22SMOJS,0x813389e2380a9b638316362b070c19bca9955689,78201
+528 Birch Street,,Fresno,NO_KYC_RECORD,,1953.69,2024-06-05,,merged,Tech Solutions Inc,,,Andrea,,,,NOT_FOUND,Watson,Producer,555-4895,CA,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,93701
+528 Birch Street,,Fresno,NO_KYC_RECORD,,898.94,2024-08-05,,merged,Tech Solutions Inc,,,Andrea,,,,NOT_FOUND,Watson,Producer,555-4895,CA,KQIIPUPB,0x83a0b9fc0683f66235f5a10affb7d1d7be65ba5a,93701
+739 Birch Street,,San Jose,NO_KYC_RECORD,,914.5,2024-07-19,,merged,Telecom Company,,,Benjamin,,,,NOT_FOUND,Miller,Real Estate Agent,555-3542,CA,BN9ZJEK0,0x84f9d70c91b2f60c448b97c20fb50065ed7f4cc2,95101
+963 Maple Avenue,,Raleigh,NO_KYC_RECORD,,1563.5,2024-10-07,,merged,Accounting Firm,,,Jeremy,,,,NOT_FOUND,Griffin,Software Engineer,555-4910,NC,K9DQG0A3,0x86cf43195ee25dab7e4b0da464fc250638be3462,27601
+554 Pine Place,,Portland,NO_KYC_RECORD,,183.22,2024-05-28,,merged,Media Productions,,,Zachary,,,,NOT_FOUND,Simmons,Designer,555-7442,OR,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,97201
+554 Pine Place,,Portland,NO_KYC_RECORD,,896.38,2024-08-19,,merged,Media Productions,,,Zachary,,,,NOT_FOUND,Simmons,Designer,555-7442,OR,8H68I9A7,0x8774d1c6bbf3c427725fd2b990f169f3792581ec,97201
+918 Oak Place,,Indianapolis,NO_KYC_RECORD,,1288.96,2024-03-28,,merged,Biotech Labs,,,Peter,,,,NOT_FOUND,Cruz,Project Manager,555-3357,IN,ID074SG0,0x87784d374dc663aa06c86e68be590d190a01a94b,46201
+336 Oak Boulevard,,Los Angeles,VALID,,522.38,2024-03-26,,merged,Travel Agency,,,Isabella,,,,PASSED,Ellis,Producer,555-6167,CA,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,90001
+336 Oak Boulevard,,Los Angeles,VALID,,724.13,2024-11-14,,merged,Travel Agency,,,Isabella,,,,PASSED,Ellis,Producer,555-6167,CA,D9CLQHB1,0x8778637aa0f7b0f098e8d8fd6aea1b4be8130f6f,90001
+420 Spruce Place,,Tampa,NO_KYC_RECORD,,3300,2024-05-01,,merged,Energy Company,,,Brenda,,,,NOT_FOUND,Young,Mechanical Engineer,555-4284,FL,89CM5WVC,0x89050758df62c70764793ea4141dd83d0c29918f,33601
+859 Cedar Place,,Washington,NO_KYC_RECORD,,1345.48,2024-03-22,,merged,Investment Bank,,,Emily,,,,NOT_FOUND,Sanchez,Administrator,555-7261,DC,Y98W4QG0,0x8ad1100b8fc3cf674adab8369d29dd583d37f6af,20001
+395 Spruce Circle,,San Antonio,NO_KYC_RECORD,,1144.44,2024-02-14,,merged,Construction Co,,,Brandon,,,,NOT_FOUND,Kim,Agent,555-5033,TX,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,78201
+395 Spruce Circle,,San Antonio,NO_KYC_RECORD,,789.78,2024-08-15,,merged,Construction Co,,,Brandon,,,,NOT_FOUND,Kim,Agent,555-5033,TX,Y0A4GCHY,0x8deb771df348a346e9665651642b84e7612a8cfa,78201
+108 Cedar Avenue,,Detroit,VALID,,179.71,2024-11-10,,merged,Healthcare Partners,,,Joseph,,,,PASSED,Edwards,Network Engineer,555-3979,MI,U6NQV6BX,0x90ec8941158a155fa43c5380f310082694f3350f,48201
+858 Willow Place,,Virginia Beach,NO_KYC_RECORD,,1730.25,2024-12-14,,merged,Construction Co,,,Dennis,,,,NOT_FOUND,Roberts,Engineer,555-8252,VA,VLI8N7T0,0x915cae980ea6f1dc227290e763860c6edfed97be,23451
+993 Oak Boulevard,,Oakland,NO_KYC_RECORD,,1526.06,2024-02-19,,merged,Education First,,,Justin,,,,NOT_FOUND,Murray,CPA,555-8023,CA,NK71KXKQ,0x9179e979c6f88a2e5bb7452b9184f81b2fc72b2e,94601
+173 Pine Court,,Sacramento,NO_KYC_RECORD,,859.96,2024-02-21,,merged,Energy Company,,,Jennifer,,,,NOT_FOUND,Williams,Software Engineer,555-5736,CA,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,95801
+173 Pine Court,,Sacramento,NO_KYC_RECORD,,460,2024-12-08,,merged,Energy Company,,,Jennifer,,,,NOT_FOUND,Williams,Software Engineer,555-5736,CA,8KAP8OKK,0x947d80c2e24bddd798547911375235b11956d6e8,95801
+727 Willow Boulevard,,Omaha,NO_KYC_RECORD,,793.62,2024-08-29,,merged,Insurance Corp,,,Emma,,,,NOT_FOUND,Collins,Restaurant Owner,555-7411,NE,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,68101
+727 Willow Boulevard,,Omaha,NO_KYC_RECORD,,1097.92,2024-10-22,,merged,Insurance Corp,,,Emma,,,,NOT_FOUND,Collins,Restaurant Owner,555-7411,NE,XW302M2V,0x96afedef0e3d47eed2c5089a3c77c9433a5d55f3,68101
+309 Willow Place,,Atlanta,NO_KYC_RECORD,,830.93,2024-12-25,,merged,Tech Solutions Inc,,,Douglas,,,,NOT_FOUND,Peterson,Agent,555-7360,GA,TE036S5O,0x98c9e31d5cefdb7491465fa1ea6140a6eaa89f26,30301
+333 Poplar Boulevard,,Portland,NO_KYC_RECORD,,3299.95,2024-05-24,,merged,Tech Solutions Inc,,,Christine,,,,NOT_FOUND,Harris,Marketing Director,555-5836,OR,M91DV3DW,0x9e93a17d9105a0682c40ec8aa268897b68172689,97201
+216 Spruce Way,,Boston,VALID,,573.22,2024-09-17,,merged,Hotel Chain,,,Hannah,,,,PASSED,Woods,Underwriter,555-1214,MA,M7SNFIY3,0xa0248529dc5bf1a7ee913e470d88d4ed96744a6c,02101
+435 Cedar Way,,Sacramento,NO_KYC_RECORD,,273.43,2024-11-25,,merged,Publishing House,,,Victoria,,,,NOT_FOUND,Johnson,Systems Analyst,555-7872,CA,FDMKQED8,0xa0e522d400abacda16bc0f23af0ea42ec991324e,95801
+954 Elm Boulevard,,Nashville,VALID,,262.73,2024-05-20,,merged,Music Label,,,Susan,,,,PASSED,Diaz,Research Scientist,555-2828,TN,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,37201
+954 Elm Boulevard,,Nashville,VALID,,147.46,2024-07-22,,merged,Music Label,,,Susan,,,,PASSED,Diaz,Research Scientist,555-2828,TN,F8M7G9DL,0xa51697eeedfb8e9d5af175aab64d1c1170dbf12e,37201
+634 Maple Drive,,Minneapolis,NO_KYC_RECORD,,836.6,2024-01-20,,merged,Consulting Firm,,,Jacqueline,,,,NOT_FOUND,Ruiz,Site Supervisor,555-2653,MN,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,55401
+634 Maple Drive,,Minneapolis,NO_KYC_RECORD,,1013.26,2024-11-27,,merged,Consulting Firm,,,Jacqueline,,,,NOT_FOUND,Ruiz,Site Supervisor,555-2653,MN,5W2GH215,0xa6f73db471dfbf4fcdbc146bca6f57b4e4a21f36,55401
+296 Maple Boulevard,,New York,NO_KYC_RECORD,,1433.53,2024-09-27,,merged,Sports Management,,,Brittany,,,,NOT_FOUND,Cook,Producer,555-2747,NY,IZZZXXH2,0xa713dd62d42e06b1b4cb3f2f013c508b1e41da62,10001
+339 Birch Court,,Charlotte,VALID,,1833.98,2024-04-06,,merged,Financial Advisory LLC,,,Donna,,,,PASSED,Myers,Professor,555-6145,NC,OX09YVNV,0xa946121fef719d4f0692dd4f7fdfa1f93e03fed8,28201
+653 Cedar Place,,Fresno,NO_KYC_RECORD,,119.92,2024-06-10,,merged,Architecture Firm,,,Dennis,,,,NOT_FOUND,Jackson,Financial Analyst,555-5858,CA,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,93701
+653 Cedar Place,,Fresno,NO_KYC_RECORD,,1931.39,2024-09-15,,merged,Architecture Firm,,,Dennis,,,,NOT_FOUND,Jackson,Financial Analyst,555-5858,CA,DMDT7SNV,0xab8ae0c9c2bcfcd1a1d2c470726590abdc7b42b2,93701
+223 Cedar Road,,Raleigh,NO_KYC_RECORD,,346.55,2024-03-26,,merged,Real Estate Group,,,Kevin,,,,NOT_FOUND,Marshall,Security Consultant,555-7242,NC,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,27601
+223 Cedar Road,,Raleigh,NO_KYC_RECORD,,785.86,2024-04-20,,merged,Real Estate Group,,,Kevin,,,,NOT_FOUND,Marshall,Security Consultant,555-7242,NC,GR57OCIL,0xaf6893930cf70d8e426d0974d7b6532cd5d29636,27601
+509 Pine Circle,,Atlanta,VALID,,15.62,2024-02-03,,merged,Hospital Network,,,Kelly,,,,PASSED,Diaz,Systems Analyst,555-6981,GA,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,30301
+509 Pine Circle,,Atlanta,VALID,,361.39,2024-06-16,,merged,Hospital Network,,,Kelly,,,,PASSED,Diaz,Systems Analyst,555-6981,GA,6H1RMG77,0xb04cd64de83f984a0587cf8c4af20c920e8fcc4a,30301
+590 Birch Avenue,,Columbus,NO_KYC_RECORD,,42.73,2024-07-08,,merged,Media Productions,,,Maria,,,,NOT_FOUND,Wallace,Editor,555-5668,OH,FQJB26BY,0xb3e6b4fa848d8c51f2a143379e76b27f5304455d,43201
+294 Willow Drive,,Omaha,NO_KYC_RECORD,,45.26,2024-09-17,,merged,Tech Solutions Inc,,,Amanda,,,,NOT_FOUND,Fernandez,Attorney,555-7425,NE,NPRNMY4U,0xb3e7c95cc76bd535b1369a9d48ffe8a8a4a3a6b7,68101
+774 Ash Street,,Charlotte,VALID,,849.83,2024-08-30,,merged,Film Studio,,,Amanda,,,,PASSED,West,Teacher,555-5523,NC,OTBEOGIR,0xb40ac5b4fbb12a16a036cd2251524f74e67edf23,28201
+520 Ash Way,,Fresno,VALID,,830.56,2024-03-12,,merged,Accounting Firm,,,Carolyn,,,,PASSED,Wright,Software Engineer,555-2360,CA,HYRZFLYY,0xb5da13c9a2e6c944909df341735971f35f159f4b,93701
+601 Cedar Street,,Tampa,VALID,,1174.41,2024-03-07,,merged,Real Estate Group,,,Nicholas,,,,PASSED,Wright,CEO,555-4533,FL,ZBWLU9BD,0xbc333228bdbf1ab6433082428f9f9ba4efaf6eef,33601
+765 Elm Place,,Miami,VALID,,985.14,2024-01-07,,merged,Tech Solutions Inc,,,James,,,,PASSED,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+765 Elm Place,,Miami,VALID,,784.79,2024-01-18,,merged,Tech Solutions Inc,,,James,,,,PASSED,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+765 Elm Place,,Miami,VALID,,1529.07,2024-04-01,,merged,Tech Solutions Inc,,,James,,,,PASSED,Powell,Banker,555-4207,FL,BS2LMXM4,0xbe3499ead82ee1b832ad617e920fcb9420d95c15,33101
+323 Ash Way,,Milwaukee,NO_KYC_RECORD,,1108.07,2024-02-02,,merged,Tech Startup,,,Carolyn,,,,NOT_FOUND,Williams,Designer,555-8189,WI,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,53201
+323 Ash Way,,Milwaukee,NO_KYC_RECORD,,58.07,2024-11-11,,merged,Tech Startup,,,Carolyn,,,,NOT_FOUND,Williams,Designer,555-8189,WI,2TJUI40V,0xc314a1b0300b7bb183fa4fa72327b992d7b4c803,53201
+120 Cedar Court,,Columbus,NO_KYC_RECORD,,59.95,2024-06-27,,merged,Logistics Co,,,Scott,,,,NOT_FOUND,Bell,Product Manager,555-1727,OH,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,43201
+120 Cedar Court,,Columbus,NO_KYC_RECORD,,128.88,2024-09-28,,merged,Logistics Co,,,Scott,,,,NOT_FOUND,Bell,Product Manager,555-1727,OH,7Y6HI04S,0xc35a158bfc9957ec35229112741f64942abbb36b,43201
+949 Willow Drive,,Milwaukee,NO_KYC_RECORD,,507.67,2024-07-24,,merged,Music Label,,,Sara,,,,NOT_FOUND,Vasquez,Software Engineer,555-4727,WI,KMN9ELGG,0xc6e6bd0e707daa49a2b682a80d8a57e607c9e38e,53201
+125 Pine Place,,Atlanta,NO_KYC_RECORD,,3300,2024-01-07,,merged,Consulting Firm,,,Laura,,,,NOT_FOUND,Ward,Pilot,555-3473,GA,9R1LB52B,0xc81131c2206dcacd857c8fd22937b17a9edade8b,30301
+589 Ash Road,,San Jose,VALID,,1950.42,2024-06-30,,merged,Security Firm,,,Dennis,,,,PASSED,Martin,Creative Director,555-4154,CA,J06OIXBQ,0xc9d6351894be064644e05fa77a3f3363070da9af,95101
+297 Birch Court,,Phoenix,NO_KYC_RECORD,,1821.1,2024-03-02,,merged,Insurance Corp,,,James,,,,NOT_FOUND,Jordan,Physician,555-6346,AZ,INYIJ9SW,0xca18afa644b2bc0c608e8c1ad9698976221d56c3,85001
+388 Pine Street,,San Francisco,NO_KYC_RECORD,,1939.77,2024-11-19,,merged,Logistics Co,,,Michelle,,,,NOT_FOUND,Jenkins,Game Developer,555-5756,CA,8HMDGSZC,0xce7368011f0d4c47c288448edd4b44236327976a,94102
+450 Oak Circle,,Houston,NO_KYC_RECORD,,1394.56,2024-04-24,,merged,Pharmacy Chain,,,Debra,,,,NOT_FOUND,Alvarez,Editor,555-6510,TX,9T7ZT14E,0xcfc1fa19b3e0c3cac56d1bc975212aa5725b732b,77001
+958 Spruce Place,,Tampa,NO_KYC_RECORD,,1625.94,2024-02-12,,merged,Pharmacy Chain,,,Olivia,,,,NOT_FOUND,Hayes,Financial Analyst,555-6908,FL,Z9V2TMV2,0xd18e529ab2f0b718e2443b403698490da8b0b0a0,33601
+340 Willow Place,,Denver,NO_KYC_RECORD,,1770.13,2024-08-11,,merged,Hospital Network,,,George,,,,NOT_FOUND,Patel,Pharmacist,555-4765,CO,V6YR2VIQ,0xd26dd943f61a6c1254f148e1ff8971dccd051146,80201
+177 Poplar Way,,Omaha,NO_KYC_RECORD,,242.39,2024-12-25,,merged,Law Associates,,,Dennis,,,,NOT_FOUND,Lee,Editor,555-2455,NE,ZDLSNM46,0xd3dedbb4a6bce1644f25ba9ceb57e31d515376c1,68101
+953 Willow Lane,,Austin,NO_KYC_RECORD,,1786.01,2024-01-23,,merged,Financial Advisory LLC,,,Christian,,,,NOT_FOUND,Butler,Director,555-3971,TX,H3D8ZLEY,0xd9345816116cd600b4d2a3a78c37eee7551ba686,78701
+536 Elm Street,,Las Vegas,NO_KYC_RECORD,,594.96,2024-08-12,,merged,Fashion House,,,Dennis,,,,NOT_FOUND,Kennedy,Teacher,555-6049,NV,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,89101
+536 Elm Street,,Las Vegas,NO_KYC_RECORD,,747,2024-12-10,,merged,Fashion House,,,Dennis,,,,NOT_FOUND,Kennedy,Teacher,555-6049,NV,VPRPDFRK,0xd9695fa9149cbfdd8c75a72588a4ca92a3b117a5,89101
+466 Spruce Avenue,,Washington,NO_KYC_RECORD,,1388.81,2024-03-05,,merged,Consulting Firm,,,Jordan,,,,NOT_FOUND,Tran,Operations Manager,555-9913,DC,V4IHMZWN,0xdce29b140ea98c1288fc73758b4b6789121e89ed,20001
+973 Ash Court,,Fort Worth,NO_KYC_RECORD,,1355.48,2024-07-23,,merged,Investment Bank,,,Michelle,,,,NOT_FOUND,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+973 Ash Court,,Fort Worth,NO_KYC_RECORD,,538.37,2024-11-30,,merged,Investment Bank,,,Michelle,,,,NOT_FOUND,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+973 Ash Court,,Fort Worth,NO_KYC_RECORD,,587.14,2024-12-22,,merged,Investment Bank,,,Michelle,,,,NOT_FOUND,Hayes,Software Engineer,555-8237,TX,OWPDCNSA,0xdfc346b38246a7f4e673a6d6304ba681057561b5,76101
+971 Spruce Court,,Tampa,VALID,,219.96,2024-09-02,,merged,Auto Industries,,,Susan,,,,PASSED,Ramirez,Project Manager,555-1572,FL,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,33601
+971 Spruce Court,,Tampa,VALID,,51.43,2024-12-27,,merged,Auto Industries,,,Susan,,,,PASSED,Ramirez,Project Manager,555-1572,FL,C99FD0WM,0xe0493f4d230fbb06510b6314e239317ece100144,33601
+577 Oak Lane,,Indianapolis,NO_KYC_RECORD,,34.18,2024-02-20,,merged,Telecom Company,,,Christina,,,,NOT_FOUND,Parker,Systems Analyst,555-5078,IN,W94BZF6D,0xe0538f86fe2ca2184330103e34d4de7daea201af,46201
+498 Pine Circle,,Chicago,VALID,,437.1,2024-05-13,,merged,Food Services,,,Samuel,,,,PASSED,Martin,Security Consultant,555-4625,IL,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,60601
+498 Pine Circle,,Chicago,VALID,,1108.98,2024-12-04,,merged,Food Services,,,Samuel,,,,PASSED,Martin,Security Consultant,555-4625,IL,UG1P460X,0xe2026c7617466af6b694e2f57ceee189ae685bdd,60601
+538 Pine Drive,,Honolulu,NO_KYC_RECORD,,575.65,2024-09-13,,merged,Healthcare Partners,,,Tyler,,,,NOT_FOUND,Adams,Engineer,555-9026,HI,WTKHNAZW,0xe23ce54ff4ff2439fdde6fbc43f32cf76277bbf3,96801
+613 Ash Place,,Albuquerque,NO_KYC_RECORD,,27.51,2024-05-28,,merged,Financial Advisory LLC,,,Willie,,,,NOT_FOUND,Myers,Partner,555-6084,NM,W16RO41P,0xe28eb12c0381ce4f4b121a6c6816b448f569bbf9,87101
+799 Ash Place,,Minneapolis,NO_KYC_RECORD,,911.19,2024-09-04,,merged,Art Gallery,,,Nathan,,,,NOT_FOUND,Jones,Project Manager,555-6887,MN,EGCUQSJ6,0xe35eb7275294e6c56afcb2ce3631fd87ed16f91e,55401
+334 Ash Drive,,San Antonio,NO_KYC_RECORD,,27,2024-05-25,,merged,Biotech Labs,,,Keith,,,,NOT_FOUND,Vargas,Network Engineer,555-4237,TX,HX1TJEQY,0xe5e7c4760c8ff66f4cfc648aad78ec321e41622f,78201
+591 Poplar Way,,Charlotte,NO_KYC_RECORD,,19.32,2024-09-29,,merged,Hospital Network,,,Raymond,,,,NOT_FOUND,Tran,Consultant,555-6800,NC,E0QIM197,0xe9cd7aa390c37c805be81281d2dbcc2f87a6b8a4,28201
+116 Elm Avenue,,Charlotte,NO_KYC_RECORD,,589.23,2024-10-26,,merged,Film Studio,,,Helen,,,,NOT_FOUND,Baker,Agent,555-1093,NC,EOP0RWRO,0xf0a6904f179b5cccd9abb57ce3890745e1bb6cf2,28201
+812 Spruce Boulevard,,Atlanta,NO_KYC_RECORD,,865.48,2024-03-28,,merged,Sports Management,,,Laura,,,,NOT_FOUND,Alvarez,Network Engineer,555-8531,GA,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,30301
+812 Spruce Boulevard,,Atlanta,NO_KYC_RECORD,,489.5,2024-05-29,,merged,Sports Management,,,Laura,,,,NOT_FOUND,Alvarez,Network Engineer,555-8531,GA,AE6STQMB,0xf0db28b02e0aefc44f0c8f440689b2e8b2aab742,30301
+631 Oak Boulevard,,Columbus,NO_KYC_RECORD,,1031.61,2024-03-29,,merged,Insurance Corp,,,Steven,,,,NOT_FOUND,Simmons,Partner,555-2086,OH,8XQ3USL9,0xf4b45c2c886e754735d3a925c01b646749f44422,43201
+814 Oak Avenue,,Fresno,NO_KYC_RECORD,,613.34,2024-04-27,,merged,Healthcare Partners,,,Heather,,,,NOT_FOUND,Gonzalez,Site Supervisor,555-7715,CA,ES2FK5CG,0xf4b66f6222fa72269483a2db98ccc67ba33e2488,93701
+393 Elm Boulevard,,Chicago,NO_KYC_RECORD,,1891.35,2024-05-12,,merged,Logistics Co,,,Barbara,,,,NOT_FOUND,Martin,Partner,555-8290,IL,0ZAA8WA1,0xf8939b634a74a54acc65e84e6b47b515e2e0ea25,60601
+392 Maple Circle,,Kansas City,NO_KYC_RECORD,,1425.87,2024-02-14,,merged,Financial Advisory LLC,,,Katherine,,,,NOT_FOUND,Medina,Physician,555-6505,MO,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,64101
+392 Maple Circle,,Kansas City,NO_KYC_RECORD,,291.28,2024-11-10,,merged,Financial Advisory LLC,,,Katherine,,,,NOT_FOUND,Medina,Physician,555-6505,MO,UULAEUSF,0xf9ffe8604491a3bbdbbcd10ef5c1bb27ca066401,64101

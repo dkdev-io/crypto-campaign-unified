@@ -21,8 +21,6 @@ class HonestFormTestingAgent {
   }
 
   async initialize() {
-    console.log('🔧 Honest Form Testing Agent - ACTUALLY DETECTS FORMS');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     await this.loadCSVData();
     
@@ -36,7 +34,6 @@ class HonestFormTestingAgent {
     this.page = await this.browser.newPage();
     this.page.setDefaultTimeout(60000);
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -67,10 +64,8 @@ class HonestFormTestingAgent {
   }
 
   async comprehensiveFormDetection() {
-    console.log('🔍 COMPREHENSIVE FORM DETECTION - NO MORE LIES');
     
     const detection = await this.page.evaluate(() => {
-      console.log('Starting comprehensive form detection...');
       
       // Get ALL possible form elements with multiple strategies
       const results = {
@@ -157,7 +152,6 @@ class HonestFormTestingAgent {
       if (result.count > 0 && result.elements) {
         result.elements.forEach((el, i) => {
           if (el.visible && (el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA')) {
-            console.log(`    📍 ${i+1}. ${el.tagName} ${el.type || ''} - ${el.name || el.id || 'no-name'} - "${el.placeholder || 'no-placeholder'}" - Visible: ${el.visible}`);
           }
         });
       }
@@ -167,7 +161,6 @@ class HonestFormTestingAgent {
   }
 
   async testHomepageFormHonestly(persona) {
-    console.log(`\\n🏠 HONEST HOMEPAGE TEST: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     try {
       await this.page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
@@ -176,7 +169,6 @@ class HonestFormTestingAgent {
       await this.page.waitForFunction(() => document.readyState === 'complete');
       await new Promise(resolve => setTimeout(resolve, 5000)); // 5 second wait for any dynamic content
       
-      console.log('🔍 Starting comprehensive form detection...');
       const detection = await this.comprehensiveFormDetection();
       
       // Take screenshot for manual verification  
@@ -188,7 +180,6 @@ class HonestFormTestingAgent {
       // Find actual fillable inputs
       const fillableInputs = await this.page.$$('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), select, textarea, [contenteditable="true"]');
       
-      console.log(`📝 Found ${fillableInputs.length} potentially fillable inputs`);
       
       if (fillableInputs.length === 0) {
         console.log('❌ Still no fillable inputs found - taking debug screenshot');
@@ -212,7 +203,6 @@ class HonestFormTestingAgent {
   }
 
   async fillHomepageForm(persona, inputs, detection) {
-    console.log(`📝 Attempting to fill ${inputs.length} inputs with REAL DATA`);
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
@@ -231,7 +221,6 @@ class HonestFormTestingAgent {
       amount: donation.contribution_amount || '100.00'
     };
     
-    console.log(`📋 Test data: ${testData.firstName} ${testData.lastName}, ${testData.email}, $${testData.amount}`);
     
     let fieldsFilled = 0;
     
@@ -254,10 +243,8 @@ class HonestFormTestingAgent {
           rect: el.getBoundingClientRect()
         }));
         
-        console.log(`🔍 Input ${i+1}: ${inputDetails.tagName} type="${inputDetails.type}" name="${inputDetails.name}" placeholder="${inputDetails.placeholder}" visible=${inputDetails.visible}`);
         
         if (!inputDetails.visible || inputDetails.disabled || inputDetails.readonly) {
-          console.log(`  ⏭️  Skipping (not visible/disabled/readonly)`);
           continue;
         }
         
@@ -265,7 +252,6 @@ class HonestFormTestingAgent {
         const value = this.matchInputToData(inputDetails, testData);
         
         if (value) {
-          console.log(`  📍 FILLING with: "${value}"`);
           
           // Scroll to input and make it fully visible
           await input.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -290,7 +276,6 @@ class HonestFormTestingAgent {
           // Wait between fields
           await new Promise(resolve => setTimeout(resolve, 800));
         } else {
-          console.log(`  ⚠️  No matching data for this field`);
         }
         
       } catch (inputError) {
@@ -298,7 +283,6 @@ class HonestFormTestingAgent {
       }
     }
     
-    console.log(`\\n✅ FILLED ${fieldsFilled} FIELDS WITH REAL DATA`);
     
     // Take screenshot after filling
     await this.page.screenshot({ 
@@ -353,7 +337,6 @@ class HonestFormTestingAgent {
       // Find submit buttons with comprehensive search
       const submitButtons = await this.page.$$('button[type="submit"], input[type="submit"], button:not([type]), .submit-btn, .donate-btn, [data-testid*="submit"]');
       
-      console.log(`📍 Found ${submitButtons.length} potential submit buttons`);
       
       for (let i = 0; i < submitButtons.length; i++) {
         const button = submitButtons[i];
@@ -368,7 +351,6 @@ class HonestFormTestingAgent {
             visible: el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden'
           }));
           
-          console.log(`  ${i+1}. ${buttonDetails.tagName} "${buttonDetails.textContent}" visible=${buttonDetails.visible} disabled=${buttonDetails.disabled}`);
           
           if (buttonDetails.visible && !buttonDetails.disabled && 
               (buttonDetails.textContent.toLowerCase().includes('submit') || 
@@ -376,13 +358,11 @@ class HonestFormTestingAgent {
                buttonDetails.textContent.toLowerCase().includes('contribute') ||
                buttonDetails.type === 'submit')) {
             
-            console.log(`  🎯 CLICKING SUBMIT BUTTON: "${buttonDetails.textContent}"`);
             
             await button.scrollIntoView();
             await new Promise(resolve => setTimeout(resolve, 500));
             await button.click();
             
-            console.log('  ✅ Submit button clicked! Waiting for response...');
             
             // Wait for submission response
             await new Promise(resolve => setTimeout(resolve, 8000));
@@ -421,7 +401,6 @@ class HonestFormTestingAgent {
   }
 
   async runHonestTest(options = {}) {
-    console.log('\\n🔧 STARTING HONEST FORM TESTING (NO MORE LIES)\\n');
     
     const { count = 2, testType = 'mixed' } = options;
     
@@ -437,13 +416,11 @@ class HonestFormTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`🎯 Testing ${testPersonas.length} personas with HONEST detection`);
     
     fs.mkdirSync('test-results/screenshots', { recursive: true });
     
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
-      console.log(`\\n--- HONEST TEST ${i+1}/${testPersonas.length} ---`);
       
       const result = await this.testHomepageFormHonestly(persona);
       this.testResults.push({
@@ -460,13 +437,11 @@ class HonestFormTestingAgent {
 
   generateHonestReport() {
     console.log('\\n📊 HONEST FORM TESTING RESULTS');
-    console.log('==========================================');
     
     const totalTests = this.testResults.length;
     const successfulFills = this.testResults.filter(r => r.result.fieldsFilled > 0).length;
     const successfulSubmits = this.testResults.filter(r => r.result.submitResult?.submitted).length;
     
-    console.log(`Total Tests: ${totalTests}`);
     console.log(`Forms Found & Filled: ${successfulFills}/${totalTests}`);
     console.log(`Forms Submitted: ${successfulSubmits}/${totalTests}`);
     
@@ -476,7 +451,6 @@ class HonestFormTestingAgent {
     
     const reportPath = `test-results/honest-form-test-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Honest report saved: ${reportPath}`);
   }
 
   async cleanup() {

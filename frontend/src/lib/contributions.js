@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import web3Service from './web3';
 
 class ContributionService {
   constructor() {
@@ -75,28 +76,84 @@ class ContributionService {
     };
   }
 
-  // Check contribution limits
-  async checkContributionLimits(campaignId, donorEmail, proposedAmount, isRecurring = false, recurringDetails = null) {
+  // Check contribution limits using smart contract validation
+  async checkContributionLimits(campaignId, donorEmail, proposedAmount, isRecurring = false, recurringDetails = null, walletAddress = null) {
     try {
-      // Get existing contribution limits (with graceful fallback if table doesn't exist)
-      const { data: existingLimits, error: limitsError } = await supabase
-        .from('contribution_limits')
-        .select('*')
-        .eq('campaign_id', campaignId)
-        .eq('donor_email', donorEmail)
-        .single();
-
-      let currentTotal = 0;
-      let remainingCapacity = this.FEC_LIMIT;
+      console.log('🔍 Checking contribution limits via smart contract');
       
-      // Handle case where table doesn't exist yet (graceful fallback)
-      if (limitsError && limitsError.code === 'PGRST116') {
-        // Table doesn't exist or no record found - this is okay, just use defaults
-        console.log('Contribution limits table not found, using defaults');
-      } else if (existingLimits && !limitsError) {
-        currentTotal = parseFloat(existingLimits.total_contributed || 0);
-        remainingCapacity = this.FEC_LIMIT - currentTotal;
+      // CRITICAL: Always validate through smart contract, never bypass
+      // This ensures KYC and cumulative limits are properly enforced
+      
+      // If no wallet address provided, try to get from connected wallet
+      let addressToCheck = walletAddress;
+      if (!addressToCheck && web3Service.isConnected) {
+        addressToCheck = web3Service.account;
       }
+      
+      // If still no address, we cannot validate - FAIL CLOSED
+      if (!addressToCheck) {
+        console.error('❌ No wallet address available for validation');
+        return {
+          canContribute: false,
+          currentTotal: 0,
+          remainingCapacity: 0,
+          proposedAmount,
+          totalProjectedAmount: proposedAmount,
+          willExceedLimit: true,
+          projection: null,
+          message: 'Wallet connection required for validation. Please connect your wallet to continue.'
+        };
+      }
+
+      // Initialize web3 if not already connected
+      if (!web3Service.provider) {
+        const initialized = await web3Service.init();
+        if (!initialized) {
+          console.error('❌ Failed to initialize Web3');
+          return {
+            canContribute: false,
+            currentTotal: 0,
+            remainingCapacity: 0,
+            proposedAmount,
+            message: 'Web3 initialization failed. Please ensure MetaMask is installed.'
+          };
+        }
+      }
+
+      // Convert USD to ETH for smart contract validation
+      const ethAmount = await web3Service.convertUSDToETH(proposedAmount);
+      
+      // Get contributor info from smart contract (includes KYC status and cumulative amounts)
+      let contributorInfo = null;
+      let contractValidation = null;
+      
+      try {
+        // First get comprehensive contributor info
+        contributorInfo = await web3Service.getContributorInfo(addressToCheck);
+        console.log('📊 Contributor info from contract:', contributorInfo);
+        
+        // Then check if specific contribution is allowed
+        contractValidation = await web3Service.canContribute(addressToCheck, ethAmount);
+        console.log('✅ Contract validation result:', contractValidation);
+      } catch (contractError) {
+        console.error('❌ Smart contract validation failed:', contractError);
+        // CRITICAL: Fail closed - if we can't validate, reject the contribution
+        return {
+          canContribute: false,
+          currentTotal: 0,
+          remainingCapacity: 0,
+          proposedAmount,
+          message: 'Unable to validate contribution. Smart contract validation required.',
+          error: contractError.message
+        };
+      }
+
+      // Parse contract response
+      const currentTotal = contributorInfo ? parseFloat(contributorInfo.cumulativeAmount) * 3000 : 0; // Convert ETH to USD
+      const remainingCapacity = contributorInfo ? parseFloat(contributorInfo.remainingCapacity) * 3000 : 0;
+      const isKYCVerified = contributorInfo ? contributorInfo.isKYCVerified : false;
+      const canContributeNow = contractValidation ? contractValidation.canContribute : false;
+      const validationReason = contractValidation ? contractValidation.reason : 'Unknown validation error';
 
       // Calculate projections for recurring donations
       let projection = null;
@@ -109,41 +166,40 @@ class ContributionService {
         );
       }
 
-      const immediateAmountAllowed = proposedAmount <= remainingCapacity;
       const totalProjectedAmount = currentTotal + (projection ? projection.totalAmount : proposedAmount);
       const willExceedLimit = totalProjectedAmount > this.FEC_LIMIT;
 
+      // Build comprehensive validation result
+      let message = '';
+      if (!isKYCVerified) {
+        message = 'KYC verification required. Please complete identity verification first.';
+      } else if (!canContributeNow) {
+        message = validationReason || `Contribution exceeds remaining capacity of $${remainingCapacity.toFixed(2)}`;
+      } else {
+        message = 'Contribution allowed';
+      }
+
       return {
-        canContribute: immediateAmountAllowed,
+        canContribute: canContributeNow && isKYCVerified,
         currentTotal,
         remainingCapacity,
         proposedAmount,
         totalProjectedAmount,
         willExceedLimit,
         projection,
-        message: immediateAmountAllowed 
-          ? 'Contribution allowed' 
-          : `Contribution exceeds remaining capacity of $${remainingCapacity.toFixed(2)}`
+        isKYCVerified,
+        walletAddress: addressToCheck,
+        message
       };
     } catch (error) {
-      console.error('Error checking contribution limits:', error);
-      // If tables don't exist, allow contribution with defaults
-      if (error.message && error.message.includes('relation') && error.message.includes('does not exist')) {
-        console.log('Contribution tables not created yet, allowing contribution with defaults');
-        return {
-          canContribute: proposedAmount <= this.FEC_LIMIT,
-          currentTotal: 0,
-          remainingCapacity: this.FEC_LIMIT,
-          proposedAmount,
-          totalProjectedAmount: proposedAmount,
-          willExceedLimit: false,
-          projection: null,
-          message: proposedAmount <= this.FEC_LIMIT ? 'Contribution allowed' : `Amount exceeds FEC limit of $${this.FEC_LIMIT}`
-        };
-      }
+      console.error('❌ Critical error in contribution validation:', error);
+      // CRITICAL: Always fail closed - never default to allowing
       return {
         canContribute: false,
-        message: 'Error checking contribution limits',
+        currentTotal: 0,
+        remainingCapacity: 0,
+        proposedAmount,
+        message: 'Validation failed. For security, contributions cannot proceed without proper validation.',
         error: error.message
       };
     }

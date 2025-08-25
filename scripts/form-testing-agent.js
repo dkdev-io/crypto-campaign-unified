@@ -27,7 +27,6 @@ class FormTestingAgent {
   }
 
   async initialize() {
-    console.log('🤖 Initializing Form Testing Agent...');
     
     // Load CSV data
     await this.loadCSVData();
@@ -39,7 +38,6 @@ class FormTestingAgent {
     });
     this.page = await this.browser.newPage();
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -83,7 +81,6 @@ class FormTestingAgent {
     const startTime = Date.now();
     const testId = `test-${persona.profile.unique_id}-${startTime}`;
     
-    console.log(`\n🧪 Testing form for: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     try {
       // Navigate to form
@@ -113,9 +110,7 @@ class FormTestingAgent {
       this.testResults.push(testResult);
       
       if (testResult.success) {
-        console.log(`✅ Test passed for ${persona.profile.first_name} ${persona.profile.last_name}`);
       } else {
-        console.log(`❌ Test failed for ${persona.profile.first_name} ${persona.profile.last_name}`);
       }
       
       return testResult;
@@ -142,7 +137,6 @@ class FormTestingAgent {
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
     
-    console.log('📝 Filling form fields...');
     
     // Personal Information
     await this.fillField('input[name="firstName"]', profile.first_name);
@@ -182,7 +176,6 @@ class FormTestingAgent {
     await this.page.click('input[name="usCitizen"]');
     await this.page.click('input[name="acknowledgment"]');
     
-    console.log(`✅ Form filled for ${profile.first_name} ${profile.last_name}`);
   }
 
   async fillField(selector, value) {
@@ -230,7 +223,6 @@ class FormTestingAgent {
       return { success: false, message: 'Skipped DB verification - submission failed' };
     }
     
-    console.log('🔍 Verifying database entry...');
     
     try {
       // Query recent submissions for this persona
@@ -275,7 +267,6 @@ class FormTestingAgent {
   }
 
   async runTestSuite(options = {}) {
-    console.log('\n🧪 Starting Form Testing Suite...\n');
     
     const {
       count = 5,
@@ -303,12 +294,10 @@ class FormTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`Testing ${testPersonas.length} personas (${testType} mode)`);
     
     // Run tests
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
-      console.log(`\n--- Test ${i + 1}/${testPersonas.length} ---`);
       
       await this.testFormSubmission(persona, { paymentMethod });
       
@@ -321,21 +310,15 @@ class FormTestingAgent {
   }
 
   generateTestReport() {
-    console.log('\n📊 Test Report');
-    console.log('==========================================');
     
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter(r => r.success).length;
     const failedTests = totalTests - passedTests;
     const successRate = ((passedTests / totalTests) * 100).toFixed(1);
     
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${passedTests} ✅`);
-    console.log(`Failed: ${failedTests} ❌`);
     console.log(`Success Rate: ${successRate}%`);
     
     if (failedTests > 0) {
-      console.log('\nFailed Tests:');
       this.testResults
         .filter(r => !r.success)
         .forEach(r => {
@@ -347,7 +330,6 @@ class FormTestingAgent {
     const reportPath = `test-results/form-test-report-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\n📁 Detailed report saved: ${reportPath}`);
   }
 
   async cleanup() {

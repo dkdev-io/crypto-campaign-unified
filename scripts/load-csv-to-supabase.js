@@ -3,9 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 
+// Load environment variables
+require('dotenv').config({ path: '../.env' });
+
 // Supabase configuration
-const SUPABASE_URL = 'https://owjvgdzmmlrdtpjdxgka.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4NTI4MTksImV4cCI6MjA0MjQyODgxOX0.dHyNtZfNzuaeBdrZiDzH4eMGYP4-FVWQd7F1Xf3VKz0';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://owjvgdzmmlrdtpjdxgka.supabase.co';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4NTI4MTksImV4cCI6MjA0MjQyODgxOX0.dHyNtZfNzuaeBdrZiDzH4eMGYP4-FVWQd7F1Xf3VKz0';
 
 class SupabaseDataLoader {
     constructor() {
@@ -26,7 +29,6 @@ class SupabaseDataLoader {
 
     // Load prospects data
     async loadProspects() {
-        console.log('Loading prospects data...');
         try {
             const prospectsData = await this.readCSV('/Users/Danallovertheplace/crypto-campaign-unified/data/prospects.csv');
             
@@ -61,7 +63,6 @@ class SupabaseDataLoader {
 
     // Load donors data
     async loadDonors() {
-        console.log('Loading donors data...');
         try {
             const donorsData = await this.readCSV('/Users/Danallovertheplace/crypto-campaign-unified/data/donors.csv');
             
@@ -98,7 +99,6 @@ class SupabaseDataLoader {
 
     // Load KYC data
     async loadKYC() {
-        console.log('Loading KYC data...');
         try {
             const kycData = await this.readCSV('/Users/Danallovertheplace/crypto-campaign-unified/data/kyc.csv');
             
@@ -125,7 +125,6 @@ class SupabaseDataLoader {
 
     // Verify data counts after loading
     async verifyDataCounts() {
-        console.log('\n🔍 Verifying data counts...');
         
         const tables = ['campaign_prospects', 'campaign_donors', 'kyc'];
         const results = {};
@@ -138,7 +137,6 @@ class SupabaseDataLoader {
 
                 if (error) throw error;
                 results[table] = count;
-                console.log(`📊 ${table}: ${count} records`);
             } catch (error) {
                 console.error(`❌ Error checking ${table}:`, error);
                 results[table] = 'Error';
@@ -150,7 +148,6 @@ class SupabaseDataLoader {
 
     // Check for overlapping donor-prospects (should be 38)
     async checkDonorProspectOverlap() {
-        console.log('\n🔍 Checking donor-prospect overlaps...');
         
         try {
             // Get unique donor IDs
@@ -170,7 +167,6 @@ class SupabaseDataLoader {
 
             if (overlapError) throw overlapError;
 
-            console.log(`🎯 Found ${overlaps.length} donor-prospect overlaps (expected: 38)`);
             return overlaps.length;
         } catch (error) {
             console.error('❌ Error checking overlaps:', error);
@@ -209,7 +205,6 @@ if (require.main === module) {
     const loader = new SupabaseDataLoader();
     loader.loadAllData()
         .then(() => {
-            console.log('🎉 All done!');
             process.exit(0);
         })
         .catch((error) => {

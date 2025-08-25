@@ -114,7 +114,6 @@ test.describe('Landing Page Visual Tests', () => {
       });
     } catch (error) {
       // Loading state might be too fast to capture, that's okay
-      console.log('Loading state screenshot not captured - page loaded too quickly');
     }
   });
 

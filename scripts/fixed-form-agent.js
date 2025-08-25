@@ -21,8 +21,6 @@ class FixedFormAgent {
   }
 
   async initialize() {
-    console.log('🔧 FIXED Form Agent - ACTUALLY DETECTS REACT FORMS');
-    console.log(`🎯 Target: ${BASE_URL}`);
     
     await this.loadCSVData();
     
@@ -41,7 +39,6 @@ class FixedFormAgent {
     this.page = await this.browser.newPage();
     this.page.setDefaultTimeout(45000);
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -72,7 +69,6 @@ class FixedFormAgent {
   }
 
   async findFormFields() {
-    console.log('🔍 COMPREHENSIVE FORM FIELD DETECTION');
     
     // Use multiple detection strategies for modern forms
     const formFields = await this.page.evaluate(() => {
@@ -173,21 +169,15 @@ class FixedFormAgent {
     });
     
     console.log(`📊 DETECTION RESULTS:`);
-    console.log(`  Standard inputs: ${formFields.filter(f => f.element === 'standard').length}`);
-    console.log(`  React components: ${formFields.filter(f => f.element === 'react').length}`);
-    console.log(`  Custom elements: ${formFields.filter(f => f.element === 'custom').length}`);
-    console.log(`  TOTAL FIELDS: ${formFields.length}`);
     
     // Log details of each field found
     formFields.forEach((field, i) => {
-      console.log(`    ${i+1}. [${field.element}] ${field.tagName || field.selector} - "${field.placeholder || field.name || field.id}" - ${field.rect.width}x${field.rect.height}`);
     });
     
     return formFields;
   }
 
   async fillFormWithData(persona, formType = 'homepage') {
-    console.log(`\\n📝 FILLING ${formType.toUpperCase()} FORM WITH REAL DATA`);
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '500.00' };
@@ -207,10 +197,6 @@ class FixedFormAgent {
       wallet: profile.wallet_address
     };
     
-    console.log(`📋 Data: ${testData.firstName} ${testData.lastName}, ${testData.email}, $${testData.amount}`);
-    console.log(`🏢 Employment: ${testData.employer} - ${testData.occupation}`);
-    console.log(`🏠 Address: ${testData.address}, ${testData.city}, ${testData.state} ${testData.zip}`);
-    console.log(`💰 Wallet: ${testData.wallet}`);
     
     try {
       // Find all form fields
@@ -227,17 +213,14 @@ class FixedFormAgent {
         const field = formFields[i];
         
         try {
-          console.log(`\\n📍 Field ${i+1}/${formFields.length}: ${field.selector}`);
           
           // Determine what value to put in this field
           const value = this.smartMatch(field, testData);
           
           if (!value) {
-            console.log(`  ⏭️  No matching value found`);
             continue;
           }
           
-          console.log(`  📝 FILLING with: "${value}"`);
           
           // Try multiple strategies to interact with this field
           const success = await this.fillFieldMultipleWays(field, value);
@@ -249,7 +232,6 @@ class FixedFormAgent {
             // Wait between fields
             await new Promise(resolve => setTimeout(resolve, 1000));
           } else {
-            console.log(`  ❌ Failed to fill`);
           }
           
         } catch (fieldError) {
@@ -257,7 +239,6 @@ class FixedFormAgent {
         }
       }
       
-      console.log(`\\n✅ FILLED ${fieldsFilled}/${formFields.length} FIELDS`);
       
       return {
         success: fieldsFilled > 0,
@@ -371,7 +352,6 @@ class FixedFormAgent {
         }, field, value);
         return true;
       } catch (e) {
-        console.log(`    All strategies failed for this field`);
         return false;
       }
       
@@ -412,7 +392,6 @@ class FixedFormAgent {
   }
 
   async submitForm(formType) {
-    console.log(`🚀 SUBMITTING ${formType.toUpperCase()} FORM`);
     
     try {
       // Look for submit buttons
@@ -469,7 +448,6 @@ class FixedFormAgent {
   }
 
   async testPersonaOnBothForms(persona, testIndex, totalTests) {
-    console.log(`\\n🎯 TESTING ${testIndex}/${totalTests}: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     const results = {
       persona: `${persona.profile.first_name} ${persona.profile.last_name}`,
@@ -483,7 +461,6 @@ class FixedFormAgent {
     
     try {
       // Test 1: Homepage Form
-      console.log('\\n🏠 TESTING HOMEPAGE FORM');
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
       await new Promise(resolve => setTimeout(resolve, 3000));
       
@@ -512,7 +489,6 @@ class FixedFormAgent {
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       // Test 2: Modal Form
-      console.log('\\n🔘 TESTING MODAL FORM');
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
       await new Promise(resolve => setTimeout(resolve, 2000));
       
@@ -529,7 +505,6 @@ class FixedFormAgent {
         await donateButton.click();
       }
       
-      console.log('⏳ Waiting for modal to load...');
       await new Promise(resolve => setTimeout(resolve, 4000));
       
       await this.page.screenshot({ 
@@ -572,7 +547,6 @@ class FixedFormAgent {
   }
 
   async runFixedTest(options = {}) {
-    console.log('\\n🔧 RUNNING FIXED FORM AGENT\\n');
     
     const { count = 2, testType = 'mixed' } = options;
     
@@ -588,7 +562,6 @@ class FixedFormAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`🎯 Testing ${testPersonas.length} personas with FIXED detection`);
     
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
@@ -603,7 +576,6 @@ class FixedFormAgent {
 
   generateFixedReport() {
     console.log('\\n📊 FIXED FORM AGENT RESULTS');
-    console.log('==========================================');
     
     const total = this.testResults.length;
     let homepageSuccess = 0;
@@ -619,11 +591,8 @@ class FixedFormAgent {
       if (result.modalTest?.submitResult?.submitted) totalSubmissions++;
     });
     
-    console.log(`Total Personas: ${total}`);
     console.log(`Homepage Forms Filled: ${homepageSuccess}/${total}`);
     console.log(`Modal Forms Filled: ${modalSuccess}/${total}`);
-    console.log(`Total Fields Filled: ${totalFieldsFilled}`);
-    console.log(`Total Submissions: ${totalSubmissions}`);
     
     console.log('\\n📋 DETAILED RESULTS:');
     this.testResults.forEach((result, i) => {
@@ -634,7 +603,6 @@ class FixedFormAgent {
     
     const reportPath = `test-results/fixed-form-agent-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Report saved: ${reportPath}`);
   }
 
   async cleanup() {

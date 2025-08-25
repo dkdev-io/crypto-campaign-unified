@@ -8,13 +8,11 @@
 const puppeteer = require('puppeteer');
 
 async function inspectPostClick() {
-  console.log('🕵️  Post-Click Inspector - What happens after donate button click?');
   
   const browser = await puppeteer.launch({ headless: false, slowMo: 1000 });
   const page = await browser.newPage();
   
   try {
-    console.log('📍 Step 1: Navigate to site');
     await page.goto('https://testy-pink-chancellor.lovable.app', { 
       waitUntil: 'domcontentloaded',
       timeout: 60000 
@@ -22,12 +20,9 @@ async function inspectPostClick() {
     await new Promise(resolve => setTimeout(resolve, 3000));
     
     const initialUrl = page.url();
-    console.log(`🌐 Initial URL: ${initialUrl}`);
     
-    console.log('📍 Step 2: Take before screenshot');
     await page.screenshot({ path: 'before-donate-click.png' });
     
-    console.log('📍 Step 3: Click donate button and monitor changes');
     
     // Set up navigation listener
     let navigationHappened = false;
@@ -37,7 +32,6 @@ async function inspectPostClick() {
       if (frame === page.mainFrame()) {
         navigationHappened = true;
         newUrl = frame.url();
-        console.log(`🔄 Navigation detected: ${newUrl}`);
       }
     });
     
@@ -48,7 +42,6 @@ async function inspectPostClick() {
         btn.textContent.toLowerCase().includes('donate')
       );
       if (donateBtn) {
-        console.log('Clicking donate button:', donateBtn.textContent);
         donateBtn.click();
         return true;
       }
@@ -72,7 +65,6 @@ async function inspectPostClick() {
       if (currentUrl !== initialUrl && !navigationHappened) {
         navigationHappened = true;
         newUrl = currentUrl;
-        console.log(`🔄 URL changed to: ${newUrl}`);
       }
       
       // Check for page elements
@@ -87,14 +79,12 @@ async function inspectPostClick() {
         };
       });
       
-      console.log(`Second ${i}: URL=${currentUrl === initialUrl ? 'unchanged' : 'CHANGED'}, Modals=${pageState.modals}, Forms=${pageState.forms}, Inputs=${pageState.inputs}`);
       
       if (i === 5) {
         await page.screenshot({ path: 'during-donate-click.png' });
       }
     }
     
-    console.log('📍 Step 4: Final analysis');
     await page.screenshot({ path: 'after-donate-click.png' });
     
     const finalUrl = page.url();
@@ -125,44 +115,24 @@ async function inspectPostClick() {
       };
     });
     
-    console.log('\n📊 FINAL ANALYSIS');
-    console.log('='.repeat(50));
-    console.log(`Initial URL: ${initialUrl}`);
-    console.log(`Final URL: ${finalUrl}`);
-    console.log(`Navigation occurred: ${navigationHappened ? 'YES' : 'NO'}`);
-    console.log(`Page title: ${finalState.title}`);
-    console.log(`Modals found: ${finalState.modalCount}`);
-    console.log(`Forms found: ${finalState.formCount}`);
-    console.log(`Inputs found: ${finalState.inputCount}`);
     
     if (finalState.modalCount > 0) {
-      console.log('\n🎭 MODAL DETAILS:');
       finalState.modalInfo.forEach((modal, i) => {
-        console.log(`Modal ${i + 1}:`, JSON.stringify(modal, null, 2));
       });
     }
     
     if (finalState.inputCount > 0) {
-      console.log('\n📝 INPUT DETAILS:');
       finalState.inputInfo.forEach((input, i) => {
-        console.log(`Input ${i + 1}:`, JSON.stringify(input, null, 2));
       });
     }
     
-    console.log('\n📸 Screenshots saved:');
-    console.log('- before-donate-click.png');
-    console.log('- during-donate-click.png');
-    console.log('- after-donate-click.png');
     
     // Conclusion
     if (navigationHappened) {
-      console.log('\n🎯 CONCLUSION: Donate button triggers navigation to new page');
       console.log('✅ SOLUTION: Update testing strategy to handle page navigation instead of modal');
     } else if (finalState.formCount > 0 || finalState.inputCount > 0) {
-      console.log('\n🎯 CONCLUSION: Forms/inputs exist but modal detection failed');
       console.log('✅ SOLUTION: Update modal selectors or remove modal detection requirement');
     } else {
-      console.log('\n🎯 CONCLUSION: No forms found after button click');
       console.log('❌ ISSUE: Button may not be working or site may have issues');
     }
     

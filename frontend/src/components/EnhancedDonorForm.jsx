@@ -64,11 +64,11 @@ const EnhancedDonorForm = ({ campaignId }) => {
   }, [campaignId]);
 
   useEffect(() => {
-    // Check contribution limits when amount or donation type changes
+    // Check contribution limits when amount, donation type, or wallet changes
     if (formData.amount && formData.email && campaignId) {
       checkContributionLimits();
     }
-  }, [formData.amount, formData.donationType, formData.recurringFrequency, formData.recurringStartDate, formData.email]);
+  }, [formData.amount, formData.donationType, formData.recurringFrequency, formData.recurringStartDate, formData.email, walletInfo]);
 
   const loadCampaignData = async () => {
     try {
@@ -391,6 +391,35 @@ const EnhancedDonorForm = ({ campaignId }) => {
       <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
+      
+      {/* CRITICAL: Show warning if wallet not connected for validation */}
+      {!walletInfo?.isConnected && formData.amount && (
+        <div style={{ 
+          padding: '15px',
+          background: '#fff3cd',
+          color: '#856404',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #ffeaa7'
+        }}>
+          ⚠️ <strong>Wallet Connection Required for Validation</strong><br/>
+          To ensure FEC compliance and validate contribution limits, please connect your wallet using the Web3 component above.
+          This is required for proper validation of both traditional and crypto payments.
+        </div>
+      )}
+      
+      {errorMessage && (
+        <div style={{ 
+          padding: '15px',
+          background: '#f8d7da',
+          color: '#721c24',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #f5c6cb'
+        }}>
+          {errorMessage}
+        </div>
+      )}
       
       <form onSubmit={handleSubmit}>
         {/* Donation Type Selection */}

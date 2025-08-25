@@ -21,7 +21,6 @@ test.describe('Live Campaign Site Monitoring', () => {
     expect(title).toBeTruthy();
     expect(title).not.toBe('Error');
 
-    console.log(`Live site title: ${title}`);
 
     // Check for main content containers
     const mainContent = page.locator('main, #root, .app, body > div').first();
@@ -30,22 +29,18 @@ test.describe('Live Campaign Site Monitoring', () => {
     // Look for form elements
     const forms = page.locator('form');
     const formCount = await forms.count();
-    console.log(`Found ${formCount} forms on the live site`);
 
     // Look for input fields (donation/contribution forms)
     const inputs = page.locator('input[type="text"], input[type="email"], input[type="number"], input[name*="amount"], input[name*="name"]');
     const inputCount = await inputs.count();
-    console.log(`Found ${inputCount} form inputs on the live site`);
 
     // Look for buttons (submit, connect wallet, etc.)
     const buttons = page.locator('button');
     const buttonCount = await buttons.count();
-    console.log(`Found ${buttonCount} buttons on the live site`);
 
     // Check for specific campaign elements
     const campaignElements = page.locator('[data-testid*="campaign"], .campaign, [class*="campaign"], [id*="campaign"]');
     const campaignCount = await campaignElements.count();
-    console.log(`Found ${campaignCount} campaign-specific elements`);
 
     // Verify no obvious error states
     const errorElements = page.locator('.error, .alert-error, [data-testid*="error"]');
@@ -55,7 +50,6 @@ test.describe('Live Campaign Site Monitoring', () => {
     // Check for loading states (shouldn't be present after page load)
     const loadingElements = page.locator('.loading, .spinner, [data-testid*="loading"]');
     const loadingCount = await loadingElements.count();
-    console.log(`Found ${loadingCount} loading elements (should be 0 after load)`);
 
     // Generate a basic health report
     const healthReport = {
@@ -72,7 +66,6 @@ test.describe('Live Campaign Site Monitoring', () => {
       status: errorCount === 0 && (formCount > 0 || inputCount > 0) ? 'HEALTHY' : 'NEEDS_ATTENTION'
     };
 
-    console.log('Live Site Health Report:', JSON.stringify(healthReport, null, 2));
   });
 
   test('live site form functionality test', async ({ page }) => {
@@ -140,7 +133,6 @@ test.describe('Live Campaign Site Monitoring', () => {
 
     // Overall form health assessment
     const formIsHealthy = (interactionResults.canFillName || interactionResults.canFillEmail || interactionResults.canFillAmount) && interactionResults.hasSubmitButton;
-    console.log(`Form Health Status: ${formIsHealthy ? 'HEALTHY' : 'NEEDS_ATTENTION'}`);
   });
 
   test('live site mobile responsiveness check', async ({ page }) => {
@@ -183,7 +175,6 @@ test.describe('Live Campaign Site Monitoring', () => {
     await page.waitForLoadState('networkidle');
     
     const loadTime = Date.now() - startTime;
-    console.log(`Page load time: ${loadTime}ms`);
 
     // Performance should be under 5 seconds for a good user experience
     expect(loadTime).toBeLessThan(5000);
@@ -215,7 +206,6 @@ test.describe('Live Campaign Site Monitoring', () => {
     const walletButtons = page.locator('button').filter({ hasText: /connect.*wallet|wallet.*connect|metamask/i });
     const walletCount = await walletButtons.count();
 
-    console.log(`Found ${walletCount} wallet connection elements`);
 
     if (walletCount > 0) {
       // Take screenshot of wallet integration
@@ -235,6 +225,5 @@ test.describe('Live Campaign Site Monitoring', () => {
     // Look for Web3 indicators
     const web3Elements = page.locator('[data-testid*="web3"], .web3, [class*="web3"]');
     const web3Count = await web3Elements.count();
-    console.log(`Found ${web3Count} Web3 integration elements`);
   });
 });

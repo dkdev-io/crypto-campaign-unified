@@ -22,8 +22,6 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   async initialize() {
-    console.log('🤖 Initializing Enhanced Live Site Testing Agent...');
-    console.log(`🎯 Target URL: ${BASE_URL}`);
     
     // Load CSV data
     await this.loadCSVData();
@@ -37,7 +35,6 @@ class EnhancedLiveSiteTestingAgent {
     });
     this.page = await this.browser.newPage();
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects, ${this.donors.length} contributions`);
   }
 
   async loadCSVData() {
@@ -73,7 +70,6 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   async navigateToForm() {
-    console.log('🔄 Attempting to navigate to donation form...');
     
     try {
       // First, go to the main page
@@ -100,7 +96,6 @@ class EnhancedLiveSiteTestingAgent {
           for (const button of buttons) {
             const text = await this.page.evaluate(el => el.textContent.trim().toLowerCase(), button);
             if (text.includes('donate') || text.includes('support') || text.includes('contribute')) {
-              console.log(`🎯 Found donation button with text: "${text}"`);
               await button.click();
               await new Promise(resolve => setTimeout(resolve, 3000));
               return true;
@@ -121,7 +116,6 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   async analyzeCurrentPage() {
-    console.log('🔍 Analyzing current page...');
     
     try {
       const analysis = await this.page.evaluate(() => {
@@ -166,9 +160,6 @@ class EnhancedLiveSiteTestingAgent {
         };
       });
       
-      console.log(`📋 Page Analysis: ${analysis.url}`);
-      console.log(`Forms: ${analysis.forms.length}, Inputs: ${analysis.inputs.length}, Buttons: ${analysis.buttons.length}`);
-      console.log(`Has form keywords: ${analysis.hasFormKeywords}`);
       
       return analysis;
       
@@ -182,14 +173,12 @@ class EnhancedLiveSiteTestingAgent {
     const startTime = Date.now();
     const testId = `test-${persona.profile.unique_id}-${startTime}`;
     
-    console.log(`\\n🧪 Testing for: ${persona.profile.first_name} ${persona.profile.last_name}`);
     
     try {
       // Create screenshots directory
       fs.mkdirSync('test-results/screenshots', { recursive: true });
       
       // Navigate to the site and try to find form
-      console.log(`🌐 Navigating to: ${BASE_URL}`);
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 30000 });
       
       // Initial screenshot
@@ -242,9 +231,7 @@ class EnhancedLiveSiteTestingAgent {
       this.testResults.push(testResult);
       
       if (testResult.success) {
-        console.log(`✅ Test completed for ${persona.profile.first_name}`);
       } else {
-        console.log(`⚠️  Test completed with issues for ${persona.profile.first_name}`);
       }
       
       return testResult;
@@ -277,7 +264,6 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   async attemptFormFilling(persona, testConfig) {
-    console.log('📝 Attempting to fill form fields...');
     
     const profile = persona.profile;
     const donation = persona.donations[0] || { contribution_amount: '100.00' };
@@ -338,7 +324,6 @@ class EnhancedLiveSiteTestingAgent {
         }
       }
       
-      console.log(`✅ Form filling complete: ${fieldsFilled} fields filled`);
       
       return {
         success: fieldsFilled > 0,
@@ -399,7 +384,6 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   async runTestSuite(options = {}) {
-    console.log('\\n🧪 Starting Enhanced Live Site Testing Suite...\\n');
     
     const { count = 3, testType = 'mixed' } = options;
     
@@ -422,11 +406,9 @@ class EnhancedLiveSiteTestingAgent {
         testPersonas = shuffled.slice(0, count).map(id => this.getPersonaById(id));
     }
     
-    console.log(`Testing ${testPersonas.length} personas (${testType} mode)`);
     
     for (let i = 0; i < testPersonas.length; i++) {
       const persona = testPersonas[i];
-      console.log(`\\n--- Test ${i + 1}/${testPersonas.length} ---`);
       
       await this.testFormSubmission(persona, {});
       
@@ -438,29 +420,21 @@ class EnhancedLiveSiteTestingAgent {
   }
 
   generateTestReport() {
-    console.log('\\n📊 Enhanced Live Site Test Report');
-    console.log('==========================================');
     
     const totalTests = this.testResults.length;
     const passedTests = this.testResults.filter(r => r.success).length;
     const failedTests = totalTests - passedTests;
     const successRate = totalTests > 0 ? ((passedTests / totalTests) * 100).toFixed(1) : '0.0';
     
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${passedTests} ✅`);
-    console.log(`Failed: ${failedTests} ❌`);
     console.log(`Success Rate: ${successRate}%`);
     
     // Detailed analysis
     const navigationSuccesses = this.testResults.filter(r => r.navigationSuccess).length;
     const formsFound = this.testResults.filter(r => r.pageAnalysis && r.pageAnalysis.inputs.length > 0).length;
     
-    console.log(`\\nDetailed Analysis:`);
     console.log(`Navigation to form successful: ${navigationSuccesses}/${totalTests}`);
-    console.log(`Form inputs found: ${formsFound}/${totalTests}`);
     
     if (failedTests > 0) {
-      console.log('\\nFailed Tests:');
       this.testResults
         .filter(r => !r.success)
         .forEach(r => {
@@ -472,7 +446,6 @@ class EnhancedLiveSiteTestingAgent {
     const reportPath = `test-results/enhanced-live-site-test-report-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\\n📁 Detailed report saved: ${reportPath}`);
     console.log('📸 Screenshots saved in test-results/screenshots/');
   }
 

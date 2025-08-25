@@ -1,0 +1,15 @@
+{
+  "generated_at": "2025-08-25T00:11:17.386Z",
+  "total_contributions": 215,
+  "statistics": {
+    "accepted": 53,
+    "rejected_kyc": 162,
+    "rejected_single_limit": 0,
+    "rejected_cumulative": 0
+  },
+  "acceptance_rate": "25%",
+  "rejection_rate": "75%",
+  "unique_wallets": 150,
+  "total_amount_attempted": "194183.33",
+  "total_amount_valid": "41340.13"
+}

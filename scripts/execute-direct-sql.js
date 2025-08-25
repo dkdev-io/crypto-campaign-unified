@@ -54,7 +54,6 @@ async function executeSQL() {
     console.log('✅ Table created successfully');
     
     // Insert the test committee data
-    console.log('📝 Inserting Testy Test for Chancellor...');
     
     const insertSQL = `
       INSERT INTO committee_test_data (committee_name, test_purpose, added_by_email) 
@@ -84,13 +83,11 @@ async function executeSQL() {
     
   } catch (error) {
     console.error('💥 SQL execution failed:', error);
-    console.log('🔄 Trying fallback approach...');
     await createTestCommitteeDirectly();
   }
 }
 
 async function createTestCommitteeDirectly() {
-  console.log('🎯 Attempting direct committee insertion...');
   
   try {
     // Try inserting directly into the table using REST API
@@ -119,8 +116,6 @@ async function createTestCommitteeDirectly() {
       console.error('❌ Direct insertion failed:', error);
       
       if (error.includes('does not exist')) {
-        console.log('📋 The committee_test_data table does not exist.');
-        console.log('💡 Creating it via the campaigns table (which definitely exists)...');
         await createViaExistingTable();
       }
     }
@@ -131,7 +126,6 @@ async function createTestCommitteeDirectly() {
 }
 
 async function createViaExistingTable() {
-  console.log('🔄 Using existing campaigns table as fallback...');
   
   try {
     // Create a test campaign that represents our test committee
@@ -160,7 +154,6 @@ async function createViaExistingTable() {
     if (response.ok) {
       const data = await response.json();
       console.log('🎉 SUCCESS! Test committee created as campaign:', data);
-      console.log('💡 You can now search for "Testy Test" in the campaign setup');
     } else {
       const error = await response.text();
       console.error('❌ Campaign creation failed:', error);
@@ -171,7 +164,6 @@ async function createViaExistingTable() {
 }
 
 async function verifyTestCommittee() {
-  console.log('🔍 Verifying test committee...');
   
   try {
     // Check committee_test_data table
@@ -188,7 +180,6 @@ async function verifyTestCommittee() {
       if (data.length > 0) {
         console.log('✅ Test committee found in committee_test_data:', data[0]);
       } else {
-        console.log('ℹ️  No test committee found in committee_test_data table');
         await checkCampaignsTable();
       }
     } else {
@@ -202,7 +193,6 @@ async function verifyTestCommittee() {
 }
 
 async function checkCampaignsTable() {
-  console.log('🔍 Checking campaigns table...');
   
   try {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/campaigns?campaign_name=eq.Testy Test for Chancellor`, {
@@ -217,9 +207,7 @@ async function checkCampaignsTable() {
       const data = await response.json();
       if (data.length > 0) {
         console.log('✅ Test committee found in campaigns table:', data[0]);
-        console.log('🎯 Campaign ID for testing:', data[0].id);
       } else {
-        console.log('ℹ️  No test committee found in campaigns table either');
       }
     } else {
       console.log('⚠️  Could not check campaigns table');
@@ -232,9 +220,6 @@ async function checkCampaignsTable() {
 // Execute the migration
 executeSQL()
   .then(() => {
-    console.log('\n🎉 Migration process completed!');
-    console.log('🔗 Test at: http://localhost:5173/');
-    console.log('💡 Search for "Testy Test" in the campaign setup');
     console.log('🏛️  The committee should now appear in search results');
   })
   .catch((error) => {

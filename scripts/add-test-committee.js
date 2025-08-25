@@ -9,14 +9,12 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 
-console.log('🎯 Adding "Testy Test for Chancellor" committee to database...');
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function addTestCommittee() {
   try {
     // First, check if the fec_committees table exists
-    console.log('🔍 Checking if fec_committees table exists...');
     
     const { data: existingData, error: checkError } = await supabase
       .from('fec_committees')
@@ -25,15 +23,12 @@ async function addTestCommittee() {
     
     if (checkError) {
       console.error('❌ fec_committees table does not exist:', checkError.message);
-      console.log('📋 You need to run the full schema migration first.');
-      console.log('💡 Please apply the SQL file: docs/fec-committees-schema.sql to your Supabase database');
       return;
     }
     
     console.log('✅ fec_committees table exists');
     
     // Check if test committee already exists
-    console.log('🔍 Checking if test committee already exists...');
     
     const { data: existing, error: existsError } = await supabase
       .from('fec_committees')
@@ -42,15 +37,10 @@ async function addTestCommittee() {
       .single();
     
     if (existing) {
-      console.log('ℹ️  Test committee already exists:');
-      console.log(`   📍 Committee ID: ${existing.fec_committee_id}`);
-      console.log(`   🏛️  Name: ${existing.committee_name}`);
-      console.log(`   👤 Candidate: ${existing.candidate_name}`);
       return;
     }
     
     // Insert the test committee
-    console.log('➕ Inserting test committee...');
     
     const testCommittee = {
       fec_committee_id: 'C00999999',
@@ -78,16 +68,9 @@ async function addTestCommittee() {
       
       // Check if it's a missing column error and suggest solution
       if (error.message.includes('column') && error.message.includes('does not exist')) {
-        console.log('💡 This might be a schema issue. The table exists but is missing columns.');
-        console.log('🔧 Please run the full schema migration: docs/fec-committees-schema.sql');
       }
     } else {
       console.log('🎉 SUCCESS! Test committee added:');
-      console.log(`   📍 Committee ID: ${data.fec_committee_id}`);
-      console.log(`   🏛️  Name: ${data.committee_name}`);
-      console.log(`   👤 Candidate: ${data.candidate_name}`);
-      console.log(`   📍 Location: ${data.city}, ${data.state}`);
-      console.log(`   💼 Treasurer: ${data.treasurer_name}`);
       
       // Test the search functionality
       await testSearchFunctionality();
@@ -99,7 +82,6 @@ async function addTestCommittee() {
 }
 
 async function testSearchFunctionality() {
-  console.log('\n🔍 Testing search functionality...');
   
   try {
     // Test if the search function exists
@@ -111,11 +93,9 @@ async function testSearchFunctionality() {
     
     if (error) {
       console.log('⚠️  Search function not available:', error.message);
-      console.log('💡 The search_fec_committees function needs to be created via the full schema migration');
     } else {
       console.log('✅ Search function works! Found committees:');
       data.forEach(committee => {
-        console.log(`   🏛️  ${committee.committee_name} (${committee.fec_committee_id})`);
       });
     }
   } catch (error) {
@@ -126,9 +106,6 @@ async function testSearchFunctionality() {
 // Run the script
 addTestCommittee()
   .then(() => {
-    console.log('\n✨ Test committee setup completed!');
-    console.log('🔗 Test it at: http://localhost:5173/');
-    console.log('💡 Search for "Testy" or "Chancellor" in the campaign setup');
   })
   .catch((error) => {
     console.error('\n💥 Failed to add test committee:', error);
