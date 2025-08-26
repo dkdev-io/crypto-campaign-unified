@@ -1,7 +1,7 @@
 [build]
-  command = "cd frontend && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps --force && npm run build"
+  command = "cd frontend && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps --force && npm run build && cd .. && npm install && node apply-migrations.cjs"
   publish = "frontend/dist"
-  environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "22" }
+  environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "22", MIGRATION_SUPABASE_URL = "https://kmepcdsklnnxokoimvzo.supabase.co", MIGRATION_SUPABASE_SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE" }
 
 [[redirects]]
   from = "/api/*"
