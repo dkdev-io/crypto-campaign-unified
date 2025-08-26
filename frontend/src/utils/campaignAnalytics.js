@@ -864,7 +864,7 @@ if (typeof document !== 'undefined') {
   const initAnalytics = () => {
     if (!analytics) {
       analytics = new CampaignAnalytics({
-        debug: typeof import !== 'undefined' && import.meta?.env?.DEV
+        debug: false
       });
     }
   };

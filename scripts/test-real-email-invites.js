@@ -54,7 +54,7 @@ async function testRealEmailInvites() {
     await page.type('input[type="email"]', 'test@example.com');
     
     // Check if validation warning appears
-    await page.waitForTimeout(500);
+    await new Promise(resolve => setTimeout(resolve, 500));
     const validationWarning = await page.evaluate(() => {
       const small = document.querySelector('small[style*="color"]');
       return small ? small.innerText : null;
@@ -88,12 +88,13 @@ async function testRealEmailInvites() {
     await page.click('button[type="submit"]');
     
     // Wait for processing
-    await page.waitForTimeout(5000);
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Check results
     const results = await page.evaluate(() => {
-      const resultsSection = document.querySelector('h3:has-text("Invitation Results"), h3');
-      if (!resultsSection || !resultsSection.innerText.includes('Results')) {
+      const h3Elements = Array.from(document.querySelectorAll('h3'));
+      const resultsSection = h3Elements.find(h3 => h3.innerText.includes('Invitation Results'));
+      if (!resultsSection) {
         return null;
       }
       
@@ -149,8 +150,12 @@ async function testRealEmailInvites() {
     
     // Check for Continue button
     const hasContinueButton = await page.evaluate(() => {
-      const button = document.querySelector('button:has-text("Continue to Campaign Setup"), button[style*="28a745"]');
-      return !!button;
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const continueButton = buttons.find(btn => 
+        btn.innerText.includes('Continue to Campaign Setup') ||
+        (btn.style.background && btn.style.background.includes('28a745'))
+      );
+      return !!continueButton;
     });
     
     if (hasContinueButton) {
@@ -167,7 +172,7 @@ async function testRealEmailInvites() {
     console.log('\n🏆 REAL EMAIL SYSTEM STATUS: IMPLEMENTED');
     console.log('Users will receive actual Supabase verification emails!');
     console.log('\n🔍 Browser staying open for 10 seconds...');
-    await page.waitForTimeout(10000);
+    await new Promise(resolve => setTimeout(resolve, 10000));
     
   } catch (error) {
     console.error('❌ Test error:', error.message);
