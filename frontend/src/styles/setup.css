@@ -1,33 +1,28 @@
-:root {
-  --primary: #2a2a72;
-  --accent-light: #EAF6FF;
-  --accent-orange: #F0A202;
-}
+/* Setup styles - using Crypto Campaign design system */
 
 body {
-  font-family: Georgia, serif;
   margin: 0;
   padding: 0;
 }
 
 .setup-container {
   min-height: 100vh;
-  background-color: var(--accent-light);
+  background-color: hsl(var(--crypto-light-gray));
   padding: 2rem;
 }
 
 .setup-card {
   max-width: 800px;
   margin: 0 auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(42, 42, 114, 0.1);
+  background: hsl(var(--crypto-white));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
 }
 
 .step-indicator {
-  background: var(--primary);
+  background: hsl(var(--primary));
   padding: 2rem;
-  color: white;
+  color: hsl(var(--primary-foreground));
   text-align: center;
 }
 
@@ -42,8 +37,10 @@ body {
 .form-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--input));
+  color: hsl(var(--foreground));
 }
 
 .btn {
@@ -55,14 +52,14 @@ body {
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 .btn-secondary {
   background: transparent;
-  border: 2px solid var(--primary);
-  color: var(--primary);
+  border: 2px solid hsl(var(--primary));
+  color: hsl(var(--primary));
 }
 
 .form-actions {

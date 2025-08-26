@@ -326,3 +326,5 @@ $RECYCLE.BIN/
 .DS_Store
 *.pem
 Thumbs.db
+# Local Netlify folder
+.netlify
