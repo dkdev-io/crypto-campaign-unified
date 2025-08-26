@@ -97,8 +97,12 @@ const SimpleTeamInvites = ({ campaignId }) => {
         console.log(`Invite link for ${invite.email}: ${inviteLink}`)
       }
 
-      alert('Invitations sent successfully!')
-      setInvites([{ email: '', permissions: ['view'] }])
+      alert('Invitations sent successfully!\n\nRedirecting to campaign setup...')
+      
+      // Redirect to campaign setup workflow
+      setTimeout(() => {
+        window.location.href = '/setup'
+      }, 1000)
       
     } catch (error) {
       console.error('Error sending invites:', error)
