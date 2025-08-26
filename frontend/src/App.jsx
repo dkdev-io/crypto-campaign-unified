@@ -3,6 +3,7 @@ import SetupWizard from './components/setup/SetupWizard';
 import SimpleDonorForm from './components/SimpleDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
+import SimpleAuth from './components/auth/SimpleAuth';
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -11,6 +12,11 @@ function App() {
   
   console.log('App routing:', { path, campaignId, search: window.location.search });
   
+  // Auth route (new default)
+  if (path === '/auth' || path === '/') {
+    return <SimpleAuth />;
+  }
+
   // Test route
   if (path === '/test') {
     return (
@@ -18,8 +24,11 @@ function App() {
         <h1>✅ Test Route Works!</h1>
         <p>React app is functioning correctly</p>
         <div style={{ marginTop: '2rem' }}>
-          <a href="/" style={{ padding: '1rem', background: '#28a745', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
+          <a href="/setup" style={{ padding: '1rem', background: '#28a745', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
             Go to Setup Wizard
+          </a>
+          <a href="/auth" style={{ padding: '1rem', background: '#2a2a72', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
+            Auth Demo
           </a>
           <a href="/debug" style={{ padding: '1rem', background: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
             Debug Panel
@@ -42,13 +51,18 @@ function App() {
     return <CampaignDebug />;
   }
   
+  // Setup wizard route (moved from default)
+  if (path === '/setup') {
+    return <SetupWizard />;
+  }
+
   // Simple form for campaigns
   if (campaignId) {
     return <SimpleDonorForm campaignId={campaignId} />;
   }
   
-  // Default: Setup wizard
-  return <SetupWizard />;
+  // Default: Simple auth system
+  return <SimpleAuth />;
 }
 
 export default App;

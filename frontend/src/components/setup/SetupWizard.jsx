@@ -3,6 +3,8 @@ import StepIndicator from './StepIndicator';
 import Signup from './Signup';
 import CommitteeSearch from './CommitteeSearch';
 import BankConnection from './BankConnection';
+import WebsiteStyleMatcher from './WebsiteStyleMatcher';
+import StyleConfirmation from './StyleConfirmation';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
 import { supabase } from '../../lib/supabase';
@@ -13,7 +15,7 @@ const SetupWizard = () => {
   const [formData, setFormData] = useState({});
   const [campaignId, setCampaignId] = useState(null);
 
-  const totalSteps = 5;
+  const totalSteps = 7;
 
   const updateFormData = async (newData) => {
     const updatedData = { ...formData, ...newData };
@@ -52,6 +54,12 @@ const SetupWizard = () => {
         if (updatedData.setupStep) dbData.setup_step = updatedData.setupStep;
         if (updatedData.setupCompleted) dbData.setup_completed = updatedData.setupCompleted;
         if (updatedData.setupCompleted) dbData.setup_completed_at = new Date().toISOString();
+        
+        // Website style matching
+        if (updatedData.websiteUrl) dbData.website_analyzed = updatedData.websiteUrl;
+        if (updatedData.styleAnalysis) dbData.style_analysis = updatedData.styleAnalysis;
+        if (updatedData.appliedStyles) dbData.applied_styles = updatedData.appliedStyles;
+        if (updatedData.stylesApplied) dbData.styles_applied = updatedData.stylesApplied;
         
         // Embed code
         if (updatedData.embedCode) {
@@ -171,8 +179,18 @@ const SetupWizard = () => {
       case 3:
         return <BankConnection {...stepProps} />;
       case 4:
-        return <TermsAgreement {...stepProps} />;
+        return <WebsiteStyleMatcher {...stepProps} />;
       case 5:
+        // Only show StyleConfirmation if user analyzed a website
+        if (formData.stylesAnalyzed && !formData.styleMatchingSkipped) {
+          return <StyleConfirmation {...stepProps} />;
+        } else {
+          // Skip directly to terms if no styles were analyzed
+          return <TermsAgreement {...stepProps} />;
+        }
+      case 6:
+        return <TermsAgreement {...stepProps} />;
+      case 7:
         return <EmbedCode {...stepProps} />;
       default:
         return <Signup {...stepProps} />;

@@ -7,11 +7,25 @@ const FormCustomization = ({ formData, updateFormData, onNext, onPrev }) => {
       
       <div className="form-group">
         <label>Theme Color</label>
-        <input 
-          type="color"
-          value={formData.themeColor || '#2a2a72'}
-          onChange={(e) => updateFormData({ themeColor: e.target.value })}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <input 
+            type="color"
+            value={formData.themeColor || formData.appliedStyles?.colors?.primary || '#2a2a72'}
+            onChange={(e) => updateFormData({ themeColor: e.target.value })}
+          />
+          {formData.appliedStyles?.colors?.primary && (
+            <div style={{ 
+              fontSize: '0.9rem', 
+              color: '#28a745',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <span>✨</span>
+              <span>From your website: {formData.appliedStyles.colors.primary}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="form-group">

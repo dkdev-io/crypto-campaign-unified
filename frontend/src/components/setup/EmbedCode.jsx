@@ -34,7 +34,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       setEmbedCode(data);
       setTestUrl(`${window.location.origin}/embed-form.html?campaign=${campaignId}`);
       
-      // Mark setup as completed
+      // Mark setup as completed and trigger donor page automation
       const { error: updateError } = await supabase
         .from('campaigns')
         .update({
@@ -48,10 +48,21 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         console.error('Failed to update campaign completion status:', updateError);
       }
 
+      // NEW: Check if donor page automation was successful
+      let donorPageUrl = null;
+      let donorPageGenerated = false;
+      
+      if (typeof data === 'object' && data.donorPageUrl) {
+        donorPageUrl = data.donorPageUrl;
+        donorPageGenerated = data.donorPageGenerated;
+      }
+
       updateFormData({ 
-        embedCode: data,
+        embedCode: typeof data === 'string' ? data : data.embedCode,
         setupCompleted: true,
-        embedGenerated: true
+        embedGenerated: true,
+        donorPageUrl: donorPageUrl,
+        donorPageGenerated: donorPageGenerated
       });
 
     } catch (err) {
@@ -356,6 +367,88 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       </div>
 
+      {/* Donor Page Section */}
+      {formData.donorPageGenerated && formData.donorPageUrl && (
+        <div style={{ 
+          background: 'linear-gradient(135deg, #e7f3ff, #f0f9ff)',
+          border: '1px solid #b6d7ff',
+          borderRadius: '8px',
+          padding: '2rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🎉</div>
+            <h3 style={{ color: '#0066cc', margin: '0 0 0.5rem 0' }}>
+              Your Donor Page is Live!
+            </h3>
+            <p style={{ color: '#004499', margin: 0 }}>
+              We've automatically created a dedicated donation page for your campaign
+            </p>
+          </div>
+          
+          <div style={{ 
+            background: 'white',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            textAlign: 'center',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            <h5 style={{ color: '#495057', marginTop: 0 }}>
+              📄 Your Dedicated Donor Page
+            </h5>
+            <div style={{ 
+              background: '#f8f9fa',
+              padding: '1rem',
+              borderRadius: '4px',
+              marginBottom: '1rem',
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              wordBreak: 'break-all'
+            }}>
+              {window.location.origin}{formData.donorPageUrl}
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a
+                href={formData.donorPageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: '#0066cc',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+              >
+                🌐 View Your Page
+              </a>
+              <button
+                onClick={() => {
+                  const url = `${window.location.origin}${formData.donorPageUrl}`;
+                  navigator.clipboard.writeText(url);
+                  alert('Page URL copied to clipboard!');
+                }}
+                style={{
+                  background: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+              >
+                📋 Copy Page URL
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Next Steps */}
       <div style={{ 
         background: 'white',
@@ -373,18 +466,28 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           gap: '1rem',
           fontSize: '14px'
         }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🌐</div>
-            <strong>Embed on Website</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Add the form to your campaign website
+          {formData.donorPageGenerated && formData.donorPageUrl ? (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🌐</div>
+              <strong>Share Donor Page</strong>
+              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
+                Direct supporters to your custom page
+              </div>
             </div>
-          </div>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🌐</div>
+              <strong>Embed on Website</strong>
+              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
+                Add the form to your campaign website
+              </div>
+            </div>
+          )}
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>📱</div>
             <strong>Share on Social</strong>
             <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Direct supporters to your form link
+              Share your donation page on social media
             </div>
           </div>
           <div style={{ textAlign: 'center' }}>
