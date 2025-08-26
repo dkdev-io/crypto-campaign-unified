@@ -4,6 +4,7 @@ import SimpleDonorForm from './components/SimpleDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
+import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -12,6 +13,16 @@ function App() {
   
   console.log('App routing:', { path, campaignId, search: window.location.search });
   
+  // Test invite form directly
+  if (path === '/invite-test') {
+    return (
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
+        <h2>Team Invitation Form Test</h2>
+        <SimpleTeamInvites campaignId="test-campaign" />
+      </div>
+    );
+  }
+
   // Auth route (new default)
   if (path === '/auth' || path === '/') {
     return <SimpleAuth />;
@@ -29,6 +40,9 @@ function App() {
           </a>
           <a href="/auth" style={{ padding: '1rem', background: '#2a2a72', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
             Auth Demo
+          </a>
+          <a href="/invite-test" style={{ padding: '1rem', background: '#dc3545', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
+            Test Invite Form
           </a>
           <a href="/debug" style={{ padding: '1rem', background: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '4px', marginRight: '1rem' }}>
             Debug Panel
