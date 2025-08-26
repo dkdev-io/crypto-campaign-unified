@@ -6,5 +6,15 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/crypto-campaign-unified/' : '/',
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom']
   }
 })
