@@ -2,8 +2,20 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE';
+// Load environment variables
+require('dotenv').config();
+
+const supabaseUrl = process.env.MIGRATION_SUPABASE_URL;
+const supabaseServiceKey = process.env.MIGRATION_SUPABASE_SERVICE_KEY;
+
+// Validate environment variables
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing required environment variables:');
+  console.error('   MIGRATION_SUPABASE_URL:', supabaseUrl ? '✓' : '❌ Missing');
+  console.error('   MIGRATION_SUPABASE_SERVICE_KEY:', supabaseServiceKey ? '✓' : '❌ Missing');
+  console.error('Please check your .env file contains these variables.');
+  process.exit(1);
+}
 
 // Note: Using service key for admin operations
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
