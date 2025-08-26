@@ -28,13 +28,19 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="font-bebas">
+            <Button 
+              variant="ghost" 
+              className="font-bebas"
+              onClick={() => {
+                window.location.href = '/auth';
+              }}
+            >
               Sign In
             </Button>
             <Button 
               className="font-bebas bg-accent hover:bg-accent/90 text-accent-foreground shadow-button"
               onClick={() => {
-                window.location.href = 'http://localhost:5173';
+                window.location.href = '/setup';
               }}
             >
               Get Started

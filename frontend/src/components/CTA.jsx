@@ -19,7 +19,7 @@ const CTA = () => {
               size="lg" 
               className="font-bebas text-lg bg-accent hover:bg-accent/90 text-accent-foreground shadow-button px-12 py-6"
               onClick={() => {
-                window.location.href = 'http://localhost:5173';
+                window.location.href = '/setup';
               }}
             >
               Get Started—No Setup Fee
