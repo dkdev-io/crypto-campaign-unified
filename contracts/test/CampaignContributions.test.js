@@ -46,15 +46,15 @@ describe("CampaignContributions", function () {
     });
 
     it("Should emit KYCStatusUpdated event when verifying", async function () {
-      const tx = await campaignContract.connect(kycVerifier).verifyKYC(contributor1.address);
-      const receipt = await tx.wait();
-      const event = receipt.events?.find(e => e.event === 'KYCStatusUpdated');
-      
-      expect(event).to.exist;
-      expect(event.args.contributor).to.equal(contributor1.address);
-      expect(event.args.verified).to.be.true;
-      expect(event.args.verifier).to.equal(kycVerifier.address);
-      expect(event.args.timestamp).to.be.a('bigint');
+      await expect(
+        campaignContract.connect(kycVerifier).verifyKYC(contributor1.address)
+      ).to.emit(campaignContract, "KYCStatusUpdated")
+        .withArgs(
+          contributor1.address,
+          true,
+          kycVerifier.address,
+          anyValue // timestamp
+        );
     });
 
     it("Should allow batch KYC verification", async function () {
@@ -82,16 +82,16 @@ describe("CampaignContributions", function () {
     it("Should accept valid contributions", async function () {
       const contributionAmount = ethers.parseEther("0.5"); // $1,500 worth
       
-      const tx = await campaignContract.connect(contributor1).contribute({ value: contributionAmount });
-      const receipt = await tx.wait();
-      const event = receipt.events?.find(e => e.event === 'ContributionAccepted');
-      
-      expect(event).to.exist;
-      expect(event.args.contributor).to.equal(contributor1.address);
-      expect(event.args.amount).to.equal(contributionAmount);
-      expect(event.args.cumulativeAmount).to.equal(contributionAmount);
-      expect(event.args.timestamp).to.be.a('bigint');
-      expect(event.args.transactionHash).to.be.a('string');
+      await expect(
+        campaignContract.connect(contributor1).contribute({ value: contributionAmount })
+      ).to.emit(campaignContract, "ContributionAccepted")
+        .withArgs(
+          contributor1.address,
+          contributionAmount,
+          contributionAmount, // cumulativeAmount
+          anyValue, // timestamp
+          anyValue // transactionHash
+        );
     });
 
     it("Should transfer funds to treasury", async function () {
@@ -201,14 +201,15 @@ describe("CampaignContributions", function () {
     it("Should allow owner to update ETH price", async function () {
       const newPrice = ethers.parseUnits("4000", 18); // $4000 per ETH
       
-      const tx = await campaignContract.setEthPrice(newPrice);
-      const receipt = await tx.wait();
-      const event = receipt.events?.find(e => e.event === 'EthPriceUpdated');
-      
-      expect(event).to.exist;
-      expect(event.args.oldPrice).to.equal(initialEthPrice);
-      expect(event.args.newPrice).to.equal(newPrice);
-      expect(event.args.updatedBy).to.equal(owner.address);
+      await expect(
+        campaignContract.setEthPrice(newPrice)
+      ).to.emit(campaignContract, "EthPriceUpdated")
+        .withArgs(
+          initialEthPrice, // oldPrice
+          newPrice, // newPrice
+          anyValue, // newMaxContribution
+          owner.address // updatedBy
+        );
       
       // New max contribution should be $3,300 / $4,000 = 0.825 ETH
       const newMaxContribution = await campaignContract.getMaxContributionWei();
@@ -218,14 +219,14 @@ describe("CampaignContributions", function () {
     it("Should allow owner to update treasury address", async function () {
       const [, , , , , newTreasury] = await ethers.getSigners(); // Get a different signer
       
-      const tx = await campaignContract.setCampaignTreasury(newTreasury.address);
-      const receipt = await tx.wait();
-      const event = receipt.events?.find(e => e.event === 'CampaignTreasuryUpdated');
-      
-      expect(event).to.exist;
-      expect(event.args.oldTreasury).to.equal(treasury.address);
-      expect(event.args.newTreasury).to.equal(newTreasury.address);
-      expect(event.args.updatedBy).to.equal(owner.address);
+      await expect(
+        campaignContract.setCampaignTreasury(newTreasury.address)
+      ).to.emit(campaignContract, "CampaignTreasuryUpdated")
+        .withArgs(
+          treasury.address, // oldTreasury
+          newTreasury.address, // newTreasury
+          owner.address // updatedBy
+        );
       
       expect(await campaignContract.campaignTreasury()).to.equal(newTreasury.address);
     });
@@ -278,5 +279,5 @@ describe("CampaignContributions", function () {
   });
 });
 
-// Helper for testing events with timestamp
-const anyValue = ethers.AbiCoder.defaultAbiCoder().encode(["uint256"], [1]);
+// Helper for testing events with variable values like timestamps and hashes
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");

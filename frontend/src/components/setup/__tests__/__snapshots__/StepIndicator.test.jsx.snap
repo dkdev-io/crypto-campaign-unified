@@ -1,0 +1,73 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StepIndicator > Component Snapshots > matches snapshot for beginning of process 1`] = `
+<div
+  class="step-indicator"
+>
+  <h1>
+    Campaign Setup
+  </h1>
+  <p>
+    Step 
+    1
+     of 
+    5
+    : 
+    Signup
+  </p>
+</div>
+`;
+
+exports[`StepIndicator > Component Snapshots > matches snapshot for different step count 1`] = `
+<div
+  class="step-indicator"
+>
+  <h1>
+    Campaign Setup
+  </h1>
+  <p>
+    Step 
+    2
+     of 
+    3
+    : 
+    Campaign Info
+  </p>
+</div>
+`;
+
+exports[`StepIndicator > Component Snapshots > matches snapshot for end of process 1`] = `
+<div
+  class="step-indicator"
+>
+  <h1>
+    Campaign Setup
+  </h1>
+  <p>
+    Step 
+    5
+     of 
+    5
+    : 
+    Embed Options
+  </p>
+</div>
+`;
+
+exports[`StepIndicator > Component Snapshots > matches snapshot for middle of process 1`] = `
+<div
+  class="step-indicator"
+>
+  <h1>
+    Campaign Setup
+  </h1>
+  <p>
+    Step 
+    3
+     of 
+    5
+    : 
+    Compliance
+  </p>
+</div>
+`;

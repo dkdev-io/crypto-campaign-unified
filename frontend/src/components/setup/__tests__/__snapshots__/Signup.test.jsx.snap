@@ -1,0 +1,575 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Signup > Component Snapshots > matches snapshot for empty form 1`] = `
+<div>
+  <h2
+    style="color: rgb(42, 42, 114); text-align: center; margin-bottom: 1rem;"
+  >
+    📋 Campaign Setup - Step 1
+  </h2>
+  <p
+    style="text-align: center; color: rgb(102, 102, 102); margin-bottom: 2rem;"
+  >
+    Tell us about yourself and your campaign
+  </p>
+  <div
+    class="form-group"
+  >
+    <label
+      for="userFullName"
+    >
+      Your Full Name *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="userFullName"
+      placeholder="Enter your full name"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      This will be used for FEC reporting
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="email"
+    >
+      Your Email Address *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="email"
+      placeholder="your.email@domain.com"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="email"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Used for notifications and account management
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="campaignName"
+    >
+      Campaign Name *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="campaignName"
+      placeholder="e.g., Smith for Mayor 2024"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Publicly displayed name for your campaign
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="committeeNameSearch"
+    >
+      Committee Name or Search Term *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="committeeNameSearch"
+      placeholder="Friends of John Smith Committee"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Enter your FEC committee name or keywords to search. We'll help you find the exact match in the next step.
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="suggestedAmounts"
+    >
+      Suggested Contribution Amounts
+    </label>
+    <input
+      class="form-input"
+      id="suggestedAmounts"
+      placeholder="25, 50, 100, 250"
+      type="text"
+      value="25, 50, 100, 250"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Comma-separated dollar amounts that contributors can quickly select
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="maxDonationLimit"
+    >
+      Maximum Contribution Limit
+    </label>
+    <input
+      class="form-input"
+      id="maxDonationLimit"
+      max="10000"
+      min="1"
+      placeholder="3300"
+      type="number"
+      value="3300"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Maximum amount a single contributor can donate (FEC limit: $3,300 per election)
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="website"
+    >
+      Campaign Website (Optional)
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="website"
+      placeholder="https://yourcampaign.com"
+      required=""
+      type="url"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Your official campaign website
+    </small>
+  </div>
+  <div
+    class="form-actions"
+  >
+    <div />
+    <button
+      class="btn btn-primary"
+    >
+      Next: Find Your Committee →
+    </button>
+  </div>
+  <div
+    style="margin-top: 2rem; padding: 1rem; background: rgb(248, 249, 250); border: 1px solid rgb(233, 236, 239); border-radius: 6px; font-size: 14px; color: rgb(108, 117, 125);"
+  >
+    <h3>
+      🔄 What Happens Next
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Find Your FEC Committee:
+        </strong>
+         We'll search for your registered committee
+      </li>
+      <li>
+        <strong>
+          Connect Bank Account:
+        </strong>
+         Secure connection via Plaid
+      </li>
+      <li>
+        <strong>
+          Launch Your Form:
+        </strong>
+         Get your embed code and start collecting
+      </li>
+    </ul>
+    <h3
+      style="margin-top: 1rem;"
+    >
+      🔒 Privacy & Security
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Your information is encrypted
+        </strong>
+         and stored securely
+      </li>
+      <li>
+        <strong>
+          FEC-compliant data handling
+        </strong>
+         with audit trails
+      </li>
+      <li>
+        <strong>
+          You control your campaign data
+        </strong>
+         - export anytime
+      </li>
+    </ul>
+    <h3
+      style="margin-top: 1rem;"
+    >
+      📋 Requirements
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Valid FEC committee
+        </strong>
+         registration required
+      </li>
+      <li>
+        <strong>
+          Campaign bank account
+        </strong>
+         for processing donations
+      </li>
+      <li>
+        <strong>
+          Official campaign website
+        </strong>
+         (recommended)
+      </li>
+    </ul>
+    <p
+      style="margin-top: 1rem; text-align: center; color: rgb(73, 80, 87);"
+    >
+      <strong>
+        We'll guide you through the complete setup process.
+      </strong>
+      <br />
+      This process takes about 5-10 minutes to complete.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Signup > Component Snapshots > matches snapshot for populated form 1`] = `
+<div>
+  <h2
+    style="color: rgb(42, 42, 114); text-align: center; margin-bottom: 1rem;"
+  >
+    📋 Campaign Setup - Step 1
+  </h2>
+  <p
+    style="text-align: center; color: rgb(102, 102, 102); margin-bottom: 2rem;"
+  >
+    Tell us about yourself and your campaign
+  </p>
+  <div
+    class="form-group"
+  >
+    <label
+      for="userFullName"
+    >
+      Your Full Name *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="userFullName"
+      placeholder="Enter your full name"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value="Jane Doe"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      This will be used for FEC reporting
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="email"
+    >
+      Your Email Address *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="email"
+      placeholder="your.email@domain.com"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="email"
+      value="jane@doe2024.org"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Used for notifications and account management
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="campaignName"
+    >
+      Campaign Name *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="campaignName"
+      placeholder="e.g., Smith for Mayor 2024"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value="Doe for Governor 2024"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Publicly displayed name for your campaign
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="committeeNameSearch"
+    >
+      Committee Name or Search Term *
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="committeeNameSearch"
+      placeholder="Friends of John Smith Committee"
+      required=""
+      style="border-color: rgb(206, 212, 218);"
+      type="text"
+      value=""
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Enter your FEC committee name or keywords to search. We'll help you find the exact match in the next step.
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="suggestedAmounts"
+    >
+      Suggested Contribution Amounts
+    </label>
+    <input
+      class="form-input"
+      id="suggestedAmounts"
+      placeholder="25, 50, 100, 250"
+      type="text"
+      value="25, 50, 100, 250"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Comma-separated dollar amounts that contributors can quickly select
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="maxDonationLimit"
+    >
+      Maximum Contribution Limit
+    </label>
+    <input
+      class="form-input"
+      id="maxDonationLimit"
+      max="10000"
+      min="1"
+      placeholder="3300"
+      type="number"
+      value="3300"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Maximum amount a single contributor can donate (FEC limit: $3,300 per election)
+    </small>
+  </div>
+  <div
+    class="form-group"
+  >
+    <label
+      for="website"
+    >
+      Campaign Website (Optional)
+    </label>
+    <input
+      aria-required="true"
+      class="form-input"
+      id="website"
+      placeholder="https://yourcampaign.com"
+      required=""
+      type="url"
+      value="https://jane-doe-2024.org"
+    />
+    <small
+      class="field-help"
+      style="color: rgb(108, 117, 125); font-size: 12px;"
+    >
+      Your official campaign website
+    </small>
+  </div>
+  <div
+    class="form-actions"
+  >
+    <div />
+    <button
+      class="btn btn-primary"
+    >
+      Next: Find Your Committee →
+    </button>
+  </div>
+  <div
+    style="margin-top: 2rem; padding: 1rem; background: rgb(248, 249, 250); border: 1px solid rgb(233, 236, 239); border-radius: 6px; font-size: 14px; color: rgb(108, 117, 125);"
+  >
+    <h3>
+      🔄 What Happens Next
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Find Your FEC Committee:
+        </strong>
+         We'll search for your registered committee
+      </li>
+      <li>
+        <strong>
+          Connect Bank Account:
+        </strong>
+         Secure connection via Plaid
+      </li>
+      <li>
+        <strong>
+          Launch Your Form:
+        </strong>
+         Get your embed code and start collecting
+      </li>
+    </ul>
+    <h3
+      style="margin-top: 1rem;"
+    >
+      🔒 Privacy & Security
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Your information is encrypted
+        </strong>
+         and stored securely
+      </li>
+      <li>
+        <strong>
+          FEC-compliant data handling
+        </strong>
+         with audit trails
+      </li>
+      <li>
+        <strong>
+          You control your campaign data
+        </strong>
+         - export anytime
+      </li>
+    </ul>
+    <h3
+      style="margin-top: 1rem;"
+    >
+      📋 Requirements
+    </h3>
+    <ul
+      style="margin: 0.5rem 0px 0px 0px; padding-left: 1.2rem;"
+    >
+      <li>
+        <strong>
+          Valid FEC committee
+        </strong>
+         registration required
+      </li>
+      <li>
+        <strong>
+          Campaign bank account
+        </strong>
+         for processing donations
+      </li>
+      <li>
+        <strong>
+          Official campaign website
+        </strong>
+         (recommended)
+      </li>
+    </ul>
+    <p
+      style="margin-top: 1rem; text-align: center; color: rgb(73, 80, 87);"
+    >
+      <strong>
+        We'll guide you through the complete setup process.
+      </strong>
+      <br />
+      This process takes about 5-10 minutes to complete.
+    </p>
+  </div>
+</div>
+`;
