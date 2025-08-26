@@ -87,7 +87,6 @@
     "express-validator": "^7.0.1",
     "isomorphic-dompurify": "^2.26.0",
     "jsonwebtoken": "^9.0.2",
-    "puppeteer": "^24.17.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "sqlite3": "^5.1.7",
@@ -103,6 +102,7 @@
     "lint-staged": "^15.2.0",
     "playwright": "^1.55.0",
     "prettier": "^3.2.5",
+    "puppeteer": "^24.17.0",
     "rimraf": "^5.0.5"
   },
   "engines": {
