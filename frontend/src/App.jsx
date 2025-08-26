@@ -5,6 +5,7 @@ import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
+import WorkingTeamInvites from './components/team/WorkingTeamInvites';
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -16,9 +17,9 @@ function App() {
   // Test invite form directly
   if (path === '/invite-test') {
     return (
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
-        <h2>Team Invitation Form Test</h2>
-        <SimpleTeamInvites campaignId="test-campaign" />
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+        <h2>Team Invitation System</h2>
+        <WorkingTeamInvites campaignId="test-campaign" />
       </div>
     );
   }
