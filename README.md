@@ -98,8 +98,8 @@ crypto-campaign-unified/
 
 ```bash
 # Clone the repository
-git clone https://github.com/dkdev-io/crypto-campaign-setup.git
-cd crypto-campaign-setup
+git clone https://github.com/dkdev-io/crypto-campaign-unified.git
+cd crypto-campaign-unified
 
 # Install all dependencies (uses workspaces)
 npm run install:all

@@ -72,7 +72,7 @@ class AutoStartInstaller {
     log.info('  3. Git commit → Auto-pushes and deploys'); 
     log.info('  4. System reboot → Auto-starts again');
     console.log('');
-    log.success('🌐 Site: https://dkdev-io.github.io/crypto-campaign-setup/');
+    log.success('🌐 Site: https://dkdev-io.github.io/crypto-campaign-unified/');
   }
 
   async installMacOS() {
