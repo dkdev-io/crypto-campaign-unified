@@ -1,0 +1,9 @@
+[build]
+  command = "cd frontend && npm install --legacy-peer-deps && npm run build"
+  publish = "frontend/dist"
+  environment = { NPM_FLAGS = "--legacy-peer-deps" }
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
