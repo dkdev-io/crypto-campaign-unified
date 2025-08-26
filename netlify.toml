@@ -1,7 +1,7 @@
 [build]
-  command = "cd frontend && npm install --legacy-peer-deps && npm run build"
+  command = "cd frontend && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps --force && npm run build"
   publish = "frontend/dist"
-  environment = { NPM_FLAGS = "--legacy-peer-deps" }
+  environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "18" }
 
 [[redirects]]
   from = "/api/*"
