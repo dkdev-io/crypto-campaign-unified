@@ -2,27 +2,12 @@ import jwt from 'jsonwebtoken';
 import rateLimit from 'express-rate-limit';
 import { body, validationResult } from 'express-validator';
 import { logger } from '../utils/logger.js';
+import DOMPurify from 'isomorphic-dompurify';
 
-// Simple HTML/XSS sanitizer without DOMPurify dependency for tests
-const simpleSanitize = (content) => {
+// Use DOMPurify for robust XSS prevention
+const secureSanitize = (content) => {
   if (typeof content !== 'string') return content;
-  
-  return content
-    .replace(/<script[^>]*>.*?<\/script>/gis, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/<svg[^>]*onload[^>]*>/gi, '<svg>')
-    .replace(/<iframe[^>]*>/gi, '')
-    .replace(/<object[^>]*>/gi, '')
-    .replace(/<embed[^>]*>/gi, '')
-    .replace(/<video[^>]*onerror[^>]*>/gi, '<video>')
-    .replace(/<audio[^>]*onerror[^>]*>/gi, '<audio>')
-    .replace(/<img[^>]*onerror[^>]*>/gi, (match) => {
-      return match.replace(/onerror\s*=\s*["'][^"']*["']/gi, '');
-    })
-    .replace(/<div[^>]*onclick[^>]*>/gi, (match) => {
-      return match.replace(/onclick\s*=\s*["'][^"']*["']/gi, '');
-    });
+  return DOMPurify.sanitize(content);
 };
 
 /**
@@ -72,12 +57,12 @@ function sanitizeObject(obj) {
   
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === 'string') {
-      sanitized[key] = simpleSanitize(value);
+      sanitized[key] = secureSanitize(value);
     } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       sanitized[key] = sanitizeObject(value);
     } else if (Array.isArray(value)) {
       sanitized[key] = value.map(item => 
-        typeof item === 'string' ? simpleSanitize(item) : item
+        typeof item === 'string' ? secureSanitize(item) : item
       );
     } else {
       sanitized[key] = value;

@@ -6,6 +6,8 @@ import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
+import { AnalyticsProvider } from './components/analytics/AnalyticsProvider';
+import PrivacyBanner from './components/analytics/PrivacyBanner';
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -17,10 +19,13 @@ function App() {
   // Test invite form directly
   if (path === '/invite-test') {
     return (
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-        <h2>Team Invitation System</h2>
-        <WorkingTeamInvites campaignId="test-campaign" />
-      </div>
+      <AnalyticsProvider config={{ debug: true }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+          <h2>Team Invitation System</h2>
+          <WorkingTeamInvites campaignId="test-campaign" />
+        </div>
+        <PrivacyBanner />
+      </AnalyticsProvider>
     );
   }
 
