@@ -36,32 +36,31 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="features" className="py-24 bg-secondary/30">
-      <div className="container mx-auto px-6">
+    <section id="features" className="content-section">
+      <div className="container-responsive">
         <div className="text-center mb-16">
-          <h2 className="font-bebas text-5xl lg:text-7xl text-primary mb-4">
+          <h2 className="mb-6" style={{color: 'hsl(var(--crypto-navy))'}}>
             Key Features
           </h2>
-          <p className="font-georgia text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Everything you need to accept cryptocurrency donations with confidence
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <Card key={index} className="border-0 shadow-card bg-card hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-6">
-                  <feature.icon className="w-6 h-6 text-accent" />
-                </div>
-                <h3 className="font-bebas text-2xl text-primary mb-3">
-                  {feature.title}
-                </h3>
-                <p className="font-georgia text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
+            <div key={index} className="crypto-card">
+              <div className="w-14 h-14 rounded-lg flex items-center justify-center mb-6" 
+                   style={{backgroundColor: 'hsl(var(--crypto-gold) / 0.1)'}}>
+                <feature.icon className="w-7 h-7" style={{color: 'hsl(var(--crypto-gold))'}} />
+              </div>
+              <h3 className="text-2xl font-bold mb-4" style={{color: 'hsl(var(--crypto-navy))'}}>
+                {feature.title}
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>

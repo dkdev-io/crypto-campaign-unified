@@ -2,117 +2,338 @@
 @tailwind components;
 @tailwind utilities;
 
-/* NextRaise Design System - Crypto donation platform styling
-All colors MUST be HSL.
+/* Crypto Campaign Design System - Professional crypto donation platform styling
+All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 */
 
 @layer base {
   :root {
-    /* NextRaise Brand Colors */
-    --dominant-blue: 235 62% 31%; /* #2a2a72 */
-    --accent-light: 202 100% 96%; /* #EAF6FF */
-    --accent-orange: 42 88% 47%; /* #F0A202 */
+    /* Crypto Campaign Brand Colors */
+    --crypto-navy: 214 100% 21%; /* Deep navy blue #1a237e */
+    --crypto-blue: 207 90% 54%; /* Bright blue #2196f3 */
+    --crypto-gold: 45 100% 51%; /* Gold #ffc107 */
+    --crypto-white: 0 0% 100%; /* Pure white */
+    --crypto-light-gray: 210 20% 98%; /* Light gray #f8f9fa */
+    --crypto-medium-gray: 210 11% 71%; /* Medium gray #9e9e9e */
+    --crypto-dark-gray: 210 9% 31%; /* Dark gray #424242 */
     
-    /* Core Theme Colors */
-    --background: 0 0% 100%;
-    --foreground: 235 62% 31%; /* dominant blue for text */
+    /* Core Theme Colors - Mapped to Crypto Campaign palette */
+    --background: var(--crypto-white);
+    --foreground: var(--crypto-navy);
 
-    --card: 0 0% 100%;
-    --card-foreground: 235 62% 31%;
+    --card: var(--crypto-white);
+    --card-foreground: var(--crypto-navy);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 235 62% 31%;
+    --popover: var(--crypto-white);
+    --popover-foreground: var(--crypto-navy);
 
-    --primary: 235 62% 31%; /* dominant blue */
-    --primary-foreground: 0 0% 100%;
+    --primary: var(--crypto-navy); /* Deep navy blue */
+    --primary-foreground: var(--crypto-white);
 
-    --secondary: 202 100% 96%; /* accent light */
-    --secondary-foreground: 235 62% 31%;
+    --secondary: var(--crypto-light-gray);
+    --secondary-foreground: var(--crypto-navy);
 
-    --muted: 202 100% 96%;
-    --muted-foreground: 235 30% 50%;
+    --muted: var(--crypto-light-gray);
+    --muted-foreground: var(--crypto-medium-gray);
 
-    --accent: 42 88% 47%; /* accent orange */
-    --accent-foreground: 0 0% 100%;
+    --accent: var(--crypto-gold); /* Gold for CTAs */
+    --accent-foreground: var(--crypto-navy);
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: var(--crypto-white);
 
-    --border: 202 50% 90%;
-    --input: 202 50% 90%;
-    --ring: 235 62% 31%;
+    --border: 210 20% 90%;
+    --input: 210 20% 95%;
+    --ring: var(--crypto-blue);
 
-    --radius: 0.75rem;
+    --radius: 0.5rem; /* 8px rounded corners */
     
-    /* Custom Design Tokens */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(235 62% 25%));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-light)), hsl(202 100% 92%));
-    --shadow-card: 0 4px 24px -4px hsl(var(--primary) / 0.12);
-    --shadow-button: 0 2px 8px -2px hsl(var(--accent) / 0.2);
+    /* Crypto Campaign Design Tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--crypto-navy)), hsl(214 100% 16%));
+    --gradient-section: linear-gradient(135deg, hsl(var(--crypto-light-gray)), hsl(210 20% 95%));
+    --shadow-card: 0 4px 20px -4px hsl(var(--crypto-navy) / 0.1);
+    --shadow-button: 0 2px 12px -2px hsl(var(--crypto-gold) / 0.3);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Typography Scale */
+    --text-hero: 4.5rem; /* 72px */
+    --text-heading-xl: 3rem; /* 48px */
+    --text-heading-lg: 2.25rem; /* 36px */
+    --text-heading-md: 1.875rem; /* 30px */
+    --text-heading-sm: 1.5rem; /* 24px */
+    --text-body-lg: 1.125rem; /* 18px */
+    --text-body: 1rem; /* 16px */
+    --text-body-sm: 0.875rem; /* 14px */
+    
+    /* Spacing Scale - Based on 8px system */
+    --space-xs: 0.5rem; /* 8px */
+    --space-sm: 1rem; /* 16px */
+    --space-md: 1.5rem; /* 24px */
+    --space-lg: 2rem; /* 32px */
+    --space-xl: 3rem; /* 48px */
+    --space-2xl: 5rem; /* 80px */
+    --space-3xl: 7.5rem; /* 120px */
+    
+    /* Container Widths */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1200px;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: var(--crypto-light-gray);
+    --sidebar-foreground: var(--crypto-navy);
+    --sidebar-primary: var(--crypto-navy);
+    --sidebar-primary-foreground: var(--crypto-white);
+    --sidebar-accent: var(--crypto-white);
+    --sidebar-accent-foreground: var(--crypto-navy);
+    --sidebar-border: 210 20% 90%;
+    --sidebar-ring: var(--crypto-blue);
   }
 
+  /* Dark mode support - maintaining Crypto Campaign brand colors */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: var(--crypto-dark-gray);
+    --foreground: var(--crypto-white);
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: hsl(210 9% 25%);
+    --card-foreground: var(--crypto-white);
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: hsl(210 9% 25%);
+    --popover-foreground: var(--crypto-white);
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: var(--crypto-blue);
+    --primary-foreground: var(--crypto-white);
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: hsl(210 9% 20%);
+    --secondary-foreground: var(--crypto-white);
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: hsl(210 9% 20%);
+    --muted-foreground: var(--crypto-medium-gray);
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: var(--crypto-gold);
+    --accent-foreground: var(--crypto-navy);
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: var(--crypto-white);
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: hsl(210 9% 25%);
+    --input: hsl(210 9% 20%);
+    --ring: var(--crypto-blue);
+    
+    --sidebar-background: hsl(210 9% 15%);
+    --sidebar-foreground: var(--crypto-white);
+    --sidebar-primary: var(--crypto-blue);
+    --sidebar-primary-foreground: var(--crypto-white);
+    --sidebar-accent: hsl(210 9% 20%);
+    --sidebar-accent-foreground: var(--crypto-white);
+    --sidebar-border: hsl(210 9% 25%);
+    --sidebar-ring: var(--crypto-blue);
   }
 }
 
 @layer base {
+  /* CSS Reset and base styles */
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography Hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+  }
+
+  h1 {
+    font-size: var(--text-hero);
+    font-weight: 800;
+  }
+
+  h2 {
+    font-size: var(--text-heading-xl);
+  }
+
+  h3 {
+    font-size: var(--text-heading-lg);
+  }
+
+  h4 {
+    font-size: var(--text-heading-md);
+  }
+
+  h5 {
+    font-size: var(--text-heading-sm);
+  }
+
+  /* Responsive Typography */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: var(--text-heading-xl);
+    }
+    
+    h2 {
+      font-size: var(--text-heading-lg);
+    }
+    
+    h3 {
+      font-size: var(--text-heading-md);
+    }
+  }
+}
+
+@layer components {
+  /* Hero Section Styles */
+  .hero-section {
+    @apply relative overflow-hidden;
+    background: var(--gradient-hero);
+    padding: var(--space-3xl) 0;
+    min-height: 70vh;
+  }
+  
+  .hero-section h1 {
+    color: hsl(var(--crypto-white));
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hero-section p {
+    color: hsl(var(--crypto-white) / 0.9);
+    font-size: var(--text-body-lg);
+  }
+
+  /* Content Section Styles */
+  .content-section {
+    padding: var(--space-2xl) 0;
+    max-width: var(--container-xl);
+    margin: 0 auto;
+  }
+  
+  .content-section:nth-child(even) {
+    background: var(--gradient-section);
+  }
+
+  /* Card Component Styles */
+  .crypto-card {
+    @apply bg-card text-card-foreground;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-lg);
+    transition: var(--transition-smooth);
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .crypto-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px -8px hsl(var(--crypto-navy) / 0.15);
+  }
+
+  /* Button Component Styles */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: var(--text-body);
+    transition: var(--transition-smooth);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+  
+  .btn-primary:hover {
+    background: hsl(var(--crypto-navy) / 0.9);
+    box-shadow: var(--shadow-button);
+  }
+  
+  .btn-secondary {
+    @apply bg-accent text-accent-foreground;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: var(--text-body);
+    transition: var(--transition-smooth);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    box-shadow: var(--shadow-button);
+  }
+  
+  .btn-secondary:hover {
+    background: hsl(var(--crypto-gold) / 0.9);
+    transform: translateY(-1px);
+  }
+
+  /* Form Styles */
+  .form-input {
+    @apply bg-background border-border text-foreground;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: var(--space-sm);
+    font-size: var(--text-body);
+    transition: var(--transition-smooth);
+    width: 100%;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border-color: hsl(var(--crypto-blue));
+    box-shadow: 0 0 0 2px hsl(var(--crypto-blue) / 0.2);
+  }
+  
+  .form-label {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    font-size: var(--text-body-sm);
+    margin-bottom: var(--space-xs);
+    display: block;
+  }
+
+  /* Utility Classes */
+  .container-responsive {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  
+  @media (max-width: 768px) {
+    .container-responsive {
+      padding: 0 var(--space-md);
+    }
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

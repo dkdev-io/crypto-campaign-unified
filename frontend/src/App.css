@@ -1,76 +1,61 @@
+/* Crypto Campaign - Clean, Professional Styles */
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  padding: 20px;
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Analytics Demo Styles */
+/* Enhanced Analytics Demo Styles */
 .analytics-demo {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: var(--gradient-section);
+  padding: var(--space-lg) 0;
 }
 
 .demo-container {
-  max-width: 1200px;
+  max-width: var(--container-xl);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 var(--space-lg);
 }
 
 .demo-grid {
   display: grid;
   grid-template-columns: 1fr 350px;
-  gap: 2rem;
+  gap: var(--space-lg);
   align-items: start;
 }
 
 @media (max-width: 768px) {
   .demo-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .demo-container {
+    padding: 0 var(--space-md);
   }
 }
 
 .analytics-panel {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: hsl(var(--crypto-white));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
   position: sticky;
-  top: 2rem;
+  top: var(--space-lg);
+}
+
+.analytics-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px -8px hsl(var(--crypto-navy) / 0.15);
 }
 
 .analytics-panel h3 {
-  color: #1e293b;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+  color: hsl(var(--crypto-navy));
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-heading-sm);
+  font-weight: 700;
 }
 
 .feature-list {
@@ -80,103 +65,129 @@
 }
 
 .feature-list li {
-  padding: 0.25rem 0;
-  color: #64748b;
-  font-size: 0.9rem;
+  padding: var(--space-xs) 0;
+  color: hsl(var(--crypto-medium-gray));
+  font-size: var(--text-body-sm);
 }
 
 .test-commands {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  margin-top: 1rem;
+  background: hsl(var(--crypto-light-gray));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 .test-commands code {
-  font-size: 0.8rem;
+  font-size: var(--text-body-sm);
   display: block;
-  margin-top: 0.25rem;
-  color: #4f46e5;
-}
-
-.hero-section {
-  text-align: center;
-  margin-bottom: 3rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.hero-section h2 {
-  color: #1e293b;
-  margin-bottom: 1rem;
-}
-
-.hero-section p {
-  color: #64748b;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+  margin-top: var(--space-xs);
+  color: hsl(var(--crypto-blue));
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 .demo-alert {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-top: 1rem;
+  background: hsl(var(--crypto-blue) / 0.05);
+  border: 1px solid hsl(var(--crypto-blue) / 0.2);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 .demo-alert h4 {
-  color: #0369a1;
-  margin: 0 0 0.5rem 0;
+  color: hsl(var(--crypto-blue));
+  margin: 0 0 var(--space-xs) 0;
+  font-weight: 600;
 }
 
 .demo-alert p {
-  color: #0369a1;
+  color: hsl(var(--crypto-blue));
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-body-sm);
 }
 
 .contributions-section {
-  background: white;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: hsl(var(--crypto-white));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  margin-top: var(--space-lg);
+}
+
+.contributions-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px -8px hsl(var(--crypto-navy) / 0.15);
 }
 
 .contribution-item {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-top: 0.5rem;
+  background: hsl(var(--crypto-gold) / 0.05);
+  border: 1px solid hsl(var(--crypto-gold) / 0.2);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  margin-top: var(--space-xs);
+  transition: var(--transition-smooth);
+}
+
+.contribution-item:hover {
+  background: hsl(var(--crypto-gold) / 0.08);
+  border-color: hsl(var(--crypto-gold) / 0.3);
 }
 
 .app-footer {
-  background: #1e293b;
-  color: white;
-  padding: 2rem;
+  background: hsl(var(--crypto-navy));
+  color: hsl(var(--crypto-white));
+  padding: var(--space-2xl);
   text-align: center;
 }
 
 .footer-controls {
-  margin-top: 1rem;
+  margin-top: var(--space-sm);
 }
 
 .footer-btn {
   background: transparent;
-  border: 1px solid #64748b;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+  border: 1px solid hsl(var(--crypto-medium-gray));
+  color: hsl(var(--crypto-white));
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius);
   cursor: pointer;
-  margin: 0 0.5rem;
-  font-size: 0.9rem;
+  margin: 0 var(--space-xs);
+  font-size: var(--text-body-sm);
+  transition: var(--transition-smooth);
 }
 
 .footer-btn:hover {
-  border-color: #94a3b8;
+  border-color: hsl(var(--crypto-gold));
+  color: hsl(var(--crypto-gold));
+}
+
+/* Mobile-first responsive improvements */
+@media (max-width: 640px) {
+  .hero-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .hero-section h1 {
+    font-size: var(--text-heading-lg);
+  }
+  
+  .content-section {
+    padding: var(--space-xl) 0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .hero-section {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .btn-primary, .btn-secondary {
+    background: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+  }
 }

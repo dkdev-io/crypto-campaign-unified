@@ -1,42 +1,39 @@
-import { Button } from "./ui/button";
-
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-hero py-24 lg:py-32">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent" />
+    <section className="hero-section">
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
       
-      <div className="container relative mx-auto px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <div className="container-responsive relative">
+        <div className="max-w-5xl mx-auto text-center animate-fade-in">
           <div className="space-y-8">
-            <h1 className="font-bebas text-5xl lg:text-7xl leading-tight text-primary-foreground">
+            <h1 className="text-balance leading-tight">
               Raise More—Faster.
-              <span className="block text-accent">
+              <span className="block" style={{color: 'hsl(var(--crypto-gold))'}}>
                 The Easiest Way
               </span>
               for Campaigns to Accept Secure and Compliant Cryptocurrency Donations
             </h1>
             
-            <div className="space-y-4 text-lg text-primary-foreground/90 font-georgia">
-              <p className="flex items-center justify-center">
-                <span className="w-2 h-2 bg-accent rounded-full mr-3" />
+            <div className="space-y-6 max-w-2xl mx-auto">
+              <p className="flex items-center justify-center gap-3 text-lg">
+                <span className="w-3 h-3 rounded-full" style={{backgroundColor: 'hsl(var(--crypto-gold))'}} />
                 Onboard in minutes. No setup fees, ever.
               </p>
-              <p className="flex items-center justify-center">
-                <span className="w-2 h-2 bg-accent rounded-full mr-3" />
+              <p className="flex items-center justify-center gap-3 text-lg">
+                <span className="w-3 h-3 rounded-full" style={{backgroundColor: 'hsl(var(--crypto-gold))'}} />
                 Full compliance and reporting handled for you.
               </p>
             </div>
 
-            <div className="flex justify-center">
-              <Button 
-                size="lg" 
-                className="font-bebas text-lg bg-accent hover:bg-accent/90 text-accent-foreground shadow-button px-8 py-6"
+            <div className="flex justify-center pt-4">
+              <button 
+                className="btn-secondary text-xl font-bold px-12 py-4"
                 onClick={() => {
                   window.location.href = '/setup';
                 }}
               >
                 Get Started—No Setup Fee
-              </Button>
+              </button>
             </div>
           </div>
         </div>

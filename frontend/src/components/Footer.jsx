@@ -1,35 +1,44 @@
 const Footer = () => {
   return (
-    <footer className="bg-primary py-16">
-      <div className="container mx-auto px-6">
+    <footer className="app-footer">
+      <div className="container-responsive">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <div className="font-bebas text-2xl">
-              <span className="text-primary-foreground">Next</span>
-              <span className="text-accent">Raise</span>
+            <div className="text-2xl font-bold">
+              <span style={{color: 'hsl(var(--crypto-white))'}}>Crypto</span>
+              <span style={{color: 'hsl(var(--crypto-gold))'}}>Campaign</span>
             </div>
-            <p className="font-georgia text-primary-foreground/80 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed opacity-80">
               The easiest way for campaigns to accept secure and compliant cryptocurrency donations.
             </p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-bebas text-lg text-primary-foreground">
+            <h3 className="text-lg font-bold" style={{color: 'hsl(var(--crypto-white))'}}>
               Product
             </h3>
-            <ul className="space-y-2 font-georgia text-sm">
+            <ul className="space-y-2 text-sm">
               <li>
-                <a href="#features" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#features" className="opacity-80 transition-colors" style={{
+                  color: 'hsl(var(--crypto-white))',
+                  ':hover': { color: 'hsl(var(--crypto-gold))' }
+                }}>
                   Features
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#pricing" className="opacity-80 transition-colors" style={{
+                  color: 'hsl(var(--crypto-white))',
+                  ':hover': { color: 'hsl(var(--crypto-gold))' }
+                }}>
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#demo" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#demo" className="opacity-80 transition-colors" style={{
+                  color: 'hsl(var(--crypto-white))',
+                  ':hover': { color: 'hsl(var(--crypto-gold))' }
+                }}>
                   Demo
                 </a>
               </li>
@@ -37,22 +46,28 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-bebas text-lg text-primary-foreground">
+            <h3 className="text-lg font-bold" style={{color: 'hsl(var(--crypto-white))'}}>
               Resources
             </h3>
-            <ul className="space-y-2 font-georgia text-sm">
+            <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   Developer Notes
                 </a>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   White Paper
                 </a>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   Privacy Policy
                 </a>
               </li>
@@ -60,22 +75,28 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-bebas text-lg text-primary-foreground">
+            <h3 className="text-lg font-bold" style={{color: 'hsl(var(--crypto-white))'}}>
               Support
             </h3>
-            <ul className="space-y-2 font-georgia text-sm">
+            <ul className="space-y-2 text-sm">
               <li>
-                <a href="#contact" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#contact" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="#" className="opacity-80 hover:opacity-100 transition-all duration-200" style={{
+                  color: 'hsl(var(--crypto-white))'
+                }}>
                   Status
                 </a>
               </li>
@@ -83,9 +104,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center">
-          <p className="font-georgia text-primary-foreground/60 text-sm">
-            © 2024 NextRaise. All rights reserved.
+        <div className="border-t mt-12 pt-8 text-center" style={{borderColor: 'hsl(var(--crypto-white) / 0.2)'}}>
+          <p className="text-sm opacity-60" style={{color: 'hsl(var(--crypto-white))'}}>
+            © 2024 CryptoCampaign. All rights reserved.
           </p>
         </div>
       </div>

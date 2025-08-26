@@ -1,32 +1,31 @@
-import { Button } from "./ui/button";
-
 const CTA = () => {
   return (
-    <section className="py-24 bg-gradient-hero">
-      <div className="container mx-auto px-6 text-center">
+    <section className="hero-section">
+      <div className="container-responsive text-center">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h2 className="font-bebas text-4xl lg:text-6xl text-primary-foreground">
+          <h2 className="text-5xl lg:text-6xl font-bold leading-tight">
             Ready to Transform Your
-            <span className="block text-accent">Campaign Fundraising?</span>
+            <span className="block" style={{color: 'hsl(var(--crypto-gold))'}}>
+              Campaign Fundraising?
+            </span>
           </h2>
           
-          <p className="font-georgia text-xl text-primary-foreground/90 leading-relaxed">
+          <p className="text-xl leading-relaxed opacity-90">
             Reach the growing crypto currency donor community and fundraise with lower fees.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button 
-              size="lg" 
-              className="font-bebas text-lg bg-accent hover:bg-accent/90 text-accent-foreground shadow-button px-12 py-6"
+          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-4">
+            <button 
+              className="btn-secondary text-lg px-12 py-4 font-bold"
               onClick={() => {
                 window.location.href = '/setup';
               }}
             >
               Get Started—No Setup Fee
-            </Button>
+            </button>
           </div>
 
-          <p className="font-georgia text-sm text-primary-foreground/70">
+          <p className="text-sm opacity-70">
             No credit card required • Setup in under 10 minutes • Full compliance included
           </p>
         </div>

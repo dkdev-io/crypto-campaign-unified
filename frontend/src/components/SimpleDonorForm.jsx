@@ -128,30 +128,22 @@ const SimpleDonorForm = ({ campaignId }) => {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <p>Loading campaign...</p>
-        {campaignId && <p style={{ fontSize: '0.9rem', color: '#666' }}>Campaign ID: {campaignId}</p>}
+      <div className="crypto-card max-w-md mx-auto text-center">
+        <p className="text-lg font-medium" style={{color: 'hsl(var(--crypto-navy))'}}>Loading campaign...</p>
+        {campaignId && <p className="text-sm text-muted-foreground mt-2">Campaign ID: {campaignId}</p>}
       </div>
     );
   }
 
   if (errorMessage && !campaignData) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', background: '#f8d7da', borderRadius: '8px' }}>
-        <h3>Unable to Load Campaign</h3>
-        <p>{errorMessage}</p>
-        <p style={{ fontSize: '0.9rem', color: '#666' }}>Campaign ID: {campaignId || 'None provided'}</p>
+      <div className="crypto-card max-w-md mx-auto text-center" style={{backgroundColor: 'hsl(0 93% 94%)', borderColor: 'hsl(0 84% 80%)'}}>
+        <h3 className="text-lg font-bold mb-3" style={{color: 'hsl(var(--crypto-navy))'}}>Unable to Load Campaign</h3>
+        <p className="text-muted-foreground mb-2">{errorMessage}</p>
+        <p className="text-sm text-muted-foreground mb-4">Campaign ID: {campaignId || 'None provided'}</p>
         <button 
           onClick={() => window.location.reload()} 
-          style={{ 
-            padding: '0.5rem 1rem', 
-            background: '#007bff', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '4px',
-            cursor: 'pointer',
-            marginTop: '1rem'
-          }}
+          className="btn-primary"
         >
           Retry
         </button>
@@ -161,14 +153,14 @@ const SimpleDonorForm = ({ campaignId }) => {
 
   if (submitted) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', background: '#d4edda', borderRadius: '8px' }}>
-        <h2>🎉 Thank You!</h2>
-        <p>Your contribution has been submitted successfully.</p>
+      <div className="crypto-card max-w-md mx-auto text-center" style={{backgroundColor: 'hsl(120 60% 97%)', borderColor: 'hsl(120 60% 84%)'}}>
+        <h2 className="text-2xl font-bold mb-4" style={{color: 'hsl(var(--crypto-navy))'}}>🎉 Thank You!</h2>
+        <p className="text-muted-foreground">Your contribution has been submitted successfully.</p>
       </div>
     );
   }
 
-  const themeColor = campaignData?.theme_color || '#2a2a72';
+  const themeColor = campaignData?.theme_color || 'hsl(var(--crypto-navy))';
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
   const candidateName = campaignData?.candidate_name;
@@ -182,31 +174,31 @@ const SimpleDonorForm = ({ campaignId }) => {
   });
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '2rem', background: 'white', borderRadius: '8px' }}>
-      <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
+    <div className="crypto-card max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4" style={{color: themeColor || 'hsl(var(--crypto-navy))'}}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
       {candidateName && (
-        <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
-          Candidate: <strong>{candidateName}</strong>
+        <p className="mb-6 text-lg">
+          Candidate: <strong className="font-bold">{candidateName}</strong>
         </p>
       )}
       
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label>First Name *</label>
+            <label className="form-label">First Name *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.firstName || ''}
               onChange={(e) => setFormData({...formData, firstName: e.target.value})}
             />
           </div>
           <div>
-            <label>Last Name *</label>
+            <label className="form-label">Last Name *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.lastName || ''}
               onChange={(e) => setFormData({...formData, lastName: e.target.value})}
@@ -214,44 +206,44 @@ const SimpleDonorForm = ({ campaignId }) => {
           </div>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Email *</label>
+        <div>
+          <label className="form-label">Email *</label>
           <input 
             type="email"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             required
             value={formData.email || ''}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
           />
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Address *</label>
+        <div>
+          <label className="form-label">Address *</label>
           <input 
             placeholder="Street Address"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '0.5rem' }}
+            className="form-input mb-3"
             required
             value={formData.street || ''}
             onChange={(e) => setFormData({...formData, street: e.target.value})}
           />
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.5rem' }}>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             <input 
               placeholder="City"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input col-span-2 md:col-span-1"
               required
               value={formData.city || ''}
               onChange={(e) => setFormData({...formData, city: e.target.value})}
             />
             <input 
               placeholder="State"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.state || ''}
               onChange={(e) => setFormData({...formData, state: e.target.value})}
             />
             <input 
               placeholder="ZIP"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.zip || ''}
               onChange={(e) => setFormData({...formData, zip: e.target.value})}
@@ -259,20 +251,20 @@ const SimpleDonorForm = ({ campaignId }) => {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label>Employer *</label>
+            <label className="form-label">Employer *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.employer || ''}
               onChange={(e) => setFormData({...formData, employer: e.target.value})}
             />
           </div>
           <div>
-            <label>Occupation *</label>
+            <label className="form-label">Occupation *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.occupation || ''}
               onChange={(e) => setFormData({...formData, occupation: e.target.value})}
@@ -280,35 +272,36 @@ const SimpleDonorForm = ({ campaignId }) => {
           </div>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Your Crypto Wallet Address *</label>
+        <div>
+          <label className="form-label">Your Crypto Wallet Address *</label>
           <input 
             placeholder="Enter your cryptocurrency wallet address"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '1rem' }}
+            className="form-input mb-2"
             required
             value={formData.walletAddress || ''}
             onChange={(e) => setFormData({...formData, walletAddress: e.target.value})}
           />
-          <small style={{ color: '#666', fontSize: '0.9rem' }}>
+          <small className="text-muted-foreground text-sm">
             This is where your crypto contribution will be sent from
           </small>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+        <div>
+          <label className="form-label">Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
+          <div className="flex gap-2 mb-3 flex-wrap">
             {suggestedAmounts.map(amount => (
               <button 
                 key={amount}
                 type="button"
                 onClick={() => setFormData({...formData, amount})}
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  border: `2px solid ${themeColor}`, 
-                  background: formData.amount === amount ? themeColor : 'white',
-                  color: formData.amount === amount ? 'white' : themeColor,
-                  borderRadius: '4px',
-                  cursor: 'pointer'
+                className={`px-4 py-2 rounded font-medium transition-all duration-200 ${
+                  formData.amount === amount 
+                    ? 'btn-secondary' 
+                    : 'border-2 bg-transparent hover:bg-primary/5'
+                }`}
+                style={{
+                  borderColor: themeColor || 'hsl(var(--crypto-navy))',
+                  color: formData.amount === amount ? 'hsl(var(--crypto-navy))' : themeColor || 'hsl(var(--crypto-navy))'
                 }}
               >
                 ${amount}
@@ -320,7 +313,7 @@ const SimpleDonorForm = ({ campaignId }) => {
             placeholder="Custom amount"
             min="1"
             max={maxDonation}
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             value={formData.amount || ''}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
@@ -330,19 +323,18 @@ const SimpleDonorForm = ({ campaignId }) => {
                 setErrorMessage('');
                 setFormData({...formData, amount: e.target.value});
               }
-              
             }}
           />
         </div>
 
-        <div style={{ background: '#f0f8ff', padding: '1rem', borderRadius: '4px', marginBottom: '1rem', fontSize: '0.9rem' }}>
-          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+        <div className="crypto-card" style={{backgroundColor: 'hsl(var(--crypto-blue) / 0.05)', borderColor: 'hsl(var(--crypto-blue) / 0.2)'}}>
+          <label className="flex items-start gap-3 cursor-pointer">
             <input 
               type="checkbox"
               required
-              style={{ marginTop: '0.25rem' }}
+              className="mt-1 w-4 h-4"
             />
-            <span>
+            <span className="text-sm leading-relaxed">
               I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
               this contribution is made from my own funds, I am not a federal contractor, 
               and I am at least 18 years old.
@@ -351,30 +343,26 @@ const SimpleDonorForm = ({ campaignId }) => {
         </div>
 
         {errorMessage && (
-          <div style={{ 
-            background: '#f8d7da', 
-            color: '#721c24', 
-            padding: '0.75rem', 
-            borderRadius: '4px', 
-            marginBottom: '1rem',
-            border: '1px solid #f5c6cb'
+          <div className="crypto-card" style={{
+            backgroundColor: 'hsl(0 93% 94%)',
+            borderColor: 'hsl(0 84% 80%)',
+            color: 'hsl(var(--crypto-navy))'
           }}>
-            ⚠️ {errorMessage}
+            <span className="font-medium">⚠️ {errorMessage}</span>
           </div>
         )}
         
         <button 
           type="submit"
           disabled={isSubmitting}
-          style={{ 
-            width: '100%', 
-            padding: '1rem', 
-            background: isSubmitting ? '#ccc' : themeColor, 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '4px', 
-            fontSize: '1.1rem',
-            cursor: isSubmitting ? 'not-allowed' : 'pointer'
+          className={`w-full py-4 text-lg font-bold rounded transition-all duration-200 ${
+            isSubmitting 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'btn-primary hover:transform hover:scale-[1.02]'
+          }`}
+          style={{
+            backgroundColor: isSubmitting ? 'hsl(220 14% 65%)' : (themeColor || 'hsl(var(--crypto-navy))'),
+            color: 'white'
           }}
         >
           {isSubmitting ? '⏳ Initiating Smart Contract...' : '🚀 Launch Smart Contract'}
