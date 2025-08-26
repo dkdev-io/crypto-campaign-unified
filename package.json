@@ -48,7 +48,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "prepare": "husky install",
     "install:all": "cd frontend && npm install && cd ../backend && npm install && cd ../contracts && npm install",
     "clean": "rimraf */node_modules */dist */build coverage .nyc_output",
     "start:prod": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
