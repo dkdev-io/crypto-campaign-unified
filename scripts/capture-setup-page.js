@@ -68,18 +68,22 @@ async function captureSetupPage() {
           console.log(`Clicking button: "${buttonText}"`);
           
           // Fill in required fields if any
-          const requiredFields = await page.$$('input[required], select[required], textarea[required]');
-          for (let field of requiredFields) {
-            const fieldType = await page.evaluate(el => el.type, field);
-            const placeholder = await page.evaluate(el => el.placeholder || el.name, field);
-            
-            console.log(`Filling required field: ${placeholder} (${fieldType})`);
-            
-            if (fieldType === 'email') {
-              await page.type(field, 'test@example.com');
-            } else if (fieldType === 'text' || fieldType === 'tel') {
-              await page.type(field, 'Test Value');
+          try {
+            const requiredFields = await page.$$('input[required], select[required], textarea[required]');
+            for (let field of requiredFields) {
+              const fieldType = await page.evaluate(el => el.type, field);
+              const placeholder = await page.evaluate(el => el.placeholder || el.name, field);
+              
+              console.log(`Filling required field: ${placeholder} (${fieldType})`);
+              
+              if (fieldType === 'email') {
+                await field.type('test@example.com');
+              } else if (fieldType === 'text' || fieldType === 'tel') {
+                await field.type('Test Value');
+              }
             }
+          } catch (fillError) {
+            console.log('Error filling fields:', fillError.message);
           }
           
           await button.click();

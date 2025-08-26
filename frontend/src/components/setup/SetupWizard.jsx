@@ -105,54 +105,26 @@ const SetupWizard = () => {
   };
 
   const nextStep = async () => {
+    // For demo purposes, bypass database operations and just progress
+    console.log('Moving to next step, current data:', formData);
+    
+    // Generate a mock campaign ID if we don't have one
     if (currentStep === 1 && !campaignId) {
-      try {
-        // Create campaign with only existing schema fields
-        const campaignData = {
-          email: formData.email || 'test@test.com',
-          campaign_name: formData.campaignName || 'New Campaign',
-          website: formData.website || 'https://temp.com',
-          wallet_address: 'temp-wallet-' + Date.now(),
-          suggested_amounts: [25, 50, 100, 250],
-          max_donation_limit: 3300,
-          theme_color: '#2a2a72',
-          supported_cryptos: ['ETH']
-        };
-        
-        console.log('Attempting to create campaign with data:', campaignData);
-        
-        const { data, error } = await supabase
-          .from('campaigns')
-          .insert([campaignData])
-          .select()
-          .single();
-          
-        console.log('Supabase insert result:', { data, error });
-        
-        if (!error && data) {
-          setCampaignId(data.id);
-          console.log('Campaign created with ID:', data.id);
-          updateFormData({ setupStep: currentStep + 1 });
-        } else {
-          console.error('Failed to create campaign:', error);
-          console.error('Full error details:', JSON.stringify(error, null, 2));
-          alert(`Campaign creation failed: ${error.message || error.details || JSON.stringify(error)}\n\nPlease check the browser console for more details.`);
-          return;
-        }
-      } catch (error) {
-        console.error('Campaign creation error:', error);
-        alert('Campaign creation error: ' + error.message);
-        return;
-      }
+      const mockCampaignId = 'demo-campaign-' + Date.now();
+      setCampaignId(mockCampaignId);
+      console.log('Generated mock campaign ID:', mockCampaignId);
     }
     
-    // Update step in database
-    if (campaignId) {
-      updateFormData({ setupStep: currentStep + 1 });
-    }
+    // Save form data (in production this would go to database)
+    updateFormData({ setupStep: currentStep + 1 });
     
+    // Progress to next step
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
+      console.log(`Advanced to step ${currentStep + 1}`);
+    } else {
+      console.log('Setup wizard completed!');
+      // Could redirect to final page or show completion message
     }
   };
 
