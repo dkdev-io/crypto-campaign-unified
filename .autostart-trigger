@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Auto-trigger script - runs deployment monitoring automatically
+# This file's existence triggers the autostart system
+
+cd "$(dirname "$0")"
+node scripts/auto-start-on-directory-open.js
+
+echo "Auto-deployment monitoring is now active!"
+echo "Edit any file and save - it will auto-deploy to GitHub Pages"

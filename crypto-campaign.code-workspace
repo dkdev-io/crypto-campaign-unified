@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "/Users/Danallovertheplace/crypto-campaign-unified",
+    "files.watcherExclude": {
+      "**/.autostart.*": true,
+      "**/.auto-deploy-daemon.*": true
+    }
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Auto-Deploy: Start",
+        "type": "shell",
+        "command": "node",
+        "args": [
+          "scripts/auto-start-on-directory-open.js"
+        ],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "silent",
+          "focus": false,
+          "panel": "shared",
+          "showReuseMessage": true,
+          "clear": false
+        },
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      }
+    ]
+  }
+}

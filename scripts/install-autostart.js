@@ -1,0 +1,293 @@
+#!/usr/bin/env node
+
+/**
+ * Install automatic startup system - ZERO COMMANDS NEEDED AFTER THIS
+ */
+
+import { execSync, spawn } from 'child_process';
+import { existsSync, writeFileSync, readFileSync, copyFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { homedir, platform } from 'os';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const PROJECT_ROOT = join(__dirname, '..');
+
+const colors = {
+  reset: '\x1b[0m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  bold: '\x1b[1m'
+};
+
+const log = {
+  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
+  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
+  warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
+  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
+  step: (msg) => console.log(`${colors.magenta}${colors.bold}🚀 ${msg}${colors.reset}`)
+};
+
+class AutoStartInstaller {
+  constructor() {
+    this.platform = platform();
+    this.homeDir = homedir();
+    this.projectRoot = PROJECT_ROOT;
+  }
+
+  async install() {
+    log.step('Installing ZERO-COMMAND auto-deployment system...');
+    
+    // Install platform-specific auto-start
+    if (this.platform === 'darwin') {
+      await this.installMacOS();
+    } else if (this.platform === 'linux') {
+      await this.installLinux();
+    } else {
+      await this.installGeneric();
+    }
+    
+    // Install shell integration
+    await this.installShellIntegration();
+    
+    // Install VS Code integration
+    await this.installVSCodeIntegration();
+    
+    // Start the system immediately
+    await this.startNow();
+    
+    log.step('🎉 INSTALLATION COMPLETE!');
+    console.log('');
+    log.success('✨ Your system is now FULLY AUTOMATIC');
+    log.success('💡 Just open this directory or edit files - auto-deployment will start');
+    log.success('🚀 No commands ever needed again!');
+    console.log('');
+    log.info('What happens now:');
+    log.info('  1. Open directory → Auto-deployment starts');
+    log.info('  2. Edit any file → Auto-deploys to GitHub Pages');
+    log.info('  3. Git commit → Auto-pushes and deploys'); 
+    log.info('  4. System reboot → Auto-starts again');
+    console.log('');
+    log.success('🌐 Site: https://dkdev-io.github.io/crypto-campaign-setup/');
+  }
+
+  async installMacOS() {
+    log.info('Installing macOS LaunchAgent...');
+    
+    const launchAgentsDir = join(this.homeDir, 'Library/LaunchAgents');
+    const plistFile = join(launchAgentsDir, 'com.crypto-campaign.auto-deploy.plist');
+    
+    // Ensure LaunchAgents directory exists
+    try {
+      execSync(`mkdir -p "${launchAgentsDir}"`);
+    } catch (error) {
+      // Directory might already exist
+    }
+    
+    // Copy plist file
+    const sourcePlist = join(this.projectRoot, '.autostart.plist');
+    if (existsSync(sourcePlist)) {
+      copyFileSync(sourcePlist, plistFile);
+      log.success('LaunchAgent plist installed');
+      
+      // Load the agent
+      try {
+        execSync(`launchctl load "${plistFile}"`);
+        log.success('LaunchAgent loaded - will auto-start on login');
+      } catch (error) {
+        log.warning('Could not load LaunchAgent automatically');
+        log.info('Run manually: launchctl load "~/Library/LaunchAgents/com.crypto-campaign.auto-deploy.plist"');
+      }
+    }
+  }
+
+  async installLinux() {
+    log.info('Installing Linux systemd service...');
+    
+    const serviceContent = `[Unit]
+Description=Crypto Campaign Auto-Deploy
+After=network.target
+
+[Service]
+Type=forking
+User=${process.env.USER}
+WorkingDirectory=${this.projectRoot}
+ExecStart=/usr/bin/node ${this.projectRoot}/scripts/auto-start-on-directory-open.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target`;
+
+    const servicePath = join(this.homeDir, '.config/systemd/user/crypto-campaign-auto-deploy.service');
+    
+    // Create systemd user directory
+    try {
+      execSync(`mkdir -p "${dirname(servicePath)}"`);
+      writeFileSync(servicePath, serviceContent);
+      
+      // Enable and start the service
+      execSync('systemctl --user daemon-reload');
+      execSync('systemctl --user enable crypto-campaign-auto-deploy.service');
+      execSync('systemctl --user start crypto-campaign-auto-deploy.service');
+      
+      log.success('Systemd service installed and started');
+    } catch (error) {
+      log.warning('Could not install systemd service automatically');
+      log.info('Manual setup may be required for Linux auto-start');
+    }
+  }
+
+  async installGeneric() {
+    log.info('Installing generic startup hooks...');
+    // For Windows or other platforms, rely on shell integration
+  }
+
+  async installShellIntegration() {
+    log.info('Installing shell integration...');
+    
+    const shells = ['.bashrc', '.zshrc', '.profile'];
+    const autoStartCommand = `
+# Crypto Campaign Auto-Deploy (added by installer)
+if [ -d "${this.projectRoot}" ] && [ "$PWD" = "${this.projectRoot}" ]; then
+    if [ ! -f "${this.projectRoot}/.autostart.lock" ]; then
+        echo "🚀 Auto-starting deployment monitoring..."
+        node "${this.projectRoot}/scripts/auto-start-on-directory-open.js" 2>/dev/null &
+    fi
+fi`;
+
+    shells.forEach(shell => {
+      const shellPath = join(this.homeDir, shell);
+      if (existsSync(shellPath)) {
+        try {
+          const content = readFileSync(shellPath, 'utf8');
+          if (!content.includes('Crypto Campaign Auto-Deploy')) {
+            writeFileSync(shellPath, content + autoStartCommand);
+            log.success(`Updated ${shell}`);
+          }
+        } catch (error) {
+          log.warning(`Could not update ${shell}`);
+        }
+      }
+    });
+  }
+
+  async installVSCodeIntegration() {
+    log.info('Installing VS Code integration...');
+    
+    const workspaceConfig = {
+      "folders": [
+        {
+          "path": "."
+        }
+      ],
+      "settings": {
+        "terminal.integrated.cwd": this.projectRoot,
+        "files.watcherExclude": {
+          "**/.autostart.*": true,
+          "**/.auto-deploy-daemon.*": true
+        }
+      },
+      "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+          {
+            "label": "Auto-Deploy: Start",
+            "type": "shell",
+            "command": "node",
+            "args": ["scripts/auto-start-on-directory-open.js"],
+            "group": "build",
+            "presentation": {
+              "echo": true,
+              "reveal": "silent",
+              "focus": false,
+              "panel": "shared",
+              "showReuseMessage": true,
+              "clear": false
+            },
+            "runOptions": {
+              "runOn": "folderOpen"
+            }
+          }
+        ]
+      }
+    };
+
+    const workspaceFile = join(this.projectRoot, 'crypto-campaign.code-workspace');
+    writeFileSync(workspaceFile, JSON.stringify(workspaceConfig, null, 2));
+    log.success('VS Code workspace created with auto-start task');
+  }
+
+  async startNow() {
+    log.info('Starting auto-deployment system immediately...');
+    
+    try {
+      // Start the auto-deployment now
+      const startProcess = spawn('node', [
+        join(this.projectRoot, 'scripts/auto-start-on-directory-open.js')
+      ], {
+        cwd: this.projectRoot,
+        detached: true,
+        stdio: 'ignore'
+      });
+      
+      startProcess.unref();
+      log.success('Auto-deployment system is now active!');
+      
+    } catch (error) {
+      log.error(`Could not start immediately: ${error.message}`);
+    }
+  }
+
+  async uninstall() {
+    log.step('Uninstalling auto-start system...');
+    
+    // Remove platform-specific services
+    if (this.platform === 'darwin') {
+      const plistFile = join(this.homeDir, 'Library/LaunchAgents/com.crypto-campaign.auto-deploy.plist');
+      try {
+        execSync(`launchctl unload "${plistFile}"`);
+        execSync(`rm -f "${plistFile}"`);
+        log.success('Removed LaunchAgent');
+      } catch (error) {
+        log.warning('Could not remove LaunchAgent');
+      }
+    }
+    
+    // Clean up project files
+    const cleanupFiles = [
+      '.autostart.lock',
+      '.autostart.log',
+      '.auto-deploy-daemon.pid',
+      '.auto-deploy-daemon.log'
+    ];
+    
+    cleanupFiles.forEach(file => {
+      const filePath = join(this.projectRoot, file);
+      try {
+        execSync(`rm -f "${filePath}"`);
+      } catch (error) {
+        // Ignore cleanup errors
+      }
+    });
+    
+    log.success('Uninstall completed');
+  }
+}
+
+// CLI Interface
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const installer = new AutoStartInstaller();
+  
+  if (process.argv[2] === 'uninstall') {
+    installer.uninstall();
+  } else {
+    installer.install();
+  }
+}
+
+export { AutoStartInstaller };
