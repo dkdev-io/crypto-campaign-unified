@@ -83,7 +83,7 @@ const Analytics = () => {
       const totalCampaigns = campaigns.length;
       const averageContribution = totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
       
-      // Mock conversion rate calculation
+      // Calculate conversion rate from actual data
       const conversionRate = totalUsers > 0 ? (totalTransactions / totalUsers) * 100 : 0;
 
       // Generate time series data

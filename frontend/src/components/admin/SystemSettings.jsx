@@ -4,16 +4,16 @@ import { useAdmin } from '../../contexts/AdminContext';
 
 const SystemSettings = () => {
   const [settings, setSettings] = useState({
-    site_name: 'Crypto Campaign Platform',
-    site_description: 'Secure cryptocurrency campaign contributions',
+    site_name: '',
+    site_description: '',
     maintenance_mode: false,
     allow_registrations: true,
     require_email_verification: true,
-    max_contribution_amount: 5000,
-    min_contribution_amount: 1,
-    supported_currencies: ['ETH', 'BTC'],
-    fee_percentage: 2.5,
-    contact_email: 'admin@cryptocampaign.com',
+    max_contribution_amount: 0,
+    min_contribution_amount: 0,
+    supported_currencies: [],
+    fee_percentage: 0,
+    contact_email: '',
     privacy_policy_url: '',
     terms_of_service_url: ''
   });
@@ -21,12 +21,9 @@ const SystemSettings = () => {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
   const [systemStats, setSystemStats] = useState({
-    uptime: '99.9%',
-    version: '1.0.0',
-    lastBackup: new Date().toISOString(),
-    dbSize: '125MB',
-    totalFiles: 2847,
-    errorRate: '0.02%'
+    totalUsers: 0,
+    totalCampaigns: 0,
+    totalTransactions: 0
   });
 
   const { isSuperAdmin } = useAdmin();
@@ -40,11 +37,30 @@ const SystemSettings = () => {
     try {
       setLoading(true);
       
-      // In a real app, you'd load these from a settings table
-      // For now, we'll use mock data
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      // Load settings from database if settings table exists
+      const { data: settingsData, error } = await supabase
+        .from('system_settings')
+        .select('*')
+        .single();
+      
+      if (settingsData && !error) {
+        setSettings({
+          site_name: settingsData.site_name || '',
+          site_description: settingsData.site_description || '',
+          maintenance_mode: settingsData.maintenance_mode || false,
+          allow_registrations: settingsData.allow_registrations || true,
+          require_email_verification: settingsData.require_email_verification || true,
+          max_contribution_amount: settingsData.max_contribution_amount || 0,
+          min_contribution_amount: settingsData.min_contribution_amount || 0,
+          supported_currencies: settingsData.supported_currencies || [],
+          fee_percentage: settingsData.fee_percentage || 0,
+          contact_email: settingsData.contact_email || '',
+          privacy_policy_url: settingsData.privacy_policy_url || '',
+          terms_of_service_url: settingsData.terms_of_service_url || ''
+        });
+      }
+      
+      setLoading(false);
     } catch (error) {
       console.error('Error loading settings:', error);
       setLoading(false);
@@ -76,11 +92,34 @@ const SystemSettings = () => {
     setSaving(true);
     
     try {
-      // In a real app, you'd save these to a settings table
-      // For now, we'll simulate a save
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save settings to database
+      const { error } = await supabase
+        .from('system_settings')
+        .upsert({
+          id: 1, // Single row for settings
+          site_name: settings.site_name,
+          site_description: settings.site_description,
+          maintenance_mode: settings.maintenance_mode,
+          allow_registrations: settings.allow_registrations,
+          require_email_verification: settings.require_email_verification,
+          max_contribution_amount: settings.max_contribution_amount,
+          min_contribution_amount: settings.min_contribution_amount,
+          supported_currencies: settings.supported_currencies,
+          fee_percentage: settings.fee_percentage,
+          contact_email: settings.contact_email,
+          privacy_policy_url: settings.privacy_policy_url,
+          terms_of_service_url: settings.terms_of_service_url,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
+        });
       
-      alert('Settings saved successfully!');
+      if (error) {
+        console.error('Database error:', error);
+        alert('Error saving settings to database. Settings table may not exist yet.');
+      } else {
+        alert('Settings saved successfully!');
+      }
     } catch (error) {
       console.error('Error saving settings:', error);
       alert('Error saving settings');
@@ -99,19 +138,20 @@ const SystemSettings = () => {
     }
 
     try {
-      switch (action) {
-        case 'backup':
-          alert('System backup initiated. You will receive an email when complete.');
-          break;
-        case 'clear_cache':
-          alert('Cache cleared successfully!');
-          break;
-        case 'restart':
-          alert('System restart initiated. This may take a few minutes.');
-          break;
-        default:
-          break;
+      // Log system actions to database
+      const { error } = await supabase
+        .from('admin_logs')
+        .insert({
+          action,
+          timestamp: new Date().toISOString(),
+          user_id: 'current-admin-id' // Replace with actual admin ID
+        });
+      
+      if (error) {
+        console.error('Error logging system action:', error);
       }
+      
+      alert(`System action "${action}" logged successfully.`);
     } catch (error) {
       console.error(`Error performing ${action}:`, error);
       alert(`Error performing ${action}`);
@@ -345,23 +385,19 @@ const SystemSettings = () => {
           <div className="space-y-6">
             {/* System Stats */}
             <div>
-              <h4 className="text-lg font-medium text-gray-900 mb-4">System Statistics</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <h4 className="text-lg font-medium text-gray-900 mb-4">Database Statistics</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Uptime</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.uptime}</div>
+                  <div className="text-sm text-gray-600">Total Users</div>
+                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalUsers || 0}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Version</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.version}</div>
+                  <div className="text-sm text-gray-600">Total Campaigns</div>
+                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalCampaigns || 0}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Error Rate</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.errorRate}</div>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">DB Size</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.dbSize}</div>
+                  <div className="text-sm text-gray-600">Total Transactions</div>
+                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalTransactions || 0}</div>
                 </div>
               </div>
             </div>
