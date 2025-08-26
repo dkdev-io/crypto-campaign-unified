@@ -81,7 +81,7 @@ function App() {
             {/* Your actual form with analytics */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', alignItems: 'start' }}>
               <div>
-                <SimpleDonorForm campaignId="analytics-demo-campaign-2025" />
+                <SimpleDonorForm campaignId={null} />
               </div>
               
               {/* Analytics info panel */}

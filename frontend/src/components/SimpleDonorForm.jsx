@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { processContribution } from '../lib/smart-contract';
-import { useAnalytics } from './analytics/AnalyticsProvider';
 
 const SimpleDonorForm = ({ campaignId }) => {
   const [formData, setFormData] = useState({});
@@ -11,36 +10,19 @@ const SimpleDonorForm = ({ campaignId }) => {
   const [campaignData, setCampaignData] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  // Analytics integration (with safe fallback)
-  let analytics;
-  try {
-    analytics = useAnalytics();
-  } catch (e) {
-    // Analytics provider not available in this context
-    analytics = {
-      trackEvent: () => {},
-      trackConversion: () => {}
-    };
-  }
+  // Analytics integration - check if provider exists
   const formStartTime = Date.now();
 
   console.log('SimpleDonorForm rendering with campaignId:', campaignId);
 
   useEffect(() => {
-    // Track form view
-    analytics?.trackEvent('form_view', { 
-      formType: 'contribution', 
-      campaignId,
-      timestamp: new Date().toISOString()
-    });
-    
     if (campaignId) {
       loadCampaignData();
     } else {
       // No campaign ID, just show default form
       setLoading(false);
     }
-  }, [campaignId, analytics]);
+  }, [campaignId]);
 
   const loadCampaignData = async () => {
     try {
@@ -79,30 +61,19 @@ const SimpleDonorForm = ({ campaignId }) => {
     const contributionAmount = parseFloat(formData.amount);
     const processingStartTime = Date.now();
     
-    // Track contribution attempt
-    analytics?.trackEvent('contribution_attempt', {
-      amount: contributionAmount,
-      campaign_id: campaignId,
-      has_wallet: !!formData.walletAddress,
-      form_completion_time: Date.now() - formStartTime
-    });
-    
     try {
       // Validate campaign ID
       if (!campaignId) {
-        analytics?.trackEvent('contribution_validation_error', { error: 'missing_campaign_id' });
         throw new Error('No campaign ID found. Please check the campaign URL.');
       }
       
       // Validate amount
       if (!formData.amount || contributionAmount <= 0) {
-        analytics?.trackEvent('contribution_validation_error', { error: 'invalid_amount', value: formData.amount });
         throw new Error('Please enter a valid contribution amount');
       }
       
       // Validate wallet address for crypto contributions
       if (!formData.walletAddress || !formData.walletAddress.trim()) {
-        analytics?.trackEvent('contribution_validation_error', { error: 'missing_wallet' });
         throw new Error('Wallet address is required for cryptocurrency contributions');
       }
       
@@ -111,22 +82,10 @@ const SimpleDonorForm = ({ campaignId }) => {
       const contractResult = await processContribution(formData, campaignId);
       
       if (!contractResult.success) {
-        analytics?.trackEvent('contribution_blockchain_error', {
-          amount: contributionAmount,
-          error: contractResult.error,
-          processing_time: Date.now() - processingStartTime
-        });
         throw new Error(`Smart contract error: ${contractResult.error}`);
       }
       
       console.log('✅ Smart contract transaction successful:', contractResult);
-      
-      // Track successful blockchain transaction
-      analytics?.trackEvent('contribution_blockchain_success', {
-        amount: contributionAmount,
-        transaction_hash: contractResult.transactionHash,
-        processing_time: Date.now() - processingStartTime
-      });
       
       // Save donor submission to database with transaction details
       const { data, error } = await supabase
@@ -154,39 +113,13 @@ const SimpleDonorForm = ({ campaignId }) => {
 
       if (error) {
         console.error('Supabase error:', error);
-        analytics?.trackEvent('contribution_database_error', {
-          amount: contributionAmount,
-          error: error.message,
-          processing_time: Date.now() - processingStartTime
-        });
         throw new Error(error.message || 'Failed to save contribution');
       }
-      
-      // Track full contribution success (conversion!)
-      analytics?.trackConversion({
-        amount: contributionAmount,
-        transaction_hash: contractResult.transactionHash,
-        campaign_id: campaignId,
-        total_processing_time: Date.now() - processingStartTime,
-        form_completion_time: Date.now() - formStartTime
-      });
       
       setSubmitted(true);
       console.log('✅ Contribution submitted successfully');
     } catch (err) {
       console.error('Form submission error:', err);
-      
-      // Track contribution failure
-      analytics?.trackEvent('contribution_failure', {
-        amount: contributionAmount || 0,
-        error: err.message,
-        error_step: err.message.includes('Smart contract') ? 'blockchain' : 
-                   err.message.includes('campaign ID') ? 'validation' : 
-                   err.message.includes('amount') ? 'validation' : 
-                   err.message.includes('wallet') ? 'validation' : 'database',
-        total_time_to_error: Date.now() - formStartTime
-      });
-      
       setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -268,7 +201,6 @@ const SimpleDonorForm = ({ campaignId }) => {
               required
               value={formData.firstName || ''}
               onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-              onFocus={() => analytics?.trackEvent('form_field_focus', { field: 'firstName' })}
             />
           </div>
           <div>
@@ -399,15 +331,7 @@ const SimpleDonorForm = ({ campaignId }) => {
                 setFormData({...formData, amount: e.target.value});
               }
               
-              // Track amount changes for analytics
-              if (value && !isNaN(value)) {
-                analytics?.trackEvent('contribution_amount_change', { 
-                  amount: value,
-                  milestone: value >= 100 ? '100+' : value >= 50 ? '50+' : value >= 25 ? '25+' : 'under_25'
-                });
-              }
             }}
-            onFocus={() => analytics?.trackEvent('form_field_focus', { field: 'amount' })}
           />
         </div>
 
