@@ -15,8 +15,8 @@ class CampaignAnalytics {
   constructor(config = {}) {
     this.config = {
       // API Configuration
-      supabaseUrl: config.supabaseUrl || process.env.REACT_APP_SUPABASE_URL,
-      supabaseKey: config.supabaseKey || process.env.REACT_APP_SUPABASE_ANON_KEY,
+      supabaseUrl: config.supabaseUrl || 'https://demo.supabase.co',
+      supabaseKey: config.supabaseKey || 'demo-key',
       apiEndpoint: config.apiEndpoint || '/api/analytics',
       
       // Tracking Configuration
@@ -864,7 +864,7 @@ if (typeof document !== 'undefined') {
   const initAnalytics = () => {
     if (!analytics) {
       analytics = new CampaignAnalytics({
-        debug: process.env.NODE_ENV === 'development'
+        debug: typeof import !== 'undefined' && import.meta?.env?.DEV
       });
     }
   };

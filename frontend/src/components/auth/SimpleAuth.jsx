@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AuthProvider, useAuth } from '../../contexts/AuthContext'
-import WorkingTeamInvites from '../team/WorkingTeamInvites'
+import RealWorkingInvites from '../team/RealWorkingInvites'
 
 // Simple auth component - no complex flows
 const SimpleAuthContent = () => {
@@ -20,7 +20,7 @@ const SimpleAuthContent = () => {
     if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
       return (
         <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-          <WorkingTeamInvites campaignId="default-campaign" />
+          <RealWorkingInvites campaignId="default-campaign" />
         </div>
       )
     }

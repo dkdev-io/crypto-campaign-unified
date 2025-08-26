@@ -4,7 +4,7 @@ import express from 'express';
 import { xssProtection, sanitizeObject } from '../../middleware/security.js';
 import { TestHelpers } from '../utils/testHelpers.js';
 
-// No need to mock DOMPurify since we're using our own sanitizer
+// Using DOMPurify for robust XSS prevention
 
 describe('XSS Prevention Tests', () => {
   let app;

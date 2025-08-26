@@ -346,3 +346,6 @@ export const honeypotProtection = (fieldName = 'website') => {
     next();
   };
 };
+
+// Export sanitizeObject for testing
+export { sanitizeObject };

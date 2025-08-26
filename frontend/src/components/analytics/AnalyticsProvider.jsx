@@ -17,8 +17,8 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [trackingStatus, setTrackingStatus] = useState(null);
   const [supabase] = useState(() => createClient(
-    process.env.REACT_APP_SUPABASE_URL,
-    process.env.REACT_APP_SUPABASE_ANON_KEY
+    import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co',
+    import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key'
   ));
 
   useEffect(() => {
@@ -29,9 +29,9 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
     try {
       const analyticsInstance = new CampaignAnalytics({
         ...config,
-        debug: process.env.NODE_ENV === 'development',
-        supabaseUrl: process.env.REACT_APP_SUPABASE_URL,
-        supabaseKey: process.env.REACT_APP_SUPABASE_ANON_KEY,
+        debug: import.meta.env.DEV || config.debug,
+        supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co',
+        supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key',
         apiEndpoint: '/rest/v1/rpc/create_or_update_session'
       });
 
