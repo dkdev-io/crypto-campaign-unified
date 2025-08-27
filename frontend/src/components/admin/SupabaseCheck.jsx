@@ -40,88 +40,58 @@ const SupabaseCheck = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>🔧 Supabase Setup Check</h1>
+    <div className="space-y-6">
+      <div className="crypto-card text-center">
+        <h1 className="text-2xl font-bold text-foreground">🔧 Supabase Setup Check</h1>
+      </div>
       
-      <div style={{ 
-        background: status === 'connected' ? '#d4edda' : '#f8d7da',
-        padding: '1rem',
-        borderRadius: '8px',
-        marginBottom: '2rem'
-      }}>
-        <h2>Status: {status === 'connected' ? '✅ Connected' : '❌ Not Connected'}</h2>
+      <div className={`crypto-card ${
+        status === 'connected' 
+          ? 'bg-green-50 border-green-200 text-green-800' 
+          : 'bg-destructive/10 border-destructive/20 text-destructive'
+      }`}>
+        <h2 className="text-lg font-semibold">Status: {status === 'connected' ? '✅ Connected' : '❌ Not Connected'}</h2>
       </div>
 
-      <div style={{ marginBottom: '2rem' }}>
+      <div className="crypto-card">
         <button 
           onClick={runTest}
-          style={{
-            padding: '0.75rem 1.5rem',
-            background: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}
+          className="btn-primary"
         >
           🧪 Test Campaign Creation
         </button>
       </div>
 
       {testResult && (
-        <div style={{
-          background: '#e7f3ff',
-          padding: '1rem',
-          borderRadius: '8px',
-          marginBottom: '2rem'
-        }}>
-          <h3>Test Result:</h3>
-          <pre style={{ fontSize: '12px', overflow: 'auto' }}>
+        <div className="crypto-card bg-primary/10">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Test Result:</h3>
+          <pre className="text-xs overflow-auto bg-secondary p-4 rounded font-mono">
             {JSON.stringify(testResult, null, 2)}
           </pre>
         </div>
       )}
 
-      <div style={{
-        background: '#f5f5f5',
-        padding: '1rem',
-        borderRadius: '8px',
-        marginBottom: '2rem',
-        maxHeight: '400px',
-        overflow: 'auto'
-      }}>
-        <h3>📋 Logs:</h3>
-        {logs.map((log, i) => (
-          <div 
-            key={i}
-            style={{ 
-              color: log.type === 'error' ? 'red' : 'black',
-              fontFamily: 'monospace',
-              fontSize: '12px',
-              marginBottom: '0.5rem'
-            }}
-          >
-            {log.message}
-          </div>
-        ))}
+      <div className="crypto-card bg-secondary max-h-96 overflow-auto">
+        <h3 className="text-lg font-semibold text-foreground mb-4">📋 Logs:</h3>
+        <div className="space-y-2">
+          {logs.map((log, i) => (
+            <div 
+              key={i}
+              className={`font-mono text-xs ${
+                log.type === 'error' ? 'text-destructive' : 'text-foreground'
+              }`}
+            >
+              {log.message}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div style={{
-        background: '#fff3cd',
-        padding: '1rem',
-        borderRadius: '8px'
-      }}>
-        <h3>📝 If tables don't exist, run this SQL in Supabase:</h3>
-        <details>
-          <summary>Click to view SQL</summary>
-          <pre style={{ 
-            background: 'white',
-            padding: '1rem',
-            borderRadius: '4px',
-            fontSize: '12px',
-            overflow: 'auto'
-          }}>
+      <div className="crypto-card bg-accent/10 border-accent/20">
+        <h3 className="text-lg font-semibold text-foreground mb-4">📝 If tables don't exist, run this SQL in Supabase:</h3>
+        <details className="cursor-pointer">
+          <summary className="text-accent-foreground font-medium hover:text-accent">Click to view SQL</summary>
+          <pre className="bg-card p-4 rounded text-xs overflow-auto mt-4 border border-border font-mono">
             {CREATE_TABLES_SQL}
           </pre>
         </details>

@@ -189,53 +189,53 @@ const CampaignManagement = () => {
   };
 
   const CampaignModal = () => (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div className="fixed inset-0 bg-black/50 overflow-y-auto h-full w-full z-50">
+      <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-card">
         <div className="mt-3">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+          <h3 className="text-lg font-medium text-foreground mb-4">
             {currentCampaign ? 'Edit Campaign' : 'Create New Campaign'}
           </h3>
           
           <form onSubmit={handleCreateCampaign} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Campaign Name</label>
+              <label className="form-label">Campaign Name</label>
               <input
                 type="text"
                 value={campaignFormData.name}
                 onChange={(e) => setCampaignFormData({...campaignFormData, name: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                className="form-input"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <label className="form-label">Description</label>
               <textarea
                 value={campaignFormData.description}
                 onChange={(e) => setCampaignFormData({...campaignFormData, description: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                className="form-input"
                 rows="3"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Goal Amount ($)</label>
+              <label className="form-label">Goal Amount ($)</label>
               <input
                 type="number"
                 value={campaignFormData.goal_amount}
                 onChange={(e) => setCampaignFormData({...campaignFormData, goal_amount: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                className="form-input"
                 min="0"
                 step="0.01"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Status</label>
+              <label className="form-label">Status</label>
               <select
                 value={campaignFormData.status}
                 onChange={(e) => setCampaignFormData({...campaignFormData, status: e.target.value})}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                className="form-input"
               >
                 <option value="active">Active</option>
                 <option value="paused">Paused</option>
@@ -246,22 +246,22 @@ const CampaignManagement = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                <label className="form-label">Start Date</label>
                 <input
                   type="date"
                   value={campaignFormData.start_date}
                   onChange={(e) => setCampaignFormData({...campaignFormData, start_date: e.target.value})}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="form-input"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700">End Date</label>
+                <label className="form-label">End Date</label>
                 <input
                   type="date"
                   value={campaignFormData.end_date}
                   onChange={(e) => setCampaignFormData({...campaignFormData, end_date: e.target.value})}
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                  className="form-input"
                 />
               </div>
             </div>
@@ -270,13 +270,13 @@ const CampaignManagement = () => {
               <button
                 type="button"
                 onClick={() => setShowCampaignModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200"
+                className="btn-secondary"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                className="btn-primary"
               >
                 {currentCampaign ? 'Update' : 'Create'}
               </button>
@@ -290,7 +290,7 @@ const CampaignManagement = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -298,15 +298,15 @@ const CampaignManagement = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+      <div className="crypto-card">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Campaign Management</h2>
-            <p className="text-gray-600 mt-1">Create, monitor, and manage all campaigns</p>
+            <h2 className="text-2xl font-bold text-foreground">Campaign Management</h2>
+            <p className="text-muted-foreground mt-1">Create, monitor, and manage all campaigns</p>
           </div>
           <button
             onClick={() => openCampaignModal()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            className="btn-primary"
           >
             Create Campaign
           </button>
@@ -314,7 +314,7 @@ const CampaignManagement = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+      <div className="crypto-card">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <input
@@ -322,7 +322,7 @@ const CampaignManagement = () => {
               placeholder="Search campaigns..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input"
             />
           </div>
           
@@ -330,7 +330,7 @@ const CampaignManagement = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -350,11 +350,11 @@ const CampaignManagement = () => {
             : 0;
 
           return (
-            <div key={campaign.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div key={campaign.id} className="crypto-card">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{campaign.name}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-2">{campaign.description}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{campaign.name}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{campaign.description}</p>
                 </div>
                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(campaign.status)}`}>
                   {campaign.status}
@@ -362,23 +362,23 @@ const CampaignManagement = () => {
               </div>
 
               <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                <div className="flex justify-between text-sm text-muted-foreground mb-1">
                   <span>Progress</span>
                   <span>{progressPercentage.toFixed(1)}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
                   ></div>
                 </div>
-                <div className="flex justify-between text-sm text-gray-900 mt-1">
+                <div className="flex justify-between text-sm text-foreground mt-1">
                   <span>{formatCurrency(campaign.raised_amount)}</span>
                   <span>{formatCurrency(campaign.goal_amount)}</span>
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500 mb-4">
+              <div className="text-xs text-muted-foreground mb-4">
                 <div>Start: {formatDate(campaign.start_date)}</div>
                 <div>End: {formatDate(campaign.end_date)}</div>
                 <div>Created: {formatDate(campaign.created_at)}</div>
@@ -387,7 +387,7 @@ const CampaignManagement = () => {
               <div className="flex justify-between items-center">
                 <button
                   onClick={() => openCampaignModal(campaign)}
-                  className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                  className="text-primary hover:text-primary/90 text-sm font-medium"
                 >
                   Edit
                 </button>
@@ -396,7 +396,7 @@ const CampaignManagement = () => {
                   {campaign.status === 'active' && (
                     <button
                       onClick={() => handleCampaignAction(campaign.id, 'pause')}
-                      className="text-yellow-600 hover:text-yellow-900 text-sm font-medium"
+                      className="text-accent hover:text-accent/90 text-sm font-medium"
                     >
                       Pause
                     </button>
@@ -412,14 +412,14 @@ const CampaignManagement = () => {
                   {(campaign.status === 'active' || campaign.status === 'paused') && (
                     <button
                       onClick={() => handleCampaignAction(campaign.id, 'complete')}
-                      className="text-blue-600 hover:text-blue-900 text-sm font-medium"
+                      className="text-primary hover:text-primary/90 text-sm font-medium"
                     >
                       Complete
                     </button>
                   )}
                   <button
                     onClick={() => handleCampaignAction(campaign.id, 'suspend')}
-                    className="text-red-600 hover:text-red-900 text-sm font-medium"
+                    className="text-destructive hover:text-destructive/90 text-sm font-medium"
                   >
                     Suspend
                   </button>
@@ -431,12 +431,12 @@ const CampaignManagement = () => {
       </div>
 
       {/* Summary */}
-      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+      <div className="crypto-card">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-muted-foreground">
             Showing {filteredCampaigns.length} of {campaigns.length} campaigns
           </div>
-          <div className="text-sm font-medium text-gray-900">
+          <div className="text-sm font-medium text-foreground">
             Total Goal: {formatCurrency(filteredCampaigns.reduce((sum, c) => sum + (c.goal_amount || 0), 0))}
           </div>
         </div>

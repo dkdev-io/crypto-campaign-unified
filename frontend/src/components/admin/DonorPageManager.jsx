@@ -181,123 +181,69 @@ const DonorPageManager = () => {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>
-          🔄 Loading donor pages...
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
+    <div className="space-y-6">
       {/* Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ color: '#2a2a72', marginBottom: '0.5rem' }}>
+      <div className="crypto-card text-center">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           🌐 Donor Page Manager
         </h1>
-        <p style={{ color: '#666', fontSize: '1.1rem' }}>
+        <p className="text-muted-foreground">
           Manage auto-generated donor pages for all campaigns
         </p>
       </div>
 
       {/* Error Message */}
       {error && (
-        <div style={{
-          background: '#fee',
-          color: '#c33',
-          padding: '1rem',
-          borderRadius: '4px',
-          marginBottom: '2rem',
-          border: '1px solid #fcc'
-        }}>
+        <div className="crypto-card bg-destructive/10 border-destructive/20 text-destructive">
           ❌ {error}
         </div>
       )}
 
       {/* Stats Summary */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1rem',
-        marginBottom: '2rem'
-      }}>
-        <div style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '2rem', color: '#2a2a72' }}>{pages.length}</div>
-          <div style={{ color: '#666', fontSize: '0.9rem' }}>Total Pages</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="crypto-card text-center">
+          <div className="text-2xl font-bold text-foreground">{pages.length}</div>
+          <div className="text-sm text-muted-foreground">Total Pages</div>
         </div>
-        <div style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '2rem', color: '#28a745' }}>
+        <div className="crypto-card text-center">
+          <div className="text-2xl font-bold text-green-600">
             {pages.filter(p => p.status === 'active').length}
           </div>
-          <div style={{ color: '#666', fontSize: '0.9rem' }}>Active</div>
+          <div className="text-sm text-muted-foreground">Active</div>
         </div>
-        <div style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '2rem', color: '#dc3545' }}>
+        <div className="crypto-card text-center">
+          <div className="text-2xl font-bold text-destructive">
             {pages.filter(p => p.status === 'error').length}
           </div>
-          <div style={{ color: '#666', fontSize: '0.9rem' }}>Errors</div>
+          <div className="text-sm text-muted-foreground">Errors</div>
         </div>
-        <div style={{
-          background: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '2rem', color: '#17a2b8' }}>
+        <div className="crypto-card text-center">
+          <div className="text-2xl font-bold text-primary">
             {pages.filter(p => 
               new Date(p.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000)
             ).length}
           </div>
-          <div style={{ color: '#666', fontSize: '0.9rem' }}>Last 24h</div>
+          <div className="text-sm text-muted-foreground">Last 24h</div>
         </div>
       </div>
 
       {/* Controls */}
-      <div style={{
-        background: 'white',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        marginBottom: '2rem',
-        display: 'flex',
-        gap: '1rem',
-        flexWrap: 'wrap',
-        alignItems: 'center'
-      }}>
+      <div className="crypto-card flex flex-wrap gap-4 items-center">
         {/* Search */}
-        <div style={{ flex: '1', minWidth: '200px' }}>
+        <div className="flex-1 min-w-[200px]">
           <input
             type="text"
             placeholder="Search campaigns..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}
+            className="form-input"
           />
         </div>
 
@@ -305,12 +251,7 @@ const DonorPageManager = () => {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            fontSize: '14px'
-          }}
+          className="form-input"
         >
           <option value="all">All Status</option>
           <option value="active">Active</option>
@@ -326,12 +267,7 @@ const DonorPageManager = () => {
             setSortBy(field);
             setSortOrder(order);
           }}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            fontSize: '14px'
-          }}
+          className="form-input"
         >
           <option value="createdAt-desc">Newest First</option>
           <option value="createdAt-asc">Oldest First</option>
@@ -343,68 +279,51 @@ const DonorPageManager = () => {
         {/* Refresh Button */}
         <button
           onClick={loadGeneratedPages}
-          style={{
-            background: '#2a2a72',
-            color: 'white',
-            border: 'none',
-            padding: '0.5rem 1rem',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
+          className="btn-primary"
         >
           🔄 Refresh
         </button>
       </div>
 
       {/* Pages Table */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        overflow: 'hidden'
-      }}>
+      <div className="crypto-card overflow-hidden">
         {filteredAndSortedPages.length === 0 ? (
-          <div style={{
-            padding: '3rem',
-            textAlign: 'center',
-            color: '#666'
-          }}>
+          <div className="py-12 px-8 text-center text-muted-foreground">
             {pages.length === 0 ? (
               <>
-                <div style={{ fontSize: '48px', marginBottom: '1rem' }}>📄</div>
-                <h3>No donor pages found</h3>
-                <p>Generated donor pages will appear here after campaign setup completion.</p>
+                <div className="text-5xl mb-4">📄</div>
+                <h3 className="text-lg font-semibold text-foreground">No donor pages found</h3>
+                <p className="text-muted-foreground">Generated donor pages will appear here after campaign setup completion.</p>
               </>
             ) : (
               <>
-                <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🔍</div>
-                <h3>No matching pages</h3>
-                <p>Try adjusting your search or filter criteria.</p>
+                <div className="text-5xl mb-4">🔍</div>
+                <h3 className="text-lg font-semibold text-foreground">No matching pages</h3>
+                <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
               </>
             )}
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
-                <tr style={{ background: '#f8f9fa' }}>
-                  <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #e9ecef' }}>
+                <tr className="bg-secondary">
+                  <th className="p-4 text-left border-b border-border text-muted-foreground font-medium">
                     Campaign
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #e9ecef' }}>
+                  <th className="p-4 text-left border-b border-border text-muted-foreground font-medium">
                     Committee
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #e9ecef' }}>
+                  <th className="p-4 text-left border-b border-border text-muted-foreground font-medium">
                     Page URL
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'center', borderBottom: '1px solid #e9ecef' }}>
+                  <th className="p-4 text-center border-b border-border text-muted-foreground font-medium">
                     Status
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #e9ecef' }}>
+                  <th className="p-4 text-left border-b border-border text-muted-foreground font-medium">
                     Created
                   </th>
-                  <th style={{ padding: '1rem', textAlign: 'center', borderBottom: '1px solid #e9ecef' }}>
+                  <th className="p-4 text-center border-b border-border text-muted-foreground font-medium">
                     Actions
                   </th>
                 </tr>
@@ -413,97 +332,61 @@ const DonorPageManager = () => {
                 {filteredAndSortedPages.map((page, index) => (
                   <tr
                     key={page.campaignId}
-                    style={{
-                      borderBottom: '1px solid #f0f0f0',
-                      backgroundColor: index % 2 === 0 ? 'white' : '#fafafa'
-                    }}
+                    className={`border-b border-border ${index % 2 === 0 ? 'bg-card' : 'bg-secondary/30'}`}
                   >
-                    <td style={{ padding: '1rem' }}>
-                      <div style={{ fontWeight: '500', marginBottom: '0.25rem' }}>
+                    <td className="p-4">
+                      <div className="font-medium text-foreground mb-1">
                         {page.campaignName}
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#666', fontFamily: 'monospace' }}>
+                      <div className="text-xs text-muted-foreground font-mono">
                         ID: {page.campaignId}
                       </div>
                     </td>
-                    <td style={{ padding: '1rem', color: '#666' }}>
+                    <td className="p-4 text-muted-foreground">
                       {page.committeeName}
                     </td>
-                    <td style={{ padding: '1rem' }}>
+                    <td className="p-4">
                       <a
                         href={page.pageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{
-                          color: '#2a2a72',
-                          textDecoration: 'none',
-                          fontSize: '0.9rem',
-                          fontFamily: 'monospace'
-                        }}
+                        className="text-primary hover:text-primary/90 text-sm font-mono"
                       >
                         {page.pageUrl} ↗
                       </a>
                     </td>
-                    <td style={{ padding: '1rem', textAlign: 'center' }}>
-                      <span
-                        style={{
-                          ...getStatusBadgeStyle(page.status),
-                          padding: '0.25rem 0.5rem',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          fontWeight: '500',
-                          textTransform: 'uppercase'
-                        }}
-                      >
+                    <td className="p-4 text-center">
+                      <span className={`px-2 py-1 rounded text-xs font-medium uppercase ${
+                        page.status === 'active' ? 'bg-green-100 text-green-700' :
+                        page.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
+                        page.status === 'error' ? 'bg-red-100 text-red-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
                         {page.status}
                       </span>
                     </td>
-                    <td style={{ padding: '1rem', color: '#666', fontSize: '0.9rem' }}>
+                    <td className="p-4 text-muted-foreground text-sm">
                       {formatDate(page.createdAt)}
                     </td>
-                    <td style={{ padding: '1rem', textAlign: 'center' }}>
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                    <td className="p-4 text-center">
+                      <div className="flex gap-2 justify-center">
                         <button
                           onClick={() => viewPageDetails(page)}
-                          style={{
-                            background: '#17a2b8',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
+                          className="bg-primary text-primary-foreground border-none px-2 py-1 rounded text-xs cursor-pointer"
                           title="View Details"
                         >
                           👁️
                         </button>
                         <button
                           onClick={() => regeneratePage(page.campaignId)}
-                          style={{
-                            background: '#28a745',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
+                          className="bg-green-600 text-white border-none px-2 py-1 rounded text-xs cursor-pointer"
                           title="Regenerate Page"
                         >
                           🔄
                         </button>
                         <button
                           onClick={() => deletePage(page.campaignId, page.campaignName)}
-                          style={{
-                            background: '#dc3545',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
+                          className="bg-destructive text-destructive-foreground border-none px-2 py-1 rounded text-xs cursor-pointer"
                           title="Delete Page"
                         >
                           🗑️
@@ -520,100 +403,57 @@ const DonorPageManager = () => {
 
       {/* Page Details Modal */}
       {showDetails && selectedPage && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <div style={{
-            background: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
-            maxWidth: '800px',
-            maxHeight: '80vh',
-            overflow: 'auto',
-            margin: '1rem'
-          }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '2rem'
-            }}>
-              <h3 style={{ color: '#2a2a72', margin: 0 }}>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-card p-8 rounded-lg max-w-3xl max-h-[80vh] overflow-auto m-4 shadow-lg">
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-xl font-bold text-foreground">
                 📄 Page Details: {selectedPage.campaignName}
               </h3>
               <button
                 onClick={() => setShowDetails(false)}
-                style={{
-                  background: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
+                className="bg-destructive text-destructive-foreground px-4 py-2 rounded cursor-pointer"
               >
                 ✕ Close
               </button>
             </div>
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '1rem',
-              marginBottom: '2rem'
-            }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div>
-                <strong>Campaign:</strong><br />
-                <span style={{ color: '#666' }}>{selectedPage.campaignName}</span>
+                <strong className="text-foreground">Campaign:</strong><br />
+                <span className="text-muted-foreground">{selectedPage.campaignName}</span>
               </div>
               <div>
-                <strong>Committee:</strong><br />
-                <span style={{ color: '#666' }}>{selectedPage.committeeName}</span>
+                <strong className="text-foreground">Committee:</strong><br />
+                <span className="text-muted-foreground">{selectedPage.committeeName}</span>
               </div>
               <div>
-                <strong>Page URL:</strong><br />
+                <strong className="text-foreground">Page URL:</strong><br />
                 <a
                   href={selectedPage.pageUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: '#2a2a72' }}
+                  className="text-primary hover:text-primary/90"
                 >
                   {selectedPage.pageUrl} ↗
                 </a>
               </div>
               <div>
-                <strong>Status:</strong><br />
-                <span
-                  style={{
-                    ...getStatusBadgeStyle(selectedPage.status),
-                    padding: '0.25rem 0.5rem',
-                    borderRadius: '4px',
-                    fontSize: '0.8rem'
-                  }}
-                >
+                <strong className="text-foreground">Status:</strong><br />
+                <span className={`px-2 py-1 rounded text-xs font-medium uppercase ${
+                  selectedPage.status === 'active' ? 'bg-green-100 text-green-700' :
+                  selectedPage.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
+                  selectedPage.status === 'error' ? 'bg-red-100 text-red-700' :
+                  'bg-blue-100 text-blue-700'
+                }`}>
                   {selectedPage.status}
                 </span>
               </div>
             </div>
 
             {selectedPage.seoData && (
-              <div style={{
-                background: '#f8f9fa',
-                padding: '1rem',
-                borderRadius: '4px',
-                marginBottom: '1rem'
-              }}>
-                <h5>SEO Information</h5>
-                <div style={{ fontSize: '0.9rem', color: '#666' }}>
+              <div className="bg-secondary p-4 rounded mb-4">
+                <h5 className="font-medium text-foreground mb-2">SEO Information</h5>
+                <div className="text-sm text-muted-foreground space-y-1">
                   <div><strong>Title:</strong> {selectedPage.seoData.title}</div>
                   <div><strong>Description:</strong> {selectedPage.seoData.description}</div>
                   <div><strong>Keywords:</strong> {selectedPage.seoData.keywords}</div>
@@ -621,35 +461,15 @@ const DonorPageManager = () => {
               </div>
             )}
 
-            <div style={{
-              background: '#f8f9fa',
-              padding: '1rem',
-              borderRadius: '4px',
-              fontFamily: 'monospace',
-              fontSize: '0.8rem',
-              maxHeight: '200px',
-              overflow: 'auto'
-            }}>
-              <strong>File Path:</strong><br />
-              {selectedPage.filePath}
+            <div className="bg-secondary p-4 rounded font-mono text-sm max-h-48 overflow-auto">
+              <strong className="text-foreground">File Path:</strong><br />
+              <span className="text-muted-foreground">{selectedPage.filePath}</span>
             </div>
 
-            <div style={{
-              display: 'flex',
-              gap: '1rem',
-              marginTop: '2rem',
-              justifyContent: 'center'
-            }}>
+            <div className="flex gap-4 mt-8 justify-center">
               <button
                 onClick={() => regeneratePage(selectedPage.campaignId)}
-                style={{
-                  background: '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
+                className="btn-secondary"
               >
                 🔄 Regenerate Page
               </button>
@@ -657,15 +477,7 @@ const DonorPageManager = () => {
                 href={selectedPage.pageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  background: '#2a2a72',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  display: 'inline-block'
-                }}
+                className="btn-primary inline-block"
               >
                 🌐 View Page
               </a>
