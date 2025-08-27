@@ -1,15 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 
 const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
+  const from = location.state?.from?.pathname || '/setup'
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState('')
+  const [verificationChecked, setVerificationChecked] = useState(false)
 
-  const { signIn } = useAuth()
+  const { signIn, handleEmailVerification } = useAuth()
+
+  // Check for email verification on mount
+  useEffect(() => {
+    const checkVerification = async () => {
+      if (searchParams.get('verified') === 'true' && !verificationChecked) {
+        setVerificationChecked(true)
+        const { verified } = await handleEmailVerification()
+        if (verified) {
+          setSuccess('Email verified successfully! You can now log in.')
+        }
+      }
+    }
+    checkVerification()
+  }, [searchParams, verificationChecked, handleEmailVerification])
 
   const validateForm = () => {
     const newErrors = {}
@@ -35,6 +57,7 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
 
     setLoading(true)
     setErrors({})
+    setSuccess('')
 
     try {
       const { data, error } = await signIn(formData.email, formData.password)
@@ -52,9 +75,20 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
         return
       }
 
+      // Check if user is verified
+      if (data.user && !data.user.email_confirmed_at) {
+        setErrors({ 
+          submit: 'Please verify your email before logging in. Check your inbox for the verification link.' 
+        })
+        return
+      }
+
       // Success - the AuthContext will handle the state update
       if (onSuccess) {
         onSuccess(data)
+      } else {
+        // Navigate to the protected page they were trying to access
+        navigate(from, { replace: true })
       }
     } catch (error) {
       setErrors({ submit: 'An unexpected error occurred. Please try again.' })
@@ -90,6 +124,7 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
               className={`form-input ${errors.email ? 'error' : ''}`}
               placeholder="Enter your email address"
               required
+              autoComplete="email"
             />
             {errors.email && (
               <span className="error-message">{errors.email}</span>
@@ -106,6 +141,7 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
               className={`form-input ${errors.password ? 'error' : ''}`}
               placeholder="Enter your password"
               required
+              autoComplete="current-password"
             />
             {errors.password && (
               <span className="error-message">{errors.password}</span>
@@ -115,6 +151,12 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
           {errors.submit && (
             <div className="error-banner">
               {errors.submit}
+            </div>
+          )}
+
+          {success && (
+            <div className="success-banner">
+              {success}
             </div>
           )}
 
