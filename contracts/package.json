@@ -16,7 +16,13 @@
     "size": "npx hardhat size-contracts",
     "clean": "npx hardhat clean"
   },
-  "keywords": ["blockchain", "ethereum", "campaign", "fec", "compliance"],
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "campaign",
+    "fec",
+    "compliance"
+  ],
   "author": "dkdev-io",
   "license": "MIT",
   "dependencies": {
@@ -33,6 +39,7 @@
     "@types/chai": "^4.2.0",
     "@types/mocha": ">=9.1.0",
     "chai": "^4.2.0",
+    "csv-parser": "^3.2.0",
     "ethers": "^6.15.0",
     "hardhat": "^2.19.4",
     "hardhat-contract-sizer": "^2.10.0",
