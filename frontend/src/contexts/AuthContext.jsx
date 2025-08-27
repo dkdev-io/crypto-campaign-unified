@@ -266,6 +266,85 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Reset password functionality
+  const resetPassword = async (email) => {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`
+      })
+
+      if (error) throw error
+
+      return { data, error: null }
+    } catch (error) {
+      return { data: null, error }
+    }
+  }
+
+  // Update password after reset
+  const updatePassword = async (newPassword) => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (error) throw error
+
+      return { data, error: null }
+    } catch (error) {
+      return { data: null, error }
+    }
+  }
+
+  // Check session validity and handle timeout
+  const checkSession = async () => {
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession()
+      
+      if (error) throw error
+      
+      if (!session) {
+        // Session expired
+        await signOut()
+        return { valid: false, expired: true }
+      }
+      
+      // Check if token is near expiry (within 5 minutes)
+      const expiresAt = session.expires_at * 1000 // Convert to milliseconds
+      const now = Date.now()
+      const timeUntilExpiry = expiresAt - now
+      
+      if (timeUntilExpiry < 5 * 60 * 1000) { // Less than 5 minutes
+        // Refresh the session
+        const { data: { session: newSession }, error: refreshError } = await supabase.auth.refreshSession()
+        
+        if (refreshError) {
+          await signOut()
+          return { valid: false, expired: true }
+        }
+        
+        setSession(newSession)
+        return { valid: true, refreshed: true }
+      }
+      
+      return { valid: true, expired: false }
+    } catch (error) {
+      console.error('Session check error:', error)
+      return { valid: false, error }
+    }
+  }
+
+  // Get user role
+  const getUserRole = () => {
+    if (!userProfile) return null
+    return userProfile.role || 'user'
+  }
+
+  // Check if user is admin
+  const isAdmin = () => {
+    return getUserRole() === 'admin'
+  }
+
   const value = {
     user,
     session,
@@ -280,7 +359,12 @@ export const AuthProvider = ({ children }) => {
     acceptInvitation,
     fetchUserProfile,
     isEmailVerified,
-    handleEmailVerification
+    handleEmailVerification,
+    resetPassword,
+    updatePassword,
+    checkSession,
+    getUserRole,
+    isAdmin
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -9,24 +9,25 @@ async function main() {
     // Get deployer account
     const [deployer] = await ethers.getSigners();
     console.log("📝 Deploying with account:", deployer.address);
-    console.log("💰 Account balance:", (await deployer.getBalance()).toString());
+    console.log("💰 Account balance:", (await deployer.provider.getBalance(deployer.address)).toString());
 
     // Deploy the contract
     const CampaignContributions = await ethers.getContractFactory("CampaignContributions");
     
     // Constructor parameters
     const campaignTreasury = deployer.address; // Set to campaign treasury address
-    const initialEthPrice = ethers.utils.parseUnits("3000", 18); // $3000 per ETH
+    const initialOwner = deployer.address; // Initial owner of the contract
     
     console.log("📦 Deploying contract with parameters:");
     console.log("   Campaign Treasury:", campaignTreasury);
-    console.log("   Initial ETH Price:", ethers.utils.formatUnits(initialEthPrice, 18), "USD");
+    console.log("   Initial Owner:", initialOwner);
     
-    const contract = await CampaignContributions.deploy(campaignTreasury, initialEthPrice);
-    await contract.deployed();
+    const contract = await CampaignContributions.deploy(campaignTreasury, initialOwner);
+    await contract.waitForDeployment();
+    const contractAddress = await contract.getAddress();
 
-    console.log("✅ CampaignContributions deployed to:", contract.address);
-    console.log("🔗 Transaction hash:", contract.deployTransaction.hash);
+    console.log("✅ CampaignContributions deployed to:", contractAddress);
+    console.log("🔗 Transaction hash:", contract.deploymentTransaction().hash);
     
     // Verify deployment
     console.log("\n🔍 Verifying deployment...");
@@ -35,17 +36,17 @@ async function main() {
     const ethPrice = await contract.ethPriceUSD();
     
     console.log("   Max Contribution (wei):", maxContribution.toString());
-    console.log("   Max Contribution (ETH):", ethers.utils.formatEther(maxContribution));
+    console.log("   Max Contribution (ETH):", ethers.formatEther(maxContribution));
     console.log("   Campaign Treasury:", treasury);
-    console.log("   ETH Price (USD):", ethers.utils.formatUnits(ethPrice, 18));
+    console.log("   ETH Price (USD):", ethers.formatUnits(ethPrice, 18));
     
     // Save deployment info
     const deploymentInfo = {
-        network: network.name,
-        contractAddress: contract.address,
+        network: "localhost",
+        contractAddress: contractAddress,
         deployerAddress: deployer.address,
-        transactionHash: contract.deployTransaction.hash,
-        blockNumber: contract.deployTransaction.blockNumber,
+        transactionHash: contract.deploymentTransaction().hash,
+        blockNumber: null,
         campaignTreasury: treasury,
         maxContributionWei: maxContribution.toString(),
         ethPriceUSD: ethPrice.toString(),
@@ -64,12 +65,12 @@ async function main() {
     
     console.log("✅ Deployment complete! Contract ready for contributions.");
     console.log("\n📋 Next Steps:");
-    console.log("1. Update frontend with contract address:", contract.address);
+    console.log("1. Update frontend with contract address:", contractAddress);
     console.log("2. Add KYC verifiers using addKYCVerifier()");
     console.log("3. Test contribution flow");
     console.log("4. Verify contract on Etherscan if on mainnet");
     
-    return contract.address;
+    return contractAddress;
 }
 
 // Handle errors

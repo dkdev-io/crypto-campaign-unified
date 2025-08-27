@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Spinner } from '../ui/spinner'
 
 const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
@@ -61,7 +64,20 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
       )
 
       if (error) {
-        setErrors({ submit: error.message })
+        // Handle specific error messages with user-friendly responses
+        if (error.message.includes('already registered') || 
+            error.message.includes('User already registered')) {
+          setErrors({ submit: 'Email already registered. Please sign in or use a different email.' })
+        } else if (error.message.includes('Password should be')) {
+          setErrors({ submit: 'Password does not meet security requirements. Please use at least 8 characters.' })
+        } else if (error.message.includes('Network request failed') || 
+                   error.message.includes('Failed to fetch')) {
+          setErrors({ submit: 'Connection failed. Please check your internet connection and try again.' })
+        } else if (error.message.includes('rate limit')) {
+          setErrors({ submit: 'Too many signup attempts. Please wait a moment and try again.' })
+        } else {
+          setErrors({ submit: 'An unexpected error occurred. Please try again.' })
+        }
         return
       }
 
@@ -84,39 +100,42 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
 
   if (emailSent) {
     return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="auth-header">
-            <h2>📧 Check Your Email</h2>
-            <p>We've sent a verification link to <strong>{formData.email}</strong></p>
+      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight">Check Your Email</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We've sent a verification link to <strong className="text-foreground">{formData.email}</strong>
+            </p>
           </div>
           
-          <div className="email-verification-notice">
-            <div className="verification-steps">
-              <h3>Next Steps:</h3>
-              <ol>
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div>
+              <h3 className="font-semibold mb-2">Next Steps:</h3>
+              <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
                 <li>Check your email inbox (and spam folder)</li>
                 <li>Click the verification link in the email</li>
                 <li>Return here and log in to complete your profile</li>
               </ol>
             </div>
 
-            <div className="resend-section">
-              <p>Didn't receive the email?</p>
-              <button 
-                className="btn btn-outline"
+            <div className="pt-4 border-t">
+              <p className="text-sm text-muted-foreground mb-3">Didn't receive the email?</p>
+              <Button 
+                variant="outline"
+                className="w-full"
                 onClick={() => setEmailSent(false)}
               >
                 Try Different Email
-              </button>
+              </Button>
             </div>
           </div>
 
-          <div className="auth-footer">
-            <p>
+          <div className="text-center text-sm">
+            <p className="text-muted-foreground">
               Already have an account?{' '}
               <button 
-                className="btn-link" 
+                className="font-medium text-primary hover:underline" 
                 onClick={onSwitchToLogin}
               >
                 Sign In
@@ -129,107 +148,124 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h2>Create Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight">Create Your Account</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Start managing your campaign today</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="fullName">Full Name *</label>
-            <input
-              id="fullName"
-              type="text"
-              value={formData.fullName}
-              onChange={(e) => handleInputChange('fullName', e.target.value)}
-              className={`form-input ${errors.fullName ? 'error' : ''}`}
-              placeholder="Enter your full name"
-              required
-            />
-            {errors.fullName && (
-              <span className="error-message">{errors.fullName}</span>
-            )}
-          </div>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
+                Full Name
+              </label>
+              <Input
+                id="fullName"
+                type="text"
+                value={formData.fullName}
+                onChange={(e) => handleInputChange('fullName', e.target.value)}
+                className={errors.fullName ? 'border-destructive' : ''}
+                placeholder="Enter your full name"
+                required
+              />
+              {errors.fullName && (
+                <p className="mt-1 text-sm text-destructive">{errors.fullName}</p>
+              )}
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email Address *</label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
-              className={`form-input ${errors.email ? 'error' : ''}`}
-              placeholder="Enter your email address"
-              required
-            />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-2">
+                Email Address
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className={errors.email ? 'border-destructive' : ''}
+                placeholder="Enter your email address"
+                required
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-destructive">{errors.email}</p>
+              )}
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password *</label>
-            <input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={(e) => handleInputChange('password', e.target.value)}
-              className={`form-input ${errors.password ? 'error' : ''}`}
-              placeholder="Enter a strong password"
-              required
-            />
-            {errors.password && (
-              <span className="error-message">{errors.password}</span>
-            )}
-            <small className="field-help">
-              Must be at least 8 characters long
-            </small>
-          </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-2">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                className={errors.password ? 'border-destructive' : ''}
+                placeholder="Enter a strong password"
+                required
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-destructive">{errors.password}</p>
+              )}
+              <p className="mt-1 text-xs text-muted-foreground">
+                Must be at least 8 characters long
+              </p>
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password *</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-              className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
-              placeholder="Confirm your password"
-              required
-            />
-            {errors.confirmPassword && (
-              <span className="error-message">{errors.confirmPassword}</span>
-            )}
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2">
+                Confirm Password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                className={errors.confirmPassword ? 'border-destructive' : ''}
+                placeholder="Confirm your password"
+                required
+              />
+              {errors.confirmPassword && (
+                <p className="mt-1 text-sm text-destructive">{errors.confirmPassword}</p>
+              )}
+            </div>
           </div>
 
           {errors.submit && (
-            <div className="error-banner">
+            <div className="p-3 text-sm text-destructive-foreground bg-destructive/10 border border-destructive/20 rounded-md">
               {errors.submit}
             </div>
           )}
 
-          <button 
+          <Button 
             type="submit" 
-            className="btn btn-primary btn-full"
+            className="w-full"
             disabled={loading}
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
-          </button>
+            {loading ? (
+              <>
+                <Spinner size="sm" className="mr-2" />
+                Creating Account...
+              </>
+            ) : (
+              'Create Account'
+            )}
+          </Button>
         </form>
 
-        <div className="auth-footer">
-          <p>
+        <div className="text-center text-sm">
+          <p className="text-muted-foreground">
             Already have an account?{' '}
             <button 
-              className="btn-link" 
+              className="font-medium text-primary hover:underline" 
               onClick={onSwitchToLogin}
             >
               Sign In
             </button>
           </p>
         </div>
-
       </div>
     </div>
   )

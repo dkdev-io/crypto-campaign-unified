@@ -1,59 +1,80 @@
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="container-responsive py-4">
-        <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center px-4 md:px-6">
+        <div className="flex flex-1 items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center">
-            <div className="text-2xl font-bold" style={{color: 'hsl(var(--crypto-navy))'}}>
+            <span className="text-2xl font-bold text-primary">
               NEXTRAISE
-            </div>
+            </span>
           </div>
           
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6">
+            <a 
+              href="#features" 
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               FEATURES
             </a>
-            <a href="#how-it-works" className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm">
+            <a 
+              href="#how-it-works" 
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               HOW IT WORKS
             </a>
-            <a href="#pricing" className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm">
+            <a 
+              href="#pricing" 
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               PRICING
             </a>
-            <a href="#contact" className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm">
+            <a 
+              href="#contact" 
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               CONTACT
             </a>
           </nav>
 
-          <div className="flex items-center space-x-4">
-            <button 
-              className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold px-6 py-2.5 rounded-md transition-all duration-200 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-              onClick={() => {
-                window.location.href = '/donor/register';
-              }}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="secondary"
+              size="sm"
+              className="hidden sm:inline-flex"
+              onClick={() => navigate('/donor/register')}
             >
-              👥 JOIN AS DONOR
-            </button>
-            <button 
-              className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm"
-              onClick={() => {
-                window.location.href = '/auth';
-              }}
+              Join as Donor
+            </Button>
+            <Button 
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/auth')}
             >
-              SIGN IN
-            </button>
-            <button 
-              className="bg-gold hover:bg-gold/90 text-navy font-bold px-8 py-3 rounded-md transition-colors uppercase text-sm"
-              style={{
-                backgroundColor: 'hsl(var(--crypto-gold))',
-                color: 'hsl(var(--crypto-navy))'
-              }}
-              onClick={() => {
-                window.location.href = '/setup';
-              }}
+              Sign In
+            </Button>
+            <Button 
+              size="sm"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              onClick={() => navigate('/setup')}
             >
-              GET STARTED
-            </button>
+              Get Started
+            </Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button className="md:hidden p-2 hover:bg-accent/10 rounded-md">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
       </div>
     </header>

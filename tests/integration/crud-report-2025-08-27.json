@@ -1,0 +1,141 @@
+{
+  "timestamp": "2025-08-27T01:57:35.944Z",
+  "tables": {
+    "campaigns": {
+      "exists": true,
+      "count": 24,
+      "columns": [
+        "id",
+        "email",
+        "campaign_name",
+        "website",
+        "wallet_address",
+        "created_at",
+        "suggested_amounts",
+        "max_donation_limit",
+        "theme_color",
+        "supported_cryptos"
+      ]
+    },
+    "contributions": {
+      "exists": true,
+      "count": 0
+    },
+    "kyc_data": {
+      "exists": true,
+      "count": 0
+    },
+    "fec_committees": {
+      "exists": true,
+      "count": 0
+    },
+    "committee_test_data": {
+      "exists": true,
+      "count": 0
+    },
+    "donation_amounts": {
+      "exists": true,
+      "count": 0
+    },
+    "blockchain_transactions": {
+      "exists": true,
+      "count": 0
+    },
+    "admin_users": {
+      "exists": true,
+      "count": 0
+    }
+  },
+  "operations": {
+    "CREATE": {
+      "passed": [],
+      "failed": [
+        {
+          "table": "campaigns",
+          "details": "Could not find the 'description' column of 'campaigns' in the schema cache",
+          "timestamp": "2025-08-27T01:57:39.913Z"
+        },
+        {
+          "table": "kyc_data",
+          "details": "Could not find the table 'public.kyc_data' in the schema cache",
+          "timestamp": "2025-08-27T01:57:40.116Z"
+        }
+      ]
+    },
+    "READ": {
+      "passed": [],
+      "failed": [
+        {
+          "table": "campaigns",
+          "details": "column campaigns.status does not exist",
+          "timestamp": "2025-08-27T01:57:40.302Z"
+        },
+        {
+          "table": "contributions",
+          "details": "Could not find the table 'public.contributions' in the schema cache",
+          "timestamp": "2025-08-27T01:57:40.502Z"
+        },
+        {
+          "table": "kyc_data",
+          "details": "Could not find the table 'public.kyc_data' in the schema cache",
+          "timestamp": "2025-08-27T01:57:40.611Z"
+        },
+        {
+          "table": "dashboard statistics",
+          "details": "Unable to get counts",
+          "timestamp": "2025-08-27T01:57:41.119Z"
+        }
+      ]
+    },
+    "UPDATE": {
+      "passed": [],
+      "failed": []
+    },
+    "DELETE": {
+      "passed": [],
+      "failed": []
+    }
+  },
+  "queries": {
+    "working": [],
+    "broken": [
+      {
+        "name": "Active Campaigns",
+        "error": "column campaigns.status does not exist"
+      },
+      {
+        "name": "User Contributions",
+        "error": "Could not find the table 'public.contributions' in the schema cache"
+      },
+      {
+        "name": "Approved KYC",
+        "error": "Could not find the table 'public.kyc_data' in the schema cache"
+      },
+      {
+        "name": "Campaign with Total Raised",
+        "error": "Could not find a relationship between 'campaigns' and 'contributions' in the schema cache"
+      },
+      {
+        "name": "Recent Contributions",
+        "error": "Could not find the table 'public.contributions' in the schema cache"
+      },
+      {
+        "name": "Test Committees",
+        "error": "Could not find the table 'public.committee_test_data' in the schema cache"
+      }
+    ]
+  },
+  "summary": {
+    "totalTests": 6,
+    "passed": 0,
+    "failed": 6,
+    "brokenFlows": [
+      "CREATE on campaigns: Could not find the 'description' column of 'campaigns' in the schema cache",
+      "CREATE on kyc_data: Could not find the table 'public.kyc_data' in the schema cache",
+      "READ on campaigns: column campaigns.status does not exist",
+      "READ on contributions: Could not find the table 'public.contributions' in the schema cache",
+      "READ on kyc_data: Could not find the table 'public.kyc_data' in the schema cache",
+      "READ on dashboard statistics: Unable to get counts"
+    ]
+  }
+}

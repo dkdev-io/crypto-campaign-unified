@@ -1,0 +1,81 @@
+{
+  "timestamp": "2025-08-27T02:00:16.314Z",
+  "working": [
+    {
+      "operation": "CREATE campaign",
+      "details": "Created: Test Campaign 1756260016315 (ID: 372a9ad2-121c-4bea-8d9f-acd0c8fd678b)"
+    },
+    {
+      "operation": "READ all campaigns",
+      "details": "Found 25 campaigns"
+    },
+    {
+      "operation": "READ single campaign",
+      "details": "Retrieved: Test Campaign 1756260016315"
+    },
+    {
+      "operation": "READ filtered campaigns",
+      "details": "Found 5 campaigns with limit >= $1000"
+    },
+    {
+      "operation": "READ BTC-supporting campaigns",
+      "details": "Found 18 BTC campaigns"
+    },
+    {
+      "operation": "UPDATE suggested_amounts",
+      "details": "Updated to: [10, 25, 50, 100, 250, 500, 1000]"
+    },
+    {
+      "operation": "UPDATE multiple fields",
+      "details": "Max: $5000, Cryptos: 5"
+    },
+    {
+      "operation": "UPDATE conditional",
+      "details": "Website updated to: https://updated-test.com"
+    },
+    {
+      "operation": "DELETE campaign",
+      "details": "Deleted: Test Campaign 1756260016315"
+    },
+    {
+      "operation": "DELETE verification",
+      "details": "Confirmed campaign was deleted"
+    },
+    {
+      "operation": "QUERY high donation limits",
+      "details": "Found 24 campaigns >= $2000"
+    },
+    {
+      "operation": "QUERY recent campaigns",
+      "details": "Retrieved 5 most recent campaigns"
+    },
+    {
+      "operation": "QUERY count",
+      "details": "Total campaigns in database: 24"
+    },
+    {
+      "operation": "QUERY by email pattern",
+      "details": "Found 17 Gmail campaigns"
+    },
+    {
+      "operation": "QUERY crypto analysis",
+      "details": "Crypto support: {\"BTC\":17,\"ETH\":24,\"USDC\":17}"
+    },
+    {
+      "operation": "EDGE invalid UUID",
+      "details": "Properly handles invalid UUID"
+    },
+    {
+      "operation": "EDGE empty insert",
+      "details": "Properly rejects empty insert"
+    }
+  ],
+  "broken": [
+    {
+      "operation": "EDGE large array",
+      "details": "null value in column \"website\" of relation \"campaigns\" violates not-null constraint"
+    }
+  ],
+  "summary": {},
+  "testCampaignId": "372a9ad2-121c-4bea-8d9f-acd0c8fd678b"
+}

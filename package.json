@@ -96,6 +96,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
+    "chai": "^4.5.0",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "husky": "^8.0.3",

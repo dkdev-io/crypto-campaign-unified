@@ -1,31 +1,34 @@
+import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+
 const CTA = () => {
+  const navigate = useNavigate();
   return (
-    <section className="hero-section">
-      <div className="container-responsive text-center">
+    <section className="py-24 bg-gradient-to-b from-primary to-primary/90 text-primary-foreground">
+      <div className="container px-4 md:px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h2 className="text-5xl lg:text-6xl font-bold leading-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             Ready to Transform Your
-            <span className="block" style={{color: 'hsl(var(--crypto-gold))'}}>
+            <span className="block text-accent">
               Campaign Fundraising?
             </span>
           </h2>
           
-          <p className="text-xl leading-relaxed opacity-90">
+          <p className="text-xl leading-relaxed text-primary-foreground/90">
             Reach the growing crypto currency donor community and fundraise with lower fees.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-4">
-            <button 
-              className="btn-secondary text-lg px-12 py-4 font-bold"
-              onClick={() => {
-                window.location.href = '/setup';
-              }}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <Button 
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-12 py-6 h-auto"
+              onClick={() => navigate('/setup')}
             >
               Get Started—No Setup Fee
-            </button>
+            </Button>
           </div>
 
-          <p className="text-sm opacity-70">
+          <p className="text-sm text-primary-foreground/70">
             No credit card required • Setup in under 10 minutes • Full compliance included
           </p>
         </div>

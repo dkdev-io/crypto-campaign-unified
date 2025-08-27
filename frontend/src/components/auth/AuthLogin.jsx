@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Spinner } from '../ui/spinner'
 
 const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
   const navigate = useNavigate()
@@ -63,14 +66,22 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
       const { data, error } = await signIn(formData.email, formData.password)
 
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          setErrors({ submit: 'Invalid email or password. Please try again.' })
+        // Handle specific error messages with user-friendly responses
+        if (error.message.includes('Invalid login credentials') || 
+            error.message.includes('Invalid password') ||
+            error.message.includes('User not found')) {
+          setErrors({ submit: 'Invalid email or password' })
         } else if (error.message.includes('Email not confirmed')) {
           setErrors({ 
             submit: 'Please check your email and click the verification link before logging in.'
           })
+        } else if (error.message.includes('Network request failed') || 
+                   error.message.includes('Failed to fetch')) {
+          setErrors({ submit: 'Connection failed. Please check your internet connection and try again.' })
+        } else if (error.message.includes('Too many requests')) {
+          setErrors({ submit: 'Too many login attempts. Please wait a moment and try again.' })
         } else {
-          setErrors({ submit: error.message })
+          setErrors({ submit: 'An unexpected error occurred. Please try again.' })
         }
         return
       }
@@ -106,74 +117,87 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h2>🔐 Welcome Back</h2>
-          <p>Sign in to your campaign management account</p>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold tracking-tight">Welcome Back</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Sign in to your campaign management account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
-              className={`form-input ${errors.email ? 'error' : ''}`}
-              placeholder="Enter your email address"
-              required
-              autoComplete="email"
-            />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
-          </div>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-2">
+                Email Address
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className={errors.email ? 'border-destructive' : ''}
+                placeholder="Enter your email address"
+                required
+                autoComplete="email"
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-destructive">{errors.email}</p>
+              )}
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={(e) => handleInputChange('password', e.target.value)}
-              className={`form-input ${errors.password ? 'error' : ''}`}
-              placeholder="Enter your password"
-              required
-              autoComplete="current-password"
-            />
-            {errors.password && (
-              <span className="error-message">{errors.password}</span>
-            )}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-2">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                className={errors.password ? 'border-destructive' : ''}
+                placeholder="Enter your password"
+                required
+                autoComplete="current-password"
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-destructive">{errors.password}</p>
+              )}
+            </div>
           </div>
 
           {errors.submit && (
-            <div className="error-banner">
+            <div className="p-3 text-sm text-destructive-foreground bg-destructive/10 border border-destructive/20 rounded-md">
               {errors.submit}
             </div>
           )}
 
           {success && (
-            <div className="success-banner">
+            <div className="p-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded-md">
               {success}
             </div>
           )}
 
-          <button 
+          <Button 
             type="submit" 
-            className="btn btn-primary btn-full"
+            className="w-full"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
-          </button>
+            {loading ? (
+              <>
+                <Spinner size="sm" className="mr-2" />
+                Signing In...
+              </>
+            ) : (
+              'Sign In'
+            )}
+          </Button>
         </form>
 
-        <div className="auth-footer">
-          <p>
+        <div className="text-center text-sm">
+          <p className="text-muted-foreground">
             Don't have an account?{' '}
             <button 
-              className="btn-link" 
+              className="font-medium text-primary hover:underline" 
               onClick={onSwitchToSignUp}
             >
               Sign Up
@@ -181,12 +205,16 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
           </p>
         </div>
 
-        <div className="forgot-password">
+        <div className="text-center">
           <button 
-            className="btn-link"
+            className="text-sm font-medium text-primary hover:underline"
             onClick={() => {
-              // TODO: Implement forgot password functionality
-              alert('Forgot password functionality coming soon!')
+              if (window.onShowPasswordReset) {
+                window.onShowPasswordReset()
+              } else {
+                // Fallback navigation
+                window.location.href = '/auth?mode=reset'
+              }
             }}
           >
             Forgot your password?
