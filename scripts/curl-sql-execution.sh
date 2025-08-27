@@ -1,152 +1,78 @@
 #!/bin/bash
 
-# Direct SQL execution via curl to Supabase PostgREST
+# Load environment
+source .env
+
+# Supabase connection details
 SUPABASE_URL="https://kmepcdsklnnxokoimvzo.supabase.co"
-SERVICE_KEY="${SUPABASE_SERVICE_ROLE_KEY}"
+SERVICE_KEY="$MIGRATION_SUPABASE_SERVICE_KEY"
 
 if [ -z "$SERVICE_KEY" ]; then
-  echo "❌ SUPABASE_SERVICE_ROLE_KEY environment variable is required"
-  echo "Please set it in your .env file and source it"
-  exit 1
-fi
-
-echo "🔧 DIRECT SQL EXECUTION VIA CURL"
-echo "🎯 Attempting to execute SQL fixes directly via PostgREST API"
-echo "=" $(printf "=%.0s" {1..60})
-
-# Function to execute SQL
-execute_sql() {
-    local description="$1"
-    local sql="$2"
-    
-    echo ""
-    echo "📝 $description..."
-    
-    # Try different PostgREST endpoints
-    local endpoints=("rpc/exec" "rpc/execute" "rpc/query" "rpc/sql")
-    
-    for endpoint in "${endpoints[@]}"; do
-        echo "   🔄 Trying endpoint: $endpoint"
-        
-        response=$(curl -s -X POST "$SUPABASE_URL/rest/v1/$endpoint" \
-            -H "apikey: $SERVICE_KEY" \
-            -H "Authorization: Bearer $SERVICE_KEY" \
-            -H "Content-Type: application/json" \
-            -H "Prefer: return=minimal" \
-            -d "{\"sql\":\"$sql\"}" 2>/dev/null)
-        
-        # Check if response indicates success
-        if [[ $response != *"PGRST"* ]] && [[ $response != *"error"* ]] && [[ $response != *"Could not find"* ]]; then
-            echo "   ✅ Success via $endpoint"
-            echo "   📋 Response: $response"
-            return 0
-        else
-            echo "   ❌ Failed via $endpoint: $response"
-        fi
-    done
-    
-    return 1
-}
-
-# Try creating a simple function first to test if we can execute SQL
-echo ""
-echo "🧪 TESTING SQL EXECUTION CAPABILITY..."
-
-test_sql="SELECT 1 as test_result;"
-if execute_sql "Test basic SQL execution" "$test_sql"; then
-    echo "✅ SQL execution is working! Proceeding with fixes..."
-else
-    echo "❌ Cannot execute SQL directly via API endpoints"
-    echo ""
-    echo "🔄 ATTEMPTING ALTERNATIVE APPROACH..."
-    
-    # Try using the Database REST API directly
-    echo "📝 Trying database REST API..."
-    
-    response=$(curl -s -X POST "$SUPABASE_URL/rest/v1/" \
-        -H "apikey: $SERVICE_KEY" \
-        -H "Authorization: Bearer $SERVICE_KEY" \
-        -H "Content-Type: application/json" \
-        -H "Accept: application/json" \
-        -d '{}' 2>/dev/null)
-    
-    echo "Database API response: $response"
-    
-    echo ""
-    echo "❌ DIRECT SQL EXECUTION NOT POSSIBLE VIA API"
-    echo "📋 MANUAL EXECUTION REQUIRED:"
-    echo "   1. Open: https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo"
-    echo "   2. Go to SQL Editor"
-    echo "   3. Copy and paste the contents of: scripts/FINAL-DATABASE-FIXES.sql"
-    echo "   4. Click 'RUN' to execute all fixes"
-    echo ""
-    echo "🎯 This is the most reliable way to apply the database fixes."
+    echo "❌ Missing MIGRATION_SUPABASE_SERVICE_KEY"
     exit 1
 fi
 
-# If we get here, SQL execution worked, so apply the fixes
+echo "🚀 Executing SQL to create donor tables..."
 echo ""
-echo "🔧 APPLYING DATABASE FIXES..."
 
-# Fix 1: Add status column
-status_sql="ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active';"
-execute_sql "Add status column to campaigns" "$status_sql"
+# First, let's try to create a stored procedure that executes our SQL
+EXEC_FUNCTION='{"query": "CREATE OR REPLACE FUNCTION create_donor_tables() RETURNS text LANGUAGE plpgsql SECURITY DEFINER AS $$ BEGIN DROP TABLE IF EXISTS donor_profiles CASCADE; DROP TABLE IF EXISTS donors CASCADE; DROP TYPE IF EXISTS donor_type CASCADE; CREATE TYPE donor_type AS ENUM ('"'"'individual'"'"', '"'"'organization'"'"'); CREATE TABLE donors (id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY, email TEXT UNIQUE NOT NULL, full_name TEXT NOT NULL, phone TEXT, donor_type donor_type DEFAULT '"'"'individual'"'"', email_verified BOOLEAN DEFAULT FALSE, created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP); CREATE TABLE donor_profiles (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, donor_id UUID NOT NULL REFERENCES donors(id) ON DELETE CASCADE, bio TEXT, created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, UNIQUE(donor_id)); ALTER TABLE donors ENABLE ROW LEVEL SECURITY; ALTER TABLE donor_profiles ENABLE ROW LEVEL SECURITY; CREATE POLICY \"Users can insert own donor record\" ON donors FOR INSERT WITH CHECK (auth.uid() = id); CREATE POLICY \"Donors can view own record\" ON donors FOR SELECT USING (auth.uid() = id); CREATE POLICY \"Users can manage own profile\" ON donor_profiles FOR ALL USING (auth.uid() = donor_id); GRANT ALL ON donors TO anon, authenticated; GRANT ALL ON donor_profiles TO anon, authenticated; INSERT INTO donors (id, email, full_name, phone, donor_type) VALUES ('"'"'a6dd2983-3dd4-4e0d-b3f6-17d38772ff32'"'"', '"'"'test@dkdev.io'"'"', '"'"'Test Donor Account'"'"', '"'"'555-0123'"'"', '"'"'individual'"'"') ON CONFLICT DO NOTHING; INSERT INTO donor_profiles (donor_id, bio) VALUES ('"'"'a6dd2983-3dd4-4e0d-b3f6-17d38772ff32'"'"', '"'"'Test donor account'"'"') ON CONFLICT DO NOTHING; RETURN '"'"'Tables created successfully'"'"'; EXCEPTION WHEN OTHERS THEN RETURN '"'"'Error: '"'"' || SQLERRM; END; $$;"}'
 
-# Fix 2: Create contributions table
-contrib_sql="CREATE TABLE IF NOT EXISTS contributions (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    campaign_id UUID REFERENCES campaigns(id) ON DELETE CASCADE,
-    user_id TEXT NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    currency TEXT DEFAULT 'USD',
-    status TEXT DEFAULT 'pending',
-    donor_email TEXT,
-    donor_name TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);"
-execute_sql "Create contributions table" "$contrib_sql"
+# Try to create the function
+echo "Creating function..."
+RESPONSE=$(curl -s -X POST \
+  "${SUPABASE_URL}/rest/v1/rpc" \
+  -H "apikey: ${SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SERVICE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Prefer: return=representation" \
+  -d "$EXEC_FUNCTION")
 
-# Fix 3: Create KYC table
-kyc_sql="CREATE TABLE IF NOT EXISTS kyc_data (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id TEXT NOT NULL UNIQUE,
-    full_name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    verification_status TEXT DEFAULT 'pending',
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);"
-execute_sql "Create KYC data table" "$kyc_sql"
+echo "Response: $RESPONSE"
 
-# Fix 4: Enable RLS
-rls_sql="ALTER TABLE campaigns ENABLE ROW LEVEL SECURITY;
-ALTER TABLE contributions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE kyc_data ENABLE ROW LEVEL SECURITY;"
-execute_sql "Enable Row Level Security" "$rls_sql"
+# Now try to call the function
+echo ""
+echo "Calling function to create tables..."
+RESPONSE=$(curl -s -X POST \
+  "${SUPABASE_URL}/rest/v1/rpc/create_donor_tables" \
+  -H "apikey: ${SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SERVICE_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "{}")
 
-# Fix 5: Create policies
-policy_sql="CREATE POLICY IF NOT EXISTS campaigns_public_access ON campaigns FOR ALL USING (true);
-CREATE POLICY IF NOT EXISTS contributions_public_access ON contributions FOR ALL USING (true);
-CREATE POLICY IF NOT EXISTS kyc_data_public_access ON kyc_data FOR ALL USING (true);"
-execute_sql "Create RLS policies" "$policy_sql"
+echo "Response: $RESPONSE"
 
-# Fix 6: Dashboard function
-function_sql="CREATE OR REPLACE FUNCTION get_dashboard_stats()
-RETURNS JSON AS \$\$
-BEGIN
-  RETURN json_build_object(
-    'total_campaigns', (SELECT COUNT(*) FROM campaigns),
-    'active_campaigns', (SELECT COUNT(*) FROM campaigns WHERE status = 'active'),
-    'total_contributions', (SELECT COUNT(*) FROM contributions),
-    'total_raised', (SELECT COALESCE(SUM(amount), 0) FROM contributions)
-  );
-END;
-\$\$ LANGUAGE plpgsql;"
-execute_sql "Create dashboard statistics function" "$function_sql"
+# Test if tables were created
+echo ""
+echo "Testing tables..."
+
+# Check donors table
+echo -n "Checking donors table... "
+RESPONSE=$(curl -s -X GET \
+  "${SUPABASE_URL}/rest/v1/donors?select=*&limit=1" \
+  -H "apikey: ${SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SERVICE_KEY}")
+
+if [[ "$RESPONSE" == *"\"id\""* ]] || [[ "$RESPONSE" == "[]" ]]; then
+  echo "✅ EXISTS"
+else
+  echo "❌ NOT FOUND"
+  echo "Response: $RESPONSE"
+fi
+
+# Check donor_profiles table  
+echo -n "Checking donor_profiles table... "
+RESPONSE=$(curl -s -X GET \
+  "${SUPABASE_URL}/rest/v1/donor_profiles?select=*&limit=1" \
+  -H "apikey: ${SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SERVICE_KEY}")
+
+if [[ "$RESPONSE" == *"\"id\""* ]] || [[ "$RESPONSE" == "[]" ]]; then
+  echo "✅ EXISTS"
+else
+  echo "❌ NOT FOUND"
+  echo "Response: $RESPONSE"
+fi
 
 echo ""
-echo "=" $(printf "=%.0s" {1..60})
-echo "🎯 FIX APPLICATION COMPLETE"
-echo "=" $(printf "=%.0s" {1..60})
-echo ""
-echo "🧪 Run verification: node tests/integration/specific-fix-test.js"
-echo "🚀 Run full test suite: node tests/integration/actual-crud-test.js"
+echo "✨ Done"
