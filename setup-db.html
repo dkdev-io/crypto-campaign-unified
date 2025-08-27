@@ -25,10 +25,14 @@
     <script>
         const { createClient } = supabase
         
-        const supabaseClient = createClient(
-            'https://kmepcdsklnnxokoimvzo.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.9gyw4TmPvtNYLz7_aNHBdkPSgUypmg5SCbLEwQKki-Q'
-        )
+        // ❌ SECURITY WARNING: Service Role Key was removed for security
+        // This HTML file cannot be used as-is. You must:
+        // 1. Never embed Service Role keys in client-side code
+        // 2. Use server-side scripts with environment variables instead
+        // 3. Delete this file or convert to use anon key only
+        
+        alert('❌ SECURITY WARNING: This file has been disabled due to exposed Service Role key. Use server-side scripts instead.');
+        return;
 
         function log(message, type = 'info') {
             const console = document.getElementById('console')

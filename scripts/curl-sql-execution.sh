@@ -2,7 +2,13 @@
 
 # Direct SQL execution via curl to Supabase PostgREST
 SUPABASE_URL="https://kmepcdsklnnxokoimvzo.supabase.co"
-SERVICE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.9gyw4TmPvtNYLz7_aNHBdkPSgUypmg5SCbLEwQKki-Q"
+SERVICE_KEY="${SUPABASE_SERVICE_ROLE_KEY}"
+
+if [ -z "$SERVICE_KEY" ]; then
+  echo "❌ SUPABASE_SERVICE_ROLE_KEY environment variable is required"
+  echo "Please set it in your .env file and source it"
+  exit 1
+fi
 
 echo "🔧 DIRECT SQL EXECUTION VIA CURL"
 echo "🎯 Attempting to execute SQL fixes directly via PostgREST API"

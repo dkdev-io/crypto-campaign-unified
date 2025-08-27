@@ -36,17 +36,31 @@ out/
 /.next
 /out
 
-# Environment variables
+# Environment variables - CRITICAL: Never commit any .env files
 .env
+.env.*
+.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-.env*.local
 .env.development
 .env.production
 .env.staging
 .env.test
+
+# Security files - NEVER commit these
+secrets.json
+secret.*
+*secret*
+*.key
+*.pem
+*.p12
+*.pfx
+*jwt*
+*token*
+api-keys.*
+credentials.*
 
 # IDE and editor files
 .vscode/

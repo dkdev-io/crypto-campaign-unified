@@ -106,42 +106,6 @@
     </div>
 
     <div class="section">
-        <h2>⚙️ Configuration Options</h2>
-        
-        <h3>Campaign Configuration</h3>
-        <div class="code-block">
-            <code>
-{<br>
-  campaignId: 'your-campaign-id',     // Required for production<br>
-  theme: {<br>
-    primaryColor: '#1a365d',          // Navy blue (default)<br>
-    accentColor: '#3182ce',           // Blue accent<br>
-    backgroundColor: '#ffffff'         // White background<br>
-  },<br>
-  suggestedAmounts: [25, 50, 100, 250, 500], // Dollar amounts<br>
-  maxDonation: 3300,                  // FEC compliance limit<br>
-  showBranding: true,                 // Show "Powered by Crypto Campaign"<br>
-  demoMode: false                     // Set true for testing<br>
-}
-            </code>
-        </div>
-
-        <h3>Styling Options</h3>
-        <div class="code-block">
-            <code>
-/* CSS variables for custom styling */<br>
-.donation-form-embed {<br>
-  --crypto-navy: 210 79% 46%;         /* Primary color */<br>
-  --crypto-blue: 213 93% 68%;         /* Accent color */<br>
-  --border-radius: 8px;               /* Border radius */<br>
-  --padding: 1.5rem;                  /* Container padding */<br>
-  --shadow: 0 4px 6px rgba(0,0,0,0.1); /* Box shadow */<br>
-}
-            </code>
-        </div>
-    </div>
-
-    <div class="section">
         <h2>🚀 Features Included</h2>
         <ul>
             <li>✅ <strong>Complete Web3 Integration</strong> - Real blockchain transactions</li>
@@ -154,57 +118,6 @@
             <li>✅ <strong>Error Handling</strong> - Clear user feedback</li>
             <li>✅ <strong>Transaction Tracking</strong> - Blockchain confirmation</li>
             <li>✅ <strong>Supabase Integration</strong> - Secure data storage</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>📋 Implementation Steps</h2>
-        <ol>
-            <li><strong>Choose Your Method:</strong> Pick from the 3 embed options above</li>
-            <li><strong>Replace Campaign ID:</strong> Change 'YOUR_CAMPAIGN_ID' to your actual campaign ID</li>
-            <li><strong>Customize Styling:</strong> Adjust colors and layout to match your site</li>
-            <li><strong>Test in Demo Mode:</strong> Set demoMode: true for testing without MetaMask</li>
-            <li><strong>Go Live:</strong> Remove demo mode for real transactions</li>
-        </ol>
-    </div>
-
-    <div class="warning">
-        <h3>⚠️ Important Notes</h3>
-        <ul>
-            <li><strong>Campaign ID:</strong> Required for production use - contact admin for your ID</li>
-            <li><strong>Demo Mode:</strong> Perfect for testing - simulates transactions without real crypto</li>
-            <li><strong>MetaMask:</strong> Users need MetaMask or compatible Web3 wallet for real donations</li>
-            <li><strong>Mobile Support:</strong> Fully responsive design works on all devices</li>
-            <li><strong>FEC Compliance:</strong> All required donor fields are included automatically</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>🔧 Testing & Demo</h2>
-        
-        <h3>Demo Mode Testing</h3>
-        <div class="code-block">
-            <code>
-// For testing without MetaMask<br>
-CryptoDonationWidget.init({<br>
-  containerId: 'crypto-donation-widget',<br>
-  campaignId: 'demo-campaign',<br>
-  demoMode: true  // Simulates transactions<br>
-});
-            </code>
-        </div>
-
-        <h3>Live Testing URL</h3>
-        <p>Test the form directly at: <a href="https://cryptocampaign.netlify.app/donation-test" target="_blank">https://cryptocampaign.netlify.app/donation-test</a></p>
-    </div>
-
-    <div class="section">
-        <h2>📞 Support</h2>
-        <p>For questions or support with embedding the donation form:</p>
-        <ul>
-            <li><strong>Demo Site:</strong> <a href="https://cryptocampaign.netlify.app" target="_blank">cryptocampaign.netlify.app</a></li>
-            <li><strong>GitHub:</strong> <a href="https://github.com/dkdev-io/crypto-campaign-unified" target="_blank">GitHub Repository</a></li>
-            <li><strong>Campaign Setup:</strong> Contact your administrator for campaign ID assignment</li>
         </ul>
     </div>
 
