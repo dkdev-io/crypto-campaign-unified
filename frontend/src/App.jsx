@@ -7,6 +7,7 @@ import SimpleDonorForm from './components/SimpleDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
 import RealWorkingInvites from './components/team/RealWorkingInvites';
@@ -38,7 +39,11 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/setup" element={<SetupWizard />} />
+            <Route path="/setup" element={
+              <ProtectedRoute requireVerified={true}>
+                <SetupWizard />
+              </ProtectedRoute>
+            } />
             <Route path="/auth" element={<SimpleAuth />} />
             <Route path="/debug" element={<CampaignDebug />} />
             <Route path="/testing" element={<TestingDashboard />} />

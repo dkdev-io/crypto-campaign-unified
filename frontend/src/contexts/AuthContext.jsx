@@ -79,7 +79,8 @@ export const AuthProvider = ({ children }) => {
         options: {
           data: {
             full_name: fullName
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth?verified=true`
         }
       })
 
@@ -94,7 +95,9 @@ export const AuthProvider = ({ children }) => {
               id: data.user.id,
               email: data.user.email,
               full_name: fullName,
-              email_confirmed: false
+              email_confirmed: data.user.email_confirmed_at ? true : false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             }
           ])
 
@@ -232,6 +235,37 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Check if user email is verified
+  const isEmailVerified = () => {
+    return user?.email_confirmed_at !== null
+  }
+
+  // Handle email verification callback
+  const handleEmailVerification = async () => {
+    try {
+      if (!user) return { verified: false, error: 'No user found' }
+
+      // Update local user profile with email confirmation status
+      if (user.email_confirmed_at) {
+        await supabase
+          .from('users')
+          .update({ 
+            email_confirmed: true,
+            email_confirmed_at: user.email_confirmed_at,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user.id)
+
+        // Refresh user profile
+        await fetchUserProfile(user.id)
+      }
+
+      return { verified: !!user.email_confirmed_at, error: null }
+    } catch (error) {
+      return { verified: false, error }
+    }
+  }
+
   const value = {
     user,
     session,
@@ -244,7 +278,9 @@ export const AuthProvider = ({ children }) => {
     getUserCampaigns,
     hasPermission,
     acceptInvitation,
-    fetchUserProfile
+    fetchUserProfile,
+    isEmailVerified,
+    handleEmailVerification
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -1,21 +1,90 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from '../../contexts/AuthContext'
 import RealWorkingInvites from '../team/RealWorkingInvites'
 
 // Simple auth component - no complex flows
 const SimpleAuthContent = () => {
-  const { user, userProfile, signUp, signIn, signOut, updateProfile, loading } = useAuth()
+  const { user, userProfile, signUp, signIn, signOut, updateProfile, loading, isEmailVerified, handleEmailVerification } = useAuth()
   const [mode, setMode] = useState('login') // 'login' or 'signup'
   const [showProfile, setShowProfile] = useState(false)
   const [showInvites, setShowInvites] = useState(false)
+  const [emailVerificationMessage, setEmailVerificationMessage] = useState('')
+
+  // Check for email verification callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('verified') === 'true') {
+      setEmailVerificationMessage('Email verified successfully! You can now proceed to campaign setup.')
+      // Handle the verification
+      if (user) {
+        handleEmailVerification()
+        // After a short delay, redirect to setup
+        setTimeout(() => {
+          window.location.href = '/setup'
+        }, 2000)
+      }
+    }
+  }, [user, handleEmailVerification])
 
   // Loading state
   if (loading) {
     return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
   }
 
+  // Show email verification message
+  if (emailVerificationMessage) {
+    return (
+      <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ 
+          background: 'hsl(var(--crypto-blue) / 0.1)', 
+          border: '1px solid hsl(var(--crypto-blue) / 0.3)',
+          borderRadius: 'var(--radius)',
+          padding: '2rem',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ color: 'hsl(var(--crypto-blue))', marginBottom: '1rem' }}>✅ Verification Complete</h2>
+          <p style={{ color: 'hsl(var(--crypto-blue))' }}>{emailVerificationMessage}</p>
+          <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)', marginTop: '1rem' }}>
+            Redirecting to campaign setup...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   // User is authenticated
   if (user) {
+    // Check if email is verified
+    if (!isEmailVerified()) {
+      return (
+        <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
+          <div style={{ 
+            background: 'hsl(var(--crypto-gold) / 0.1)', 
+            border: '1px solid hsl(var(--crypto-gold) / 0.3)',
+            borderRadius: 'var(--radius)',
+            padding: '2rem',
+            marginBottom: '2rem'
+          }}>
+            <h2 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem' }}>📧 Verify Your Email</h2>
+            <p style={{ color: 'hsl(var(--crypto-medium-gray))', marginBottom: '1rem' }}>
+              We sent a verification link to <strong>{user.email}</strong>
+            </p>
+            <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)' }}>
+              Please check your email and click the verification link to continue with campaign setup.
+            </p>
+            <button 
+              onClick={signOut}
+              className="btn-secondary"
+              style={{ marginTop: '1rem' }}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      )
+    }
+
+    // Email is verified, proceed with normal flow
     // If profile complete, show team invites
     if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
       return (

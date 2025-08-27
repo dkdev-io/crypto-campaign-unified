@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Signup = ({ formData, updateFormData, onNext }) => {
+  const { user, userProfile } = useAuth();
   const [showErrors, setShowErrors] = useState(false);
   
   const handleInputChange = (field, value) => {
@@ -9,6 +11,16 @@ const Signup = ({ formData, updateFormData, onNext }) => {
       setShowErrors(false);
     }
   };
+
+  // Pre-populate form data with user information if available
+  React.useEffect(() => {
+    if (user && userProfile && !formData.userFullName && !formData.email) {
+      updateFormData({
+        userFullName: userProfile.full_name || user.user_metadata?.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, userProfile, formData.userFullName, formData.email, updateFormData]);
 
   const handleNext = () => {
     // Validate all required fields
@@ -24,16 +36,20 @@ const Signup = ({ formData, updateFormData, onNext }) => {
   };
 
   return (
-    <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        📋 Campaign Setup - Step 1
-      </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
-        Tell us about yourself and your campaign
-      </p>
+    <div className="container-responsive">
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <h2 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem', fontSize: 'var(--text-heading-lg)' }}>
+          📋 Campaign Information
+        </h2>
+        <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-lg)', marginBottom: '0' }}>
+          Tell us about yourself and your campaign
+        </p>
+      </div>
 
-      <div className="form-group">
-        <label htmlFor="userFullName">Your Full Name *</label>
+      <div style={{ marginBottom: 'var(--space-lg)' }}>
+        <label className="form-label" htmlFor="userFullName">
+          Your Full Name *
+        </label>
         <input
           id="userFullName"
           className="form-input"
@@ -44,13 +60,15 @@ const Signup = ({ formData, updateFormData, onNext }) => {
           required
           aria-required="true"
           style={{ 
-            borderColor: showErrors && !formData.userFullName ? '#dc3545' : '#ced4da' 
+            borderColor: showErrors && !formData.userFullName ? 'hsl(var(--destructive))' : 'hsl(var(--border))'
           }}
         />
         {showErrors && !formData.userFullName && (
-          <small style={{ color: '#dc3545' }}>Your full name is required</small>
+          <small style={{ color: 'hsl(var(--destructive))', fontSize: 'var(--text-body-sm)', display: 'block', marginTop: 'var(--space-xs)' }}>
+            Your full name is required
+          </small>
         )}
-        <small className="field-help" style={{ color: '#6c757d', fontSize: '12px' }}>
+        <small style={{ color: 'hsl(var(--muted-foreground))', fontSize: 'var(--text-body-sm)', display: 'block', marginTop: 'var(--space-xs)' }}>
           This will be used for FEC reporting
         </small>
       </div>

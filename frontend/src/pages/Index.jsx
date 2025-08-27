@@ -4,17 +4,20 @@ import Features from "../components/Features";
 import HowItWorks from "../components/HowItWorks";
 import CTA from "../components/CTA";
 import Footer from "../components/Footer";
+import { AuthProvider } from '../contexts/AuthContext';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <Hero />
-      <Features />
-      <HowItWorks />
-      <CTA />
-      <Footer />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-background">
+        <Header />
+        <Hero />
+        <Features />
+        <HowItWorks />
+        <CTA />
+        <Footer />
+      </div>
+    </AuthProvider>
   );
 };
 
