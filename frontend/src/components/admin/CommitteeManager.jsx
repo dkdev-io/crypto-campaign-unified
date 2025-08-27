@@ -185,92 +185,65 @@ const CommitteeManager = () => {
       </div>
 
       {/* Test Committees List */}
-      <div style={{ background: 'white', borderRadius: '8px', border: '1px solid #e9ecef' }}>
-        <div style={{ 
-          padding: '1.5rem', 
-          borderBottom: '1px solid #e9ecef',
-          background: '#f8f9fa',
-          borderRadius: '8px 8px 0 0'
-        }}>
-          <h3 style={{ margin: 0, color: '#495057' }}>
+      <div className="crypto-card">
+        <div className="border-b border-border bg-secondary rounded-t-lg p-6">
+          <h3 className="text-lg font-semibold text-foreground">
             Test Committees ({testCommittees.length})
           </h3>
-          <p style={{ margin: '0.5rem 0 0 0', color: '#6c757d', fontSize: '14px' }}>
+          <p className="text-sm text-muted-foreground mt-2">
             These committees are available for testing the campaign setup flow
           </p>
         </div>
 
-        <div style={{ padding: '1.5rem' }}>
+        <div className="p-6">
           {loading && testCommittees.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
+            <div className="text-center py-8 text-muted-foreground">
               ⏳ Loading test committees...
             </div>
           ) : testCommittees.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#6c757d' }}>
-              <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🗳️</div>
-              <p style={{ margin: 0, fontSize: '16px' }}>No test committees found</p>
-              <p style={{ margin: '0.5rem 0 0 0', fontSize: '14px' }}>
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="text-5xl mb-4">🗳️</div>
+              <p className="text-base font-medium">No test committees found</p>
+              <p className="text-sm mt-2">
                 Add a test committee above to get started
               </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gap: '1rem' }}>
+            <div className="space-y-4">
               {testCommittees.map(committee => (
                 <div 
                   key={committee.id}
-                  style={{
-                    border: '1px solid #e9ecef',
-                    borderRadius: '6px',
-                    padding: '1rem',
-                    background: '#fafbfc'
-                  }}
+                  className="border border-border rounded-lg p-4 bg-secondary/50"
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                    <div style={{ flex: 1 }}>
-                      <h4 style={{ 
-                        margin: '0 0 0.5rem 0', 
-                        color: '#2a2a72',
-                        fontSize: '16px'
-                      }}>
-                        🏛️ {committee.name}
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="text-base font-semibold text-foreground mb-2">
+                        {committee.name}
                       </h4>
                       
-                      <div style={{ marginBottom: '0.5rem' }}>
-                        <span style={{ 
-                          background: '#e3f2fd', 
-                          color: '#1565c0', 
-                          padding: '0.25rem 0.5rem', 
-                          borderRadius: '4px', 
-                          fontSize: '12px',
-                          fontWeight: '500'
-                        }}>
+                      <div className="mb-2">
+                        <span className="bg-accent/20 text-accent px-2 py-1 rounded text-xs font-medium">
                           TEST COMMITTEE
                         </span>
                       </div>
 
-                      <div style={{ fontSize: '14px', color: '#6c757d', marginBottom: '0.5rem' }}>
+                      <div className="text-sm text-muted-foreground mb-2">
                         <strong>ID:</strong> {committee.id}
                       </div>
 
                       {committee.testPurpose && (
-                        <div style={{ fontSize: '14px', color: '#6c757d', marginBottom: '0.5rem' }}>
+                        <div className="text-sm text-muted-foreground mb-2">
                           <strong>Purpose:</strong> {committee.testPurpose}
                         </div>
                       )}
 
-                      <div style={{ fontSize: '12px', color: '#868e96' }}>
+                      <div className="text-xs text-muted-foreground/70">
                         Added by {committee.addedBy} • {formatDate(committee.createdAt)}
                       </div>
                     </div>
 
-                    <div style={{ marginLeft: '1rem' }}>
-                      <span style={{ 
-                        color: '#28a745', 
-                        fontSize: '12px',
-                        background: '#d4edda',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '4px'
-                      }}>
+                    <div className="ml-4">
+                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium">
                         ✅ ACTIVE
                       </span>
                     </div>
@@ -283,15 +256,9 @@ const CommitteeManager = () => {
       </div>
 
       {/* Instructions */}
-      <div style={{ 
-        marginTop: '2rem', 
-        padding: '1.5rem', 
-        background: '#f8f9fa', 
-        borderRadius: '8px',
-        border: '1px solid #e9ecef'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>📋 Usage Instructions</h4>
-        <ul style={{ color: '#6c757d', fontSize: '14px', lineHeight: '1.6' }}>
+      <div className="crypto-card bg-secondary">
+        <h4 className="text-lg font-medium text-foreground mb-4">📋 Usage Instructions</h4>
+        <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
           <li>Test committees appear in the committee search during campaign setup</li>
           <li>They can be selected just like real FEC committees</li>
           <li>Use descriptive names to identify different test scenarios</li>
@@ -301,17 +268,11 @@ const CommitteeManager = () => {
       </div>
 
       {/* Development Info */}
-      <div style={{ 
-        marginTop: '2rem', 
-        padding: '1rem', 
-        background: '#fff3cd', 
-        borderRadius: '6px',
-        border: '1px solid #ffeaa7',
-        fontSize: '13px',
-        color: '#856404'
-      }}>
-        <strong>🔧 Development Note:</strong> These test committees are stored separately from real FEC data 
-        and are only used for development and testing purposes.
+      <div className="crypto-card bg-accent/10 border-accent/20 text-accent-foreground">
+        <div className="text-sm">
+          <strong>🔧 Development Note:</strong> These test committees are stored separately from real FEC data 
+          and are only used for development and testing purposes.
+        </div>
       </div>
     </div>
   );

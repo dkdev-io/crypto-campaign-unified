@@ -5,8 +5,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="text-2xl font-bold">
-              <span style={{color: 'hsl(var(--crypto-white))'}}>Crypto</span>
-              <span style={{color: 'hsl(var(--crypto-gold))'}}>Campaign</span>
+              <span style={{color: 'hsl(var(--crypto-white))'}}>NEXT</span>
+              <span style={{color: 'hsl(var(--crypto-gold))'}}>PHASE</span>
             </div>
             <p className="text-sm leading-relaxed opacity-80">
               The easiest way for campaigns to accept secure and compliant cryptocurrency donations.
@@ -106,7 +106,7 @@ const Footer = () => {
 
         <div className="border-t mt-12 pt-8 text-center" style={{borderColor: 'hsl(var(--crypto-white) / 0.2)'}}>
           <p className="text-sm opacity-60" style={{color: 'hsl(var(--crypto-white))'}}>
-            © 2024 CryptoCampaign. All rights reserved.
+            © 2024 NextPhase. All rights reserved.
           </p>
         </div>
       </div>
