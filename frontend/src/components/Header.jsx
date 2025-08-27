@@ -26,6 +26,14 @@ const Header = () => {
 
           <div className="flex items-center space-x-4">
             <button 
+              className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold px-6 py-2.5 rounded-md transition-all duration-200 uppercase text-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              onClick={() => {
+                window.location.href = '/donor/register';
+              }}
+            >
+              👥 JOIN AS DONOR
+            </button>
+            <button 
               className="text-gray-700 hover:text-primary transition-colors font-medium uppercase text-sm"
               onClick={() => {
                 window.location.href = '/auth';

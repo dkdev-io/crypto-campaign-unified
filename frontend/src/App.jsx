@@ -32,6 +32,7 @@ import DonorLogin from './components/donor/DonorLogin';
 import DonorDashboard from './components/donor/DonorDashboard';
 import DonorProfile from './components/donor/DonorProfile';
 import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
+import DonorVerifyEmail from './components/donor/DonorVerifyEmail';
 
 function App() {
   return (
@@ -103,6 +104,7 @@ function App() {
             {/* Donor Routes */}
             <Route path="/donor/register" element={<DonorRegister />} />
             <Route path="/donor/login" element={<DonorLogin />} />
+            <Route path="/donor/verify-email" element={<DonorVerifyEmail />} />
             <Route path="/donor/dashboard" element={
               <DonorProtectedRoute>
                 <DonorDashboard />
