@@ -59,3 +59,38 @@ Dashboard: file:///Users/Danallovertheplace/docs/app-access-dashboard.html
 🚀 Live Admin System: https://cryptocampaign.netlify.app/admin
 📱 Main Platform: https://cryptocampaign.netlify.app/
 💻 GitHub Repository: https://github.com/dkdev-io/crypto-campaign-unified
+
+---
+
+## Security Fix Session - 2025-08-26
+
+**Issue**: GitHub security alert for exposed Supabase service key in `apply-migrations.cjs`
+
+**Resolution**:
+1. **Local Environment**: 
+   - Moved hardcoded service key to `.env` file
+   - Updated `apply-migrations.cjs` to use environment variables
+   - Added validation for missing environment variables
+   - Updated `.env.example` with proper documentation
+
+2. **Live Deployment**: 
+   - Added migration script to Netlify build process
+   - Configured environment variables in `netlify.toml`
+   - Migration script now runs during Netlify deployment
+
+**Security Status**: ✅ **RESOLVED**
+- Hardcoded credentials removed from source code
+- Environment variables properly configured for both local and production
+- GitHub security alert will be resolved after next deployment
+
+**Files Modified**:
+- `apply-migrations.cjs` - Updated to use environment variables
+- `.env` - Added migration-specific environment variables
+- `.env.example` - Updated with new variable documentation
+- `netlify.toml` - Added migration script to build process
+
+**Technical Notes**:
+- Used `dotenv` package for environment variable loading
+- Maintained backward compatibility with existing functionality  
+- Added proper error handling for missing credentials
+- Secured sensitive data while maintaining deployment functionality

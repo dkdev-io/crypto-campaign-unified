@@ -44,7 +44,6 @@ const CampaignManager = () => {
 
   const saveAmounts = async (campaignId) => {
     try {
-      // Parse the amounts string into an array of numbers
       const amounts = editAmounts
         .split(',')
         .map(a => parseFloat(a.trim()))
@@ -54,8 +53,6 @@ const CampaignManager = () => {
         alert('Please enter valid amounts (e.g., "25, 50, 100, 250")');
         return;
       }
-
-      console.log(`💾 Saving amounts for campaign ${campaignId}:`, amounts);
 
       const { data, error } = await supabase
         .from('campaigns')
@@ -67,8 +64,6 @@ const CampaignManager = () => {
       if (error) {
         alert(`Failed to update amounts: ${error.message}`);
       } else {
-        console.log(`✅ Updated amounts successfully:`, data.suggested_amounts);
-        // Update local state
         setCampaigns(prev => prev.map(c => 
           c.id === campaignId 
             ? { ...c, suggested_amounts: amounts }
@@ -107,18 +102,18 @@ const CampaignManager = () => {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>Loading campaigns...</h2>
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
-        <h2>Error</h2>
-        <p>{error}</p>
-        <button onClick={loadCampaigns} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
+      <div className="crypto-card text-center">
+        <h2 className="text-xl font-bold text-foreground mb-4">Error</h2>
+        <p className="text-muted-foreground mb-4">{error}</p>
+        <button onClick={loadCampaigns} className="btn-primary">
           Retry
         </button>
       </div>
@@ -126,180 +121,133 @@ const CampaignManager = () => {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1>🔧 Campaign Manager</h1>
-        <div>
-          <button 
-            onClick={loadCampaigns}
-            style={{ 
-              padding: '0.5rem 1rem', 
-              marginRight: '1rem',
-              background: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            🔄 Refresh
-          </button>
-          <a 
-            href="/" 
-            style={{ 
-              padding: '0.5rem 1rem', 
-              background: '#007bff',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px'
-            }}
-          >
-            ← Back to Setup
-          </a>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="crypto-card">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Campaign Manager</h1>
+            <p className="text-muted-foreground">Manage and configure campaigns</p>
+          </div>
+          <div className="flex gap-4">
+            <button onClick={loadCampaigns} className="btn-secondary">
+              🔄 Refresh
+            </button>
+            <a href="/" className="btn-primary">
+              ← Back to Setup
+            </a>
+          </div>
         </div>
       </div>
 
-      <p style={{ marginBottom: '2rem', color: '#666' }}>
-        📊 Total Campaigns: <strong>{campaigns.length}</strong>
-      </p>
-
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-          <thead>
-            <tr style={{ background: '#f8f9fa' }}>
-              <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Campaign</th>
-              <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Email</th>
-              <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Suggested Amounts</th>
-              <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Max Donation</th>
-              <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '2px solid #dee2e6' }}>Created</th>
-              <th style={{ padding: '1rem', textAlign: 'center', borderBottom: '2px solid #dee2e6' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {campaigns.map((campaign, index) => (
-              <tr key={campaign.id} style={{ borderBottom: '1px solid #dee2e6' }}>
-                <td style={{ padding: '1rem' }}>
-                  <div>
-                    <strong>{campaign.campaign_name}</strong>
-                    <br />
-                    <small style={{ color: '#666' }}>
-                      <a 
-                        href={`http://localhost:5173/?campaign=${campaign.id}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ color: '#007bff' }}
-                      >
-                        🔗 View Form
-                      </a>
-                    </small>
-                  </div>
-                </td>
-                <td style={{ padding: '1rem' }}>
-                  <small>{campaign.email}</small>
-                </td>
-                <td style={{ padding: '1rem' }}>
-                  {editingCampaign === campaign.id ? (
-                    <div>
-                      <input
-                        type="text"
-                        value={editAmounts}
-                        onChange={(e) => setEditAmounts(e.target.value)}
-                        placeholder="Enter new amounts (e.g., 10, 25, 100)"
-                        style={{ 
-                          width: '150px', 
-                          padding: '0.25rem', 
-                          border: '1px solid #ccc',
-                          borderRadius: '4px'
-                        }}
-                      />
-                      <div style={{ marginTop: '0.5rem' }}>
-                        <button
-                          onClick={() => saveAmounts(campaign.id)}
-                          style={{ 
-                            padding: '0.25rem 0.5rem', 
-                            marginRight: '0.5rem',
-                            background: '#28a745',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            fontSize: '12px'
-                          }}
-                        >
-                          ✅ Save
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          style={{ 
-                            padding: '0.25rem 0.5rem',
-                            background: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '3px',
-                            cursor: 'pointer',
-                            fontSize: '12px'
-                          }}
-                        >
-                          ❌ Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <strong>[{campaign.suggested_amounts?.join(', ') || 'none'}]</strong>
-                    </div>
-                  )}
-                </td>
-                <td style={{ padding: '1rem' }}>
-                  ${campaign.max_donation_limit || 3300}
-                </td>
-                <td style={{ padding: '1rem' }}>
-                  <small>{new Date(campaign.created_at).toLocaleDateString()}</small>
-                </td>
-                <td style={{ padding: '1rem', textAlign: 'center' }}>
-                  {editingCampaign === campaign.id ? null : (
-                    <div>
-                      <button
-                        onClick={() => startEdit(campaign)}
-                        style={{ 
-                          padding: '0.25rem 0.5rem', 
-                          marginRight: '0.5rem',
-                          background: '#ffc107',
-                          color: 'black',
-                          border: 'none',
-                          borderRadius: '3px',
-                          cursor: 'pointer',
-                          fontSize: '12px'
-                        }}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => deleteCampaign(campaign.id, campaign.campaign_name)}
-                        style={{ 
-                          padding: '0.25rem 0.5rem',
-                          background: '#dc3545',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '3px',
-                          cursor: 'pointer',
-                          fontSize: '12px'
-                        }}
-                      >
-                        🗑️ Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Stats */}
+      <div className="crypto-card">
+        <p className="text-muted-foreground">
+          📊 Total Campaigns: <strong className="text-foreground">{campaigns.length}</strong>
+        </p>
       </div>
 
-      <div style={{ marginTop: '2rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>
-        <h3>💡 Usage Tips:</h3>
-        <ul>
+      {/* Campaigns Table */}
+      <div className="crypto-card">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-secondary">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Campaign</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Suggested Amounts</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Max Donation</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Created</th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-card divide-y divide-border">
+              {campaigns.map((campaign) => (
+                <tr key={campaign.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-foreground">{campaign.campaign_name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        <a 
+                          href={`http://localhost:5173/?campaign=${campaign.id}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary hover:text-primary/80"
+                        >
+                          🔗 View Form
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {campaign.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {editingCampaign === campaign.id ? (
+                      <div>
+                        <input
+                          type="text"
+                          value={editAmounts}
+                          onChange={(e) => setEditAmounts(e.target.value)}
+                          placeholder="Enter new amounts (e.g., 10, 25, 100)"
+                          className="form-input w-40"
+                        />
+                        <div className="flex gap-2 mt-2">
+                          <button
+                            onClick={() => saveAmounts(campaign.id)}
+                            className="px-2 py-1 bg-accent text-accent-foreground rounded text-xs"
+                          >
+                            ✅ Save
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs"
+                          >
+                            ❌ Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-sm font-medium text-foreground">
+                        [{campaign.suggested_amounts?.join(', ') || 'none'}]
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                    ${campaign.max_donation_limit || 3300}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {new Date(campaign.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    {editingCampaign === campaign.id ? null : (
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => startEdit(campaign)}
+                          className="px-2 py-1 bg-accent text-accent-foreground rounded text-xs hover:bg-accent/80"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          onClick={() => deleteCampaign(campaign.id, campaign.campaign_name)}
+                          className="px-2 py-1 bg-destructive text-destructive-foreground rounded text-xs hover:bg-destructive/80"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Usage Tips */}
+      <div className="crypto-card">
+        <h3 className="text-lg font-semibold text-foreground mb-4">💡 Usage Tips:</h3>
+        <ul className="space-y-2 text-muted-foreground">
           <li>✏️ <strong>Edit Amounts:</strong> Click "Edit" to modify suggested donation amounts</li>
           <li>🔗 <strong>Test Campaigns:</strong> Click "View Form" to see the live donation form</li>
           <li>🗑️ <strong>Delete Campaigns:</strong> Remove test campaigns you no longer need</li>

@@ -86,16 +86,11 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="crypto-card w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900">Admin Portal</h2>
-          <p className="text-gray-600 mt-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Admin Portal</h2>
+          <p className="text-muted-foreground">
             {showSetup ? 'Set up your admin account' : 'Sign in to manage the platform'}
           </p>
         </div>
@@ -135,7 +130,7 @@ const AdminLogin = () => {
         {showSetup ? (
           <form onSubmit={handleSetup} className="space-y-6">
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="fullName" className="form-label">
                 Full Name
               </label>
               <input
@@ -145,13 +140,13 @@ const AdminLogin = () => {
                 value={setupData.fullName}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Enter your full name"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="form-label">
                 Email Address
               </label>
               <input
@@ -161,13 +156,13 @@ const AdminLogin = () => {
                 value={setupData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
@@ -177,14 +172,14 @@ const AdminLogin = () => {
                 value={setupData.password}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Create a strong password"
                 minLength={8}
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmPassword" className="form-label">
                 Confirm Password
               </label>
               <input
@@ -194,7 +189,7 @@ const AdminLogin = () => {
                 value={setupData.confirmPassword}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Confirm your password"
                 minLength={8}
               />
@@ -203,7 +198,7 @@ const AdminLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Setting up...' : 'Create Admin Account'}
             </button>
@@ -211,7 +206,7 @@ const AdminLogin = () => {
             <button
               type="button"
               onClick={() => setShowSetup(false)}
-              className="w-full text-gray-600 hover:text-gray-800 font-medium transition duration-200"
+              className="w-full text-muted-foreground hover:text-foreground font-medium transition-colors duration-200"
             >
               Back to Login
             </button>
@@ -219,7 +214,7 @@ const AdminLogin = () => {
         ) : (
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="form-label">
                 Email Address
               </label>
               <input
@@ -229,13 +224,13 @@ const AdminLogin = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Enter your admin email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
@@ -245,7 +240,7 @@ const AdminLogin = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="form-input"
                 placeholder="Enter your password"
               />
             </div>
@@ -253,7 +248,7 @@ const AdminLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -262,7 +257,7 @@ const AdminLogin = () => {
               <button
                 type="button"
                 onClick={() => setShowSetup(true)}
-                className="text-blue-600 hover:text-blue-800 font-medium transition duration-200"
+                className="text-primary hover:text-primary/80 font-medium transition-colors duration-200"
               >
                 First time? Set up admin account
               </button>
@@ -270,8 +265,8 @@ const AdminLogin = () => {
           </form>
         )}
 
-        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-          <p className="text-xs text-gray-500">
+        <div className="mt-8 pt-6 border-t border-border text-center">
+          <p className="text-xs text-muted-foreground">
             Crypto Campaign Platform Admin Portal
           </p>
         </div>

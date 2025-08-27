@@ -240,7 +240,7 @@ const DonorForm = ({ campaignId }) => {
   const candidateName = campaignData?.candidate_name;
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '2rem', background: 'white', borderRadius: '8px' }}>
+    <div className="container-responsive crypto-card" style={{ maxWidth: '500px' }}>
       <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
@@ -252,9 +252,9 @@ const DonorForm = ({ campaignId }) => {
       
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
-          <label>Full Name *</label>
+          <label className="form-label">Full Name *</label>
           <input 
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             required
             value={formData.fullName || ''}
             onChange={(e) => setFormData({...formData, fullName: e.target.value})}
@@ -262,10 +262,10 @@ const DonorForm = ({ campaignId }) => {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label>Email *</label>
+          <label className="form-label">Email *</label>
           <input 
             type="email"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             required
             value={formData.email || ''}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -273,10 +273,11 @@ const DonorForm = ({ campaignId }) => {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label>Address *</label>
+          <label className="form-label">Address *</label>
           <input 
             placeholder="Street Address"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '0.5rem' }}
+            className="form-input"
+            style={{ marginBottom: '0.5rem' }}
             required
             value={formData.street || ''}
             onChange={(e) => setFormData({...formData, street: e.target.value})}
@@ -284,21 +285,21 @@ const DonorForm = ({ campaignId }) => {
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.5rem' }}>
             <input 
               placeholder="City"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.city || ''}
               onChange={(e) => setFormData({...formData, city: e.target.value})}
             />
             <input 
               placeholder="State"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.state || ''}
               onChange={(e) => setFormData({...formData, state: e.target.value})}
             />
             <input 
               placeholder="ZIP"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.zip || ''}
               onChange={(e) => setFormData({...formData, zip: e.target.value})}
@@ -308,18 +309,18 @@ const DonorForm = ({ campaignId }) => {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div>
-            <label>Employer *</label>
+            <label className="form-label">Employer *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.employer || ''}
               onChange={(e) => setFormData({...formData, employer: e.target.value})}
             />
           </div>
           <div>
-            <label>Occupation *</label>
+            <label className="form-label">Occupation *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.occupation || ''}
               onChange={(e) => setFormData({...formData, occupation: e.target.value})}
