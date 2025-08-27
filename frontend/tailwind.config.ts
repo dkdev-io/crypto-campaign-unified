@@ -8,6 +8,18 @@ export default {
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
 	],
+	safelist: [
+		'hero-section',
+		'crypto-card',
+		'container-responsive',
+		'content-section',
+		'btn-primary',
+		'btn-secondary',
+		'form-input',
+		'form-label',
+		'text-balance',
+		'animate-fade-in'
+	],
 	prefix: "",
 	theme: {
 		container: {

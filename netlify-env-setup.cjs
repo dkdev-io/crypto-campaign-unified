@@ -59,7 +59,7 @@ async function setupNetlifyEnvVars() {
     
     console.log('🎉 Setup complete! GitGuardian alerts should be resolved after deployment.');
     
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
   } catch (error) {
     console.error('❌ Error during setup:', error.message);
@@ -75,17 +75,17 @@ async function addEnvironmentVariable(page, key, value) {
     // Click "Add variable" button
     await page.waitForSelector('button:has-text("Add variable"), button:has-text("New variable")', { timeout: 10000 });
     await page.click('button:has-text("Add variable"), button:has-text("New variable")');
-    await page.waitForTimeout(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Fill in key
     await page.waitForSelector('input[placeholder*="Key"], input[name="key"]');
     await page.fill('input[placeholder*="Key"], input[name="key"]', key);
-    await page.waitForTimeout(500);
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     // Fill in value
     await page.waitForSelector('input[placeholder*="Value"], textarea[placeholder*="Value"], input[name="value"]');
     await page.fill('input[placeholder*="Value"], textarea[placeholder*="Value"], input[name="value"]', value);
-    await page.waitForTimeout(500);
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     // Save the variable
     await page.click('button:has-text("Save"), button:has-text("Add")');
