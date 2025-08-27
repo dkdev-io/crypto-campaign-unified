@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-08-27T02:17:48.883Z",
+  "timestamp": "2025-08-27T02:48:41.605Z",
   "working": [
     {
       "operation": "CREATE campaign",
-      "details": "Created: Test Campaign 1756261068884 (ID: 8e055469-a8b3-4cbf-be6f-6e6e1172f244)"
+      "details": "Created: Test Campaign 1756262921606 (ID: b00872b8-502c-4bd3-ae15-7dc1391e098a)"
     },
     {
       "operation": "READ all campaigns",
@@ -11,7 +11,7 @@
     },
     {
       "operation": "READ single campaign",
-      "details": "Retrieved: Test Campaign 1756261068884"
+      "details": "Retrieved: Test Campaign 1756262921606"
     },
     {
       "operation": "READ filtered campaigns",
@@ -35,7 +35,7 @@
     },
     {
       "operation": "DELETE campaign",
-      "details": "Deleted: Test Campaign 1756261068884"
+      "details": "Deleted: Test Campaign 1756262921606"
     },
     {
       "operation": "DELETE verification",
@@ -77,5 +77,5 @@
     }
   ],
   "summary": {},
-  "testCampaignId": "8e055469-a8b3-4cbf-be6f-6e6e1172f244"
+  "testCampaignId": "b00872b8-502c-4bd3-ae15-7dc1391e098a"
 }
