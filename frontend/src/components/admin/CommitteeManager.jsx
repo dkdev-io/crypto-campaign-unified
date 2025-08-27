@@ -72,128 +72,69 @@ const CommitteeManager = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ color: '#2a2a72', marginBottom: '0.5rem' }}>
-          🏛️ FEC Committee Manager
+    <div className="space-y-6">
+      <div className="crypto-card text-center">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          FEC Committee Manager
         </h1>
-        <p style={{ color: '#666', fontSize: '16px' }}>
+        <p className="text-muted-foreground">
           Manage test committees for development and testing purposes
         </p>
       </div>
 
       {/* Navigation */}
-      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <a 
-          href="/"
-          style={{ 
-            marginRight: '1rem',
-            color: '#2a2a72', 
-            textDecoration: 'none',
-            padding: '0.5rem 1rem',
-            border: '1px solid #2a2a72',
-            borderRadius: '4px',
-            display: 'inline-block'
-          }}
-        >
-          ← Back to Setup
-        </a>
-        <a 
-          href="/admin"
-          style={{ 
-            marginRight: '1rem',
-            color: '#666', 
-            textDecoration: 'none',
-            padding: '0.5rem 1rem',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            display: 'inline-block'
-          }}
-        >
-          📊 Campaign Admin
-        </a>
-        <a 
-          href="/fec-test"
-          style={{ 
-            color: '#28a745', 
-            textDecoration: 'none',
-            padding: '0.5rem 1rem',
-            border: '1px solid #28a745',
-            borderRadius: '4px',
-            display: 'inline-block'
-          }}
-        >
-          🔬 Test FEC API
-        </a>
+      <div className="crypto-card text-center">
+        <div className="flex justify-center space-x-4">
+          <a 
+            href="/"
+            className="btn-primary"
+          >
+            ← Back to Setup
+          </a>
+          <a 
+            href="/admin"
+            className="btn-secondary"
+          >
+            Campaign Admin
+          </a>
+          <a 
+            href="/fec-test"
+            className="btn-secondary"
+          >
+            Test FEC API
+          </a>
+        </div>
       </div>
 
       {/* Status Messages */}
       {error && (
-        <div style={{ 
-          background: '#fee', 
-          color: '#c33', 
-          padding: '1rem', 
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #fcc'
-        }}>
+        <div className="crypto-card bg-destructive/10 border-destructive/20 text-destructive">
           ❌ {error}
         </div>
       )}
 
       {success && (
-        <div style={{ 
-          background: '#efe', 
-          color: '#393', 
-          padding: '1rem', 
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #cfc'
-        }}>
+        <div className="crypto-card bg-green-50 border-green-200 text-green-800">
           ✅ {success}
         </div>
       )}
 
       {/* Add Committee Section */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '1.5rem', 
-        borderRadius: '8px', 
-        marginBottom: '2rem',
-        border: '1px solid #e9ecef'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          marginBottom: showAddForm ? '1rem' : '0'
-        }}>
-          <h3 style={{ margin: 0, color: '#495057' }}>Add Test Committee</h3>
+      <div className="crypto-card bg-secondary">
+        <div className={`flex justify-between items-center ${showAddForm ? 'mb-4' : ''}`}>
+          <h3 className="text-lg font-semibold text-foreground">Add Test Committee</h3>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            style={{
-              background: showAddForm ? '#dc3545' : '#28a745',
-              color: 'white',
-              border: 'none',
-              padding: '0.5rem 1rem',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
+            className={showAddForm ? 'bg-destructive text-destructive-foreground btn-secondary' : 'btn-secondary'}
           >
             {showAddForm ? '✕ Cancel' : '+ Add Committee'}
           </button>
         </div>
 
         {showAddForm && (
-          <form onSubmit={handleAddCommittee} style={{ marginTop: '1rem' }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontWeight: '500',
-                color: '#495057'
-              }}>
+          <form onSubmit={handleAddCommittee} className="mt-4 space-y-4">
+            <div>
+              <label className="form-label">
                 Committee Name *
               </label>
               <input
@@ -201,24 +142,13 @@ const CommitteeManager = () => {
                 value={newCommittee.name}
                 onChange={(e) => setNewCommittee({ ...newCommittee, name: e.target.value })}
                 placeholder="e.g., Test Campaign Committee 2024"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ced4da',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className="form-input"
                 required
               />
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontWeight: '500',
-                color: '#495057'
-              }}>
+            <div>
+              <label className="form-label">
                 Test Purpose
               </label>
               <input
@@ -226,36 +156,19 @@ const CommitteeManager = () => {
                 value={newCommittee.purpose}
                 onChange={(e) => setNewCommittee({ ...newCommittee, purpose: e.target.value })}
                 placeholder="e.g., UI testing, Development testing"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ced4da',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className="form-input"
               />
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontWeight: '500',
-                color: '#495057'
-              }}>
+            <div>
+              <label className="form-label">
                 Admin Email
               </label>
               <input
                 type="email"
                 value={newCommittee.adminEmail}
                 onChange={(e) => setNewCommittee({ ...newCommittee, adminEmail: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ced4da',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className="form-input"
                 required
               />
             </div>
@@ -263,16 +176,7 @@ const CommitteeManager = () => {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                background: '#2a2a72',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '4px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
-                opacity: loading ? 0.7 : 1
-              }}
+              className="btn-primary disabled:opacity-50"
             >
               {loading ? '⏳ Adding...' : '✅ Add Committee'}
             </button>

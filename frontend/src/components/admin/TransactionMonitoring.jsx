@@ -265,7 +265,7 @@ const TransactionMonitoring = () => {
                         setSelectedTransactions([]);
                       }
                     }}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-border text-primary focus:ring-primary"
                   />
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Transaction</th>
@@ -291,14 +291,14 @@ const TransactionMonitoring = () => {
                           setSelectedTransactions(selectedTransactions.filter(id => id !== transaction.id));
                         }
                       }}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-border text-primary focus:ring-primary"
                     />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">#{transaction.id}</div>
+                      <div className="text-sm font-medium text-foreground">#{transaction.id}</div>
                       {transaction.transaction_hash && (
-                        <div className="text-xs text-gray-500 font-mono">
+                        <div className="text-xs text-muted-foreground font-mono">
                           {transaction.transaction_hash.substring(0, 20)}...
                         </div>
                       )}
@@ -306,14 +306,14 @@ const TransactionMonitoring = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-foreground">
                         {transaction.first_name} {transaction.last_name}
                       </div>
-                      <div className="text-sm text-gray-500">{transaction.email}</div>
+                      <div className="text-sm text-muted-foreground">{transaction.email}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-foreground">
                       {formatCurrency(transaction.amount)}
                     </div>
                   </td>
@@ -326,7 +326,7 @@ const TransactionMonitoring = () => {
                       {transaction.payment_method || 'crypto'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                     {formatDate(transaction.submitted_at)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -336,10 +336,10 @@ const TransactionMonitoring = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900">
+                      <button className="text-primary hover:text-primary/90">
                         View
                       </button>
-                      <button className="text-purple-600 hover:text-purple-900">
+                      <button className="text-accent hover:text-accent/90">
                         Verify
                       </button>
                       {transaction.transaction_hash && (
@@ -362,12 +362,12 @@ const TransactionMonitoring = () => {
       </div>
 
       {/* Summary */}
-      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+      <div className="crypto-card">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-muted-foreground">
             Showing {filteredTransactions.length} of {transactions.length} transactions
           </div>
-          <div className="text-sm font-medium text-gray-900">
+          <div className="text-sm font-medium text-foreground">
             Total: {formatCurrency(filteredTransactions.reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0))}
           </div>
         </div>

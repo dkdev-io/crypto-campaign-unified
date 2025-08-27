@@ -6,33 +6,38 @@ const Hero = () => {
       <div className="container-responsive relative">
         <div className="max-w-5xl mx-auto text-center animate-fade-in">
           <div className="space-y-8">
-            <h1 className="text-balance leading-tight">
+            <h1 className="text-balance leading-tight font-extrabold">
               Raise More—Faster.
               <span className="block" style={{color: 'hsl(var(--crypto-gold))'}}>
                 The Easiest Way
               </span>
-              for Campaigns to Accept Secure and Compliant Cryptocurrency Donations
+              <span className="block">
+                for Campaigns to Accept Secure and
+              </span>
+              <span className="block">
+                Compliant Cryptocurrency Donations
+              </span>
             </h1>
             
-            <div className="space-y-6 max-w-2xl mx-auto">
-              <p className="flex items-center justify-center gap-3 text-lg">
-                <span className="w-3 h-3 rounded-full" style={{backgroundColor: 'hsl(var(--crypto-gold))'}} />
-                Onboard in minutes. No setup fees, ever.
-              </p>
-              <p className="flex items-center justify-center gap-3 text-lg">
-                <span className="w-3 h-3 rounded-full" style={{backgroundColor: 'hsl(var(--crypto-gold))'}} />
-                Full compliance and reporting handled for you.
-              </p>
+            <div className="space-y-4 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-3 text-lg text-white">
+                <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
+                <span>Onboard in minutes. No setup fees, ever.</span>
+              </div>
+              <div className="flex items-center justify-center gap-3 text-lg text-white">
+                <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
+                <span>Full compliance and reporting handled for you.</span>
+              </div>
             </div>
 
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-8">
               <button 
-                className="btn-secondary text-xl font-bold px-12 py-4"
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl px-12 py-4 rounded transition-colors shadow-lg"
                 onClick={() => {
                   window.location.href = '/setup';
                 }}
               >
-                Get Started—No Setup Fee
+                GET STARTED—NO SETUP FEE
               </button>
             </div>
           </div>

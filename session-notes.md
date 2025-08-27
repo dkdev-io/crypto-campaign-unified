@@ -93,4 +93,7 @@ Dashboard: file:///Users/Danallovertheplace/docs/app-access-dashboard.html
 - Used `dotenv` package for environment variable loading
 - Maintained backward compatibility with existing functionality  
 - Added proper error handling for missing credentials
-- Secured sensitive data while maintaining deployment functionality
+- Secured sensitive data while maintaining deployment functionality## App Access Information
+Dashboard: file:///Users/Danallovertheplace/docs/app-access-dashboard.html
+[0;34m[APP SCANNER][0m Starting application scan...
+[0;34m[APP SCANNER][0m Current Apps Summary:
