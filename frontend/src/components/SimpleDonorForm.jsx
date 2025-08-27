@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { processContribution } from '../lib/smart-contract';
+import { web3Service } from '../lib/web3';
 
 const SimpleDonorForm = ({ campaignId }) => {
   const [formData, setFormData] = useState({});
