@@ -372,7 +372,7 @@ const SimpleDonorForm = ({ campaignId }) => {
             color: 'white'
           }}
         >
-          {isSubmitting ? '⏳ Initiating Smart Contract...' : '🚀 Launch Smart Contract'}
+          {isSubmitting ? '⏳ Processing Contribution...' : '💝 Contribute Now'}
         </button>
       </form>
     </div>
