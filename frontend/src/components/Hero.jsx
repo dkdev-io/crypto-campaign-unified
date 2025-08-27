@@ -1,22 +1,29 @@
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const { user, loading, isEmailVerified } = useAuth();
+  const navigate = useNavigate();
 
   const handleGetStarted = () => {
+    console.log('Get Started clicked - Auth state:', { user: !!user, loading, verified: user ? isEmailVerified() : false });
+    
     // Check if user is authenticated
     if (!loading && user) {
       // Check if email is verified
       if (isEmailVerified()) {
         // User is authenticated and verified, proceed to campaign setup
-        window.location.href = '/setup';
+        console.log('Navigating to /setup (user verified)');
+        navigate('/setup');
       } else {
         // User is authenticated but not verified, go to auth page for verification
-        window.location.href = '/auth';
+        console.log('Navigating to /auth (user not verified)');
+        navigate('/auth');
       }
     } else {
       // User is not authenticated, redirect to sign up/sign in
-      window.location.href = '/auth';
+      console.log('Navigating to /auth (user not authenticated)');
+      navigate('/auth');
     }
   };
 

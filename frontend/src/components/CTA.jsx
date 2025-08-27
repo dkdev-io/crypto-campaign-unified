@@ -1,8 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useAuth } from '../contexts/AuthContext';
 
 const CTA = () => {
   const navigate = useNavigate();
+  const { user, loading, isEmailVerified } = useAuth();
+
+  const handleGetStarted = () => {
+    console.log('CTA Get Started clicked - Auth state:', { user: !!user, loading });
+    
+    // Check if user is authenticated
+    if (!loading && user) {
+      // Check if email is verified
+      if (isEmailVerified && isEmailVerified()) {
+        // User is authenticated and verified, proceed to campaign setup
+        console.log('Navigating to /setup (user verified)');
+        navigate('/setup');
+      } else {
+        // User is authenticated but not verified, go to auth page for verification
+        console.log('Navigating to /auth (user not verified)');
+        navigate('/auth');
+      }
+    } else {
+      // User is not authenticated, redirect to sign up/sign in
+      console.log('Navigating to /auth (user not authenticated)');
+      navigate('/auth');
+    }
+  };
+
   return (
     <section className="py-24 bg-gradient-to-b from-primary to-primary/90 text-primary-foreground">
       <div className="container px-4 md:px-6 text-center">
@@ -22,9 +47,10 @@ const CTA = () => {
             <Button 
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-12 py-6 h-auto"
-              onClick={() => navigate('/setup')}
+              onClick={handleGetStarted}
+              disabled={loading}
             >
-              Get Started—No Setup Fee
+              {loading ? 'Loading...' : 'Get Started—No Setup Fee'}
             </Button>
           </div>
 
