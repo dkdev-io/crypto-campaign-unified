@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from '../../contexts/AuthContext'
 import RealWorkingInvites from '../team/RealWorkingInvites'
+import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb'
 
 // Simple auth component - no complex flows
 const SimpleAuthContent = () => {
@@ -34,19 +35,22 @@ const SimpleAuthContent = () => {
   // Show email verification message
   if (emailVerificationMessage) {
     return (
-      <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
-        <div style={{ 
-          background: 'hsl(var(--crypto-blue) / 0.1)', 
-          border: '1px solid hsl(var(--crypto-blue) / 0.3)',
-          borderRadius: 'var(--radius)',
-          padding: '2rem',
-          marginBottom: '2rem'
-        }}>
-          <h2 style={{ color: 'hsl(var(--crypto-blue))', marginBottom: '1rem' }}>✅ Verification Complete</h2>
-          <p style={{ color: 'hsl(var(--crypto-blue))' }}>{emailVerificationMessage}</p>
-          <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)', marginTop: '1rem' }}>
-            Redirecting to campaign setup...
-          </p>
+      <div>
+        <CampaignBreadcrumb />
+        <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
+          <div style={{ 
+            background: 'hsl(var(--crypto-blue) / 0.1)', 
+            border: '1px solid hsl(var(--crypto-blue) / 0.3)',
+            borderRadius: 'var(--radius)',
+            padding: '2rem',
+            marginBottom: '2rem'
+          }}>
+            <h2 style={{ color: 'hsl(var(--crypto-blue))', marginBottom: '1rem' }}>✅ Verification Complete</h2>
+            <p style={{ color: 'hsl(var(--crypto-blue))' }}>{emailVerificationMessage}</p>
+            <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)', marginTop: '1rem' }}>
+              Redirecting to campaign setup...
+            </p>
+          </div>
         </div>
       </div>
     )
@@ -88,28 +92,37 @@ const SimpleAuthContent = () => {
     // If profile complete, show team invites
     if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
       return (
-        <div className="container-responsive" style={{ maxWidth: '800px' }}>
-          <RealWorkingInvites campaignId="default-campaign" />
+        <div>
+          <CampaignBreadcrumb />
+          <div className="container-responsive" style={{ maxWidth: '800px' }}>
+            <RealWorkingInvites campaignId="default-campaign" />
+          </div>
         </div>
       )
     }
 
     // Show contact form
     return (
-      <div className="container-responsive" style={{ maxWidth: '600px' }}>
-        <ContactForm onComplete={() => setShowInvites(true)} />
+      <div>
+        <CampaignBreadcrumb />
+        <div className="container-responsive" style={{ maxWidth: '600px' }}>
+          <ContactForm onComplete={() => setShowInvites(true)} />
+        </div>
       </div>
     )
   }
 
   // User not authenticated - show login/signup
   return (
-    <div className="container-responsive" style={{ maxWidth: '400px' }}>
-      {mode === 'login' ? (
-        <LoginForm onSuccess={() => {}} onSwitchMode={() => setMode('signup')} />
-      ) : (
-        <SignupForm onSuccess={() => {}} onSwitchMode={() => setMode('login')} />
-      )}
+    <div>
+      <CampaignBreadcrumb />
+      <div className="container-responsive" style={{ maxWidth: '400px' }}>
+        {mode === 'login' ? (
+          <LoginForm onSuccess={() => {}} onSwitchMode={() => setMode('signup')} />
+        ) : (
+          <SignupForm onSuccess={() => {}} onSwitchMode={() => setMode('login')} />
+        )}
+      </div>
     </div>
   )
 }

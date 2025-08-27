@@ -12,18 +12,20 @@ const CampaignBreadcrumb = () => {
     ];
 
     // Add Campaign-specific breadcrumbs
-    if (pathname.startsWith('/setup') || pathname.startsWith('/campaigns')) {
-      breadcrumbs.push({ label: 'Campaigns', path: '/setup' });
+    if (pathname.startsWith('/setup') || pathname.startsWith('/campaigns') || pathname === '/auth') {
+      breadcrumbs.push({ label: 'Campaigns', path: '/' });
     }
 
-    if (pathname === '/setup') {
+    if (pathname === '/auth') {
+      breadcrumbs.push({ label: 'Sign In / Sign Up', path: '/auth', current: true });
+    } else if (pathname === '/setup') {
       breadcrumbs.push({ label: 'Setup Wizard', path: '/setup', current: true });
     } else if (pathname === '/campaigns/auth/register') {
       breadcrumbs.push({ label: 'Sign Up', path: '/campaigns/auth/register', current: true });
     } else if (pathname === '/campaigns/auth/login') {
       breadcrumbs.push({ label: 'Sign In', path: '/campaigns/auth/login', current: true });
     } else if (pathname === '/campaigns/auth') {
-      breadcrumbs.push({ label: 'Sign In', path: '/campaigns/auth', current: true });
+      breadcrumbs.push({ label: 'Sign In / Sign Up', path: '/campaigns/auth', current: true });
     } else if (pathname === '/campaigns/dashboard') {
       breadcrumbs.push({ label: 'Dashboard', path: '/campaigns/dashboard', current: true });
     } else if (pathname === '/campaigns/profile') {
