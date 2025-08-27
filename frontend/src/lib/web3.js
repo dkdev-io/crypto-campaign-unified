@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import { web3DemoService } from './web3-demo-mode.js';
+
 import { CAMPAIGN_CONTRACT_ABI, CONTRACT_CONFIG } from './contract-abi.js';
 
 class Web3Service {
@@ -11,25 +13,30 @@ class Web3Service {
   }
 
   // Initialize Web3 connection
+    // Initialize Web3 connection
   async init() {
     try {
-      if (typeof window.ethereum !== 'undefined') {
-        this.provider = new ethers.BrowserProvider(window.ethereum);
-        console.log('✅ Web3 provider initialized');
-        return true;
-      } else {
-        console.error('❌ MetaMask not found');
-        return false;
+      if (typeof window === 'undefined' || typeof window.ethereum === 'undefined') {
+        console.log('⚠️ MetaMask not available, switching to demo mode');
+        this.demoMode = true;
+        return await web3DemoService.init();
       }
+      
+      this.provider = new ethers.BrowserProvider(window.ethereum);
+      console.log('✅ Web3 provider initialized');
+      return true;
     } catch (error) {
-      console.error('❌ Web3 initialization failed:', error);
-      return false;
+      console.error('❌ Web3 initialization failed, switching to demo mode:', error);
+      this.demoMode = true;
+      return await web3DemoService.init();
     }
   }
 
   // Connect wallet (MetaMask)
   async connectWallet() {
     try {
+          if (this.demoMode) return await web3DemoService.connectWallet();
+
       if (!this.provider) {
         throw new Error('Web3 provider not initialized');
       }
@@ -122,6 +129,8 @@ class Web3Service {
   // Get account balance
   async getBalance() {
     try {
+          if (this.demoMode) return await web3DemoService.getBalance();
+
       if (!this.account || !this.provider) {
         throw new Error('Wallet not connected');
       }
@@ -196,6 +205,8 @@ class Web3Service {
   // Make a contribution
   async contribute(amountInETH) {
     try {
+          if (this.demoMode) return await web3DemoService.contribute(amountInETH);
+
       if (!this.contract || !this.signer) {
         throw new Error('Contract or signer not initialized');
       }

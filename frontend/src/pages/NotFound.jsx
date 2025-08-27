@@ -20,7 +20,7 @@ const NotFound = () => {
         <div className="space-y-2">
           <h1 className="text-9xl font-bold text-muted-foreground">404</h1>
           <p className="text-2xl font-semibold">Page Not Found</p>
-          <p className="text-muted-foreground">The page you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground">The page you&apos;re looking for doesn&apos;t exist.</p>
         </div>
         <div className="flex gap-4 justify-center">
           <Button 

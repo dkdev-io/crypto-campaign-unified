@@ -12,6 +12,7 @@ import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
 import RealWorkingInvites from './components/team/RealWorkingInvites';
 import { AnalyticsProvider } from './components/analytics/AnalyticsProvider';
+import DonationTest from './pages/DonationTest';
 import PrivacyBanner from './components/analytics/PrivacyBanner';
 
 // Admin Components
@@ -63,6 +64,7 @@ function App() {
                 <RealWorkingInvites campaignId="test-campaign" />
               </div>
             } />
+            <Route path="/donation-test" element={<DonationTest />} />
             <Route path="/analytics-demo" element={
               <div style={{ 
                 minHeight: '100vh', 
