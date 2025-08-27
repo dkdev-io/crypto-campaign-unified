@@ -63,36 +63,44 @@ const SimpleDonorForm = ({ campaignId }) => {
     const processingStartTime = Date.now();
     
     try {
-      // Validate campaign ID
-      if (!campaignId) {
-        throw new Error('No campaign ID found. Please check the campaign URL.');
-      }
+      // Use demo campaign if no campaign ID provided
+      const effectiveCampaignId = campaignId || 'demo-campaign';
       
       // Validate amount
       if (!formData.amount || contributionAmount <= 0) {
         throw new Error('Please enter a valid contribution amount');
       }
       
-      // Validate wallet address for crypto contributions
-      if (!formData.walletAddress || !formData.walletAddress.trim()) {
-        throw new Error('Wallet address is required for cryptocurrency contributions');
+      // Initialize Web3 and process contribution through blockchain
+      console.log('🚀 Initiating Web3 connection and transaction...');
+      
+      // Initialize Web3 service
+      await web3Service.init();
+      
+      // Connect wallet (demo mode if MetaMask unavailable)
+      const walletConnection = await web3Service.connectWallet();
+      if (!walletConnection.success) {
+        throw new Error(`Wallet connection failed: ${walletConnection.error}`);
       }
       
-      // Process contribution through smart contract
-      console.log('🚀 Initiating smart contract transaction...');
-      const contractResult = await processContribution(formData, campaignId);
+      // Convert USD to ETH for blockchain transaction
+      const amountETH = await web3Service.convertUSDToETH(contributionAmount);
+      console.log(`Converting $${contributionAmount} to ${amountETH} ETH`);
+      
+      // Execute blockchain contribution
+      const contractResult = await web3Service.contribute(amountETH);
       
       if (!contractResult.success) {
-        throw new Error(`Smart contract error: ${contractResult.error}`);
+        throw new Error(`Blockchain transaction failed: ${contractResult.error}`);
       }
       
-      console.log('✅ Smart contract transaction successful:', contractResult);
+      console.log('✅ Blockchain transaction successful:', contractResult);
       
       // Save donor submission to database with transaction details
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([{
-          campaign_id: campaignId,
+          campaign_id: effectiveCampaignId,
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
@@ -104,8 +112,8 @@ const SimpleDonorForm = ({ campaignId }) => {
           employer: formData.employer,
           occupation: formData.occupation,
           amount: parseFloat(formData.amount),
-          contributor_wallet: formData.walletAddress,
-          transaction_hash: contractResult.transactionHash,
+          contributor_wallet: walletConnection.account || 'demo-wallet',
+          transaction_hash: contractResult.txHash,
           payment_method: 'crypto',
           is_us_citizen: true,
           is_prohibited_source: false,
@@ -273,18 +281,16 @@ const SimpleDonorForm = ({ campaignId }) => {
           </div>
         </div>
 
-        <div>
-          <label className="form-label">Your Crypto Wallet Address *</label>
-          <input 
-            placeholder="Enter your cryptocurrency wallet address"
-            className="form-input mb-2"
-            required
-            value={formData.walletAddress || ''}
-            onChange={(e) => setFormData({...formData, walletAddress: e.target.value})}
-          />
-          <small className="text-muted-foreground text-sm">
-            This is where your crypto contribution will be sent from
-          </small>
+        <div className="crypto-card" style={{backgroundColor: 'hsl(var(--crypto-blue) / 0.05)', borderColor: 'hsl(var(--crypto-blue) / 0.2)'}}>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔗</span>
+            <div>
+              <p className="font-medium">Crypto Wallet Connection</p>
+              <p className="text-sm text-muted-foreground">
+                Your wallet will be connected automatically when you submit your contribution
+              </p>
+            </div>
+          </div>
         </div>
 
         <div>
