@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
+import DonorBreadcrumb from './DonorBreadcrumb';
 import { 
   User, 
   Mail, 
@@ -189,6 +190,8 @@ const DonorProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb Navigation */}
+      <DonorBreadcrumb />
       {/* Header */}
       <div className="bg-gradient-to-r from-navy-900 to-blue-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

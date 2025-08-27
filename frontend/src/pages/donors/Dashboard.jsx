@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
+import DonorBreadcrumb from '../../components/donor/DonorBreadcrumb';
 import { User, Heart, Calendar, TrendingUp, Settings, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +15,8 @@ const DonorDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb Navigation */}
+      <DonorBreadcrumb />
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

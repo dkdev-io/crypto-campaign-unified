@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, UserPlus, LogIn, Shield, FileText } from 'lucide-react';
+import DonorBreadcrumb from './DonorBreadcrumb';
 
 const DonorAuthNav = () => {
   const location = useLocation();
@@ -10,7 +11,8 @@ const DonorAuthNav = () => {
   };
 
   return (
-    <nav className="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+    <div className="sticky top-0 z-50">
+      <nav className="bg-white/95 backdrop-blur-sm shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
@@ -106,7 +108,9 @@ const DonorAuthNav = () => {
           </button>
         </div>
       </div>
-    </nav>
+      </nav>
+      <DonorBreadcrumb />
+    </div>
   );
 };
 
