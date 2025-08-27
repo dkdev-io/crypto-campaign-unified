@@ -10,7 +10,7 @@ const DonorDashboard = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/donors/auth/login');
+    navigate('/donors/auth');
   };
 
   return (

@@ -115,7 +115,7 @@ const DonorVerifyEmail = () => {
                 {resendLoading ? 'Sending...' : 'Resend Verification Email'}
               </button>
               <Link
-                to="/donors/auth/login"
+                to="/donors/auth"
                 className="block text-blue-600 hover:underline"
               >
                 Back to Login
@@ -174,7 +174,7 @@ const DonorVerifyEmail = () => {
             
             <div className="text-sm text-gray-600">
               <p>Already verified?</p>
-              <Link to="/donors/auth/login" className="text-blue-600 hover:underline font-medium">
+              <Link to="/donors/auth" className="text-blue-600 hover:underline font-medium">
                 Sign in to your account
               </Link>
             </div>

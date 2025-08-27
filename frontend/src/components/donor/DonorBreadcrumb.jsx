@@ -14,7 +14,7 @@ const DonorBreadcrumb = () => {
 
     // Add donor section
     if (pathname.includes('/donors')) {
-      breadcrumbs.push({ label: 'Donors', path: '/donors/auth/login' });
+      breadcrumbs.push({ label: 'Donors', path: '/donors/auth' });
     }
 
     // Add specific page breadcrumbs
@@ -22,6 +22,8 @@ const DonorBreadcrumb = () => {
       breadcrumbs.push({ label: 'Sign Up', path: '/donors/auth/register', current: true });
     } else if (pathname === '/donors/auth/login') {
       breadcrumbs.push({ label: 'Sign In', path: '/donors/auth/login', current: true });
+    } else if (pathname === '/donors/auth') {
+      breadcrumbs.push({ label: 'Sign In', path: '/donors/auth', current: true });
     } else if (pathname === '/donors/auth/terms') {
       breadcrumbs.push({ label: 'Terms of Service', path: '/donors/auth/terms', current: true });
     } else if (pathname === '/donors/auth/privacy') {
