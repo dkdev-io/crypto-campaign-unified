@@ -7,6 +7,7 @@ import WebsiteStyleMatcher from './WebsiteStyleMatcher';
 import StyleConfirmation from './StyleConfirmation';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
+import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
 import { supabase } from '../../lib/supabase';
 import '../../styles/setup.css';
 
@@ -170,7 +171,9 @@ const SetupWizard = () => {
   };
 
   return (
-    <div className="setup-container">
+    <div>
+      <CampaignBreadcrumb />
+      <div className="setup-container">
       <div className="setup-card">
         <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
           <a 
@@ -192,7 +195,7 @@ const SetupWizard = () => {
         <div className="form-content">
           {renderStep()}
         </div>
-      </div>
+      </div>      </div>
     </div>
   );
 };
