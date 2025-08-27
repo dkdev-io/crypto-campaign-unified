@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import { Mail, Lock, AlertCircle, Heart } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Spinner } from '../ui/spinner';
 
 const DonorLogin = () => {
   const navigate = useNavigate();
@@ -77,25 +80,25 @@ const DonorLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-card rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mb-4">
-              <Heart className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full mb-4">
+              <Heart className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h2 className="text-3xl font-bold text-navy-900 mb-2">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
               Donor Sign In
             </h2>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Access your donor account
             </p>
           </div>
 
           {/* Error Alert */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-start gap-2">
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg mb-6 flex items-start gap-2">
               <AlertCircle className="w-5 h-5 mt-0.5" />
               <span className="text-sm">{error}</span>
             </div>
