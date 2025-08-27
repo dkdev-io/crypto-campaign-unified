@@ -16,7 +16,6 @@ async function testNetlifySite() {
         await page.setViewport({ width: 1280, height: 720 });
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
         
-        console.log('📡 Navigating to site...');
         
         // Navigate with timeout
         const response = await page.goto('https://cryptocampaign.netlify.app/', {
@@ -24,8 +23,6 @@ async function testNetlifySite() {
             timeout: 30000
         });
         
-        console.log(`✅ Response status: ${response.status()}`);
-        console.log(`📄 Response headers: ${JSON.stringify(response.headers(), null, 2)}`);
         
         // Check if page loaded successfully
         if (response.status() === 200) {
@@ -33,7 +30,6 @@ async function testNetlifySite() {
             
             // Get page title
             const title = await page.title();
-            console.log(`📑 Page title: "${title}"`);
             
             // Check for React app mounting
             await page.waitForSelector('body', { timeout: 5000 });
@@ -43,7 +39,6 @@ async function testNetlifySite() {
                 return document.body.innerText.slice(0, 200) + '...';
             });
             
-            console.log(`📝 Page content preview: "${bodyText}"`);
             
             // Check for common error indicators
             const hasErrorText = bodyText.toLowerCase().includes('error') || 
@@ -61,14 +56,12 @@ async function testNetlifySite() {
                        window.React !== undefined;
             });
             
-            console.log(`⚛️  React app detected: ${hasReactRoot}`);
             
             // Take a screenshot for verification
             await page.screenshot({ 
                 path: '/Users/Danallovertheplace/crypto-campaign-unified/scripts/netlify-site-screenshot.png',
                 fullPage: false
             });
-            console.log('📸 Screenshot saved: scripts/netlify-site-screenshot.png');
             
             return {
                 status: 'SUCCESS',
@@ -80,7 +73,6 @@ async function testNetlifySite() {
             };
             
         } else {
-            console.log(`❌ Site returned status: ${response.status()}`);
             return {
                 status: 'FAILED',
                 statusCode: response.status(),
@@ -106,9 +98,7 @@ testNetlifySite().then(result => {
     console.log(JSON.stringify(result, null, 2));
     
     if (result.status === 'SUCCESS') {
-        console.log('\n✅ DEPLOYMENT WORKING: Netlify site is accessible and functional');
     } else {
-        console.log('\n❌ DEPLOYMENT ISSUE: Site has problems');
     }
     
     process.exit(result.status === 'SUCCESS' ? 0 : 1);

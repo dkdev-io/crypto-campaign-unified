@@ -8,8 +8,6 @@
 const puppeteer = require('puppeteer');
 
 async function testFinalValidation() {
-  console.log('🧪 FINAL VALIDATION TEST');
-  console.log('Testing on updated server at port 5174...\n');
   
   const browser = await puppeteer.launch({
     headless: false,
@@ -19,14 +17,12 @@ async function testFinalValidation() {
   const page = await browser.newPage();
   
   try {
-    console.log('1. Loading form with updated validation...');
     await page.goto('http://localhost:5174/?campaign=fefd5286-e859-48c9-95e6-0a743837acb3', {
       waitUntil: 'domcontentloaded'
     });
     
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    console.log('2. Testing validation without wallet connection...');
     
     // Fill in email and amount to trigger validation
     const emailField = await page.$('input[name*="email"], input[type="email"]');
@@ -37,13 +33,11 @@ async function testFinalValidation() {
     const amountField = await page.$('input[name*="amount"], input[placeholder*="amount"], input[type="number"]');
     if (amountField) {
       await amountField.type('100');
-      console.log('   Entered: $100');
     }
     
     // Wait for validation
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    console.log('3. Checking for validation messages...');
     
     // Check for wallet warning
     const validationCheck = await page.evaluate(() => {
@@ -70,9 +64,7 @@ async function testFinalValidation() {
     });
     
     console.log('\n📊 VALIDATION TEST RESULTS:');
-    console.log(`   ✅ Amount field detected: ${validationCheck.pageHasAmount ? 'YES' : 'NO'}`);
     console.log(`   🔍 Wallet warning present: ${validationCheck.hasWalletWarning ? 'YES ✅' : 'NO ❌'}`);
-    console.log(`   📋 Validation references: ${validationCheck.hasValidationReference ? 'YES ✅' : 'NO ❌'}`);
     
     if (validationCheck.warningText) {
       console.log(`\n   Warning message found:`);
@@ -86,11 +78,7 @@ async function testFinalValidation() {
     // Final assessment
     if (validationCheck.hasWalletWarning) {
       console.log('\n✅ SUCCESS! Validation fix is working!');
-      console.log('The form now properly requires wallet connection for validation.');
-      console.log('Smart contract validation is being enforced.');
     } else {
-      console.log('\n⚠️ Validation messages not visible yet.');
-      console.log('The changes may need more time to compile or there may be a React state issue.');
     }
     
   } catch (error) {

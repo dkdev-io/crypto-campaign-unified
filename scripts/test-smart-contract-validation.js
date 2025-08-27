@@ -18,9 +18,6 @@ class SmartContractValidationTester {
   }
 
   async initialize() {
-    console.log('🧪 Smart Contract Validation Tester');
-    console.log('Testing that form properly validates through smart contract');
-    console.log(`Target: ${FORM_URL}\n`);
     
     this.browser = await puppeteer.launch({ 
       headless: false, // Show browser to see validation
@@ -31,7 +28,6 @@ class SmartContractValidationTester {
   }
 
   async runValidationTests() {
-    console.log('📋 TEST SUITE: Smart Contract Validation\n');
     
     // Test 1: No wallet connected should block validation
     await this.testNoWalletValidation();
@@ -47,8 +43,6 @@ class SmartContractValidationTester {
   }
 
   async testNoWalletValidation() {
-    console.log('TEST 1: Form without wallet connection');
-    console.log('Expected: Should show wallet connection required message');
     
     const page = await this.browser.newPage();
     
@@ -96,8 +90,6 @@ class SmartContractValidationTester {
   }
 
   async testNoKYCValidation() {
-    console.log('TEST 2: Wallet connected but no KYC');
-    console.log('Expected: Should fail validation with KYC required message');
     
     const page = await this.browser.newPage();
     
@@ -152,8 +144,6 @@ class SmartContractValidationTester {
   }
 
   async testOverLimitValidation() {
-    console.log('TEST 3: Contribution over cumulative limit');
-    console.log('Expected: Should fail validation with over limit message');
     
     const page = await this.browser.newPage();
     
@@ -223,15 +213,11 @@ class SmartContractValidationTester {
   }
 
   generateReport() {
-    console.log('\n📊 VALIDATION TEST REPORT');
-    console.log('=' * 50);
     
     const passed = this.testResults.filter(r => r.passed).length;
     const failed = this.testResults.filter(r => !r.passed).length;
     
     console.log(`Total Tests: ${this.testResults.length}`);
-    console.log(`✅ Passed: ${passed}`);
-    console.log(`❌ Failed: ${failed}`);
     
     console.log('\n📋 DETAILED RESULTS:');
     this.testResults.forEach((result, i) => {
@@ -248,19 +234,14 @@ class SmartContractValidationTester {
     // Check if validation is now working
     if (passed === this.testResults.length) {
       console.log('\n✅ SUCCESS: Validation is now working properly!');
-      console.log('The form is correctly validating through the smart contract.');
     } else if (passed > 0) {
       console.log('\n⚠️ PARTIAL SUCCESS: Some validation is working');
-      console.log('The form has partial smart contract validation but needs more work.');
     } else {
-      console.log('\n❌ FAILURE: Validation is still not working');
-      console.log('The form is not properly validating through the smart contract.');
     }
     
     // Save results
     const reportPath = `test-results/smart-contract-validation-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\n📁 Report saved: ${reportPath}`);
   }
 
   async cleanup() {

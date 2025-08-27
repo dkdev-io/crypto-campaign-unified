@@ -6,7 +6,6 @@ async function debugNetlify() {
     
     // Listen for console errors
     page.on('console', msg => {
-        console.log(`BROWSER LOG [${msg.type()}]:`, msg.text());
     });
     
     // Listen for page errors
@@ -19,7 +18,6 @@ async function debugNetlify() {
         console.log('FAILED REQUEST:', request.url(), request.failure().errorText);
     });
     
-    console.log('🔍 Opening Netlify site with debugging...');
     await page.goto('https://cryptocampaign.netlify.app/', { 
         waitUntil: 'networkidle0',
         timeout: 30000 
@@ -35,7 +33,6 @@ async function debugNetlify() {
         };
     });
     
-    console.log('📋 Page analysis:', JSON.stringify(bodyContent, null, 2));
     
     // Wait a bit to see if anything loads
     await page.waitForTimeout(5000);

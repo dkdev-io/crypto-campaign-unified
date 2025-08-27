@@ -31,12 +31,6 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  daemon: (msg) => console.log(`${colors.magenta}👁️  ${msg}${colors.reset}`),
-  dim: (msg) => console.log(`${colors.dim}   ${msg}${colors.reset}`)
 };
 
 class AutoDeployDaemon {
@@ -229,8 +223,6 @@ class AutoDeployDaemon {
     try {
       const logs = readFileSync(DAEMON_LOG_FILE, 'utf8');
       if (logs.trim()) {
-        console.log('\n--- Auto-Deploy Daemon Logs ---\n');
-        console.log(logs);
       } else {
         log.info('Log file is empty');
       }
@@ -254,7 +246,6 @@ function parseCommand() {
 }
 
 function showHelp() {
-  console.log(`
 ${colors.bold}Auto-Deploy Daemon${colors.reset}
 
 ${colors.cyan}Usage:${colors.reset}

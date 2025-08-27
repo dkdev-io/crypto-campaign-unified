@@ -8,8 +8,6 @@ class DetailedViolationAnalysis {
     }
 
     async analyzeAllViolations() {
-        console.log('🔍 DETAILED CONTRACT VIOLATION ANALYSIS');
-        console.log('=' .repeat(60));
         
         // Get all contributions with KYC status, sorted by wallet and date
         const contributions = await new Promise((resolve, reject) => {
@@ -41,8 +39,6 @@ class DetailedViolationAnalysis {
         const walletTotals = {};
         let cumulativeViolations = [];
 
-        console.log('🧪 Analyzing each contribution:');
-        console.log('');
 
         for (const contrib of contributions) {
             const amount = parseFloat(contrib.contribution_amount);
@@ -90,9 +86,7 @@ class DetailedViolationAnalysis {
 
             // Log significant violations
             if (violationType === 'EXCEEDS_PER_TRANSACTION') {
-                console.log(`❌ PER_TX_LIMIT  | ${contrib.unique_id} | $${amount} (limit: $${this.MAX_CONTRIBUTION_USD})`);
             } else if (violationType === 'EXCEEDS_CUMULATIVE') {
-                console.log(`❌ CUMULATIVE    | ${contrib.unique_id} | $${amount} (wallet total would be: $${(walletTotals[wallet] + amount).toFixed(2)})`);
             }
         }
 
@@ -104,30 +98,16 @@ class DetailedViolationAnalysis {
     }
 
     generateDetailedReport(violations, cumulativeViolations, totalContributions) {
-        console.log('\n📊 COMPREHENSIVE VIOLATION BREAKDOWN:');
-        console.log('=' .repeat(60));
-        console.log(`   Total Contributions Analyzed: ${totalContributions}`);
-        console.log(`   ✅ Valid (compliant): ${violations.valid} (${Math.round(violations.valid/totalContributions*100)}%)`);
-        console.log(`   ❌ KYC failures: ${violations.kyc_not_passed} (${Math.round(violations.kyc_not_passed/totalContributions*100)}%)`);
-        console.log(`   ❌ Per-transaction limit violations: ${violations.exceeds_per_transaction} (${Math.round(violations.exceeds_per_transaction/totalContributions*100)}%)`);
-        console.log(`   ❌ Cumulative limit violations: ${violations.exceeds_cumulative} (${Math.round(violations.exceeds_cumulative/totalContributions*100)}%)`);
         
         const totalInvalid = violations.kyc_not_passed + violations.exceeds_per_transaction + violations.exceeds_cumulative;
-        console.log(`\n   📈 Total Valid: ${violations.valid}/${totalContributions} (${Math.round(violations.valid/totalContributions*100)}%)`);
-        console.log(`   📉 Total Invalid: ${totalInvalid}/${totalContributions} (${Math.round(totalInvalid/totalContributions*100)}%)`);
 
         if (cumulativeViolations.length > 0) {
-            console.log(`\n🎯 CUMULATIVE VIOLATIONS DETAILS:`);
-            console.log('   These contributions would exceed the $3,300 wallet limit:');
             cumulativeViolations.forEach(violation => {
-                console.log(`   - ${violation.unique_id}: $${violation.amount} (previous: $${violation.previousTotal.toFixed(2)} → would total: $${violation.wouldBeTotal.toFixed(2)})`);
             });
         }
     }
 
     async analyzeWalletPatterns() {
-        console.log('\n🔍 WALLET-LEVEL ANALYSIS:');
-        console.log('=' .repeat(60));
 
         // Find wallets that would exceed limits if all contributions were processed
         const walletTotals = await new Promise((resolve, reject) => {
@@ -150,7 +130,6 @@ class DetailedViolationAnalysis {
         let walletsOverLimit = 0;
         let walletsWithKYCValid = 0;
         
-        console.log('Top 10 wallets by attempted contribution:');
         walletTotals.slice(0, 10).forEach((wallet, index) => {
             const overLimit = wallet.total_attempted > this.MAX_CONTRIBUTION_USD;
             const kycValidOver = wallet.kyc_valid_total > this.MAX_CONTRIBUTION_USD;
@@ -158,13 +137,9 @@ class DetailedViolationAnalysis {
             if (overLimit) walletsOverLimit++;
             if (kycValidOver) walletsWithKYCValid++;
             
-            console.log(`   ${index + 1}. ${wallet.wallet.substring(0, 12)}... | $${wallet.total_attempted.toFixed(2)} (${wallet.contribution_count} contributions) ${overLimit ? '⚠️ OVER LIMIT' : '✅'} | KYC-valid: $${wallet.kyc_valid_total.toFixed(2)} ${kycValidOver ? '⚠️' : '✅'}`);
         });
 
         console.log(`\n📊 Wallet Summary:`);
-        console.log(`   - Total wallets: ${walletTotals.length}`);
-        console.log(`   - Wallets attempting >$3,300: ${walletsOverLimit}`);
-        console.log(`   - Wallets with KYC-valid contributions >$3,300: ${walletsWithKYCValid}`);
     }
 
     async cleanup() {
@@ -177,7 +152,6 @@ if (require.main === module) {
     const analyzer = new DetailedViolationAnalysis();
     analyzer.analyzeAllViolations()
         .then(() => {
-            console.log('\n✅ Detailed analysis completed');
             return analyzer.cleanup();
         })
         .catch((error) => {

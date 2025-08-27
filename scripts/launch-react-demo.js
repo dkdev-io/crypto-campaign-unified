@@ -21,7 +21,6 @@ async function setupReactDemo() {
   }
 
   // Install additional dependencies if needed
-  console.log('📦 Checking dependencies...');
   
   try {
     // Check if @supabase/supabase-js is installed
@@ -29,12 +28,10 @@ async function setupReactDemo() {
     const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
     
     if (!deps['@supabase/supabase-js']) {
-      console.log('📦 Installing Supabase client...');
       await runCommand('npm install @supabase/supabase-js', frontendPath);
     }
 
     if (!deps['react-router-dom']) {
-      console.log('📦 Installing React Router...');
       await runCommand('npm install react-router-dom', frontendPath);
     }
 
@@ -50,7 +47,6 @@ async function createEnvFile() {
   const envPath = path.join(process.cwd(), 'frontend', '.env.local');
   
   if (!fs.existsSync(envPath)) {
-    console.log('🔧 Creating environment file for demo...');
     
     const envContent = `# Demo Environment Variables
 REACT_APP_SUPABASE_URL=https://your-project.supabase.co
@@ -64,7 +60,6 @@ REACT_APP_DEMO_MODE=true
 }
 
 async function updateAppForDemo() {
-  console.log('🔧 Updating App.js for analytics demo...');
   
   const appPath = path.join(process.cwd(), 'frontend', 'src', 'App.js');
   
@@ -302,7 +297,6 @@ function App() {
                 Disable Analytics
               </button>
               <button 
-                onClick={() => console.log(window.getAnalyticsStatus?.())}
                 style={{
                   background: 'transparent',
                   border: '1px solid #64748b',
@@ -323,7 +317,6 @@ function App() {
             theme="dark"
             showLearnMore={true}
             onConsentChange={(granted) => {
-              console.log('🍪 Privacy consent changed:', granted);
             }}
           />
         </div>
@@ -341,7 +334,6 @@ export default App;
 
 async function runCommand(command, cwd) {
   return new Promise((resolve, reject) => {
-    console.log(`🔧 Running: ${command}`);
     const child = spawn(command.split(' ')[0], command.split(' ').slice(1), {
       cwd,
       stdio: 'pipe'
@@ -379,7 +371,6 @@ async function startReactServer() {
 
     child.stdout.on('data', (data) => {
       const output = data.toString();
-      console.log('📱 React:', output.trim());
       
       if (output.includes('Local:') || output.includes('localhost:3000')) {
         setTimeout(() => resolve('http://localhost:3000'), 2000);
@@ -389,14 +380,12 @@ async function startReactServer() {
     child.stderr.on('data', (data) => {
       const output = data.toString();
       if (!output.includes('webpack compiled')) {
-        console.log('📱 React:', output.trim());
       }
     });
   });
 }
 
 async function launchBrowserDemo() {
-  console.log('🌐 Launching browser for React analytics demo...');
   
   const browser = await puppeteer.launch({
     headless: false,
@@ -414,7 +403,6 @@ async function launchBrowserDemo() {
   page.on('console', msg => {
     const type = msg.type();
     if (type === 'log') {
-      console.log('🖥️ Browser:', msg.text());
     } else if (type === 'error') {
       console.error('❌ Browser Error:', msg.text());
     }
@@ -422,13 +410,11 @@ async function launchBrowserDemo() {
 
   // Navigate with UTM parameters for testing
   const url = 'http://localhost:3000?utm_source=demo&utm_medium=puppeteer&utm_campaign=analytics_test';
-  console.log('📱 Opening:', url);
   
   await page.goto(url, { waitUntil: 'networkidle0' });
 
   // Inject some demo interactions
   setTimeout(async () => {
-    console.log('🤖 Running demo interactions...');
     
     // Scroll to trigger scroll events
     await page.evaluate(() => {
@@ -444,11 +430,6 @@ async function launchBrowserDemo() {
   }, 5000);
 
   console.log('✅ React demo is running!');
-  console.log('🎯 Try these interactions:');
-  console.log('   • Connect wallet and contribute');
-  console.log('   • Scroll to see scroll tracking');
-  console.log('   • Open dev tools to see analytics logs');
-  console.log('   • Test the privacy controls');
 
   return browser;
 }
@@ -469,11 +450,9 @@ async function main() {
     // Launch browser
     await launchBrowserDemo();
     
-    console.log('🔄 Demo is running. Press Ctrl+C to stop.');
     
     // Keep running
     process.on('SIGINT', () => {
-      console.log('\n👋 Shutting down demo...');
       process.exit(0);
     });
     

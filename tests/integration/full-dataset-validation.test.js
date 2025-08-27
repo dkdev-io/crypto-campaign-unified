@@ -34,7 +34,6 @@ describe('Full Dataset Validation (515 Records)', function() {
   this.timeout(300000); // 5 minutes for bulk operations
 
   before(async function() {
-    console.log('🔍 Loading all test accounts and data...');
     
     // Get test accounts (20 available in Hardhat)
     const accounts = await ethers.getSigners();
@@ -45,16 +44,10 @@ describe('Full Dataset Validation (515 Records)', function() {
     contract = await CampaignContract.deploy(treasury.address, owner.address);
     await contract.waitForDeployment();
     
-    console.log(`✅ Contract deployed: ${await contract.getAddress()}`);
     
     // Load all CSV data
     await loadAllCSVData();
     
-    console.log(`📊 Data loaded:`);
-    console.log(`   • Prospects: ${prospects.length}`);
-    console.log(`   • Donors: ${donors.length}`);
-    console.log(`   • KYC Records: ${kycRecords.length}`);
-    console.log(`   • Total Records: ${prospects.length + donors.length + kycRecords.length}`);
   });
 
   async function loadCSV(filePath) {
@@ -142,7 +135,6 @@ describe('Full Dataset Validation (515 Records)', function() {
     before(function() {
       // Filter for approved KYC records only
       approvedKYC = kycRecords.filter(kyc => kyc.status === 'approved');
-      console.log(`   📋 Found ${approvedKYC.length} approved KYC records to verify`);
     });
 
     it('should batch verify approved KYC addresses', async function() {
@@ -161,13 +153,11 @@ describe('Full Dataset Validation (515 Records)', function() {
         
         const addresses = batch.map(kyc => kyc.wallet_address);
         
-        console.log(`   🔄 Batch ${i + 1}/${batches}: Verifying ${addresses.length} addresses`);
         
         const tx = await contract.connect(owner).batchVerifyKYC(addresses);
         await tx.wait();
       }
       
-      console.log(`   ✅ Verified ${approvedKYC.length} KYC addresses on-chain`);
     });
 
     it('should confirm all approved addresses are verified on-chain', async function() {
@@ -178,12 +168,10 @@ describe('Full Dataset Validation (515 Records)', function() {
         if (isVerified) {
           verifiedCount++;
         } else {
-          console.log(`   ⚠️  Address not verified: ${kyc.wallet_address}`);
         }
       }
       
       expect(verifiedCount).to.equal(approvedKYC.length);
-      console.log(`   ✅ All ${verifiedCount} approved addresses verified on-chain`);
     });
   });
 
@@ -202,7 +190,6 @@ describe('Full Dataset Validation (515 Records)', function() {
         approvedAddresses.includes(donor.wallet_address.toLowerCase())
       ).slice(0, 15); // Test with first 15 to avoid gas limits
       
-      console.log(`   🎯 Testing contributions with ${verifiedDonors.length} verified donors`);
     });
 
     it('should simulate contributions from verified donors', async function() {
@@ -230,7 +217,6 @@ describe('Full Dataset Validation (515 Records)', function() {
           );
           
           if (!canContribute) {
-            console.log(`   ⚠️  Contribution blocked: ${reason}`);
             failedContributions++;
             continue;
           }
@@ -245,7 +231,6 @@ describe('Full Dataset Validation (515 Records)', function() {
           totalContributed = totalContributed + amountWei;
           successfulContributions++;
           
-          console.log(`   ✅ Contribution ${i + 1}: $${amountUSD} (${amountETH.toFixed(4)} ETH)`);
           
         } catch (error) {
           console.log(`   ❌ Contribution ${i + 1} failed: ${error.message.substring(0, 60)}...`);
@@ -255,8 +240,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       
       console.log(`   📊 Results:`);
       console.log(`      • Successful: ${successfulContributions}`);
-      console.log(`      • Failed: ${failedContributions}`);
-      console.log(`      • Total Raised: ${ethers.formatEther(totalContributed)} ETH`);
       
       expect(successfulContributions).to.be.greaterThan(0);
     });
@@ -267,10 +250,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       expect(Number(stats.totalReceived)).to.be.greaterThan(0);
       expect(Number(stats.uniqueContributors)).to.be.greaterThan(0);
       
-      console.log(`   📈 Campaign Stats:`);
-      console.log(`      • Total Raised: ${ethers.formatEther(stats.totalReceived)} ETH`);
-      console.log(`      • Unique Contributors: ${stats.uniqueContributors.toString()}`);
-      console.log(`      • Max Contribution: ${ethers.formatEther(stats.maxContribution)} ETH`);
     });
   });
 
@@ -281,8 +260,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       
       const overlap = prospectAddresses.filter(addr => donorAddresses.includes(addr));
       
-      console.log(`   🔗 Prospect-Donor Overlap: ${overlap.length} addresses`);
-      console.log(`   📊 Conversion Rate: ${((overlap.length / prospectAddresses.length) * 100).toFixed(1)}%`);
       
       // Some overlap is expected in real campaign data
       expect(overlap.length).to.be.greaterThanOrEqual(0);
@@ -299,8 +276,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       const donorsWithKYC = donorAddresses.filter(addr => kycAddresses.includes(addr));
       const donorsWithApprovedKYC = donorAddresses.filter(addr => kycApprovedAddresses.includes(addr));
       
-      console.log(`   🔐 Donors with KYC Records: ${donorsWithKYC.length}`);
-      console.log(`   ✅ Donors with Approved KYC: ${donorsWithApprovedKYC.length}`);
       
       expect(donorsWithKYC.length).to.be.greaterThan(0);
     });
@@ -319,14 +294,10 @@ describe('Full Dataset Validation (515 Records)', function() {
         if (ethers.isAddress(address)) {
           validAddresses++;
         } else {
-          console.log(`   ❌ Invalid address at index ${index}: ${address}`);
           invalidAddresses++;
         }
       });
       
-      console.log(`   📊 Address Validation:`);
-      console.log(`      • Valid: ${validAddresses}`);
-      console.log(`      • Invalid: ${invalidAddresses}`);
       
       expect(invalidAddresses).to.equal(0);
       expect(validAddresses).to.equal(allAddresses.length);
@@ -346,8 +317,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       const endTime = Date.now();
       const duration = endTime - startTime;
       
-      console.log(`   ⚡ Queried ${testAddresses.length} addresses in ${duration}ms`);
-      console.log(`   📊 Average: ${(duration / testAddresses.length).toFixed(2)}ms per query`);
       
       expect(duration).to.be.lessThan(10000); // Should complete within 10 seconds
       expect(results.length).to.equal(testAddresses.length);
@@ -418,7 +387,6 @@ describe('Full Dataset Validation (515 Records)', function() {
         ...kycRecords.filter(k => !k.wallet_address || !k.status)
       ];
       
-      console.log(`   🔍 Records with missing/invalid fields: ${recordsWithMissingFields.length}`);
       
       // We should have filtered these out during loading
       expect(recordsWithMissingFields.length).to.equal(0);
@@ -445,8 +413,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       const uniqueAmounts = [...new Set(donors.map(d => parseFloat(d.amount)))];
       const addressVariations = [...new Set(donors.map(d => d.wallet_address?.length))];
       
-      console.log(`   💰 Unique contribution amounts: ${uniqueAmounts.length}`);
-      console.log(`   🏠 Address format variations: ${addressVariations.length}`);
       
       expect(uniqueAmounts.length).to.be.greaterThan(10); // Diverse amounts
       expect(addressVariations.length).to.be.lessThanOrEqual(2); // Consistent addressing
@@ -464,7 +430,6 @@ describe('Full Dataset Validation (515 Records)', function() {
       const totalRecords = prospects.length + donors.length + kycRecords.length;
       const validityRate = (totalValidAddresses / totalRecords) * 100;
       
-      console.log(`   📊 Data validity rate: ${validityRate.toFixed(1)}%`);
       
       expect(validityRate).to.be.greaterThan(95); // 95%+ data quality
     });

@@ -21,12 +21,9 @@ class BatchFormTester {
 
   async initialize() {
     console.log('🚀 Batch Form Tester - Optimized for Large Scale Testing');
-    console.log(`🎯 Target: ${FORM_URL}`);
-    console.log(`⏰ Started at: ${new Date().toISOString()}`);
     
     // Load CSV data
     this.prospects = await this.loadCSV('../data/prospects.csv');
-    console.log(`✅ Loaded ${this.prospects.length} prospects for testing`);
     
     // Launch browser with optimized settings for batch processing
     this.browser = await puppeteer.launch({ 
@@ -44,7 +41,6 @@ class BatchFormTester {
       defaultViewport: { width: 1024, height: 768 } // Smaller viewport for speed
     });
     
-    console.log(`🌟 Browser initialized - Ready to test ${this.prospects.length} records`);
   }
 
   async loadCSV(filepath) {
@@ -66,7 +62,6 @@ class BatchFormTester {
     const testId = `test-${prospect.unique_id}-${Date.now()}`;
     const startTime = Date.now();
     
-    console.log(`\n[${index + 1}/${this.prospects.length}] Testing: ${prospect.first_name} ${prospect.last_name}`);
     
     const testResult = {
       testId,
@@ -213,7 +208,6 @@ class BatchFormTester {
   }
 
   async runBatchTest(batchSize = 10) {
-    console.log(`\n🏃‍♂️ Running batch test - Processing ${this.prospects.length} records in batches of ${batchSize}`);
     
     const totalBatches = Math.ceil(this.prospects.length / batchSize);
     
@@ -222,7 +216,6 @@ class BatchFormTester {
       const end = Math.min(start + batchSize, this.prospects.length);
       const batch = this.prospects.slice(start, end);
       
-      console.log(`\n📦 Batch ${batchNum + 1}/${totalBatches}: Testing records ${start + 1}-${end}`);
       
       // Process batch concurrently (but limit concurrency to avoid overwhelming)
       const promises = batch.map((prospect, i) => 
@@ -239,7 +232,6 @@ class BatchFormTester {
       
       // Brief pause between batches
       if (batchNum < totalBatches - 1) {
-        console.log('⏸️  Brief pause before next batch...');
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
     }
@@ -251,8 +243,6 @@ class BatchFormTester {
     const endTime = Date.now();
     const totalDuration = (endTime - this.startTime) / 1000;
     
-    console.log('\n🎯 BATCH TESTING COMPLETE!');
-    console.log('═'.repeat(60));
     
     const successful = this.testResults.filter(r => r.success);
     const failed = this.testResults.filter(r => !r.success);
@@ -262,7 +252,6 @@ class BatchFormTester {
     console.log(`   Total Tests: ${this.testResults.length}`);
     console.log(`   ✅ Successful: ${successful.length} (${successRate}%)`);
     console.log(`   ❌ Failed: ${failed.length} (${(100 - successRate).toFixed(1)}%)`);
-    console.log(`   ⏱️  Total Time: ${totalDuration.toFixed(2)}s`);
     console.log(`   ⚡ Avg per test: ${(totalDuration / this.testResults.length).toFixed(2)}s`);
     
     // Field success analysis
@@ -298,10 +287,7 @@ class BatchFormTester {
     
     if (successful.length > 0) {
       console.log('\n🎉 BATCH TESTING SUCCESSFUL!');
-      console.log('The donation form is processing submissions at scale!');
     } else {
-      console.log('\n🚨 BATCH TESTING REVEALED ISSUES');
-      console.log('Form requires investigation for production readiness');
     }
     
     return reportPath;

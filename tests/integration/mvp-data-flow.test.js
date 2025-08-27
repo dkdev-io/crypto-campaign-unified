@@ -186,9 +186,6 @@ describe('MVP Complete Data Flow', function() {
       expect(stats.currentEthPrice).to.exist;
       
       console.log('📊 Campaign Stats:');
-      console.log('  Total Raised:', ethers.formatEther(stats.totalReceived), 'ETH');
-      console.log('  Unique Contributors:', stats.uniqueContributors.toString());
-      console.log('  Max Contribution:', ethers.formatEther(stats.maxContribution), 'ETH');
     });
 
     it('should allow admin to update ETH price', async function() {
@@ -217,25 +214,20 @@ describe('MVP Complete Data Flow', function() {
       const newDonor = (await ethers.getSigners())[4];
       
       // Step 1: Register (mock)
-      console.log('  ➤ Step 1: Donor registers');
       
       // Step 2: KYC verification
-      console.log('  ➤ Step 2: KYC verification');
       await contract.connect(owner).verifyKYC(newDonor.address);
       
       // Step 3: Check eligibility
-      console.log('  ➤ Step 3: Check contribution eligibility');
       const amount = ethers.parseEther('0.3'); // ~$900
       const [canContribute] = await contract.canContribute(newDonor.address, amount);
       expect(canContribute).to.be.true;
       
       // Step 4: Make contribution
-      console.log('  ➤ Step 4: Make contribution');
       const tx = await contract.connect(newDonor).contribute({ value: amount });
       await tx.wait();
       
       // Step 5: Verify recorded
-      console.log('  ➤ Step 5: Verify transaction recorded');
       const info = await contract.getContributorInfo(newDonor.address);
       expect(info.hasContributedBefore).to.be.true;
       expect(ethers.formatEther(info.cumulativeAmount)).to.equal('0.3');

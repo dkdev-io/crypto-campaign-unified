@@ -18,14 +18,10 @@ async function testRealEmailInvites() {
       if (text.includes('Error') || text.includes('failed')) {
         console.log(`❌ Console error: ${text}`);
       } else if (text.includes('Success') || text.includes('sent')) {
-        console.log(`✅ Console: ${text}`);
       }
     });
     
-    console.log('🧪 TESTING REAL EMAIL INVITATION SYSTEM');
-    console.log('='.repeat(50));
     
-    console.log('\n📍 Navigate to /invite-test');
     await page.goto('http://localhost:5175/invite-test', { 
       waitUntil: 'networkidle0',
       timeout: 10000 
@@ -44,13 +40,9 @@ async function testRealEmailInvites() {
       };
     });
     
-    console.log('\n📊 Component Status:');
-    console.log(`✅ Title present: ${pageContent.hasTitle ? '✓' : '✗'}`);
-    console.log(`✅ Email working notice: ${pageContent.hasEmailWorking ? '✓' : '✗'}`);
     console.log(`✅ Real email warning: ${pageContent.hasWarning ? '✓' : '✗'}`);
     
     // Test with invalid email first
-    console.log('\n🧪 Test 1: Invalid email (test@example.com)');
     await page.type('input[type="email"]', 'test@example.com');
     
     // Check if validation warning appears
@@ -65,13 +57,11 @@ async function testRealEmailInvites() {
     }
     
     // Clear and test with valid email
-    console.log('\n🧪 Test 2: Valid email format');
     await page.evaluate(() => {
       document.querySelector('input[type="email"]').value = '';
     });
     
     const testEmail = `testuser${Date.now()}@gmail.com`;
-    console.log(`Testing with: ${testEmail}`);
     await page.type('input[type="email"]', testEmail);
     await page.click('input[type="checkbox"]'); // Check first permission
     
@@ -79,12 +69,10 @@ async function testRealEmailInvites() {
     let alertMessage = null;
     page.on('dialog', async dialog => {
       alertMessage = dialog.message();
-      console.log(`\n📢 Alert received: ${alertMessage.slice(0, 100)}`);
       await dialog.accept();
     });
     
     // Click Send Invitations
-    console.log('\n📧 Clicking "Send Invitations"...');
     await page.click('button[type="submit"]');
     
     // Wait for processing
@@ -136,15 +124,12 @@ async function testRealEmailInvites() {
       
       if (sentCount > 0) {
         console.log('\n✅ SUCCESS: Real email invitations are working!');
-        console.log('Verification emails have been sent to invited users.');
       }
     } else if (alertMessage) {
       if (alertMessage.includes('Success')) {
         console.log('\n✅ SUCCESS: Alert indicates emails were sent!');
       } else if (alertMessage.includes('Invalid email')) {
-        console.log('\n⚠️ Email validation is working correctly');
       } else {
-        console.log('\n❌ Issue detected:', alertMessage);
       }
     }
     
@@ -159,7 +144,6 @@ async function testRealEmailInvites() {
     });
     
     if (hasContinueButton) {
-      console.log('\n✅ Continue to Campaign Setup button is present');
     }
     
     // Take screenshot
@@ -168,10 +152,6 @@ async function testRealEmailInvites() {
       fullPage: true 
     });
     
-    console.log('\n📸 Screenshot saved to: scripts/real-email-invites.png');
-    console.log('\n🏆 REAL EMAIL SYSTEM STATUS: IMPLEMENTED');
-    console.log('Users will receive actual Supabase verification emails!');
-    console.log('\n🔍 Browser staying open for 10 seconds...');
     await new Promise(resolve => setTimeout(resolve, 10000));
     
   } catch (error) {

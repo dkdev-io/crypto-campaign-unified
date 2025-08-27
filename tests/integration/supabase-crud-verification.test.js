@@ -68,7 +68,6 @@ async function testQuery(queryName, queryFunction) {
 
 // 1. LIST ALL TABLES AND RELATIONSHIPS
 async function listTablesAndRelationships() {
-  console.log('\n📊 === LISTING ALL TABLES AND RELATIONSHIPS ===\n');
   
   const tables = [
     'campaigns',
@@ -92,7 +91,6 @@ async function listTablesAndRelationships() {
         console.log(`❌ Table '${table}': NOT ACCESSIBLE - ${error.message}`);
       } else {
         testReport.tables[table] = { exists: true, count: count || 0 };
-        console.log(`✅ Table '${table}': EXISTS (${count || 0} records)`);
         
         // Get sample record to understand structure
         const { data: sample } = await supabase
@@ -111,7 +109,6 @@ async function listTablesAndRelationships() {
   }
 
   // Test relationships
-  console.log('\n🔗 Testing Table Relationships:');
   
   // Campaign -> Contributions relationship
   const { data: campaignWithContribs } = await supabase
@@ -135,7 +132,6 @@ async function listTablesAndRelationships() {
 
 // 2. TEST CREATE OPERATIONS
 async function testCreateOperations() {
-  console.log('\n➕ === TESTING CREATE OPERATIONS ===\n');
 
   // Test campaign creation
   const testCampaign = {
@@ -216,7 +212,6 @@ async function testCreateOperations() {
 
 // 3. TEST READ OPERATIONS
 async function testReadOperations() {
-  console.log('\n📖 === TESTING READ OPERATIONS ===\n');
 
   // Test loading all campaigns
   const { data: allCampaigns, error: campaignsError } = await supabase
@@ -306,7 +301,6 @@ async function testReadOperations() {
 
 // 4. TEST UPDATE OPERATIONS
 async function testUpdateOperations() {
-  console.log('\n✏️ === TESTING UPDATE OPERATIONS ===\n');
 
   // Update campaign details
   if (testReport.testCampaignId) {
@@ -364,7 +358,6 @@ async function testUpdateOperations() {
 
 // 5. TEST DELETE OPERATIONS
 async function testDeleteOperations() {
-  console.log('\n🗑️ === TESTING DELETE OPERATIONS ===\n');
 
   // Test soft delete (if implemented)
   // Note: Checking if soft delete is implemented by updating status instead of hard delete
@@ -435,7 +428,6 @@ async function testDeleteOperations() {
 
 // 6. TEST SPECIFIC QUERIES
 async function testSpecificQueries() {
-  console.log('\n🔍 === TESTING SPECIFIC QUERIES ===\n');
 
   const queries = [
     {
@@ -496,7 +488,6 @@ async function testSpecificQueries() {
 
 // Generate comprehensive test report
 function generateReport() {
-  console.log('\n📋 === COMPREHENSIVE TEST REPORT ===\n');
   
   console.log('📊 TABLE STATUS:');
   for (const [table, info] of Object.entries(testReport.tables)) {
@@ -507,32 +498,23 @@ function generateReport() {
     }
   }
 
-  console.log('\n✅ WORKING OPERATIONS:');
   for (const [operation, results] of Object.entries(testReport.operations)) {
     if (results.passed.length > 0) {
-      console.log(`  ${operation}:`);
       results.passed.forEach(test => {
-        console.log(`    - ${test.table}: ${test.details}`);
       });
     }
   }
 
-  console.log('\n❌ BROKEN OPERATIONS:');
   for (const [operation, results] of Object.entries(testReport.operations)) {
     if (results.failed.length > 0) {
-      console.log(`  ${operation}:`);
       results.failed.forEach(test => {
-        console.log(`    - ${test.table}: ${test.details}`);
       });
     }
   }
 
-  console.log('\n🔍 WORKING QUERIES:');
   testReport.queries.working.forEach(q => {
-    console.log(`  ✅ ${q.name}: ${q.count} records`);
   });
 
-  console.log('\n❌ BROKEN QUERIES:');
   testReport.queries.broken.forEach(q => {
     console.log(`  ❌ ${q.name}: ${q.error}`);
   });
@@ -544,24 +526,18 @@ function generateReport() {
   console.log(`  Success Rate: ${((testReport.summary.passed / testReport.summary.totalTests) * 100).toFixed(1)}%`);
 
   if (testReport.summary.brokenFlows.length > 0) {
-    console.log('\n⚠️ BROKEN FLOWS REQUIRING ATTENTION:');
     testReport.summary.brokenFlows.forEach(flow => {
-      console.log(`  - ${flow}`);
     });
   }
 
   // Save report to file
   const reportFilename = `tests/integration/crud-report-${new Date().toISOString().split('T')[0]}.json`;
   writeFileSync(reportFilename, JSON.stringify(testReport, null, 2));
-  console.log(`\n💾 Full report saved to: ${reportFilename}`);
 }
 
 // Main execution function
 async function runAllTests() {
   console.log('🚀 Starting Comprehensive CRUD Verification');
-  console.log('📅 ' + new Date().toISOString());
-  console.log('🔗 Supabase URL: ' + supabaseUrl);
-  console.log('=' .repeat(60));
 
   try {
     await listTablesAndRelationships();
@@ -577,7 +553,6 @@ async function runAllTests() {
     generateReport();
   }
 
-  console.log('\n✨ Testing Complete!');
 }
 
 // Run tests

@@ -29,7 +29,6 @@ async function main() {
       const text = msg.text();
       
       if (text.includes('[CampaignAnalytics]') || text.includes('Analytics')) {
-        console.log(`📊 ${type.toUpperCase()}:`, text);
       } else if (type === 'error') {
         console.error('❌ Browser Error:', text);
       }
@@ -37,26 +36,12 @@ async function main() {
 
     // Navigate to analytics demo with UTM parameters for testing
     const demoUrl = 'http://localhost:5173/analytics-demo?utm_source=demo&utm_medium=puppeteer&utm_campaign=test&utm_content=main_demo';
-    console.log('📱 Opening analytics demo:', demoUrl);
     
     await page.goto(demoUrl, { waitUntil: 'networkidle0' });
 
-    console.log('\n✅ Analytics demo is now running!');
-    console.log('\n🎯 Try these interactions to see analytics in action:');
-    console.log('   • Fill out the form fields (watch console for field focus events)');
-    console.log('   • Change the contribution amount (milestone tracking)');
-    console.log('   • Try to submit the form (validation tracking)');
-    console.log('   • Scroll the page (scroll depth tracking)');
-    console.log('   • Open browser dev tools to see detailed analytics logs');
-    console.log('   • Check the privacy banner and consent options');
-    console.log('\n🔧 Test commands in browser console:');
-    console.log('   window.getAnalyticsStatus() - See analytics status');
-    console.log('   window.trackEvent("test", {custom: true}) - Track custom event');
-    console.log('   window.campaignAnalytics - Access analytics instance');
 
     // Wait a bit then perform some automated interactions for demo
     setTimeout(async () => {
-      console.log('\n🤖 Performing demo interactions...');
       
       try {
         // Scroll to trigger scroll events
@@ -75,7 +60,6 @@ async function main() {
           const presetButtons = await page.$$('button[style*="2px solid"]');
           if (presetButtons.length > 0) {
             await presetButtons[0].click();
-            console.log('🤖 Clicked preset amount button (should trigger analytics)');
           }
         }, 3000);
         
@@ -85,12 +69,9 @@ async function main() {
       
     }, 5000);
 
-    console.log('\n⚠️ Keep this process running to maintain the demo');
-    console.log('Press Ctrl+C to stop the demo');
     
     // Keep running
     process.on('SIGINT', () => {
-      console.log('\n👋 Shutting down analytics demo...');
       browser.close();
       process.exit(0);
     });

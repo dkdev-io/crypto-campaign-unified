@@ -10,7 +10,6 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function runMigration() {
   try {
-    console.log('Setting up donor system tables...');
     
     // Read the SQL file
     const sqlContent = fs.readFileSync(
@@ -24,12 +23,10 @@ async function runMigration() {
       .map(s => s.trim())
       .filter(s => s.length > 0 && !s.startsWith('--'));
     
-    console.log(`Found ${statements.length} SQL statements to execute`);
     
     // Execute each statement
     for (let i = 0; i < statements.length; i++) {
       const statement = statements[i] + ';';
-      console.log(`Executing statement ${i + 1}/${statements.length}...`);
       
       // Skip if it's just a comment
       if (statement.trim().startsWith('--')) continue;
@@ -46,7 +43,6 @@ async function runMigration() {
       }
     }
     
-    console.log('Migration completed!');
     
   } catch (error) {
     console.error('Migration failed:', error);
@@ -61,10 +57,8 @@ async function checkTables() {
     .limit(1);
   
   if (error) {
-    console.log('Donors table does not exist yet. Running migration...');
     await runMigration();
   } else {
-    console.log('Donors table already exists. Skipping migration.');
   }
 }
 

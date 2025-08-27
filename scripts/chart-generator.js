@@ -35,7 +35,6 @@ class ChartGenerator {
     const successRate = ((successful.length / this.results.length) * 100).toFixed(1);
 
     console.log('\n📊 FORM TESTING RESULTS CHART');
-    console.log('='.repeat(60));
     
     // ASCII Bar Chart
     const maxWidth = 50;
@@ -48,7 +47,6 @@ class ChartGenerator {
 
     // Field Success Analysis
     console.log('\n📝 FIELD FILLING SUCCESS RATES:');
-    console.log('-'.repeat(40));
     
     const fieldStats = {};
     this.results.forEach(result => {
@@ -70,8 +68,6 @@ class ChartGenerator {
       });
 
     // Performance Analysis
-    console.log('\n⏱️  PERFORMANCE METRICS:');
-    console.log('-'.repeat(30));
     
     const durations = this.results.map(r => r.duration).filter(d => d);
     if (durations.length > 0) {
@@ -79,15 +75,11 @@ class ChartGenerator {
       const minDuration = (Math.min(...durations) / 1000).toFixed(2);
       const maxDuration = (Math.max(...durations) / 1000).toFixed(2);
       
-      console.log(`Average test time: ${avgDuration}s`);
-      console.log(`Fastest test: ${minDuration}s`);
-      console.log(`Slowest test: ${maxDuration}s`);
     }
 
     // Error Analysis
     if (failed.length > 0) {
       console.log('\n💥 ERROR ANALYSIS:');
-      console.log('-'.repeat(25));
       
       const errorStats = {};
       failed.forEach(result => {
@@ -106,8 +98,6 @@ class ChartGenerator {
     }
 
     // Test Progress Timeline
-    console.log('\n📈 TESTING TIMELINE:');
-    console.log('-'.repeat(30));
     
     if (this.results.length >= 10) {
       const batchSize = Math.ceil(this.results.length / 10);
@@ -174,7 +164,6 @@ class ChartGenerator {
     // Save detailed report
     const reportPath = `test-results/detailed-chart-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    console.log(`\n📁 Detailed report saved: ${reportPath}`);
 
     return report;
   }
@@ -246,8 +235,6 @@ async function main() {
     const summary = generator.generateBasicChart();
     const detailedReport = generator.generateDetailedReport();
     
-    console.log('\n🎯 KEY INSIGHTS:');
-    detailedReport.insights.forEach(insight => console.log(`  ${insight}`));
   }
 }
 

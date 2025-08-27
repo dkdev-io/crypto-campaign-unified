@@ -100,7 +100,6 @@ async function applySupabaseFixes() {
   const page = await browser.newPage();
   
   try {
-    console.log('📝 Navigating to Supabase SQL Editor...');
     
     // Navigate to the exact SQL editor URL provided
     await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8', {
@@ -108,14 +107,12 @@ async function applySupabaseFixes() {
       timeout: 30000
     });
 
-    console.log('⏳ Waiting for SQL editor to load...');
     
     // Wait for the SQL editor to be present
     await page.waitForSelector('.monaco-editor, .sql-editor, textarea, [role="textbox"]', { 
       timeout: 15000 
     });
 
-    console.log('🔍 Looking for SQL editor input...');
 
     // Multiple strategies to find and interact with the SQL editor
     let editorFound = false;
@@ -123,7 +120,6 @@ async function applySupabaseFixes() {
     // Strategy 1: Monaco Editor (most common)
     try {
       await page.waitForSelector('.monaco-editor', { timeout: 5000 });
-      console.log('📝 Found Monaco editor, clearing and entering SQL...');
       
       // Click in the editor area
       await page.click('.monaco-editor .view-lines');
@@ -147,7 +143,6 @@ async function applySupabaseFixes() {
       try {
         const textarea = await page.$('textarea');
         if (textarea) {
-          console.log('📝 Found textarea, entering SQL...');
           await textarea.click();
           await page.keyboard.down('Meta');
           await page.keyboard.press('a');
@@ -165,7 +160,6 @@ async function applySupabaseFixes() {
       try {
         const editableElements = await page.$$('[contenteditable="true"], [role="textbox"]');
         if (editableElements.length > 0) {
-          console.log('📝 Found editable element, entering SQL...');
           await editableElements[0].click();
           await page.keyboard.down('Meta');
           await page.keyboard.press('a');  
@@ -183,7 +177,6 @@ async function applySupabaseFixes() {
       
       // Take a screenshot for debugging
       await page.screenshot({ path: 'supabase-editor-debug.png', fullPage: true });
-      console.log('📸 Screenshot saved as supabase-editor-debug.png');
       
       // Print page content selectors for debugging
       const selectors = await page.evaluate(() => {
@@ -202,14 +195,12 @@ async function applySupabaseFixes() {
         return selectorList.slice(0, 10); // First 10 matches
       });
       
-      console.log('🔍 Available editor-related selectors:', selectors);
       throw new Error('SQL editor not found');
     }
 
     console.log('✅ SQL entered successfully!');
     
     // Look for and click the Run button
-    console.log('🏃 Looking for Run button...');
     
     const runButtonSelectors = [
       'button[data-testid="run-sql"]',
@@ -225,7 +216,6 @@ async function applySupabaseFixes() {
       try {
         await page.waitForSelector(selector, { timeout: 2000 });
         await page.click(selector);
-        console.log(`✅ Clicked Run button using selector: ${selector}`);
         runButtonFound = true;
         break;
       } catch (err) {
@@ -256,7 +246,6 @@ async function applySupabaseFixes() {
 
     // Alternative: Use keyboard shortcut
     if (!runButtonFound) {
-      console.log('🎹 Trying keyboard shortcut (Ctrl+Enter / Cmd+Enter)...');
       await page.keyboard.down('Meta');
       await page.keyboard.press('Enter');
       await page.keyboard.up('Meta');
@@ -264,7 +253,6 @@ async function applySupabaseFixes() {
     }
 
     if (runButtonFound) {
-      console.log('⏳ Waiting for SQL execution to complete...');
       
       // Wait a bit for execution
       await page.waitForTimeout(5000);
@@ -283,7 +271,6 @@ async function applySupabaseFixes() {
         console.log('⚠️  Could not read execution results');
       }
       
-      console.log('🎉 SQL execution completed!');
       
     } else {
       console.log('❌ Could not find or click Run button');
@@ -313,11 +300,9 @@ async function applySupabaseFixes() {
 }
 
 // Run the automation
-console.log('🎯 Starting Supabase database fix automation...');
 applySupabaseFixes()
   .then(() => {
     console.log('✅ Automation completed successfully!');
-    console.log('🧪 Run verification: node tests/integration/specific-fix-test.js');
   })
   .catch((error) => {
     console.error('❌ Automation failed:', error);

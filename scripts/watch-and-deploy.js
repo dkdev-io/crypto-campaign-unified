@@ -28,13 +28,6 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  watch: (msg) => console.log(`${colors.magenta}👀 ${msg}${colors.reset}`),
-  deploy: (msg) => console.log(`${colors.cyan}${colors.bold}🚀 ${msg}${colors.reset}`),
-  dim: (msg) => console.log(`${colors.dim}   ${msg}${colors.reset}`)
 };
 
 class DeploymentWatcher {
@@ -149,7 +142,6 @@ class DeploymentWatcher {
       return;
     }
 
-    console.log(''); // Empty line for separation
     log.deploy(`🚀 Starting auto-deployment #${changeId}...`);
     
     try {
@@ -181,7 +173,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
       log.warning('Continuing to watch for changes...');
     } finally {
       this.isDeploying = false;
-      console.log(''); // Empty line for separation
       this.showWatchStatus();
     }
   }
@@ -196,7 +187,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
 
   // Start watching
   start() {
-    console.log('');
     log.deploy('🔍 Starting deployment watcher...');
     
     // Validate watch paths exist
@@ -236,7 +226,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
       }
     });
 
-    console.log('');
     this.showWatchStatus();
 
     // Handle cleanup on exit
@@ -251,7 +240,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
 
   // Stop watching
   stop() {
-    console.log('');
     log.watch('🛑 Stopping deployment watcher...');
     
     // Clear any pending deployment
@@ -313,7 +301,6 @@ function parseArgs() {
 }
 
 function showHelp() {
-  console.log(`
 ${colors.bold}GitHub Pages Watch & Auto-Deploy${colors.reset}
 
 ${colors.cyan}Usage:${colors.reset}

@@ -62,7 +62,6 @@ function log(message, type = 'info') {
     reset: '\x1b[0m'     // Reset
   }
   
-  console.log(`${colors[type]}[${timestamp}] ${message}${colors.reset}`)
 }
 
 function assert(condition, message) {

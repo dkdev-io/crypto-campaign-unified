@@ -73,29 +73,14 @@ function copyToClipboard(text) {
 }
 
 async function main() {
-  console.log('📋 Copying clean SQL to clipboard...');
   
   try {
     await copyToClipboard(cleanSQL);
     console.log('✅ SQL copied to clipboard!');
-    console.log('');
-    console.log('🎯 NEXT STEPS:');
-    console.log('1. Go to your open Supabase SQL Editor tab');
-    console.log('2. Select all text (Cmd+A) and delete it');
-    console.log('3. Paste the SQL (Cmd+V)');
-    console.log('4. Click the "Run" button');
-    console.log('');
     console.log('📊 Expected result: "Database fixes applied successfully!"');
-    console.log('');
-    console.log('🧪 After running, verify with: node tests/integration/specific-fix-test.js');
     
   } catch (error) {
     console.error('❌ Failed to copy to clipboard:', error.message);
-    console.log('');
-    console.log('📋 MANUAL COPY - Copy this SQL and paste into Supabase:');
-    console.log('=' .repeat(60));
-    console.log(cleanSQL);
-    console.log('=' .repeat(60));
   }
 }
 

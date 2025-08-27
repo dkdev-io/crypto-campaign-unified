@@ -83,21 +83,17 @@ async function applyFixes() {
   const page = await browser.newPage();
   
   try {
-    console.log('📝 Navigating to Supabase SQL Editor...');
     await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8');
     
     // Wait for page to load
     await page.waitForLoadState('networkidle');
     
-    console.log('⏳ Waiting for editor...');
     await page.waitForTimeout(3000);
     
     // Take initial screenshot
     await page.screenshot({ path: 'supabase-initial.png' });
-    console.log('📸 Initial screenshot saved');
     
     // Find and clear editor
-    console.log('🔍 Looking for editor...');
     
     // Try multiple strategies
     const strategies = [
@@ -105,7 +101,6 @@ async function applyFixes() {
       async () => {
         const editor = await page.$('.monaco-editor');
         if (editor) {
-          console.log('📝 Found Monaco editor');
           await page.click('.monaco-editor');
           await page.keyboard.press('Control+a');
           await page.keyboard.press('Delete');
@@ -119,7 +114,6 @@ async function applyFixes() {
       async () => {
         const textarea = await page.$('textarea');
         if (textarea) {
-          console.log('📝 Found textarea');
           await textarea.click();
           await textarea.selectText();
           await textarea.type(cleanSQL);
@@ -132,7 +126,6 @@ async function applyFixes() {
       async () => {
         const editable = await page.$('[contenteditable="true"]');
         if (editable) {
-          console.log('📝 Found contenteditable');
           await editable.click();
           await page.keyboard.press('Control+a');
           await editable.type(cleanSQL);
@@ -148,7 +141,6 @@ async function applyFixes() {
         success = await strategy();
         if (success) break;
       } catch (err) {
-        console.log(`Strategy failed: ${err.message}`);
       }
     }
     
@@ -157,9 +149,6 @@ async function applyFixes() {
       await page.screenshot({ path: 'supabase-no-editor.png' });
       
       // Keep browser open for manual entry
-      console.log('🖱️  Browser will stay open - please paste SQL manually and click Run');
-      console.log('📋 SQL to paste:');
-      console.log(cleanSQL);
       
       // Wait 60 seconds for manual intervention
       await page.waitForTimeout(60000);
@@ -169,7 +158,6 @@ async function applyFixes() {
     console.log('✅ SQL entered successfully');
     
     // Look for Run button
-    console.log('🏃 Looking for Run button...');
     
     const runSelectors = [
       'button[data-testid="run-sql"]',
@@ -183,7 +171,6 @@ async function applyFixes() {
       try {
         await page.waitForSelector(selector, { timeout: 2000 });
         await page.click(selector);
-        console.log(`✅ Clicked Run button: ${selector}`);
         runClicked = true;
         break;
       } catch (err) {
@@ -193,20 +180,17 @@ async function applyFixes() {
     
     // Try keyboard shortcut as fallback
     if (!runClicked) {
-      console.log('🎹 Using keyboard shortcut...');
       await page.keyboard.press('Control+Enter');
       runClicked = true;
     }
     
     if (runClicked) {
-      console.log('⏳ Waiting for execution...');
       await page.waitForTimeout(5000);
       
       // Take final screenshot
       await page.screenshot({ path: 'supabase-result.png' });
       console.log('📸 Result screenshot saved');
       
-      console.log('🎉 SQL execution completed!');
     }
     
   } catch (error) {
@@ -214,7 +198,6 @@ async function applyFixes() {
     await page.screenshot({ path: 'supabase-error.png' });
   } finally {
     // Keep open for 15 seconds to see results
-    console.log('⏳ Keeping browser open for 15 seconds...');
     await page.waitForTimeout(15000);
     await browser.close();
   }

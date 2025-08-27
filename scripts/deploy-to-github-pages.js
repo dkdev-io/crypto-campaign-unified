@@ -27,12 +27,6 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  step: (msg) => console.log(`${colors.cyan}${colors.bold}🚀 ${msg}${colors.reset}`),
-  deploy: (msg) => console.log(`${colors.magenta}${colors.bold}🌐 ${msg}${colors.reset}`)
 };
 
 class DeploymentError extends Error {
@@ -81,7 +75,6 @@ class GitHubPagesDeployer {
     const status = this.exec('git status --porcelain', { silent: true });
     if (status && !this.options.force) {
       log.warning('Uncommitted changes detected:');
-      console.log(status);
     }
 
     // Verify remote exists
@@ -228,7 +221,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`;
     }
 
     log.info('Staged files:');
-    console.log(staged.split('\n').map(f => `  ${f}`).join('\n'));
 
     // Create commit
     const message = this.generateCommitMessage();
@@ -318,7 +310,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>`;
     
     try {
       log.deploy('🚀 Starting GitHub Pages deployment...');
-      console.log('');
 
       // Validation
       this.validateGitRepo();
@@ -341,18 +332,14 @@ Co-Authored-By: Claude <noreply@anthropic.com>`;
       
       // Success message
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-      console.log('');
       log.deploy('🎉 Deployment completed successfully!');
-      console.log('');
       log.success(`✨ Site URL: ${summary.url}`);
       log.success(`⏱️  Duration: ${duration}s`);
       log.success(`🔗 Commit: ${summary.gitCommit.substring(0, 7)}`);
-      console.log('');
       log.info('🕒 GitHub Pages may take 5-10 minutes to update');
       log.info('📊 Check deployment status at: https://github.com/{username}/{repo}/deployments');
       
     } catch (error) {
-      console.log('');
       log.error('💥 Deployment failed!');
       log.error(error.message);
       
@@ -401,7 +388,6 @@ function parseArgs() {
 }
 
 function showHelp() {
-  console.log(`
 ${colors.bold}GitHub Pages Auto-Deployment Script${colors.reset}
 
 ${colors.cyan}Usage:${colors.reset}

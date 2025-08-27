@@ -27,7 +27,6 @@ function log(message, type = 'info') {
     reset: '\x1b[0m'
   }
   
-  console.log(`${colors[type]}${message}${colors.reset}`)
 }
 
 async function checkCurrentAuthSettings() {
@@ -92,9 +91,6 @@ function printManualConfigurationSteps() {
 <p>{{ .ConfirmationURL }}</p>
 <p>This link expires in 24 hours.</p>`
   
-  console.log('\nConfirm Signup Template:')
-  console.log('------------------------')
-  console.log(confirmTemplate)
   
   log('\n📬 STEP 3: Configure SMTP (Optional but Recommended)', 'info')
   log('1. Go to: https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/settings/auth', 'info')

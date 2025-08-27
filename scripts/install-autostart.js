@@ -25,11 +25,6 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  step: (msg) => console.log(`${colors.magenta}${colors.bold}🚀 ${msg}${colors.reset}`)
 };
 
 class AutoStartInstaller {
@@ -61,17 +56,14 @@ class AutoStartInstaller {
     await this.startNow();
     
     log.step('🎉 INSTALLATION COMPLETE!');
-    console.log('');
     log.success('✨ Your system is now FULLY AUTOMATIC');
     log.success('💡 Just open this directory or edit files - auto-deployment will start');
     log.success('🚀 No commands ever needed again!');
-    console.log('');
     log.info('What happens now:');
     log.info('  1. Open directory → Auto-deployment starts');
     log.info('  2. Edit any file → Auto-deploys to GitHub Pages');
     log.info('  3. Git commit → Auto-pushes and deploys'); 
     log.info('  4. System reboot → Auto-starts again');
-    console.log('');
     log.success('🌐 Site: https://dkdev-io.github.io/crypto-campaign-unified/');
   }
 

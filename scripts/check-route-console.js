@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 
 async function checkRoute() {
-  console.log('🔍 Checking route and console logs...\n');
   
   const browser = await puppeteer.launch({
     headless: true,
@@ -39,15 +38,8 @@ async function checkRoute() {
   });
   
   console.log('📋 PAGE INFO:');
-  console.log('  Title:', pageContent.title);
-  console.log('  Path:', pageContent.pathname);
-  console.log('  H1:', pageContent.h1Text);
-  console.log('\n📝 BODY TEXT (first 500 chars):');
-  console.log(pageContent.bodyText);
   
-  console.log('\n🖥️ CONSOLE LOGS:');
   logs.forEach((log, i) => {
-    console.log(`  ${i + 1}. ${log}`);
   });
   
   await browser.close();

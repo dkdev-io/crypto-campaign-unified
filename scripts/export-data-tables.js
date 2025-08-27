@@ -10,7 +10,6 @@ class DataExporter {
 
     async exportAllTables() {
         console.log('📊 DATA TABLE EXPORT TOOL');
-        console.log('=' .repeat(60));
         
         // Create export directory
         if (!fs.existsSync(this.exportDir)) {
@@ -29,19 +28,12 @@ class DataExporter {
         await this.exportValidationSummary();
         
         console.log('\n✅ All data exported successfully!');
-        console.log(`📁 Files saved in: ${this.exportDir}`);
-        console.log('\n📋 Available files:');
-        console.log('   - campaign_prospects.csv (150 records)');
-        console.log('   - campaign_donors.csv (215 records)');
-        console.log('   - kyc.csv (150 records)');
-        console.log('   - merged_donor_kyc_view.csv (all donors with KYC status)');
         console.log('   - validation_summary.csv (contract compliance analysis)');
         console.log('   - data_summary.json (complete statistics)');
     }
 
     async exportTable(tableName) {
         return new Promise((resolve, reject) => {
-            console.log(`\n📤 Exporting ${tableName}...`);
             
             this.db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
                 if (err) {
@@ -51,7 +43,6 @@ class DataExporter {
                 }
 
                 if (rows.length === 0) {
-                    console.log(`   ⚠️ No data in ${tableName}`);
                     resolve();
                     return;
                 }
@@ -78,7 +69,6 @@ class DataExporter {
                 // Write to file
                 const filePath = path.join(this.exportDir, `${tableName}.csv`);
                 fs.writeFileSync(filePath, csv);
-                console.log(`   ✅ Exported ${rows.length} records to ${tableName}.csv`);
                 resolve();
             });
         });
@@ -86,7 +76,6 @@ class DataExporter {
 
     async exportMergedView() {
         return new Promise((resolve, reject) => {
-            console.log('\n📤 Creating merged donor-KYC view...');
             
             const query = `
                 SELECT 
@@ -151,7 +140,6 @@ class DataExporter {
 
                 const filePath = path.join(this.exportDir, 'merged_donor_kyc_view.csv');
                 fs.writeFileSync(filePath, csv);
-                console.log(`   ✅ Created merged view with ${rows.length} records`);
                 resolve();
             });
         });
@@ -268,16 +256,12 @@ class DataExporter {
     }
 
     async displaySampleData() {
-        console.log('\n📋 SAMPLE DATA PREVIEW:');
-        console.log('=' .repeat(60));
         
         // Show sample prospects
-        console.log('\n🔍 Sample Prospects (first 5):');
         await new Promise((resolve) => {
             this.db.all('SELECT unique_id, first_name, last_name, wallet FROM campaign_prospects LIMIT 5', (err, rows) => {
                 if (!err) {
                     rows.forEach(row => {
-                        console.log(`   ${row.unique_id}: ${row.first_name} ${row.last_name} - ${row.wallet.substring(0, 10)}...`);
                     });
                 }
                 resolve();
@@ -285,12 +269,10 @@ class DataExporter {
         });
 
         // Show sample donors
-        console.log('\n💰 Sample Donors (first 5):');
         await new Promise((resolve) => {
             this.db.all('SELECT unique_id, first_name, last_name, contribution_amount FROM campaign_donors LIMIT 5', (err, rows) => {
                 if (!err) {
                     rows.forEach(row => {
-                        console.log(`   ${row.unique_id}: ${row.first_name} ${row.last_name} - $${row.contribution_amount}`);
                     });
                 }
                 resolve();
@@ -308,7 +290,6 @@ class DataExporter {
                 FROM kyc
             `, (err, row) => {
                 if (!err) {
-                    console.log(`   Total: ${row.total} | Passed: ${row.passed} | Failed: ${row.failed}`);
                 }
                 resolve();
             });

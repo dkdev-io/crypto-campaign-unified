@@ -15,12 +15,10 @@ const report = {
 };
 
 console.log('🚀 CRUD OPERATIONS TEST - ACTUAL SCHEMA');
-console.log('=' .repeat(60));
 
 // Helper to log results
 function log(operation, success, details) {
   const status = success ? '✅' : '❌';
-  console.log(`${status} ${operation}: ${details}`);
   if (success) {
     report.working.push({ operation, details });
   } else {
@@ -30,7 +28,6 @@ function log(operation, success, details) {
 
 // TEST 1: CREATE Campaign
 async function testCreate() {
-  console.log('\n📝 CREATE OPERATIONS:');
   
   const testCampaign = {
     campaign_name: `Test Campaign ${Date.now()}`,
@@ -61,7 +58,6 @@ async function testCreate() {
 
 // TEST 2: READ Operations
 async function testRead() {
-  console.log('\n📖 READ OPERATIONS:');
 
   // Read all campaigns
   const { data: allCampaigns, error: allError } = await supabase
@@ -118,7 +114,6 @@ async function testRead() {
 
 // TEST 3: UPDATE Operations
 async function testUpdate() {
-  console.log('\n✏️ UPDATE OPERATIONS:');
 
   if (!report.testCampaignId) {
     log('UPDATE campaign', false, 'No test campaign to update');
@@ -178,7 +173,6 @@ async function testUpdate() {
 
 // TEST 4: DELETE Operations
 async function testDelete() {
-  console.log('\n🗑️ DELETE OPERATIONS:');
 
   if (!report.testCampaignId) {
     log('DELETE campaign', false, 'No test campaign to delete');
@@ -225,7 +219,6 @@ async function testDelete() {
 
 // TEST 5: Complex Queries
 async function testComplexQueries() {
-  console.log('\n🔍 COMPLEX QUERIES:');
 
   // Query 1: Campaigns with high donation limits
   const { data: highLimit, error: err1 } = await supabase
@@ -298,7 +291,6 @@ async function testComplexQueries() {
 
 // TEST 6: Edge Cases
 async function testEdgeCases() {
-  console.log('\n⚠️ EDGE CASE TESTS:');
 
   // Test 1: Invalid ID
   const { data: invalid, error: invErr } = await supabase
@@ -386,21 +378,14 @@ async function testEdgeCases() {
 
 // Generate final report
 function generateReport() {
-  console.log('\n' + '=' .repeat(60));
   console.log('📊 FINAL REPORT');
-  console.log('=' .repeat(60));
 
-  console.log('\n✅ WORKING OPERATIONS:');
   report.working.forEach(item => {
-    console.log(`  • ${item.operation}: ${item.details}`);
   });
 
-  console.log('\n❌ BROKEN OPERATIONS:');
   if (report.broken.length === 0) {
-    console.log('  None! All operations working correctly.');
   } else {
     report.broken.forEach(item => {
-      console.log(`  • ${item.operation}: ${item.details}`);
     });
   }
 
@@ -408,20 +393,15 @@ function generateReport() {
   const successRate = ((report.working.length / total) * 100).toFixed(1);
 
   console.log('\n📈 SUMMARY:');
-  console.log(`  Total Tests: ${total}`);
-  console.log(`  Passed: ${report.working.length}`);
-  console.log(`  Failed: ${report.broken.length}`);
   console.log(`  Success Rate: ${successRate}%`);
 
   // Save detailed report
   const filename = `tests/integration/crud-results-${new Date().toISOString().split('T')[0]}.json`;
   writeFileSync(filename, JSON.stringify(report, null, 2));
-  console.log(`\n💾 Detailed report saved to: ${filename}`);
 }
 
 // Run all tests
 async function runTests() {
-  console.log(`📅 Test run: ${new Date().toISOString()}\n`);
 
   try {
     const campaignId = await testCreate();

@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 
 async function debugReactRender() {
-  console.log('🔍 Debugging React render issue...\n');
   
   const browser = await puppeteer.launch({
     headless: false, // Show browser for debugging
@@ -13,14 +12,12 @@ async function debugReactRender() {
   
   // Capture ALL console logs
   page.on('console', msg => {
-    console.log(`[${msg.type()}] ${msg.text()}`);
   });
   
   page.on('pageerror', error => {
     console.log('❌ PAGE ERROR:', error.message);
   });
   
-  console.log('📱 Navigating to http://localhost:5173/analytics-demo');
   await page.goto('http://localhost:5173/analytics-demo', { 
     waitUntil: 'networkidle0'
   });
@@ -54,7 +51,6 @@ async function debugReactRender() {
     };
   });
   
-  console.log('\n📊 DOM ANALYSIS:');
   console.log('  Has #root element:', domInfo.hasRoot);
   console.log('  Has React root:', domInfo.hasReactRoot);
   console.log('  Root children count:', domInfo.rootChildren);
@@ -62,11 +58,9 @@ async function debugReactRender() {
   console.log('  React DevTools:', domInfo.hasReactDevTools);
   console.log('  Current pathname:', domInfo.pathname);
   console.log('  Current href:', domInfo.href);
-  console.log('\n  Root HTML:');
   console.log(domInfo.rootHTML);
   
   // Try to trigger a re-render
-  console.log('\n🔄 Attempting to trigger re-render...');
   await page.evaluate(() => {
     // Try changing the URL hash to trigger a re-render
     window.location.hash = '#test';
@@ -83,12 +77,7 @@ async function debugReactRender() {
     };
   });
   
-  console.log('\n📊 AFTER RE-RENDER ATTEMPT:');
-  console.log('  Root children:', afterRerender.rootChildren);
-  console.log('  Root HTML:', afterRerender.rootHTML);
   
-  console.log('\n⌨️ Browser is open. Check the console and try debugging manually.');
-  console.log('Press Ctrl+C to close the browser and exit.');
   
   // Keep browser open
   await new Promise(() => {});

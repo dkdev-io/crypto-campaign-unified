@@ -20,15 +20,11 @@ class ValidationFailureTester {
   }
 
   async initialize() {
-    console.log('🚨 Validation Failure Tester - Testing Cases That SHOULD Fail');
-    console.log(`🎯 Target: ${FORM_URL}`);
     
     // Load prospects and validation failures
     this.prospects = await this.loadCSV('../data/prospects.csv');
     this.validationFailures = JSON.parse(fs.readFileSync('test-results/validation-failures.json', 'utf8'));
     
-    console.log(`✅ Loaded ${this.prospects.length} prospects`);
-    console.log(`🚨 Found ${this.validationFailures.length} cases that SHOULD fail validation`);
     
     this.browser = await puppeteer.launch({ 
       headless: false, // Show browser to see what happens
@@ -50,10 +46,6 @@ class ValidationFailureTester {
   }
 
   async testValidationFailureCase(failureCase, index) {
-    console.log(`\n🧪 TEST ${index + 1}/${this.validationFailures.length}: ${failureCase.name}`);
-    console.log(`   Type: ${failureCase.failure_type}`);
-    console.log(`   Reason: ${failureCase.reason}`);
-    console.log(`   Expected: ❌ SHOULD FAIL`);
     
     const page = await this.browser.newPage();
     page.setDefaultTimeout(30000);
@@ -88,7 +80,6 @@ class ValidationFailureTester {
       
       if (submitResult.success) {
         console.log(`   Result: ✅ PASSED (BUG! Should have failed)`);
-        console.log(`   🚨 VALIDATION BUG: Form accepted donation it should reject`);
       } else {
         console.log(`   Result: ❌ FAILED (Correct! Validation working)`);
         console.log(`   ✅ Validation message: ${submitResult.message}`);
@@ -105,7 +96,6 @@ class ValidationFailureTester {
   }
 
   async fillFormForFailureCase(page, prospect, failureCase) {
-    console.log('   📝 Filling form with prospect data...');
     
     const email = `${prospect.first_name.toLowerCase()}.${prospect.last_name.toLowerCase()}@test.com`;
     
@@ -140,7 +130,6 @@ class ValidationFailureTester {
   }
 
   async submitAndCheckValidation(page, failureCase) {
-    console.log('   🚀 Submitting form and checking for validation...');
     
     try {
       // Take screenshot before submission
@@ -224,7 +213,6 @@ class ValidationFailureTester {
   }
 
   async runValidationTests() {
-    console.log(`\n🧪 Testing ${this.validationFailures.length} cases that SHOULD fail validation`);
     
     for (let i = 0; i < Math.min(this.validationFailures.length, 5); i++) { // Test first 5 cases
       const failureCase = this.validationFailures[i];
@@ -239,39 +227,26 @@ class ValidationFailureTester {
   }
 
   generateValidationReport() {
-    console.log('\n🚨 VALIDATION TESTING REPORT');
-    console.log('=' * 50);
     
     const totalTests = this.testResults.length;
     const validationWorking = this.testResults.filter(r => r.validationWorking).length;
     const validationBroken = totalTests - validationWorking;
     
     console.log(`📊 VALIDATION RESULTS:`);
-    console.log(`   Total tests: ${totalTests}`);
-    console.log(`   ✅ Validation working (correctly failed): ${validationWorking}`);
-    console.log(`   🚨 Validation broken (incorrectly passed): ${validationBroken}`);
-    console.log(`   📈 Validation failure rate: ${((validationBroken / totalTests) * 100).toFixed(1)}%`);
     
     if (validationBroken > 0) {
-      console.log('\n🚨 CRITICAL VALIDATION BUGS:');
       const brokenCases = this.testResults.filter(r => !r.validationWorking);
       brokenCases.forEach(result => {
         console.log(`   ❌ ${result.name} (${result.failure_type})`);
-        console.log(`      Expected: FAIL, Got: PASS`);
         console.log(`      Issue: ${result.reason}`);
       });
       
-      console.log('\n💥 FORM VALIDATION IS NOT WORKING PROPERLY!');
-      console.log('The donation form is accepting donations it should reject.');
-      console.log('This is a critical security and compliance issue.');
     } else {
-      console.log('\n✅ All validation tests passed - form is working correctly!');
     }
     
     // Save results
     const reportPath = `test-results/validation-test-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
-    console.log(`\n📁 Validation test report saved: ${reportPath}`);
   }
 
   async cleanup() {

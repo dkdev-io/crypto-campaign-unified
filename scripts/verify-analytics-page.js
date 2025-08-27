@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 
 async function verifyAnalyticsPage() {
-  console.log('🔍 Starting page verification...\n');
   
   try {
     const browser = await puppeteer.launch({
@@ -21,7 +20,6 @@ async function verifyAnalyticsPage() {
     });
     
     // Navigate to the analytics demo page
-    console.log('📱 Navigating to: http://localhost:5173/analytics-demo');
     
     try {
       await page.goto('http://localhost:5173/analytics-demo', { 
@@ -30,7 +28,6 @@ async function verifyAnalyticsPage() {
       });
     } catch (error) {
       console.log('❌ Error loading page:', error.message);
-      console.log('\nTrying alternative URL: http://localhost:5173/');
       
       // Try the root URL instead
       await page.goto('http://localhost:5173/', { 
@@ -46,12 +43,8 @@ async function verifyAnalyticsPage() {
     const pageTitle = await page.title();
     const currentUrl = page.url();
     
-    console.log('\n📄 PAGE METADATA:');
-    console.log('  Title:', pageTitle);
-    console.log('  Current URL:', currentUrl);
     
     // Check for main elements
-    console.log('\n🔍 CHECKING FOR KEY ELEMENTS:\n');
     
     // Check for analytics demo header
     const demoHeader = await page.evaluate(() => {
@@ -59,7 +52,6 @@ async function verifyAnalyticsPage() {
       const analyticsHeader = h1Elements.find(el => el.textContent.includes('Analytics Demo'));
       return analyticsHeader ? analyticsHeader.textContent : null;
     });
-    console.log('✓ Analytics Demo Header:', demoHeader || '❌ NOT FOUND');
     
     // Check for SimpleDonorForm
     const formExists = await page.evaluate(() => {
@@ -76,10 +68,6 @@ async function verifyAnalyticsPage() {
         hasWalletField
       };
     });
-    console.log('✓ Form exists:', formExists.hasForm ? 'YES' : '❌ NO');
-    console.log('✓ First Name field:', formExists.hasFirstNameField ? 'YES' : '❌ NO');
-    console.log('✓ Amount field:', formExists.hasAmountField ? 'YES' : '❌ NO');
-    console.log('✓ Wallet field:', formExists.hasWalletField ? 'YES' : '❌ NO');
     
     // Check for Analytics Provider
     const analyticsStatus = await page.evaluate(() => {
@@ -89,10 +77,6 @@ async function verifyAnalyticsPage() {
         hasGetStatus: typeof window.getAnalyticsStatus === 'function'
       };
     });
-    console.log('\n✓ Analytics Integration:');
-    console.log('  - Global analytics object:', analyticsStatus.hasGlobalAnalytics ? 'YES' : '❌ NO');
-    console.log('  - trackEvent function:', analyticsStatus.hasTrackEvent ? 'YES' : '❌ NO');
-    console.log('  - getAnalyticsStatus function:', analyticsStatus.hasGetStatus ? 'YES' : '❌ NO');
     
     // Check for Privacy Banner
     const privacyBanner = await page.evaluate(() => {
@@ -101,9 +85,6 @@ async function verifyAnalyticsPage() {
       const hasAcceptButton = !!Array.from(document.querySelectorAll('button')).find(btn => btn.textContent === 'Accept');
       return { hasCookieBanner, hasAcceptButton };
     });
-    console.log('\n✓ Privacy Banner:');
-    console.log('  - Banner present:', privacyBanner.hasCookieBanner ? 'YES' : '❌ NO');
-    console.log('  - Accept button:', privacyBanner.hasAcceptButton ? 'YES' : '❌ NO');
     
     // Get all visible text to check what's actually rendered
     const visibleText = await page.evaluate(() => {
@@ -119,9 +100,7 @@ async function verifyAnalyticsPage() {
       return mainContent;
     });
     
-    console.log('\n📝 VISIBLE TEXT ON PAGE:');
     visibleText.forEach((text, i) => {
-      console.log(`  ${i + 1}. ${text.substring(0, 60)}${text.length > 60 ? '...' : ''}`);
     });
     
     // Check what route is actually loading
@@ -165,10 +144,8 @@ async function verifyAnalyticsPage() {
       path: '/tmp/analytics-page-verification.png',
       fullPage: true 
     });
-    console.log('\n📸 Screenshot saved to: /tmp/analytics-page-verification.png');
     
     // ANALYSIS
-    console.log('\n' + '='.repeat(60));
     console.log('📊 ANALYSIS - WHAT\'S NOT CORRECT:\n');
     
     const issues = [];
@@ -198,7 +175,6 @@ async function verifyAnalyticsPage() {
     if (issues.length === 0) {
       console.log('✅ Everything appears to be working correctly!');
     } else {
-      issues.forEach(issue => console.log(issue));
     }
     
     await browser.close();

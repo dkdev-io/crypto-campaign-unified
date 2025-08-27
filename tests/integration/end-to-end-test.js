@@ -81,12 +81,10 @@ class IntegrationTester {
   }
 
   async testNewUserJourney() {
-    console.log('\n🧪 Testing New User Journey...\n');
     const journey = [];
 
     try {
       // 1. Land on homepage
-      console.log('  1. Landing on homepage...');
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
       journey.push(this.logResult('Homepage Load', true));
 
@@ -95,7 +93,6 @@ class IntegrationTester {
       journey.push(this.logResult('Hero Section Visible', heroExists));
 
       // 2. Navigate to signup
-      console.log('  2. Navigating to signup...');
       const signupButton = await this.page.$('a[href="/signup"], button:has-text("Sign Up")');
       if (signupButton) {
         await signupButton.click();
@@ -106,7 +103,6 @@ class IntegrationTester {
       }
 
       // 3. Fill signup form
-      console.log('  3. Filling signup form...');
       const timestamp = Date.now();
       const testEmail = `testuser${timestamp}@test.com`;
       
@@ -117,7 +113,6 @@ class IntegrationTester {
       journey.push(this.logResult('Fill Signup Form', true));
 
       // 4. Submit signup
-      console.log('  4. Submitting signup...');
       const submitButton = await this.page.$('button[type="submit"], button:has-text("Sign Up")');
       if (submitButton) {
         await submitButton.click();
@@ -128,7 +123,6 @@ class IntegrationTester {
       }
 
       // 5. Check for KYC flow
-      console.log('  5. Checking KYC flow...');
       await this.page.waitForTimeout(2000);
       const kycForm = await this.page.$('.kyc-form, form[class*="kyc"]');
       if (kycForm) {
@@ -149,14 +143,12 @@ class IntegrationTester {
       }
 
       // 6. Browse campaigns
-      console.log('  6. Browsing campaigns...');
       await this.page.goto(`${BASE_URL}/campaigns`, { waitUntil: 'networkidle2' });
       const campaignCards = await this.page.$$('.campaign-card, .campaign-item');
       journey.push(this.logResult('Campaign List Displayed', campaignCards.length > 0, 
         `Found ${campaignCards.length} campaigns`));
 
       // 7. Make a contribution
-      console.log('  7. Making a contribution...');
       if (campaignCards.length > 0) {
         await campaignCards[0].click();
         await this.page.waitForTimeout(2000);
@@ -180,7 +172,6 @@ class IntegrationTester {
       }
 
       // 8. View contribution history
-      console.log('  8. Viewing contribution history...');
       await this.page.goto(`${BASE_URL}/profile`, { waitUntil: 'networkidle2' });
       const historySection = await this.page.$('.contribution-history, .transaction-history');
       journey.push(this.logResult('Contribution History', historySection !== null));
@@ -194,12 +185,10 @@ class IntegrationTester {
   }
 
   async testAdminJourney() {
-    console.log('\n🧪 Testing Admin Journey...\n');
     const journey = [];
 
     try {
       // 1. Login as admin
-      console.log('  1. Logging in as admin...');
       await this.page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle2' });
       
       await this.page.type('input[name="email"], input[type="email"]', 'admin@crypto-campaign.com');
@@ -215,13 +204,11 @@ class IntegrationTester {
       }
 
       // 2. View admin dashboard
-      console.log('  2. Viewing admin dashboard...');
       await this.page.goto(`${BASE_URL}/admin`, { waitUntil: 'networkidle2' });
       const dashboard = await this.page.$('.admin-dashboard, .dashboard');
       journey.push(this.logResult('Admin Dashboard Access', dashboard !== null));
 
       // 3. Create new campaign
-      console.log('  3. Creating new campaign...');
       const createCampaignButton = await this.page.$('button:has-text("Create Campaign"), a[href*="create"]');
       if (createCampaignButton) {
         await createCampaignButton.click();
@@ -242,7 +229,6 @@ class IntegrationTester {
       }
 
       // 4. View all contributions
-      console.log('  4. Viewing all contributions...');
       const contributionsLink = await this.page.$('a[href*="contributions"], button:has-text("Contributions")');
       if (contributionsLink) {
         await contributionsLink.click();
@@ -262,12 +248,10 @@ class IntegrationTester {
   }
 
   async testReturningUserJourney() {
-    console.log('\n🧪 Testing Returning User Journey...\n');
     const journey = [];
 
     try {
       // 1. Login with existing account
-      console.log('  1. Logging in with existing account...');
       await this.page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle2' });
       
       await this.page.type('input[name="email"], input[type="email"]', 'test@example.com');
@@ -283,14 +267,12 @@ class IntegrationTester {
       }
 
       // 2. View previous contributions
-      console.log('  2. Viewing previous contributions...');
       await this.page.goto(`${BASE_URL}/profile`, { waitUntil: 'networkidle2' });
       const contributions = await this.page.$$('.contribution-item, .transaction-item');
       journey.push(this.logResult('View Previous Contributions', true, 
         `Found ${contributions.length} previous contributions`));
 
       // 3. Make another contribution
-      console.log('  3. Making another contribution...');
       await this.page.goto(`${BASE_URL}/campaigns`, { waitUntil: 'networkidle2' });
       const campaignCards = await this.page.$$('.campaign-card');
       if (campaignCards.length > 0) {
@@ -336,12 +318,10 @@ class IntegrationTester {
   }
 
   async performCriticalChecks() {
-    console.log('\n🧪 Performing Critical Checks...\n');
     const checks = [];
 
     try {
       // 1. Check all main pages load without errors
-      console.log('  1. Checking all pages load...');
       const pages = ['/', '/campaigns', '/about', '/contact'];
       for (const path of pages) {
         try {
@@ -361,7 +341,6 @@ class IntegrationTester {
         `Found ${consoleErrors.length} console errors`));
 
       // 3. Check mobile responsiveness
-      console.log('  3. Checking mobile responsiveness...');
       await this.page.setViewport({ width: 375, height: 667 });
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
       const mobileMenu = await this.page.$('.mobile-menu, .hamburger, button[aria-label*="menu" i]');
@@ -369,13 +348,11 @@ class IntegrationTester {
       await this.page.setViewport({ width: 1366, height: 768 });
 
       // 4. Check loading states
-      console.log('  4. Checking loading states...');
       await this.page.goto(`${BASE_URL}/campaigns`, { waitUntil: 'domcontentloaded' });
       const loadingIndicator = await this.page.$('.loading, .spinner, [class*="load"]');
       checks.push(this.logResult('Loading States Present', loadingIndicator !== null));
 
       // 5. Check form validation
-      console.log('  5. Checking form validation...');
       await this.page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle2' });
       const submitButton = await this.page.$('button[type="submit"]');
       if (submitButton) {
@@ -386,7 +363,6 @@ class IntegrationTester {
       }
 
       // 6. Check images load
-      console.log('  6. Checking image loading...');
       const brokenImages = await this.page.evaluate(() => {
         const images = Array.from(document.querySelectorAll('img'));
         return images.filter(img => !img.complete || img.naturalWidth === 0).length;
@@ -395,7 +371,6 @@ class IntegrationTester {
         `${brokenImages} broken images found`));
 
       // 7. Check API connectivity
-      console.log('  7. Checking API connectivity...');
       const apiResponse = await this.page.evaluate(async () => {
         try {
           const response = await fetch('/api/health');
@@ -407,7 +382,6 @@ class IntegrationTester {
       checks.push(this.logResult('API Connectivity', apiResponse));
 
       // 8. Check blockchain connectivity
-      console.log('  8. Checking blockchain connectivity...');
       const web3Connected = await this.page.evaluate(() => {
         return typeof window.ethereum !== 'undefined';
       });
@@ -571,7 +545,6 @@ class IntegrationTester {
       
       // Generate and save report
       const report = this.generateReport();
-      console.log('\n' + report);
       
       // Save report to file
       fs.writeFileSync('./test-results/integration-test-report.md', report);

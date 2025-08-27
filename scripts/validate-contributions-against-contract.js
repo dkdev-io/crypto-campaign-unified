@@ -11,20 +11,13 @@ class ContributionValidator {
         this.maxContributionWei = (this.MAX_CONTRIBUTION_USD * 1e18 * 1e18) / (this.ETH_PRICE_USD * 1e18);
         this.maxContributionETH = this.MAX_CONTRIBUTION_USD / this.ETH_PRICE_USD; // 1.1 ETH
         
-        console.log(`📋 Contract Validation Rules:`);
-        console.log(`   - Max per transaction: $${this.MAX_CONTRIBUTION_USD} (${this.maxContributionETH} ETH)`);
-        console.log(`   - Max cumulative per wallet: $${this.MAX_CONTRIBUTION_USD} (${this.maxContributionETH} ETH)`);
-        console.log(`   - KYC required: YES`);
-        console.log(`   - ETH Price assumed: $${this.ETH_PRICE_USD}\n`);
     }
 
     async validateAllContributions() {
-        console.log('🔍 Validating All Contributions Against Smart Contract Rules\n');
         
         // Get all donors with their contributions and KYC status
         const contributions = await this.getAllContributionsWithKYC();
         
-        console.log(`📊 Total Contributions to Validate: ${contributions.length}\n`);
         
         let validCount = 0;
         let invalidCount = 0;
@@ -32,14 +25,12 @@ class ContributionValidator {
         const cumulativeContributions = {}; // Track cumulative per wallet
         
         console.log('🧪 Validation Results:');
-        console.log('=' .repeat(80));
         
         for (const contrib of contributions) {
             const validation = this.validateSingleContribution(contrib, cumulativeContributions);
             
             if (validation.valid) {
                 validCount++;
-                console.log(`✅ VALID   | ${contrib.unique_id} | $${contrib.contribution_amount} | KYC: ${contrib.kyc_passed ? 'PASS' : 'FAIL'}`);
                 
                 // Update cumulative tracking
                 if (!cumulativeContributions[contrib.wallet]) {
@@ -48,7 +39,6 @@ class ContributionValidator {
                 cumulativeContributions[contrib.wallet] += parseFloat(contrib.contribution_amount);
             } else {
                 invalidCount++;
-                console.log(`❌ INVALID | ${contrib.unique_id} | $${contrib.contribution_amount} | ${validation.reason}`);
                 
                 // Track rejection reasons
                 if (!rejectionReasons[validation.reason]) {
@@ -58,7 +48,6 @@ class ContributionValidator {
             }
         }
         
-        console.log('=' .repeat(80));
         this.generateValidationReport(validCount, invalidCount, rejectionReasons, contributions.length);
     }
 
@@ -131,16 +120,10 @@ class ContributionValidator {
 
     generateValidationReport(valid, invalid, reasons, total) {
         console.log('\n📊 VALIDATION SUMMARY:');
-        console.log(`   Total Contributions: ${total}`);
-        console.log(`   ✅ Valid (would be accepted): ${valid}`);
-        console.log(`   ❌ Invalid (would be rejected): ${invalid}`);
         console.log(`   📈 Success Rate: ${Math.round(valid/total*100)}%`);
-        console.log(`   📉 Rejection Rate: ${Math.round(invalid/total*100)}%`);
         
         if (Object.keys(reasons).length > 0) {
-            console.log('\n🔍 REJECTION BREAKDOWN:');
             for (const [reason, count] of Object.entries(reasons)) {
-                console.log(`   - ${reason}: ${count} contributions`);
             }
         }
         
@@ -149,7 +132,6 @@ class ContributionValidator {
     }
 
     async performAdditionalAnalysis() {
-        console.log('\n📈 ADDITIONAL ANALYSIS:');
         
         // Create new database connection for additional analysis
         const analysisDb = new sqlite3.Database(path.join(__dirname, 'test-data.db'));
@@ -168,7 +150,6 @@ class ContributionValidator {
             });
         });
         
-        console.log(`   🔍 KYC Status: ${kycStats.kyc_passed}/${kycStats.total_kyc} passed (${Math.round(kycStats.kyc_passed/kycStats.total_kyc*100)}%)`);
         
         // Contribution amount analysis
         const amountStats = await new Promise((resolve, reject) => {
@@ -187,9 +168,7 @@ class ContributionValidator {
         });
         
         if (amountStats.length > 0) {
-            console.log(`   💰 Over-limit contributions found:`);
             amountStats.forEach(stat => {
-                console.log(`     - $${stat.contribution_amount}: ${stat.count} contributions`);
             });
         }
         
@@ -211,9 +190,7 @@ class ContributionValidator {
         });
         
         if (walletStats.length > 0) {
-            console.log(`   🎯 Wallets exceeding cumulative limit:`);
             walletStats.slice(0, 10).forEach(stat => {
-                console.log(`     - ${stat.wallet.substring(0, 10)}...: $${stat.total_contributed} (${stat.contribution_count} contributions)`);
             });
         }
         
@@ -230,7 +207,6 @@ if (require.main === module) {
     const validator = new ContributionValidator();
     validator.validateAllContributions()
         .then(() => {
-            console.log('\n✅ Validation completed');
             return validator.cleanup();
         })
         .catch((error) => {

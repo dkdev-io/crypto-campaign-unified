@@ -740,10 +740,6 @@ async function createDemoHTML() {
         });
 
         console.log('🚀 Demo Analytics System Ready!');
-        console.log('Try these commands in the console:');
-        console.log('• window.trackEvent("custom_event", {test: true})');
-        console.log('• window.getAnalyticsStatus()');
-        console.log('• window.demoAnalytics.flushEvents()');
     </script>
 </body>
 </html>
@@ -762,7 +758,6 @@ async function launchDemoForm() {
   console.log('✅ Demo form created at:', demoPath);
 
   // Launch Puppeteer
-  console.log('🌐 Launching browser...');
   
   const browser = await puppeteer.launch({
     headless: false, // Show the browser
@@ -783,7 +778,6 @@ async function launchDemoForm() {
   page.on('console', msg => {
     const type = msg.type();
     if (type === 'log' || type === 'info') {
-      console.log('🖥️ Browser Console:', msg.text());
     } else if (type === 'error') {
       console.error('❌ Browser Error:', msg.text());
     }
@@ -791,7 +785,6 @@ async function launchDemoForm() {
 
   // Navigate to the demo form
   const fileUrl = 'file://' + demoPath;
-  console.log('📱 Opening demo form at:', fileUrl);
   
   await page.goto(fileUrl, { waitUntil: 'networkidle0' });
 
@@ -808,38 +801,10 @@ async function launchDemoForm() {
   });
 
   console.log('✅ Demo form is now open in your browser!');
-  console.log('');
-  console.log('🎯 Try these interactions to see analytics in action:');
-  console.log('   • Scroll down the page');
-  console.log('   • Click the "Connect Wallet" button');
-  console.log('   • Select a preset amount (0.1, 0.5, 1, or 5 ETH)');
-  console.log('   • Enter a custom amount');
-  console.log('   • Submit the contribution form');
-  console.log('   • Accept or decline analytics tracking');
-  console.log('');
   console.log('📊 Analytics features demonstrated:');
-  console.log('   ✅ Visitor ID generation and persistence');
-  console.log('   ✅ Session tracking with real-time updates');
-  console.log('   ✅ Form interaction tracking');
-  console.log('   ✅ Button click analytics');
-  console.log('   ✅ Scroll depth measurement');
-  console.log('   ✅ Conversion tracking');
-  console.log('   ✅ Privacy consent management');
-  console.log('   ✅ UTM parameter detection');
-  console.log('');
-  console.log('🔍 Open browser dev tools (F12) to see:');
-  console.log('   • Console logs of all analytics events');
-  console.log('   • Network tab showing simulated API calls');
-  console.log('   • Local storage with visitor ID');
-  console.log('');
-  console.log('💡 Console commands you can try:');
-  console.log('   • window.trackEvent("custom_event", {test: true})');
-  console.log('   • window.getAnalyticsStatus()');
-  console.log('   • window.demoAnalytics.flushEvents()');
 
   // Add some automated interactions for demo purposes
   setTimeout(async () => {
-    console.log('🤖 Running automated demo interactions...');
     
     // Scroll down automatically
     await page.evaluate(() => {
@@ -859,25 +824,20 @@ async function launchDemoForm() {
     }, 4000);
     
     console.log('✅ Automated scroll interactions completed');
-    console.log('👆 You can now interact with the form manually');
     
   }, 3000);
 
   // Keep the browser open
-  console.log('🔄 Browser will stay open for testing. Press Ctrl+C to close.');
   
   // Handle cleanup on exit
   process.on('SIGINT', async () => {
-    console.log('\n🧹 Cleaning up...');
     await browser.close();
     
     // Clean up demo file
     if (fs.existsSync(demoPath)) {
       fs.unlinkSync(demoPath);
-      console.log('🗑️ Demo file cleaned up');
     }
     
-    console.log('👋 Demo closed. Thanks for testing!');
     process.exit(0);
   });
 }

@@ -12,7 +12,6 @@ if (!supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function createCriticalTables() {
-  console.log('🔧 Creating critical database tables...\n');
 
   try {
     // Create users table
@@ -159,7 +158,6 @@ async function createCriticalTables() {
     }
 
     // Try alternative creation method if RPC doesn't work
-    console.log('\n📋 Attempting alternative table creation via direct insert...');
 
     // Test users table
     const { error: testUsersError } = await supabase
@@ -169,8 +167,6 @@ async function createCriticalTables() {
 
     if (testUsersError) {
       console.log('❌ Users table not accessible:', testUsersError.message);
-      console.log('\n⚠️  IMPORTANT: You may need to create these tables manually in Supabase dashboard');
-      console.log('Visit: https://app.supabase.com/project/kmepcdsklnnxokoimvzo/editor');
     } else {
       console.log('✅ Users table is accessible');
     }
@@ -188,7 +184,6 @@ async function createCriticalTables() {
     }
 
     // Create a test admin user
-    console.log('\n👤 Creating test admin user...');
     const { data: adminUser, error: adminError } = await supabase
       .from('users')
       .upsert([
@@ -230,16 +225,9 @@ async function createCriticalTables() {
       console.log('✅ Test user created/updated:', testUser.email);
     }
 
-    console.log('\n✨ Critical tables setup complete!');
-    console.log('\nNOTE: If tables were not created, please create them manually in Supabase dashboard.');
-    console.log('SQL scripts are available in the /scripts directory.');
 
   } catch (error) {
     console.error('❌ Error creating tables:', error);
-    console.log('\n📝 Manual Setup Instructions:');
-    console.log('1. Go to https://app.supabase.com/project/kmepcdsklnnxokoimvzo/editor');
-    console.log('2. Run the SQL commands from scripts/create-critical-tables.sql');
-    console.log('3. Ensure Row Level Security (RLS) is properly configured');
   }
 
   process.exit(0);

@@ -13,10 +13,8 @@ async function captureSetupPage() {
     
     // Capture console messages
     page.on('console', msg => {
-      console.log(`Console ${msg.type()}: ${msg.text()}`);
     });
     
-    console.log('🔍 Navigating to http://localhost:5175/setup');
     await page.goto('http://localhost:5175/setup', { 
       waitUntil: 'networkidle0',
       timeout: 10000 
@@ -38,20 +36,9 @@ async function captureSetupPage() {
       };
     });
     
-    console.log('\n📊 SETUP PAGE ANALYSIS:');
-    console.log(`Title: ${setupAnalysis.title}`);
-    console.log(`Current Step: ${setupAnalysis.currentStep}`);
-    console.log(`Has Form: ${setupAnalysis.hasForm}`);
-    console.log(`Has Submit Button: ${setupAnalysis.hasSubmitButton}`);
-    console.log(`Has Next Button: ${setupAnalysis.hasNextButton}`);
-    console.log(`Form Fields: ${setupAnalysis.formFields}`);
-    console.log(`Total Buttons: ${setupAnalysis.buttons}`);
     
-    console.log('\n📝 Page Content:');
-    console.log(setupAnalysis.bodyText);
     
     // Try to find and click submit/next button
-    console.log('\n🔄 Testing submit/next button...');
     
     try {
       // Look for submit or next button
@@ -62,10 +49,8 @@ async function captureSetupPage() {
         const buttonText = await page.evaluate(el => el.textContent || el.value, button);
         const buttonType = await page.evaluate(el => el.type, button);
         
-        console.log(`Found button: "${buttonText}" (type: ${buttonType})`);
         
         if (buttonText.includes('Next') || buttonText.includes('Submit') || buttonText.includes('Continue') || buttonType === 'submit') {
-          console.log(`Clicking button: "${buttonText}"`);
           
           // Fill in required fields if any
           try {
@@ -74,7 +59,6 @@ async function captureSetupPage() {
               const fieldType = await page.evaluate(el => el.type, field);
               const placeholder = await page.evaluate(el => el.placeholder || el.name, field);
               
-              console.log(`Filling required field: ${placeholder} (${fieldType})`);
               
               if (fieldType === 'email') {
                 await field.type('test@example.com');
@@ -100,15 +84,10 @@ async function captureSetupPage() {
           currentStep: document.body.innerText.match(/Step \d+/)?.[0] || 'No step found'
         }));
         
-        console.log('\n📍 AFTER CLICKING SUBMIT:');
-        console.log(`URL: ${afterClick.url}`);
-        console.log(`Current Step: ${afterClick.currentStep}`);
-        console.log(`Content: ${afterClick.bodySnippet}`);
         
         const progressMade = afterClick.url !== 'http://localhost:5175/setup' || 
                            afterClick.currentStep !== setupAnalysis.currentStep;
         
-        console.log(`\n✅ Progress to next step: ${progressMade ? '✓' : '✗'}`);
         
         if (!progressMade) {
           console.log('❌ ISSUE: User stuck on same step after clicking submit');
@@ -126,8 +105,6 @@ async function captureSetupPage() {
       fullPage: true 
     });
     
-    console.log('\n📸 Screenshot saved to: scripts/setup-page-debug.png');
-    console.log('🔍 Browser staying open for 8 seconds...');
     await new Promise(resolve => setTimeout(resolve, 8000));
     
   } catch (error) {

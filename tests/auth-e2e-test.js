@@ -53,7 +53,6 @@ const colors = {
 // Helper function to log test results
 function logTest(testName, passed, error = null) {
   const status = passed ? `${colors.green}✓ PASS${colors.reset}` : `${colors.red}✗ FAIL${colors.reset}`
-  console.log(`${status} - ${testName}`)
   if (error) {
     console.error(`  ${colors.red}Error: ${error.message}${colors.reset}`)
   }
@@ -61,9 +60,6 @@ function logTest(testName, passed, error = null) {
 
 // Helper function to log section headers
 function logSection(sectionName) {
-  console.log(`\n${colors.cyan}═══════════════════════════════════════${colors.reset}`)
-  console.log(`${colors.cyan}${sectionName}${colors.reset}`)
-  console.log(`${colors.cyan}═══════════════════════════════════════${colors.reset}\n`)
 }
 
 // Test Suite
@@ -77,8 +73,6 @@ class AuthTestSuite {
   }
 
   async runAllTests() {
-    console.log(`${colors.blue}Starting Authentication E2E Test Suite${colors.reset}`)
-    console.log(`${colors.yellow}Timestamp: ${new Date().toISOString()}${colors.reset}\n`)
 
     // Setup test users
     await this.setupTestUsers()
@@ -525,25 +519,18 @@ class AuthTestSuite {
   }
 
   printSummary() {
-    console.log(`\n${colors.cyan}═══════════════════════════════════════${colors.reset}`)
     console.log(`${colors.cyan}TEST SUITE SUMMARY${colors.reset}`)
-    console.log(`${colors.cyan}═══════════════════════════════════════${colors.reset}\n`)
     
     const total = this.results.passed + this.results.failed
     const passRate = ((this.results.passed / total) * 100).toFixed(1)
     
-    console.log(`Total Tests: ${total}`)
     console.log(`${colors.green}Passed: ${this.results.passed}${colors.reset}`)
     console.log(`${colors.red}Failed: ${this.results.failed}${colors.reset}`)
-    console.log(`Pass Rate: ${passRate}%`)
     
     if (this.results.failed === 0) {
-      console.log(`\n${colors.green}✨ ALL TESTS PASSED! ✨${colors.reset}`)
     } else {
-      console.log(`\n${colors.yellow}⚠️  Some tests failed. Review the output above for details.${colors.reset}`)
     }
     
-    console.log(`\n${colors.blue}Test completed at: ${new Date().toISOString()}${colors.reset}`)
   }
 }
 

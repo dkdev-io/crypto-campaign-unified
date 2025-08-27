@@ -35,7 +35,6 @@ const log = (msg) => {
     // Ignore logging errors
   }
   
-  console.log(`${colors.magenta}🚀 AUTO-START: ${colors.reset}${msg}`);
 };
 
 class AutoStart {
@@ -138,13 +137,7 @@ class AutoStart {
   status() {
     const running = this.checkIfRunning();
     if (running) {
-      console.log(`${colors.green}✅ Auto-deployment is ACTIVE${colors.reset}`);
-      console.log(`   Started: ${running.startTime}`);
-      console.log(`   PID: ${running.pid}`);
-      console.log(`${colors.blue}💡 Just edit and save files - they'll auto-deploy!${colors.reset}`);
     } else {
-      console.log(`${colors.yellow}⚠️  Auto-deployment not running${colors.reset}`);
-      console.log(`${colors.blue}Run: node scripts/auto-start-on-directory-open.js${colors.reset}`);
     }
   }
 }

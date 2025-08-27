@@ -58,7 +58,6 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 SELECT 'Database fixes applied successfully!' as result;`;
 
 async function connectToExistingBrowser() {
-  console.log('🔗 Connecting to existing browser...');
   
   try {
     // Connect to existing Chrome instance
@@ -68,7 +67,6 @@ async function connectToExistingBrowser() {
     });
 
     const pages = await browser.pages();
-    console.log(`📄 Found ${pages.length} open tabs`);
     
     // Look for Supabase tab
     let supabasePage = null;
@@ -84,19 +82,16 @@ async function connectToExistingBrowser() {
     if (!supabasePage) {
       // Navigate to the provided URL
       const page = pages[0] || await browser.newPage();
-      console.log('📝 Navigating to Supabase SQL editor...');
       await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8');
       supabasePage = page;
     }
 
     await supabasePage.bringToFront();
-    console.log('🎯 Focusing on Supabase tab');
 
     // Wait a moment for page to be ready
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Clear and enter SQL
-    console.log('📝 Entering SQL...');
     
     // Try to find and click in editor area
     try {
@@ -127,20 +122,16 @@ async function connectToExistingBrowser() {
           // Type the SQL
           await supabasePage.keyboard.type(cleanSQL, { delay: 5 });
           
-          console.log(`✅ SQL entered using selector: ${selector}`);
           success = true;
           break;
           
         } catch (err) {
-          console.log(`❌ Selector ${selector} failed: ${err.message}`);
           continue;
         }
       }
 
       if (!success) {
         console.log('❌ Could not find editor - please paste manually');
-        console.log('📋 SQL to paste:');
-        console.log(cleanSQL);
         return;
       }
 
@@ -150,7 +141,6 @@ async function connectToExistingBrowser() {
     }
 
     // Look for and click Run button
-    console.log('🏃 Looking for Run button...');
     
     const runSelectors = [
       'button[data-testid="run-sql"]',
@@ -165,7 +155,6 @@ async function connectToExistingBrowser() {
       try {
         await supabasePage.waitForSelector(selector, { timeout: 1000 });
         await supabasePage.click(selector);
-        console.log(`✅ Clicked Run button: ${selector}`);
         runSuccess = true;
         break;
       } catch (err) {
@@ -175,13 +164,11 @@ async function connectToExistingBrowser() {
 
     // Fallback to keyboard shortcut
     if (!runSuccess) {
-      console.log('🎹 Using keyboard shortcut (Cmd+Enter)...');
       await supabasePage.keyboard.down('Meta');
       await supabasePage.keyboard.press('Enter');
       await supabasePage.keyboard.up('Meta');
     }
 
-    console.log('⏳ Waiting for execution to complete...');
     await new Promise(resolve => setTimeout(resolve, 5000));
 
     console.log('🎉 SQL execution initiated! Check the Supabase interface for results.');
@@ -191,10 +178,6 @@ async function connectToExistingBrowser() {
 
   } catch (error) {
     console.error('❌ Failed to connect to existing browser:', error.message);
-    console.log('💡 Make sure Chrome is running with --remote-debugging-port=9222');
-    console.log('   Or paste this SQL manually in your open Supabase tab:');
-    console.log('📋 SQL:');
-    console.log(cleanSQL);
   }
 }
 

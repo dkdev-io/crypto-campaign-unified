@@ -6,8 +6,6 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function inspectNewDatabase() {
-  console.log('🔍 Inspecting New Database Connection...\n');
-  console.log(`🔗 URL: ${supabaseUrl}`);
 
   const tables = [
     'campaigns', 
@@ -28,8 +26,6 @@ async function inspectNewDatabase() {
   };
 
   for (const table of tables) {
-    console.log(`\n📊 Testing table: ${table}`);
-    console.log('=' .repeat(30));
     
     try {
       // Test basic access
@@ -53,22 +49,17 @@ async function inspectNewDatabase() {
         .select('*', { count: 'exact', head: true });
 
       if (totalCount > 0) {
-        console.log(`  ✅ Accessible with ${totalCount} records`);
         report.hasData.push({ table, count: totalCount });
         
         // Show structure if has data
         if (data && data.length > 0) {
           const columns = Object.keys(data[0]);
-          console.log(`  📋 Columns: ${columns.join(', ')}`);
           
           // Show sample for campaigns
           if (table === 'campaigns') {
-            console.log('  📄 Sample record:');
-            console.log(JSON.stringify(data[0], null, 2).split('\n').map(line => '    ' + line).join('\n'));
           }
         }
       } else {
-        console.log(`  ⚠️ Accessible but empty`);
         report.empty.push(table);
       }
 
@@ -79,8 +70,6 @@ async function inspectNewDatabase() {
   }
 
   // Test specific operations
-  console.log('\n🔧 Testing Specific Operations:');
-  console.log('=' .repeat(40));
 
   // Test INSERT on campaigns
   const testCampaign = {
@@ -101,14 +90,12 @@ async function inspectNewDatabase() {
     
     // Clean up
     await supabase.from('campaigns').delete().eq('id', inserted.id);
-    console.log(`🧹 Cleaned up test record`);
   } else {
     console.log(`❌ INSERT test failed: ${insertError?.message || 'Unknown error'}`);
   }
 
   // Test if contributions table is accessible now
   if (report.accessible.includes('contributions')) {
-    console.log('\n🔗 Testing contributions table access:');
     const { data: contribData, error: contribError } = await supabase
       .from('contributions')
       .select('*')
@@ -123,7 +110,6 @@ async function inspectNewDatabase() {
 
   // Test if kyc_data table is accessible now
   if (report.accessible.includes('kyc_data')) {
-    console.log('\n🔐 Testing kyc_data table access:');
     const { data: kycData, error: kycError } = await supabase
       .from('kyc_data')
       .select('*')
@@ -137,10 +123,6 @@ async function inspectNewDatabase() {
   }
 
   console.log('\n📊 SUMMARY:');
-  console.log(`  Accessible tables: ${report.accessible.length}`);
-  console.log(`  Inaccessible tables: ${report.inaccessible.length}`);
-  console.log(`  Tables with data: ${report.hasData.length}`);
-  console.log(`  Empty tables: ${report.empty.length}`);
 
   return report;
 }
