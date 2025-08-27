@@ -1,5 +1,10 @@
 {
+<<<<<<< HEAD
   "pid": 31402,
   "startTime": "2025-08-27T02:21:13.787Z",
+=======
+  "pid": 29286,
+  "startTime": "2025-08-27T02:20:43.544Z",
+>>>>>>> agent-styling-fixes-2025-08-27
   "projectRoot": "/Users/Danallovertheplace/crypto-campaign-unified"
 }
