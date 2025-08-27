@@ -25,19 +25,28 @@ import CampaignManagement from './components/admin/CampaignManagement';
 import Analytics from './components/admin/Analytics';
 import SystemSettings from './components/admin/SystemSettings';
 
+// Donor Components
+import { DonorAuthProvider } from './contexts/DonorAuthContext';
+import DonorRegister from './components/donor/DonorRegister';
+import DonorLogin from './components/donor/DonorLogin';
+import DonorDashboard from './components/donor/DonorDashboard';
+import DonorProfile from './components/donor/DonorProfile';
+import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
+
 function App() {
   return (
     <AdminProvider>
-      <AnalyticsProvider config={{ 
-        debug: process.env.NODE_ENV === 'development',
-        cookieConsent: 'optional',
-        respectDNT: true,
-        enableGeolocation: true,
-        enableScrollTracking: true,
-        enableClickTracking: true 
-      }}>
-        <Router>
-          <Routes>
+      <DonorAuthProvider>
+        <AnalyticsProvider config={{ 
+          debug: process.env.NODE_ENV === 'development',
+          cookieConsent: 'optional',
+          respectDNT: true,
+          enableGeolocation: true,
+          enableScrollTracking: true,
+          enableClickTracking: true 
+        }}>
+          <Router>
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/setup" element={
               <ProtectedRoute requireVerified={true}>
@@ -91,11 +100,36 @@ function App() {
               <Route path="settings" element={<SystemSettings />} />
             </Route>
             
+            {/* Donor Routes */}
+            <Route path="/donor/register" element={<DonorRegister />} />
+            <Route path="/donor/login" element={<DonorLogin />} />
+            <Route path="/donor/dashboard" element={
+              <DonorProtectedRoute>
+                <DonorDashboard />
+              </DonorProtectedRoute>
+            } />
+            <Route path="/donor/profile" element={
+              <DonorProtectedRoute>
+                <DonorProfile />
+              </DonorProtectedRoute>
+            } />
+            <Route path="/donor/donations" element={
+              <DonorProtectedRoute>
+                <DonorDashboard />
+              </DonorProtectedRoute>
+            } />
+            <Route path="/donor/campaigns" element={
+              <DonorProtectedRoute>
+                <DonorDashboard />
+              </DonorProtectedRoute>
+            } />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           <PrivacyBanner />
         </Router>
       </AnalyticsProvider>
+    </DonorAuthProvider>
     </AdminProvider>
   );
 }
