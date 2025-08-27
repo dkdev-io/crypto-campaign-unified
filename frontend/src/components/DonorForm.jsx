@@ -329,7 +329,7 @@ const DonorForm = ({ campaignId }) => {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label>Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
+          <label className="form-label">Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
             {suggestedAmounts.map(amount => (
               <button 
@@ -354,7 +354,7 @@ const DonorForm = ({ campaignId }) => {
             placeholder="Custom amount"
             min="1"
             max={maxDonation}
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             value={formData.amount || ''}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
@@ -370,7 +370,7 @@ const DonorForm = ({ campaignId }) => {
 
         {/* Payment Method Selection */}
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ marginBottom: '0.5rem', display: 'block', fontWeight: 'bold' }}>
+          <label className="form-label" style={{ fontWeight: 'bold' }}>
             Payment Method *
           </label>
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
@@ -449,19 +449,12 @@ const DonorForm = ({ campaignId }) => {
                       parseFloat(formData.amount) <= 0 ||
                       (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
                     }
+                    className="btn-secondary"
                     style={{
                       width: '100%',
-                      padding: '1rem',
-                      background: 
-                        isProcessingCrypto || 
+                      opacity: (isProcessingCrypto || 
                         !formData.amount || 
-                        (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
-                          ? '#ccc' : '#28a745',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '1.1rem',
-                      fontWeight: 'bold',
+                        (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)) ? 0.5 : 1,
                       cursor: 
                         isProcessingCrypto || 
                         !formData.amount || 
@@ -536,14 +529,10 @@ const DonorForm = ({ campaignId }) => {
           <button 
             type="submit"
             disabled={isSubmitting}
+            className="btn-primary"
             style={{ 
-              width: '100%', 
-              padding: '1rem', 
-              background: isSubmitting ? '#ccc' : '#F0A202', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '4px', 
-              fontSize: '1.1rem',
+              width: '100%',
+              opacity: isSubmitting ? 0.5 : 1,
               cursor: isSubmitting ? 'not-allowed' : 'pointer'
             }}
           >

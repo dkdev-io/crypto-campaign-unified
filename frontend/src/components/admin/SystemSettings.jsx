@@ -172,32 +172,32 @@ const SystemSettings = () => {
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Site Name</label>
+              <label className="form-label">Site Name</label>
               <input
                 type="text"
                 value={settings.site_name}
                 onChange={(e) => handleInputChange('site_name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Site Description</label>
+              <label className="form-label">Site Description</label>
               <textarea
                 value={settings.site_description}
                 onChange={(e) => handleInputChange('site_description', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
                 rows="3"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
+              <label className="form-label">Contact Email</label>
               <input
                 type="email"
                 value={settings.contact_email}
                 onChange={(e) => handleInputChange('contact_email', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
               />
             </div>
 
@@ -207,9 +207,9 @@ const SystemSettings = () => {
                 id="maintenance_mode"
                 checked={settings.maintenance_mode}
                 onChange={(e) => handleInputChange('maintenance_mode', e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-border text-primary focus:ring-primary"
               />
-              <label htmlFor="maintenance_mode" className="text-sm font-medium text-gray-700">
+              <label htmlFor="maintenance_mode" className="form-label">
                 Maintenance Mode
               </label>
             </div>
@@ -225,9 +225,9 @@ const SystemSettings = () => {
                 id="allow_registrations"
                 checked={settings.allow_registrations}
                 onChange={(e) => handleInputChange('allow_registrations', e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-border text-primary focus:ring-primary"
               />
-              <label htmlFor="allow_registrations" className="text-sm font-medium text-gray-700">
+              <label htmlFor="allow_registrations" className="form-label">
                 Allow New User Registrations
               </label>
             </div>
@@ -238,31 +238,31 @@ const SystemSettings = () => {
                 id="require_email_verification"
                 checked={settings.require_email_verification}
                 onChange={(e) => handleInputChange('require_email_verification', e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-border text-primary focus:ring-primary"
               />
-              <label htmlFor="require_email_verification" className="text-sm font-medium text-gray-700">
+              <label htmlFor="require_email_verification" className="form-label">
                 Require Email Verification
               </label>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Privacy Policy URL</label>
+              <label className="form-label">Privacy Policy URL</label>
               <input
                 type="url"
                 value={settings.privacy_policy_url}
                 onChange={(e) => handleInputChange('privacy_policy_url', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
                 placeholder="https://yoursite.com/privacy"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Terms of Service URL</label>
+              <label className="form-label">Terms of Service URL</label>
               <input
                 type="url"
                 value={settings.terms_of_service_url}
                 onChange={(e) => handleInputChange('terms_of_service_url', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
                 placeholder="https://yoursite.com/terms"
               />
             </div>
@@ -274,24 +274,24 @@ const SystemSettings = () => {
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Contribution ($)</label>
+                <label className="form-label">Minimum Contribution ($)</label>
                 <input
                   type="number"
                   value={settings.min_contribution_amount}
                   onChange={(e) => handleInputChange('min_contribution_amount', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="form-input"
                   min="0.01"
                   step="0.01"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Maximum Contribution ($)</label>
+                <label className="form-label">Maximum Contribution ($)</label>
                 <input
                   type="number"
                   value={settings.max_contribution_amount}
                   onChange={(e) => handleInputChange('max_contribution_amount', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="form-input"
                   min="1"
                   step="1"
                 />
@@ -299,12 +299,12 @@ const SystemSettings = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Platform Fee (%)</label>
+              <label className="form-label">Platform Fee (%)</label>
               <input
                 type="number"
                 value={settings.fee_percentage}
                 onChange={(e) => handleInputChange('fee_percentage', parseFloat(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="form-input"
                 min="0"
                 max="10"
                 step="0.1"
@@ -312,7 +312,7 @@ const SystemSettings = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Supported Cryptocurrencies</label>
+              <label className="form-label">Supported Cryptocurrencies</label>
               <div className="space-y-2">
                 {['ETH', 'BTC', 'USDC', 'USDT'].map(currency => (
                   <div key={currency} className="flex items-center space-x-3">
@@ -327,9 +327,9 @@ const SystemSettings = () => {
                           handleInputChange('supported_currencies', settings.supported_currencies.filter(c => c !== currency));
                         }
                       }}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-border text-primary focus:ring-primary"
                     />
-                    <label htmlFor={currency} className="text-sm font-medium text-gray-700">
+                    <label htmlFor={currency} className="form-label">
                       {currency}
                     </label>
                   </div>
@@ -342,15 +342,13 @@ const SystemSettings = () => {
       case 'notifications':
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="bg-secondary border border-border rounded-lg p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
+                  <span className="text-accent">⚠️</span>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-yellow-800">
+                  <p className="text-sm text-foreground">
                     Email notification settings are managed through your email service provider.
                   </p>
                 </div>
@@ -358,20 +356,20 @@ const SystemSettings = () => {
             </div>
             
             <div>
-              <h4 className="text-lg font-medium text-gray-900 mb-4">Notification Templates</h4>
+              <h4 className="text-lg font-medium text-foreground mb-4">Notification Templates</h4>
               <div className="space-y-3">
-                <div className="p-4 border border-gray-200 rounded-lg">
-                  <h5 className="font-medium text-gray-900">Welcome Email</h5>
-                  <p className="text-sm text-gray-600 mt-1">Sent to new users after registration</p>
-                  <button className="mt-2 text-blue-600 hover:text-blue-900 text-sm font-medium">
+                <div className="p-4 border border-border rounded-lg">
+                  <h5 className="font-medium text-foreground">Welcome Email</h5>
+                  <p className="text-sm text-muted-foreground mt-1">Sent to new users after registration</p>
+                  <button className="mt-2 text-primary hover:text-primary/90 text-sm font-medium">
                     Edit Template
                   </button>
                 </div>
                 
-                <div className="p-4 border border-gray-200 rounded-lg">
-                  <h5 className="font-medium text-gray-900">Contribution Confirmation</h5>
-                  <p className="text-sm text-gray-600 mt-1">Sent after successful contribution</p>
-                  <button className="mt-2 text-blue-600 hover:text-blue-900 text-sm font-medium">
+                <div className="p-4 border border-border rounded-lg">
+                  <h5 className="font-medium text-foreground">Contribution Confirmation</h5>
+                  <p className="text-sm text-muted-foreground mt-1">Sent after successful contribution</p>
+                  <button className="mt-2 text-primary hover:text-primary/90 text-sm font-medium">
                     Edit Template
                   </button>
                 </div>
@@ -385,19 +383,19 @@ const SystemSettings = () => {
           <div className="space-y-6">
             {/* System Stats */}
             <div>
-              <h4 className="text-lg font-medium text-gray-900 mb-4">Database Statistics</h4>
+              <h4 className="text-lg font-medium text-foreground mb-4">Database Statistics</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Total Users</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalUsers || 0}</div>
+                <div className="bg-secondary p-4 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Total Users</div>
+                  <div className="text-lg font-semibold text-foreground">{systemStats.totalUsers || 0}</div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Total Campaigns</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalCampaigns || 0}</div>
+                <div className="bg-secondary p-4 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Total Campaigns</div>
+                  <div className="text-lg font-semibold text-foreground">{systemStats.totalCampaigns || 0}</div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Total Transactions</div>
-                  <div className="text-lg font-semibold text-gray-900">{systemStats.totalTransactions || 0}</div>
+                <div className="bg-secondary p-4 rounded-lg">
+                  <div className="text-sm text-muted-foreground">Total Transactions</div>
+                  <div className="text-lg font-semibold text-foreground">{systemStats.totalTransactions || 0}</div>
                 </div>
               </div>
             </div>
@@ -405,60 +403,48 @@ const SystemSettings = () => {
             {/* System Actions */}
             {isSuperAdmin() && (
               <div>
-                <h4 className="text-lg font-medium text-gray-900 mb-4">System Actions</h4>
+                <h4 className="text-lg font-medium text-foreground mb-4">System Actions</h4>
                 <div className="space-y-3">
                   <button
                     onClick={() => performSystemAction('backup')}
-                    className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+                    className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:bg-secondary"
                   >
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
+                      <span className="mr-3 text-primary">💾</span>
                       <div>
-                        <div className="font-medium text-gray-900">Create Backup</div>
-                        <div className="text-sm text-gray-500">Generate a full system backup</div>
+                        <div className="font-medium text-foreground">Create Backup</div>
+                        <div className="text-sm text-muted-foreground">Generate a full system backup</div>
                       </div>
                     </div>
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="text-muted-foreground">→</span>
                   </button>
 
                   <button
                     onClick={() => performSystemAction('clear_cache')}
-                    className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+                    className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:bg-secondary"
                   >
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                      <span className="mr-3 text-accent">🗑️</span>
                       <div>
-                        <div className="font-medium text-gray-900">Clear Cache</div>
-                        <div className="text-sm text-gray-500">Clear all cached data</div>
+                        <div className="font-medium text-foreground">Clear Cache</div>
+                        <div className="text-sm text-muted-foreground">Clear all cached data</div>
                       </div>
                     </div>
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="text-muted-foreground">→</span>
                   </button>
 
                   <button
                     onClick={() => performSystemAction('restart')}
-                    className="w-full flex items-center justify-between p-4 border border-red-200 rounded-lg hover:bg-red-50 text-red-700"
+                    className="w-full flex items-center justify-between p-4 border border-destructive/20 rounded-lg hover:bg-destructive/10 text-destructive"
                   >
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
+                      <span className="mr-3 text-destructive">🔄</span>
                       <div>
                         <div className="font-medium">Restart System</div>
-                        <div className="text-sm text-red-500">Restart the application server</div>
+                        <div className="text-sm text-destructive/70">Restart the application server</div>
                       </div>
                     </div>
-                    <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="text-destructive/70">→</span>
                   </button>
                 </div>
               </div>
@@ -474,7 +460,7 @@ const SystemSettings = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -482,16 +468,16 @@ const SystemSettings = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+      <div className="crypto-card">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">System Settings</h2>
-            <p className="text-gray-600 mt-1">Configure platform settings and system preferences</p>
+            <h2 className="text-2xl font-bold text-foreground">System Settings</h2>
+            <p className="text-muted-foreground mt-1">Configure platform settings and system preferences</p>
           </div>
           <button
             onClick={saveSettings}
             disabled={saving}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -499,8 +485,8 @@ const SystemSettings = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="border-b border-gray-200">
+      <div className="crypto-card">
+        <div className="border-b border-border">
           <nav className="flex space-x-8 px-6" aria-label="Tabs">
             {tabs.map((tab) => (
               <button
@@ -508,8 +494,8 @@ const SystemSettings = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                 }`}
               >
                 <span className="mr-2">{tab.icon}</span>

@@ -387,7 +387,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
   });
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem', background: 'white', borderRadius: '8px' }}>
+    <div className="container-responsive crypto-card" style={{ maxWidth: '600px' }}>
       <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
@@ -537,7 +537,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
         {/* Contribution Amount */}
         <div style={{ marginBottom: '1rem' }}>
-          <label>Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
+          <label className="form-label">Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
             {suggestedAmounts.map(amount => (
               <button 
@@ -562,7 +562,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
             placeholder="Custom amount"
             min="1"
             max={maxDonation}
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             value={formData.amount || ''}
             onChange={(e) => {
               const value = parseFloat(e.target.value);
@@ -601,9 +601,9 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
         {/* Donor Information */}
         <div style={{ marginBottom: '1rem' }}>
-          <label>Full Name *</label>
+          <label className="form-label">Full Name *</label>
           <input 
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+            className="form-input"
             required
             value={formData.fullName}
             onChange={(e) => setFormData({...formData, fullName: e.target.value})}
@@ -612,20 +612,20 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div>
-            <label>Email *</label>
+            <label className="form-label">Email *</label>
             <input 
               type="email"
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
           </div>
           <div>
-            <label>Phone</label>
+            <label className="form-label">Phone</label>
             <input 
               type="tel"
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
             />
@@ -633,10 +633,11 @@ const EnhancedDonorForm = ({ campaignId }) => {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label>Address *</label>
+          <label className="form-label">Address *</label>
           <input 
             placeholder="Street Address"
-            style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '0.5rem' }}
+            className="form-input"
+            style={{ marginBottom: '0.5rem' }}
             required
             value={formData.street}
             onChange={(e) => setFormData({...formData, street: e.target.value})}
@@ -644,14 +645,14 @@ const EnhancedDonorForm = ({ campaignId }) => {
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.5rem' }}>
             <input 
               placeholder="City"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.city}
               onChange={(e) => setFormData({...formData, city: e.target.value})}
             />
             <input 
               placeholder="State"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               maxLength="2"
               value={formData.state}
@@ -659,7 +660,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
             />
             <input 
               placeholder="ZIP"
-              style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.zip}
               onChange={(e) => setFormData({...formData, zip: e.target.value})}
@@ -669,18 +670,18 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
           <div>
-            <label>Employer *</label>
+            <label className="form-label">Employer *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.employer}
               onChange={(e) => setFormData({...formData, employer: e.target.value})}
             />
           </div>
           <div>
-            <label>Occupation *</label>
+            <label className="form-label">Occupation *</label>
             <input 
-              style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+              className="form-input"
               required
               value={formData.occupation}
               onChange={(e) => setFormData({...formData, occupation: e.target.value})}
@@ -690,7 +691,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
         {/* Payment Method Selection */}
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ marginBottom: '0.5rem', display: 'block', fontWeight: 'bold' }}>
+          <label className="form-label" style={{ fontWeight: 'bold' }}>
             Payment Method *
           </label>
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
@@ -875,14 +876,10 @@ const EnhancedDonorForm = ({ campaignId }) => {
           <button 
             type="submit"
             disabled={isSubmitting || (limitCheck && !limitCheck.canContribute)}
+            className="btn-primary"
             style={{ 
-              width: '100%', 
-              padding: '1rem', 
-              background: isSubmitting || (limitCheck && !limitCheck.canContribute) ? '#ccc' : '#F0A202', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '4px', 
-              fontSize: '1.1rem',
+              width: '100%',
+              opacity: (isSubmitting || (limitCheck && !limitCheck.canContribute)) ? 0.5 : 1,
               cursor: isSubmitting || (limitCheck && !limitCheck.canContribute) ? 'not-allowed' : 'pointer'
             }}
           >
@@ -900,15 +897,10 @@ const EnhancedDonorForm = ({ campaignId }) => {
               (limitCheck && !limitCheck.canContribute) ||
               !validateForm()
             }
+            className="btn-secondary"
             style={{
               width: '100%',
-              padding: '1rem',
-              background: isProcessingCrypto || (limitCheck && !limitCheck.canContribute) ? '#ccc' : '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              fontSize: '1.1rem',
-              fontWeight: 'bold',
+              opacity: (isProcessingCrypto || (limitCheck && !limitCheck.canContribute)) ? 0.5 : 1,
               cursor: isProcessingCrypto || (limitCheck && !limitCheck.canContribute) ? 'not-allowed' : 'pointer'
             }}
           >

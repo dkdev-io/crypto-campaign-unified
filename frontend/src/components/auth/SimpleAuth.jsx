@@ -19,7 +19,7 @@ const SimpleAuthContent = () => {
     // If profile complete, show team invites
     if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
       return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+        <div className="container-responsive" style={{ maxWidth: '800px' }}>
           <RealWorkingInvites campaignId="default-campaign" />
         </div>
       )
@@ -27,7 +27,7 @@ const SimpleAuthContent = () => {
 
     // Show contact form
     return (
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
+      <div className="container-responsive" style={{ maxWidth: '600px' }}>
         <ContactForm onComplete={() => setShowInvites(true)} />
       </div>
     )
@@ -35,7 +35,7 @@ const SimpleAuthContent = () => {
 
   // User not authenticated - show login/signup
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
+    <div className="container-responsive" style={{ maxWidth: '400px' }}>
       {mode === 'login' ? (
         <LoginForm onSuccess={() => {}} onSwitchMode={() => setMode('signup')} />
       ) : (
@@ -86,7 +86,7 @@ const ContactForm = ({ onComplete }) => {
         value={formData.full_name}
         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="tel"
@@ -94,62 +94,57 @@ const ContactForm = ({ onComplete }) => {
         value={formData.phone}
         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="Company"
         value={formData.company}
         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="Job Title"
         value={formData.job_title}
         onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="Address"
         value={formData.address}
         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="City"
         value={formData.city}
         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="State"
         value={formData.state}
         onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="text"
         placeholder="ZIP"
         value={formData.zip}
         onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <button 
         type="submit" 
         disabled={loading}
+        className="btn-primary"
         style={{ 
-          padding: '0.75rem', 
-          fontSize: '16px', 
-          background: '#007bff', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '4px',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.6 : 1
+          opacity: loading ? 0.6 : 1,
+          cursor: loading ? 'not-allowed' : 'pointer'
         }}
       >
         {loading ? 'Saving...' : 'Submit'}
@@ -192,7 +187,7 @@ const LoginForm = ({ onSuccess, onSwitchMode }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="password"
@@ -200,20 +195,15 @@ const LoginForm = ({ onSuccess, onSwitchMode }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <button 
         type="submit" 
         disabled={loading}
+        className="btn-primary"
         style={{ 
-          padding: '0.75rem', 
-          fontSize: '16px', 
-          background: '#007bff', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '4px',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.6 : 1
+          opacity: loading ? 0.6 : 1,
+          cursor: loading ? 'not-allowed' : 'pointer'
         }}
       >
         {loading ? 'Signing in...' : 'Sign In'}
@@ -282,7 +272,7 @@ const SignupForm = ({ onSuccess, onSwitchMode }) => {
         value={formData.fullName}
         onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="email"
@@ -290,7 +280,7 @@ const SignupForm = ({ onSuccess, onSwitchMode }) => {
         value={formData.email}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="password"
@@ -298,7 +288,7 @@ const SignupForm = ({ onSuccess, onSwitchMode }) => {
         value={formData.password}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <input
         type="password"
@@ -306,20 +296,15 @@ const SignupForm = ({ onSuccess, onSwitchMode }) => {
         value={formData.confirmPassword}
         onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
         required
-        style={{ padding: '0.75rem', fontSize: '16px', border: '1px solid #ddd', borderRadius: '4px' }}
+        className="form-input"
       />
       <button 
         type="submit" 
         disabled={loading}
+        className="btn-primary"
         style={{ 
-          padding: '0.75rem', 
-          fontSize: '16px', 
-          background: '#007bff', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '4px',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.6 : 1
+          opacity: loading ? 0.6 : 1,
+          cursor: loading ? 'not-allowed' : 'pointer'
         }}
       >
         {loading ? 'Creating account...' : 'Create Account'}

@@ -6,13 +6,13 @@
 .admin-access-denied {
   text-align: center;
   padding: 60px 20px;
-  background: #f8f9fa;
+  background: hsl(var(--crypto-light-gray));
   border-radius: 12px;
   margin: 20px;
 }
 
 .admin-access-denied h2 {
-  color: #dc3545;
+  color: hsl(var(--destructive));
   margin-bottom: 15px;
 }
 
@@ -28,12 +28,12 @@
 }
 
 .user-management-header h2 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 10px 0;
 }
 
 .user-management-header p {
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
   margin: 0;
 }
 
@@ -42,7 +42,7 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 15px;
   margin-bottom: 30px;
-  background: white;
+  background: hsl(var(--crypto-white));
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -56,7 +56,7 @@
 }
 
 .users-table-container {
-  background: white;
+  background: hsl(var(--crypto-white));
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -69,11 +69,11 @@
 }
 
 .users-table th {
-  background: #f8f9fa;
+  background: hsl(var(--crypto-light-gray));
   padding: 15px 12px;
   text-align: left;
   font-weight: 600;
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   border-bottom: 2px solid #e9ecef;
   white-space: nowrap;
 }
@@ -85,18 +85,18 @@
 }
 
 .users-table tr:hover {
-  background: #f8f9fa;
+  background: hsl(var(--crypto-light-gray));
 }
 
 .user-info strong {
   display: block;
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin-bottom: 3px;
 }
 
 .user-title, .user-company {
   font-size: 12px;
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
   margin: 2px 0;
 }
 
@@ -108,7 +108,7 @@
 
 .contact-info .phone {
   font-size: 12px;
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
 }
 
 .role-select {
@@ -182,7 +182,7 @@
 }
 
 .created-date {
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
 }
 
 .last-login {
@@ -204,13 +204,13 @@
 .user-management-info {
   margin-top: 30px;
   padding: 20px;
-  background: #f8f9fa;
+  background: hsl(var(--crypto-light-gray));
   border-radius: 8px;
   border-left: 4px solid #2a2a72;
 }
 
 .user-management-info h4 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 15px 0;
 }
 
@@ -245,7 +245,7 @@
 }
 
 .app-header {
-  background: white;
+  background: hsl(var(--crypto-white));
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -264,7 +264,7 @@
 }
 
 .header-content h1 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0;
   font-size: 24px;
 }
@@ -277,12 +277,12 @@
 }
 
 .user-info span {
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
   font-weight: 500;
 }
 
 .app-navigation {
-  background: #2a2a72;
+  background: hsl(var(--crypto-navy));
   padding: 0;
   display: flex;
   justify-content: center;
@@ -293,7 +293,7 @@
 .nav-btn {
   background: transparent;
   border: none;
-  color: white;
+  color: hsl(var(--crypto-white));
   padding: 15px 20px;
   cursor: pointer;
   font-weight: 500;
@@ -307,7 +307,7 @@
 
 .nav-btn.active {
   background: rgba(255, 255, 255, 0.2);
-  border-bottom: 3px solid #F0A202;
+  border-bottom: 3px solid hsl(var(--crypto-gold));
 }
 
 .app-content {
@@ -321,7 +321,7 @@
 }
 
 .dashboard h2 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin-bottom: 30px;
 }
 
@@ -332,14 +332,14 @@
 }
 
 .dashboard-card {
-  background: white;
+  background: hsl(var(--crypto-white));
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-card h3 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 20px 0;
   font-size: 20px;
 }
@@ -357,7 +357,7 @@
 }
 
 .profile-info strong {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   display: inline-block;
   width: 120px;
 }
@@ -383,7 +383,7 @@
 }
 
 .campaign-selector {
-  background: white;
+  background: hsl(var(--crypto-white));
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -391,19 +391,19 @@
 }
 
 .campaign-selector h3 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 15px 0;
 }
 
 .invitation-demo {
-  background: white;
+  background: hsl(var(--crypto-white));
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .invitation-demo h2 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 20px 0;
 }
 
@@ -424,7 +424,7 @@
 }
 
 .demo-invitation h3 {
-  color: #2a2a72;
+  color: hsl(var(--crypto-navy));
   margin: 0 0 15px 0;
 }
 
@@ -444,7 +444,7 @@
 }
 
 .error-container p {
-  color: #666;
+  color: hsl(var(--crypto-medium-gray));
   margin-bottom: 20px;
 }
 

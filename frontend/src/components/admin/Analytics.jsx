@@ -245,22 +245,19 @@ const Analytics = () => {
     }).format(amount || 0);
   };
 
-  const MetricCard = ({ title, value, change, icon, color = 'bg-blue-500' }) => (
-    <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+  const MetricCard = ({ title, value, change, icon }) => (
+    <div className="crypto-card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
           {change !== undefined && (
             <div className={`flex items-center mt-2 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d={change >= 0 ? 'M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z' : 'M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z'} clipRule="evenodd" />
-              </svg>
-              <span className="text-sm font-medium">{Math.abs(change)}%</span>
+              <span className="text-sm font-medium">{change >= 0 ? '↗' : '↘'} {Math.abs(change)}%</span>
             </div>
           )}
         </div>
-        <div className={`${color} p-3 rounded-lg`}>
+        <div className="bg-primary text-primary-foreground p-3 rounded-lg">
           {icon}
         </div>
       </div>
@@ -270,7 +267,7 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -278,17 +275,17 @@ const Analytics = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+      <div className="crypto-card">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Analytics & Reports</h2>
-            <p className="text-gray-600 mt-1">Performance insights and detailed reporting</p>
+            <h2 className="text-2xl font-bold text-foreground">Analytics & Reports</h2>
+            <p className="text-muted-foreground mt-1">Performance insights and detailed reporting</p>
           </div>
           <div className="flex space-x-3">
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input"
             >
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
@@ -297,11 +294,8 @@ const Analytics = () => {
             </select>
             <button
               onClick={exportData}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center"
+              className="btn-secondary flex items-center"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
               Export
             </button>
           </div>
@@ -314,37 +308,29 @@ const Analytics = () => {
           title="Total Revenue"
           value={formatCurrency(analytics.overview.totalRevenue)}
           change={15}
-          icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>}
+          icon={"💰"}
         />
         
         <MetricCard
           title="Total Transactions"
           value={analytics.overview.totalTransactions.toLocaleString()}
           change={8}
-          color="bg-green-500"
-          icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>}
+          icon={"📊"}
         />
         
         <MetricCard
           title="Average Contribution"
           value={formatCurrency(analytics.overview.averageContribution)}
           change={-3}
-          color="bg-purple-500"
-          icon={<svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>}
+          icon={"📈"}
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Over Time</h3>
+        <div className="crypto-card">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Revenue Over Time</h3>
           <div className="space-y-3">
             {analytics.timeSeriesData.slice(-7).map((item, index) => {
               const maxRevenue = Math.max(...analytics.timeSeriesData.map(d => d.revenue));
@@ -352,16 +338,16 @@ const Analytics = () => {
               
               return (
                 <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 w-16">{item.displayDate}</span>
+                  <span className="text-sm text-muted-foreground w-16">{item.displayDate}</span>
                   <div className="flex items-center space-x-2 flex-1 mx-4">
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                        className="bg-primary h-2 rounded-full transition-all duration-500"
                         style={{ width: `${widthPercent}%` }}
                       ></div>
                     </div>
                   </div>
-                  <span className="text-sm font-medium text-gray-900 w-20 text-right">
+                  <span className="text-sm font-medium text-foreground w-20 text-right">
                     {formatCurrency(item.revenue)}
                   </span>
                 </div>
@@ -371,8 +357,8 @@ const Analytics = () => {
         </div>
 
         {/* Top Campaigns */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Campaigns</h3>
+        <div className="crypto-card">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Top Performing Campaigns</h3>
           <div className="space-y-3">
             {analytics.topCampaigns.map((campaign, index) => (
               <div key={index} className="flex items-center justify-between">
@@ -384,9 +370,9 @@ const Analytics = () => {
                   }`}>
                     {index + 1}
                   </div>
-                  <span className="text-sm text-gray-900">{campaign.name}</span>
+                  <span className="text-sm text-foreground">{campaign.name}</span>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(campaign.revenue)}
                 </span>
               </div>
@@ -398,8 +384,8 @@ const Analytics = () => {
       {/* Additional Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Payment Methods */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Methods</h3>
+        <div className="crypto-card">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Payment Methods</h3>
           <div className="space-y-3">
             {analytics.paymentMethods.map((method, index) => {
               const total = analytics.paymentMethods.reduce((sum, m) => sum + m.count, 0);
@@ -407,15 +393,15 @@ const Analytics = () => {
               
               return (
                 <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 capitalize">{method.method}</span>
+                  <span className="text-sm text-muted-foreground capitalize">{method.method}</span>
                   <div className="flex items-center space-x-3">
-                    <div className="w-24 bg-gray-200 rounded-full h-2">
+                    <div className="w-24 bg-muted rounded-full h-2">
                       <div
-                        className="bg-purple-500 h-2 rounded-full transition-all duration-500"
+                        className="bg-accent h-2 rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-medium text-gray-900 w-16 text-right">
+                    <span className="text-sm font-medium text-foreground w-16 text-right">
                       {method.count} ({percentage.toFixed(1)}%)
                     </span>
                   </div>
@@ -426,23 +412,23 @@ const Analytics = () => {
         </div>
 
         {/* Top Contributors */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Contributors</h3>
+        <div className="crypto-card">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Top Contributors</h3>
           <div className="space-y-3">
             {analytics.topContributors.map((contributor, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium text-blue-700">
+                  <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-foreground">
                       {contributor.name.charAt(0)}
                     </span>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{contributor.name}</div>
-                    <div className="text-xs text-gray-500">{contributor.count} contributions</div>
+                    <div className="text-sm font-medium text-foreground">{contributor.name}</div>
+                    <div className="text-xs text-muted-foreground">{contributor.count} contributions</div>
                   </div>
                 </div>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {formatCurrency(contributor.total)}
                 </span>
               </div>
