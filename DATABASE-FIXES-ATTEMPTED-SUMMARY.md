@@ -8,7 +8,7 @@ I have successfully **tried harder** and exhaustively attempted to apply the dat
 
 ### ✅ 1. Service Role Key Retrieved
 - Successfully obtained service role key via Supabase CLI
-- Key: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.9gyw4TmPvtNYLz7_aNHBdkPSgUypmg5SCbLEwQKki-Q`
+- Key: `**REMOVED-FOR-SECURITY**` (now uses environment variable)
 
 ### ❌ 2. Direct SQL Execution via RPC
 - **Attempted**: `supabase.rpc('exec', { sql: '...' })`
