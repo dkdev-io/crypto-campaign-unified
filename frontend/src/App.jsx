@@ -12,7 +12,7 @@ import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
 import RealWorkingInvites from './components/team/RealWorkingInvites';
 import { AnalyticsProvider } from './components/analytics/AnalyticsProvider';
-import DonationTest from './pages/DonationTest';
+// import DonationTest from './pages/DonationTest';
 import PrivacyBanner from './components/analytics/PrivacyBanner';
 
 // Admin Components
@@ -30,10 +30,12 @@ import SystemSettings from './components/admin/SystemSettings';
 import { DonorAuthProvider } from './contexts/DonorAuthContext';
 import DonorRegister from './components/donor/DonorRegister';
 import DonorLogin from './components/donor/DonorLogin';
-import DonorDashboard from './components/donor/DonorDashboard';
+import DonorDashboard from './pages/donors/Dashboard';
 import DonorProfile from './components/donor/DonorProfile';
 import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
 import DonorVerifyEmail from './components/donor/DonorVerifyEmail';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
   return (
@@ -64,7 +66,7 @@ function App() {
                 <RealWorkingInvites campaignId="test-campaign" />
               </div>
             } />
-            <Route path="/donation-test" element={<DonationTest />} />
+            {/* <Route path="/donation-test" element={<DonationTest />} /> */}
             <Route path="/analytics-demo" element={
               <div style={{ 
                 minHeight: '100vh', 
@@ -104,25 +106,27 @@ function App() {
             </Route>
             
             {/* Donor Routes */}
-            <Route path="/donor/register" element={<DonorRegister />} />
-            <Route path="/donor/login" element={<DonorLogin />} />
-            <Route path="/donor/verify-email" element={<DonorVerifyEmail />} />
-            <Route path="/donor/dashboard" element={
+            <Route path="/donors/auth/register" element={<DonorRegister />} />
+            <Route path="/donors/auth/login" element={<DonorLogin />} />
+            <Route path="/donors/auth/terms" element={<TermsOfService />} />
+            <Route path="/donors/auth/privacy" element={<PrivacyPolicy />} />
+            <Route path="/donors/auth/verify-email" element={<DonorVerifyEmail />} />
+            <Route path="/donors/dashboard" element={
               <DonorProtectedRoute>
                 <DonorDashboard />
               </DonorProtectedRoute>
             } />
-            <Route path="/donor/profile" element={
+            <Route path="/donors/profile" element={
               <DonorProtectedRoute>
                 <DonorProfile />
               </DonorProtectedRoute>
             } />
-            <Route path="/donor/donations" element={
+            <Route path="/donors/donations" element={
               <DonorProtectedRoute>
                 <DonorDashboard />
               </DonorProtectedRoute>
             } />
-            <Route path="/donor/campaigns" element={
+            <Route path="/donors/campaigns" element={
               <DonorProtectedRoute>
                 <DonorDashboard />
               </DonorProtectedRoute>

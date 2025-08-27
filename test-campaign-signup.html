@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Campaign Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Campaign Signup Flow Debugger</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check Auth Page</h2>
+        <button onclick="testAuthPage()">Test /auth Route</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Check Setup Page</h2>
+        <button onclick="testSetupPage()">Test /setup Route</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Check Button Actions</h2>
+        <button onclick="testGetStartedButton()">Test Get Started Button</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Direct Navigation</h2>
+        <a href="http://localhost:5173/" target="_blank">
+            <button>Open Homepage</button>
+        </a>
+        <a href="http://localhost:5173/auth" target="_blank">
+            <button>Open Auth Page</button>
+        </a>
+        <a href="http://localhost:5173/setup" target="_blank">
+            <button>Open Setup Page (Protected)</button>
+        </a>
+    </div>
+    
+    <div id="output"></div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type;
+            output.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+        }
+        
+        async function testAuthPage() {
+            log('Testing /auth route...');
+            try {
+                const response = await fetch('http://localhost:5173/auth');
+                log(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    const hasSignup = text.includes('Sign') || text.includes('Create');
+                    log(`Page contains signup form: ${hasSignup}`, hasSignup ? 'success' : 'error');
+                    
+                    // Check for React app
+                    const hasReact = text.includes('root') || text.includes('react');
+                    log(`React app detected: ${hasReact}`, hasReact ? 'success' : 'info');
+                }
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testSetupPage() {
+            log('Testing /setup route...');
+            try {
+                const response = await fetch('http://localhost:5173/setup', {
+                    credentials: 'include'
+                });
+                log(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    const hasAuth = text.includes('auth') || text.includes('login');
+                    log(`Requires authentication: ${hasAuth}`, 'info');
+                }
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testGetStartedButton() {
+            log('Testing Get Started button flow...');
+            try {
+                // First, get the homepage
+                const response = await fetch('http://localhost:5173/');
+                if (response.ok) {
+                    const text = await response.text();
+                    const hasButton = text.includes('GET STARTED') || text.includes('Get Started');
+                    log(`Homepage has Get Started button: ${hasButton}`, hasButton ? 'success' : 'error');
+                    
+                    // Check for Hero component
+                    const hasHero = text.includes('Hero') || text.includes('hero');
+                    log(`Hero component present: ${hasHero}`, hasHero ? 'success' : 'info');
+                }
+                
+                log('\nExpected flow:');
+                log('1. Click "Get Started" → Redirect to /auth');
+                log('2. Sign up with email/password');
+                log('3. Verify email');
+                log('4. Redirect to /setup for campaign creation');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-run tests on load
+        window.onload = () => {
+            log('Campaign Signup Flow Debugger Ready', 'success');
+            log('Click the buttons above to test different parts of the signup flow\n');
+        };
+    </script>
+</body>
+</html>

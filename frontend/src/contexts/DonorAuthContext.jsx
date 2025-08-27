@@ -72,6 +72,8 @@ export const DonorAuthProvider = ({ children }) => {
   const signUp = async ({ email, password, fullName, phone, donorType = 'individual' }) => {
     try {
       setError(null);
+      
+      // First sign up the user
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -82,38 +84,18 @@ export const DonorAuthProvider = ({ children }) => {
             user_type: 'donor',
             donor_type: donorType
           },
-          emailRedirectTo: `${window.location.origin}/donor/verify-email`
+          emailRedirectTo: `${window.location.origin}/donors/dashboard`
         }
       });
 
       if (error) throw error;
 
-      // Create donor record
-      if (data.user) {
-        const { error: donorError } = await supabase
-          .from('donors')
-          .insert({
-            id: data.user.id,
-            email,
-            full_name: fullName,
-            phone,
-            donor_type: donorType
-          });
-
-        if (donorError) throw donorError;
-
-        // Create donor profile
-        const { error: profileError } = await supabase
-          .from('donor_profiles')
-          .insert({
-            donor_id: data.user.id
-          });
-
-        if (profileError) throw profileError;
-      }
-
+      // Note: The donor record will be created by the trigger when email is confirmed
+      // For now, we just need to handle the successful signup
+      
       return { data, error: null };
     } catch (error) {
+      console.error('Signup error:', error);
       setError(error.message);
       return { data: null, error };
     }

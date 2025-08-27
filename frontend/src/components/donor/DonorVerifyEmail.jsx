@@ -45,7 +45,7 @@ const DonorVerifyEmail = () => {
         type: 'signup',
         email: email,
         options: {
-          emailRedirectTo: `${window.location.origin}/donor/verify-email`
+          emailRedirectTo: `${window.location.origin}/donors/dashboard`
         }
       });
 
@@ -75,7 +75,7 @@ const DonorVerifyEmail = () => {
               Your email has been successfully verified. You can now access your donor account.
             </p>
             <Link
-              to="/donor/dashboard"
+              to="/donors/dashboard"
               className="inline-block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
             >
               Go to Dashboard
@@ -109,7 +109,7 @@ const DonorVerifyEmail = () => {
                 {resendLoading ? 'Sending...' : 'Resend Verification Email'}
               </button>
               <Link
-                to="/donor/login"
+                to="/donors/auth/login"
                 className="block text-blue-600 hover:underline"
               >
                 Back to Login
@@ -165,7 +165,7 @@ const DonorVerifyEmail = () => {
             
             <div className="text-sm text-gray-600">
               <p>Already verified?</p>
-              <Link to="/donor/login" className="text-blue-600 hover:underline font-medium">
+              <Link to="/donors/auth/login" className="text-blue-600 hover:underline font-medium">
                 Sign in to your account
               </Link>
             </div>

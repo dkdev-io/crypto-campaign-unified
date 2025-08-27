@@ -5,6 +5,7 @@ import { Mail, Lock, AlertCircle, Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
+import DonorAuthNav from './DonorAuthNav';
 
 const DonorLogin = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const DonorLogin = () => {
   });
   const [validationErrors, setValidationErrors] = useState({});
 
-  const from = location.state?.from?.pathname || '/donor/dashboard';
+  const from = location.state?.from?.pathname || '/donors/dashboard';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +81,9 @@ const DonorLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <DonorAuthNav />
+      <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
         <div className="bg-card rounded-2xl shadow-2xl p-8">
           {/* Header */}
@@ -143,7 +146,7 @@ const DonorLogin = () => {
                   Password
                 </label>
                 <Link 
-                  to="/donor/forgot-password" 
+                  to="/donors/auth/forgot-password" 
                   className="text-sm text-blue-600 hover:underline"
                 >
                   Forgot password?
@@ -199,19 +202,12 @@ const DonorLogin = () => {
           {/* Sign Up Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Don't have a donor account?{' '}
-            <Link to="/donor/register" className="font-medium text-blue-600 hover:underline">
+            <Link to="/donors/auth/register" className="font-medium text-blue-600 hover:underline">
               Create account
             </Link>
           </p>
-
-          {/* Campaign Creator Link */}
-          <p className="mt-3 text-center text-sm text-gray-600">
-            Campaign creator?{' '}
-            <Link to="/login" className="font-medium text-purple-600 hover:underline">
-              Sign in here
-            </Link>
-          </p>
         </div>
+      </div>
       </div>
     </div>
   );

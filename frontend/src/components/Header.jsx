@@ -49,7 +49,7 @@ const Header = () => {
               variant="secondary"
               size="sm"
               className="hidden sm:inline-flex"
-              onClick={() => navigate('/donor/register')}
+              onClick={() => navigate('/donors/auth/register')}
             >
               Join as Donor
             </Button>

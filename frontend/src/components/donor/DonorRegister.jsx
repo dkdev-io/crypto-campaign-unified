@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
-import { User, Mail, Phone, Building, Lock, AlertCircle } from 'lucide-react';
+import { User, Mail, Phone, Lock, AlertCircle } from 'lucide-react';
+import DonorAuthNav from './DonorAuthNav';
 
 const DonorRegister = () => {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ const DonorRegister = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    donorType: 'individual',
     agreeToTerms: false
   });
   const [validationErrors, setValidationErrors] = useState({});
@@ -79,7 +79,7 @@ const DonorRegister = () => {
         password: formData.password,
         fullName: formData.fullName,
         phone: formData.phone,
-        donorType: formData.donorType
+        donorType: 'individual'
       });
 
       if (error) {
@@ -87,7 +87,7 @@ const DonorRegister = () => {
       }
 
       // Navigate to email verification page
-      navigate('/donor/verify-email', { 
+      navigate('/donors/auth/verify-email', { 
         state: { email: formData.email } 
       });
     } catch (error) {
@@ -98,7 +98,9 @@ const DonorRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900">
+      <DonorAuthNav />
+      <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}
@@ -121,43 +123,11 @@ const DonorRegister = () => {
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Donor Type Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Account Type
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, donorType: 'individual' }))}
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    formData.donorType === 'individual'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <User className="w-5 h-5 mx-auto mb-1" />
-                  <span className="text-sm font-medium">Individual</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, donorType: 'organization' }))}
-                  className={`p-3 rounded-lg border-2 transition-colors ${
-                    formData.donorType === 'organization'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <Building className="w-5 h-5 mx-auto mb-1" />
-                  <span className="text-sm font-medium">Organization</span>
-                </button>
-              </div>
-            </div>
 
             {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {formData.donorType === 'organization' ? 'Organization Name' : 'Full Name'}
+                Full Name
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -169,7 +139,7 @@ const DonorRegister = () => {
                   className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                     validationErrors.fullName ? 'border-red-300' : 'border-gray-300'
                   }`}
-                  placeholder={formData.donorType === 'organization' ? 'Enter organization name' : 'Enter your full name'}
+                  placeholder="Enter your full name"
                 />
               </div>
               {validationErrors.fullName && (
@@ -276,11 +246,11 @@ const DonorRegister = () => {
                 />
                 <span className="text-sm text-gray-600">
                   I agree to the{' '}
-                  <Link to="/terms" className="text-blue-600 hover:underline">
+                  <Link to="/donors/auth/terms" className="text-blue-600 hover:underline">
                     Terms and Conditions
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="text-blue-600 hover:underline">
+                  <Link to="/donors/auth/privacy" className="text-blue-600 hover:underline">
                     Privacy Policy
                   </Link>
                 </span>
@@ -310,19 +280,12 @@ const DonorRegister = () => {
           {/* Sign In Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Already have a donor account?{' '}
-            <Link to="/donor/login" className="font-medium text-blue-600 hover:underline">
+            <Link to="/donors/auth/login" className="font-medium text-blue-600 hover:underline">
               Sign in
             </Link>
           </p>
-
-          {/* Campaign Creator Link */}
-          <p className="mt-3 text-center text-sm text-gray-600">
-            Want to create campaigns?{' '}
-            <Link to="/register" className="font-medium text-purple-600 hover:underline">
-              Register as a Campaign Creator
-            </Link>
-          </p>
         </div>
+      </div>
       </div>
     </div>
   );
