@@ -40,10 +40,10 @@ const Hero = () => {
                 The Easiest Way
               </span>
               <span className="block">
-                for Campaigns to Accept Secure and
+                for Campaigns to Accept
               </span>
               <span className="block">
-                Compliant Cryptocurrency Donations
+                Cryptocurrency Donations
               </span>
             </h1>
             

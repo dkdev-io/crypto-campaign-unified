@@ -7,25 +7,9 @@ const CTA = () => {
   const { user, loading, isEmailVerified } = useAuth();
 
   const handleGetStarted = () => {
-    console.log('CTA Get Started clicked - Auth state:', { user: !!user, loading });
-    
-    // Check if user is authenticated
-    if (!loading && user) {
-      // Check if email is verified
-      if (isEmailVerified && isEmailVerified()) {
-        // User is authenticated and verified, proceed to campaign setup
-        console.log('Navigating to /setup (user verified)');
-        navigate('/setup');
-      } else {
-        // User is authenticated but not verified, go to auth page for verification
-        console.log('Navigating to /auth (user not verified)');
-        navigate('/auth');
-      }
-    } else {
-      // User is not authenticated, redirect to sign up/sign in
-      console.log('Navigating to /auth (user not authenticated)');
-      navigate('/auth');
-    }
+    console.log('CTA Get Started clicked');
+    // Always navigate to /auth to ensure proper sign-up/sign-in flow
+    navigate('/auth');
   };
 
   return (
@@ -48,9 +32,8 @@ const CTA = () => {
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-12 py-6 h-auto"
               onClick={handleGetStarted}
-              disabled={loading}
             >
-              {loading ? 'Loading...' : 'Get Started—No Setup Fee'}
+              Get Started—No Setup Fee
             </Button>
           </div>
 
