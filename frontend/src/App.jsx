@@ -59,6 +59,7 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/auth" element={<SimpleAuth />} />
+            <Route path="/campaigns/auth" element={<SimpleAuth />} />
             <Route path="/debug" element={<CampaignDebug />} />
             <Route path="/testing" element={<TestingDashboard />} />
             <Route path="/invite-test" element={

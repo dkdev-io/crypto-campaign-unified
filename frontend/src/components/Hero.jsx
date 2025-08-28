@@ -17,13 +17,13 @@ const Hero = () => {
         navigate('/setup');
       } else {
         // User is authenticated but not verified, go to auth page for verification
-        console.log('Navigating to /auth (user not verified)');
-        navigate('/auth');
+        console.log('Navigating to /campaigns/auth (user not verified)');
+        navigate('/campaigns/auth');
       }
     } else {
       // User is not authenticated, redirect to sign up/sign in
-      console.log('Navigating to /auth (user not authenticated)');
-      navigate('/auth');
+      console.log('Navigating to /campaigns/auth (user not authenticated)');
+      navigate('/campaigns/auth');
     }
   };
 

@@ -7,9 +7,25 @@ const CTA = () => {
   const { user, loading, isEmailVerified } = useAuth();
 
   const handleGetStarted = () => {
-    console.log('CTA Get Started clicked');
-    // Always navigate to /auth to ensure proper sign-up/sign-in flow
-    navigate('/auth');
+    console.log('CTA Get Started clicked - Auth state:', { user: !!user, loading, verified: user ? isEmailVerified() : false });
+    
+    // Check if user is authenticated
+    if (!loading && user) {
+      // Check if email is verified
+      if (isEmailVerified()) {
+        // User is authenticated and verified, proceed to campaign setup
+        console.log('Navigating to /setup (user verified)');
+        navigate('/setup');
+      } else {
+        // User is authenticated but not verified, go to auth page for verification
+        console.log('Navigating to /campaigns/auth (user not verified)');
+        navigate('/campaigns/auth');
+      }
+    } else {
+      // User is not authenticated, redirect to sign up/sign in
+      console.log('Navigating to /campaigns/auth (user not authenticated)');
+      navigate('/campaigns/auth');
+    }
   };
 
   return (
