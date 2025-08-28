@@ -26,7 +26,7 @@ function App() {
         <div className="App">
           <header className="App-header">
             <nav>
-              <h1>Crypto Campaign Platform</h1>
+              <h1>NEXTRAISE</h1>
               <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/campaigns">Campaigns</a></li>
@@ -41,7 +41,7 @@ function App() {
                 path="/" 
                 element={
                   <div>
-                    <h2>Welcome to Crypto Campaign Platform</h2>
+                    <h2>Welcome to NEXTRAISE</h2>
                     <p>Support innovative projects with cryptocurrency contributions.</p>
                     
                     {/* Demo Campaign */}
@@ -91,7 +91,7 @@ function App() {
           </main>
 
           <footer>
-            <p>&copy; 2025 Crypto Campaign Platform. All rights reserved.</p>
+            <p>&copy; 2025 NEXTRAISE. All rights reserved.</p>
             <div>
               <button onClick={() => window.setAnalyticsConsent?.(false)}>
                 Disable Analytics

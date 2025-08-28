@@ -20,7 +20,7 @@ const DonorAuthNav = () => {
             <Link to="/" className="flex items-center gap-2">
               <Shield className="w-8 h-8 text-blue-600" />
               <span className="text-xl font-bold text-navy-900">
-                SecureDonate
+                NEXTRAISE
               </span>
             </Link>
           </div>

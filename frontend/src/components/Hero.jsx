@@ -52,10 +52,6 @@ const Hero = () => {
                 <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
                 <span>Onboard in minutes. No setup fees, ever.</span>
               </div>
-              <div className="flex items-center justify-center gap-3 text-lg text-white">
-                <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
-                <span>Full compliance and reporting handled for you.</span>
-              </div>
             </div>
 
             <div className="flex justify-center pt-8">

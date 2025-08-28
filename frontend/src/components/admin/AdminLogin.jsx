@@ -267,7 +267,7 @@ const AdminLogin = () => {
 
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-xs text-muted-foreground">
-            Crypto Campaign Platform Admin Portal
+            NEXTRAISE Admin Portal
           </p>
         </div>
       </div>

@@ -55,7 +55,7 @@ const CTA = () => {
           </div>
 
           <p className="text-sm text-primary-foreground/70">
-            No credit card required • Setup in under 10 minutes • Full compliance included
+            No credit card required • Setup in under 10 minutes
           </p>
         </div>
       </div>

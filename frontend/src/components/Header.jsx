@@ -11,7 +11,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <span className="text-2xl font-bold text-primary">
-              NEXTRAISE
+              NEXT<span style={{color: 'hsl(var(--crypto-gold))'}}>RAISE</span>
             </span>
           </div>
           
@@ -46,26 +46,20 @@ const Header = () => {
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <Button 
-              variant="secondary"
-              size="sm"
-              className="hidden sm:inline-flex"
-              onClick={() => navigate('/donors/auth')}
-            >
-              Join as Donor
-            </Button>
-            <Button 
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate('/auth')}
-            >
-              Sign In
-            </Button>
-            <Button 
               size="sm"
               className="bg-accent text-accent-foreground hover:bg-accent/90"
+              style={{backgroundColor: 'hsl(var(--crypto-gold))', color: 'hsl(var(--crypto-navy))'}}
               onClick={() => navigate('/setup')}
             >
-              Get Started
+              Campaigns
+            </Button>
+            <Button 
+              size="sm"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              style={{backgroundColor: 'hsl(var(--crypto-blue))', color: 'white'}}
+              onClick={() => navigate('/donors/auth')}
+            >
+              Donors
             </Button>
           </div>
 

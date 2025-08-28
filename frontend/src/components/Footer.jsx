@@ -85,7 +85,7 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center">
           <p className="text-sm text-primary-foreground/60">
-            © 2024 NextRaise. All rights reserved.
+            © 2024 NEXTRAISE. All rights reserved.
           </p>
         </div>
       </div>
