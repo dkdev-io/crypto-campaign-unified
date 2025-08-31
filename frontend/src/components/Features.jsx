@@ -39,7 +39,7 @@ const Features = () => {
     <section id="features" className="content-section">
       <div className="container-responsive">
         <div className="text-center mb-16">
-          <h2 className="mb-6" style={{color: 'hsl(var(--crypto-navy))'}}>
+          <h2 className="mb-6 font-bold" style={{color: 'hsl(var(--crypto-navy))'}}>
             Key Features
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -54,7 +54,7 @@ const Features = () => {
                    style={{backgroundColor: 'hsl(var(--crypto-gold) / 0.1)'}}>
                 <feature.icon className="w-7 h-7" style={{color: 'hsl(var(--crypto-gold))'}} />
               </div>
-              <h3 className="text-2xl font-bold mb-4" style={{color: 'hsl(var(--crypto-navy))'}}>
+              <h3 className="text-2xl font-bold mb-4 text-center" style={{color: 'hsl(var(--crypto-navy))'}}>
                 {feature.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">

@@ -10,8 +10,9 @@ const Header = () => {
         <div className="flex flex-1 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-primary">
-              NEXT<span style={{color: 'hsl(var(--crypto-gold))'}}>RAISE</span>
+            <span className="text-2xl font-bold">
+              <span className="text-primary">NEXT</span>
+              <span className="text-accent">RAISE</span>
             </span>
           </div>
           
