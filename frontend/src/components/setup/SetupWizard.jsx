@@ -8,6 +8,7 @@ import StyleConfirmation from './StyleConfirmation';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
 import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
+import CampaignAuthNav from '../campaigns/CampaignAuthNav';
 import { supabase } from '../../lib/supabase';
 import '../../styles/setup.css';
 
@@ -172,7 +173,7 @@ const SetupWizard = () => {
 
   return (
     <div>
-      <CampaignBreadcrumb />
+      <CampaignAuthNav />
       <div className="setup-container">
       <div className="setup-card">
         <div style={{ textAlign: 'right', marginBottom: '1rem' }}>

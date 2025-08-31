@@ -7,6 +7,7 @@ import SimpleDonorForm from './components/SimpleDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
+import CampaignAuth from './components/campaigns/CampaignAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
@@ -59,7 +60,9 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/auth" element={<SimpleAuth />} />
-            <Route path="/campaigns/auth" element={<SimpleAuth />} />
+            <Route path="/campaigns/auth" element={<CampaignAuth />} />
+            <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
+            <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
             <Route path="/testing" element={<TestingDashboard />} />
             <Route path="/invite-test" element={
@@ -98,6 +101,7 @@ function App() {
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/minda" element={<AdminLogin />} />
             <Route path="/admin/*" element={<AdminLayout />}>
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<UserManagement />} />
