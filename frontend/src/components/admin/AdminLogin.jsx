@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: 'dan@dkdev.io',
-    password: ''
+    password: 'admin123'
   });
   const [setupData, setSetupData] = useState({
     email: 'dan@dkdev.io',
@@ -253,15 +253,6 @@ const AdminLogin = () => {
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
 
-            <div className="text-center pt-4">
-              <button
-                type="button"
-                onClick={() => setShowSetup(true)}
-                className="text-primary hover:text-primary/80 font-medium transition-colors duration-200"
-              >
-                First time? Set up admin account
-              </button>
-            </div>
           </form>
         )}
 

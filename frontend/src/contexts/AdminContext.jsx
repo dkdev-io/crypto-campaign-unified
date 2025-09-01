@@ -77,17 +77,40 @@ export const AdminProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw error;
+      
+      // Hardcoded admin credentials since you're the only admin
+      if (email === 'dan@dkdev.io' && password === 'admin123') {
+        // Create mock admin user
+        const mockAdmin = {
+          id: 'admin-user',
+          email: 'dan@dkdev.io',
+          full_name: 'Dan Kovacs',
+          role: 'super_admin',
+          permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+        };
+        
+        setAdmin(mockAdmin);
+        setPermissions(mockAdmin.permissions);
+        return { success: true };
       }
+      
+      // If Supabase is configured, use it as fallback
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      await checkAdminPermissions(data.user);
-      return { success: true };
+        if (error) {
+          throw error;
+        }
+
+        await checkAdminPermissions(data.user);
+        return { success: true };
+      } catch (supabaseError) {
+        // If Supabase fails, return generic error
+        throw new Error('Invalid credentials');
+      }
     } catch (error) {
       return { success: false, error: error.message };
     } finally {
