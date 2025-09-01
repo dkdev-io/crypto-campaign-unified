@@ -23,6 +23,24 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
 
+      // Check if Supabase is configured
+      if (!supabase.from || typeof supabase.from !== 'function') {
+        // Database not configured - set everything to zero
+        setStats({
+          totalUsers: 0,
+          totalCampaigns: 0,
+          totalTransactions: 0,
+          totalRevenue: 0,
+          activeUsers: 0,
+          pendingCampaigns: 0,
+          recentTransactions: [],
+          campaignMetrics: [],
+          userGrowth: [],
+          databaseError: 'Database not configured. Please set up Supabase to view real data.'
+        });
+        return;
+      }
+
       // Load basic stats
       const [
         usersResponse,
@@ -72,6 +90,19 @@ const AdminDashboard = () => {
 
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+      // On error, reset to zero values instead of showing mock data
+      setStats({
+        totalUsers: 0,
+        totalCampaigns: 0,
+        totalTransactions: 0,
+        totalRevenue: 0,
+        activeUsers: 0,
+        pendingCampaigns: 0,
+        recentTransactions: [],
+        campaignMetrics: [],
+        userGrowth: [],
+        databaseError: 'Error loading data. Please check database connection.'
+      });
     } finally {
       setLoading(false);
     }

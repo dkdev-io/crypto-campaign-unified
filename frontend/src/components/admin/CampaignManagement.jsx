@@ -25,6 +25,12 @@ const CampaignManagement = () => {
     try {
       setLoading(true);
       
+      // Check if Supabase is configured
+      if (!supabase.from || typeof supabase.from !== 'function') {
+        setCampaigns([]);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('campaigns')
         .select(`
@@ -47,6 +53,7 @@ const CampaignManagement = () => {
       setCampaigns(data || []);
     } catch (error) {
       console.error('Error loading campaigns:', error);
+      setCampaigns([]); // Ensure campaigns is empty on error
     } finally {
       setLoading(false);
     }

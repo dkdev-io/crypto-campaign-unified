@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAdmin } from '../../contexts/AdminContext'
 import { supabase } from '../../lib/supabase'
 
 const UserManagement = () => {
@@ -11,18 +11,25 @@ const UserManagement = () => {
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState('desc')
 
-  const { userProfile } = useAuth()
+  const { admin, isAdmin, isSuperAdmin } = useAdmin()
 
   useEffect(() => {
-    if (userProfile?.role === 'admin' || userProfile?.role === 'super_admin') {
+    if (isAdmin()) {
       fetchUsers()
     }
-  }, [userProfile])
+  }, [admin])
 
   const fetchUsers = async () => {
     try {
       setLoading(true)
       setError('')
+
+      // Check if Supabase is configured
+      if (!supabase.from) {
+        setError('Database not configured. Please set up Supabase to manage users.')
+        setUsers([])
+        return
+      }
 
       const { data, error } = await supabase
         .from('users')
@@ -41,7 +48,12 @@ const UserManagement = () => {
 
       setUsers(data || [])
     } catch (error) {
-      setError('Error loading users: ' + error.message)
+      if (error.message.includes('Supabase not configured')) {
+        setError('Database not configured. Please set up Supabase to manage users.')
+      } else {
+        setError('Error loading users: ' + error.message)
+      }
+      setUsers([])
     } finally {
       setLoading(false)
     }

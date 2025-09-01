@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Navigate, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAdmin } from '../../contexts/AdminContext';
 
 const AdminLayout = () => {
@@ -125,9 +125,9 @@ const AdminLayout = () => {
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${
                     isActive
                       ? 'bg-primary/10 text-primary border-r-4 border-primary'
@@ -138,7 +138,7 @@ const AdminLayout = () => {
                     {item.icon}
                   </span>
                   {item.name}
-                </a>
+                </Link>
               );
             })}
           </nav>
