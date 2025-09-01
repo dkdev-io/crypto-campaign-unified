@@ -195,15 +195,6 @@ npm run test:watch
 
 ## 🚀 Deployment
 
-### Live Site
-🌐 **Production Site**: [https://nextraise-campaigns.netlify.app](https://nextraise-campaigns.netlify.app)
-
-The site is continuously deployed via **Netlify** with automatic GitHub integration:
-- **Main Branch** → Production deployment
-- **Pull Requests** → Preview deployments
-- **Build Command**: `npm run build` (from frontend directory)
-- **Publish Directory**: `frontend/dist`
-
 ### Testnet Deployment
 ```bash
 # Deploy to Sepolia testnet
@@ -224,13 +215,6 @@ npm run build
 # Start production servers
 npm run start:prod
 ```
-
-### Netlify Configuration
-The project includes:
-- **Netlify Build**: Automatic deployment from GitHub
-- **Environment Variables**: Configured in Netlify dashboard
-- **Form Handling**: Netlify forms for campaign signup
-- **Analytics**: Netlify analytics enabled
 
 ## 📚 API Documentation
 
