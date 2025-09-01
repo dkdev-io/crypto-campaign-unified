@@ -64,23 +64,19 @@ async function testSignupWithPuppeteer() {
     
     // Full Name
     await page.waitForSelector('#signup-fullname', { timeout: 5000 });
-    await page.click('#signup-fullname');
-    await page.keyboard.selectAll();
+    await page.click('#signup-fullname', { clickCount: 3 });
     await page.type('#signup-fullname', TEST_FULL_NAME);
     
     // Email
-    await page.click('#signup-email');
-    await page.keyboard.selectAll();
+    await page.click('#signup-email', { clickCount: 3 });
     await page.type('#signup-email', TEST_EMAIL);
     
     // Password
-    await page.click('#signup-password');
-    await page.keyboard.selectAll();
+    await page.click('#signup-password', { clickCount: 3 });
     await page.type('#signup-password', TEST_PASSWORD);
     
     // Confirm Password
-    await page.click('#signup-confirmpassword');
-    await page.keyboard.selectAll();
+    await page.click('#signup-confirmpassword', { clickCount: 3 });
     await page.type('#signup-confirmpassword', TEST_PASSWORD);
     
     // Agree to terms
