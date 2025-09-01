@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
-import { Mail, Lock, User, Phone, AlertCircle, Heart, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, Phone, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
@@ -186,9 +186,6 @@ const DonorAuth = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full mb-4">
-                <Heart className="w-8 h-8 text-primary-foreground" />
-              </div>
               <h2 className="text-3xl font-bold text-foreground mb-2">
                 Donor Portal
               </h2>

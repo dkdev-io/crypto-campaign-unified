@@ -1,114 +1,83 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, UserPlus, LogIn, Shield, FileText } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '../ui/button';
 import DonorBreadcrumb from './DonorBreadcrumb';
 
 const DonorAuthNav = () => {
-  const location = useLocation();
-  
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className="sticky top-0 z-50">
-      <nav className="bg-white/95 backdrop-blur-sm shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo/Brand */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <Shield className="w-8 h-8 text-blue-600" />
-              <span className="text-xl font-bold text-navy-900">
-                NEXTRAISE
-              </span>
-            </Link>
-          </div>
+    <div>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center px-4 md:px-6">
+          <div className="flex flex-1 items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Link to="/">
+                <span className="text-2xl font-bold">
+                  <span className="text-primary">NEXT</span>
+                  <span className="text-accent">RAISE</span>
+                </span>
+              </Link>
+            </div>
+            
+            {/* Desktop Navigation - removed auth links */}
+            <nav className="hidden md:flex items-center gap-6">
+              <a 
+                href="#features" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                FEATURES
+              </a>
+              <a 
+                href="#how-it-works" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                HOW IT WORKS
+              </a>
+              <a 
+                href="#pricing" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                PRICING
+              </a>
+              <a 
+                href="#contact" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                CONTACT
+              </a>
+            </nav>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                isActive('/') 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <Home className="w-4 h-4" />
-              Home
-            </Link>
-            
-            <Link
-              to="/donors/auth/register"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                isActive('/donors/auth/register') 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <UserPlus className="w-4 h-4" />
-              Sign Up
-            </Link>
-            
-            <Link
-              to="/donors/auth/login"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                isActive('/donors/auth/login') 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <LogIn className="w-4 h-4" />
-              Sign In
-            </Link>
-            
-            <div className="h-6 w-px bg-gray-300"></div>
-            
-            <Link
-              to="/donors/auth/terms"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                isActive('/donors/auth/terms') 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              Terms
-            </Link>
-            
-            <Link
-              to="/donors/auth/privacy"
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                isActive('/donors/auth/privacy') 
-                  ? 'text-blue-600' 
-                  : 'text-gray-600 hover:text-blue-600'
-              }`}
-            >
-              <Shield className="w-4 h-4" />
-              Privacy
-            </Link>
-          </div>
+            {/* Action Buttons - matching home page */}
+            <div className="flex items-center gap-2">
+              <Button 
+                size="sm"
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+                style={{backgroundColor: 'hsl(var(--crypto-gold))', color: 'hsl(var(--crypto-navy))'}}
+                onClick={() => navigate('/setup')}
+              >
+                Campaigns
+              </Button>
+              <Button 
+                size="sm"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                style={{backgroundColor: 'hsl(var(--crypto-blue))', color: 'white'}}
+                onClick={() => navigate('/donors/auth')}
+              >
+                Donors
+              </Button>
+            </div>
 
-          {/* CTA Button */}
-          <div className="flex items-center gap-4">
-            <Link
-              to="/donors/auth/register"
-              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
-            >
-              Get Started
-            </Link>
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2 hover:bg-accent/10 rounded-md">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100">
-            <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
         </div>
-      </div>
-      </nav>
+      </header>
       <DonorBreadcrumb />
     </div>
   );
