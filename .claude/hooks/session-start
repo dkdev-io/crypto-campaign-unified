@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Claude Code session start hook
+# Automatically sync Claude configuration when Claude Code session starts
+
+echo "🚀 Claude Code session starting - checking configuration..."
+
+# Auto-sync Claude configuration
+if [ -f "sync-claude-config.sh" ]; then
+    # Check if CLAUDE.md needs updating (older than 1 hour or doesn't exist)
+    if [ ! -f "CLAUDE.md" ] || [ $(find "CLAUDE.md" -mmin +60 2>/dev/null | wc -l) -gt 0 ]; then
+        echo "🔄 Auto-syncing Claude configuration for session..."
+        ./sync-claude-config.sh >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            echo "✅ Claude configuration synced successfully"
+        else
+            echo "⚠️ Claude config sync had issues (continuing anyway)"
+        fi
+    else
+        echo "✅ Claude configuration is current"
+    fi
+else
+    echo "ℹ️ No sync script found - configuration sync skipped"
+fi
+
+# Verify essential files are present
+if [ ! -f "CLAUDE.md" ]; then
+    echo "⚠️ Warning: CLAUDE.md not found - reduced functionality"
+else
+    echo "✅ CLAUDE.md loaded with full autonomy rules"
+fi
+
+if [ ! -f ".claude/settings.local.json" ]; then
+    echo "⚠️ Warning: Claude settings not found - using defaults"
+else
+    echo "✅ Claude settings loaded with permissions"
+fi
+
+echo "🎯 Claude Code session ready with auto-sync enabled"

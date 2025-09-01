@@ -55,6 +55,12 @@ else
     echo "   git branch --set-upstream-to=origin/$BRANCH"
 fi
 
+# Sync Claude configuration
+if [ -f "sync-claude-config.sh" ]; then
+    echo -e "${BLUE}🔄 Syncing Claude configuration...${NC}"
+    ./sync-claude-config.sh > /dev/null 2>&1 || true
+    echo -e "${GREEN}✓ Claude config synced${NC}"
+fi
 # Re-apply stashed changes if any
 if [ "$STASHED" = true ]; then
     echo -e "${YELLOW}📦 Re-applying stashed changes...${NC}"

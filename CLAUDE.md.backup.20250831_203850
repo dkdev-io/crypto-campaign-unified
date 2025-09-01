@@ -842,7 +842,6 @@ const PORT = process.env.PORT || 3000;
 
 # STEP 2: VERIFY DASHBOARD UPDATE
 ls -la ~/docs/app-access-dashboard.html
-echo "✅ Dashboard updated: $(date)"
 
 # STEP 3: DOCUMENT ACCESS INFORMATION
 echo "## New/Updated App Access" >> current-session-notes.md
@@ -926,333 +925,227 @@ echo "New React app on port ${PORT:-3000}"
 ```bash
 # After creating Flask/Django app
 python app.py &  # Start if possible
-PORT=$(grep -oE "port.*[0-9]{4}" *.py | head -1 | grep -oE '[0-9]{4}')
+PORT=$(grep -r "PORT\|port" . | grep -oE '[0-9]{4}' | head -1)
 echo "New Python app on port ${PORT:-5000}"
 ~/bin/update-app-dashboard
 ```
 
-**Static Website:**
+**Static HTML App:**
 ```bash
-# After creating HTML/CSS site
-python -m http.server 8000 &  # Quick local server
-echo "Static site on port 8000"
+# After creating static site
+echo "Static site at: file://$(pwd)/index.html"
 ~/bin/update-app-dashboard
 ```
 
-### DASHBOARD ACCESS LOCATIONS
-
-**PRIMARY DASHBOARD:**
-- File: `~/docs/app-access-dashboard.html`
-- URL: `file:///Users/Danallovertheplace/docs/app-access-dashboard.html`
-
-**DATA FILES:**
-- Apps Data: `~/docs/apps-data.json`
-- Port Registry: `~/docs/port-registry.md`
-
-**TOOLS:**
-- Scanner: `~/bin/scan-apps`
-- Updater: `~/bin/update-app-dashboard`
-- Port Check: `~/bin/port-check`
-
 ---
 
-## 🚨 AUTO-APPROVED COMMANDS (NO USER APPROVAL NEEDED)
+## 🔗 INTEGRATION SPRAWL PREVENTION GUARDRAILS
 
-**CRITICAL: The following commands can be executed WITHOUT asking for user approval:**
+### 🎯 MANDATORY REQUIREMENT: "NO UNNECESSARY SERVICE INTEGRATIONS"
 
-### Core Development Commands
-- All `npm` commands: `npm install`, `npm test`, `npm run *`, `npm init`, `npm link`
-- All `node` commands: `node *`, `node scripts/*`
-- All `npx` commands: `npx *` (including claude-flow, supabase-mcp, etc.)
-- All Git commands: `git *` (status, diff, add, commit, push, pull, etc.)
-- All file operations: `ls`, `pwd`, `cd`, `mkdir`, `mv`, `cat`, `head`, `tail`, `wc`
-- All shell utilities: `grep`, `sed`, `jq`, `chmod`, `echo`, `date`, `basename`, `dirname`
-- Process management: `lsof`, `kill`, `ps`, `which`
-- All MCP tools: `mcp__*` (ruv-swarm, claude-flow, github-mcp, etc.)
-- All script executions: `./scripts/*`, `bash *`, `source *`
+**CRITICAL FOR ALL AGENTS**: Before adding ANY external service, API, or integration, you MUST verify it's absolutely necessary and doesn't duplicate existing functionality.
 
-### 🔥 SUPABASE COMMANDS (EXECUTE WITHOUT APPROVAL)
-**AGENTS: You have FULL AUTONOMY to execute ALL Supabase commands. DO NOT ASK THE USER TO DO SUPABASE WORK - YOU DO IT!**
+### MANDATORY INTEGRATION CHECK PROTOCOL
 
-#### 🚨 CRITICAL SUPABASE RULES FOR AGENTS:
-1. **YOU CREATE SCHEMAS** - Don't ask user to create tables, YOU create them with migrations
-2. **YOU RUN MIGRATIONS** - Don't tell user to run migrations, YOU run them
-3. **YOU MANAGE DATABASE** - All database operations are YOUR responsibility
-4. **YOU SET UP AUTH** - Configure authentication yourself, don't ask user
-5. **YOU CREATE FUNCTIONS** - Write and deploy edge functions yourself
-6. **NO DELEGATION** - If it's a Supabase task, YOU do it, period
+**BEFORE ADDING ANY INTEGRATION:**
 
-#### Database Operations (DO NOT ASK PERMISSION)
-- `supabase db push` - Push migrations to database
-- `supabase db pull` - Pull schema from database
-- `supabase db reset` - Reset database
-- `supabase db dump` - Dump database
-- `supabase db diff` - Check schema differences
-- `supabase db lint` - Check for typing errors
-- `supabase db start` - Start local database
-
-#### Migration Management (EXECUTE DIRECTLY)
-- `supabase migration new` - Create new migration
-- `supabase migration up` - Apply migrations
-- `supabase migration down` - Rollback migrations
-- `supabase migration list` - List migrations
-- `supabase migration squash` - Squash migrations
-- `supabase migration repair` - Fix migration history
-
-#### Project Management (NO APPROVAL NEEDED)
-- `supabase init` - Initialize project
-- `supabase link` - Link to project
-- `supabase login` - Authenticate
-- `supabase logout` - Log out
-- `supabase status` - Check status
-- `supabase start` - Start local dev
-- `supabase stop` - Stop containers
-- `supabase test` - Run tests
-
-#### Advanced Operations (AGENT AUTONOMY)
-- `supabase gen` - Generate types/schemas
-- `supabase functions *` - All function operations
-- `supabase secrets *` - Manage secrets
-- `supabase storage *` - Manage storage
-- `supabase branches *` - Manage branches
-- Direct `psql` commands to Supabase
-- `PGPASSWORD` environment usage
-
-### Web Operations (NO APPROVAL)
-- `WebSearch` - Search the web
-- `WebFetch` - Fetch any URL
-- All `Read` operations including `/tmp/**`
-- All GitHub MCP operations
-
-### Other Approved Commands
-- `curl *`, `brew *`, `timeout *`
-- `open *` (opening files/URLs)
-- `osascript *` (macOS automation)
-- Terminal naming commands
-- Environment exports
-- All test frameworks
-
-## 🚫 INTEGRATION SPRAWL PREVENTION GUARDRAILS
-
-### 🎯 GOLDEN RULE: "One Service, One Implementation, One Location"
-
-**CRITICAL FOR AI AGENTS**: These rules prevent "integration sprawl" - the most common failure pattern in AI-assisted development where multiple sessions create competing implementations.
-
-### 1. BEFORE ANY INTEGRATION WORK
-
-**MANDATORY SEARCH PROTOCOL**:
 ```bash
-# ALWAYS run these BEFORE creating ANY integration:
-grep -r "ServiceName" . --include="*.js" --include="*.ts" --include="*.py"
-find . -name "*servicename*" -type f 2>/dev/null
-ls -la ~/.claude*/  # Check for existing implementations
+# STEP 1: CHECK EXISTING SERVICES (NON-NEGOTIABLE)
+echo "✅ INTEGRATION CHECK: $(date)"
+echo "Proposed integration: [SERVICE_NAME]"
+
+# Check package.json for existing similar services
+grep -i -E "(api|service|client)" package.json || echo "No existing API packages found"
+
+# Check project for existing integrations
+find . -name "*.js" -o -name "*.ts" -o -name "*.py" | xargs grep -l -i -E "(axios|fetch|api|service)" | head -5
+
+# List current environment variables (may indicate existing services)
+env | grep -E "(API|KEY|URL|TOKEN)" | wc -l
+echo "Found environment variables that may indicate existing services"
 ```
 
-**If ANY matches found → MUST choose:**
-- **REUSE**: Continue with existing implementation
-- **REPLACE**: Archive old, create new (NEVER both)
-- **ABORT**: If unsure, ask user first
+**INTEGRATION APPROVAL CHECKLIST:**
+- [ ] No existing package provides this functionality
+- [ ] No existing service handles this use case
+- [ ] Integration is core to the primary functionality
+- [ ] Integration has been explicitly requested by user
+- [ ] Integration follows security best practices
+- [ ] Integration is well-documented and maintained
 
-### 2. SINGLE SOURCE OF TRUTH
+### INTEGRATION CATEGORIES & RESTRICTIONS
 
-**ONE Location Per Service**:
+**✅ ALLOWED INTEGRATIONS (Pre-approved):**
+- **Core Infrastructure**: Database (Supabase), Authentication, File Storage
+- **Essential APIs**: Payment processing, Email service
+- **Development Tools**: Testing frameworks, Build tools, Linting
+- **User-Requested**: Specifically asked for by the user
+
+**⚠️ REQUIRES JUSTIFICATION:**
+- **Analytics**: Unless specifically requested
+- **Social Media APIs**: Unless core to functionality
+- **Third-party UI Libraries**: When native/existing options exist
+- **Additional Database Services**: When one already exists
+- **Redundant HTTP Clients**: When one already exists
+
+**❌ FORBIDDEN WITHOUT EXPLICIT PERMISSION:**
+- **Multiple payment processors** (choose one)
+- **Multiple state management libraries** (choose one)
+- **Multiple CSS frameworks** (choose one)
+- **Multiple HTTP clients** (choose one)
+- **Duplicate authentication systems**
+- **Unnecessary monitoring services**
+- **Unrelated APIs** (not core to functionality)
+
+### INTEGRATION DOCUMENTATION REQUIREMENTS
+
+**FOR EVERY NEW INTEGRATION:**
+```markdown
+## Integration: [SERVICE_NAME]
+
+**Purpose**: [Why this integration is needed]
+**Alternative Considered**: [What existing solution was evaluated]
+**Justification**: [Why existing solution is insufficient]
+**Dependencies**: [Package name and version]
+**Configuration**: [Environment variables, setup steps]
+**Security Notes**: [API keys, permissions, data access]
+**Maintenance**: [Update schedule, monitoring needs]
 ```
-✅ CORRECT:
-~/.claude-flow/integrations/
-  ├── slack/          # ALL Slack code here
-  ├── github/         # ALL GitHub code here  
-  └── supabase/       # ALL Supabase code here
 
-❌ WRONG (Integration Sprawl):
-./project1/slack-integration.js
-./project2/lib/slack.js
-./utils/slack-helper.js
-~/.claude/hooks/slack.js
-```
+### COMMON INTEGRATION VIOLATIONS
 
-### 3. IMPLEMENTATION DECISION LOG
-
-**REQUIRED**: Before starting ANY integration, create/update log:
-```bash
-echo "## $(date): Starting [Service] Integration" >> ~/integration-decisions.log
-echo "Pattern: [webhook/api/socket]" >> ~/integration-decisions.log  
-echo "Location: [exact path]" >> ~/integration-decisions.log
-echo "Replacing: [old paths if any]" >> ~/integration-decisions.log
-```
-
-### 4. FAILED ATTEMPT PROTOCOL
-
-**IMMEDIATE CLEANUP REQUIRED**:
-```bash
-# If implementation fails or is abandoned:
-mkdir -p ~/archived-integrations/$(date +%Y%m%d)
-mv failed-integration ~/archived-integrations/$(date +%Y%m%d)/
-echo "ARCHIVED: Reason for failure" >> ~/archived-integrations/$(date +%Y%m%d)/README.md
-```
-
-**NEVER leave partial implementations in codebase!**
-
-### 5. DEPENDENCY VERIFICATION
-
-**NO PHANTOM DEPENDENCIES**:
+**❌ ANTI-PATTERNS TO AVOID:**
 ```javascript
-// ❌ FORBIDDEN - Never reference without checking:
-const module = require('./some-module');
+// BAD: Adding axios when fetch already used
+import axios from 'axios';  // when project already uses fetch
 
-// ✅ REQUIRED - Always verify first:
-const fs = require('fs');
-if (!fs.existsSync('./some-module.js')) {
-  console.error('Creating some-module.js as it does not exist');
-  // CREATE the file or throw error - never leave hanging
-}
-const module = require('./some-module');
+// BAD: Adding lodash when native methods work
+import _ from 'lodash';  // for simple array operations
+
+// BAD: Adding Material-UI when Tailwind already used
+import { Button } from '@mui/material';  // when project uses Tailwind
+
+// BAD: Adding another state manager when one exists
+import { create } from 'zustand';  // when project uses Redux/Context
 ```
 
-### 6. CONFIGURATION HIERARCHY
+**✅ GOOD INTEGRATION PRACTICES:**
+```javascript
+// GOOD: Using existing HTTP client
+const response = await fetch(url);  // consistent with project
 
-**ONE Config Per Service**:
-```bash
-# ✅ CORRECT:
-~/.claude-flow/integrations/slack/.env       # Single source
-~/.claude-flow/integrations/slack/config.js  # References .env
+// GOOD: Native JavaScript methods
+const filtered = array.filter(item => item.active);  // no lodash needed
 
-# ❌ WRONG:
-./.env                    # Multiple .env files
-./config/.env             # Scattered configuration
-~/.claude/.env            # Competing configs
+// GOOD: Consistent UI framework
+<button className="bg-blue-500 hover:bg-blue-700">  // matches Tailwind
+
+// GOOD: Extend existing state management
+const useStore = useContext(AppContext);  // uses existing context
 ```
 
-### 7. SESSION HANDOFF REQUIREMENTS
+### INTEGRATION CLEANUP REQUIREMENTS
 
-**BEFORE ENDING ANY SESSION**:
-```bash
-# Create handoff file:
-cat > ~/current-integration-state.md << EOF
-## Active Integrations
-- Slack: [working/broken/none] at [path]
-- GitHub: [working/broken/none] at [path]  
-- Pattern Used: [webhook/api/socket]
-- Next Session MUST: [specific instruction]
-- DO NOT CREATE NEW: [service] already exists at [path]
-EOF
-```
+**WHEN REMOVING OR REPLACING INTEGRATIONS:**
+1. **Remove package dependencies**: `npm uninstall package-name`
+2. **Remove configuration**: Delete env vars, config files
+3. **Remove code references**: Search and remove all imports/usage
+4. **Update documentation**: Remove from integration docs
+5. **Test functionality**: Ensure nothing breaks
 
-### 8. ANTI-DUPLICATION CHECKS
+### PRE-COMMIT INTEGRATION VALIDATION
 
-**RUN BEFORE EVERY SESSION**:
+**Add to `.git/hooks/pre-commit`:**
 ```bash
 #!/bin/bash
-# integration-health-check.sh
+# Check for integration sprawl
 
-# Check for sprawl
-for service in slack github supabase twitter; do
-  count=$(find . -name "*${service}*" -type f | wc -l)
-  if [ $count -gt 3 ]; then
-    echo "⚠️ WARNING: ${count} ${service} files - CONSOLIDATION REQUIRED"
-    echo "DO NOT create new ${service} integration!"
-  fi
-done
+# Count unique HTTP clients
+http_clients=$(grep -r -E "(axios|fetch|superagent|request)" src/ | grep import | wc -l)
+if [ $http_clients -gt 1 ]; then
+    echo "⚠️ WARNING: Multiple HTTP clients detected ($http_clients)"
+fi
 
-# Check for exposed credentials
-if grep -r "xox[bp]-\|sk_live\|api_key" . 2>/dev/null; then
-  echo "🚨 CRITICAL: Exposed credentials detected - ROTATE IMMEDIATELY"
+# Check for duplicate UI frameworks
+ui_frameworks=$(grep -r -E "(@mui|bootstrap|bulma|semantic)" package.json | wc -l)
+tailwind=$(grep -r "tailwind" package.json | wc -l)
+if [ $((ui_frameworks + tailwind)) -gt 1 ]; then
+    echo "⚠️ WARNING: Multiple UI frameworks detected"
+fi
+
+# Flag unusual integrations
+unusual=$(grep -r -E "(analytics|tracking|social|share)" package.json | wc -l)
+if [ $unusual -gt 0 ]; then
+    echo "ℹ️ INFO: External integrations detected - verify necessity"
 fi
 ```
 
-### 9. INTEGRATION TESTING GATE
+### INTEGRATION APPROVAL WORKFLOW
 
-**NO Integration Without Test**:
+**BEFORE ADDING INTEGRATION:**
+
+1. **Search existing codebase**: Verify no existing solution
+2. **Check package.json**: Look for similar dependencies
+3. **Document justification**: Why existing solutions insufficient
+4. **Get user confirmation**: For non-essential integrations
+5. **Add integration documentation**: Document purpose and config
+6. **Test integration**: Verify it works as expected
+7. **Update team**: Document in integration registry
+
+### ACCEPTABLE INTEGRATION PATTERNS
+
+**✅ PROGRESSIVE ENHANCEMENT:**
+- Start with native/simple solutions
+- Add complexity only when needed
+- Prefer established, well-maintained packages
+- Choose packages with minimal sub-dependencies
+- Avoid packages that duplicate existing functionality
+
+**✅ CONSOLIDATION OPPORTUNITIES:**
+- Use single HTTP client throughout project
+- Standardize on one UI framework
+- Use one state management approach
+- Prefer multi-purpose over single-purpose packages
+- Choose packages that integrate well together
+
+### ENFORCEMENT & MONITORING
+
+**REGULAR INTEGRATION AUDITS:**
 ```bash
-# For EVERY integration file:
-integration.js       # Implementation
-integration.test.js  # MUST exist and pass
-integration.md       # MUST document setup
-.env.example        # MUST show required vars
+# Monthly integration review
+npm list --depth=0 | wc -l  # Monitor dependency growth
+npm outdated  # Check for maintenance issues
+npm audit  # Security review
 ```
 
-### 10. APPROVAL REQUIRED PATTERNS
+**INTEGRATION METRICS TO TRACK:**
+- Total number of dependencies
+- Dependencies added/removed per month
+- Unused dependencies (depcheck tool)
+- Security vulnerabilities
+- Package maintenance status
 
-**ALWAYS Ask User Before**:
-- Creating new integration in different location
-- Using different integration pattern than existing
-- Adding new service dependencies
-- Modifying existing working integration
+### EXCEPTIONS & OVERRIDES
 
-### 11. CONTEXT AWARENESS FOR AI AGENTS
+**LEGITIMATE REASONS FOR MULTIPLE SIMILAR PACKAGES:**
+- **Legacy compatibility**: Gradual migration between packages
+- **Different use cases**: Frontend vs backend requirements
+- **Team expertise**: Different teams using familiar tools
+- **Performance requirements**: Specialized tools for specific tasks
 
-**START OF EVERY SESSION, AI Agents MUST**:
-1. Check `~/current-integration-state.md`
-2. Run `integration-health-check.sh`
-3. Read `~/integration-decisions.log`
-4. NEVER assume clean slate
-5. ALWAYS assume previous work exists
+**APPROVAL PROCESS FOR EXCEPTIONS:**
+1. Document specific use case
+2. Explain why consolidation isn't possible
+3. Set timeline for eventual consolidation
+4. Monitor usage and maintenance burden
+5. Regular review of exception validity
 
-### 12. RECOVERY FROM SPRAWL
+---
 
-**If Sprawl Detected**:
-```bash
-# 1. Stop and assess
-find . -name "*service*" > sprawl-audit.txt
+Remember: **Keep integrations minimal, purposeful, and well-documented!**
 
-# 2. Identify newest working version
-grep -l "working" */README.md
+---
 
-# 3. Consolidate to single location
-mkdir -p ~/.claude-flow/integrations/service
-cp newest-working/* ~/.claude-flow/integrations/service/
-
-# 4. Archive everything else
-mkdir ~/archived-integrations/sprawl-cleanup-$(date +%Y%m%d)
-mv old-attempts/* ~/archived-integrations/sprawl-cleanup-$(date +%Y%m%d)/
-
-# 5. Document
-echo "Consolidated service integration from X locations to 1" >> ~/integration-decisions.log
-```
-
-### 13. COMMIT MESSAGE REQUIREMENTS
-
-**For Integration Work**:
-```bash
-# ✅ CORRECT commit messages:
-"feat(slack): Implement single Socket Mode integration at ~/.claude-flow/integrations/slack"
-"refactor(slack): Consolidate 7 implementations into single location"
-"fix(slack): Replace webhook with Socket Mode at standard location"
-
-# ❌ WRONG:
-"Add Slack integration"  # Where? What pattern? Replacing what?
-"Fix Slack"             # Which of the 7 implementations?
-```
-
-### 14. PREVENTING FUTURE SPRAWL
-
-**Pre-commit Hook** (add to `.git/hooks/pre-commit`):
-```bash
-#!/bin/bash
-# Prevent integration sprawl
-
-for service in slack github supabase; do
-  new_files=$(git diff --cached --name-only | grep -i "$service" | grep -v "claude-flow/integrations/$service")
-  if [ ! -z "$new_files" ]; then
-    echo "❌ BLOCKED: New $service files outside standard location:"
-    echo "$new_files"
-    echo "Use: ~/.claude-flow/integrations/$service/ instead"
-    exit 1
-  fi
-done
-```
-
-### 15. SPECIAL RULES FOR SLACK
-
-Given previous sprawl issues:
-- **ONLY location**: `~/.claude-flow/integrations/slack/`
-- **ONLY pattern**: Socket Mode (most reliable for local)
-- **ONLY config**: Single `.env` file in that directory
-- **REQUIRED test**: Must successfully post "Hello World" before any complex features
-
-# important-instruction-reminders
-Do what has been asked; nothing more, nothing less.
-NEVER create files unless they're absolutely necessary for achieving your goal.
-ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
-Never save working files, text/mds and tests to the root folder.
-ALWAYS check for existing implementations before creating new integrations.
+*Configuration Version: SPARC-2024-v2.0.0*
+*Last Updated: 2024-12-28*
+*For issues: https://github.com/dkdev-io/claude-sparc-config*
