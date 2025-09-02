@@ -150,8 +150,11 @@ const CampaignAuth = () => {
         throw error;
       }
 
-      // For campaigns, we redirect to setup after successful signup
-      navigate('/setup', { replace: true });
+      // After signup, show email verification message - ProtectedRoute will handle verification requirement
+      // User will be redirected to setup automatically after email verification
+      setValidationErrors({ 
+        submit: 'Account created! Please check your email and click the verification link to continue with campaign setup.' 
+      });
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
