@@ -147,7 +147,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: hsl(var(--crypto-navy));
+    background: var(--gradient-hero);
     color: hsl(var(--crypto-white));
   }
 

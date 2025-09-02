@@ -14,11 +14,11 @@ const DonorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
       {/* Breadcrumb Navigation */}
       <DonorBreadcrumb />
       {/* Header */}
-      <header className="shadow-sm border-b" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
+      <header className="shadow-sm border-b" style={{background: 'var(--gradient-hero)', color: 'hsl(var(--crypto-white))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">

@@ -8,7 +8,7 @@ const DonorAuthNav = () => {
 
   return (
     <div>
-      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{background: 'var(--gradient-hero)'}}>
         {/* Corner Brackets */}
         <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-black"></div>
         <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-black"></div>

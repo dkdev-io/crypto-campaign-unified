@@ -97,7 +97,7 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
