@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { processContribution } from '../lib/smart-contract';
 import { web3Service } from '../lib/web3';
+import { extractCampaignStyles, getCampaignButtonStyles, debugCampaignStyles } from '../utils/styleGuide';
 
 const SimpleDonorForm = ({ campaignId }) => {
   const [formData, setFormData] = useState({});
@@ -44,6 +45,9 @@ const SimpleDonorForm = ({ campaignId }) => {
       } else {
         setCampaignData(data);
         console.log('Successfully loaded campaign data:', data);
+        
+        // Debug style guide data
+        debugCampaignStyles(data);
       }
     } catch (err) {
       console.error('Error loading campaign:', err);
@@ -169,10 +173,16 @@ const SimpleDonorForm = ({ campaignId }) => {
     );
   }
 
-  const themeColor = campaignData?.theme_color || 'hsl(var(--crypto-navy))';
+  // Extract campaign styles from style guide data
+  const campaignStyles = extractCampaignStyles(campaignData);
+  const themeColor = campaignStyles.colors.primary;
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
   const candidateName = campaignData?.candidate_name;
+  
+  // Generate button styles based on campaign theme
+  const primaryButtonStyle = getCampaignButtonStyles(campaignData, 'primary');
+  const secondaryButtonStyle = getCampaignButtonStyles(campaignData, 'secondary');
 
   console.log('Rendering simple form with:', {
     campaignData: !!campaignData,
@@ -184,7 +194,11 @@ const SimpleDonorForm = ({ campaignId }) => {
 
   return (
     <div className="crypto-card max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4" style={{color: themeColor || 'hsl(var(--crypto-navy))'}}>
+      <h1 className="text-3xl font-bold mb-4" style={{
+        color: campaignStyles.colors.primary,
+        fontFamily: campaignStyles.fonts.heading.family,
+        fontWeight: campaignStyles.fonts.heading.weight
+      }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
       {candidateName && (
@@ -301,14 +315,12 @@ const SimpleDonorForm = ({ campaignId }) => {
                 key={amount}
                 type="button"
                 onClick={() => setFormData({...formData, amount})}
-                className={`px-4 py-2 rounded font-medium transition-all duration-200 ${
-                  formData.amount === amount 
-                    ? 'btn-secondary' 
-                    : 'border-2 bg-transparent hover:bg-primary/5'
-                }`}
                 style={{
-                  borderColor: themeColor || 'hsl(var(--crypto-navy))',
-                  color: formData.amount === amount ? 'hsl(var(--crypto-navy))' : themeColor || 'hsl(var(--crypto-navy))'
+                  ...secondaryButtonStyle,
+                  border: `2px solid ${campaignStyles.colors.primary}`,
+                  background: formData.amount === amount ? campaignStyles.colors.primary : campaignStyles.colors.background,
+                  color: formData.amount === amount ? campaignStyles.colors.background : campaignStyles.colors.primary,
+                  fontFamily: campaignStyles.fonts.button.family
                 }}
               >
                 ${amount}
@@ -362,14 +374,13 @@ const SimpleDonorForm = ({ campaignId }) => {
         <button 
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-4 text-lg font-bold rounded transition-all duration-200 ${
-            isSubmitting 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'btn-primary hover:transform hover:scale-[1.02]'
-          }`}
           style={{
-            backgroundColor: isSubmitting ? 'hsl(220 14% 65%)' : (themeColor || 'hsl(var(--crypto-navy))'),
-            color: 'white'
+            ...primaryButtonStyle,
+            width: '100%',
+            padding: '1rem',
+            fontSize: '1.125rem',
+            opacity: isSubmitting ? 0.5 : 1,
+            cursor: isSubmitting ? 'not-allowed' : 'pointer'
           }}
         >
           {isSubmitting ? '⏳ Processing Contribution...' : '💝 Contribute Now'}
