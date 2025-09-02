@@ -9,7 +9,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 const Index = () => {
   return (
     <AuthProvider>
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-blue))', color: 'hsl(var(--crypto-white))'}}>
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
         <Header />
         <Hero />
         <Features />

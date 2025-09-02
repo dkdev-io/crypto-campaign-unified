@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-02T17:34:46.807Z",
+  "timestamp": "2025-09-02T17:39:28.566Z",
   "overallPercentage": 40,
   "implementedChanges": 4,
   "totalExpectedChanges": 10,
@@ -24,9 +24,9 @@
       },
       "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/home_page_live.png",
       "expectedChanges": [
-        "Blue background (hsl(207, 90%, 54%))",
-        "White text on blue background",
-        "Navigation with blue background and black corner brackets"
+        "Navy blue background (hsl(214, 100%, 21%))",
+        "White text on navy background",
+        "Navigation with navy background and black corner brackets"
       ]
     },
     {
@@ -49,8 +49,8 @@
       },
       "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/donor_auth_live.png",
       "expectedChanges": [
-        "Blue background throughout",
-        "Auth forms on blue background",
+        "Navy background throughout",
+        "Auth forms on navy background",
         "Navigation with corner brackets"
       ]
     },
@@ -74,7 +74,7 @@
       },
       "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/campaign_auth_live.png",
       "expectedChanges": [
-        "Blue background",
+        "Navy background",
         "Navigation styling updates"
       ]
     },
@@ -98,8 +98,8 @@
       },
       "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/setup_page_live.png",
       "expectedChanges": [
-        "Blue background instead of light gray",
-        "Setup wizard on blue background"
+        "Navy background instead of light gray",
+        "Setup wizard on navy background"
       ]
     }
   ]

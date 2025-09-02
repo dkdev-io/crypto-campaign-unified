@@ -134,7 +134,7 @@ const DonorDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: 'hsl(var(--crypto-blue))'}}>
+      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
           <p className="mt-4 text-white/80">Loading your dashboard...</p>
@@ -144,11 +144,11 @@ const DonorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-blue))'}}>
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       {/* Breadcrumb Navigation */}
       <DonorBreadcrumb />
       {/* Header */}
-      <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-blue))'}}>
+      <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-start">
             <div>

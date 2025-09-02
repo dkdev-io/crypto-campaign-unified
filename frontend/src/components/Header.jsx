@@ -5,7 +5,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{backgroundColor: 'hsl(var(--crypto-blue))'}}>
+    <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       {/* Corner Brackets */}
       <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-black"></div>
       <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-black"></div>
@@ -63,7 +63,7 @@ const Header = () => {
             <Button 
               size="sm"
               className="bg-primary text-primary-foreground hover:bg-primary/90"
-              style={{backgroundColor: 'hsl(var(--crypto-blue))', color: 'white'}}
+              style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'white'}}
               onClick={() => navigate('/donors/auth')}
             >
               Donors

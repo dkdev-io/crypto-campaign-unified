@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: hsl(var(--crypto-blue));
+  background: hsl(var(--crypto-navy));
   padding: var(--space-lg);
 }
 

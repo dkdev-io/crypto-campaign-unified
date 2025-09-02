@@ -18,17 +18,17 @@ async function analyzeLiveSite() {
         name: 'Home Page', 
         url: 'https://cryptocampaign.netlify.app',
         expectedChanges: [
-          'Blue background (hsl(207, 90%, 54%))',
-          'White text on blue background', 
-          'Navigation with blue background and black corner brackets'
+          'Navy blue background (hsl(214, 100%, 21%))',
+          'White text on navy background', 
+          'Navigation with navy background and black corner brackets'
         ]
       },
       { 
         name: 'Donor Auth', 
         url: 'https://cryptocampaign.netlify.app/donors/auth',
         expectedChanges: [
-          'Blue background throughout',
-          'Auth forms on blue background',
+          'Navy background throughout',
+          'Auth forms on navy background',
           'Navigation with corner brackets'
         ]
       },
@@ -36,7 +36,7 @@ async function analyzeLiveSite() {
         name: 'Campaign Auth', 
         url: 'https://cryptocampaign.netlify.app/campaigns/auth',
         expectedChanges: [
-          'Blue background',
+          'Navy background',
           'Navigation styling updates'
         ]
       },
@@ -44,8 +44,8 @@ async function analyzeLiveSite() {
         name: 'Setup Page', 
         url: 'https://cryptocampaign.netlify.app/setup',
         expectedChanges: [
-          'Blue background instead of light gray',
-          'Setup wizard on blue background'
+          'Navy background instead of light gray',
+          'Setup wizard on navy background'
         ]
       }
     ];
@@ -92,22 +92,22 @@ async function analyzeLiveSite() {
           };
         });
         
-        // Check for any elements that should have blue backgrounds
-        const blueElements = await page.evaluate(() => {
+        // Check for any elements that should have navy backgrounds
+        const navyElements = await page.evaluate(() => {
           const elements = document.querySelectorAll('div, section');
-          let blueCount = 0;
+          let navyCount = 0;
           let whiteCount = 0;
           
           elements.forEach(el => {
             const bg = window.getComputedStyle(el).backgroundColor;
-            if (bg.includes('rgb(33, 150, 243)') || bg.includes('hsl(207, 90%, 54%)')) {
-              blueCount++;
+            if (bg.includes('rgb(26, 35, 126)') || bg.includes('hsl(214, 100%, 21%)')) {
+              navyCount++;
             } else if (bg.includes('rgb(255, 255, 255)') || bg === 'white') {
               whiteCount++;
             }
           });
           
-          return { blueCount, whiteCount, total: elements.length };
+          return { blueCount: navyCount, whiteCount, total: elements.length };
         });
         
         // Take a screenshot
@@ -123,7 +123,7 @@ async function analyzeLiveSite() {
           bodyBackground: bodyBg,
           navigationStyling: navStyling,
           mainContentStyling: mainContentBg,
-          elementAnalysis: blueElements,
+          elementAnalysis: navyElements,
           screenshot: screenshotPath,
           expectedChanges: pageInfo.expectedChanges
         };
@@ -134,7 +134,7 @@ async function analyzeLiveSite() {
         console.log(`   Body BG: ${bodyBg}`);
         console.log(`   Nav BG: ${navStyling?.backgroundColor || 'Not found'}`);
         console.log(`   Corner Brackets: ${navStyling?.hasCornerBrackets ? 'YES' : 'NO'}`);
-        console.log(`   Blue elements: ${blueElements.blueCount}, White elements: ${blueElements.whiteCount}`);
+        console.log(`   Navy elements: ${navyElements.blueCount}, White elements: ${navyElements.whiteCount}`);
         
       } catch (error) {
         console.log(`❌ Error checking ${pageInfo.name}: ${error.message}`);
@@ -165,17 +165,17 @@ async function analyzeLiveSite() {
       
       let pageImplementedCount = 0;
       
-      // Check if background is blue
-      const hasBlueBackground = result.bodyBackground.includes('rgb(33, 150, 243)') || 
-                               result.bodyBackground.includes('hsl(207, 90%, 54%)') ||
-                               result.mainContentStyling?.backgroundColor.includes('rgb(33, 150, 243)') ||
+      // Check if background is navy blue (correct color)
+      const hasNavyBackground = result.bodyBackground.includes('rgb(26, 35, 126)') || 
+                               result.bodyBackground.includes('hsl(214, 100%, 21%)') ||
+                               result.mainContentStyling?.backgroundColor.includes('rgb(26, 35, 126)') ||
                                result.elementAnalysis.blueCount > 0;
       
-      if (hasBlueBackground) {
+      if (hasNavyBackground) {
         pageImplementedCount++;
-        console.log('   ✅ Blue background detected');
+        console.log('   ✅ Navy background detected');
       } else {
-        console.log('   ❌ Blue background missing');
+        console.log('   ❌ Navy background missing');
       }
       
       // Check navigation styling  
@@ -186,12 +186,12 @@ async function analyzeLiveSite() {
         console.log('   ❌ Navigation corner brackets missing');
       }
       
-      // Check if navigation has blue background
-      if (result.navigationStyling?.backgroundColor.includes('rgb(33, 150, 243)')) {
+      // Check if navigation has navy background
+      if (result.navigationStyling?.backgroundColor.includes('rgb(26, 35, 126)')) {
         pageImplementedCount++;
-        console.log('   ✅ Navigation has blue background');
+        console.log('   ✅ Navigation has navy background');
       } else {
-        console.log('   ❌ Navigation blue background missing');
+        console.log('   ❌ Navigation navy background missing');
       }
       
       implementedChanges += pageImplementedCount;
