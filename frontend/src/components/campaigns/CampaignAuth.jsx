@@ -157,6 +157,9 @@ const CampaignAuth = () => {
       });
     } catch (error) {
       console.error('Registration error:', error);
+      setValidationErrors({ 
+        submit: error.message || 'An error occurred during registration. Please try again.' 
+      });
     } finally {
       setLoading(false);
     }
