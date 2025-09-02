@@ -2,7 +2,7 @@
   command = "rm -rf node_modules package-lock.json && npm install --legacy-peer-deps --force && npm run build"
   base = "frontend"
   publish = "dist"
-  environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "22" }
+  environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "22", VITE_APP_URL = "https://cryptocampaign.netlify.app" }
 
 [[redirects]]
   from = "/api/*"
