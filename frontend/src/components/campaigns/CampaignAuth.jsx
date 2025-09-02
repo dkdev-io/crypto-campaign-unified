@@ -175,11 +175,8 @@ const CampaignAuth = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full mb-4">
-                <Building2 className="w-8 h-8 text-primary-foreground" />
-              </div>
               <h2 className="text-3xl font-bold text-foreground mb-2">
-                Campaign Portal
+                Campaigns
               </h2>
               <p className="text-muted-foreground">
                 Sign in to your account or create a new one
