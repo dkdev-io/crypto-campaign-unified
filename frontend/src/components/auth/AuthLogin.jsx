@@ -69,8 +69,15 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
         // Handle specific error messages with user-friendly responses
         if (error.message.includes('Invalid login credentials') || 
             error.message.includes('Invalid password') ||
-            error.message.includes('User not found')) {
-          setErrors({ submit: 'Invalid email or password' })
+            error.message.includes('User not found') ||
+            error.type === 'user_not_found') {
+          setErrors({ 
+            submit: 'No account found with this email address',
+            type: 'user_not_found',
+            email: formData.email
+          })
+        } else if (error.type === 'wrong_password') {
+          setErrors({ submit: 'Incorrect password. Please try again or reset your password.' })
         } else if (error.message.includes('Email not confirmed')) {
           setErrors({ 
             submit: 'Please check your email and click the verification link before logging in.'
@@ -168,6 +175,21 @@ const AuthLogin = ({ onSuccess, onSwitchToSignUp }) => {
           {errors.submit && (
             <div className="p-3 text-sm text-destructive-foreground bg-destructive/10 border border-destructive/20 rounded-md">
               {errors.submit}
+              {errors.type === 'user_not_found' && (
+                <div className="mt-3 p-2 bg-background rounded border">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Would you like to create an account with <strong>{errors.email}</strong>?
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => onSwitchToSignUp(errors.email)}
+                    className="w-full"
+                  >
+                    Create New Account
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 

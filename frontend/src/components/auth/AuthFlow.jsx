@@ -14,6 +14,7 @@ const AuthFlow = ({
   const [mode, setMode] = useState(initialMode)
   const [showProfileCompletion, setShowProfileCompletion] = useState(false)
   const [showDataSetup, setShowDataSetup] = useState(false)
+  const [prefillEmail, setPrefillEmail] = useState('')
 
   const { user, userProfile, loading } = useAuth()
 
@@ -145,12 +146,19 @@ const AuthFlow = ({
       {mode === 'login' ? (
         <AuthLogin
           onSuccess={handleAuthSuccess}
-          onSwitchToSignUp={() => setMode('signup')}
+          onSwitchToSignUp={(email) => {
+            if (email) setPrefillEmail(email)
+            setMode('signup')
+          }}
         />
       ) : (
         <AuthSignUp
           onSuccess={handleAuthSuccess}
-          onSwitchToLogin={() => setMode('login')}
+          onSwitchToLogin={() => {
+            setPrefillEmail('')
+            setMode('login')
+          }}
+          prefillEmail={prefillEmail}
         />
       )}
     </div>

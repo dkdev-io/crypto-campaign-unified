@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Spinner } from '../ui/spinner'
 
-const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
+const AuthSignUp = ({ onSuccess, onSwitchToLogin, prefillEmail = '' }) => {
   const [formData, setFormData] = useState({
-    email: '',
+    email: prefillEmail,
     password: '',
     confirmPassword: '',
     fullName: ''
@@ -16,6 +16,13 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
   const [emailSent, setEmailSent] = useState(false)
 
   const { signUp } = useAuth()
+
+  // Update email when prefillEmail prop changes
+  useEffect(() => {
+    if (prefillEmail && prefillEmail !== formData.email) {
+      setFormData(prev => ({ ...prev, email: prefillEmail }))
+    }
+  }, [prefillEmail, formData.email])
 
   const validateForm = () => {
     const newErrors = {}
@@ -81,7 +88,8 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin }) => {
         return
       }
 
-      // Show email verification message
+      // Show email verification message - don't call onSuccess yet
+      // The user needs to verify their email first before proceeding
       setEmailSent(true)
     } catch (error) {
       setErrors({ submit: 'An unexpected error occurred. Please try again.' })

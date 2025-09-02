@@ -88,6 +88,10 @@ export const AuthProvider = ({ children }) => {
   // Sign up with email and password
   const signUp = async (email, password, fullName) => {
     try {
+      console.log('🔐 Starting signup process...')
+      console.log(`📧 Email: ${email}`)
+      console.log(`📍 Redirect URL: ${window.location.origin}/auth?verified=true`)
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -99,7 +103,17 @@ export const AuthProvider = ({ children }) => {
         }
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Signup error:', error)
+        throw error
+      }
+      
+      console.log('✅ Signup successful:', {
+        userId: data.user?.id,
+        email: data.user?.email,
+        emailConfirmed: data.user?.email_confirmed_at,
+        needsVerification: !data.user?.email_confirmed_at
+      })
 
       // Create user profile in our users table (if table exists)
       if (data.user) {
