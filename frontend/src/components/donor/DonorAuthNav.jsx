@@ -8,14 +8,20 @@ const DonorAuthNav = () => {
 
   return (
     <div>
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{backgroundColor: 'hsl(var(--crypto-blue))'}}>
+        {/* Corner Brackets */}
+        <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-black"></div>
+        <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-black"></div>
+        <div className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2 border-black"></div>
+        <div className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-black"></div>
+        
         <div className="container flex h-16 items-center px-4 md:px-6">
           <div className="flex flex-1 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/">
                 <span className="text-2xl font-bold">
-                  <span className="text-primary">NEXT</span>
+                  <span className="text-white">NEXT</span>
                   <span className="text-accent">RAISE</span>
                 </span>
               </Link>
@@ -25,25 +31,25 @@ const DonorAuthNav = () => {
             <nav className="hidden md:flex items-center gap-6">
               <a 
                 href="#features" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
               >
                 FEATURES
               </a>
               <a 
                 href="#how-it-works" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
               >
                 HOW IT WORKS
               </a>
               <a 
                 href="#pricing" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
               >
                 PRICING
               </a>
               <a 
                 href="#contact" 
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
               >
                 CONTACT
               </a>
@@ -70,7 +76,7 @@ const DonorAuthNav = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden p-2 hover:bg-accent/10 rounded-md">
+            <button className="md:hidden p-2 hover:bg-white/10 rounded-md text-white">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
