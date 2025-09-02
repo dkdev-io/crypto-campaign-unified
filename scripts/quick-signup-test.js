@@ -11,6 +11,21 @@ async function testSignupFlow() {
   
   const page = await browser.newPage();
   
+  // Listen for console messages and errors
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      console.log(`🔴 Browser error: ${msg.text()}`);
+    } else if (msg.text().includes('signup') || msg.text().includes('auth') || msg.text().includes('error')) {
+      console.log(`🟡 Browser log: ${msg.text()}`);
+    }
+  });
+  
+  page.on('response', response => {
+    if (response.url().includes('supabase') || response.url().includes('auth')) {
+      console.log(`📡 API call: ${response.status()} ${response.url()}`);
+    }
+  });
+  
   try {
     console.log('🧪 Testing signup flow specifically...');
     

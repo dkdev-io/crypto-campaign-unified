@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 async function testAdminDashboard() {
   let browser;
@@ -70,7 +70,7 @@ async function testAdminDashboard() {
       console.log(`Found ${statCards.length} stat cards`);
       
       // Check for database error messages
-      const databaseError = await page.$text => {
+      const databaseError = await page.evaluate(() => {
         return document.body.innerText.includes('Database not configured') || 
                document.body.innerText.includes('Error loading data');
       });
