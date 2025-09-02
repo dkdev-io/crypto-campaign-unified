@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Web3Wallet from './Web3Wallet';
 import web3Service from '../lib/web3';
+import { extractCampaignStyles, getCampaignButtonStyles, debugCampaignStyles } from '../utils/styleGuide';
 
 const DonorForm = ({ campaignId }) => {
   const [formData, setFormData] = useState({});
@@ -44,6 +45,9 @@ const DonorForm = ({ campaignId }) => {
         console.log('Available fields:', Object.keys(data));
         console.log('Suggested amounts from DB:', data.suggested_amounts);
         console.log('Candidate name:', data.candidate_name);
+        
+        // Debug style guide data
+        debugCampaignStyles(data);
       }
     } catch (err) {
       console.error('Error loading campaign:', err);
@@ -234,14 +238,25 @@ const DonorForm = ({ campaignId }) => {
     );
   }
 
-  const themeColor = campaignData?.theme_color || '#2a2a72';
+  // Extract campaign styles from style guide data
+  const campaignStyles = extractCampaignStyles(campaignData);
+  const themeColor = campaignStyles.colors.primary;
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
   const candidateName = campaignData?.candidate_name;
+  
+  // Generate button styles based on campaign theme
+  const primaryButtonStyle = getCampaignButtonStyles(campaignData, 'primary');
+  const secondaryButtonStyle = getCampaignButtonStyles(campaignData, 'secondary');
 
   return (
     <div className="container-responsive crypto-card" style={{ maxWidth: '500px' }}>
-      <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
+      <h1 style={{ 
+        color: campaignStyles.colors.primary, 
+        marginBottom: campaignStyles.layout.spacing,
+        fontFamily: campaignStyles.fonts.heading.family,
+        fontWeight: campaignStyles.fonts.heading.weight
+      }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
       {candidateName && (
@@ -337,12 +352,11 @@ const DonorForm = ({ campaignId }) => {
                 type="button"
                 onClick={() => setFormData({...formData, amount})}
                 style={{ 
-                  padding: '0.5rem 1rem', 
-                  border: `2px solid ${themeColor}`, 
-                  background: formData.amount === amount ? themeColor : 'white',
-                  color: formData.amount === amount ? 'white' : themeColor,
-                  borderRadius: '4px',
-                  cursor: 'pointer'
+                  ...secondaryButtonStyle,
+                  border: `2px solid ${campaignStyles.colors.primary}`, 
+                  background: formData.amount === amount ? campaignStyles.colors.primary : campaignStyles.colors.background,
+                  color: formData.amount === amount ? campaignStyles.colors.background : campaignStyles.colors.primary,
+                  fontFamily: campaignStyles.fonts.button.family
                 }}
               >
                 ${amount}
@@ -449,8 +463,8 @@ const DonorForm = ({ campaignId }) => {
                       parseFloat(formData.amount) <= 0 ||
                       (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
                     }
-                    className="btn-secondary"
                     style={{
+                      ...primaryButtonStyle,
                       width: '100%',
                       opacity: (isProcessingCrypto || 
                         !formData.amount || 
@@ -529,8 +543,8 @@ const DonorForm = ({ campaignId }) => {
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="btn-primary"
             style={{ 
+              ...primaryButtonStyle,
               width: '100%',
               opacity: isSubmitting ? 0.5 : 1,
               cursor: isSubmitting ? 'not-allowed' : 'pointer'

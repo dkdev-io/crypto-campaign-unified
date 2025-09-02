@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import Web3Wallet from './Web3Wallet';
 import web3Service from '../lib/web3';
 import contributionService from '../lib/contributions';
+import { extractCampaignStyles, getCampaignButtonStyles, debugCampaignStyles } from '../utils/styleGuide';
 
 const EnhancedDonorForm = ({ campaignId }) => {
   console.log('EnhancedDonorForm rendering with campaignId:', campaignId);
@@ -90,6 +91,9 @@ const EnhancedDonorForm = ({ campaignId }) => {
       } else {
         console.log('Campaign loaded successfully:', data);
         setCampaignData(data);
+        
+        // Debug style guide data
+        debugCampaignStyles(data);
       }
     } catch (err) {
       console.error('Campaign load exception:', err);
@@ -374,9 +378,15 @@ const EnhancedDonorForm = ({ campaignId }) => {
     );
   }
 
-  const themeColor = campaignData?.theme_color || '#2a2a72';
+  // Extract campaign styles from style guide data
+  const campaignStyles = extractCampaignStyles(campaignData);
+  const themeColor = campaignStyles.colors.primary;
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
+  
+  // Generate button styles based on campaign theme
+  const primaryButtonStyle = getCampaignButtonStyles(campaignData, 'primary');
+  const secondaryButtonStyle = getCampaignButtonStyles(campaignData, 'secondary');
 
   console.log('Rendering form with:', {
     campaignData: !!campaignData,
