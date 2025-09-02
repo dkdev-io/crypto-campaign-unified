@@ -175,7 +175,7 @@ Session successfully completed major test infrastructure improvements and implem
 - ✅ **Zero commands needed** - Everything is automatic
 
 #### GitHub Pages
-- **URL:** https://cryptocampaign.netlify.app
+- **URL:** https://dkdev-io.github.io/crypto-campaign-setup/
 - **Status:** Requires one-time enable in repository settings
 - **Auto-deployment:** Working - commits auto-push and trigger deployment
 - **File monitoring:** Active - saves auto-deploy after 3 seconds

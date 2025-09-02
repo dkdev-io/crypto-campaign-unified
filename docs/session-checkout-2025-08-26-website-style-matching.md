@@ -129,7 +129,7 @@ docs/donor-page-automation-system.md              # Donor page docs
 - **Testing Flow**: Complete campaign setup to reach style matching steps
 
 ### **GitHub Pages Deployment**
-- **Live Site**: https://cryptocampaign.netlify.app
+- **Live Site**: https://dkdev-io.github.io/crypto-campaign-setup/
 - **Auto-deployment**: Triggered by git commits
 - **Dashboard**: `file:///Users/Danallovertheplace/docs/app-access-dashboard.html`
 

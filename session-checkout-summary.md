@@ -30,7 +30,7 @@
 **DIFFERENT**: Header branding (CryptoCampaign vs NEXTPHASE), visual polish level
 
 ### 🌐 LIVE URLS:
-- **Netlify Production**: https://cryptocampaign.netlify.app/ ✅ WORKING
+- **Netlify Production**: https://dkdev-io.github.io/crypto-campaign-setup// ✅ WORKING
 - **Reference Site**: https://blue-token-campaigns.lovable.app/
 - **GitHub Pages**: https://dkdev-io.github.io/crypto-campaign-unified/
 

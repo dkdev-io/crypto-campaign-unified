@@ -16,9 +16,9 @@
 3. `frontend/src/components/auth/SimpleAuth.jsx` - Updated campaign title, removed Building2 icon
 
 ### Live Site Verification
-- **Donor Auth**: `https://cryptocampaign.netlify.app/donors/auth` ✅ Shows "Donors"
-- **Campaign Auth**: `https://cryptocampaign.netlify.app/auth` ✅ Shows "Campaigns"  
-- **Campaign Auth Alt**: `https://cryptocampaign.netlify.app/campaigns/auth` ✅ Shows "Campaigns"
+- **Donor Auth**: `https://dkdev-io.github.io/crypto-campaign-setup//donors/auth` ✅ Shows "Donors"
+- **Campaign Auth**: `https://dkdev-io.github.io/crypto-campaign-setup//auth` ✅ Shows "Campaigns"  
+- **Campaign Auth Alt**: `https://dkdev-io.github.io/crypto-campaign-setup//campaigns/auth` ✅ Shows "Campaigns"
 
 ### Testing Process
 Used Puppeteer automation to verify changes were deployed correctly:

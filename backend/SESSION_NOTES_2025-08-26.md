@@ -67,7 +67,7 @@ Performed comprehensive code review of the cryptocurrency campaign donation syst
 - **Dashboard:** file:///Users/Danallovertheplace/docs/app-access-dashboard.html
 - **Frontend:** http://localhost:5175 (React - Running)
 - **Backend:** http://localhost:3103 (Express - Configured)
-- **Deployed Site:** https://cryptocampaign.netlify.app
+- **Deployed Site:** https://dkdev-io.github.io/crypto-campaign-setup/
 
 ## 🔄 Next Session Priorities
 1. Implement XSS fixes with DOMPurify

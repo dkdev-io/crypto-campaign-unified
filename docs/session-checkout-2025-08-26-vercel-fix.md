@@ -38,7 +38,7 @@ npm error command sh -c husky install
 
 ## 📱 App Access Information
 - **Dashboard Location**: file:///Users/Danallovertheplace/docs/app-access-dashboard.html
-- **Main Application**: https://cryptocampaign.netlify.app
+- **Main Application**: https://dkdev-io.github.io/crypto-campaign-setup/
 - **Repository**: https://github.com/dkdev-io/crypto-campaign-setup
 
 ## 🔍 Code Quality Notes

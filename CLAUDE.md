@@ -837,12 +837,12 @@ const PORT = process.env.PORT || 3000;
 **AFTER CREATING/MODIFYING ANY APPLICATION:**
 
 ```bash
-# STEP 1: UPDATE DASHBOARD (NON-NEGOTIABLE)
-~/bin/update-app-dashboard
+# STEP 1: UPDATE PROJECT STATUS (NON-NEGOTIABLE)
+project-status
 
-# STEP 2: VERIFY DASHBOARD UPDATE
-ls -la ~/docs/app-access-dashboard.html
-echo "✅ Dashboard updated: $(date)"
+# STEP 2: UPDATE APP STRUCTURE GUIDE
+echo "Last Updated: $(date)" >> docs/APP_STRUCTURE_GUIDE.md
+echo "Agent: $(whoami)" >> docs/APP_STRUCTURE_GUIDE.md
 
 # STEP 3: DOCUMENT ACCESS INFORMATION
 echo "## New/Updated App Access" >> current-session-notes.md
@@ -950,9 +950,9 @@ echo "Static site on port 8000"
 - Port Registry: `~/docs/port-registry.md`
 
 **TOOLS:**
-- Scanner: `~/bin/scan-apps`
-- Updater: `~/bin/update-app-dashboard`
-- Port Check: `~/bin/port-check`
+- Status Check: `project-status`
+- Onboarding: `agent-onboard`
+- Structure Guide: `docs/APP_STRUCTURE_GUIDE.md`
 
 ---
 
