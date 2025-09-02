@@ -65,7 +65,10 @@ class DonorPageAutomationService {
     // Generate SEO metadata
     const seoData = generateSEOMetadata(campaignData);
     
-    // Replace template variables
+    // Extract campaign styles for template replacement
+    const campaignStyles = this.extractCampaignStylesForTemplate(campaignData);
+    
+    // Replace template variables with full style guide data
     const pageContent = template
       .replace(/\{\{CAMPAIGN_NAME\}\}/g, campaignData.campaign_name)
       .replace(/\{\{COMMITTEE_NAME\}\}/g, campaignData.committee_name)
@@ -73,7 +76,19 @@ class DonorPageAutomationService {
       .replace(/\{\{SEO_TITLE\}\}/g, seoData.title)
       .replace(/\{\{SEO_DESCRIPTION\}\}/g, seoData.description)
       .replace(/\{\{SEO_KEYWORDS\}\}/g, seoData.keywords)
-      .replace(/\{\{THEME_COLOR\}\}/g, campaignData.theme_color || '#2a2a72')
+      // Style guide replacements
+      .replace(/\{\{PRIMARY_COLOR\}\}/g, campaignStyles.colors.primary)
+      .replace(/\{\{SECONDARY_COLOR\}\}/g, campaignStyles.colors.secondary)
+      .replace(/\{\{ACCENT_COLOR\}\}/g, campaignStyles.colors.accent)
+      .replace(/\{\{BACKGROUND_COLOR\}\}/g, campaignStyles.colors.background)
+      .replace(/\{\{TEXT_COLOR\}\}/g, campaignStyles.colors.text)
+      .replace(/\{\{HEADING_FONT\}\}/g, campaignStyles.fonts.heading.family)
+      .replace(/\{\{BODY_FONT\}\}/g, campaignStyles.fonts.body.family)
+      .replace(/\{\{BUTTON_FONT\}\}/g, campaignStyles.fonts.button.family)
+      .replace(/\{\{BORDER_RADIUS\}\}/g, campaignStyles.layout.borderRadius)
+      .replace(/\{\{SPACING\}\}/g, campaignStyles.layout.spacing)
+      // Legacy support
+      .replace(/\{\{THEME_COLOR\}\}/g, campaignStyles.colors.primary)
       .replace(/\{\{CAMPAIGN_ID\}\}/g, campaignData.id)
       .replace(/\{\{PAGE_URL\}\}/g, pageUrl)
       .replace(/\{\{CREATED_DATE\}\}/g, new Date().toISOString());
@@ -90,6 +105,108 @@ class DonorPageAutomationService {
       embedCode,
       seoData,
       createdAt: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Extract campaign styles for template usage (backend version)
+   */
+  extractCampaignStylesForTemplate(campaignData) {
+    if (!campaignData) {
+      return this.getDefaultTemplateStyles();
+    }
+
+    // Priority order: applied_styles > custom_styles > theme_color > defaults
+    const appliedStyles = campaignData.applied_styles;
+    const customStyles = campaignData.custom_styles;
+    const themeColor = campaignData.theme_color;
+
+    return {
+      colors: {
+        primary: appliedStyles?.colors?.primary || 
+                 customStyles?.colors?.primary || 
+                 themeColor || 
+                 '#2a2a72',
+        secondary: appliedStyles?.colors?.secondary || 
+                   customStyles?.colors?.secondary || 
+                   '#666666',
+        accent: appliedStyles?.colors?.accent || 
+                customStyles?.colors?.accent || 
+                '#28a745',
+        background: appliedStyles?.colors?.background || 
+                    customStyles?.colors?.background || 
+                    '#ffffff',
+        text: appliedStyles?.colors?.text || 
+              customStyles?.colors?.text || 
+              '#333333'
+      },
+      fonts: {
+        heading: {
+          family: appliedStyles?.fonts?.heading?.suggested || 
+                  customStyles?.fonts?.heading?.family || 
+                  'Inter, system-ui, -apple-system, sans-serif',
+          weight: appliedStyles?.fonts?.heading?.weight || 
+                  customStyles?.fonts?.heading?.weight || 
+                  '700'
+        },
+        body: {
+          family: appliedStyles?.fonts?.body?.suggested || 
+                  customStyles?.fonts?.body?.family || 
+                  'Inter, system-ui, -apple-system, sans-serif',
+          weight: appliedStyles?.fonts?.body?.weight || 
+                  customStyles?.fonts?.body?.weight || 
+                  '400'
+        },
+        button: {
+          family: appliedStyles?.fonts?.button?.suggested || 
+                  customStyles?.fonts?.button?.family || 
+                  'Inter, system-ui, -apple-system, sans-serif',
+          weight: appliedStyles?.fonts?.button?.weight || 
+                  customStyles?.fonts?.button?.weight || 
+                  '500'
+        }
+      },
+      layout: {
+        borderRadius: appliedStyles?.layout?.recommendations?.borderRadius || 
+                      customStyles?.layout?.borderRadius || 
+                      '8px',
+        spacing: appliedStyles?.layout?.recommendations?.margin || 
+                 customStyles?.layout?.spacing || 
+                 '1rem'
+      }
+    };
+  }
+
+  /**
+   * Get default styles when no campaign data is available
+   */
+  getDefaultTemplateStyles() {
+    return {
+      colors: {
+        primary: '#2a2a72',
+        secondary: '#666666',
+        accent: '#28a745',
+        background: '#ffffff',
+        text: '#333333'
+      },
+      fonts: {
+        heading: {
+          family: 'Inter, system-ui, -apple-system, sans-serif',
+          weight: '700'
+        },
+        body: {
+          family: 'Inter, system-ui, -apple-system, sans-serif',
+          weight: '400'
+        },
+        button: {
+          family: 'Inter, system-ui, -apple-system, sans-serif',
+          weight: '500'
+        }
+      },
+      layout: {
+        borderRadius: '8px',
+        spacing: '1rem'
+      }
     };
   }
 

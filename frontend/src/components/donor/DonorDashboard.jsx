@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import { supabase } from '../../lib/supabase';
-import DonorBreadcrumb from './DonorBreadcrumb';
 import { 
   Heart, 
   DollarSign, 
@@ -145,8 +144,6 @@ const DonorDashboard = () => {
 
   return (
     <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
-      {/* Breadcrumb Navigation */}
-      <DonorBreadcrumb />
       {/* Header */}
       <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

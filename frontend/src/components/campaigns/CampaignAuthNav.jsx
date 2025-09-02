@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-import CampaignBreadcrumb from './CampaignBreadcrumb';
 
 const CampaignAuthNav = () => {
   const navigate = useNavigate();
@@ -84,7 +83,6 @@ const CampaignAuthNav = () => {
           </div>
         </div>
       </header>
-      <CampaignBreadcrumb />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-import DonorBreadcrumb from './DonorBreadcrumb';
 
 const DonorAuthNav = () => {
   const navigate = useNavigate();
@@ -84,7 +83,6 @@ const DonorAuthNav = () => {
           </div>
         </div>
       </header>
-      <DonorBreadcrumb />
     </div>
   );
 };

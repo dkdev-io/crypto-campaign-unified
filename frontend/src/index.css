@@ -284,7 +284,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Form Styles */
   .form-input {
-    @apply bg-background border-border text-foreground;
+    background-color: white;
+    color: black;
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     padding: var(--space-sm);
