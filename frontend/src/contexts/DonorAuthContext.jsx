@@ -104,12 +104,35 @@ export const DonorAuthProvider = ({ children }) => {
   const signIn = async ({ email, password }) => {
     try {
       setError(null);
+      
+      // First check if the email exists in the donors table
+      const { data: existingDonor, error: lookupError } = await supabase
+        .from('donors')
+        .select('id, email')
+        .eq('email', email)
+        .single();
+
+      if (lookupError && lookupError.code === 'PGRST116') {
+        // No donor found with this email
+        throw new Error('No user found with this email address. Please check your email or create a new account.');
+      }
+
+      if (lookupError) {
+        throw new Error('Unable to verify account. Please try again.');
+      }
+
+      // Now attempt to sign in
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('Incorrect password. Please check your password and try again.');
+        }
+        throw error;
+      }
 
       // Verify this is a donor account
       if (data.user) {

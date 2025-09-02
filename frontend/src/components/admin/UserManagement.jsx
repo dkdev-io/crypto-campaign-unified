@@ -31,24 +31,44 @@ const UserManagement = () => {
         return
       }
 
-      // First try to get users from public.users table
+      // Try users table first, then fall back to form_submissions
       let { data: usersData, error: usersError } = await supabase
         .from('users')
-        .select(`
-          *,
-          campaign_members (
-            campaign_id,
-            campaigns (
-              campaign_name
-            )
-          )
-        `)
+        .select('*')
         .order(sortBy, { ascending: sortOrder === 'asc' })
 
       if (usersError && usersError.code === 'PGRST205') {
-        // users table doesn't exist, show message to admin
-        setError('Users table not found in database. No user profiles have been created yet. Users will appear here after they sign up and create profiles.')
-        setUsers([])
+        // users table doesn't exist, get data from form_submissions instead
+        console.log('Users table not found, checking form_submissions...')
+        
+        const { data: submissionsData, error: submissionsError } = await supabase
+          .from('form_submissions')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (submissionsError) {
+          throw submissionsError
+        }
+
+        // Transform form submissions into user format
+        const transformedUsers = submissionsData.map(submission => ({
+          id: submission.id,
+          full_name: `${submission.first_name} ${submission.last_name}`,
+          email: submission.email,
+          phone: submission.phone,
+          address: `${submission.address}, ${submission.city}, ${submission.state} ${submission.zip_code}`,
+          employer: submission.employer,
+          occupation: submission.occupation,
+          role: 'donor',
+          created_at: submission.created_at,
+          last_login_at: null,
+          total_donated: submission.amount,
+          contribution_type: submission.contribution_type,
+          is_us_citizen: submission.is_us_citizen
+        }))
+
+        setUsers(transformedUsers)
+        setError('Showing form submission data. User profiles table not yet configured.')
       } else if (usersError) {
         throw usersError
       } else {
