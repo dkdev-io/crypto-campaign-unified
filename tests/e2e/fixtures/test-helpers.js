@@ -79,7 +79,7 @@ export const mockSuccessResponse = (page, responseData = { success: true, id: '1
 export const fillFormWithTestData = async (page, data = {}) => {
   const defaults = {
     name: 'John Doe',
-    email: 'john.doe@example.com',
+    email: 'john.doe@dkdev.io',
     amount: '100',
     message: 'Test contribution message'
   };

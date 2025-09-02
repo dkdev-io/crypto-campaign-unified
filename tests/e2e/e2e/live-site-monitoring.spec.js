@@ -99,8 +99,8 @@ test.describe('Live Campaign Site Monitoring', () => {
     // Test email input
     if (await emailInput.isVisible()) {
       try {
-        await emailInput.fill('test@example.com');
-        await expect(emailInput).toHaveValue('test@example.com');
+        await emailInput.fill('test@dkdev.io');
+        await expect(emailInput).toHaveValue('test@dkdev.io');
         interactionResults.canFillEmail = true;
       } catch (error) {
         console.log('Could not fill email input:', error.message);

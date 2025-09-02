@@ -10,7 +10,7 @@ export const testCampaign = {
 
 export const testContributor = {
   name: 'John Doe',
-  email: 'john.doe@example.com',
+  email: 'john.doe@dkdev.io',
   amount: 100,
   message: 'Supporting this great cause! Keep up the excellent work.',
   anonymous: false

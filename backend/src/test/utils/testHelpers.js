@@ -16,7 +16,7 @@ export class TestHelpers {
     return {
       address,
       fullName: 'John Doe',
-      email: 'john@example.com',
+      email: 'john@dkdev.io',
       phone: '+1234567890',
       documentType: 'drivers_license',
       documentNumber: 'DL123456789',
@@ -28,7 +28,7 @@ export class TestHelpers {
   static generateMockCampaignData() {
     return {
       campaign_name: 'Test Campaign',
-      email: 'campaign@example.com',
+      email: 'campaign@dkdev.io',
       website: 'https://example.com',
       description: 'A test campaign'
     };
@@ -106,7 +106,7 @@ export const MockFactories = {
   campaign: (overrides = {}) => ({
     id: '123e4567-e89b-12d3-a456-426614174000',
     campaign_name: 'Test Campaign',
-    email: 'test@example.com',
+    email: 'test@dkdev.io',
     website: 'https://example.com',
     setup_step: 1,
     setup_completed: false,
@@ -119,7 +119,7 @@ export const MockFactories = {
     id: '456e7890-e12b-34d5-a678-901234567890',
     wallet_address: TestHelpers.generateMockAddress().toLowerCase(),
     full_name: 'Jane Doe',
-    email: 'jane@example.com',
+    email: 'jane@dkdev.io',
     phone: '+0987654321',
     document_type: 'passport',
     document_number: 'P123456789',

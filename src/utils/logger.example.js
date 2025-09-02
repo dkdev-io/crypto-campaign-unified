@@ -25,7 +25,7 @@ function exampleContextLoggers() {
 
     dbLogger.info('Connection pool initialized', { maxConnections: 10 });
     apiLogger.debug('Processing request', { endpoint: '/api/campaigns', method: 'GET' });
-    authLogger.warn('Invalid login attempt', { ip: '192.168.1.1', email: 'test@example.com' });
+    authLogger.warn('Invalid login attempt', { ip: '192.168.1.1', email: 'test@dkdev.io' });
 }
 
 // Example 3: Child loggers
