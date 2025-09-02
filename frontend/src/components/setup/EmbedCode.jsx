@@ -32,7 +32,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       if (dbError) throw dbError;
 
       setEmbedCode(data);
-      const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
+      const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
       setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
       
       // Mark setup as completed and trigger donor page automation
@@ -73,7 +73,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       // Fallback embed code generation
       const fallbackCode = generateFallbackEmbedCode();
       setEmbedCode(fallbackCode);
-      const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
+      const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
       setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
       
     } finally {
@@ -82,7 +82,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   };
 
   const generateFallbackEmbedCode = () => {
-    const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
+    const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
     return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
