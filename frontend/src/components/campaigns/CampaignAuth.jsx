@@ -228,6 +228,28 @@ const CampaignAuth = () => {
               </div>
             )}
 
+            {/* Success/Validation Messages */}
+            {validationErrors.submit && (
+              <div className={`mb-6 p-4 rounded-lg flex items-center gap-2 ${
+                validationErrors.submit.includes('Account created') 
+                  ? 'bg-green-50 border border-green-200' 
+                  : 'bg-destructive/10 border border-destructive/20'
+              }`}>
+                <AlertCircle className={`w-4 h-4 ${
+                  validationErrors.submit.includes('Account created') 
+                    ? 'text-green-600' 
+                    : 'text-destructive'
+                }`} />
+                <span className={`text-sm ${
+                  validationErrors.submit.includes('Account created') 
+                    ? 'text-green-700' 
+                    : 'text-destructive'
+                }`}>
+                  {validationErrors.submit}
+                </span>
+              </div>
+            )}
+
             {/* Sign In Tab */}
             {activeTab === 'signin' && (
               <form onSubmit={handleSignIn} className="space-y-6">
