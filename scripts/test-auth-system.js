@@ -364,7 +364,7 @@ async function runAllTests() {
   
   log('\n📋 NEXT STEPS:', 'info')
   log('1. Run the database migration: supabase/migrations/20250826_create_auth_system.sql', 'info')
-  log('2. Import AuthDemo component in your React app', 'info')
+  log('2. Import AuthFlow component in your React app', 'info')
   log('3. Test the full flow in your browser', 'info')
   log('4. Configure email verification in Supabase dashboard', 'info')
   

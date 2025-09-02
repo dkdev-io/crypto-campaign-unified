@@ -18,8 +18,7 @@
 
 ### 2. Frontend Components
 - ✅ **AuthContext**: Complete auth state management (`frontend/src/contexts/AuthContext.jsx`)
-- ✅ **AuthFlow**: Multi-step auth workflow (`frontend/src/components/auth/AuthFlow.jsx`)
-- ✅ **AuthDemo**: Full demo application (`frontend/src/components/auth/AuthDemo.jsx`)
+- ✅ **AuthFlow**: Main authentication component with multi-step workflow (`frontend/src/components/auth/AuthFlow.jsx`)
 - ✅ **TeamManagement**: Team invitations and permissions (`frontend/src/components/team/TeamManagement.jsx`)
 - ✅ **DonorDataSetup**: Data upload orchestration (`frontend/src/components/data/DonorDataSetup.jsx`)
 - ✅ **CSVUpload**: File processing and validation (`frontend/src/components/data/CSVUpload.jsx`)

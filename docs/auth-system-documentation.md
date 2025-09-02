@@ -207,12 +207,17 @@ import './styles/admin.css'
 ```jsx
 // App.jsx
 import { AuthProvider } from './contexts/AuthContext'
-import AuthDemo from './components/auth/AuthDemo'
+import AuthFlow from './components/auth/AuthFlow'
 
 function App() {
   return (
     <AuthProvider>
-      <AuthDemo />
+      <AuthFlow
+        onAuthComplete={(data) => console.log('Auth complete:', data)}
+        initialMode="login"
+        requireProfileCompletion={true}
+        requireDataSetup={false}
+      />
     </AuthProvider>
   )
 }

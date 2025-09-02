@@ -379,7 +379,7 @@ async function runAllTests() {
   
   log('\n📋 NEXT STEPS:', 'info')
   log('1. Run database migrations for dynamic table functions', 'info')
-  log('2. Test the complete flow in your browser using AuthDemo', 'info')
+  log('2. Test the complete flow in your browser using AuthFlow', 'info')
   log('3. Try uploading the generated test-data.csv file', 'info')
   log('4. Verify data appears in your user-specific table', 'info')
   

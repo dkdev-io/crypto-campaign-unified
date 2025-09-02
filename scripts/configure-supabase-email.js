@@ -99,7 +99,7 @@ function printManualConfigurationSteps() {
   
   log('\n🧪 STEP 4: Test Configuration', 'info')
   log('1. Run: node scripts/test-auth-system.js', 'info')
-  log('2. Or test signup in your AuthDemo component', 'info')
+  log('2. Or test signup in your AuthFlow component', 'info')
   log('3. Check that confirmation email is sent', 'info')
   
   log('\n⚙️ RECOMMENDED SETTINGS:', 'info')
