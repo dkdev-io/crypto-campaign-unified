@@ -50,7 +50,7 @@ async function verifyAuthWorkflow() {
     
     // Go to home page first to analyze navigation
     await page.goto(PRODUCTION_URL, { waitUntil: 'networkidle0', timeout: 30000 });
-    await page.waitForTimeout(2000);
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Take home page screenshot
     const homeScreenshot = `netlify-homepage-${TIMESTAMP}.png`;
@@ -99,7 +99,7 @@ async function verifyAuthWorkflow() {
     
     // Navigate to auth page
     await page.goto(`${PRODUCTION_URL}/auth`, { waitUntil: 'networkidle0', timeout: 30000 });
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Take auth page screenshot
     const authScreenshot = `netlify-auth-${TIMESTAMP}.png`;
@@ -195,7 +195,7 @@ async function verifyAuthWorkflow() {
     if (toggleTest.hasSignUpTab) {
       try {
         await page.click('button:contains("Sign Up"), [role="tab"]:contains("Sign Up")');
-        await page.waitForTimeout(1000);
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         const signUpFormCheck = await page.evaluate(() => {
           const fullNameField = document.querySelector('input[name="fullName"], input[placeholder*="full name" i]');
@@ -302,7 +302,7 @@ async function verifyAuthWorkflow() {
     
     try {
       await page.goto(`${PRODUCTION_URL}/campaigns/auth`, { waitUntil: 'networkidle0', timeout: 30000 });
-      await page.waitForTimeout(2000);
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       const campaignsAuthScreenshot = `netlify-campaigns-auth-${TIMESTAMP}.png`;
       await page.screenshot({ path: campaignsAuthScreenshot, fullPage: true });

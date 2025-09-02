@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     // Get initial session
@@ -120,21 +121,52 @@ export const AuthProvider = ({ children }) => {
         password
       })
 
-      if (error) throw error
+      if (error) {
+        // Provide more specific error messages
+        let friendlyError = { ...error }
+        
+        if (error.message === 'Invalid login credentials') {
+          // Check if the user exists in auth.users
+          const { data: existingUsers } = await supabase.auth.admin.listUsers()
+          const userExists = existingUsers?.users?.some(u => u.email === email)
+          
+          if (!userExists) {
+            friendlyError.message = 'No account found with this email address'
+            friendlyError.type = 'user_not_found'
+          } else {
+            friendlyError.message = 'Incorrect password. Please try again or reset your password.'
+            friendlyError.type = 'wrong_password'
+          }
+        } else if (error.message.includes('email')) {
+          friendlyError.message = 'Please enter a valid email address'
+          friendlyError.type = 'invalid_email'
+        } else if (error.message.includes('password')) {
+          friendlyError.message = 'Password is required'
+          friendlyError.type = 'missing_password'
+        }
+        
+        throw friendlyError
+      }
 
       // Update login tracking
       if (data.user) {
-        await supabase
-          .from('users')
-          .update({
-            last_login_at: new Date().toISOString(),
-            login_count: supabase.sql`login_count + 1`
-          })
-          .eq('id', data.user.id)
+        try {
+          await supabase
+            .from('users')
+            .update({
+              last_login_at: new Date().toISOString(),
+              login_count: supabase.sql`login_count + 1`
+            })
+            .eq('id', data.user.id)
+        } catch (updateError) {
+          console.warn('Could not update login tracking:', updateError)
+          // Don't fail the login for this
+        }
       }
 
       return { data, error: null }
     } catch (error) {
+      setError(error)
       return { data: null, error }
     }
   }
@@ -270,10 +302,20 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = async (email) => {
     try {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`
+        redirectTo: `${window.location.origin}/auth?reset=true`
       })
 
-      if (error) throw error
+      if (error) {
+        let friendlyError = { ...error }
+        if (error.message.includes('email')) {
+          friendlyError.message = 'Please enter a valid email address'
+        } else if (error.message.includes('not found')) {
+          friendlyError.message = 'No account found with this email address'
+        } else {
+          friendlyError.message = 'Unable to send reset email. Please try again.'
+        }
+        throw friendlyError
+      }
 
       return { data, error: null }
     } catch (error) {
@@ -345,11 +387,18 @@ export const AuthProvider = ({ children }) => {
     return getUserRole() === 'admin'
   }
 
+  // Clear error function
+  const clearError = () => {
+    setError(null)
+  }
+
   const value = {
     user,
     session,
     userProfile,
     loading,
+    error,
+    clearError,
     signUp,
     signIn,
     signOut,

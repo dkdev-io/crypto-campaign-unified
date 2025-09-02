@@ -199,11 +199,14 @@ const ContactForm = ({ onComplete }) => {
 
 // Main auth component with proper toggle
 const AuthForm = ({ onSuccess }) => {
-  const { signUp, signIn, error } = useAuth();
+  const { signUp, signIn, resetPassword, error, clearError } = useAuth();
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
 
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
@@ -227,7 +230,7 @@ const AuthForm = ({ onSuccess }) => {
       ...prev,
       [name]: value
     }));
-    clearError(name);
+    clearFieldError(name);
   };
 
   const handleSignUpChange = (e) => {
@@ -236,15 +239,19 @@ const AuthForm = ({ onSuccess }) => {
       ...prev,
       [name]: value
     }));
-    clearError(name);
+    clearFieldError(name);
   };
 
-  const clearError = (fieldName) => {
+  const clearFieldError = (fieldName) => {
     if (validationErrors[fieldName]) {
       setValidationErrors(prev => ({
         ...prev,
         [fieldName]: ''
       }));
+    }
+    // Also clear global auth error when user starts typing
+    if (error) {
+      clearError();
     }
   };
 
@@ -307,7 +314,8 @@ const AuthForm = ({ onSuccess }) => {
         throw error;
       }
 
-      onSuccess();
+      // Successful login - redirect to campaign setup
+      window.location.href = '/setup';
     } catch (error) {
       console.error('Login error:', error);
     } finally {
@@ -332,8 +340,16 @@ const AuthForm = ({ onSuccess }) => {
         throw error;
       }
 
-      alert('Check your email for verification link');
-      onSuccess();
+      // Show success message instead of alert
+      setValidationErrors({});
+      setResetMessage('Account created! Check your email for verification link, then you can sign in.');
+      
+      // Switch to sign in tab after a moment
+      setTimeout(() => {
+        setActiveTab('signin');
+        setSignInData({ email: signUpData.email, password: '' });
+        setResetMessage('');
+      }, 3000);
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
@@ -347,6 +363,29 @@ const AuthForm = ({ onSuccess }) => {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    if (!resetEmail.trim()) {
+      setResetMessage('Please enter your email address');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await resetPassword(resetEmail);
+      if (error) {
+        setResetMessage(error.message);
+      } else {
+        setResetMessage('Password reset email sent! Check your inbox and follow the instructions.');
+        setResetEmail('');
+      }
+    } catch (error) {
+      setResetMessage('Failed to send reset email. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -401,9 +440,85 @@ const AuthForm = ({ onSuccess }) => {
         {error && (
           <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-destructive" />
-            <span className="text-sm text-destructive">
-              {error.message || 'An error occurred. Please try again.'}
-            </span>
+            <div className="flex-1">
+              <span className="text-sm text-destructive">
+                {error.message || 'An error occurred. Please try again.'}
+              </span>
+              {error.type === 'wrong_password' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowResetForm(true);
+                    setResetEmail(signInData.email);
+                    clearError();
+                  }}
+                  className="block mt-2 text-xs text-primary hover:underline"
+                >
+                  Reset password
+                </button>
+              )}
+              {error.type === 'user_not_found' && (
+                <div className="mt-2">
+                  <span className="block text-xs text-muted-foreground">
+                    Don't have an account?
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('signup');
+                      setSignUpData({ ...signUpData, email: signInData.email });
+                      clearError();
+                    }}
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Create one here
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Password Reset Form */}
+        {showResetForm && (
+          <div className="mb-6 p-4 bg-muted/50 border border-muted/20 rounded-lg">
+            <h3 className="text-sm font-medium text-foreground mb-3">Reset Password</h3>
+            <form onSubmit={handlePasswordReset} className="space-y-3">
+              <Input
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="text-sm"
+              />
+              {resetMessage && (
+                <p className={`text-xs ${resetMessage.includes('sent') ? 'text-green-600' : 'text-destructive'}`}>
+                  {resetMessage}
+                </p>
+              )}
+              <div className="flex gap-2">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  size="sm"
+                  className="flex-1"
+                >
+                  {loading ? 'Sending...' : 'Send Reset Email'}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setShowResetForm(false);
+                    setResetMessage('');
+                    setResetEmail('');
+                  }}
+                  variant="outline"
+                  size="sm"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
           </div>
         )}
 
@@ -473,6 +588,20 @@ const AuthForm = ({ onSuccess }) => {
                 'Sign In'
               )}
             </Button>
+
+            {/* Forgot Password Link */}
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowResetForm(true);
+                  setResetEmail(signInData.email);
+                }}
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot your password?
+              </button>
+            </div>
           </form>
         )}
 
