@@ -18,8 +18,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --crypto-dark-gray: 210 9% 31%; /* Dark gray #424242 */
     
     /* Core Theme Colors - Mapped to Crypto Campaign palette */
-    --background: var(--crypto-white);
-    --foreground: var(--crypto-navy);
+    --background: var(--crypto-blue);
+    --foreground: var(--crypto-white);
 
     --card: var(--crypto-white);
     --card-foreground: var(--crypto-navy);
@@ -147,6 +147,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: hsl(var(--crypto-blue));
+    color: hsl(var(--crypto-white));
   }
 
   /* Typography Hierarchy */
