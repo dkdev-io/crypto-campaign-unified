@@ -139,6 +139,18 @@ function App() {
               </DonorProtectedRoute>
             } />
             
+            {/* Embed Form Route - for iframe embeds */}
+            <Route path="/embed-form.html" element={
+              <div style={{ minHeight: '100vh', padding: '1rem' }}>
+                <SimpleDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
+              </div>
+            } />
+            <Route path="/embed-form" element={
+              <div style={{ minHeight: '100vh', padding: '1rem' }}>
+                <SimpleDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
+              </div>
+            } />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           <PrivacyBanner />

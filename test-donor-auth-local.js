@@ -41,7 +41,7 @@ async function testDonorAuthLocal() {
     await page.click('button[type="submit"]');
     
     // Wait for error message to appear
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Look for error messages using multiple selectors
     const errorSelectors = [
@@ -90,7 +90,7 @@ async function testDonorAuthLocal() {
     await page.type('input[name="password"]', 'WrongPassword123!');
     
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Check for password error
     let passwordErrorMessage = null;
@@ -132,7 +132,7 @@ async function testDonorAuthLocal() {
     await page.click('button[type="submit"]');
     
     // Wait for either redirect or error
-    await page.waitForTimeout(5000);
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     const currentUrl = page.url();
     console.log(`Current URL after login attempt: ${currentUrl}`);
