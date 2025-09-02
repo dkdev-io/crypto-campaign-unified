@@ -187,7 +187,7 @@ const DonorAuth = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-foreground mb-2">
-                Donor Portal
+                Donors
               </h2>
               <p className="text-muted-foreground">
                 Sign in to your account or create a new one

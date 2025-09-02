@@ -31,7 +31,8 @@ const UserManagement = () => {
         return
       }
 
-      const { data, error } = await supabase
+      // First try to get users from public.users table
+      let { data: usersData, error: usersError } = await supabase
         .from('users')
         .select(`
           *,
@@ -44,9 +45,16 @@ const UserManagement = () => {
         `)
         .order(sortBy, { ascending: sortOrder === 'asc' })
 
-      if (error) throw error
+      if (usersError && usersError.code === 'PGRST205') {
+        // users table doesn't exist, show message to admin
+        setError('Users table not found in database. No user profiles have been created yet. Users will appear here after they sign up and create profiles.')
+        setUsers([])
+      } else if (usersError) {
+        throw usersError
+      } else {
+        setUsers(usersData || [])
+      }
 
-      setUsers(data || [])
     } catch (error) {
       if (error.message.includes('Supabase not configured')) {
         setError('Database not configured. Please set up Supabase to manage users.')
