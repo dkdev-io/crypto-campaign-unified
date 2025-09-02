@@ -7,7 +7,6 @@ import WebsiteStyleMatcher from './WebsiteStyleMatcher';
 import StyleConfirmation from './StyleConfirmation';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
-import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
 import CampaignAuthNav from '../campaigns/CampaignAuthNav';
 import { supabase } from '../../lib/supabase';
 import '../../styles/setup.css';

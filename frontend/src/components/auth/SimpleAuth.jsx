@@ -5,7 +5,6 @@ import { Mail, Lock, User, Building2, AlertCircle, Eye, EyeOff } from 'lucide-re
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
-import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
 import RealWorkingInvites from '../team/RealWorkingInvites';
 
 // Auth Navigation Component matching home page
