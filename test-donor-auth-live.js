@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const LIVE_SITE_URL = 'https://crypto-campaign-unified.netlify.app';
+const LIVE_SITE_URL = 'https://cryptocampaign.netlify.app';
 
 async function testDonorAuthFlow() {
   console.log('🚀 Testing Donor Authentication Flow on Live Netlify Site');

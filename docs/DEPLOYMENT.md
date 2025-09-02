@@ -282,8 +282,8 @@ curl -X POST \
 
 After successful deployment:
 
-- **Production:** https://dkdev-io.github.io/crypto-campaign-setup/
-- **Build Info:** https://dkdev-io.github.io/crypto-campaign-setup/build-info.json
+- **Production:** https://cryptocampaign.netlify.app
+- **Build Info:** https://cryptocampaign.netlify.app/build-info.json
 
 ## 📝 Deployment Checklist
 

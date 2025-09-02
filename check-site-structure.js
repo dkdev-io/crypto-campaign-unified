@@ -2,7 +2,7 @@
 
 import puppeteer from 'puppeteer';
 
-const LIVE_SITE_URL = 'https://crypto-campaign-unified.netlify.app';
+const LIVE_SITE_URL = 'https://cryptocampaign.netlify.app';
 
 async function checkSiteStructure() {
   console.log('🔍 Checking site structure and donor auth pages...');
@@ -149,7 +149,7 @@ async function testAuthOnCurrentPage(page, foundPath) {
     await page.waitForTimeout(5000);
     
     const currentUrl = page.url();
-    if (currentUrl.includes('dashboard') || currentUrl !== `https://crypto-campaign-unified.netlify.app${foundPath}`) {
+    if (currentUrl.includes('dashboard') || currentUrl !== `https://cryptocampaign.netlify.app${foundPath}`) {
       console.log(`   ✅ Appeared to redirect or change page: ${currentUrl}`);
     } else {
       console.log(`   📍 Still on login page: ${currentUrl}`);
