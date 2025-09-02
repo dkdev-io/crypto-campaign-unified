@@ -66,7 +66,7 @@ The previous session successfully delivered a complete website style matching sy
 ### **Primary Application**
 - **Frontend**: `http://localhost:5173` (Vite development server)
 - **Backend API**: `http://localhost:3102/api` (Express server)
-- **Live Deployment**: https://dkdev-io.github.io/crypto-campaign-setup/
+- **Live Deployment**: https://cryptocampaign.netlify.app
 
 ### **Dashboard Locations**
 - **App Access Dashboard**: `file:///Users/Danallovertheplace/docs/app-access-dashboard.html`
