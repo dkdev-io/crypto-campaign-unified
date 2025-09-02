@@ -49,7 +49,7 @@
 
 ## 🌐 DEPLOYMENT VERIFICATION
 
-### **Production Site**: `https://dkdev-io.github.io/crypto-campaign-setup/`
+### **Production Site**: `https://cryptocampaign.netlify.app`
 
 ### **Puppeteer Testing Results**: ✅ **100% SUCCESS**
 - **🏠 Home Navigation**: 7/7 elements found
@@ -83,8 +83,8 @@
 ## 📱 APP ACCESS INFORMATION
 
 ### **Live Campaign Auth Workflow**:
-- **Primary URL**: https://dkdev-io.github.io/crypto-campaign-setup//auth
-- **Alternative URL**: https://dkdev-io.github.io/crypto-campaign-setup//campaigns/auth
+- **Primary URL**: https://cryptocampaign.netlify.app/auth
+- **Alternative URL**: https://cryptocampaign.netlify.app/campaigns/auth
 - **Status**: ✅ **FULLY OPERATIONAL**
 
 ### **Features Verified**:
@@ -163,12 +163,12 @@
 
 ---
 
-**📍 Dashboard Access**: Campaign auth workflow improvements are live at https://dkdev-io.github.io/crypto-campaign-setup//auth
+**📍 Dashboard Access**: Campaign auth workflow improvements are live at https://cryptocampaign.netlify.app/auth
 
 **🔄 Auto-Sync Status**: All changes committed and pushed to GitHub automatically
 
 ---
 
 ## checkout completed.📱 Campaign Auth Workflow Access Information
-Dashboard: https://dkdev-io.github.io/crypto-campaign-setup//auth
+Dashboard: https://cryptocampaign.netlify.app/auth
 Status: ✅ FULLY OPERATIONAL

@@ -51,9 +51,9 @@ This session focused on preparing the crypto campaign application for production
 - **All changes synchronized to main branch**
 
 ### Deployment Options
-1. **GitHub Pages** (Currently Active)
-   - URL: https://dkdev-io.github.io/crypto-campaign-setup/
-   - Auto-deploys on push to main
+1. **Netlify** (Currently Active)
+   - URL: https://cryptocampaign.netlify.app
+   - Auto-deploys on push to GitHub main branch
    - Deployment hook configured and working
 
 2. **Vercel** (Ready for setup)

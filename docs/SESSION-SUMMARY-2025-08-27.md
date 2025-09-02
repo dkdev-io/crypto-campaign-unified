@@ -74,7 +74,7 @@
 ```html
 <!-- Quick Start iframe Option -->
 <iframe 
-  src="https://dkdev-io.github.io/crypto-campaign-setup//embed/donation?campaign=YOUR_CAMPAIGN_ID"
+  src="https://cryptocampaign.netlify.app/embed/donation?campaign=YOUR_CAMPAIGN_ID"
   width="100%" height="800" frameborder="0">
 </iframe>
 
@@ -95,8 +95,8 @@ CryptoDonationWidget.init({
 - **Responsive:** Mobile-first design implementation
 
 ### **Integration Ready:**
-- **Live Site:** https://dkdev-io.github.io/crypto-campaign-setup/
-- **Test URL:** https://dkdev-io.github.io/crypto-campaign-setup//donation-test
+- **Live Site:** https://cryptocampaign.netlify.app
+- **Test URL:** https://cryptocampaign.netlify.app/donation-test
 - **GitHub:** All changes pushed and ready for Netlify auto-deployment
 
 ---
@@ -144,8 +144,8 @@ CryptoDonationWidget.init({
 - **Session Summary:** `/Users/Danallovertheplace/crypto-campaign-unified/docs/SESSION-SUMMARY-2025-08-27.md`
 
 ### **Live Applications:**
-- **Main Site:** https://dkdev-io.github.io/crypto-campaign-setup/
-- **Test Form:** https://dkdev-io.github.io/crypto-campaign-setup//donation-test
+- **Main Site:** https://cryptocampaign.netlify.app
+- **Test Form:** https://cryptocampaign.netlify.app/donation-test
 - **GitHub Repo:** https://github.com/dkdev-io/crypto-campaign-unified
 
 ### **Development:**

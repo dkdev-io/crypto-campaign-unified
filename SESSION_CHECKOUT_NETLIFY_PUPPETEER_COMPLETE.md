@@ -12,7 +12,7 @@
 ## Final Verification Results
 
 ### 🎯 Puppeteer Test on Production Netlify:
-- **URL Tested**: `https://dkdev-io.github.io/crypto-campaign-setup//campaigns/auth`
+- **URL Tested**: `https://cryptocampaign.netlify.app/campaigns/auth`
 - **Tool Used**: Puppeteer browser automation (as requested)
 - **Environment**: Live Netlify production deployment (not localhost)
 - **Credentials**: `dan@dkdev.io` with password `32test1!` (as specified)
@@ -54,7 +54,7 @@
 ## Session Outcome
 **Email verification for campaign signups is now fully operational on the live Netlify production site.**
 
-Users signing up at `https://dkdev-io.github.io/crypto-campaign-setup//campaigns/auth` will receive verification emails as expected.
+Users signing up at `https://cryptocampaign.netlify.app/campaigns/auth` will receive verification emails as expected.
 
 ---
 

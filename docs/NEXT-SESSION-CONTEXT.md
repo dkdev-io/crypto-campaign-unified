@@ -59,7 +59,7 @@ file:///Users/Danallovertheplace/docs/app-access-dashboard.html
 ### **Development Environment:**
 - **Frontend Dev Server:** Running on port 5175 (Vite)
 - **Local Dev URL:** http://localhost:5175
-- **Live Site:** https://dkdev-io.github.io/crypto-campaign-setup/
+- **Live Site:** https://cryptocampaign.netlify.app
 
 ---
 
@@ -68,7 +68,7 @@ file:///Users/Danallovertheplace/docs/app-access-dashboard.html
 ### **Priority 1: Verify Deployment**
 ```bash
 # Check if Netlify auto-deployment completed
-curl -I https://dkdev-io.github.io/crypto-campaign-setup//
+curl -I https://cryptocampaign.netlify.app/
 # Should return 200 OK with updated content
 ```
 
@@ -209,8 +209,8 @@ frontend/src/components/SimpleDonorForm.jsx // Main form component
 - CTO Summary: `docs/CTO-SUMMARY-2025-08-27.md`
 
 ### **Live Applications:**
-- Main Site: https://dkdev-io.github.io/crypto-campaign-setup/
-- Test Page: https://dkdev-io.github.io/crypto-campaign-setup//donation-test
+- Main Site: https://cryptocampaign.netlify.app
+- Test Page: https://cryptocampaign.netlify.app/donation-test
 - GitHub: https://github.com/dkdev-io/crypto-campaign-unified
 
 ### **Development:**

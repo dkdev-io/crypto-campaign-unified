@@ -4,7 +4,7 @@
 **Status**: ✅ **RESOLVED**
 
 ## 🎯 Problem Identified
-The embed form at `https://dkdev-io.github.io/crypto-campaign-setup//embed-form.html?campaign=91323410-1081-40ff-a931-517785995ff8` was returning 404 errors.
+The embed form at `https://cryptocampaign.netlify.app/embed-form.html?campaign=91323410-1081-40ff-a931-517785995ff8` was returning 404 errors.
 
 **Root Cause**: Missing React routes for embed form URLs
 - React Router had no route for `/embed-form.html` 
@@ -35,11 +35,11 @@ Added missing routes to `frontend/src/App.jsx`:
 - ✅ **Component**: SimpleDonorForm renders with campaign ID from query params
 
 ## 🌐 App Access Information
-**Netlify Production**: https://dkdev-io.github.io/crypto-campaign-setup//
-- **Main Site**: https://dkdev-io.github.io/crypto-campaign-setup//
-- **Embed Form**: https://dkdev-io.github.io/crypto-campaign-setup//embed-form.html?campaign=YOUR_CAMPAIGN_ID
-- **Auth Portal**: https://dkdev-io.github.io/crypto-campaign-setup//campaigns/auth
-- **Setup Wizard**: https://dkdev-io.github.io/crypto-campaign-setup//setup
+**Netlify Production**: https://cryptocampaign.netlify.app/
+- **Main Site**: https://cryptocampaign.netlify.app/
+- **Embed Form**: https://cryptocampaign.netlify.app/embed-form.html?campaign=YOUR_CAMPAIGN_ID
+- **Auth Portal**: https://cryptocampaign.netlify.app/campaigns/auth
+- **Setup Wizard**: https://cryptocampaign.netlify.app/setup
 
 **Local Development**: http://localhost:5174/ (when dev server running)
 

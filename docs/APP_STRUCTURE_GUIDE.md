@@ -47,7 +47,7 @@ npm run deploy               # Deploy to GitHub Pages
 
 ## DEPLOYMENT STATUS
 
-**Live Site:** https://dkdev-io.github.io/crypto-campaign-setup/
+**Live Site:** https://cryptocampaign.netlify.app
 - Static build deployed to Netlify
 - Connected to Supabase backend
 - Web3 wallet integration enabled
