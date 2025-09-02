@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Project Status Checker
+# Creates comprehensive status report for crypto-campaign-unified
+
+echo "🚀 CRYPTO CAMPAIGN PROJECT STATUS"
+echo "================================="
+echo ""
+
+# Check current directory
+echo "📍 CURRENT LOCATION:"
+pwd
+if [[ $(pwd) == *"crypto-campaign-unified/crypto-campaign-unified"* ]]; then
+    echo "⚠️  WARNING: You're in a subdirectory!"
+    echo "   Run: cd /Users/Danallovertheplace/crypto-campaign-unified"
+fi
+echo ""
+
+# Check project structure
+echo "📁 PROJECT STRUCTURE:"
+cd /Users/Danallovertheplace/crypto-campaign-unified 2>/dev/null || {
+    echo "❌ Cannot find project root!"
+    exit 1
+}
+
+for dir in frontend backend contracts; do
+    if [ -d "$dir" ]; then
+        echo "✅ $dir/ - $(cat $dir/package.json 2>/dev/null | grep '"name"' | cut -d'"' -f4)"
+    else
+        echo "❌ $dir/ - MISSING"
+    fi
+done
+echo ""
+
+# Check running services
+echo "🔌 RUNNING SERVICES:"
+frontend_port=$(lsof -i :5173 2>/dev/null | grep LISTEN | wc -l)
+backend_port=$(lsof -i :3000 2>/dev/null | grep LISTEN | wc -l)
+hardhat_port=$(lsof -i :8545 2>/dev/null | grep LISTEN | wc -l)
+
+if [ $frontend_port -gt 0 ]; then
+    echo "✅ Frontend: http://localhost:5173"
+else
+    echo "⭕ Frontend: Not running"
+fi
+
+if [ $backend_port -gt 0 ]; then
+    echo "✅ Backend: http://localhost:3000"
+else
+    echo "⭕ Backend: Not running"
+fi
+
+if [ $hardhat_port -gt 0 ]; then
+    echo "✅ Hardhat: http://localhost:8545"
+else
+    echo "⭕ Hardhat: Not running"
+fi
+echo ""
+
+# Check deployment
+echo "🌐 DEPLOYMENT STATUS:"
+echo "Live Site: https://cryptocampaign.netlify.app"
+echo "Last Deploy: $(git log -1 --format='%cd' --date=short 2>/dev/null || echo 'Unknown')"
+echo ""
+
+# Quick start commands
+echo "⚡ QUICK COMMANDS:"
+echo "Start all: npm run dev"
+echo "Frontend only: npm run dev:frontend" 
+echo "Backend only: npm run dev:backend"
+echo "Build: npm run build"
+echo "Deploy: npm run deploy"
+echo ""
+
+# Update status file
+echo "$(date): Status checked from $(pwd)" >> /Users/Danallovertheplace/crypto-campaign-unified/.status-log

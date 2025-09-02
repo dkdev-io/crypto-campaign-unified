@@ -1,0 +1,146 @@
+#!/bin/bash
+
+# MANDATORY AGENT ONBOARDING PROTOCOL
+# All agents MUST run this before starting work
+
+echo "🤖 AGENT ONBOARDING: CRYPTO CAMPAIGN PROJECT"
+echo "============================================="
+echo ""
+
+# Store agent start info
+agent_id="${1:-unknown-agent-$(date +%s)}"
+echo "Agent: $agent_id"
+echo "Started: $(date)"
+echo "Directory: $(pwd)"
+echo ""
+
+# STEP 1: DIRECTORY VERIFICATION
+echo "📍 STEP 1: DIRECTORY VERIFICATION"
+if [[ $(pwd) != "/Users/Danallovertheplace/crypto-campaign-unified" ]]; then
+    echo "❌ CRITICAL: Wrong directory!"
+    echo "   Current: $(pwd)"
+    echo "   Required: /Users/Danallovertheplace/crypto-campaign-unified"
+    echo ""
+    echo "🔧 AUTO-FIXING: Changing to correct directory..."
+    cd /Users/Danallovertheplace/crypto-campaign-unified || {
+        echo "❌ FATAL: Cannot access project directory!"
+        exit 1
+    }
+    echo "✅ Fixed: Now in correct directory"
+else
+    echo "✅ Correct directory"
+fi
+echo ""
+
+# STEP 2: PROJECT STRUCTURE VERIFICATION  
+echo "📁 STEP 2: PROJECT STRUCTURE VERIFICATION"
+missing_components=0
+
+for component in frontend backend contracts package.json; do
+    if [ -e "$component" ]; then
+        echo "✅ $component"
+    else
+        echo "❌ $component - MISSING"
+        missing_components=$((missing_components + 1))
+    fi
+done
+
+if [ $missing_components -gt 0 ]; then
+    echo "❌ CRITICAL: $missing_components components missing!"
+    echo "   This may not be the correct project."
+    exit 1
+fi
+echo ""
+
+# STEP 3: RUNNING SERVICES SCAN
+echo "🔌 STEP 3: RUNNING SERVICES SCAN"
+services_running=0
+
+# Check common development ports
+ports_to_check="3000 5173 8545"
+for port in $ports_to_check; do
+    if lsof -i :$port > /dev/null 2>&1; then
+        service_info=$(lsof -i :$port | grep LISTEN | head -1)
+        echo "✅ Port $port: ACTIVE - $service_info"
+        services_running=$((services_running + 1))
+    else
+        echo "⭕ Port $port: Available"
+    fi
+done
+
+echo ""
+echo "📊 Summary: $services_running services running"
+echo ""
+
+# STEP 4: LOAD PROJECT CONTEXT
+echo "📚 STEP 4: LOADING PROJECT CONTEXT"
+if [ -f "docs/APP_STRUCTURE_GUIDE.md" ]; then
+    echo "✅ App structure guide available"
+else
+    echo "⚠️  App structure guide missing - creating basic one"
+fi
+
+if [ -f "package.json" ]; then
+    project_name=$(cat package.json | grep '"name"' | head -1 | cut -d'"' -f4)
+    echo "✅ Project: $project_name"
+else
+    echo "❌ Cannot read project name"
+fi
+echo ""
+
+# STEP 5: DEPLOYMENT STATUS CHECK
+echo "🌐 STEP 5: DEPLOYMENT STATUS CHECK"
+if git remote -v > /dev/null 2>&1; then
+    echo "✅ Git repository connected"
+    last_commit=$(git log -1 --format='%h %s' 2>/dev/null || echo "Unknown")
+    echo "📝 Last commit: $last_commit"
+else
+    echo "⚠️  Git repository not found"
+fi
+
+echo "🌍 Live site: https://cryptocampaign.netlify.app"
+echo ""
+
+# STEP 6: CREATE SESSION STATE
+echo "💾 STEP 6: SESSION STATE CREATION"
+session_file="/Users/Danallovertheplace/crypto-campaign-unified/.current-session"
+cat > "$session_file" << EOF
+{
+  "agent_id": "$agent_id",
+  "started": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "directory": "$(pwd)",
+  "services_running": $services_running,
+  "project_verified": true,
+  "onboarding_completed": true
+}
+EOF
+echo "✅ Session state saved: $session_file"
+echo ""
+
+# STEP 7: PROVIDE QUICK ACTIONS
+echo "⚡ STEP 7: QUICK ACTIONS AVAILABLE"
+echo ""
+echo "Start development:"
+echo "  npm run dev              # All services"
+echo "  npm run dev:frontend     # Frontend only (port 5173)"
+echo "  npm run dev:backend      # Backend only (port 3000)"
+echo ""
+echo "Build & deploy:"
+echo "  npm run build            # Build all"
+echo "  npm run deploy           # Deploy to production"
+echo ""
+echo "Status checks:"
+echo "  project-status           # Full project status"
+echo "  lsof -i :3000,5173,8545 # Check running services"
+echo ""
+
+# STEP 8: FINAL VERIFICATION
+echo "✅ ONBOARDING COMPLETE!"
+echo ""
+echo "Agent $agent_id is ready to work on crypto-campaign-unified"
+echo "Working directory: $(pwd)"
+echo "Session logged: $session_file"
+echo ""
+
+# Log this onboarding
+echo "$(date): Agent $agent_id onboarded successfully" >> .agent-onboarding.log

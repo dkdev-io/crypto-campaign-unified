@@ -106,12 +106,15 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
  * Generate the actual embed code HTML
  */
 function generateEmbedCodeHTML(campaignId, baseUrl) {
+  // Use production URL if baseUrl is localhost
+  const embedBaseUrl = baseUrl && baseUrl.includes('localhost') ? 'https://cryptocampaign.netlify.app' : baseUrl;
+  
   return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${baseUrl}/embed-form.html?campaign=${campaignId}";
+    iframe.src = "${embedBaseUrl}/embed-form.html?campaign=${campaignId}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";

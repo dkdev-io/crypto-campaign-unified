@@ -67,7 +67,14 @@
     "platform-status": "./scripts/check-boundaries.sh status",
     "test-donors": "node scripts/form-testing-agent.js --count=10 --type=donors --payment=crypto",
     "test-prospects": "node scripts/form-testing-agent.js --count=10 --type=prospects --payment=crypto",
-    "test-mixed": "node scripts/form-testing-agent.js --count=15 --type=mixed --payment=crypto"
+    "test-mixed": "node scripts/form-testing-agent.js --count=15 --type=mixed --payment=crypto",
+    "sync:auto-start": "node scripts/auto-sync-github.js start",
+    "sync:auto-stop": "node scripts/auto-sync-github.js stop",
+    "sync:daemon:start": "node scripts/auto-sync-daemon.js start",
+    "sync:daemon:stop": "node scripts/auto-sync-daemon.js stop",
+    "sync:daemon:restart": "node scripts/auto-sync-daemon.js restart",
+    "sync:daemon:status": "node scripts/auto-sync-daemon.js status",
+    "sync:daemon:logs": "node scripts/auto-sync-daemon.js logs"
   },
   "workspaces": [
     "frontend",

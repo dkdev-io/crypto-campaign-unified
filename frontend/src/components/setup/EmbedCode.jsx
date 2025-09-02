@@ -32,7 +32,8 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       if (dbError) throw dbError;
 
       setEmbedCode(data);
-      setTestUrl(`${window.location.origin}/embed-form.html?campaign=${campaignId}`);
+      const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
+      setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
       
       // Mark setup as completed and trigger donor page automation
       const { error: updateError } = await supabase
@@ -72,7 +73,8 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       // Fallback embed code generation
       const fallbackCode = generateFallbackEmbedCode();
       setEmbedCode(fallbackCode);
-      setTestUrl(`${window.location.origin}/embed-form.html?campaign=${campaignId}`);
+      const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
+      setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
       
     } finally {
       setLoading(false);
@@ -80,12 +82,13 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   };
 
   const generateFallbackEmbedCode = () => {
+    const baseUrl = window.location.hostname === 'localhost' ? 'https://cryptocampaign.netlify.app' : window.location.origin;
     return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${window.location.origin}/embed-form.html?campaign=${campaignId}";
+    iframe.src = "${baseUrl}/embed-form.html?campaign=${campaignId}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";

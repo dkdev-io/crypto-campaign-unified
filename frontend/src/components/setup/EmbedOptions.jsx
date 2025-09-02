@@ -4,7 +4,7 @@ const EmbedOptions = ({ formData, updateFormData, onNext, onPrev, campaignId }) 
   // Simple embed URL with just campaign ID
   console.log('EmbedOptions - Campaign ID:', campaignId);
   console.log('EmbedOptions - Form Data:', formData);
-  const embedUrl = campaignId ? `http://localhost:5173/?campaign=${campaignId}` : 'http://localhost:5173/';
+  const embedUrl = campaignId ? `https://cryptocampaign.netlify.app/embed-form.html?campaign=${campaignId}` : 'https://cryptocampaign.netlify.app/embed-form.html';
   const embedCode = `<iframe src="${embedUrl}" width="400" height="600" frameborder="0" style="border-radius: 8px;"></iframe>`;
   
    return (
