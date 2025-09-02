@@ -13,27 +13,18 @@
 4. **FIX** - Debug issues, resolve conflicts, handle errors
 5. **COMPLETE** - Finish tasks end-to-end without asking user to do parts
 
-### ❌ NEVER SAY (Examples of what NOT to do):
-- "You'll need to create a table..." → **WRONG! YOU create the table**
-- "Please run `supabase db push`..." → **WRONG! YOU run the command**
-- "Set up authentication by..." → **WRONG! YOU set up authentication**
-- "The user should configure..." → **WRONG! YOU configure it**
-- "Ask me for credentials..." → **OK, only for secrets you don't have**
+### Behavior Examples:
 
-### ✅ ALWAYS DO (Examples of correct behavior):
-- "I'll create the schema now..." → **CORRECT! Take action**
-- "Running `supabase db push`..." → **CORRECT! Execute directly**
-- "Setting up authentication..." → **CORRECT! Do it yourself**
-- "Configuring the service..." → **CORRECT! Handle it**
-- "I need your API key..." → **CORRECT! Only ask for what you can't access**
+| ❌ NEVER SAY | ✅ ALWAYS DO |
+|-------------|-------------|
+| "You'll need to create a table..." | "I'll create the schema now..." |
+| "Please run `supabase db push`..." | "Running `supabase db push`..." |
+| "Set up authentication by..." | "Setting up authentication..." |
+| "The user should configure..." | "Configuring the service..." |
+| "Ask me for credentials..." | "I need your API key..." (for secrets only) |
 
 ### SUPABASE-SPECIFIC AUTONOMY:
-- **Schemas**: Create tables, views, functions, triggers yourself
-- **Migrations**: Write, apply, rollback migrations yourself
-- **Auth**: Configure providers, policies, rules yourself
-- **Storage**: Set up buckets, policies yourself
-- **Functions**: Write, deploy, manage edge functions yourself
-- **Testing**: Create test data, run tests yourself
+**Schemas** • **Migrations** • **Auth** • **Storage** • **Functions** • **Testing** - Do everything yourself
 
 ## BEFORE ANY ACTION, EVERY AGENT MUST:
 
@@ -170,22 +161,19 @@ This project uses SPARC (Specification, Pseudocode, Architecture, Refinement, Co
 
 ## SPARC Commands
 
-### Core Commands
-- `npx claude-flow sparc modes` - List available modes
-- `npx claude-flow sparc run <mode> "<task>"` - Execute specific mode
-- `npx claude-flow sparc tdd "<feature>"` - Run complete TDD workflow
-- `npx claude-flow sparc info <mode>` - Get mode details
-
-### Batchtools Commands
-- `npx claude-flow sparc batch <modes> "<task>"` - Parallel execution
-- `npx claude-flow sparc pipeline "<task>"` - Full pipeline processing
-- `npx claude-flow sparc concurrent <mode> "<tasks-file>"` - Multi-task processing
-
-### Build Commands
-- `npm run build` - Build project
-- `npm run test` - Run tests
-- `npm run lint` - Linting
-- `npm run typecheck` - Type checking
+| Type | Command | Description |
+|------|---------|-------------|
+| **Core** | `npx claude-flow sparc modes` | List available modes |
+| | `npx claude-flow sparc run <mode> "<task>"` | Execute specific mode |
+| | `npx claude-flow sparc tdd "<feature>"` | Run complete TDD workflow |
+| | `npx claude-flow sparc info <mode>` | Get mode details |
+| **Batch** | `npx claude-flow sparc batch <modes> "<task>"` | Parallel execution |
+| | `npx claude-flow sparc pipeline "<task>"` | Full pipeline processing |
+| | `npx claude-flow sparc concurrent <mode> "<tasks-file>"` | Multi-task processing |
+| **Build** | `npm run build` | Build project |
+| | `npm run test` | Run tests |
+| | `npm run lint` | Linting |
+| | `npm run typecheck` | Type checking |
 
 ## SPARC Workflow Phases
 
@@ -205,32 +193,17 @@ This project uses SPARC (Specification, Pseudocode, Architecture, Refinement, Co
 
 ## 🚀 Available Agents (54 Total)
 
-### Core Development
-`coder`, `reviewer`, `tester`, `planner`, `researcher`
-
-### Swarm Coordination
-`hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `collective-intelligence-coordinator`, `swarm-memory-manager`
-
-### Consensus & Distributed
-`byzantine-coordinator`, `raft-manager`, `gossip-coordinator`, `consensus-builder`, `crdt-synchronizer`, `quorum-manager`, `security-manager`
-
-### Performance & Optimization
-`perf-analyzer`, `performance-benchmarker`, `task-orchestrator`, `memory-coordinator`, `smart-agent`
-
-### GitHub & Repository
-`github-modes`, `pr-manager`, `code-review-swarm`, `issue-tracker`, `release-manager`, `workflow-automation`, `project-board-sync`, `repo-architect`, `multi-repo-swarm`
-
-### SPARC Methodology
-`sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`, `refinement`
-
-### Specialized Development
-`backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator`
-
-### Testing & Validation
-`tdd-london-swarm`, `production-validator`
-
-### Migration & Planning
-`migration-planner`, `swarm-init`
+| Category | Agents |
+|----------|--------|
+| **Core** | `coder`, `reviewer`, `tester`, `planner`, `researcher` |
+| **Swarm** | `hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `collective-intelligence-coordinator`, `swarm-memory-manager` |
+| **Consensus** | `byzantine-coordinator`, `raft-manager`, `gossip-coordinator`, `consensus-builder`, `crdt-synchronizer`, `quorum-manager`, `security-manager` |
+| **Performance** | `perf-analyzer`, `performance-benchmarker`, `task-orchestrator`, `memory-coordinator`, `smart-agent` |
+| **GitHub** | `github-modes`, `pr-manager`, `code-review-swarm`, `issue-tracker`, `release-manager`, `workflow-automation`, `project-board-sync`, `repo-architect`, `multi-repo-swarm` |
+| **SPARC** | `sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`, `refinement` |
+| **Specialized** | `backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator` |
+| **Testing** | `tdd-london-swarm`, `production-validator` |
+| **Migration** | `migration-planner`, `swarm-init` |
 
 ## 🎯 Claude Code vs MCP Tools
 
@@ -264,20 +237,13 @@ claude mcp add claude-flow npx claude-flow@alpha mcp start
 
 ## MCP Tool Categories
 
-### Coordination
-`swarm_init`, `agent_spawn`, `task_orchestrate`
-
-### Monitoring
-`swarm_status`, `agent_list`, `agent_metrics`, `task_status`, `task_results`
-
-### Memory & Neural
-`memory_usage`, `neural_status`, `neural_train`, `neural_patterns`
-
-### GitHub Integration
-`github_swarm`, `repo_analyze`, `pr_enhance`, `issue_triage`, `code_review`
-
-### System
-`benchmark_run`, `features_detect`, `swarm_monitor`
+| Category | Tools |
+|----------|-------|
+| **Coordination** | `swarm_init`, `agent_spawn`, `task_orchestrate` |
+| **Monitoring** | `swarm_status`, `agent_list`, `agent_metrics`, `task_status`, `task_results` |
+| **Memory & Neural** | `memory_usage`, `neural_status`, `neural_train`, `neural_patterns` |
+| **GitHub** | `github_swarm`, `repo_analyze`, `pr_enhance`, `issue_triage`, `code_review` |
+| **System** | `benchmark_run`, `features_detect`, `swarm_monitor` |
 
 ## 📋 Agent Coordination Protocol
 
@@ -374,24 +340,11 @@ Message 4: Write "file.js"
 
 ## Advanced Features (v2.0.0)
 
-- 🚀 Automatic Topology Selection
-- ⚡ Parallel Execution (2.8-4.4x speed)
-- 🧠 Neural Training
-- 📊 Bottleneck Analysis
-- 🤖 Smart Auto-Spawning
-- 🛡️ Self-Healing Workflows
-- 💾 Cross-Session Memory
-- 🔗 GitHub Integration
+⚡ **Parallel Execution** • 🧠 **Neural Training** • 📊 **Bottleneck Analysis** • 🤖 **Smart Auto-Spawning** • 🛡️ **Self-Healing** • 💾 **Cross-Session Memory** • 🔗 **GitHub Integration**
 
 ## Integration Tips
 
-1. Start with basic swarm init
-2. Scale agents gradually
-3. Use memory for context
-4. Monitor progress regularly
-5. Train patterns from success
-6. Enable hooks automation
-7. Use GitHub tools first
+**Setup** → Scale agents → Use memory → Monitor progress → Train patterns → Enable hooks → Use GitHub tools
 
 ## Support
 
