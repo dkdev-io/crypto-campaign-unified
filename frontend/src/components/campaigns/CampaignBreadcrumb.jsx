@@ -16,8 +16,8 @@ const CampaignBreadcrumb = () => {
       breadcrumbs.push({ label: 'Campaigns', path: '/' });
     }
 
-    if (pathname === '/auth') {
-      breadcrumbs.push({ label: 'Sign In / Sign Up', path: '/auth', current: true });
+    if (pathname === '/auth' || pathname === '/campaigns/auth') {
+      breadcrumbs.push({ label: 'Sign In / Sign Up', path: '/campaigns/auth', current: true });
     } else if (pathname === '/setup') {
       breadcrumbs.push({ label: 'Setup Wizard', path: '/setup', current: true });
     } else if (pathname === '/campaigns/auth/register') {
@@ -32,6 +32,10 @@ const CampaignBreadcrumb = () => {
       breadcrumbs.push({ label: 'Profile', path: '/campaigns/profile', current: true });
     } else if (pathname === '/campaigns/settings') {
       breadcrumbs.push({ label: 'Settings', path: '/campaigns/settings', current: true });
+    } else if (pathname === '/campaigns/auth/terms') {
+      breadcrumbs.push({ label: 'Terms of Service', path: '/campaigns/auth/terms', current: true });
+    } else if (pathname === '/campaigns/auth/privacy') {
+      breadcrumbs.push({ label: 'Privacy Policy', path: '/campaigns/auth/privacy', current: true });
     }
 
     return breadcrumbs;
