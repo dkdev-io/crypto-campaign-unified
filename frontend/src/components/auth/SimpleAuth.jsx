@@ -14,7 +14,7 @@ const CampaignAuthNav = () => {
 
   return (
     <div>
-      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{background: 'var(--gradient-hero)'}}>
+      <header className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm relative" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         {/* Corner Brackets */}
         <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-black"></div>
         <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-black"></div>
@@ -754,7 +754,7 @@ const SimpleAuthContent = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <CampaignAuthNav />
         <div className="flex items-center justify-center px-4 py-12">
           <div className="text-center">
@@ -769,7 +769,7 @@ const SimpleAuthContent = () => {
   // Show email verification message
   if (emailVerificationMessage) {
     return (
-      <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <CampaignAuthNav />
         <div className="flex items-center justify-center px-4 py-12">
           <div className="max-w-md w-full">
@@ -789,7 +789,7 @@ const SimpleAuthContent = () => {
     // Check if email is verified
     if (!isEmailVerified()) {
       return (
-        <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+        <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
           <CampaignAuthNav />
           <div className="flex items-center justify-center px-4 py-12">
             <div className="max-w-md w-full">
@@ -814,7 +814,7 @@ const SimpleAuthContent = () => {
     // Email is verified, check if profile is complete
     if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
       return (
-        <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+        <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
           <CampaignAuthNav />
           <div className="flex items-center justify-center px-4 py-12">
             <div className="max-w-4xl w-full">
@@ -827,7 +827,7 @@ const SimpleAuthContent = () => {
 
     // Show profile completion form
     return (
-      <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <CampaignAuthNav />
         <div className="flex items-center justify-center px-4 py-12">
           <ContactForm onComplete={() => setShowInvites(true)} />
@@ -838,7 +838,7 @@ const SimpleAuthContent = () => {
 
   // User not authenticated - show login/signup
   return (
-    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <AuthForm onSuccess={() => {}} />

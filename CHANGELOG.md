@@ -174,7 +174,7 @@
 
 ### Documentation
 - **Test Summary:** `docs/AUTH_TEST_SUMMARY.md` - Complete authentication testing documentation
-- **Test Files:** `tests/auth-e2e-test.js`, `tests/auth-test-page.html`
+- **Test Files:** Authentication testing components removed
 - **Component Files:** Enhanced existing auth components with new functionality
 
 ### Technical Details

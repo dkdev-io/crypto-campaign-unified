@@ -7,6 +7,71 @@ const donorPageAutomation = require('../services/donorPageAutomation');
 const { triggerWebhooks } = require('../utils/webhookUtils');
 
 /**
+ * Extract campaign styles for embed template
+ */
+function extractCampaignStylesForEmbed(campaignData) {
+  // Same logic as frontend styleGuide.js but for backend use
+  const appliedStyles = campaignData.applied_styles;
+  const customStyles = campaignData.custom_styles;
+  const themeColor = campaignData.theme_color;
+
+  return {
+    colors: {
+      primary: appliedStyles?.colors?.primary || 
+               customStyles?.colors?.primary || 
+               themeColor || 
+               '#2a2a72',
+      secondary: appliedStyles?.colors?.secondary || 
+                 customStyles?.colors?.secondary || 
+                 '#666666',
+      accent: appliedStyles?.colors?.accent || 
+              customStyles?.colors?.accent || 
+              '#28a745',
+      background: appliedStyles?.colors?.background || 
+                  customStyles?.colors?.background || 
+                  '#ffffff',
+      text: appliedStyles?.colors?.text || 
+            customStyles?.colors?.text || 
+            '#333333'
+    },
+    fonts: {
+      heading: {
+        family: appliedStyles?.fonts?.heading?.suggested || 
+                customStyles?.fonts?.heading?.family || 
+                'Inter, system-ui, sans-serif',
+        weight: appliedStyles?.fonts?.heading?.weight || 
+                customStyles?.fonts?.heading?.weight || 
+                '600'
+      },
+      body: {
+        family: appliedStyles?.fonts?.body?.suggested || 
+                customStyles?.fonts?.body?.family || 
+                'Inter, system-ui, sans-serif',
+        weight: appliedStyles?.fonts?.body?.weight || 
+                customStyles?.fonts?.body?.weight || 
+                '400'
+      },
+      button: {
+        family: appliedStyles?.fonts?.button?.suggested || 
+                customStyles?.fonts?.button?.family || 
+                'Inter, system-ui, sans-serif',
+        weight: appliedStyles?.fonts?.button?.weight || 
+                customStyles?.fonts?.button?.weight || 
+                '500'
+      }
+    },
+    layout: {
+      borderRadius: appliedStyles?.layout?.recommendations?.borderRadius || 
+                    customStyles?.layout?.borderRadius || 
+                    '8px',
+      spacing: appliedStyles?.layout?.recommendations?.margin || 
+               customStyles?.layout?.spacing || 
+               '1rem'
+    }
+  };
+}
+
+/**
  * Enhanced embed code generation that triggers donor page creation
  * This replaces or enhances the existing generate_embed_code Supabase function
  */
@@ -32,8 +97,8 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
       throw new Error('Campaign not found');
     }
 
-    // Generate the embed code (existing logic)
-    const embedCode = generateEmbedCodeHTML(campaignId, baseUrl);
+    // Generate the embed code with style guide data
+    const embedCode = generateEmbedCodeHTML(campaignId, baseUrl, campaignData);
 
     // Update campaign as setup completed (existing logic)
     const { error: updateError } = await supabase
@@ -103,18 +168,33 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
 }
 
 /**
- * Generate the actual embed code HTML
+ * Generate the actual embed code HTML with style guide integration
  */
-function generateEmbedCodeHTML(campaignId, baseUrl) {
+function generateEmbedCodeHTML(campaignId, baseUrl, campaignData = null) {
   // Use production URL if baseUrl is localhost
   const embedBaseUrl = baseUrl && baseUrl.includes('localhost') ? 'https://cryptocampaign.netlify.app' : baseUrl;
+  
+  // Extract style guide data for the embed
+  let styleParams = '';
+  if (campaignData) {
+    const styles = extractCampaignStylesForEmbed(campaignData);
+    const params = new URLSearchParams({
+      primary: styles.colors.primary,
+      secondary: styles.colors.secondary,
+      accent: styles.colors.accent,
+      headingFont: styles.fonts.heading.family,
+      bodyFont: styles.fonts.body.family,
+      borderRadius: styles.layout.borderRadius
+    });
+    styleParams = '&' + params.toString();
+  }
   
   return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${embedBaseUrl}/embed-form.html?campaign=${campaignId}";
+    iframe.src = "${embedBaseUrl}/embed-form.html?campaign=${campaignId}${styleParams}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";

@@ -32,10 +32,25 @@
     <!-- Styles -->
     <style>
         :root {
-            --primary-color: {{THEME_COLOR}};
-            --primary-hover: color-mix(in srgb, {{THEME_COLOR}} 80%, black);
-            --text-color: #333;
-            --bg-color: #f8f9fa;
+            /* Style Guide Variables */
+            --primary-color: {{PRIMARY_COLOR}};
+            --secondary-color: {{SECONDARY_COLOR}};
+            --accent-color: {{ACCENT_COLOR}};
+            --background-color: {{BACKGROUND_COLOR}};
+            --text-color: {{TEXT_COLOR}};
+            
+            /* Font Variables */
+            --heading-font: {{HEADING_FONT}};
+            --body-font: {{BODY_FONT}};
+            --button-font: {{BUTTON_FONT}};
+            
+            /* Layout Variables */
+            --border-radius: {{BORDER_RADIUS}};
+            --spacing: {{SPACING}};
+            
+            /* Legacy support */
+            --primary-hover: color-mix(in srgb, {{PRIMARY_COLOR}} 80%, black);
+            --bg-color: {{BACKGROUND_COLOR}};
             --white: #ffffff;
             --gray-100: #f8f9fa;
             --gray-200: #e9ecef;
@@ -51,10 +66,10 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--body-font);
             line-height: 1.6;
             color: var(--text-color);
-            background: var(--bg-color);
+            background: var(--background-color);
         }
         
         .header {
@@ -115,6 +130,8 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--primary-color);
+            font-family: var(--heading-font);
+            font-weight: 700;
         }
         
         .hero h2 {
