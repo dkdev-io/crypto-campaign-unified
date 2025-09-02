@@ -62,6 +62,20 @@ export const AuthProvider = ({ children }) => {
 
       if (error) {
         console.error('Error fetching user profile:', error)
+        // If users table doesn't exist, create a mock profile
+        if (error.message.includes('Could not find the table')) {
+          console.log('Users table not found, using auth user data')
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            setUserProfile({
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || 'User',
+              role: 'user',
+              created_at: user.created_at
+            })
+          }
+        }
         return
       }
 
@@ -87,23 +101,28 @@ export const AuthProvider = ({ children }) => {
 
       if (error) throw error
 
-      // Create user profile in our users table
+      // Create user profile in our users table (if table exists)
       if (data.user) {
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert([
-            {
-              id: data.user.id,
-              email: data.user.email,
-              full_name: fullName,
-              email_confirmed: data.user.email_confirmed_at ? true : false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }
-          ])
+        try {
+          const { error: profileError } = await supabase
+            .from('users')
+            .insert([
+              {
+                id: data.user.id,
+                email: data.user.email,
+                full_name: fullName,
+                email_confirmed: data.user.email_confirmed_at ? true : false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              }
+            ])
 
-        if (profileError) {
-          console.error('Error creating user profile:', profileError)
+          if (profileError) {
+            console.warn('Could not create user profile (table may not exist):', profileError.message)
+            // Continue with signup anyway - auth system will work without custom users table
+          }
+        } catch (err) {
+          console.warn('Users table not available, using auth-only flow')
         }
       }
 
@@ -148,7 +167,7 @@ export const AuthProvider = ({ children }) => {
         throw friendlyError
       }
 
-      // Update login tracking
+      // Update login tracking (if users table exists)
       if (data.user) {
         try {
           await supabase
@@ -159,8 +178,8 @@ export const AuthProvider = ({ children }) => {
             })
             .eq('id', data.user.id)
         } catch (updateError) {
-          console.warn('Could not update login tracking:', updateError)
-          // Don't fail the login for this
+          console.warn('Could not update login tracking (users table may not exist):', updateError.message)
+          // Don't fail the login for this - auth will work without custom users table
         }
       }
 
