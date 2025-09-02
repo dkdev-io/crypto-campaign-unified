@@ -1,131 +1,93 @@
-import React, { useState, useEffect } from 'react'
-import { AuthProvider, useAuth } from '../../contexts/AuthContext'
-import RealWorkingInvites from '../team/RealWorkingInvites'
-import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb'
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from '../../contexts/AuthContext';
+import { Mail, Lock, User, Building2, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Spinner } from '../ui/spinner';
+import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
+import RealWorkingInvites from '../team/RealWorkingInvites';
 
-// Simple auth component - no complex flows
-const SimpleAuthContent = () => {
-  const { user, userProfile, signUp, signIn, signOut, updateProfile, loading, isEmailVerified, handleEmailVerification } = useAuth()
-  const [mode, setMode] = useState('login') // 'login' or 'signup'
-  const [showProfile, setShowProfile] = useState(false)
-  const [showInvites, setShowInvites] = useState(false)
-  const [emailVerificationMessage, setEmailVerificationMessage] = useState('')
+// Auth Navigation Component matching home page
+const CampaignAuthNav = () => {
+  const navigate = useNavigate();
 
-  // Check for email verification callback
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get('verified') === 'true') {
-      setEmailVerificationMessage('Email verified successfully! You can now proceed to campaign setup.')
-      // Handle the verification
-      if (user) {
-        handleEmailVerification()
-        // After a short delay, redirect to setup
-        setTimeout(() => {
-          window.location.href = '/setup'
-        }, 2000)
-      }
-    }
-  }, [user, handleEmailVerification])
+  return (
+    <div>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center px-4 md:px-6">
+          <div className="flex flex-1 items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Link to="/">
+                <span className="text-2xl font-bold">
+                  <span className="text-primary">NEXT</span>
+                  <span className="text-accent">RAISE</span>
+                </span>
+              </Link>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-6">
+              <a 
+                href="#features" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                FEATURES
+              </a>
+              <a 
+                href="#how-it-works" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                HOW IT WORKS
+              </a>
+              <a 
+                href="#pricing" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                PRICING
+              </a>
+              <a 
+                href="#contact" 
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                CONTACT
+              </a>
+            </nav>
 
-  // Loading state
-  if (loading) {
-    return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>
-  }
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              <Button 
+                size="sm"
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+                style={{backgroundColor: 'hsl(var(--crypto-gold))', color: 'hsl(var(--crypto-navy))'}}
+                onClick={() => navigate('/setup')}
+              >
+                Campaigns
+              </Button>
+              <Button 
+                size="sm"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                style={{backgroundColor: 'hsl(var(--crypto-blue))', color: 'white'}}
+                onClick={() => navigate('/donors/auth')}
+              >
+                Donors
+              </Button>
+            </div>
 
-  // Show email verification message
-  if (emailVerificationMessage) {
-    return (
-      <div>
-        <CampaignBreadcrumb />
-        <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
-          <div style={{ 
-            background: 'hsl(var(--crypto-blue) / 0.1)', 
-            border: '1px solid hsl(var(--crypto-blue) / 0.3)',
-            borderRadius: 'var(--radius)',
-            padding: '2rem',
-            marginBottom: '2rem'
-          }}>
-            <h2 style={{ color: 'hsl(var(--crypto-blue))', marginBottom: '1rem' }}>✅ Verification Complete</h2>
-            <p style={{ color: 'hsl(var(--crypto-blue))' }}>{emailVerificationMessage}</p>
-            <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)', marginTop: '1rem' }}>
-              Redirecting to campaign setup...
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // User is authenticated
-  if (user) {
-    // Check if email is verified
-    if (!isEmailVerified()) {
-      return (
-        <div className="container-responsive" style={{ maxWidth: '600px', padding: '2rem', textAlign: 'center' }}>
-          <div style={{ 
-            background: 'hsl(var(--crypto-gold) / 0.1)', 
-            border: '1px solid hsl(var(--crypto-gold) / 0.3)',
-            borderRadius: 'var(--radius)',
-            padding: '2rem',
-            marginBottom: '2rem'
-          }}>
-            <h2 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem' }}>📧 Verify Your Email</h2>
-            <p style={{ color: 'hsl(var(--crypto-medium-gray))', marginBottom: '1rem' }}>
-              We sent a verification link to <strong>{user.email}</strong>
-            </p>
-            <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-sm)' }}>
-              Please check your email and click the verification link to continue with campaign setup.
-            </p>
-            <button 
-              onClick={signOut}
-              className="btn-secondary"
-              style={{ marginTop: '1rem' }}
-            >
-              Sign Out
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2 hover:bg-accent/10 rounded-md">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
             </button>
           </div>
         </div>
-      )
-    }
-
-    // Email is verified, proceed with normal flow
-    // If profile complete, show team invites
-    if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
-      return (
-        <div>
-          <CampaignBreadcrumb />
-          <div className="container-responsive" style={{ maxWidth: '800px' }}>
-            <RealWorkingInvites campaignId="default-campaign" />
-          </div>
-        </div>
-      )
-    }
-
-    // Show contact form
-    return (
-      <div>
-        <CampaignBreadcrumb />
-        <div className="container-responsive" style={{ maxWidth: '600px' }}>
-          <ContactForm onComplete={() => setShowInvites(true)} />
-        </div>
-      </div>
-    )
-  }
-
-  // User not authenticated - show login/signup
-  return (
-    <div>
+      </header>
       <CampaignBreadcrumb />
-      <div className="container-responsive" style={{ maxWidth: '400px' }}>
-        {mode === 'login' ? (
-          <LoginForm onSuccess={() => {}} onSwitchMode={() => setMode('signup')} />
-        ) : (
-          <SignupForm onSuccess={() => {}} onSwitchMode={() => setMode('login')} />
-        )}
-      </div>
     </div>
-  )
-}
+  );
+};
 
 // Contact information form  
 const ContactForm = ({ onComplete }) => {
@@ -138,277 +100,620 @@ const ContactForm = ({ onComplete }) => {
     city: '',
     state: '',
     zip: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const { updateProfile } = useAuth()
+  });
+  const [loading, setLoading] = useState(false);
+  const { updateProfile } = useAuth();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     try {
-      const { error } = await updateProfile(formData)
+      const { error } = await updateProfile(formData);
       if (error) {
-        alert('Error: ' + error.message)
+        alert('Error: ' + error.message);
       } else {
-        onComplete()
+        onComplete();
       }
     } catch (error) {
-      alert('Error: ' + error.message)
+      alert('Error: ' + error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={formData.full_name}
-        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-        required
-        className="form-input"
-      />
-      <input
-        type="tel"
-        placeholder="Phone"
-        value={formData.phone}
-        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        required
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="Company"
-        value={formData.company}
-        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="Job Title"
-        value={formData.job_title}
-        onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="Address"
-        value={formData.address}
-        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="City"
-        value={formData.city}
-        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="State"
-        value={formData.state}
-        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-        className="form-input"
-      />
-      <input
-        type="text"
-        placeholder="ZIP"
-        value={formData.zip}
-        onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
-        className="form-input"
-      />
-      <button 
-        type="submit" 
-        disabled={loading}
-        className="btn-primary"
-        style={{ 
-          opacity: loading ? 0.6 : 1,
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Saving...' : 'Submit'}
-      </button>
-    </form>
-  )
-}
+    <div className="max-w-md w-full mx-auto">
+      <div className="bg-card rounded-2xl shadow-2xl p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Complete Your Profile
+          </h2>
+          <p className="text-muted-foreground">
+            Please provide additional information to continue
+          </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">Full Name</label>
+            <Input
+              type="text"
+              value={formData.full_name}
+              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
+            <Input
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              placeholder="Enter your phone number"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">Company</label>
+            <Input
+              type="text"
+              value={formData.company}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              placeholder="Enter your company"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">Job Title</label>
+            <Input
+              type="text"
+              value={formData.job_title}
+              onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
+              placeholder="Enter your job title"
+            />
+          </div>
 
-// Simple login form
-const LoginForm = ({ onSuccess, onSwitchMode }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { signIn } = useAuth()
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <Spinner size="sm" className="mr-2" />
+                Saving...
+              </>
+            ) : (
+              'Continue'
+            )}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
+// Main auth component with proper toggle
+const AuthForm = ({ onSuccess }) => {
+  const { signUp, signIn, error } = useAuth();
+  const [activeTab, setActiveTab] = useState('signin');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    try {
-      const { error } = await signIn(email, password)
-      if (error) {
-        alert('Error: ' + error.message)
-      } else {
-        onSuccess()
-      }
-    } catch (error) {
-      alert('Error: ' + error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Sign In Form Data
+  const [signInData, setSignInData] = useState({
+    email: '',
+    password: ''
+  });
 
-  return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2>Sign In</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="form-input"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className="form-input"
-      />
-      <button 
-        type="submit" 
-        disabled={loading}
-        className="btn-primary"
-        style={{ 
-          opacity: loading ? 0.6 : 1,
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Signing in...' : 'Sign In'}
-      </button>
-      <button 
-        type="button" 
-        onClick={onSwitchMode}
-        style={{ 
-          padding: '0.5rem', 
-          fontSize: '14px', 
-          background: 'transparent', 
-          color: '#007bff', 
-          border: 'none',
-          cursor: 'pointer',
-          textDecoration: 'underline'
-        }}
-      >
-        Need an account? Sign up
-      </button>
-    </form>
-  )
-}
-
-// Simple signup form
-const SignupForm = ({ onSuccess, onSwitchMode }) => {
-  const [formData, setFormData] = useState({
+  // Sign Up Form Data
+  const [signUpData, setSignUpData] = useState({
+    fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    fullName: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const { signUp } = useAuth()
+    confirmPassword: ''
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const [validationErrors, setValidationErrors] = useState({});
 
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match')
-      return
+  const handleSignInChange = (e) => {
+    const { name, value } = e.target;
+    setSignInData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    clearError(name);
+  };
+
+  const handleSignUpChange = (e) => {
+    const { name, value } = e.target;
+    setSignUpData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    clearError(name);
+  };
+
+  const clearError = (fieldName) => {
+    if (validationErrors[fieldName]) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [fieldName]: ''
+      }));
+    }
+  };
+
+  const validateSignIn = () => {
+    const errors = {};
+
+    if (!signInData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(signInData.email)) {
+      errors.email = 'Email is invalid';
     }
 
-    setLoading(true)
+    if (!signInData.password) {
+      errors.password = 'Password is required';
+    }
 
+    return errors;
+  };
+
+  const validateSignUp = () => {
+    const errors = {};
+
+    if (!signUpData.fullName.trim()) {
+      errors.fullName = 'Full name is required';
+    }
+
+    if (!signUpData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(signUpData.email)) {
+      errors.email = 'Email is invalid';
+    }
+
+    if (!signUpData.password) {
+      errors.password = 'Password is required';
+    } else if (signUpData.password.length < 8) {
+      errors.password = 'Password must be at least 8 characters';
+    }
+
+    if (signUpData.password !== signUpData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    return errors;
+  };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    
+    const errors = validateSignIn();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setLoading(true);
     try {
-      const { error } = await signUp(formData.email, formData.password, formData.fullName)
+      const { error } = await signIn(signInData.email, signInData.password);
+
       if (error) {
-        alert('Error: ' + error.message)
-      } else {
-        alert('Check your email for verification link')
-        onSuccess()
+        throw error;
       }
+
+      onSuccess();
     } catch (error) {
-      alert('Error: ' + error.message)
+      console.error('Login error:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    
+    const errors = validateSignUp();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await signUp(signUpData.email, signUpData.password, signUpData.fullName);
+
+      if (error) {
+        throw error;
+      }
+
+      alert('Check your email for verification link');
+      onSuccess();
+    } catch (error) {
+      console.error('Registration error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2>Create Account</h2>
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={formData.fullName}
-        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-        required
-        className="form-input"
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        required
-        className="form-input"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        required
-        className="form-input"
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-        required
-        className="form-input"
-      />
-      <button 
-        type="submit" 
-        disabled={loading}
-        className="btn-primary"
-        style={{ 
-          opacity: loading ? 0.6 : 1,
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Creating account...' : 'Create Account'}
-      </button>
-      <button 
-        type="button" 
-        onClick={onSwitchMode}
-        style={{ 
-          padding: '0.5rem', 
-          fontSize: '14px', 
-          background: 'transparent', 
-          color: '#007bff', 
-          border: 'none',
-          cursor: 'pointer',
-          textDecoration: 'underline'
-        }}
-      >
-        Already have an account? Sign in
-      </button>
-    </form>
-  )
-}
+    <div className="max-w-md w-full mx-auto">
+      <div className="bg-card rounded-2xl shadow-2xl p-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full mb-4">
+            <Building2 className="w-8 h-8 text-primary-foreground" />
+          </div>
+          <h2 className="text-3xl font-bold text-foreground mb-2">
+            Campaign Portal
+          </h2>
+          <p className="text-muted-foreground">
+            Sign in to your account or create a new one
+          </p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex mb-8">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab('signin');
+              setValidationErrors({});
+            }}
+            className={`flex-1 py-3 px-4 text-sm font-medium rounded-l-lg transition-colors ${
+              activeTab === 'signin'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab('signup');
+              setValidationErrors({});
+            }}
+            className={`flex-1 py-3 px-4 text-sm font-medium rounded-r-lg transition-colors ${
+              activeTab === 'signup'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+            }`}
+          >
+            Sign Up
+          </button>
+        </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-destructive" />
+            <span className="text-sm text-destructive">
+              {error.message || 'An error occurred. Please try again.'}
+            </span>
+          </div>
+        )}
+
+        {/* Sign In Tab */}
+        {activeTab === 'signin' && (
+          <form onSubmit={handleSignIn} className="space-y-6">
+            <div>
+              <label htmlFor="signin-email" className="block text-sm font-medium text-foreground mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signin-email"
+                  name="email"
+                  type="email"
+                  value={signInData.email}
+                  onChange={handleSignInChange}
+                  className={`pl-10 ${validationErrors.email ? 'border-destructive' : ''}`}
+                  placeholder="Enter your email"
+                />
+              </div>
+              {validationErrors.email && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="signin-password" className="block text-sm font-medium text-foreground mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signin-password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={signInData.password}
+                  onChange={handleSignInChange}
+                  className={`pl-10 pr-10 ${validationErrors.password ? 'border-destructive' : ''}`}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {validationErrors.password && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.password}</p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Signing In...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+        )}
+
+        {/* Sign Up Tab */}
+        {activeTab === 'signup' && (
+          <form onSubmit={handleSignUp} className="space-y-6">
+            <div>
+              <label htmlFor="signup-fullname" className="block text-sm font-medium text-foreground mb-2">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signup-fullname"
+                  name="fullName"
+                  type="text"
+                  value={signUpData.fullName}
+                  onChange={handleSignUpChange}
+                  className={`pl-10 ${validationErrors.fullName ? 'border-destructive' : ''}`}
+                  placeholder="Enter your full name"
+                />
+              </div>
+              {validationErrors.fullName && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.fullName}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="signup-email" className="block text-sm font-medium text-foreground mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signup-email"
+                  name="email"
+                  type="email"
+                  value={signUpData.email}
+                  onChange={handleSignUpChange}
+                  className={`pl-10 ${validationErrors.email ? 'border-destructive' : ''}`}
+                  placeholder="Enter your email"
+                />
+              </div>
+              {validationErrors.email && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="signup-password" className="block text-sm font-medium text-foreground mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signup-password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={signUpData.password}
+                  onChange={handleSignUpChange}
+                  className={`pl-10 pr-10 ${validationErrors.password ? 'border-destructive' : ''}`}
+                  placeholder="Create a password"
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {validationErrors.password && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.password}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="signup-confirmpassword" className="block text-sm font-medium text-foreground mb-2">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="signup-confirmpassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={signUpData.confirmPassword}
+                  onChange={handleSignUpChange}
+                  className={`pl-10 pr-10 ${validationErrors.confirmPassword ? 'border-destructive' : ''}`}
+                  placeholder="Confirm your password"
+                />
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {validationErrors.confirmPassword && (
+                <p className="mt-1 text-xs text-destructive">{validationErrors.confirmPassword}</p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
+            </Button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Simple auth component - main content
+const SimpleAuthContent = () => {
+  const { user, userProfile, loading, isEmailVerified, handleEmailVerification } = useAuth();
+  const [showProfile, setShowProfile] = useState(false);
+  const [showInvites, setShowInvites] = useState(false);
+  const [emailVerificationMessage, setEmailVerificationMessage] = useState('');
+
+  // Check for email verification callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('verified') === 'true') {
+      setEmailVerificationMessage('Email verified successfully! You can now proceed to campaign setup.');
+      if (user) {
+        handleEmailVerification();
+        setTimeout(() => {
+          window.location.href = '/setup';
+        }, 2000);
+      }
+    }
+  }, [user, handleEmailVerification]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+        <CampaignAuthNav />
+        <div className="flex items-center justify-center px-4 py-12">
+          <div className="text-center">
+            <Spinner size="lg" />
+            <p className="mt-4 text-primary-foreground">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show email verification message
+  if (emailVerificationMessage) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+        <CampaignAuthNav />
+        <div className="flex items-center justify-center px-4 py-12">
+          <div className="max-w-md w-full">
+            <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
+              <h2 className="text-3xl font-bold text-foreground mb-4">✅ Verification Complete</h2>
+              <p className="text-muted-foreground mb-4">{emailVerificationMessage}</p>
+              <p className="text-sm text-muted-foreground">Redirecting to campaign setup...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // User is authenticated
+  if (user) {
+    // Check if email is verified
+    if (!isEmailVerified()) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+          <CampaignAuthNav />
+          <div className="flex items-center justify-center px-4 py-12">
+            <div className="max-w-md w-full">
+              <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
+                <h2 className="text-3xl font-bold text-foreground mb-4">📧 Verify Your Email</h2>
+                <p className="text-muted-foreground mb-4">
+                  We sent a verification link to <strong>{user.email}</strong>
+                </p>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Please check your email and click the verification link to continue with campaign setup.
+                </p>
+                <Button variant="outline" onClick={() => window.location.reload()}>
+                  I've Verified My Email
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Email is verified, check if profile is complete
+    if (showInvites || (userProfile?.full_name && userProfile?.phone)) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+          <CampaignAuthNav />
+          <div className="flex items-center justify-center px-4 py-12">
+            <div className="max-w-4xl w-full">
+              <RealWorkingInvites campaignId="default-campaign" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Show profile completion form
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+        <CampaignAuthNav />
+        <div className="flex items-center justify-center px-4 py-12">
+          <ContactForm onComplete={() => setShowInvites(true)} />
+        </div>
+      </div>
+    );
+  }
+
+  // User not authenticated - show login/signup
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <CampaignAuthNav />
+      <div className="flex items-center justify-center px-4 py-12">
+        <AuthForm onSuccess={() => {}} />
+      </div>
+    </div>
+  );
+};
 
 // Main component with auth provider
 const SimpleAuth = () => {
@@ -416,7 +721,7 @@ const SimpleAuth = () => {
     <AuthProvider>
       <SimpleAuthContent />
     </AuthProvider>
-  )
-}
+  );
+};
 
-export default SimpleAuth
+export default SimpleAuth;
