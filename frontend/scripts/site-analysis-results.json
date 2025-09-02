@@ -1,0 +1,106 @@
+{
+  "timestamp": "2025-09-02T17:34:46.807Z",
+  "overallPercentage": 40,
+  "implementedChanges": 4,
+  "totalExpectedChanges": 10,
+  "pageResults": [
+    {
+      "page": "Home Page",
+      "url": "https://cryptocampaign.netlify.app",
+      "bodyBackground": "rgb(32, 148, 243)",
+      "navigationStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)",
+        "hasCornerBrackets": true
+      },
+      "mainContentStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "elementAnalysis": {
+        "blueCount": 0,
+        "whiteCount": 10,
+        "total": 68
+      },
+      "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/home_page_live.png",
+      "expectedChanges": [
+        "Blue background (hsl(207, 90%, 54%))",
+        "White text on blue background",
+        "Navigation with blue background and black corner brackets"
+      ]
+    },
+    {
+      "page": "Donor Auth",
+      "url": "https://cryptocampaign.netlify.app/donors/auth",
+      "bodyBackground": "rgb(32, 148, 243)",
+      "navigationStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)",
+        "hasCornerBrackets": true
+      },
+      "mainContentStyling": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "elementAnalysis": {
+        "blueCount": 0,
+        "whiteCount": 2,
+        "total": 23
+      },
+      "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/donor_auth_live.png",
+      "expectedChanges": [
+        "Blue background throughout",
+        "Auth forms on blue background",
+        "Navigation with corner brackets"
+      ]
+    },
+    {
+      "page": "Campaign Auth",
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth",
+      "bodyBackground": "rgb(32, 148, 243)",
+      "navigationStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)",
+        "hasCornerBrackets": true
+      },
+      "mainContentStyling": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "elementAnalysis": {
+        "blueCount": 0,
+        "whiteCount": 1,
+        "total": 23
+      },
+      "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/campaign_auth_live.png",
+      "expectedChanges": [
+        "Blue background",
+        "Navigation styling updates"
+      ]
+    },
+    {
+      "page": "Setup Page",
+      "url": "https://cryptocampaign.netlify.app/setup",
+      "bodyBackground": "rgb(32, 148, 243)",
+      "navigationStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)",
+        "hasCornerBrackets": true
+      },
+      "mainContentStyling": {
+        "backgroundColor": "rgb(32, 148, 243)",
+        "color": "rgb(255, 255, 255)"
+      },
+      "elementAnalysis": {
+        "blueCount": 0,
+        "whiteCount": 1,
+        "total": 23
+      },
+      "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/setup_page_live.png",
+      "expectedChanges": [
+        "Blue background instead of light gray",
+        "Setup wizard on blue background"
+      ]
+    }
+  ]
+}
