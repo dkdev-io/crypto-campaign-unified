@@ -106,6 +106,15 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
     onNext();
   };
 
+  const handleNext = () => {
+    // Allow progression even without website analysis
+    if (!websiteUrl.trim()) {
+      skipStyleMatching();
+    } else {
+      onNext();
+    }
+  };
+
   /**
    * Continue to style confirmation
    */
