@@ -645,20 +645,123 @@ const CampaignManagement = () => {
               </div>
             </div>
           );
-        })}
-      </div>
+          })}
+        </div>
 
-      {/* Summary */}
-      <div className="crypto-card">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Showing {filteredCampaigns.length} of {campaigns.length} campaigns
-          </div>
-          <div className="text-sm font-medium text-foreground">
-            Total Goal: {formatCurrency(filteredCampaigns.reduce((sum, c) => sum + (c.goal_amount || 0), 0))}
+        {/* Campaign Summary */}
+        <div className="crypto-card">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-muted-foreground">
+              Showing {filteredCampaigns.length} of {campaigns.length} campaigns
+            </div>
+            <div className="text-sm font-medium text-foreground">
+              Total campaigns: {campaigns.length}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Transaction Chart */}
+      {activeTab === 'transactions' && (
+        <div className="space-y-6">
+          {/* Transaction Summary Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="crypto-card">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">{filteredTransactions.length}</div>
+                <div className="text-sm text-muted-foreground">Total Transactions</div>
+              </div>
+            </div>
+            <div className="crypto-card">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">
+                  {formatCurrency(filteredTransactions.reduce((sum, t) => sum + t.amount, 0))}
+                </div>
+                <div className="text-sm text-muted-foreground">Total Amount</div>
+              </div>
+            </div>
+            <div className="crypto-card">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">
+                  {new Set(filteredTransactions.map(t => t.email)).size}
+                </div>
+                <div className="text-sm text-muted-foreground">Unique Users</div>
+              </div>
+            </div>
+            <div className="crypto-card">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-foreground">
+                  ${(filteredTransactions.reduce((sum, t) => sum + t.amount, 0) / Math.max(filteredTransactions.length, 1)).toFixed(2)}
+                </div>
+                <div className="text-sm text-muted-foreground">Avg Amount</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Transaction Table */}
+          <div className="crypto-card">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-border">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Donor
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-background divide-y divide-border">
+                  {filteredTransactions.slice(0, 50).map((transaction, index) => (
+                    <tr key={transaction.id + index} className="hover:bg-muted/50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                        {formatDate(transaction.date)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                        {transaction.donor_name || `${transaction.first_name || ''} ${transaction.last_name || ''}`.trim() || 'Anonymous'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                        {transaction.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
+                        {formatCurrency(transaction.amount)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                        <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                          {transaction.type === 'form_submission' ? 'Form' : 'Direct'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(transaction.status)}`}>
+                          {transaction.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {filteredTransactions.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-muted-foreground">No transactions found matching your filters</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {showCampaignModal && <CampaignModal />}
     </div>
