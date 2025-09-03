@@ -36,9 +36,25 @@ export const AdminProvider = ({ children }) => {
 
   const checkAdminAuth = async () => {
     try {
+      console.log('🔍 ADMIN CONTEXT - Checking admin auth...');
+      
+      // First check localStorage for stored admin
+      const storedAdmin = localStorage.getItem('admin_user');
+      if (storedAdmin) {
+        console.log('🔍 ADMIN CONTEXT - Found stored admin in localStorage');
+        const parsedAdmin = JSON.parse(storedAdmin);
+        setAdmin(parsedAdmin);
+        setPermissions(parsedAdmin.permissions || []);
+        return;
+      }
+      
+      // Fall back to Supabase session
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
+        console.log('🔍 ADMIN CONTEXT - Found Supabase session, checking permissions...');
         await checkAdminPermissions(session.user);
+      } else {
+        console.log('🔍 ADMIN CONTEXT - No stored admin or Supabase session found');
       }
     } catch (error) {
       console.error('Error checking admin auth:', error);
@@ -77,9 +93,11 @@ export const AdminProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true);
+      console.log('🔍 ADMIN LOGIN - Attempting login for:', email);
       
       // Hardcoded admin credentials since you're the only admin
       if (email === 'dan@dkdev.io' && password === 'admin123') {
+        console.log('🔍 ADMIN LOGIN - Credentials match, creating admin user...');
         // Create mock admin user
         const mockAdmin = {
           id: 'admin-user',
@@ -91,6 +109,11 @@ export const AdminProvider = ({ children }) => {
         
         setAdmin(mockAdmin);
         setPermissions(mockAdmin.permissions);
+        
+        // Store in localStorage for persistence
+        localStorage.setItem('admin_user', JSON.stringify(mockAdmin));
+        console.log('🔍 ADMIN LOGIN - Admin user set and stored in localStorage');
+        
         return { success: true };
       }
       

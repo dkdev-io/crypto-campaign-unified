@@ -4,6 +4,7 @@ import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import SetupWizard from './components/setup/SetupWizard';
 import SimpleDonorForm from './components/SimpleDonorForm';
+import EmbedDonorForm from './components/EmbedDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import SimpleAuth from './components/auth/SimpleAuth';
@@ -139,9 +140,7 @@ function App() {
             
             {/* Embed Form Route - for iframe embeds */}
             <Route path="/embed-form.html" element={
-              <div style={{ minHeight: '100vh', padding: '1rem' }}>
-                <SimpleDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
-              </div>
+              <EmbedDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
             } />
             <Route path="/embed-form" element={
               <div style={{ minHeight: '100vh', padding: '1rem' }}>

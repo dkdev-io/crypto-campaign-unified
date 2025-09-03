@@ -3,6 +3,7 @@ import { useAdmin } from '../../contexts/AdminContext';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
+  console.log('🔍 ADMIN LOGIN COMPONENT - Rendering...');
   const [formData, setFormData] = useState({
     email: 'dan@dkdev.io',
     password: 'admin123'
@@ -28,15 +29,20 @@ const AdminLogin = () => {
   }, [admin, isAdmin, navigate]);
 
   const handleLogin = async (e) => {
+    console.log('🔍 HANDLE LOGIN CALLED!!! - Event:', e);
     e.preventDefault();
     setError('');
     setLoading(true);
 
+    console.log('🔍 LOGIN DEBUG - Form submitted:', formData);
     const result = await login(formData.email, formData.password);
+    console.log('🔍 LOGIN DEBUG - Result:', result);
     
     if (result.success) {
+      console.log('🔍 LOGIN DEBUG - Success, navigating to dashboard...');
       navigate('/minda/dashboard');
     } else {
+      console.log('🔍 LOGIN DEBUG - Failed:', result.error);
       setError(result.error || 'Login failed');
     }
     
@@ -212,7 +218,7 @@ const AdminLogin = () => {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6" onClick={() => console.log('🔍 FORM CLICKED')}>
             <div>
               <label htmlFor="email" className="form-label">
                 Email Address
@@ -248,6 +254,7 @@ const AdminLogin = () => {
             <button
               type="submit"
               disabled={loading}
+              onClick={() => console.log('🔍 SUBMIT BUTTON CLICKED')}
               className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign In'}
