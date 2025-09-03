@@ -159,17 +159,9 @@ export const AuthProvider = ({ children }) => {
         let friendlyError = { ...error }
         
         if (error.message === 'Invalid login credentials') {
-          // Check if the user exists in auth.users
-          const { data: existingUsers } = await supabase.auth.admin.listUsers()
-          const userExists = existingUsers?.users?.some(u => u.email === email)
-          
-          if (!userExists) {
-            friendlyError.message = 'No account found with this email address'
-            friendlyError.type = 'user_not_found'
-          } else {
-            friendlyError.message = 'Incorrect password. Please try again or reset your password.'
-            friendlyError.type = 'wrong_password'
-          }
+          // Generic handling - can't check user existence without service role
+          friendlyError.message = 'Invalid email or password. Please check your credentials or sign up for a new account.'
+          friendlyError.type = 'invalid_credentials'
         } else if (error.message.includes('email')) {
           friendlyError.message = 'Please enter a valid email address'
           friendlyError.type = 'invalid_email'
