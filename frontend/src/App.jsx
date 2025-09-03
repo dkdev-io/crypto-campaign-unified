@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import SetupWizard from './components/setup/SetupWizard';
+import CampaignSetup from './components/campaigns/CampaignSetup';
 import SimpleDonorForm from './components/SimpleDonorForm';
 import EmbedDonorForm from './components/EmbedDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
@@ -61,11 +62,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<SimpleAuth />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
-            <Route path="/campaigns/auth/setup" element={
-              <ProtectedRoute>
-                <SetupWizard />
-              </ProtectedRoute>
-            } />
+            <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
