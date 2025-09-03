@@ -14,15 +14,32 @@ const CampaignPage = () => {
   useEffect(() => {
     const loadCampaign = async () => {
       try {
-        // Convert URL-friendly name back to campaign name
+        // Convert URL-friendly name back to campaign name and try multiple variations
         const decodedName = decodeURIComponent(campaignName).replace(/-/g, ' ');
+        console.log('Looking for campaign:', { urlParam: campaignName, decoded: decodedName });
         
-        const { data, error } = await supabase
+        // Try exact match first, then case-insensitive (removed status filter)
+        let { data, error } = await supabase
           .from('campaigns')
           .select('*')
           .ilike('campaign_name', decodedName)
-          .eq('status', 'active')
           .single();
+          
+        // If not found, try the original URL param
+        if (error && campaignName.toLowerCase() !== decodedName.toLowerCase()) {
+          const { data: data2, error: error2 } = await supabase
+            .from('campaigns')
+            .select('*')
+            .ilike('campaign_name', campaignName)
+            .single();
+            
+          if (!error2) {
+            data = data2;
+            error = null;
+          }
+        }
+        
+        console.log('Campaign lookup result:', { data: !!data, error: error?.message });
 
         if (error) {
           throw error;
