@@ -144,13 +144,18 @@ const CampaignAuth = () => {
 
     setLoading(true);
     try {
-      const { error } = await signUp(signUpData.email, signUpData.password, signUpData.fullName);
-
+      // Clear any previous auth context errors before signup
       if (error) {
-        throw error;
+        clearError();
+      }
+      
+      const { error: signupError } = await signUp(signUpData.email, signUpData.password, signUpData.fullName);
+
+      if (signupError) {
+        throw signupError;
       }
 
-      // After signup, show email verification message - ProtectedRoute will handle verification requirement
+      // Clear all previous errors and show success message
       setValidationErrors({ 
         submit: 'Account created! Please check your email and click the verification link to continue.' 
       });
