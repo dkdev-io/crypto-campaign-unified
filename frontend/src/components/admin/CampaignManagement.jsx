@@ -567,7 +567,8 @@ const CampaignManagement = () => {
 
       {/* Campaigns Grid */}
       {activeTab === 'campaigns' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCampaigns.map((campaign) => {
           const progressPercentage = campaign.goal_amount > 0 
             ? Math.min((campaign.raised_amount / campaign.goal_amount) * 100, 100)
@@ -651,20 +652,21 @@ const CampaignManagement = () => {
               </div>
             </div>
           );
-          })}
-        </div>
+        })}
+          </div>
 
-        {/* Campaign Summary */}
-        <div className="crypto-card">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              Showing {filteredCampaigns.length} of {campaigns.length} campaigns
-            </div>
-            <div className="text-sm font-medium text-foreground">
-              Total campaigns: {campaigns.length}
+          {/* Campaign Summary */}
+          <div className="crypto-card">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                Showing {filteredCampaigns.length} of {campaigns.length} campaigns
+              </div>
+              <div className="text-sm font-medium text-foreground">
+                Total campaigns: {campaigns.length}
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* Transaction Chart */}
