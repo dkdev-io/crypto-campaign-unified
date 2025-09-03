@@ -131,8 +131,8 @@ const CampaignAuth = () => {
         throw error;
       }
 
-      // Redirect to campaign setup workflow after successful login
-      navigate('/setup', { replace: true });
+      // Redirect to homepage after successful login (not setup)
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       setValidationErrors({ 
@@ -171,8 +171,15 @@ const CampaignAuth = () => {
       });
     } catch (error) {
       console.error('Registration error:', error);
+      
+      // Provide helpful message for existing account
+      let errorMessage = error.message || 'An error occurred during registration. Please try again.';
+      if (error.message && error.message.includes('already registered')) {
+        errorMessage = 'This email already has an account. Please try signing in instead, or use the "Forgot Password" link if you need to reset your password.';
+      }
+      
       setValidationErrors({ 
-        submit: error.message || 'An error occurred during registration. Please try again.' 
+        submit: errorMessage
       });
     } finally {
       setLoading(false);
