@@ -1,1 +1,25 @@
+# Netlify redirects for dynamic campaign pages
+# Handle campaign name routes like /testy, /john-smith, etc.
+
+# Admin routes
+/minda/* /index.html 200
+/minda /index.html 200
+
+# Auth routes  
+/campaigns/* /index.html 200
+/donors/* /index.html 200
+
+# Static routes
+/debug /index.html 200
+/testing /index.html 200
+/analytics-demo /index.html 200
+/invite-test /index.html 200
+/embed-form /index.html 200
+/embed-form.html /index.html 200
+
+# Dynamic campaign pages - catch all remaining routes
+# This will match /testy, /biden-2024, etc.
+/:campaign_name /index.html 200
+
+# Fallback
 /*    /index.html   200
