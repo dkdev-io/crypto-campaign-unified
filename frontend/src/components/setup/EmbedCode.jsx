@@ -144,7 +144,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🎉 Setup Complete! - Step 5
+        🎉 Setup Complete! - Step 7
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Your contribution form is ready to embed on your website

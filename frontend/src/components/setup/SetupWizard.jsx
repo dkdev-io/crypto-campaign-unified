@@ -287,13 +287,7 @@ const SetupWizard = () => {
       case 4:
         return <WebsiteStyleMatcher {...stepProps} />;
       case 5:
-        // Only show StyleConfirmation if user analyzed a website
-        if (formData.stylesAnalyzed && !formData.styleMatchingSkipped) {
-          return <StyleConfirmation {...stepProps} />;
-        } else {
-          // Skip directly to terms if no styles were analyzed
-          return <TermsAgreement {...stepProps} />;
-        }
+        return <StyleConfirmation {...stepProps} />;
       case 6:
         return <TermsAgreement {...stepProps} />;
       case 7:

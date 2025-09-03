@@ -46,7 +46,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        📋 Terms & Conditions - Step 4
+        📋 Terms & Conditions - Step 6
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Review and accept our terms to launch your contribution form
@@ -380,7 +380,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back
+          ← Back to Bank Connection
         </button>
         <button 
           className="btn btn-primary"

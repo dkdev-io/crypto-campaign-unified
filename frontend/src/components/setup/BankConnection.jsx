@@ -383,7 +383,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           onClick={handleNext}
           disabled={!bankInfo?.isVerified && !formData.skipBankConnection}
         >
-          Next: Terms & Launch →
+          Next: Website Style →
         </button>
       </div>
 
