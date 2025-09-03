@@ -74,33 +74,14 @@ const SimpleDonorForm = ({ campaignId }) => {
       if (!formData.amount || contributionAmount <= 0) {
         throw new Error('Please enter a valid contribution amount');
       }
+
+      // DEMO MODE: Skip Web3 for form testing
+      console.log('🎭 DEMO MODE: Simulating contribution process...');
       
-      // Initialize Web3 and process contribution through blockchain
-      console.log('🚀 Initiating Web3 connection and transaction...');
+      // Simulate processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Initialize Web3 service
-      await web3Service.init();
-      
-      // Connect wallet (demo mode if MetaMask unavailable)
-      const walletConnection = await web3Service.connectWallet();
-      if (!walletConnection.success) {
-        throw new Error(`Wallet connection failed: ${walletConnection.error}`);
-      }
-      
-      // Convert USD to ETH for blockchain transaction
-      const amountETH = await web3Service.convertUSDToETH(contributionAmount);
-      console.log(`Converting $${contributionAmount} to ${amountETH} ETH`);
-      
-      // Execute blockchain contribution
-      const contractResult = await web3Service.contribute(amountETH);
-      
-      if (!contractResult.success) {
-        throw new Error(`Blockchain transaction failed: ${contractResult.error}`);
-      }
-      
-      console.log('✅ Blockchain transaction successful:', contractResult);
-      
-      // Save donor submission to database with transaction details
+      // Save donor submission to database (demo data)
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([{
@@ -116,9 +97,9 @@ const SimpleDonorForm = ({ campaignId }) => {
           employer: formData.employer,
           occupation: formData.occupation,
           amount: parseFloat(formData.amount),
-          contributor_wallet: walletConnection.account || 'demo-wallet',
-          transaction_hash: contractResult.txHash,
-          payment_method: 'crypto',
+          contributor_wallet: 'demo-wallet-' + Date.now(),
+          transaction_hash: 'demo-tx-' + Date.now(),
+          payment_method: 'crypto-demo',
           is_us_citizen: true,
           is_prohibited_source: false,
           acknowledgment_signed: true
@@ -130,7 +111,7 @@ const SimpleDonorForm = ({ campaignId }) => {
       }
       
       setSubmitted(true);
-      console.log('✅ Contribution submitted successfully');
+      console.log('✅ Demo contribution submitted successfully');
     } catch (err) {
       console.error('Form submission error:', err);
       setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');

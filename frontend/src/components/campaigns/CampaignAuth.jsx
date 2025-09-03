@@ -16,7 +16,7 @@ const CampaignAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const from = location.state?.from?.pathname || '/setup';
+  const from = location.state?.from?.pathname || '/';
 
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
@@ -151,9 +151,8 @@ const CampaignAuth = () => {
       }
 
       // After signup, show email verification message - ProtectedRoute will handle verification requirement
-      // User will be redirected to setup automatically after email verification
       setValidationErrors({ 
-        submit: 'Account created! Please check your email and click the verification link to continue with campaign setup.' 
+        submit: 'Account created! Please check your email and click the verification link to continue.' 
       });
     } catch (error) {
       console.error('Registration error:', error);

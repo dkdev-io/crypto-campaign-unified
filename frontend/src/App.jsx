@@ -58,11 +58,6 @@ function App() {
             <Router>
             <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/setup" element={
-              <ProtectedRoute requireVerified={true}>
-                <SetupWizard />
-              </ProtectedRoute>
-            } />
             <Route path="/auth" element={<SimpleAuth />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
