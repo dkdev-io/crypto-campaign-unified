@@ -42,21 +42,17 @@ export const DonorAuthProvider = ({ children }) => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user && user.user_metadata?.user_type === 'donor') {
-        // Get donor profile
-        const { data: donorData, error: donorError } = await supabase
-          .from('donors')
-          .select(`
-            *,
-            donor_profiles (*)
-          `)
-          .eq('id', user.id)
-          .single();
-
-        if (donorError) throw donorError;
-        
+        // Use auth user data directly (no donors table needed for now)
         setDonor({
           ...user,
-          profile: donorData
+          profile: {
+            id: user.id,
+            email: user.email,
+            full_name: user.user_metadata?.full_name || 'Donor',
+            phone: user.user_metadata?.phone,
+            donor_type: user.user_metadata?.donor_type || 'individual',
+            created_at: user.created_at
+          }
         });
       } else {
         setDonor(null);
@@ -105,23 +101,7 @@ export const DonorAuthProvider = ({ children }) => {
     try {
       setError(null);
       
-      // First check if the email exists in the donors table
-      const { data: existingDonor, error: lookupError } = await supabase
-        .from('donors')
-        .select('id, email')
-        .eq('email', email)
-        .single();
-
-      if (lookupError && lookupError.code === 'PGRST116') {
-        // No donor found with this email
-        throw new Error('No user found with this email address. Please check your email or create a new account.');
-      }
-
-      if (lookupError) {
-        throw new Error('Unable to verify account. Please try again.');
-      }
-
-      // Now attempt to sign in
+      // Attempt to sign in directly (no need to check donors table first)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
