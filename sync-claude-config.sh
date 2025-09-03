@@ -1,4 +1,5 @@
 #!/bin/bash
+<<<<<<< Updated upstream
 
 # Sync Claude Configuration from claude-sparc-config repository
 # This script pulls the latest Claude Code configuration automatically
@@ -213,3 +214,7 @@ echo -e "${YELLOW}Next time, just run:${NC} ${CYAN}./sync-claude-config.sh${NC}"
 echo -e "${YELLOW}Or it will auto-run with:${NC} ${CYAN}./sync-start.sh${NC}"
 echo ""
 echo -e "${BLUE}Your Claude Code session now has full autonomy permissions!${NC}"
+=======
+curl -s "https://raw.githubusercontent.com/dkdev-io/claude-sparc-config/main/CLAUDE.md" -o "CLAUDE.md" 2>/dev/null
+echo "Claude config synced"
+>>>>>>> Stashed changes
