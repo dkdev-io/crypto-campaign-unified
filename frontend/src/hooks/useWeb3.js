@@ -5,7 +5,7 @@ import CampaignABI from '../contracts/CampaignContributions.json';
 
 const CONTRACT_ADDRESSES = {
   1: process.env.VITE_CONTRACT_ADDRESS_MAINNET,
-  11155111: process.env.VITE_CONTRACT_ADDRESS_SEPOLIA, // Sepolia
+  11155111: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6', // Sepolia - working contract
   8453: process.env.VITE_CONTRACT_ADDRESS_BASE,
   84532: process.env.VITE_CONTRACT_ADDRESS_BASE_SEPOLIA,
   31337: process.env.VITE_CONTRACT_ADDRESS_LOCAL || '0x5FbDB2315678afecb367f032d93F642f64180aa3'
