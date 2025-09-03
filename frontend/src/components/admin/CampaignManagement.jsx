@@ -79,44 +79,50 @@ const CampaignManagement = () => {
         return;
       }
 
-      // Load both form_submissions and contributions
-      const [formSubmissions, contributions] = await Promise.allSettled([
-        supabase.from('form_submissions').select('*').order('submitted_at', { ascending: false }),
-        supabase.from('contributions').select('*').order('created_at', { ascending: false })
-      ]);
+      // Only load real form_submissions data (no mock data)
+      const { data: submissions, error } = await supabase
+        .from('form_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      const submissions = formSubmissions.status === 'fulfilled' ? (formSubmissions.value.data || []) : [];
-      const contribs = contributions.status === 'fulfilled' ? (contributions.value.data || []) : [];
+      if (error) {
+        console.error('Error loading form submissions:', error);
+        setTransactions([]);
+        return;
+      }
 
-      // Combine and normalize the data
-      const allTransactions = [
-        ...submissions.map(sub => ({
+      // Filter out any remaining test data and normalize
+      const realTransactions = (submissions || [])
+        .filter(sub => {
+          // Only include real email addresses, not mock ones
+          return sub.email && 
+                 !sub.email.includes('@test') && 
+                 !sub.email.includes('.test') &&
+                 !sub.email.includes('test@') &&
+                 sub.email.includes('@') &&
+                 sub.email.includes('.');
+        })
+        .map(sub => ({
           id: sub.id,
-          type: 'form_submission',
+          type: 'donation',
           amount: parseFloat(sub.amount) || 0,
           email: sub.email,
+          donor_name: `${sub.first_name || ''} ${sub.last_name || ''}`.trim() || 'Anonymous',
           first_name: sub.first_name,
           last_name: sub.last_name,
-          donor_name: `${sub.first_name} ${sub.last_name}`,
           campaign_id: sub.campaign_id,
-          date: sub.submitted_at || sub.created_at,
+          date: sub.created_at,
           status: 'completed',
-          payment_method: sub.payment_method || 'crypto'
-        })),
-        ...contribs.map(contrib => ({
-          id: contrib.id,
-          type: 'contribution',
-          amount: parseFloat(contrib.amount) || 0,
-          email: contrib.donor_email,
-          donor_name: contrib.donor_name,
-          campaign_id: contrib.campaign_id,
-          date: contrib.created_at,
-          status: contrib.status,
-          payment_method: 'crypto'
+          payment_method: sub.payment_method || 'crypto',
+          address: sub.address,
+          city: sub.city,
+          state: sub.state,
+          zip_code: sub.zip_code
         }))
-      ].sort((a, b) => new Date(b.date) - new Date(a.date));
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      setTransactions(allTransactions);
+      console.log('Loaded real transactions:', realTransactions.length);
+      setTransactions(realTransactions);
     } catch (error) {
       console.error('Error loading transactions:', error);
       setTransactions([]);
