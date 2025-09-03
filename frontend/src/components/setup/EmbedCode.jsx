@@ -38,6 +38,11 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
       setTestUrl(donationUrl);
       
+      // Also generate campaign page URL
+      const campaignPageUrl = formData.campaignName 
+        ? `${baseUrl}/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
+        : null;
+      
       // Generate QR code for the donation URL
       try {
         const qrDataUrl = await QRCode.toDataURL(donationUrl, {
@@ -81,7 +86,8 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         setupCompleted: true,
         embedGenerated: true,
         donorPageUrl: donorPageUrl,
-        donorPageGenerated: donorPageGenerated
+        donorPageGenerated: donorPageGenerated,
+        campaignPageUrl: campaignPageUrl
       });
 
     } catch (err) {
@@ -559,6 +565,73 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 📋 Copy Page URL
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Campaign Page URL Section */}
+      {formData.campaignPageUrl && (
+        <div style={{ 
+          background: 'linear-gradient(135deg, #28a745, #20c997)',
+          color: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
+          <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
+            Your Campaign Page is Live!
+          </h3>
+          <div style={{ 
+            background: 'rgba(255,255,255,0.2)',
+            padding: '1rem',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+            fontFamily: 'monospace',
+            fontSize: '16px',
+            wordBreak: 'break-all',
+            fontWeight: '500'
+          }}>
+            {formData.campaignPageUrl}
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a
+              href={formData.campaignPageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                border: '2px solid white',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontSize: '16px',
+                fontWeight: '500'
+              }}
+            >
+              🌐 Visit Campaign Page
+            </a>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(formData.campaignPageUrl);
+                alert('Campaign URL copied!');
+              }}
+              style={{
+                background: 'white',
+                color: '#28a745',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                fontWeight: '500'
+              }}
+            >
+              📋 Copy Campaign URL
+            </button>
           </div>
         </div>
       )}

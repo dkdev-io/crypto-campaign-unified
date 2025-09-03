@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
+import CampaignPage from './pages/CampaignPage';
 import SetupWizard from './components/setup/SetupWizard';
 import CampaignSetup from './components/campaigns/CampaignSetup';
 import SimpleDonorForm from './components/SimpleDonorForm';
@@ -145,6 +146,9 @@ function App() {
                 <SimpleDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
               </div>
             } />
+            
+            {/* Dynamic Campaign Pages - must be last before 404 */}
+            <Route path="/:campaignName" element={<CampaignPage />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
