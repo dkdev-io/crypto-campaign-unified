@@ -274,7 +274,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
             <div style={{ fontSize: '14px', color: '#6c757d' }}>
               Loading Plaid SDK...
             </div>
-          ) : null}
+          )}
         </div>
       )}
 

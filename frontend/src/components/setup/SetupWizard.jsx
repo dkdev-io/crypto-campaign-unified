@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import StepIndicator from './StepIndicator';
-import Signup from './Signup';
+import CampaignInfo from './CampaignInfo';
 import CommitteeSearch from './CommitteeSearch';
 import BankConnection from './BankConnection';
 import WebsiteStyleMatcher from './WebsiteStyleMatcher';
@@ -23,7 +23,7 @@ const SetupWizard = () => {
 
   const totalSteps = 7;
 
-  // Initialize setup wizard based on user's existing campaign data
+  // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
     const initializeSetup = async () => {
       if (!user) {
@@ -32,78 +32,103 @@ const SetupWizard = () => {
       }
 
       try {
-        // Look for existing campaign for this user
+        // Try to recover from localStorage first
+        let savedData = null;
+        try {
+          const saved = localStorage.getItem('campaignSetupData');
+          if (saved) {
+            savedData = JSON.parse(saved);
+            console.log('Recovered form data from localStorage:', savedData);
+          }
+        } catch (e) {
+          console.warn('Could not recover from localStorage:', e);
+        }
+
+        // Look for existing campaign (only select existing columns to avoid errors)
         const { data: existingCampaign, error } = await supabase
           .from('campaigns')
-          .select('*')
-          .eq('user_id', user.id)
+          .select('id, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at')
+          .eq('email', user.email)
           .order('created_at', { ascending: false })
           .limit(1)
           .single();
 
         if (existingCampaign && !error) {
-          // Found existing campaign - populate data and determine step
           setCampaignId(existingCampaign.id);
           
-          // Build form data from database
+          // Build form data from available DB fields + localStorage
           const existingFormData = {
-            userFullName: existingCampaign.user_full_name || user.user_metadata?.full_name || '',
-            campaignName: existingCampaign.campaign_name || '',
+            userFullName: savedData?.userFullName || user.user_metadata?.full_name || '',
+            campaignName: existingCampaign.campaign_name || savedData?.campaignName || '',
             email: existingCampaign.email || user.email,
-            website: existingCampaign.website || '',
-            fecCommitteeId: existingCampaign.fec_committee_id || '',
-            committeeName: existingCampaign.committee_name || '',
-            committeeDetails: existingCampaign.committee_confirmed || false,
-            bankAccountVerified: existingCampaign.bank_account_verified || false,
-            bankAccountInfo: existingCampaign.bank_account_name ? {
-              accountName: existingCampaign.bank_account_name,
-              lastFour: existingCampaign.bank_last_four,
-              accountId: existingCampaign.plaid_account_id
-            } : null,
-            allTermsAccepted: existingCampaign.terms_accepted || false,
-            websiteAnalyzed: existingCampaign.website_analyzed || '',
-            styleAnalysis: existingCampaign.style_analysis || null,
-            appliedStyles: existingCampaign.applied_styles || null,
-            stylesApplied: existingCampaign.styles_applied || false,
-            embedCode: existingCampaign.embed_code || '',
-            description: existingCampaign.description || ''
+            website: existingCampaign.website || savedData?.website || '',
+            themeColor: existingCampaign.theme_color || savedData?.themeColor || '#2a2a72',
+            suggestedAmounts: existingCampaign.suggested_amounts || [25, 50, 100, 250],
+            maxDonation: existingCampaign.max_donation_limit || 3300,
+            
+            // Data that exists only in localStorage (until DB is fixed)
+            fecCommitteeId: savedData?.fecCommitteeId || '',
+            committeeName: savedData?.committeeName || '',
+            selectedCommittee: savedData?.selectedCommittee || null,
+            committeeDetails: savedData?.committeeDetails || null,
+            bankAccountVerified: savedData?.bankAccountVerified || false,
+            bankAccountInfo: savedData?.bankAccountInfo || null,
+            allTermsAccepted: savedData?.allTermsAccepted || false,
+            websiteUrl: savedData?.websiteUrl || '',
+            styleAnalysis: savedData?.styleAnalysis || null,
+            appliedStyles: savedData?.appliedStyles || null,
+            stylesApplied: savedData?.stylesApplied || false,
+            embedCode: savedData?.embedCode || '',
+            setupCompleted: savedData?.setupCompleted || false,
+            currentStep: savedData?.currentStep || 2
           };
           
           setFormData(existingFormData);
-          
-          // Determine current step based on completion status
-          if (existingCampaign.setup_completed) {
-            setCurrentStep(7); // Show final step with embed code
-          } else {
-            // Start from the appropriate step based on setup_step or data completeness
-            let startStep = existingCampaign.setup_step || 2; // Skip signup since user is authenticated
-            
-            // Skip signup step for authenticated users
-            if (startStep === 1) {
-              startStep = 2;
-            }
-            
-            setCurrentStep(startStep);
-          }
+          setCurrentStep(savedData?.currentStep || 1);
         } else {
-          // No existing campaign - start fresh but skip signup
+          // No existing campaign - start fresh
           const newFormData = {
             userFullName: user.user_metadata?.full_name || '',
             email: user.email,
             campaignName: '',
             website: '',
+            currentStep: 2
           };
+          
+          // Recover from localStorage if available
+          if (savedData) {
+            Object.assign(newFormData, savedData);
+          }
+          
           setFormData(newFormData);
-          setCurrentStep(2); // Skip signup step for authenticated users
+          setCurrentStep(newFormData.currentStep || 1);
         }
       } catch (error) {
         console.error('Error initializing setup:', error);
-        // Fallback to step 2 for authenticated users
-        setFormData({
-          userFullName: user.user_metadata?.full_name || '',
-          email: user.email
-        });
-        setCurrentStep(2);
+        
+        // Try localStorage recovery as final fallback
+        try {
+          const saved = localStorage.getItem('campaignSetupData');
+          if (saved) {
+            const savedData = JSON.parse(saved);
+            setFormData(savedData);
+            setCurrentStep(savedData.currentStep || 1);
+          } else {
+            // Complete fallback
+            setFormData({
+              userFullName: user.user_metadata?.full_name || '',
+              email: user.email,
+              currentStep: 2
+            });
+            setCurrentStep(1);
+          }
+        } catch (e) {
+          setFormData({
+            userFullName: user.user_metadata?.full_name || '',
+            email: user.email
+          });
+          setCurrentStep(2);
+        }
       } finally {
         setLoading(false);
       }
@@ -116,55 +141,22 @@ const SetupWizard = () => {
     const updatedData = { ...formData, ...newData };
     setFormData(updatedData);
     
+    // Store in localStorage as backup
+    try {
+      localStorage.setItem('campaignSetupData', JSON.stringify(updatedData));
+    } catch (e) {
+      console.warn('Could not save to localStorage:', e);
+    }
+    
     if (campaignId) {
       try {
-        // Map React form field names to database column names
+        // Only update existing columns to avoid DB errors
         const dbData = {};
         
-        // Basic campaign info
-        if (updatedData.userFullName) dbData.user_full_name = updatedData.userFullName;
+        // Only include fields that exist in current schema
         if (updatedData.campaignName) dbData.campaign_name = updatedData.campaignName;
         if (updatedData.email) dbData.email = updatedData.email;
         if (updatedData.website) dbData.website = updatedData.website;
-        
-        // FEC Committee info
-        if (updatedData.fecCommitteeId) dbData.fec_committee_id = updatedData.fecCommitteeId;
-        if (updatedData.committeeName) dbData.committee_name = updatedData.committeeName;
-        if (updatedData.committeeDetails) dbData.committee_confirmed = true;
-        
-        // Bank connection info
-        if (updatedData.bankAccountVerified !== undefined) dbData.bank_account_verified = updatedData.bankAccountVerified;
-        if (updatedData.bankAccountInfo) {
-          dbData.bank_account_name = updatedData.bankAccountInfo.accountName;
-          dbData.bank_last_four = updatedData.bankAccountInfo.lastFour;
-          dbData.plaid_account_id = updatedData.bankAccountInfo.accountId;
-        }
-        
-        // Terms acceptance
-        if (updatedData.allTermsAccepted) dbData.terms_accepted = updatedData.allTermsAccepted;
-        if (updatedData.termsAcceptedAt) dbData.terms_accepted_at = updatedData.termsAcceptedAt;
-        if (updatedData.termsIpAddress) dbData.terms_ip_address = updatedData.termsIpAddress;
-        
-        // Setup progress
-        if (updatedData.setupStep) dbData.setup_step = updatedData.setupStep;
-        if (updatedData.setupCompleted) dbData.setup_completed = updatedData.setupCompleted;
-        if (updatedData.setupCompleted) dbData.setup_completed_at = new Date().toISOString();
-        
-        // Website style matching
-        if (updatedData.websiteUrl) dbData.website_analyzed = updatedData.websiteUrl;
-        if (updatedData.styleAnalysis) dbData.style_analysis = updatedData.styleAnalysis;
-        if (updatedData.appliedStyles) dbData.applied_styles = updatedData.appliedStyles;
-        if (updatedData.stylesApplied) dbData.styles_applied = updatedData.stylesApplied;
-        
-        // Embed code
-        if (updatedData.embedCode) {
-          dbData.embed_code = updatedData.embedCode;
-          dbData.embed_generated_at = new Date().toISOString();
-        }
-        
-        // Legacy fields for compatibility
-        if (updatedData.walletAddress) dbData.wallet_address = updatedData.walletAddress || 'temp-wallet';
-        if (updatedData.maxDonation) dbData.max_donation_limit = parseFloat(updatedData.maxDonation) || 3300;
         if (updatedData.themeColor) dbData.theme_color = updatedData.themeColor;
         if (updatedData.supportedCryptos) dbData.supported_cryptos = updatedData.supportedCryptos;
         
@@ -180,21 +172,24 @@ const SetupWizard = () => {
           }
         }
 
-        console.log('Updating campaign with data:', dbData);
-        const { data: updatedCampaign, error } = await supabase
-          .from('campaigns')
-          .update(dbData)
-          .eq('id', campaignId)
-          .select()
-          .single();
-        
-        if (error) {
-          console.error('Failed to save campaign data:', error);
-        } else {
-          console.log('Campaign data saved successfully:', updatedCampaign);
+        // Only update if we have data to save
+        if (Object.keys(dbData).length > 0) {
+          console.log('Updating campaign with available columns:', dbData);
+          const { data: updatedCampaign, error } = await supabase
+            .from('campaigns')
+            .update(dbData)
+            .eq('id', campaignId)
+            .select()
+            .single();
+          
+          if (error) {
+            console.warn('Database save failed (expected with missing columns):', error.message);
+          } else {
+            console.log('Campaign data saved successfully:', updatedCampaign);
+          }
         }
       } catch (error) {
-        console.error('Save error:', error);
+        console.warn('Database save error (continuing with localStorage):', error.message);
       }
     }
   };
@@ -202,24 +197,22 @@ const SetupWizard = () => {
   const nextStep = async () => {
     console.log('Moving to next step, current data:', formData);
     
-    // Create campaign if we don't have one (for authenticated users starting fresh)
+    // Create campaign if we don't have one (using only existing columns)
     if (!campaignId && user) {
       try {
         const newCampaignData = {
-          user_id: user.id,
-          user_full_name: formData.userFullName || user.user_metadata?.full_name || '',
           email: formData.email || user.email,
-          campaign_name: formData.campaignName || '',
+          campaign_name: formData.campaignName || 'New Campaign',
           website: formData.website || '',
-          setup_step: currentStep + 1,
-          setup_completed: false,
-          // Default values for required fields
+          // Required existing fields
           wallet_address: 'temp-wallet-' + Date.now(),
           max_donation_limit: 3300,
-          suggested_amounts: [25, 50, 100, 250]
+          suggested_amounts: [25, 50, 100, 250],
+          theme_color: formData.themeColor || '#2a2a72',
+          status: 'setup'
         };
 
-        console.log('Creating new campaign:', newCampaignData);
+        console.log('Creating new campaign with existing columns:', newCampaignData);
         const { data: newCampaign, error } = await supabase
           .from('campaigns')
           .insert([newCampaignData])
@@ -228,7 +221,6 @@ const SetupWizard = () => {
 
         if (error) {
           console.error('Failed to create campaign:', error);
-          // Continue anyway with mock ID for demo
           setCampaignId('demo-campaign-' + Date.now());
         } else {
           setCampaignId(newCampaign.id);
@@ -238,22 +230,20 @@ const SetupWizard = () => {
         console.error('Error creating campaign:', error);
         setCampaignId('demo-campaign-' + Date.now());
       }
-    } else {
-      // Update existing campaign with current step
-      await updateFormData({ setupStep: currentStep + 1 });
     }
+    
+    // Update form data with current step
+    const nextStepNum = currentStep + 1;
+    await updateFormData({ 
+      currentStep: nextStepNum,
+      setupCompleted: nextStepNum >= totalSteps
+    });
     
     // Progress to next step
     if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-      console.log(`Advanced to step ${currentStep + 1}`);
+      setCurrentStep(nextStepNum);
+      console.log(`Advanced to step ${nextStepNum}`);
     } else {
-      // Mark setup as completed
-      await updateFormData({ 
-        setupStep: totalSteps,
-        setupCompleted: true,
-        setupCompletedAt: new Date().toISOString()
-      });
       console.log('Setup wizard completed!');
     }
   };
@@ -275,11 +265,7 @@ const SetupWizard = () => {
 
     switch (currentStep) {
       case 1:
-        // Skip signup for authenticated users - this should not be reached
-        if (user) {
-          return <CommitteeSearch {...stepProps} />;
-        }
-        return <Signup {...stepProps} />;
+        return <CampaignInfo {...stepProps} />;
       case 2:
         return <CommitteeSearch {...stepProps} />;
       case 3:
@@ -293,7 +279,7 @@ const SetupWizard = () => {
       case 7:
         return <EmbedCode {...stepProps} />;
       default:
-        return <CommitteeSearch {...stepProps} />;
+        return <CampaignInfo {...stepProps} />;
     }
   };
 
