@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { getAuthRoute } from '../../utils/authRouting'
 
 const PasswordReset = ({ onBackToLogin }) => {
   const navigate = useNavigate()
@@ -91,7 +92,8 @@ const PasswordReset = ({ onBackToLogin }) => {
 
       setSuccess('Password updated successfully! Redirecting to login...')
       setTimeout(() => {
-        navigate('/auth')
+        const authRoute = getAuthRoute(location.pathname)
+        navigate(authRoute.pathname, { state: authRoute.state })
       }, 2000)
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { getAuthRoute } from '../../utils/authRouting'
 
 const ProtectedRoute = ({ children, requireVerified = true }) => {
   const { user, loading, isEmailVerified, signOut } = useAuth()
@@ -40,9 +41,10 @@ const ProtectedRoute = ({ children, requireVerified = true }) => {
     )
   }
 
-  // No user logged in - redirect to auth page
+  // No user logged in - redirect to appropriate auth page based on context
   if (!user) {
-    return <Navigate to="/auth" state={{ from: location }} replace />
+    const authRoute = getAuthRoute(location.pathname, { from: location })
+    return <Navigate to={authRoute.pathname} state={authRoute.state} replace />
   }
 
   // User logged in but email not verified when verification is required

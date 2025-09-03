@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { getAuthRoute } from '../../utils/authRouting'
 
 const SessionMonitor = () => {
   const { checkSession, signOut, user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [showWarning, setShowWarning] = useState(false)
   const [countdown, setCountdown] = useState(60)
   const intervalRef = useRef(null)
@@ -19,13 +21,12 @@ const SessionMonitor = () => {
       const { valid, expired, refreshed } = await checkSession()
       
       if (expired) {
-        // Session expired, sign out and redirect
+        // Session expired, sign out and redirect to appropriate auth page
         await signOut()
-        navigate('/auth', { 
-          state: { 
-            message: 'Your session has expired. Please sign in again.' 
-          } 
+        const authRoute = getAuthRoute(location.pathname, { 
+          message: 'Your session has expired. Please sign in again.' 
         })
+        navigate(authRoute.pathname, { state: authRoute.state })
         return
       }
       
@@ -91,11 +92,10 @@ const SessionMonitor = () => {
 
     const handleInactivitySignOut = async () => {
       await signOut()
-      navigate('/auth', { 
-        state: { 
-          message: 'You have been signed out due to inactivity.' 
-        } 
+      const authRoute = getAuthRoute(location.pathname, { 
+        message: 'You have been signed out due to inactivity.' 
       })
+      navigate(authRoute.pathname, { state: authRoute.state })
     }
 
     // Events to monitor for activity
