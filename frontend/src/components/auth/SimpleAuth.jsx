@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 import RealWorkingInvites from '../team/RealWorkingInvites';
+import CampaignBreadcrumb from '../campaigns/CampaignBreadcrumb';
 
 // Auth Navigation Component matching home page
 const CampaignAuthNav = () => {
