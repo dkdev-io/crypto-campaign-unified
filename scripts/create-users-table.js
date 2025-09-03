@@ -1,10 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
+import pg from 'pg'
+import fs from 'fs'
 
-const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co'
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI'
+const { Client } = pg
 
-// Create supabase client with service key for admin operations
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+// Direct PostgreSQL connection to Supabase
+const client = new Client({
+  host: 'db.kmepcdsklnnxokoimvzo.supabase.co',
+  port: 5432,
+  database: 'postgres',
+  user: 'postgres',
+  password: 'SenecaCrypto2024!',
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
 
 async function createUsersTable() {
   console.log('🚀 Creating users table in Supabase...')
