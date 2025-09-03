@@ -119,6 +119,7 @@ export const AuthProvider = ({ children }) => {
         password
       })
       console.log('AuthContext: Supabase response - data:', !!data, 'error:', error);
+      console.log('AuthContext: Full error details:', JSON.stringify(error, null, 2));
 
       if (error) {
         // Provide more specific error messages
