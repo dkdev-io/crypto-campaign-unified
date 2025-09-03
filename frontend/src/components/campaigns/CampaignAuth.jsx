@@ -10,7 +10,7 @@ import CampaignAuthNav from './CampaignAuthNav';
 const CampaignAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signUp, error } = useAuth();
+  const { signIn, signUp, error, clearError } = useAuth();
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ const CampaignAuth = () => {
       ...prev,
       [name]: value
     }));
-    clearError(name);
+    clearFieldError(name);
   };
 
   const handleSignUpChange = (e) => {
@@ -50,15 +50,19 @@ const CampaignAuth = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    clearError(name);
+    clearFieldError(name);
   };
 
-  const clearError = (fieldName) => {
+  const clearFieldError = (fieldName) => {
     if (validationErrors[fieldName]) {
       setValidationErrors(prev => ({
         ...prev,
         [fieldName]: ''
       }));
+    }
+    // Also clear global auth error when user starts typing
+    if (error) {
+      clearError();
     }
   };
 
