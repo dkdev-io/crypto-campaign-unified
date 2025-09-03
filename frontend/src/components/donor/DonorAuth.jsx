@@ -140,6 +140,9 @@ const DonorAuth = () => {
       navigate(from, { replace: true });
     } catch (error) {
       console.error('Login error:', error);
+      setValidationErrors({ 
+        submit: error.message || 'Login failed. Please try again.' 
+      });
     } finally {
       setLoading(false);
     }
@@ -173,6 +176,9 @@ const DonorAuth = () => {
       });
     } catch (error) {
       console.error('Registration error:', error);
+      setValidationErrors({ 
+        submit: error.message || 'Registration failed. Please try again.' 
+      });
     } finally {
       setLoading(false);
     }
@@ -235,11 +241,11 @@ const DonorAuth = () => {
             </div>
 
             {/* Error Display */}
-            {error && (
+            {(error || validationErrors.submit) && (
               <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-destructive" />
                 <span className="text-sm text-destructive">
-                  {error.message || 'An error occurred. Please try again.'}
+                  {validationErrors.submit || error?.message || 'An error occurred. Please try again.'}
                 </span>
               </div>
             )}
