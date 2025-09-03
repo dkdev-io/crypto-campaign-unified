@@ -3,7 +3,6 @@ import { useAdmin } from '../../contexts/AdminContext';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
-  console.log('🔍 ADMIN LOGIN COMPONENT - Rendering...');
   const [formData, setFormData] = useState({
     email: 'dan@dkdev.io',
     password: 'admin123'
@@ -26,7 +25,7 @@ const AdminLogin = () => {
     if (isAdmin()) {
       navigate('/minda/dashboard');
     }
-  }, [admin, isAdmin, navigate]);
+  }, [admin, navigate]);
 
   const handleLogin = async (e) => {
     console.log('🔍 HANDLE LOGIN CALLED!!! - Event:', e);
