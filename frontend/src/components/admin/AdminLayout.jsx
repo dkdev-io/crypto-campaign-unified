@@ -3,7 +3,7 @@ import { Outlet, Navigate, useLocation, useNavigate, Link } from 'react-router-d
 import { useAdmin } from '../../contexts/AdminContext';
 
 const AdminLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { admin, logout, isAdmin, isSuperAdmin } = useAdmin();
   const location = useLocation();
   const navigate = useNavigate();
@@ -107,8 +107,8 @@ const AdminLayout = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
-        sidebarOpen ? 'translate-x-0' : 'lg:translate-x-0 -translate-x-full'
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-lg transform transition-transform duration-300 ease-in-out ${
+        sidebarOpen ? 'translate-x-0 lg:static lg:inset-0' : '-translate-x-full lg:-translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
@@ -176,7 +176,9 @@ const AdminLayout = () => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
+      <div className={`flex flex-col min-h-screen transition-all duration-300 ${
+        sidebarOpen ? 'lg:pl-64' : 'lg:pl-0'
+      }`}>
         {/* Top bar */}
         <div className="bg-card shadow-sm border-b border-border">
           <div className="px-4 sm:px-6 lg:px-8">
@@ -196,6 +198,21 @@ const AdminLayout = () => {
                 </h1>
               </div>
               <div className="flex items-center space-x-4">
+                {/* Desktop Sidebar Toggle */}
+                <button
+                  type="button"
+                  className="hidden lg:block text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  title={sidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {sidebarOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7M21 19l-7-7 7-7" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
                 <div className="text-sm text-muted-foreground">
                   {new Date().toLocaleDateString('en-US', { 
                     weekday: 'long', 
