@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# MD Command - Quick alias for guardrail review
+# Usage: ./scripts/md [violation-type]
+
+exec "$(dirname "$0")/md-review.sh" "$@"
