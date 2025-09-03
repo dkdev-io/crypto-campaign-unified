@@ -70,7 +70,7 @@ async function testDonorWorkflow() {
     console.log('\n🚀 Test 3: Submitting Registration');
     try {
       await page.click('button[type="submit"]');
-      await page.waitForTimeout(2000);
+      await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('✅ Registration submitted');
     } catch (error) {
       console.log('⚠️ Registration may have failed (expected if user exists):', error.message);
@@ -102,7 +102,7 @@ async function testDonorWorkflow() {
     console.log('📸 Screenshot saved: donor-login-styled.png');
 
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(3000);
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     // Test 6: Check if logged into dashboard
     console.log('\n📊 Test 6: Verifying Dashboard Access');
@@ -153,7 +153,7 @@ async function testDonorWorkflow() {
         const loadingElement = await page.$('.animate-spin');
         if (loadingElement) {
           console.log('⏳ Dashboard is loading data...');
-          await page.waitForTimeout(5000);
+          await new Promise(resolve => setTimeout(resolve, 5000));
         }
         
         const statsElements = await page.$$('.text-2xl.font-bold');
