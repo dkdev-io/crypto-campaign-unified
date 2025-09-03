@@ -75,13 +75,7 @@ const SimpleDonorForm = ({ campaignId }) => {
         throw new Error('Please enter a valid contribution amount');
       }
 
-      // DEMO MODE: Skip Web3 for form testing
-      console.log('🎭 DEMO MODE: Simulating contribution process...');
-      
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Save donor submission to database (demo data)
+      // Save donor submission to database
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([{
@@ -97,9 +91,9 @@ const SimpleDonorForm = ({ campaignId }) => {
           employer: formData.employer,
           occupation: formData.occupation,
           amount: parseFloat(formData.amount),
-          contributor_wallet: 'demo-wallet-' + Date.now(),
-          transaction_hash: 'demo-tx-' + Date.now(),
-          payment_method: 'crypto-demo',
+          contributor_wallet: null,
+          transaction_hash: null,
+          payment_method: 'pending',
           is_us_citizen: true,
           is_prohibited_source: false,
           acknowledgment_signed: true
@@ -111,7 +105,6 @@ const SimpleDonorForm = ({ campaignId }) => {
       }
       
       setSubmitted(true);
-      console.log('✅ Demo contribution submitted successfully');
     } catch (err) {
       console.error('Form submission error:', err);
       setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');
