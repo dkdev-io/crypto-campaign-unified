@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
-    email: 'dan@dkdev.io',
-    password: 'admin123'
+    email: 'test@dkdev.io',
+    password: 'TestDonor123!'
   });
   const [setupData, setSetupData] = useState({
-    email: 'dan@dkdev.io',
+    email: 'test@dkdev.io',
     password: '',
     confirmPassword: '',
-    fullName: 'Dan Kovacs'
+    fullName: 'Test Admin'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

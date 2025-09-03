@@ -41,20 +41,20 @@ const AdminDashboard = () => {
         return;
       }
 
-      // Load data from existing tables
+      // Load data from existing tables with proper error handling
       const [
         campaignsResponse,
         transactionsResponse,
         contributionsResponse
-      ] = await Promise.all([
+      ] = await Promise.allSettled([
         supabase.from('campaigns').select('*'),
         supabase.from('form_submissions').select('*').order('submitted_at', { ascending: false }),
-        supabase.from('contributions').select('*').catch(() => ({ data: [], error: null }))
+        supabase.from('contributions').select('*')
       ]);
 
-      const campaigns = campaignsResponse.data || [];
-      const transactions = transactionsResponse.data || [];
-      const contributions = contributionsResponse.data || [];
+      const campaigns = campaignsResponse.status === 'fulfilled' ? (campaignsResponse.value.data || []) : [];
+      const transactions = transactionsResponse.status === 'fulfilled' ? (transactionsResponse.value.data || []) : [];
+      const contributions = contributionsResponse.status === 'fulfilled' ? (contributionsResponse.value.data || []) : [];
 
       // Calculate metrics from existing data
       console.log('Dashboard data loaded:', {
