@@ -108,7 +108,7 @@ const AdminLayout = () => {
 
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        sidebarOpen ? 'translate-x-0' : 'lg:translate-x-0 -translate-x-full'
       }`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
