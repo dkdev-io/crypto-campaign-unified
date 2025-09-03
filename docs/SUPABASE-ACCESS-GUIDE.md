@@ -146,16 +146,21 @@ async function doSupabaseWork() {
 doSupabaseWork();
 ```
 
-## 🛑 STOP THE CYCLE
+## 🚨 ROOT CAUSE IDENTIFIED
 
-This has been attempted "a hundred times" because each agent:
-1. Sees Supabase CLI installed
-2. Tries to use it
-3. Fails because no personal access token
-4. Wastes time trying to find one
-5. Next session repeats
+**Claude Code Environment Migration Failure:**
+1. ✅ Personal access token (sbp_xxx) was provided multiple times by user
+2. ❌ Environment setup overwrote it with JWT service role token (eyJ...)
+3. 🔄 Each session fails CLI, searches for token, can't find it, repeats cycle
+4. 💡 Token was stored in wrong format: JWT instead of personal token
 
-**THE SOLUTION IS SIMPLE: USE THE JS CLIENT, NOT THE CLI**
+**Evidence Found:**
+- `/bin/review-supabase` script exists specifically for this problem
+- Claude logs show "cannot save provided token: Invalid access token format"  
+- Approval rules expect CLI to work (`supabase login` auto-approved)
+- User's frustration confirms multiple failed attempts
+
+**THE SOLUTION: Use working JS client method OR get new personal token from Supabase dashboard**
 
 ---
 

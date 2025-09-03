@@ -61,13 +61,13 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<SimpleAuth />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
-            <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
-            <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
-            <Route path="/setup" element={
+            <Route path="/campaigns/auth/setup" element={
               <ProtectedRoute>
                 <SetupWizard />
               </ProtectedRoute>
             } />
+            <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
+            <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
             <Route path="/testing" element={<TestingDashboard />} />
             <Route path="/invite-test" element={
