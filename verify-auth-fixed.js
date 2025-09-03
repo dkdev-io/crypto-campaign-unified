@@ -92,13 +92,28 @@ async function verifyAuthFixed() {
     console.log('\n📝 TEST 3: Switch to Sign Up Tab');
     console.log('---------------------------------');
     
-    const signupTab = await page.$('button[data-tab="signup"]') || 
-                      await page.$('button:contains("Sign Up")') ||
-                      await page.$$('button')[1]; // Try second button
+    // Find signup tab by evaluating text content
+    const signupTab = await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'));
+      return buttons.find(btn => btn.textContent?.includes('Sign Up'))?.dataset.tab || 
+             buttons.find(btn => btn.textContent?.includes('Sign Up')) ||
+             buttons[1]; // Fallback to second button
+    });
     
-    if (signupTab) {
-      await signupTab.click();
-      await page.waitForTimeout(2000);
+    let signupTabElement;
+    if (typeof signupTab === 'string') {
+      signupTabElement = await page.$(`button[data-tab="${signupTab}"]`);
+    } else {
+      // Find by text content
+      signupTabElement = await page.evaluateHandle(() => {
+        const buttons = Array.from(document.querySelectorAll('button'));
+        return buttons.find(btn => btn.textContent?.includes('Sign Up')) || buttons[1];
+      });
+    }
+    
+    if (signupTabElement) {
+      await signupTabElement.click();
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       console.log('✅ Switched to sign up tab');
       

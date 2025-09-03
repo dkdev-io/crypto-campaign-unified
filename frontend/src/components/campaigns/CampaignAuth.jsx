@@ -134,6 +134,9 @@ const CampaignAuth = () => {
       navigate(from, { replace: true });
     } catch (error) {
       console.error('Login error:', error);
+      setValidationErrors({ 
+        submit: error.message || 'Login failed. Please try again.' 
+      });
     } finally {
       setLoading(false);
     }
