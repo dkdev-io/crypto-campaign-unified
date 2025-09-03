@@ -2,38 +2,11 @@ import { createClient } from '@supabase/supabase-js'
 
 // Use environment variables for Supabase configuration
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://kmepcdsklnnxokoimvzo.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI'
 
-// Graceful handling of missing environment variable
-let supabase
+console.log('Supabase config - URL:', supabaseUrl)
+console.log('Supabase config - Key length:', supabaseAnonKey?.length)
 
-if (!supabaseAnonKey) {
-  console.warn('VITE_SUPABASE_ANON_KEY environment variable not found. Using fallback configuration.')
-  // Create a minimal client that won't crash the app but will log errors on use
-  supabase = {
-    auth: {
-      signUp: () => Promise.reject(new Error('Supabase not configured')),
-      signIn: () => Promise.reject(new Error('Supabase not configured')),
-      signOut: () => Promise.reject(new Error('Supabase not configured')),
-      getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-      getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      onAuthStateChange: () => ({
-        data: {
-          subscription: {
-            unsubscribe: () => {}
-          }
-        }
-      })
-    },
-    from: () => ({
-      select: () => Promise.reject(new Error('Supabase not configured')),
-      insert: () => Promise.reject(new Error('Supabase not configured')),
-      update: () => Promise.reject(new Error('Supabase not configured')),
-      delete: () => Promise.reject(new Error('Supabase not configured'))
-    })
-  }
-} else {
-  supabase = createClient(supabaseUrl, supabaseAnonKey)
-}
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export { supabase }

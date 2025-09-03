@@ -113,10 +113,12 @@ export const AuthProvider = ({ children }) => {
   // Sign in with email and password
   const signIn = async (email, password) => {
     try {
+      console.log('AuthContext: Starting signIn for:', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       })
+      console.log('AuthContext: Supabase response - data:', !!data, 'error:', error);
 
       if (error) {
         // Provide more specific error messages
