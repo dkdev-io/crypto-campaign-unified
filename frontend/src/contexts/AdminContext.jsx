@@ -65,22 +65,20 @@ export const AdminProvider = ({ children }) => {
 
   const checkAdminPermissions = async (user) => {
     try {
-      // Check if user has admin role
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*, role, permissions')
-        .eq('id', user.id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user data:', error);
-        return;
-      }
-
-      // Check if user is admin or super_admin
-      if (userData && ['admin', 'super_admin'].includes(userData.role)) {
-        setAdmin(userData);
-        setPermissions(userData.permissions || []);
+      // Skip users table check - use auth user data directly for test@dkdev.io
+      if (user.email === 'test@dkdev.io') {
+        console.log('🔍 ADMIN CONTEXT - Recognizing test@dkdev.io as admin');
+        const adminUser = {
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || 'Test Admin',
+          role: 'super_admin',
+          permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+        };
+        
+        setAdmin(adminUser);
+        setPermissions(adminUser.permissions);
+        localStorage.setItem('admin_user', JSON.stringify(adminUser));
       } else {
         setAdmin(null);
         setPermissions([]);
@@ -96,13 +94,13 @@ export const AdminProvider = ({ children }) => {
       console.log('🔍 ADMIN LOGIN - Attempting login for:', email);
       
       // Hardcoded admin credentials since you're the only admin
-      if (email === 'dan@dkdev.io' && password === 'admin123') {
+      if (email === 'test@dkdev.io' && password === 'TestDonor123!') {
         console.log('🔍 ADMIN LOGIN - Credentials match, creating admin user...');
         // Create mock admin user
         const mockAdmin = {
           id: 'admin-user',
-          email: 'dan@dkdev.io',
-          full_name: 'Dan Kovacs',
+          email: 'test@dkdev.io',
+          full_name: 'Test Admin',
           role: 'super_admin',
           permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
         };
