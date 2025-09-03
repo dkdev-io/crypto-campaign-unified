@@ -23,9 +23,10 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (isAdmin()) {
-      navigate('/minda/dashboard');
+      console.log('🔍 ADMIN DETECTED - Navigating to dashboard...');
+      navigate('/minda/dashboard', { replace: true });
     }
-  }, [admin, navigate]);
+  }, [admin, navigate, isAdmin]);
 
   const handleLogin = async (e) => {
     console.log('🔍 HANDLE LOGIN CALLED!!! - Event:', e);
@@ -39,7 +40,13 @@ const AdminLogin = () => {
     
     if (result.success) {
       console.log('🔍 LOGIN DEBUG - Success, navigating to dashboard...');
-      navigate('/minda/dashboard');
+      navigate('/minda/dashboard', { replace: true });
+      // Force navigation if React Router fails
+      setTimeout(() => {
+        if (window.location.pathname === '/minda') {
+          window.location.href = '/minda/dashboard';
+        }
+      }, 1000);
     } else {
       console.log('🔍 LOGIN DEBUG - Failed:', result.error);
       setError(result.error || 'Login failed');
