@@ -54,32 +54,18 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = async (userId) => {
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single()
-
-      if (error) {
-        console.error('Error fetching user profile:', error)
-        // If users table doesn't exist, create a mock profile
-        if (error.message.includes('Could not find the table')) {
-          console.log('Users table not found, using auth user data')
-          const { data: { user } } = await supabase.auth.getUser()
-          if (user) {
-            setUserProfile({
-              id: user.id,
-              email: user.email,
-              full_name: user.user_metadata?.full_name || 'User',
-              role: 'user',
-              created_at: user.created_at
-            })
-          }
-        }
-        return
+      // Always use auth user data since users table may not exist
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUserProfile({
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || 'User',
+          role: 'user', // Default role
+          created_at: user.created_at,
+          email_confirmed: !!user.email_confirmed_at
+        })
       }
-
-      setUserProfile(data)
     } catch (error) {
       console.error('Error in fetchUserProfile:', error)
     }
@@ -115,30 +101,8 @@ export const AuthProvider = ({ children }) => {
         needsVerification: !data.user?.email_confirmed_at
       })
 
-      // Create user profile in our users table (if table exists)
-      if (data.user) {
-        try {
-          const { error: profileError } = await supabase
-            .from('users')
-            .insert([
-              {
-                id: data.user.id,
-                email: data.user.email,
-                full_name: fullName,
-                email_confirmed: data.user.email_confirmed_at ? true : false,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              }
-            ])
-
-          if (profileError) {
-            console.warn('Could not create user profile (table may not exist):', profileError.message)
-            // Continue with signup anyway - auth system will work without custom users table
-          }
-        } catch (err) {
-          console.warn('Users table not available, using auth-only flow')
-        }
-      }
+      // Skip users table operations - use auth.users only
+      console.log('✅ User created in auth.users, skipping custom users table')
 
       return { data, error: null }
     } catch (error) {
@@ -173,21 +137,8 @@ export const AuthProvider = ({ children }) => {
         throw friendlyError
       }
 
-      // Update login tracking (if users table exists)
-      if (data.user) {
-        try {
-          await supabase
-            .from('users')
-            .update({
-              last_login_at: new Date().toISOString(),
-              login_count: supabase.sql`login_count + 1`
-            })
-            .eq('id', data.user.id)
-        } catch (updateError) {
-          console.warn('Could not update login tracking (users table may not exist):', updateError.message)
-          // Don't fail the login for this - auth will work without custom users table
-        }
-      }
+      // Skip login tracking - use auth.users only
+      console.log('✅ User signed in via auth.users')
 
       return { data, error: null }
     } catch (error) {
@@ -212,21 +163,20 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Update user profile
+  // Update user profile via auth metadata
   const updateProfile = async (updates) => {
     try {
       if (!user) throw new Error('No user logged in')
 
-      const { data, error } = await supabase
-        .from('users')
-        .update(updates)
-        .eq('id', user.id)
-        .select()
-        .single()
+      // Update auth metadata instead of users table
+      const { data, error } = await supabase.auth.updateUser({
+        data: updates
+      })
 
       if (error) throw error
 
-      setUserProfile(data)
+      // Update local profile state
+      setUserProfile(prev => ({ ...prev, ...updates }))
       return { data, error: null }
     } catch (error) {
       return { data: null, error }
@@ -306,19 +256,13 @@ export const AuthProvider = ({ children }) => {
     try {
       if (!user) return { verified: false, error: 'No user found' }
 
-      // Update local user profile with email confirmation status
+      // Update local profile state only (no users table)
       if (user.email_confirmed_at) {
-        await supabase
-          .from('users')
-          .update({ 
-            email_confirmed: true,
-            email_confirmed_at: user.email_confirmed_at,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', user.id)
-
-        // Refresh user profile
-        await fetchUserProfile(user.id)
+        setUserProfile(prev => ({
+          ...prev,
+          email_confirmed: true,
+          email_confirmed_at: user.email_confirmed_at
+        }))
       }
 
       return { verified: !!user.email_confirmed_at, error: null }
