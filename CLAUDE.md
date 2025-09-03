@@ -45,6 +45,12 @@ test@dkdev.io
 
 **ENFORCEMENT:** Any test using non-approved emails = IMMEDIATE TASK FAILURE
 
+**🚨 CRITICAL SUPABASE EMAIL BAN PREVENTION:**
+- Using multiple test emails will trigger Supabase email service bans
+- ALL existing non-compliant test emails have been consolidated to test@dkdev.io
+- Any new test email creation = IMMEDIATE VIOLATION
+- Check database first: `SELECT email FROM campaigns WHERE email LIKE '%test%'`
+
 ## 🗄️ CRITICAL: DATA INTEGRATION PREVENTION GUARDRAILS
 
 ### MANDATORY DATA INTEGRATION PROTOCOL
