@@ -1,0 +1,412 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_ENV: test
+  CI: true
+
+jobs:
+  # Unit Tests
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run unit tests
+      run: npm run test:run
+
+    - name: Generate test report
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  # Integration Tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_DB: crypto_campaign_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup test database
+      run: |
+        PGPASSWORD=test psql -h localhost -U test -d crypto_campaign_test -c "
+        CREATE TABLE IF NOT EXISTS users (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password_hash TEXT NOT NULL,
+          first_name VARCHAR(100),
+          last_name VARCHAR(100),
+          wallet_address VARCHAR(42),
+          status VARCHAR(20) DEFAULT 'active',
+          role VARCHAR(20) DEFAULT 'user',
+          permissions JSONB DEFAULT '[]',
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
+          last_login_at TIMESTAMP,
+          deleted_at TIMESTAMP
+        );
+        
+        CREATE TABLE IF NOT EXISTS campaigns (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          name VARCHAR(255) NOT NULL,
+          type VARCHAR(50) NOT NULL,
+          description TEXT,
+          duration INTEGER DEFAULT 30,
+          budget DECIMAL(15,2) DEFAULT 0,
+          target_amount DECIMAL(15,2),
+          max_individual_contribution DECIMAL(15,2),
+          status VARCHAR(20) DEFAULT 'draft',
+          user_id UUID NOT NULL REFERENCES users(id),
+          metrics JSONB DEFAULT '{}',
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
+          activated_at TIMESTAMP,
+          paused_at TIMESTAMP,
+          completed_at TIMESTAMP
+        );
+        
+        CREATE TABLE IF NOT EXISTS contributions (
+          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+          campaign_id UUID NOT NULL REFERENCES campaigns(id),
+          user_id UUID NOT NULL REFERENCES users(id),
+          amount DECIMAL(15,8) NOT NULL,
+          currency VARCHAR(10) NOT NULL,
+          wallet_address VARCHAR(42) NOT NULL,
+          status VARCHAR(30) DEFAULT 'pending',
+          message TEXT,
+          anonymous BOOLEAN DEFAULT FALSE,
+          transaction_hash VARCHAR(66),
+          block_number BIGINT,
+          refund_transaction_hash VARCHAR(66),
+          refund_reason TEXT,
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
+          confirmed_at TIMESTAMP,
+          refund_requested_at TIMESTAMP,
+          refunded_at TIMESTAMP
+        );
+        "
+
+    - name: Run integration tests
+      run: npm run test:integration
+      env:
+        DATABASE_URL: postgresql://test:test@localhost:5432/crypto_campaign_test
+        SUPABASE_URL: ${{ secrets.SUPABASE_TEST_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_TEST_KEY }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    - name: Upload integration test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: integration-test-results
+        path: test-results/
+
+  # API Tests
+  api-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Start test server
+      run: |
+        npm run build &
+        sleep 10
+      env:
+        NODE_ENV: test
+        PORT: 3001
+
+    - name: Run API tests
+      run: npm run test:api
+      env:
+        API_BASE_URL: http://localhost:3001
+        TEST_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    - name: Upload API test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: api-test-results
+        path: test-results/api/
+
+  # Performance Tests
+  performance-tests:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run performance tests
+      run: npm run test:performance
+      env:
+        PERFORMANCE_THRESHOLD_MS: 1000
+        LOAD_TEST_CONCURRENT_USERS: 25
+        LOAD_TEST_DURATION_SECONDS: 30
+
+    - name: Upload performance reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: performance-reports
+        path: benchmarks/
+
+  # Security Tests
+  security-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security tests
+      run: npm run test:security
+      env:
+        SECURITY_SCAN_TIMEOUT: 30000
+
+    - name: Run dependency audit
+      run: npm audit --audit-level high
+
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-scan-results
+        path: security-reports/
+
+  # Code Quality
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Run type checking
+      run: npm run typecheck
+      continue-on-error: true
+
+    - name: Check code formatting
+      run: npm run format:check
+      continue-on-error: true
+
+    - name: Run quality checks
+      run: npm run quality:check
+
+  # E2E Tests (only on main branch or release)
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, api-tests]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup test environment
+      run: |
+        docker-compose -f docker-compose.test.yml up -d
+        sleep 30
+
+    - name: Run E2E tests
+      run: npm run test:e2e
+      env:
+        E2E_BASE_URL: http://localhost:3000
+        E2E_API_URL: http://localhost:3001
+
+    - name: Upload E2E test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: e2e-test-results
+        path: e2e-results/
+
+    - name: Cleanup test environment
+      run: docker-compose -f docker-compose.test.yml down
+
+  # Test Summary
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, api-tests, performance-tests, security-tests, code-quality]
+    if: always()
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+
+    - name: Generate test summary
+      run: |
+        echo "## Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Test Results:" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Unit Tests: ${{ needs.unit-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Integration Tests: ${{ needs.integration-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ API Tests: ${{ needs.api-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Performance Tests: ${{ needs.performance-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Security Tests: ${{ needs.security-tests.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Code Quality: ${{ needs.code-quality.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ needs.unit-tests.result }}" == "success" ] && 
+           [ "${{ needs.integration-tests.result }}" == "success" ] && 
+           [ "${{ needs.api-tests.result }}" == "success" ]; then
+          echo "🎉 **All critical tests passed!**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Some tests failed. Please review the results.**" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Comment PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+          
+          const botComment = comments.find(comment => 
+            comment.user.type === 'Bot' && 
+            comment.body.includes('Test Results Summary')
+          );
+          
+          const testResults = `
+          ## Test Results Summary
+          
+          | Test Suite | Status |
+          |------------|--------|
+          | Unit Tests | ${{ needs.unit-tests.result == 'success' && '✅' || '❌' }} |
+          | Integration Tests | ${{ needs.integration-tests.result == 'success' && '✅' || '❌' }} |
+          | API Tests | ${{ needs.api-tests.result == 'success' && '✅' || '❌' }} |
+          | Performance Tests | ${{ needs.performance-tests.result == 'success' && '✅' || '❌' }} |
+          | Security Tests | ${{ needs.security-tests.result == 'success' && '✅' || '❌' }} |
+          | Code Quality | ${{ needs.code-quality.result == 'success' && '✅' || '❌' }} |
+          
+          ${
+            needs.unit-tests.result == 'success' && 
+            needs.integration-tests.result == 'success' && 
+            needs.api-tests.result == 'success' 
+              ? '🎉 **All critical tests passed! This PR is ready for review.**' 
+              : '❌ **Some tests failed. Please fix the issues before merging.**'
+          }
+          `;
+          
+          if (botComment) {
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: testResults
+            });
+          } else {
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: testResults
+            });
+          }

@@ -598,6 +598,24 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         >
           Next: Connect Bank Account →
         </button>
+        
+        {/* Skip option when FEC API is unavailable */}
+        {searched && committees.length === 0 && (
+          <button 
+            className="btn btn-secondary"
+            onClick={() => {
+              updateFormData({
+                fecCommitteeId: 'manual-entry',
+                committeeName: 'Manual Entry - To Be Updated',
+                selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
+              });
+              onNext();
+            }}
+            style={{ marginTop: '1rem', background: '#6c757d', color: 'white' }}
+          >
+            Continue Without Committee (Can Update Later) →
+          </button>
+        )}
       </div>
 
       {/* Instructions */}

@@ -1,0 +1,217 @@
+name: Test Coverage Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests with coverage
+      run: npm run test:coverage
+    
+    - name: Generate coverage report
+      run: |
+        echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "Node.js Version: ${{ matrix.node-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        npm run test:coverage -- --reporter=verbose 2>&1 | tail -20 >> $GITHUB_STEP_SUMMARY
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+    
+    - name: Coverage Comment
+      if: github.event_name == 'pull_request'
+      uses: MishaKav/pytest-coverage-comment@main
+      with:
+        pytest-coverage-path: ./coverage/coverage-summary.json
+        junitxml-path: ./test-results/junit.xml
+    
+    - name: Archive coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-${{ matrix.node-version }}
+        path: coverage/
+    
+    - name: Archive test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.node-version }}
+        path: test-results/
+    
+    - name: Check coverage thresholds
+      run: |
+        if [ -f coverage/coverage-summary.json ]; then
+          node -e "
+            const fs = require('fs');
+            const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+            const total = coverage.total;
+            
+            console.log('Coverage Summary:');
+            console.log(\`Lines: \${total.lines.pct}%\`);
+            console.log(\`Functions: \${total.functions.pct}%\`);
+            console.log(\`Branches: \${total.branches.pct}%\`);
+            console.log(\`Statements: \${total.statements.pct}%\`);
+            
+            const thresholds = {
+              lines: 90,
+              functions: 90,
+              branches: 85,
+              statements: 90
+            };
+            
+            let failed = false;
+            Object.keys(thresholds).forEach(key => {
+              if (total[key].pct < thresholds[key]) {
+                console.error(\`❌ \${key} coverage \${total[key].pct}% is below threshold \${thresholds[key]}%\`);
+                failed = true;
+              } else {
+                console.log(\`✅ \${key} coverage \${total[key].pct}% meets threshold \${thresholds[key]}%\`);
+              }
+            });
+            
+            if (failed) {
+              process.exit(1);
+            }
+          "
+        fi
+
+  performance-test:
+    runs-on: ubuntu-latest
+    needs: test-coverage
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run performance benchmarks
+      run: npm run bench:run
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results
+        path: benchmarks/
+
+  quality-gate:
+    runs-on: ubuntu-latest
+    needs: [test-coverage, performance-test]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Quality Gate Check
+      run: |
+        echo "🔍 Running Quality Gate Analysis..."
+        
+        # Run tests and generate coverage
+        npm run test:coverage
+        
+        # Check for code quality issues
+        echo "📊 Analyzing coverage trends..."
+        
+        # Generate quality report
+        node -e "
+          const fs = require('fs');
+          const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+          const total = coverage.total;
+          
+          const report = {
+            timestamp: new Date().toISOString(),
+            coverage: {
+              lines: total.lines.pct,
+              functions: total.functions.pct,
+              branches: total.branches.pct,
+              statements: total.statements.pct
+            },
+            quality: {
+              score: Math.round((total.lines.pct + total.functions.pct + total.branches.pct + total.statements.pct) / 4),
+              grade: total.lines.pct >= 90 && total.functions.pct >= 90 && total.branches.pct >= 85 ? 'A' : 'B'
+            }
+          };
+          
+          console.log('Quality Gate Results:');
+          console.log('=====================');
+          console.log(\`Overall Score: \${report.quality.score}%\`);
+          console.log(\`Quality Grade: \${report.quality.grade}\`);
+          console.log(\`Timestamp: \${report.timestamp}\`);
+          
+          fs.writeFileSync('quality-gate-report.json', JSON.stringify(report, null, 2));
+        "
+    
+    - name: Comment PR with Quality Gate
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('quality-gate-report.json', 'utf8'));
+          
+          const comment = `
+          ## 🚦 Quality Gate Report
+          
+          **Overall Score:** ${report.quality.score}%  
+          **Quality Grade:** ${report.quality.grade}  
+          **Timestamp:** ${report.timestamp}
+          
+          ### Coverage Details
+          - **Lines:** ${report.coverage.lines}%
+          - **Functions:** ${report.coverage.functions}%  
+          - **Branches:** ${report.coverage.branches}%
+          - **Statements:** ${report.coverage.statements}%
+          
+          ${report.quality.grade === 'A' ? '✅ All quality gates passed!' : '⚠️ Some quality gates need attention.'}
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
