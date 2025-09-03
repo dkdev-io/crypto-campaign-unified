@@ -274,7 +274,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
             <div style={{ fontSize: '14px', color: '#6c757d' }}>
               Loading Plaid SDK...
             </div>
-          )}
+          ) : null}
         </div>
       )}
 
@@ -298,8 +298,8 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </ul>
       </div>
 
-      {/* Development Skip Option */}
-      {!bankInfo?.isVerified && !formData.skipBankConnection && (
+      {/* Development Skip Option - Always show for testing */}
+      {(!bankInfo?.isVerified && !formData.skipBankConnection) || true ? (
         <div style={{ 
           background: '#fff3cd',
           border: '1px solid #ffeaa7',

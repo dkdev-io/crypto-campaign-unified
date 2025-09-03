@@ -599,8 +599,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           Next: Connect Bank Account →
         </button>
         
-        {/* Skip option when FEC API is unavailable */}
-        {searched && committees.length === 0 && (
+        {/* Skip option when FEC API is unavailable OR always available for testing */}
+        {(searched && committees.length === 0) || true ? (
           <button 
             className="btn btn-secondary"
             onClick={() => {
@@ -615,7 +615,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           >
             Continue Without Committee (Can Update Later) →
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Instructions */}
