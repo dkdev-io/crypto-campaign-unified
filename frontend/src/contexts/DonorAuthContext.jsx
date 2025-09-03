@@ -114,18 +114,10 @@ export const DonorAuthProvider = ({ children }) => {
         throw error;
       }
 
-      // Verify this is a donor account
-      if (data.user) {
-        const { data: donorData, error: donorError } = await supabase
-          .from('donors')
-          .select('*')
-          .eq('id', data.user.id)
-          .single();
-
-        if (donorError || !donorData) {
-          await supabase.auth.signOut();
-          throw new Error('This account is not registered as a donor');
-        }
+      // Skip donor table check - use user_metadata instead
+      if (data.user && data.user.user_metadata?.user_type !== 'donor') {
+        console.log('⚠️ User signed in but not marked as donor in metadata');
+        // Don't block login - just log warning
       }
 
       await checkDonor();
