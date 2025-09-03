@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import SimpleDonorForm from '../components/SimpleDonorForm';
+import EmbeddedDonorForm from '../components/EmbeddedDonorForm';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -115,10 +115,8 @@ const CampaignPage = () => {
                 </p>
               </div>
               
-              <SimpleDonorForm 
-                campaignId={campaign.id} 
-                customStyles={campaign.applied_styles}
-                themeColor={campaign.theme_color}
+              <EmbeddedDonorForm 
+                campaignId={campaign.id}
               />
             </div>
           </div>
