@@ -16,7 +16,9 @@ const CampaignAuth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const from = location.state?.from?.pathname || '/';
+  // If on setup flow, redirect back to setup after auth, otherwise go to homepage
+  const from = location.state?.from?.pathname || 
+               (location.pathname.includes('/campaigns/auth/setup') ? '/campaigns/auth/setup' : '/');
 
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
