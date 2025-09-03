@@ -19,7 +19,7 @@ async function createTestyCampaign() {
     
     // 2. Try to sign in first
     console.log('1. Attempting sign in...');
-    await page.waitForTimeout(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     await page.type('input[name="email"]', 'test@dkdev.io');
     await page.type('input[name="password"]', 'TestDonor123!');
