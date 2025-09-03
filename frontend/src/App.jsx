@@ -16,6 +16,9 @@ import { AnalyticsProvider } from './components/analytics/AnalyticsProvider';
 // import DonationTest from './pages/DonationTest';
 import PrivacyBanner from './components/analytics/PrivacyBanner';
 
+// Auth Context for Campaign Users
+import { AuthProvider } from './contexts/AuthContext';
+
 // Admin Components
 import { AdminProvider } from './contexts/AdminContext';
 import AdminLogin from './components/admin/AdminLogin';
@@ -41,17 +44,18 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 
 function App() {
   return (
-    <AdminProvider>
-      <DonorAuthProvider>
-        <AnalyticsProvider config={{ 
-          debug: process.env.NODE_ENV === 'development',
-          cookieConsent: 'optional',
-          respectDNT: true,
-          enableGeolocation: true,
-          enableScrollTracking: true,
-          enableClickTracking: true 
-        }}>
-          <Router>
+    <AuthProvider>
+      <AdminProvider>
+        <DonorAuthProvider>
+          <AnalyticsProvider config={{ 
+            debug: process.env.NODE_ENV === 'development',
+            cookieConsent: 'optional',
+            respectDNT: true,
+            enableGeolocation: true,
+            enableScrollTracking: true,
+            enableClickTracking: true 
+          }}>
+            <Router>
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/setup" element={
@@ -158,6 +162,7 @@ function App() {
       </AnalyticsProvider>
     </DonorAuthProvider>
     </AdminProvider>
+    </AuthProvider>
   );
 }
 

@@ -84,7 +84,7 @@ export const DonorAuthProvider = ({ children }) => {
             user_type: 'donor',
             donor_type: donorType
           },
-          emailRedirectTo: `${window.location.origin}/donors/dashboard`
+          emailRedirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/donors/dashboard`
         }
       });
 

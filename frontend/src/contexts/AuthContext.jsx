@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
           data: {
             full_name: fullName
           },
-          emailRedirectTo: `${window.location.origin}/auth?verified=true`
+          emailRedirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/auth?verified=true`
         }
       })
 
@@ -335,7 +335,7 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = async (email) => {
     try {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?reset=true`
+        redirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/auth?reset=true`
       })
 
       if (error) {
