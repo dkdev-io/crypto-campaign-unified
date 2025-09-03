@@ -127,19 +127,14 @@ const CampaignAuth = () => {
     setValidationErrors({});
     
     try {
-      console.log('CampaignAuth: Attempting signin with:', signInData.email);
       const result = await signIn(signInData.email, signInData.password);
-      console.log('CampaignAuth: signIn result:', result);
 
       if (result && result.error) {
-        console.error('CampaignAuth: Auth error:', result.error);
         setValidationErrors({ 
           submit: result.error.message || 'Login failed. Please try again.' 
         });
         return;
       }
-
-      console.log('CampaignAuth: Auth successful, redirecting...');
       // Redirect to setup wizard after successful login
       navigate('/campaigns/auth/setup', { replace: true });
     } catch (error) {
