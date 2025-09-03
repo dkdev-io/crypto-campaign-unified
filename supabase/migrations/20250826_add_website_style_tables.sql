@@ -26,11 +26,7 @@ CREATE TABLE IF NOT EXISTS campaign_style_logs (
     event_type VARCHAR(50) NOT NULL, -- 'styles_applied', 'styles_updated', etc.
     styles_data JSONB,
     source_url TEXT,
-    applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    
-    -- Indexes
-    INDEX(campaign_id),
-    INDEX(applied_at)
+    applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Add website style columns to campaigns table if they don't exist
