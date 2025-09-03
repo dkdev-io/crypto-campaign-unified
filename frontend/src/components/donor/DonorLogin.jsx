@@ -81,7 +81,7 @@ const DonorLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
@@ -118,7 +118,7 @@ const DonorLogin = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-card-foreground mb-1">
                 Email Address
               </label>
               <div className="relative">
@@ -128,8 +128,8 @@ const DonorLogin = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    validationErrors.email ? 'border-red-300' : 'border-gray-300'
+                  className={`form-input w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                    validationErrors.email ? 'border-destructive' : 'border-border'
                   }`}
                   placeholder="donor@example.com"
                 />
@@ -142,12 +142,12 @@ const DonorLogin = () => {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-card-foreground">
                   Password
                 </label>
                 <Link 
                   to="/donors/auth/forgot-password" 
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm text-primary hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -159,8 +159,8 @@ const DonorLogin = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    validationErrors.password ? 'border-red-300' : 'border-gray-300'
+                  className={`form-input w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                    validationErrors.password ? 'border-destructive' : 'border-border'
                   }`}
                   placeholder="Enter your password"
                 />
@@ -175,9 +175,9 @@ const DonorLogin = () => {
               <input
                 type="checkbox"
                 id="remember"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary focus:ring-primary border-border rounded"
               />
-              <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="remember" className="ml-2 block text-sm text-card-foreground">
                 Remember me
               </label>
             </div>
@@ -186,7 +186,7 @@ const DonorLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -194,15 +194,15 @@ const DonorLogin = () => {
 
           {/* Divider */}
           <div className="mt-6 flex items-center">
-            <div className="flex-1 border-t border-gray-200"></div>
-            <span className="px-4 text-sm text-gray-500">or</span>
-            <div className="flex-1 border-t border-gray-200"></div>
+            <div className="flex-1 border-t border-border"></div>
+            <span className="px-4 text-sm text-muted-foreground">or</span>
+            <div className="flex-1 border-t border-border"></div>
           </div>
 
           {/* Sign Up Link */}
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Don't have a donor account?{' '}
-            <Link to="/donors/auth/register" className="font-medium text-blue-600 hover:underline">
+            <Link to="/donors/auth/register" className="font-medium text-primary hover:underline">
               Create account
             </Link>
           </p>
