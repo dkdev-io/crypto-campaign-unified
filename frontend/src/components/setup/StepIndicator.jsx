@@ -2,12 +2,13 @@ import React from 'react';
 
 const StepIndicator = ({ currentStep, totalSteps }) => {
   const steps = [
-    'Signup',
-    'Campaign Info', 
-    'Compliance',
+    'Campaign Info',
+    'Committee Search',
+    'Bank Connection', 
     'Form Customization',
-    'Embed Options',
-    'Launch'
+    'Style Confirmation',
+    'Terms Agreement',
+    'Launch & QR Code'
   ];
 
   return (

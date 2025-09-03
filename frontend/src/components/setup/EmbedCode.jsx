@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase.js';
+import QRCode from 'qrcode';
 
 const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   const [embedCode, setEmbedCode] = useState('');
@@ -7,6 +8,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [testUrl, setTestUrl] = useState('');
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
 
   useEffect(() => {
     generateEmbedCode();
@@ -33,7 +35,23 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
       setEmbedCode(data);
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-      setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
+      const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
+      setTestUrl(donationUrl);
+      
+      // Generate QR code for the donation URL
+      try {
+        const qrDataUrl = await QRCode.toDataURL(donationUrl, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#2a2a72',
+            light: '#FFFFFF'
+          }
+        });
+        setQrCodeDataUrl(qrDataUrl);
+      } catch (qrError) {
+        console.error('Failed to generate QR code:', qrError);
+      }
       
       // Mark setup as completed and trigger donor page automation
       const { error: updateError } = await supabase
@@ -74,7 +92,23 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       const fallbackCode = generateFallbackEmbedCode();
       setEmbedCode(fallbackCode);
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-      setTestUrl(`${baseUrl}/embed-form.html?campaign=${campaignId}`);
+      const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
+      setTestUrl(donationUrl);
+      
+      // Generate QR code for fallback too
+      try {
+        const qrDataUrl = await QRCode.toDataURL(donationUrl, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#2a2a72',
+            light: '#FFFFFF'
+          }
+        });
+        setQrCodeDataUrl(qrDataUrl);
+      } catch (qrError) {
+        console.error('Failed to generate QR code:', qrError);
+      }
       
     } finally {
       setLoading(false);
@@ -286,7 +320,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       </div>
 
-      {/* Test and Preview Section */}
+      {/* QR Code and Test Section */}
       <div style={{ 
         background: '#e7f3ff',
         border: '1px solid #b6d7ff',
@@ -295,35 +329,112 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <h4 style={{ color: '#0066cc', marginTop: 0 }}>
-          🔍 Test Your Form
+          📱 QR Code & Testing
         </h4>
-        <p style={{ color: '#004499', marginBottom: '1rem' }}>
-          Test your contribution form before embedding it on your website:
+        <p style={{ color: '#004499', marginBottom: '1.5rem' }}>
+          Share your donation form via QR code or test it directly:
         </p>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <button
-            onClick={handleTestForm}
-            disabled={!campaignId}
-            style={{
-              background: '#0066cc',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1rem',
-              borderRadius: '4px',
-              cursor: !campaignId ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              opacity: !campaignId ? 0.7 : 1
-            }}
-          >
-            🚀 Test Form (New Window)
-          </button>
-          <div style={{ 
-            fontSize: '14px', 
-            color: '#004499',
-            padding: '0.75rem 0',
-            fontFamily: 'monospace'
-          }}>
-            {testUrl}
+        
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'auto 1fr',
+          gap: '2rem',
+          alignItems: 'start'
+        }}>
+          {/* QR Code */}
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ 
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '8px',
+              border: '1px solid #b6d7ff',
+              marginBottom: '1rem',
+              display: 'inline-block'
+            }}>
+              {qrCodeDataUrl ? (
+                <img 
+                  src={qrCodeDataUrl} 
+                  alt="Donation Form QR Code"
+                  style={{ display: 'block' }}
+                />
+              ) : (
+                <div style={{
+                  width: '200px',
+                  height: '200px',
+                  background: '#f8f9fa',
+                  border: '1px dashed #ccc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#666'
+                }}>
+                  Generating QR...
+                </div>
+              )}
+            </div>
+            <div style={{ 
+              fontSize: '14px', 
+              color: '#0066cc', 
+              fontWeight: '500'
+            }}>
+              📱 Scan to Donate
+            </div>
+          </div>
+          
+          {/* Testing Options */}
+          <div>
+            <div style={{ marginBottom: '1rem' }}>
+              <strong style={{ color: '#0066cc', display: 'block', marginBottom: '0.5rem' }}>
+                🔗 Donation URL:
+              </strong>
+              <div style={{ 
+                background: 'white',
+                padding: '0.75rem',
+                borderRadius: '4px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                wordBreak: 'break-all',
+                border: '1px solid #b6d7ff'
+              }}>
+                {testUrl}
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={handleTestForm}
+                disabled={!campaignId}
+                style={{
+                  background: '#0066cc',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '4px',
+                  cursor: !campaignId ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: !campaignId ? 0.7 : 1
+                }}
+              >
+                🚀 Test Form
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(testUrl);
+                  alert('Donation URL copied!');
+                }}
+                style={{
+                  background: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                📋 Copy URL
+              </button>
+            </div>
           </div>
         </div>
       </div>
