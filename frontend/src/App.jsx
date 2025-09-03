@@ -8,7 +8,6 @@ import SimpleDonorForm from './components/SimpleDonorForm';
 import EmbedDonorForm from './components/EmbedDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
-import SimpleAuth from './components/auth/SimpleAuth';
 import CampaignAuth from './components/campaigns/CampaignAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
@@ -58,7 +57,6 @@ function App() {
             <Router>
             <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<SimpleAuth />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
