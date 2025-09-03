@@ -16,90 +16,53 @@ const client = new Client({
 })
 
 async function createUsersTable() {
-  console.log('🚀 Creating users table in Supabase...')
-  
-  const createTableSQL = `
-    -- Create users table for admin dashboard
-    CREATE TABLE IF NOT EXISTS public.users (
-      id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-      email VARCHAR(255) UNIQUE NOT NULL,
-      full_name VARCHAR(255),
-      role VARCHAR(50) DEFAULT 'user',
-      permissions TEXT[] DEFAULT '{}',
-      email_confirmed BOOLEAN DEFAULT false,
-      last_login_at TIMESTAMPTZ,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      updated_at TIMESTAMPTZ DEFAULT NOW()
-    );
-
-    -- Create indexes for performance
-    CREATE INDEX IF NOT EXISTS idx_users_email ON public.users(email);
-    CREATE INDEX IF NOT EXISTS idx_users_role ON public.users(role);
-    CREATE INDEX IF NOT EXISTS idx_users_created_at ON public.users(created_at);
-
-    -- Insert admin user
-    INSERT INTO public.users (id, email, full_name, role, permissions, email_confirmed, last_login_at)
-    VALUES (
-      'admin-user-id',
-      'dan@dkdev.io',
-      'Dan Kovacs',
-      'super_admin',
-      ARRAY['admin', 'export', 'view', 'manage', 'super_admin'],
-      true,
-      NOW()
-    ) ON CONFLICT (email) DO UPDATE SET
-      full_name = EXCLUDED.full_name,
-      role = EXCLUDED.role,
-      permissions = EXCLUDED.permissions,
-      last_login_at = EXCLUDED.last_login_at;
-
-    -- Grant necessary permissions
-    ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-
-    -- Allow anon access to read users for admin dashboard
-    CREATE POLICY IF NOT EXISTS "Allow anon read access" ON public.users
-        FOR SELECT USING (true);
-  `
+  console.log('🚀 Creating users table in Supabase via direct PostgreSQL connection...')
   
   try {
-    // Execute the SQL
-    const { data, error } = await supabase.rpc('exec_sql', {
-      sql_query: createTableSQL
-    })
+    // Connect to PostgreSQL
+    await client.connect()
+    console.log('✅ Connected to Supabase PostgreSQL database')
     
-    if (error) {
-      console.error('❌ Error creating table via RPC:', error)
-      
-      // Try alternative method - direct query
-      console.log('Trying direct SQL execution...')
-      const { data: queryData, error: queryError } = await supabase
-        .from('_supabase_admin')
-        .select('*')
-      
-      if (queryError) {
-        console.error('❌ Direct query also failed:', queryError)
-      }
-    } else {
-      console.log('✅ Successfully created users table and admin user')
-      console.log('Data:', data)
+    // Read migration file
+    const migrationSQL = fs.readFileSync('supabase/migrations/20250903023905_create_users_table.sql', 'utf8')
+    console.log('📄 Loaded migration SQL from file')
+    
+    // Execute the migration
+    console.log('🔄 Executing migration...')
+    const result = await client.query(migrationSQL)
+    console.log('✅ Migration executed successfully!')
+    
+    // Test if table exists and has data
+    console.log('\n🔍 Testing table access...')
+    const testResult = await client.query('SELECT * FROM public.users LIMIT 5')
+    console.log('✅ Users table is now accessible!')
+    console.log(`📊 Found ${testResult.rows.length} users`)
+    if (testResult.rows.length > 0) {
+      console.log('👤 Admin user:', testResult.rows[0])
     }
     
-    // Test if table exists now
-    console.log('\nTesting table access...')
-    const { data: testData, error: testError } = await supabase
-      .from('users')
-      .select('*')
-      .limit(1)
+    // Test API access
+    console.log('\n🌐 Testing REST API access...')
+    const response = await fetch('https://kmepcdsklnnxokoimvzo.supabase.co/rest/v1/users?select=*', {
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI'
+      }
+    })
     
-    if (testError) {
-      console.error('❌ Table still not accessible:', testError)
+    if (response.ok) {
+      const apiData = await response.json()
+      console.log('✅ REST API access working!')
+      console.log(`📊 API returned ${apiData.length} users`)
     } else {
-      console.log('✅ Users table is now accessible!')
-      console.log('Admin user:', testData)
+      console.log('⚠️ REST API access may be restricted, but table exists in database')
     }
     
   } catch (error) {
-    console.error('💥 Script execution failed:', error)
+    console.error('❌ Error:', error.message)
+    throw error
+  } finally {
+    await client.end()
+    console.log('🔌 Disconnected from database')
   }
 }
 

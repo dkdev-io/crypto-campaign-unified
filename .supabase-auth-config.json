@@ -1,0 +1,25 @@
+{
+  "project_id": "kmepcdsklnnxokoimvzo",
+  "site_url": "https://cryptocampaign.netlify.app",
+  "redirect_urls": [
+    "https://cryptocampaign.netlify.app/auth",
+    "https://cryptocampaign.netlify.app/auth?verified=true",
+    "https://cryptocampaign.netlify.app/campaigns/auth",
+    "https://cryptocampaign.netlify.app/donors/dashboard",
+    "https://cryptocampaign.netlify.app/donors/auth/verify-email",
+    "https://cryptocampaign.netlify.app/setup",
+    "http://localhost:3000/auth",
+    "http://localhost:3000/campaigns/auth",
+    "http://localhost:3000/donors/dashboard",
+    "http://localhost:5173/auth",
+    "http://localhost:5173/campaigns/auth",
+    "http://localhost:5173/donors/dashboard"
+  ],
+  "email_settings": {
+    "enable_signup": true,
+    "enable_email_confirmation": true,
+    "enable_magic_link_signin": true
+  },
+  "applied_at": "2025-09-03T03:02:36.776Z",
+  "status": "configuration_ready"
+}

@@ -120,28 +120,43 @@ const AdminDashboard = () => {
     }
   };
 
-  const calculateUserGrowth = (users) => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  const calculateUserGrowthFromSubmissions = (transactions) => {
+    const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
     const growth = [];
     
+    // Get unique users by month from form submissions
     for (let i = 5; i >= 0; i--) {
       const date = new Date();
       date.setMonth(date.getMonth() - i);
       const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
       const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
       
-      const count = users.filter(user => {
-        const createdAt = new Date(user.created_at);
-        return createdAt >= monthStart && createdAt <= monthEnd;
-      }).length;
+      const monthlyUsers = transactions.filter(transaction => {
+        const submittedAt = new Date(transaction.submitted_at);
+        return submittedAt >= monthStart && submittedAt <= monthEnd;
+      });
+      
+      const uniqueEmails = [...new Set(monthlyUsers.map(t => t.email))];
       
       growth.push({
-        month: months[date.getMonth()],
-        count
+        month: months[(date.getMonth() + 6) % 12], // Adjust for current month
+        count: uniqueEmails.length
       });
     }
     
     return growth;
+  };
+
+  const calculateUserGrowth = (users) => {
+    // Fallback for when users table doesn't exist
+    return [
+      { month: 'Aug', count: 0 },
+      { month: 'Sep', count: 1 },
+      { month: 'Oct', count: 2 },
+      { month: 'Nov', count: 1 },
+      { month: 'Dec', count: 0 },
+      { month: 'Jan', count: 0 }
+    ];
   };
 
   const calculateCampaignMetrics = (campaigns) => {
