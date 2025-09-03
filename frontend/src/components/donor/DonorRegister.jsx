@@ -98,17 +98,17 @@ const DonorRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-card rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-navy-900 mb-2">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
               Join as a Donor
             </h2>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Support causes you care about
             </p>
           </div>

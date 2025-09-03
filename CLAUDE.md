@@ -45,6 +45,105 @@ test@dkdev.io
 
 **ENFORCEMENT:** Any test using non-approved emails = IMMEDIATE TASK FAILURE
 
+## 🗄️ CRITICAL: DATA INTEGRATION PREVENTION GUARDRAILS
+
+### MANDATORY DATA INTEGRATION PROTOCOL
+
+**ABSOLUTE RULE: NO DATA CREATION WITHOUT INTEGRATION PROOF**
+
+#### 🚨 BEFORE CREATING ANY DATA, AGENTS MUST:
+
+1. **Check Existing Data Sources First**
+   ```bash
+   # Search for existing data
+   find . -name "*.db" -o -name "*.csv" -o -name "*test*data*" | grep -v node_modules
+   ```
+
+2. **Create Integration Plan BEFORE Data Generation**
+   - Document target system (Supabase table name)
+   - Verify target tables exist or create them first
+   - Write import script before generating data
+   - Test with small batch (10-50 records) first
+
+3. **Schema-First Approach - NO EXCEPTIONS**
+   - Database tables MUST exist before data generation
+   - Generated data MUST match existing schema exactly
+   - Test import immediately with sample records
+   - No data generation without confirmed target tables
+
+#### 📋 MANDATORY INTEGRATION CHECKLIST
+
+**EVERY agent creating data MUST complete ALL steps:**
+
+```markdown
+□ Target database tables exist and accessible
+□ Import script written and tested with sample data
+□ Full integration pipeline tested end-to-end
+□ Data successfully queryable in target system
+□ Clear documentation created for next agent
+□ No orphaned files (CSV without import, DB without connection)
+```
+
+#### 🔄 INTEGRATION-FIRST WORKFLOW
+
+**REQUIRED SEQUENCE:**
+1. **Create/verify target tables** in Supabase
+2. **Generate small test batch** (10-50 records)
+3. **Create import script** and test with batch
+4. **Verify data accessible** via target system queries
+5. **Generate full dataset** only after successful test
+6. **Import immediately** - no delays
+7. **Verify final import** with count and sample queries
+8. **Document process** for next agent
+
+#### ❌ PROHIBITED ACTIONS
+
+**IMMEDIATE TASK FAILURE for:**
+- Creating data without integration plan
+- Generating CSV files without import scripts
+- Creating SQLite databases without Supabase connection
+- Exporting data without verifying import works
+- Ending session with orphaned data sources
+- Creating migration files that are never applied
+
+#### 🎯 INTEGRATION TESTING REQUIREMENTS
+
+**For ANY data generation, MUST prove integration works:**
+```javascript
+// MANDATORY: Prove the data actually works
+async function validateDataIntegration() {
+  // 1. Generate test data
+  // 2. Import to target system  
+  // 3. Query target system
+  // 4. Verify data accessible and correct
+  // 5. Document the process
+}
+```
+
+#### 📝 SESSION HANDOFF PROTOCOL
+
+**BEFORE ending any data-related session, MUST create:**
+- `DATA_INTEGRATION_GUIDE.md` - How to use the generated data
+- Working import script with examples
+- Schema documentation
+- Verification that next agent can continue seamlessly
+
+#### 🧹 DATA LIFECYCLE MANAGEMENT
+
+**All temporary data files MUST have clear lifecycle:**
+- `*.db` files → Integrate to Supabase or delete after successful import
+- `*-export.csv` → MUST have corresponding working import script
+- `*-test-data.*` → MUST be integrated or explicitly marked as throwaway
+
+#### 🚫 ENFORCEMENT
+
+**DATA INTEGRATION VIOLATIONS:**
+- 1st violation: Warning + immediate correction required
+- 2nd violation: Task termination + process review
+- 3rd violation: Agent replacement + data audit
+
+**No exceptions. No orphaned data. No "I'll integrate it later."**
+
 ## BEFORE ANY ACTION, EVERY AGENT MUST:
 
 1. **Identify Task Category**: [PORT_OPS/APP_ACCESS/INTEGRATION/SESSION/FILE_OPS/SERVICE_STARTS/CODE_GENERATION]
