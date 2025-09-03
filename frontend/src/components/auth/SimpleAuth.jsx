@@ -67,7 +67,7 @@ const CampaignAuthNav = () => {
                 size="sm"
                 className="bg-accent text-accent-foreground hover:bg-accent/90"
                 style={{backgroundColor: 'hsl(var(--crypto-gold))', color: 'hsl(var(--crypto-navy))'}}
-                onClick={() => navigate('/setup')}
+                onClick={() => navigate('/campaigns/auth')}
               >
                 Campaigns
               </Button>

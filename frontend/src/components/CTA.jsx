@@ -15,7 +15,7 @@ const CTA = () => {
       if (isEmailVerified()) {
         // User is authenticated and verified, proceed to campaign setup
         console.log('Navigating to /setup (user verified)');
-        navigate('/setup');
+        navigate('/campaigns/auth/setup');
       } else {
         // User is authenticated but not verified, go to auth page for verification
         console.log('Navigating to /campaigns/auth (user not verified)');
