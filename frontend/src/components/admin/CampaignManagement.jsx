@@ -126,12 +126,66 @@ const CampaignManagement = () => {
   };
 
   const filteredCampaigns = campaigns.filter(campaign => {
-    const matchesSearch = campaign.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         campaign.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = campaign.campaign_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         campaign.email?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || campaign.status === statusFilter;
     
     return matchesSearch && matchesStatus;
+  });
+
+  // Date filtering helper
+  const getDateRange = (filter) => {
+    const now = new Date();
+    const year = now.getFullYear();
+    
+    switch (filter) {
+      case 'today':
+        const today = new Date(now.setHours(0,0,0,0));
+        return { start: today, end: new Date(today.getTime() + 24*60*60*1000) };
+      case 'week':
+        const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+        return { start: weekStart, end: new Date() };
+      case 'month':
+        return { start: new Date(year, now.getMonth(), 1), end: new Date() };
+      case 'quarter':
+        const quarter = Math.floor(now.getMonth() / 3);
+        return { start: new Date(year, quarter * 3, 1), end: new Date() };
+      case 'year':
+        return { start: new Date(year, 0, 1), end: new Date() };
+      default:
+        return null;
+    }
+  };
+
+  const filteredTransactions = transactions.filter(transaction => {
+    // Date filter
+    if (dateFilter !== 'all') {
+      const dateRange = getDateRange(dateFilter);
+      if (dateRange) {
+        const transDate = new Date(transaction.date);
+        if (transDate < dateRange.start || transDate > dateRange.end) {
+          return false;
+        }
+      }
+    }
+    
+    // Election cycle filter (based on year)
+    if (electionCycle !== '2024') {
+      const transYear = new Date(transaction.date).getFullYear();
+      if (transYear.toString() !== electionCycle) {
+        return false;
+      }
+    }
+    
+    // User email filter
+    if (userFilter.trim()) {
+      if (!transaction.email?.toLowerCase().includes(userFilter.toLowerCase().trim())) {
+        return false;
+      }
+    }
+    
+    return true;
   });
 
   const handleCampaignAction = async (campaignId, action) => {
@@ -375,7 +429,7 @@ const CampaignManagement = () => {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-foreground">Campaign Management</h2>
-            <p className="text-muted-foreground mt-1">Create, monitor, and manage all campaigns</p>
+            <p className="text-muted-foreground mt-1">Create, monitor, and manage all campaigns & transactions</p>
           </div>
           <button
             onClick={() => openCampaignModal()}
@@ -386,38 +440,129 @@ const CampaignManagement = () => {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Tab Navigation */}
       <div className="crypto-card">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <input
-              type="text"
-              placeholder="Search campaigns..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="form-input"
-            />
-          </div>
-          
-          <div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="form-input"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="paused">Paused</option>
-              <option value="completed">Completed</option>
-              <option value="suspended">Suspended</option>
-            </select>
-          </div>
+        <div className="flex space-x-1">
+          <button
+            onClick={() => setActiveTab('campaigns')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              activeTab === 'campaigns'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+            }`}
+          >
+            Campaigns ({campaigns.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('transactions')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              activeTab === 'transactions'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+            }`}
+          >
+            Transactions ({transactions.length})
+          </button>
         </div>
       </div>
 
+      {/* Filters */}
+      {activeTab === 'campaigns' && (
+        <div className="crypto-card">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <input
+                type="text"
+                placeholder="Search campaigns..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="form-input"
+              />
+            </div>
+            
+            <div>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="form-input"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="completed">Completed</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Transaction Filters */}
+      {activeTab === 'transactions' && (
+        <div className="crypto-card">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Time Period</label>
+              <select
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="form-input"
+              >
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Election Cycle</label>
+              <select
+                value={electionCycle}
+                onChange={(e) => setElectionCycle(e.target.value)}
+                className="form-input"
+              >
+                <option value="2024">2024 Cycle</option>
+                <option value="2025">2025 Cycle</option>
+                <option value="2026">2026 Cycle</option>
+                <option value="2027">2027 Cycle</option>
+                <option value="2028">2028 Cycle</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">User Email</label>
+              <input
+                type="text"
+                placeholder="Filter by email..."
+                value={userFilter}
+                onChange={(e) => setUserFilter(e.target.value)}
+                className="form-input"
+              />
+            </div>
+            
+            <div className="flex items-end">
+              <button
+                onClick={() => {
+                  setDateFilter('all');
+                  setElectionCycle('2024');
+                  setUserFilter('');
+                }}
+                className="btn-secondary w-full"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Campaigns Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCampaigns.map((campaign) => {
+      {activeTab === 'campaigns' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCampaigns.map((campaign) => {
           const progressPercentage = campaign.goal_amount > 0 
             ? Math.min((campaign.raised_amount / campaign.goal_amount) * 100, 100)
             : 0;
