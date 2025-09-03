@@ -517,12 +517,19 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
           ← Back to Form Options
         </button>
         
-        {analysis && (
+        {analysis ? (
           <button 
             className="btn btn-primary" 
             onClick={continueToConfirmation}
           >
             Review Styles →
+          </button>
+        ) : (
+          <button 
+            className="btn btn-primary" 
+            onClick={skipStyleMatching}
+          >
+            Skip Style Matching →
           </button>
         )}
       </div>
