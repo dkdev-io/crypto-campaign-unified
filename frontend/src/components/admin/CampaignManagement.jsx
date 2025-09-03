@@ -3,11 +3,19 @@ import { supabase } from '../../lib/supabase';
 
 const CampaignManagement = () => {
   const [campaigns, setCampaigns] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [currentCampaign, setCurrentCampaign] = useState(null);
+  const [activeTab, setActiveTab] = useState('campaigns'); // 'campaigns' or 'transactions'
+  
+  // Transaction filters
+  const [dateFilter, setDateFilter] = useState('all'); // 'all', 'today', 'week', 'month', 'quarter', 'year'
+  const [electionCycle, setElectionCycle] = useState('2024'); // '2024', '2026', etc
+  const [userFilter, setUserFilter] = useState(''); // email filter
+  
   const [campaignFormData, setCampaignFormData] = useState({
     name: '',
     description: '',
@@ -19,7 +27,16 @@ const CampaignManagement = () => {
 
   useEffect(() => {
     loadCampaigns();
-  }, []);
+    if (activeTab === 'transactions') {
+      loadTransactions();
+    }
+  }, [activeTab]);
+  
+  useEffect(() => {
+    if (activeTab === 'transactions') {
+      loadTransactions();
+    }
+  }, [dateFilter, electionCycle, userFilter]);
 
   const loadCampaigns = async () => {
     try {
@@ -35,17 +52,11 @@ const CampaignManagement = () => {
         .from('campaigns')
         .select(`
           id,
-          name,
-          description,
-          goal_amount,
-          raised_amount,
-          status,
-          start_date,
-          end_date,
+          campaign_name,
+          email,
+          wallet_address,
           created_at,
-          updated_at,
-          owner_id,
-          users:owner_id(full_name, email)
+          status
         `)
         .order('created_at', { ascending: false });
 
@@ -54,6 +65,61 @@ const CampaignManagement = () => {
     } catch (error) {
       console.error('Error loading campaigns:', error);
       setCampaigns([]); // Ensure campaigns is empty on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadTransactions = async () => {
+    try {
+      setLoading(true);
+      
+      if (!supabase.from || typeof supabase.from !== 'function') {
+        setTransactions([]);
+        return;
+      }
+
+      // Load both form_submissions and contributions
+      const [formSubmissions, contributions] = await Promise.allSettled([
+        supabase.from('form_submissions').select('*').order('submitted_at', { ascending: false }),
+        supabase.from('contributions').select('*').order('created_at', { ascending: false })
+      ]);
+
+      const submissions = formSubmissions.status === 'fulfilled' ? (formSubmissions.value.data || []) : [];
+      const contribs = contributions.status === 'fulfilled' ? (contributions.value.data || []) : [];
+
+      // Combine and normalize the data
+      const allTransactions = [
+        ...submissions.map(sub => ({
+          id: sub.id,
+          type: 'form_submission',
+          amount: parseFloat(sub.amount) || 0,
+          email: sub.email,
+          first_name: sub.first_name,
+          last_name: sub.last_name,
+          donor_name: `${sub.first_name} ${sub.last_name}`,
+          campaign_id: sub.campaign_id,
+          date: sub.submitted_at || sub.created_at,
+          status: 'completed',
+          payment_method: sub.payment_method || 'crypto'
+        })),
+        ...contribs.map(contrib => ({
+          id: contrib.id,
+          type: 'contribution',
+          amount: parseFloat(contrib.amount) || 0,
+          email: contrib.donor_email,
+          donor_name: contrib.donor_name,
+          campaign_id: contrib.campaign_id,
+          date: contrib.created_at,
+          status: contrib.status,
+          payment_method: 'crypto'
+        }))
+      ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      setTransactions(allTransactions);
+    } catch (error) {
+      console.error('Error loading transactions:', error);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
