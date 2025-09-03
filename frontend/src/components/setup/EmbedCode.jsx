@@ -519,7 +519,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <a
-          href="/admin"
+          href="/minda"
           style={{
             background: '#2a2a72',
             color: 'white',

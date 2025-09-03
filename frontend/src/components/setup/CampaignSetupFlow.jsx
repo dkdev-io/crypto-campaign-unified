@@ -210,7 +210,7 @@ const CampaignSetupFlow = () => {
       if (error) throw error
       
       // Navigate to dashboard
-      navigate('/admin/dashboard')
+      navigate('/minda/dashboard')
     } catch (error) {
       console.error('Failed to complete setup:', error)
       setErrors({ complete: 'Failed to complete setup. Please try again.' })

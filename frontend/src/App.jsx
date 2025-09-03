@@ -104,9 +104,8 @@ function App() {
             } />
             
             {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLogin />} />
             <Route path="/minda" element={<AdminLogin />} />
-            <Route path="/admin/*" element={<AdminLayout />}>
+            <Route path="/minda/*" element={<AdminLayout />}>
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<UserManagement />} />
               <Route path="campaigns" element={<CampaignManagement />} />

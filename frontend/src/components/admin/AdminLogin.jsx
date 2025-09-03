@@ -23,7 +23,7 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (isAdmin()) {
-      navigate('/admin/dashboard');
+      navigate('/minda/dashboard');
     }
   }, [admin, isAdmin, navigate]);
 
@@ -35,7 +35,7 @@ const AdminLogin = () => {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
-      navigate('/admin/dashboard');
+      navigate('/minda/dashboard');
     } else {
       setError(result.error || 'Login failed');
     }

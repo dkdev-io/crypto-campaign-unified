@@ -19,13 +19,17 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 - `SUPABASE_URL` = https://kmepcdsklnnxokoimvzo.supabase.co
 - `SUPABASE_ANON_KEY` = eyJ... (the long JWT token)
 
-### ❌ WHAT DOESN'T WORK (STOP TRYING)
+### ⚠️ SUPABASE CLI STATUS
 
-**Supabase CLI Admin Commands:**
-- `supabase login` - REQUIRES PERSONAL ACCESS TOKEN (sbp_xxx) WHICH WE DON'T HAVE
-- `supabase db push` - REQUIRES CLI LOGIN
-- `supabase migration up` - REQUIRES CLI LOGIN
-- Any CLI command requiring authentication - WON'T WORK
+**Current Situation:**
+- Service role JWT token available in `.zshrc`: `SUPABASE_ACCESS_TOKEN` 
+- This is NOT a personal access token (needs to start with `sbp_`)
+- CLI commands requiring authentication need personal access token
+
+**To Enable CLI Access:**
+1. Get personal access token from: https://supabase.com/dashboard/account/tokens
+2. Token should look like: `sbp_0102...1920`
+3. Once provided, run: `supabase login --token YOUR_TOKEN_HERE`
 
 ### 🎯 THE REAL SOLUTION PATTERN
 

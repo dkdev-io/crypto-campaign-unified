@@ -177,7 +177,7 @@ const SetupWizard = () => {
       <div className="setup-card">
         <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
           <a 
-            href="/admin" 
+            href="/minda" 
             style={{ 
               color: '#666', 
               textDecoration: 'none', 

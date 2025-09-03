@@ -26,6 +26,25 @@
 ### SUPABASE-SPECIFIC AUTONOMY:
 **Schemas** • **Migrations** • **Auth** • **Storage** • **Functions** • **Testing** - Do everything yourself
 
+## 🚫 CRITICAL: TEST EMAIL POLICY
+
+### PUPPETEER & AUTOMATED TESTING EMAIL REQUIREMENT
+
+**ALL agents MUST use ONLY this email for testing:**
+```
+test@dkdev.io
+```
+
+**NEVER USE:**
+- ❌ Fake emails with timestamps: `test-${Date.now()}@example.com`
+- ❌ Random email generators or faker libraries
+- ❌ Any @test.com, @example.com, @gmail.com test addresses
+- ❌ Dynamically generated email addresses
+
+**WHY:** Using multiple fake emails causes Supabase authentication failures and email verification issues.
+
+**ENFORCEMENT:** Any test using non-approved emails = IMMEDIATE TASK FAILURE
+
 ## BEFORE ANY ACTION, EVERY AGENT MUST:
 
 1. **Identify Task Category**: [PORT_OPS/APP_ACCESS/INTEGRATION/SESSION/FILE_OPS/SERVICE_STARTS/CODE_GENERATION]
