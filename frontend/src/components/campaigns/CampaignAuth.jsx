@@ -131,7 +131,8 @@ const CampaignAuth = () => {
         throw error;
       }
 
-      navigate(from, { replace: true });
+      // Redirect to campaign setup workflow after successful login
+      navigate('/setup', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       setValidationErrors({ 
