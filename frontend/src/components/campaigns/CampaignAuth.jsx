@@ -200,6 +200,7 @@ const CampaignAuth = () => {
                 onClick={() => {
                   setActiveTab('signin');
                   setValidationErrors({});
+                  if (error) clearError();
                 }}
                 className={`flex-1 py-3 px-4 text-sm font-medium rounded-l-lg transition-colors ${
                   activeTab === 'signin'
@@ -214,6 +215,7 @@ const CampaignAuth = () => {
                 onClick={() => {
                   setActiveTab('signup');
                   setValidationErrors({});
+                  if (error) clearError();
                 }}
                 className={`flex-1 py-3 px-4 text-sm font-medium rounded-r-lg transition-colors ${
                   activeTab === 'signup'
