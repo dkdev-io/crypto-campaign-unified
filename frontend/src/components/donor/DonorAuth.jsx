@@ -11,7 +11,15 @@ const DonorAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, error } = useDonorAuth();
-  const [activeTab, setActiveTab] = useState('signin');
+  
+  // Set initial tab based on route
+  const getInitialTab = () => {
+    if (location.pathname.includes('/register')) return 'signup';
+    if (location.pathname.includes('/login')) return 'signin'; 
+    return 'signin'; // default
+  };
+  
+  const [activeTab, setActiveTab] = useState(getInitialTab());
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
