@@ -58,7 +58,6 @@ function App() {
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
-            <Route path="/setup" element={<SetupWizard />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />

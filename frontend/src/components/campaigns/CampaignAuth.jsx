@@ -131,8 +131,8 @@ const CampaignAuth = () => {
         throw error;
       }
 
-      // Redirect to homepage after successful login (not setup)
-      navigate('/', { replace: true });
+      // Redirect to setup wizard after successful login
+      navigate('/campaigns/auth/setup', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       setValidationErrors({ 
