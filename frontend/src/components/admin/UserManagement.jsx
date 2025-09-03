@@ -116,11 +116,12 @@ const UserManagement = () => {
     return matchesSearch && matchesRole
   })
 
-  if (userProfile?.role !== 'admin' && userProfile?.role !== 'super_admin') {
+  if (!admin || (admin.role !== 'admin' && admin.role !== 'super_admin')) {
     return (
       <div className="crypto-card text-center">
         <h2 className="text-xl font-bold text-foreground mb-2">🔒 Access Denied</h2>
         <p className="text-muted-foreground">You don't have permission to view user management.</p>
+        <p className="text-sm text-muted-foreground mt-2">Admin role: {admin?.role || 'None'}</p>
       </div>
     )
   }
@@ -265,7 +266,7 @@ const UserManagement = () => {
                     >
                       <option value="user">User</option>
                       <option value="admin">Admin</option>
-                      {userProfile?.role === 'super_admin' && (
+                      {admin?.role === 'super_admin' && (
                         <option value="super_admin">Super Admin</option>
                       )}
                     </select>
@@ -312,7 +313,7 @@ const UserManagement = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {user.id !== userProfile?.id && (
+                    {user.id !== admin?.id && (
                       <button
                         className="text-xs px-2 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20"
                         onClick={() => {
