@@ -34,12 +34,6 @@ if (!supabaseAnonKey) {
   }
 } else {
   supabase = createClient(supabaseUrl, supabaseAnonKey)
-  
-  // Debug logging for browser
-  console.log('🔍 Supabase client created in browser:')
-  console.log('URL:', supabaseUrl)
-  console.log('Key present:', !!supabaseAnonKey)
-  console.log('Key length:', supabaseAnonKey?.length)
 }
 
 export { supabase }
