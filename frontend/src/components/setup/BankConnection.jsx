@@ -298,39 +298,37 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </ul>
       </div>
 
-      {/* Development Skip Option - Always show for testing */}
-      {(!bankInfo?.isVerified && !formData.skipBankConnection) || true ? (
-        <div style={{ 
-          background: '#fff3cd',
-          border: '1px solid #ffeaa7',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem'
-        }}>
-          <h5 style={{ color: '#856404', marginTop: 0 }}>
-            🔧 Development Mode
-          </h5>
-          <p style={{ color: '#856404', fontSize: '14px', margin: '0 0 1rem 0' }}>
-            For development and testing purposes, you can skip bank connection 
-            and continue with the setup process.
-          </p>
-          <button
-            onClick={handleSkipForDev}
-            style={{
-              background: '#ffc107',
-              color: '#212529',
-              border: 'none',
-              padding: '0.75rem 1rem',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            ⚠️ Skip Bank Connection (Dev Only)
-          </button>
-        </div>
-      )}
+      {/* Development Skip Option */}
+      <div style={{ 
+        background: '#fff3cd',
+        border: '1px solid #ffeaa7',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        <h5 style={{ color: '#856404', marginTop: 0 }}>
+          🔧 Development Mode
+        </h5>
+        <p style={{ color: '#856404', fontSize: '14px', margin: '0 0 1rem 0' }}>
+          For development and testing purposes, you can skip bank connection 
+          and continue with the setup process.
+        </p>
+        <button
+          onClick={handleSkipForDev}
+          style={{
+            background: '#ffc107',
+            color: '#212529',
+            border: 'none',
+            padding: '0.75rem 1rem',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          ⚠️ Skip Bank Connection (Dev Only)
+        </button>
+      </div>
 
       {/* How It Works */}
       <div style={{ 
