@@ -27,11 +27,7 @@ const SetupWizard = () => {
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
     const initializeSetup = async () => {
-      // Check for dev bypass
-      const urlParams = new URLSearchParams(window.location.search);
-      const devBypass = urlParams.get('bypass') === 'dev' || localStorage.getItem('devBypass') === 'true';
-      
-      if (!user && !devBypass) {
+      if (!user) {
         setLoading(false);
         return;
       }
@@ -107,8 +103,8 @@ const SetupWizard = () => {
         } else {
           // No existing campaign - start fresh
           const newFormData = {
-            userFullName: user?.user_metadata?.full_name || 'Dev User',
-            email: user?.email || 'dev@test.com',
+            userFullName: user.user_metadata?.full_name || '',
+            email: user.email,
             campaignName: '',
             website: '',
             currentStep: 2

@@ -5,11 +5,11 @@ import CampaignAuth from './CampaignAuth';
 import { Spinner } from '../ui/spinner';
 
 /**
- * CampaignSetup - The main component for campaign setup workflow
+ * CampaignSetup - Unified campaign setup workflow
  * 
- * This component handles the complete setup flow:
- * 1. If user is not authenticated, shows CampaignAuth
- * 2. If user is authenticated, shows SetupWizard
+ * This component handles the complete setup flow in one unified experience:
+ * 1. Authentication (if needed) 
+ * 2. Campaign setup wizard
  * 
  * This should be accessible at /campaigns/auth/setup
  */
@@ -30,12 +30,8 @@ const CampaignSetup = () => {
     );
   }
 
-  // Check for dev bypass in URL or localStorage
-  const urlParams = new URLSearchParams(window.location.search);
-  const devBypass = urlParams.get('bypass') === 'dev' || localStorage.getItem('devBypass') === 'true';
-  
-  // If user is not authenticated and no dev bypass, show auth component
-  if (!user && !devBypass) {
+  // If user is not authenticated, show auth component
+  if (!user) {
     return <CampaignAuth />;
   }
 

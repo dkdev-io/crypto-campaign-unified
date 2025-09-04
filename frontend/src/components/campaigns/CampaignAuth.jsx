@@ -345,18 +345,6 @@ const CampaignAuth = () => {
                   )}
                 </Button>
 
-                {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    console.log('BYPASS: Setting dev bypass and navigating to setup...');
-                    localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup?bypass=dev');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Setup
-                </Button>
 
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-sm text-primary hover:underline">
@@ -507,18 +495,6 @@ const CampaignAuth = () => {
                   )}
                 </Button>
 
-                {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    console.log('BYPASS: Setting dev bypass and navigating to setup...');
-                    localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup?bypass=dev');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Setup
-                </Button>
               </form>
             )}
           </div>
