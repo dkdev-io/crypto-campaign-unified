@@ -34,22 +34,38 @@ const AdminLogin = () => {
     setError('');
     setLoading(true);
 
-    console.log('🔍 LOGIN DEBUG - Form submitted:', formData);
-    const result = await login(formData.email, formData.password);
-    console.log('🔍 LOGIN DEBUG - Result:', result);
-    
-    if (result.success) {
-      console.log('🔍 LOGIN DEBUG - Success, navigating to dashboard...');
-      navigate('/minda/dashboard', { replace: true });
-      // Force navigation if React Router fails
-      setTimeout(() => {
-        if (window.location.pathname === '/minda') {
-          window.location.href = '/minda/dashboard';
-        }
-      }, 1000);
-    } else {
-      console.log('🔍 LOGIN DEBUG - Failed:', result.error);
-      setError(result.error || 'Login failed');
+    try {
+      console.log('🔍 LOGIN DEBUG - Form submitted:', formData);
+      const result = await login(formData.email, formData.password);
+      console.log('🔍 LOGIN DEBUG - Result:', result);
+      
+      if (result.success) {
+        console.log('🔍 LOGIN DEBUG - Success, navigating to dashboard...');
+        // Clear any existing admin state first
+        localStorage.removeItem('admin_user');
+        
+        // Force a small delay to ensure state is updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Navigate to dashboard
+        navigate('/minda/dashboard', { replace: true });
+        
+        // Backup navigation method
+        setTimeout(() => {
+          const currentPath = window.location.pathname;
+          console.log('🔍 Current path after navigation:', currentPath);
+          if (currentPath.includes('/minda') && !currentPath.includes('/dashboard')) {
+            console.log('🔍 Forcing navigation with window.location');
+            window.location.href = '/minda/dashboard';
+          }
+        }, 500);
+      } else {
+        console.log('🔍 LOGIN DEBUG - Failed:', result.error);
+        setError(result.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error('🔍 LOGIN ERROR:', error);
+      setError('Login failed: ' + error.message);
     }
     
     setLoading(false);

@@ -423,4 +423,45 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     max-width: 480px;
     transition: var(--transition-smooth);
   }
+  
+  /* Global form input override - ensure all inputs use unified styling */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="url"], 
+  input[type="number"], 
+  input[type="tel"], 
+  textarea, 
+  select {
+    background-color: hsl(var(--crypto-navy)) !important;
+    color: hsl(var(--crypto-white)) !important;
+    border: 1px solid hsl(var(--crypto-white) / 0.3) !important;
+    border-radius: var(--radius) !important;
+    padding: var(--space-sm) !important;
+    font-size: var(--text-body) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 400 !important;
+  }
+  
+  input::placeholder, 
+  textarea::placeholder {
+    color: hsl(var(--crypto-white) / 0.6) !important;
+  }
+  
+  /* Focus states for form inputs */
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    outline: none !important;
+    border-color: hsl(var(--crypto-blue)) !important;
+    box-shadow: 0 0 0 2px hsl(var(--crypto-blue) / 0.2) !important;
+  }
+  
+  /* Override any white background containers in forms */
+  .form-container,
+  .donor-form,
+  .donation-form {
+    background-color: hsl(var(--crypto-navy)) !important;
+    color: hsl(var(--crypto-white)) !important;
+  }
 }/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */

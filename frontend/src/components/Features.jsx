@@ -49,15 +49,15 @@ const Features = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="crypto-card" style={{backgroundColor: '#E3F2FD'}}>
+            <div key={index} className="crypto-card">
               <div className="w-14 h-14 rounded-lg flex items-center justify-center mb-6" 
                    style={{backgroundColor: 'hsl(var(--crypto-gold) / 0.1)'}}>
                 <feature.icon className="w-7 h-7" style={{color: 'hsl(var(--crypto-gold))'}} />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-center" style={{color: '#1976D2'}}>
+              <h3 className="text-2xl font-bold mb-4 text-center" style={{color: 'hsl(var(--crypto-navy))'}}>
                 {feature.title}
               </h3>
-              <p className="leading-relaxed" style={{color: '#1976D2'}}>
+              <p className="leading-relaxed" style={{color: 'hsl(var(--crypto-navy))'}}>
                 {feature.description}
               </p>
             </div>

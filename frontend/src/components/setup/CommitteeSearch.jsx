@@ -294,9 +294,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
   return (
     <div>
-      <h2 className="text-center mb-4 font-bold" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif', fontWeight: '800'}}>
-        Campaign Setup
-      </h2>
       <p className="text-center mb-2" style={{ fontSize: 'var(--text-body-lg)', color: 'hsl(var(--crypto-white) / 0.9)', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
         Step 2 of 8: Committee Search
       </p>
@@ -305,9 +302,9 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       </p>
 
       {/* Search Section */}
-      <div className="crypto-card mb-8">
+      <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy))', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>
         <div className="form-group" style={{ marginBottom: '1rem' }}>
-          <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-navy))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
+          <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
               className="form-input"
@@ -316,7 +313,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter committee name or keywords..."
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              style={{ flex: 1 }}
+              style={{ 
+                flex: 1,
+                background: 'hsl(var(--crypto-white))',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--crypto-white) / 0.3)'
+              }}
             />
             <button 
               onClick={() => handleSearch()}
@@ -378,11 +380,11 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       )}
 
       {/* Manual Committee Entry */}
-      <div className="crypto-card mb-8 text-center">
-        <h4 className="mb-4" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>
+      <div className="crypto-card mb-8 text-center" style={{background: 'hsl(var(--crypto-navy))', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>
+        <h4 className="mb-4" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-white))'}}>
           Can't find your committee? Add it manually
         </h4>
-        <p className="mb-4" style={{ fontSize: '14px', color: 'hsl(var(--crypto-medium-gray))' }}>
+        <p className="mb-4" style={{ fontSize: '14px', color: 'hsl(var(--crypto-white) / 0.8)' }}>
           Enter your committee name or keywords...
         </p>
         
@@ -397,7 +399,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block'
+              display: 'block',
+              background: 'hsl(var(--crypto-white))',
+              color: 'hsl(var(--crypto-navy))',
+              border: '1px solid hsl(var(--crypto-white) / 0.3)'
             }}
           />
           
@@ -411,7 +416,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block'
+              display: 'block',
+              background: 'hsl(var(--crypto-white))',
+              color: 'hsl(var(--crypto-navy))',
+              border: '1px solid hsl(var(--crypto-white) / 0.3)'
             }}
           />
           
@@ -427,7 +435,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.city}
               onChange={(e) => setManualCommittee({...manualCommittee, city: e.target.value})}
               placeholder="City"
-              style={{ width: '120px' }}
+              style={{ 
+                width: '120px',
+                background: 'hsl(var(--crypto-white))',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--crypto-white) / 0.3)'
+              }}
             />
             <input
               className="form-input"
@@ -435,7 +448,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.state}
               onChange={(e) => setManualCommittee({...manualCommittee, state: e.target.value})}
               placeholder="State"
-              style={{ width: '80px' }}
+              style={{ 
+                width: '80px',
+                background: 'hsl(var(--crypto-white))',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--crypto-white) / 0.3)'
+              }}
               maxLength="2"
             />
             <input
@@ -444,7 +462,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.zip}
               onChange={(e) => setManualCommittee({...manualCommittee, zip: e.target.value})}
               placeholder="ZIP"
-              style={{ width: '100px' }}
+              style={{ 
+                width: '100px',
+                background: 'hsl(var(--crypto-white))',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--crypto-white) / 0.3)'
+              }}
               maxLength="10"
             />
           </div>
