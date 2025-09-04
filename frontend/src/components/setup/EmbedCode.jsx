@@ -190,58 +190,91 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         Your contribution form is ready to embed on your website
       </p>
 
-      {/* Success Banner */}
+      {/* Congratulations Banner */}
       <div style={{ 
-        background: 'linear-gradient(135deg, #28a745, #20c997)',
+        background: 'linear-gradient(135deg, #FF6B6B, #4ECDC4)',
+        color: 'white',
+        padding: '3rem',
+        borderRadius: '16px',
+        textAlign: 'center',
+        marginBottom: '3rem',
+        boxShadow: '0 8px 24px rgba(255, 107, 107, 0.3)'
+      }}>
+        <div style={{ fontSize: '80px', marginBottom: '1rem' }}>🎉</div>
+        <h2 style={{ margin: '0 0 1rem 0', fontSize: '32px', fontWeight: '700' }}>
+          Congratulations!
+        </h2>
+        <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px', opacity: 0.9 }}>
+          Your Campaign Form is Approved & Live!
+        </h3>
+        <p style={{ margin: 0, fontSize: '18px', opacity: 0.8 }}>
+          Everything is configured perfectly. Your supporters can now contribute to your campaign.
+        </p>
+      </div>
+
+      {/* Campaign Profile Link */}
+      <div style={{ 
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
         color: 'white',
         padding: '2rem',
         borderRadius: '12px',
         textAlign: 'center',
-        marginBottom: '2rem',
-        boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
+        marginBottom: '3rem',
+        boxShadow: '0 6px 20px rgba(102, 126, 234, 0.3)'
       }}>
-        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🚀</div>
+        <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
         <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
-          Your Embed Code is Ready!
+          Your Campaign Profile is Live!
         </h3>
-        <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
-          Your contribution form is configured and ready for deployment
-        </p>
-      </div>
-
-      {/* Campaign Summary */}
-      <div style={{ 
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          📊 Campaign Details
-        </h4>
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-          gap: '1rem',
-          fontSize: '14px'
+          background: 'rgba(255,255,255,0.2)',
+          padding: '1rem',
+          borderRadius: '8px',
+          marginBottom: '1.5rem',
+          fontFamily: 'monospace',
+          fontSize: '16px',
+          wordBreak: 'break-all',
+          fontWeight: '500'
         }}>
-          <div>
-            <strong>Campaign:</strong><br />
-            <span style={{ color: '#6c757d' }}>{formData.campaignName}</span>
-          </div>
-          <div>
-            <strong>Committee:</strong><br />
-            <span style={{ color: '#6c757d' }}>{formData.committeeName}</span>
-          </div>
-          <div>
-            <strong>Setup by:</strong><br />
-            <span style={{ color: '#6c757d' }}>{formData.userFullName}</span>
-          </div>
-          <div>
-            <strong>Campaign ID:</strong><br />
-            <span style={{ color: '#6c757d', fontFamily: 'monospace' }}>{campaignId}</span>
-          </div>
+          {window.location.origin}/campaign/{formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a
+            href={`/campaign/${formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: 'rgba(255,255,255,0.2)',
+              color: 'white',
+              border: '2px solid white',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '6px',
+              textDecoration: 'none',
+              fontSize: '16px',
+              fontWeight: '500'
+            }}
+          >
+            🌐 View Your Campaign Profile
+          </a>
+          <button
+            onClick={() => {
+              const profileUrl = `${window.location.origin}/campaign/${formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}`;
+              navigator.clipboard.writeText(profileUrl);
+              alert('Campaign profile URL copied!');
+            }}
+            style={{
+              background: 'white',
+              color: '#667eea',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: '500'
+            }}
+          >
+            📋 Copy Profile URL
+          </button>
         </div>
       </div>
 
