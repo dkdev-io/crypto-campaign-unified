@@ -25,11 +25,10 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       setError('');
 
       // Call the database function to generate embed code
-      const { data, error: dbError } = await supabase
-        .rpc('generate_embed_code', {
-          p_campaign_id: campaignId,
-          p_base_url: window.location.origin
-        });
+      const { data, error: dbError } = await supabase.rpc('generate_embed_code', {
+        p_campaign_id: campaignId,
+        p_base_url: window.location.origin,
+      });
 
       if (dbError) throw dbError;
 
@@ -37,12 +36,12 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
       const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
       setTestUrl(donationUrl);
-      
+
       // Also generate campaign page URL
-      const campaignPageUrl = formData.campaignName 
+      const campaignPageUrl = formData.campaignName
         ? `${baseUrl}/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
         : null;
-      
+
       // Generate QR code for the donation URL
       try {
         const qrDataUrl = await QRCode.toDataURL(donationUrl, {
@@ -50,21 +49,21 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           margin: 2,
           color: {
             dark: '#2a2a72',
-            light: '#FFFFFF'
-          }
+            light: '#FFFFFF',
+          },
         });
         setQrCodeDataUrl(qrDataUrl);
       } catch (qrError) {
         console.error('Failed to generate QR code:', qrError);
       }
-      
+
       // Mark setup as completed and trigger donor page automation
       const { error: updateError } = await supabase
         .from('campaigns')
         .update({
           setup_completed: true,
           setup_completed_at: new Date().toISOString(),
-          setup_step: 5
+          setup_step: 5,
         })
         .eq('id', campaignId);
 
@@ -75,32 +74,31 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       // NEW: Check if donor page automation was successful
       let donorPageUrl = null;
       let donorPageGenerated = false;
-      
+
       if (typeof data === 'object' && data.donorPageUrl) {
         donorPageUrl = data.donorPageUrl;
         donorPageGenerated = data.donorPageGenerated;
       }
 
-      updateFormData({ 
+      updateFormData({
         embedCode: typeof data === 'string' ? data : data.embedCode,
         setupCompleted: true,
         embedGenerated: true,
         donorPageUrl: donorPageUrl,
         donorPageGenerated: donorPageGenerated,
-        campaignPageUrl: campaignPageUrl
+        campaignPageUrl: campaignPageUrl,
       });
-
     } catch (err) {
       console.error('Generate embed code error:', err);
       setError('Failed to generate embed code: ' + err.message);
-      
+
       // Fallback embed code generation
       const fallbackCode = generateFallbackEmbedCode();
       setEmbedCode(fallbackCode);
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
       const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
       setTestUrl(donationUrl);
-      
+
       // Generate QR code for fallback too
       try {
         const qrDataUrl = await QRCode.toDataURL(donationUrl, {
@@ -108,14 +106,13 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           margin: 2,
           color: {
             dark: '#2a2a72',
-            light: '#FFFFFF'
-          }
+            light: '#FFFFFF',
+          },
         });
         setQrCodeDataUrl(qrDataUrl);
       } catch (qrError) {
         console.error('Failed to generate QR code:', qrError);
       }
-      
     } finally {
       setLoading(false);
     }
@@ -183,7 +180,10 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
   return (
     <div>
-      <h2 className="text-center mb-4 font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}>
+      <h2
+        className="text-center mb-4 font-bold text-foreground"
+        style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}
+      >
         Setup Complete! - Step 8
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
@@ -191,15 +191,17 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       </p>
 
       {/* Success Banner */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #28a745, #20c997)',
-        color: 'white',
-        padding: '2rem',
-        borderRadius: '12px',
-        textAlign: 'center',
-        marginBottom: '2rem',
-        boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
-      }}>
+      <div
+        style={{
+          background: 'linear-gradient(135deg, #28a745, #20c997)',
+          color: 'white',
+          padding: '2rem',
+          borderRadius: '12px',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+        }}
+      >
         <div style={{ marginBottom: '1rem' }}></div>
         <h3 style={{ margin: '0 0 1rem 0', fontSize: 'var(--text-heading-sm)' }}>
           Campaign Setup Completed Successfully!
@@ -210,36 +212,42 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       </div>
 
       {/* Campaign Summary */}
-      <div style={{ 
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          Campaign Details
-        </h4>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-          gap: '1rem',
-          fontSize: '14px'
-        }}>
+      <div
+        style={{
+          background: '#f8f9fa',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>Campaign Details</h4>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1rem',
+            fontSize: '14px',
+          }}
+        >
           <div>
-            <strong>Campaign:</strong><br />
+            <strong>Campaign:</strong>
+            <br />
             <span style={{ color: '#6c757d' }}>{formData.campaignName}</span>
           </div>
           <div>
-            <strong>Committee:</strong><br />
+            <strong>Committee:</strong>
+            <br />
             <span style={{ color: '#6c757d' }}>{formData.committeeName}</span>
           </div>
           <div>
-            <strong>Setup by:</strong><br />
+            <strong>Setup by:</strong>
+            <br />
             <span style={{ color: '#6c757d' }}>{formData.userFullName}</span>
           </div>
           <div>
-            <strong>Campaign ID:</strong><br />
+            <strong>Campaign ID:</strong>
+            <br />
             <span style={{ color: '#6c757d', fontFamily: 'monospace' }}>{campaignId}</span>
           </div>
         </div>
@@ -247,79 +255,89 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
       {/* Error Message */}
       {error && (
-        <div style={{ 
-          background: '#fee', 
-          color: '#c33', 
-          padding: '1rem', 
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #fcc'
-        }}>
+        <div
+          style={{
+            background: '#fee',
+            color: '#c33',
+            padding: '1rem',
+            borderRadius: '4px',
+            marginBottom: '1rem',
+            border: '1px solid #fcc',
+          }}
+        >
           {error}
         </div>
       )}
 
       {/* Embed Code Section */}
-      <div style={{ 
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        marginBottom: '2rem'
-      }}>
-        <div style={{ 
-          background: '#f8f9fa',
-          padding: '1rem',
-          borderBottom: '1px solid #e9ecef',
-          borderRadius: '8px 8px 0 0',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <h4 style={{ margin: 0, color: '#495057' }}>
-            Your Embed Code
-          </h4>
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          marginBottom: '2rem',
+        }}
+      >
+        <div
+          style={{
+            background: '#f8f9fa',
+            padding: '1rem',
+            borderBottom: '1px solid #e9ecef',
+            borderRadius: '8px 8px 0 0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h4 style={{ margin: 0, color: '#495057' }}>Your Embed Code</h4>
           <button
             onClick={handleCopyCode}
             disabled={loading || !embedCode}
             style={{
-              background: copied ? '#28a745' : '#2a2a72',
-              color: 'white',
+              background: copied ? '#28a745' : 'hsl(var(--crypto-navy))',
+              color: 'hsl(var(--crypto-white))',
               border: 'none',
-              padding: '0.5rem 1rem',
-              borderRadius: '4px',
+              padding: 'var(--space-sm) var(--space-lg)',
+              borderRadius: 'var(--radius)',
               cursor: loading || !embedCode ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              opacity: loading || !embedCode ? 0.7 : 1,
-              transition: 'background 0.2s ease'
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '600',
+              opacity: loading || !embedCode ? 0.6 : 1,
+              transition: 'var(--transition-smooth)',
             }}
           >
             {loading ? 'Generating...' : copied ? 'Copied!' : 'Copy Code'}
           </button>
         </div>
-        
+
         <div style={{ padding: '1rem' }}>
           {loading ? (
-            <div style={{ 
-              textAlign: 'center',
-              padding: '3rem',
-              color: '#6c757d'
-            }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '3rem',
+                color: '#6c757d',
+              }}
+            >
               Generating your embed code...
             </div>
           ) : (
-            <div style={{ 
-              background: '#f8f9fa',
-              border: '1px solid #e9ecef',
-              borderRadius: '4px',
-              padding: '1rem',
-              fontFamily: 'Monaco, monospace',
-              fontSize: '12px',
-              lineHeight: '1.5',
-              maxHeight: '300px',
-              overflowY: 'auto',
-              whiteSpace: 'pre-wrap',
-              color: '#495057'
-            }}>
+            <div
+              style={{
+                background: '#f8f9fa',
+                border: '1px solid #e9ecef',
+                borderRadius: '4px',
+                padding: '1rem',
+                fontFamily: 'Monaco, monospace',
+                fontSize: '12px',
+                lineHeight: '1.5',
+                maxHeight: '300px',
+                overflowY: 'auto',
+                whiteSpace: 'pre-wrap',
+                color: '#495057',
+              }}
+            >
               {embedCode || 'Failed to generate embed code'}
             </div>
           )}
@@ -327,98 +345,107 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       </div>
 
       {/* QR Code and Test Section */}
-      <div style={{ 
-        background: '#e7f3ff',
-        border: '1px solid #b6d7ff',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#0066cc', marginTop: 0 }}>
-          QR Code & Testing
-        </h4>
+      <div
+        style={{
+          background: '#e7f3ff',
+          border: '1px solid #b6d7ff',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#0066cc', marginTop: 0 }}>QR Code & Testing</h4>
         <p style={{ color: '#004499', marginBottom: '1.5rem' }}>
           Share your donation form via QR code or test it directly:
         </p>
-        
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'auto 1fr',
-          gap: '2rem',
-          alignItems: 'start'
-        }}>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
+            gap: '2rem',
+            alignItems: 'start',
+          }}
+        >
           {/* QR Code */}
           <div style={{ textAlign: 'center' }}>
-            <div style={{ 
-              background: 'white',
-              padding: '1rem',
-              borderRadius: '8px',
-              border: '1px solid #b6d7ff',
-              marginBottom: '1rem',
-              display: 'inline-block'
-            }}>
+            <div
+              style={{
+                background: 'white',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #b6d7ff',
+                marginBottom: '1rem',
+                display: 'inline-block',
+              }}
+            >
               {qrCodeDataUrl ? (
-                <img 
-                  src={qrCodeDataUrl} 
-                  alt="Donation Form QR Code"
-                  style={{ display: 'block' }}
-                />
+                <img src={qrCodeDataUrl} alt="Donation Form QR Code" style={{ display: 'block' }} />
               ) : (
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  background: '#f8f9fa',
-                  border: '1px dashed #ccc',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#666'
-                }}>
+                <div
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    background: '#f8f9fa',
+                    border: '1px dashed #ccc',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#666',
+                  }}
+                >
                   Generating QR...
                 </div>
               )}
             </div>
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#0066cc', 
-              fontWeight: '500'
-            }}>
+            <div
+              style={{
+                fontSize: '14px',
+                color: '#0066cc',
+                fontWeight: '500',
+              }}
+            >
               Scan to Donate
             </div>
           </div>
-          
+
           {/* Testing Options */}
           <div>
             <div style={{ marginBottom: '1rem' }}>
               <strong style={{ color: '#0066cc', display: 'block', marginBottom: '0.5rem' }}>
                 Donation URL:
               </strong>
-              <div style={{ 
-                background: 'white',
-                padding: '0.75rem',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                fontSize: '12px',
-                wordBreak: 'break-all',
-                border: '1px solid #b6d7ff'
-              }}>
+              <div
+                style={{
+                  background: 'white',
+                  padding: '0.75rem',
+                  borderRadius: '4px',
+                  fontFamily: 'monospace',
+                  fontSize: '12px',
+                  wordBreak: 'break-all',
+                  border: '1px solid #b6d7ff',
+                }}
+              >
                 {testUrl}
               </div>
             </div>
-            
+
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <button
                 onClick={handleTestForm}
                 disabled={!campaignId}
                 style={{
-                  background: '#0066cc',
-                  color: 'white',
+                  background: !campaignId ? 'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-blue))',
+                  color: 'hsl(var(--crypto-white))',
                   border: 'none',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '4px',
+                  padding: 'var(--space-sm) var(--space-lg)',
+                  borderRadius: 'var(--radius)',
                   cursor: !campaignId ? 'not-allowed' : 'pointer',
-                  fontSize: '14px',
-                  opacity: !campaignId ? 0.7 : 1
+                  fontSize: '1rem',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '600',
+                  opacity: !campaignId ? 0.6 : 1,
+                  transition: 'var(--transition-smooth)',
                 }}
               >
                 Test Form
@@ -430,12 +457,15 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 }}
                 style={{
                   background: '#28a745',
-                  color: 'white',
+                  color: 'hsl(var(--crypto-white))',
                   border: 'none',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '4px',
+                  padding: 'var(--space-sm) var(--space-lg)',
+                  borderRadius: 'var(--radius)',
                   cursor: 'pointer',
-                  fontSize: '14px'
+                  fontSize: '1rem',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '600',
+                  transition: 'var(--transition-smooth)',
                 }}
               >
                 Copy URL
@@ -446,16 +476,16 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       </div>
 
       {/* Implementation Instructions */}
-      <div style={{ 
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          How to Add to Your Website
-        </h4>
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>How to Add to Your Website</h4>
         <div style={{ fontSize: '14px', color: '#6c757d', lineHeight: '1.6' }}>
           <ol style={{ paddingLeft: '1.2rem' }}>
             <li style={{ marginBottom: '0.5rem' }}>
@@ -472,62 +502,70 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             </li>
           </ol>
         </div>
-        
-        <div style={{ 
-          background: '#fff3cd',
-          border: '1px solid #ffeaa7',
-          borderRadius: '4px',
-          padding: '1rem',
-          marginTop: '1rem'
-        }}>
+
+        <div
+          style={{
+            background: '#fff3cd',
+            border: '1px solid #ffeaa7',
+            borderRadius: '4px',
+            padding: '1rem',
+            marginTop: '1rem',
+          }}
+        >
           <strong style={{ color: '#856404' }}>Pro Tip:</strong>
           <span style={{ color: '#856404', fontSize: '14px' }}>
-            {' '}The form automatically resizes to fit your content and matches your campaign's branding.
+            {' '}
+            The form automatically resizes to fit your content and matches your campaign's branding.
           </span>
         </div>
       </div>
 
       {/* Donor Page Section */}
       {formData.donorPageGenerated && formData.donorPageUrl && (
-        <div style={{ 
-          background: 'linear-gradient(135deg, #e7f3ff, #f0f9ff)',
-          border: '1px solid #b6d7ff',
-          borderRadius: '8px',
-          padding: '2rem',
-          marginBottom: '2rem'
-        }}>
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #e7f3ff, #f0f9ff)',
+            border: '1px solid #b6d7ff',
+            borderRadius: '8px',
+            padding: '2rem',
+            marginBottom: '2rem',
+          }}
+        >
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <div style={{ marginBottom: '1rem' }}></div>
-            <h3 style={{ color: '#0066cc', margin: '0 0 0.5rem 0' }}>
-              Your Donor Page is Live!
-            </h3>
+            <h3 style={{ color: '#0066cc', margin: '0 0 0.5rem 0' }}>Your Donor Page is Live!</h3>
             <p style={{ color: '#004499', margin: 0 }}>
               We've automatically created a dedicated donation page for your campaign
             </p>
           </div>
-          
-          <div style={{ 
-            background: 'white',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            textAlign: 'center',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
-            <h5 style={{ color: '#495057', marginTop: 0 }}>
-              Your Dedicated Donor Page
-            </h5>
-            <div style={{ 
-              background: '#f8f9fa',
-              padding: '1rem',
-              borderRadius: '4px',
-              marginBottom: '1rem',
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              wordBreak: 'break-all'
-            }}>
-              {window.location.origin}{formData.donorPageUrl}
+
+          <div
+            style={{
+              background: 'white',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              textAlign: 'center',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            }}
+          >
+            <h5 style={{ color: '#495057', marginTop: 0 }}>Your Dedicated Donor Page</h5>
+            <div
+              style={{
+                background: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '4px',
+                marginBottom: '1rem',
+                fontFamily: 'monospace',
+                fontSize: '14px',
+                wordBreak: 'break-all',
+              }}
+            >
+              {window.location.origin}
+              {formData.donorPageUrl}
             </div>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div
+              style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}
+            >
               <a
                 href={formData.donorPageUrl}
                 target="_blank"
@@ -540,7 +578,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                   borderRadius: '4px',
                   textDecoration: 'none',
                   fontSize: '16px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 View Your Page
@@ -553,13 +591,15 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 }}
                 style={{
                   background: '#28a745',
-                  color: 'white',
+                  color: 'hsl(var(--crypto-white))',
                   border: 'none',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '4px',
+                  padding: 'var(--space-sm) var(--space-lg)',
+                  borderRadius: 'var(--radius)',
                   cursor: 'pointer',
-                  fontSize: '16px',
-                  fontWeight: '500'
+                  fontSize: '1rem',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '600',
+                  transition: 'var(--transition-smooth)',
                 }}
               >
                 Copy Page URL
@@ -571,29 +611,33 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
       {/* Campaign Page URL Section */}
       {formData.campaignPageUrl && (
-        <div style={{ 
-          background: 'linear-gradient(135deg, #28a745, #20c997)',
-          color: 'white',
-          padding: '2rem',
-          borderRadius: '12px',
-          textAlign: 'center',
-          marginBottom: '2rem',
-          boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
-        }}>
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #28a745, #20c997)',
+            color: 'white',
+            padding: '2rem',
+            borderRadius: '12px',
+            textAlign: 'center',
+            marginBottom: '2rem',
+            boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+          }}
+        >
           <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
           <h3 style={{ margin: '0 0 1rem 0', fontSize: 'var(--text-heading-sm)' }}>
             Your Campaign Page is Live!
           </h3>
-          <div style={{ 
-            background: 'rgba(255,255,255,0.2)',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem',
-            fontFamily: 'monospace',
-            fontSize: '16px',
-            wordBreak: 'break-all',
-            fontWeight: '500'
-          }}>
+          <div
+            style={{
+              background: 'rgba(255,255,255,0.2)',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              fontFamily: 'monospace',
+              fontSize: '16px',
+              wordBreak: 'break-all',
+              fontWeight: '500',
+            }}
+          >
             {formData.campaignPageUrl}
           </div>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -609,7 +653,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 borderRadius: '6px',
                 textDecoration: 'none',
                 fontSize: '16px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               Visit Campaign Page
@@ -627,7 +671,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 borderRadius: '6px',
                 cursor: 'pointer',
                 fontSize: '16px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               Copy Campaign URL
@@ -637,22 +681,24 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       )}
 
       {/* Next Steps */}
-      <div style={{ 
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          What's Next?
-        </h4>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '1rem',
-          fontSize: '14px'
-        }}>
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>What's Next?</h4>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
+            fontSize: '14px',
+          }}
+        >
           {formData.donorPageGenerated && formData.donorPageUrl ? (
             <div style={{ textAlign: 'center' }}>
               <div style={{ marginBottom: '0.5rem' }}></div>
@@ -695,15 +741,17 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       </div>
 
       {/* Action Buttons */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '1rem', 
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        marginBottom: '2rem'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          marginBottom: '2rem',
+        }}
+      >
         <a
-          href="/minda"
+          href="/campaigns/dashboard"
           style={{
             background: '#2a2a72',
             color: 'white',
@@ -713,12 +761,12 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             textDecoration: 'none',
             display: 'inline-block',
             fontSize: '16px',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           Go to Dashboard
         </a>
-        
+
         <button
           onClick={handleTestForm}
           style={{
@@ -729,7 +777,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '16px',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           🚀 Test Form Again
@@ -738,30 +786,58 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
       {/* Navigation */}
       <div className="form-actions">
-        <button className="btn btn-secondary" onClick={onPrev}>
+        <button
+          onClick={onPrev}
+          style={{
+            background: 'hsl(var(--crypto-gold))',
+            color: 'hsl(var(--crypto-navy))',
+            border: 'none',
+            padding: 'var(--space-sm) var(--space-lg)',
+            borderRadius: 'var(--radius)',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '600',
+            transition: 'var(--transition-smooth)',
+          }}
+        >
           ← Back to Terms
         </button>
-        <button className="btn" onClick={handleStartOver}>
+        <button
+          onClick={handleStartOver}
+          style={{
+            background: 'hsl(var(--crypto-navy))',
+            color: 'hsl(var(--crypto-white))',
+            border: 'none',
+            padding: 'var(--space-sm) var(--space-lg)',
+            borderRadius: 'var(--radius)',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '600',
+            transition: 'var(--transition-smooth)',
+          }}
+        >
           Setup New Campaign
         </button>
       </div>
 
       {/* Final Success Message */}
-      <div style={{ 
-        marginTop: '2rem',
-        padding: '1.5rem',
-        background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
-        border: '1px solid #dee2e6',
-        borderRadius: '8px',
-        textAlign: 'center'
-      }}>
+      <div
+        style={{
+          marginTop: '2rem',
+          padding: '1.5rem',
+          background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
+          border: '1px solid #dee2e6',
+          borderRadius: '8px',
+          textAlign: 'center',
+        }}
+      >
         <div style={{ marginBottom: '1rem' }}></div>
-        <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>
-          Congratulations!
-        </h4>
+        <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>Congratulations!</h4>
         <p style={{ color: '#6c757d', margin: 0 }}>
-          Your campaign contribution system is now live and ready to help you raise funds 
-          for your political campaign in compliance with FEC regulations.
+          Your campaign contribution system is now live and ready to help you raise funds for your
+          political campaign in compliance with FEC regulations.
         </p>
       </div>
     </div>
