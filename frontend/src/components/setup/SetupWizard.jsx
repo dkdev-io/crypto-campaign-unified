@@ -353,22 +353,6 @@ const SetupWizard = () => {
       <CampaignAuthNav />
       <div className="setup-container">
         <div className="setup-card">
-          <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
-            <a 
-              href="/minda" 
-              style={{ 
-                color: '#666', 
-                textDecoration: 'none', 
-                fontSize: '14px',
-                padding: '0.5rem',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                background: '#f8f9fa'
-              }}
-            >
-              Dashboard
-            </a>
-          </div>
           <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
           <div className="form-content">
             {renderStep()}
