@@ -58,6 +58,8 @@ function App() {
           }}>
             <Router>
             <Routes>
+            {/* DEBUG: Test route to verify routing works */}
+            <Route path="/test-route" element={<div style={{padding: '50px', fontSize: '30px', backgroundColor: 'red', color: 'white'}}>TEST ROUTE WORKING!</div>} />
             <Route path="/" element={<Index />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
