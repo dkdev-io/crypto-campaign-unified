@@ -53,7 +53,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
         <h4 style={{ color: '#495057', marginTop: 0 }}>
           Setup Summary
         </h4>
-        <div style={{ fontSize: '14px', color: '#6c757d' }}>
+        <div className="text-sm text-muted-foreground">
           <div style={{ marginBottom: '0.5rem' }}>
             <strong>Campaign:</strong> {formData.campaignName || 'Not specified'}
           </div>
@@ -91,7 +91,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           Terms & Conditions
         </h3>
         <p style={{ 
-          fontSize: '18px', 
+          fontSize: 'var(--text-body-lg)', 
           color: '#6c757d', 
           marginBottom: '2rem',
           fontStyle: 'italic'
@@ -104,7 +104,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           alignItems: 'center', 
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: '16px',
+          fontSize: 'var(--text-body)',
           color: termsAccepted ? '#28a745' : '#495057'
         }}>
           <input
@@ -153,7 +153,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
         <h3 style={{ 
           color: termsAccepted ? '#155724' : '#495057',
           marginBottom: '1rem',
-          fontSize: '24px'
+          fontSize: 'var(--text-heading-sm)'
         }}>
           {termsAccepted ? 
             'Campaign Setup Complete!' : 
@@ -163,7 +163,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
         <p style={{ 
           color: termsAccepted ? '#155724' : '#6c757d',
           marginBottom: '2rem',
-          fontSize: '16px'
+          fontSize: 'var(--text-body)'
         }}>
           {termsAccepted ? 
             'Your campaign contribution system is now live and ready to accept donations!' :
@@ -181,7 +181,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
             padding: '1.5rem 3rem',
             borderRadius: '8px',
             cursor: termsAccepted ? 'pointer' : 'not-allowed',
-            fontSize: '18px',
+            fontSize: 'var(--text-body-lg)',
             fontWeight: '600',
             opacity: termsAccepted ? 1 : 0.6,
             transform: termsAccepted ? 'scale(1)' : 'scale(0.95)',

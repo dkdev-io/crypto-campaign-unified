@@ -201,7 +201,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
       }}>
         <div style={{ marginBottom: '1rem' }}></div>
-        <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
+        <h3 style={{ margin: '0 0 1rem 0', fontSize: 'var(--text-heading-sm)' }}>
           Campaign Setup Completed Successfully!
         </h3>
         <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
@@ -581,7 +581,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
         }}>
           <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
-          <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
+          <h3 style={{ margin: '0 0 1rem 0', fontSize: 'var(--text-heading-sm)' }}>
             Your Campaign Page is Live!
           </h3>
           <div style={{ 
