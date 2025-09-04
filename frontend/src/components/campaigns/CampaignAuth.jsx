@@ -134,7 +134,7 @@ const CampaignAuth = () => {
       }
 
       // Redirect to setup wizard after successful login
-      navigate('/campaigns/auth/setup', { replace: true });
+      navigate('/campaigns/auth/setup/campaign-info', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       setValidationErrors({ 
@@ -351,7 +351,7 @@ const CampaignAuth = () => {
                   onClick={() => {
                     console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup?bypass=dev');
+                    navigate('/campaigns/auth/setup/campaign-info?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
@@ -513,7 +513,7 @@ const CampaignAuth = () => {
                   onClick={() => {
                     console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup?bypass=dev');
+                    navigate('/campaigns/auth/setup/campaign-info?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >

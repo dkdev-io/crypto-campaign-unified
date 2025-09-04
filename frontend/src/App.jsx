@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import CampaignPage from './pages/CampaignPage';
@@ -14,6 +14,10 @@ import CampaignInformationForm from './components/setup/CampaignInformationForm'
 import CommitteeSearchPage from './components/setup/CommitteeSearchPage';
 import BankConnectionForm from './components/setup/BankConnectionForm';
 import StyleConfigurationForm from './components/setup/StyleConfigurationForm';
+import StyleConfirmation from './components/setup/StyleConfirmation';
+import StylePreferences from './components/setup/StylePreferences';
+import TermsAgreement from './components/setup/TermsAgreement';
+import EmbedCode from './components/setup/EmbedCode';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
@@ -63,11 +67,16 @@ function App() {
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
-            <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
-            <Route path="/YourInfo" element={<CampaignInformationForm />} />
-            <Route path="/CommitteeSearch" element={<CommitteeSearchPage />} />
-            <Route path="/BankConnection" element={<BankConnectionForm />} />
-            <Route path="/WebsiteStyle" element={<StyleConfigurationForm />} />
+            <Route path="/campaigns/auth/setup" element={<CampaignSetup />}>
+              <Route path="campaign-info" element={<CampaignInformationForm />} />
+              <Route path="committee-search" element={<CommitteeSearchPage />} />
+              <Route path="bank-connection" element={<BankConnectionForm />} />
+              <Route path="website-style" element={<StyleConfigurationForm />} />
+              <Route path="style-confirmation" element={<StyleConfirmation />} />
+              <Route path="style-preferences" element={<StylePreferences />} />
+              <Route path="terms-agreement" element={<TermsAgreement />} />
+              <Route path="embed-code" element={<EmbedCode />} />
+            </Route>
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
