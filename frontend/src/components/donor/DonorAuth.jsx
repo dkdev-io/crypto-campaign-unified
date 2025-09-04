@@ -11,7 +11,7 @@ const DonorAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, error, donor, loading } = useDonorAuth();
-  
+
   // If auth bypass is enabled and user is already authenticated, redirect to dashboard
   React.useEffect(() => {
     if (!loading && donor) {
@@ -19,24 +19,24 @@ const DonorAuth = () => {
       navigate(redirectTo, { replace: true });
     }
   }, [donor, loading, navigate, location.state?.from?.pathname]);
-  
+
   // Set initial tab based on route - MUST be called before any early returns
   const getInitialTab = () => {
     if (location.pathname.includes('/register')) return 'signup';
-    if (location.pathname.includes('/login')) return 'signin'; 
+    if (location.pathname.includes('/login')) return 'signin';
     return 'signin'; // default
   };
-  
+
   // ALL useState hooks MUST be called before any early returns
   const [activeTab, setActiveTab] = useState(getInitialTab());
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   // Sign Up Form Data
@@ -46,15 +46,18 @@ const DonorAuth = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    agreeToTerms: false
+    agreeToTerms: false,
   });
 
   const [validationErrors, setValidationErrors] = useState({});
-  
+
   // Show loading spinner while checking auth
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}
+      >
         <div className="text-center text-white">
           <Spinner size="lg" className="mb-4" />
           <p>Loading donor authentication...</p>
@@ -67,27 +70,27 @@ const DonorAuth = () => {
 
   const handleSignInChange = (e) => {
     const { name, value } = e.target;
-    setSignInData(prev => ({
+    setSignInData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     clearError(name);
   };
 
   const handleSignUpChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setSignUpData(prev => ({
+    setSignUpData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
     clearError(name);
   };
 
   const clearError = (fieldName) => {
     if (validationErrors[fieldName]) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        [fieldName]: ''
+        [fieldName]: '',
       }));
     }
   };
@@ -140,7 +143,7 @@ const DonorAuth = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateSignIn();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -151,7 +154,7 @@ const DonorAuth = () => {
     try {
       const { error } = await signIn({
         email: signInData.email,
-        password: signInData.password
+        password: signInData.password,
       });
 
       if (error) {
@@ -161,8 +164,8 @@ const DonorAuth = () => {
       navigate(from, { replace: true });
     } catch (error) {
       // Login error occurred
-      setValidationErrors({ 
-        submit: error.message || 'Login failed. Please try again.' 
+      setValidationErrors({
+        submit: error.message || 'Login failed. Please try again.',
       });
     } finally {
       setSubmitting(false);
@@ -171,7 +174,7 @@ const DonorAuth = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateSignUp();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -185,20 +188,20 @@ const DonorAuth = () => {
         password: signUpData.password,
         fullName: signUpData.fullName,
         phone: signUpData.phone,
-        donorType: 'individual'
+        donorType: 'individual',
       });
 
       if (error) {
         throw error;
       }
 
-      navigate('/donors/auth/verify-email', { 
-        state: { email: signUpData.email } 
+      navigate('/donors/auth/verify-email', {
+        state: { email: signUpData.email },
       });
     } catch (error) {
       // Registration error occurred
-      setValidationErrors({ 
-        submit: error.message || 'Registration failed. Please try again.' 
+      setValidationErrors({
+        submit: error.message || 'Registration failed. Please try again.',
       });
     } finally {
       setSubmitting(false);
@@ -214,19 +217,23 @@ const DonorAuth = () => {
   };
 
   return (
-    <div className="donor-auth min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+    <div className="donor-auth min-h-screen" style={{ background: 'var(--gradient-hero)' }}>
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
-          <div className="rounded-2xl shadow-2xl p-8" style={{backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)'}}>
+          <div
+            className="rounded-2xl shadow-2xl p-8"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)' }}
+          >
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
-                Donors
-              </h2>
-              <p className="text-muted-foreground">
-                Sign in to your account or create a new one
-              </p>
+              <h1
+                className="font-bold text-foreground mb-2"
+                style={{ fontSize: 'var(--text-heading-xl)' }}
+              >
+                Donor Portal
+              </h1>
+              <p className="text-muted-foreground">Sign in to your account or create a new one</p>
             </div>
 
             {/* Tab Navigation */}
@@ -266,7 +273,9 @@ const DonorAuth = () => {
               <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-destructive" />
                 <span className="text-base text-destructive">
-                  {validationErrors.submit || error?.message || 'An error occurred. Please try again.'}
+                  {validationErrors.submit ||
+                    error?.message ||
+                    'An error occurred. Please try again.'}
                 </span>
               </div>
             )}
@@ -275,7 +284,10 @@ const DonorAuth = () => {
             {activeTab === 'signin' && (
               <form onSubmit={handleSignIn} className="space-y-6">
                 <div>
-                  <label htmlFor="signin-email" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signin-email"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Email Address
                   </label>
                   <div className="relative">
@@ -296,7 +308,10 @@ const DonorAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signin-password" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signin-password"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -323,11 +338,7 @@ const DonorAuth = () => {
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full"
-                >
+                <Button type="submit" disabled={submitting} className="w-full">
                   {submitting ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -339,16 +350,32 @@ const DonorAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    // Navigating to dashboard
-                    navigate('/donors/dashboard');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Dashboard
-                </Button>
+                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      console.log('DEV BYPASS: Button clicked!');
+                      console.log('Current location:', window.location.href);
+                      console.log('About to navigate to: /donors/dashboard?bypass=true');
+                      
+                      try {
+                        navigate('/donors/dashboard?bypass=true');
+                        console.log('Navigate called successfully');
+                      } catch (error) {
+                        console.error('Navigation error:', error);
+                      }
+                      
+                      // Fallback - direct window navigation
+                      setTimeout(() => {
+                        console.log('Fallback: Using window.location');
+                        window.location.href = '/donors/dashboard?bypass=true';
+                      }, 1000);
+                    }}
+                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                  >
+                    DEV BYPASS → Dashboard
+                  </Button>
+                )}
 
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-base text-primary hover:underline">
@@ -362,7 +389,10 @@ const DonorAuth = () => {
             {activeTab === 'signup' && (
               <form onSubmit={handleSignUp} className="space-y-6">
                 <div>
-                  <label htmlFor="signup-fullname" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-fullname"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Full Name
                   </label>
                   <div className="relative">
@@ -383,7 +413,10 @@ const DonorAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-email" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-email"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Email Address
                   </label>
                   <div className="relative">
@@ -404,7 +437,10 @@ const DonorAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-phone" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-phone"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Phone Number <span className="text-muted-foreground">(Optional)</span>
                   </label>
                   <div className="relative">
@@ -422,7 +458,10 @@ const DonorAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-password" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-password"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -450,7 +489,10 @@ const DonorAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-confirmpassword" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-confirmpassword"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -469,11 +511,17 @@ const DonorAuth = () => {
                       onClick={toggleConfirmPasswordVisibility}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                   {validationErrors.confirmPassword && (
-                    <p className="mt-1 text-sm text-destructive">{validationErrors.confirmPassword}</p>
+                    <p className="mt-1 text-sm text-destructive">
+                      {validationErrors.confirmPassword}
+                    </p>
                   )}
                 </div>
 
@@ -490,8 +538,8 @@ const DonorAuth = () => {
                       I agree to the{' '}
                       <Link to="/donors/auth/terms" className="text-primary hover:underline">
                         Terms of Service
-                      </Link>
-                      {' '}and{' '}
+                      </Link>{' '}
+                      and{' '}
                       <Link to="/donors/auth/privacy" className="text-primary hover:underline">
                         Privacy Policy
                       </Link>
@@ -502,11 +550,7 @@ const DonorAuth = () => {
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full"
-                >
+                <Button type="submit" disabled={submitting} className="w-full">
                   {submitting ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -518,16 +562,32 @@ const DonorAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    // Navigating to dashboard
-                    navigate('/donors/dashboard');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Dashboard
-                </Button>
+                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      console.log('DEV BYPASS: Button clicked!');
+                      console.log('Current location:', window.location.href);
+                      console.log('About to navigate to: /donors/dashboard?bypass=true');
+                      
+                      try {
+                        navigate('/donors/dashboard?bypass=true');
+                        console.log('Navigate called successfully');
+                      } catch (error) {
+                        console.error('Navigation error:', error);
+                      }
+                      
+                      // Fallback - direct window navigation
+                      setTimeout(() => {
+                        console.log('Fallback: Using window.location');
+                        window.location.href = '/donors/dashboard?bypass=true';
+                      }, 1000);
+                    }}
+                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                  >
+                    DEV BYPASS → Dashboard
+                  </Button>
+                )}
               </form>
             )}
           </div>
