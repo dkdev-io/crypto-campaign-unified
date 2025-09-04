@@ -12,7 +12,7 @@ const Index = () => {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
+      <div className="min-h-screen" style={{backgroundColor: '#2D1B69', color: 'hsl(var(--crypto-white))'}}>
         
         {/* Development Auth Bypass Panel */}
         {showAuthBypass && (

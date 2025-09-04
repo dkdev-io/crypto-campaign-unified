@@ -318,13 +318,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               style={{ 
                 flex: 1,
-                backgroundColor: 'white',
+                backgroundColor: 'hsl(var(--crypto-white))',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: 'var(--radius)',
                 padding: 'var(--space-sm)',
                 fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '400'
               }}
             />
             <button 
@@ -407,12 +408,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
               display: 'block',
-              backgroundColor: 'white',
+              backgroundColor: 'hsl(var(--crypto-white))',
               color: 'hsl(var(--crypto-navy))',
               border: '1px solid hsl(var(--border))',
-              borderRadius: '6px',
-              padding: '0.75rem',
-              fontSize: '16px'
+              borderRadius: 'var(--radius)',
+              padding: 'var(--space-sm)',
+              fontSize: 'var(--text-body)',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '400'
             }}
           />
           
@@ -427,12 +430,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
               display: 'block',
-              backgroundColor: 'white',
+              backgroundColor: 'hsl(var(--crypto-white))',
               color: 'hsl(var(--crypto-navy))',
               border: '1px solid hsl(var(--border))',
-              borderRadius: '6px',
-              padding: '0.75rem',
-              fontSize: '16px'
+              borderRadius: 'var(--radius)',
+              padding: 'var(--space-sm)',
+              fontSize: 'var(--text-body)',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '400'
             }}
           />
           
@@ -450,13 +455,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="City"
               style={{ 
                 width: '120px',
-                backgroundColor: 'white',
+                backgroundColor: 'hsl(var(--crypto-white))',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: 'var(--radius)',
                 padding: 'var(--space-sm)',
                 fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '400'
               }}
             />
             <input
@@ -467,13 +473,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="State"
               style={{ 
                 width: '80px',
-                backgroundColor: 'white',
+                backgroundColor: 'hsl(var(--crypto-white))',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: 'var(--radius)',
                 padding: 'var(--space-sm)',
                 fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '400'
               }}
               maxLength="2"
             />
@@ -485,13 +492,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="ZIP"
               style={{ 
                 width: '100px',
-                backgroundColor: 'white',
+                backgroundColor: 'hsl(var(--crypto-white))',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: 'var(--radius)',
                 padding: 'var(--space-sm)',
                 fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif'
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '400'
               }}
               maxLength="10"
             />
@@ -504,15 +512,16 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           style={{
             background: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 
               'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
-            color: 'white',
+            color: 'hsl(var(--crypto-white))',
             border: 'none',
-            padding: '0.75rem 2rem',
-            borderRadius: '6px',
+            padding: 'var(--space-sm) var(--space-lg)',
+            borderRadius: 'var(--radius)',
             cursor: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 'not-allowed' : 'pointer',
-            fontSize: '16px',
+            fontSize: 'var(--text-body)',
+            fontFamily: 'Inter, sans-serif',
             fontWeight: '600',
             opacity: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 0.6 : 1,
-            transition: 'all 0.2s'
+            transition: 'var(--transition-smooth)'
           }}
         >
           {loading ? 'Saving...' : 'Save Committee Info & Continue'}
@@ -764,11 +773,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
             background: 'hsl(var(--crypto-gold))',
             color: 'hsl(var(--crypto-navy))',
             border: 'none',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '6px',
+            padding: 'var(--space-sm) var(--space-lg)',
+            borderRadius: 'var(--radius)',
             cursor: 'pointer',
-            fontSize: '16px',
-            fontWeight: '600'
+            fontSize: 'var(--text-body)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '600',
+            transition: 'var(--transition-smooth)'
           }}
         >
           Back
@@ -816,14 +827,16 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           style={{ 
             marginTop: '1rem', 
             background: 'hsl(var(--crypto-medium-gray))', 
-            color: 'white',
+            color: 'hsl(var(--crypto-white))',
             display: 'block',
             width: '100%',
             border: 'none',
-            padding: '0.75rem',
-            borderRadius: '6px',
+            padding: 'var(--space-sm)',
+            borderRadius: 'var(--radius)',
             cursor: 'pointer',
-            fontSize: '14px'
+            fontSize: 'var(--text-body-sm)',
+            fontFamily: 'Inter, sans-serif',
+            transition: 'var(--transition-smooth)'
           }}
         >
           Continue Without Committee (Can Update Later)

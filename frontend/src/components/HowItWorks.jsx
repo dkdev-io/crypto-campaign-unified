@@ -49,7 +49,7 @@ const HowItWorks = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <div key={index} className="relative">
-                <div className="crypto-card text-center">
+                <div className="crypto-card text-center" style={{backgroundColor: '#E3F2FD'}}>
                   <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 relative"
                        style={{background: 'var(--gradient-section)'}}>
                     <step.icon className="w-8 h-8" style={{color: 'hsl(var(--crypto-navy))'}} />
@@ -60,10 +60,10 @@ const HowItWorks = () => {
                       </span>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-4" style={{color: 'hsl(var(--crypto-navy))'}}>
+                  <h3 className="text-xl font-bold mb-4" style={{color: '#1976D2'}}>
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed" style={{color: '#1976D2'}}>
                     {step.description}
                   </p>
                 </div>
