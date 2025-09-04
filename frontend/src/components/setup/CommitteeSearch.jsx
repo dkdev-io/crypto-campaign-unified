@@ -8,6 +8,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
   const [selectedCommittee, setSelectedCommittee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [searched, setSearched] = useState(false);
   const [validation, setValidation] = useState(null);
   const [showManualEntry, setShowManualEntry] = useState(false);
@@ -36,6 +37,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
     try {
       setLoading(true);
       setError('');
+      setSuccess('');
       setSearched(true);
       
       const result = await fecAPI.searchCommittees(term.trim(), 20);
@@ -151,23 +153,54 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
     }
   };
 
-  const handleManualCommitteeSubmit = () => {
+  const handleManualCommitteeSubmit = async () => {
     if (!manualCommittee.name.trim()) {
       setError('Committee name is required');
       return;
     }
     
-    const testCommittee = {
-      id: manualCommittee.id || 'MANUAL-' + Date.now(),
-      name: manualCommittee.name,
-      type: manualCommittee.type,
-      source: 'manual',
-      candidateName: manualCommittee.candidateName,
-      city: manualCommittee.city,
-      state: manualCommittee.state
-    };
-    
-    handleSelectCommittee(testCommittee);
+    try {
+      setLoading(true);
+      
+      // Save committee name directly to the current campaign in Supabase
+      const campaignId = formData.campaignId;
+      if (!campaignId) {
+        throw new Error('Campaign ID not found. Please refresh and try again.');
+      }
+      
+      const { error: updateError } = await supabase
+        .from('campaigns')
+        .update({ 
+          committee_name: manualCommittee.name.trim(),
+          fec_committee_id: 'MANUAL-' + Date.now()
+        })
+        .eq('id', campaignId);
+        
+      if (updateError) {
+        throw updateError;
+      }
+      
+      // Update form data and proceed
+      updateFormData({
+        selectedCommittee: {
+          id: 'MANUAL-' + Date.now(),
+          name: manualCommittee.name.trim(),
+          source: 'manual'
+        },
+        committeeName: manualCommittee.name.trim(),
+        fecCommitteeId: 'MANUAL-' + Date.now()
+      });
+      
+      setSuccess('Committee name saved successfully!');
+      setTimeout(() => {
+        onNext();
+      }, 1000);
+      
+    } catch (err) {
+      setError('Failed to save committee name: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formatCommitteeType = (type) => {
@@ -237,7 +270,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         )}
       </div>
 
-      {/* Error Message with Bypass Option */}
+      {/* Error Message */}
       {error && (
         <div style={{ 
           background: '#fee', 
@@ -248,146 +281,74 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           border: '1px solid #fcc'
         }}>
           ❌ {error}
-          {error.includes('temporarily unavailable') && (
-            <div style={{ marginTop: '1rem' }}>
-              <button
-                onClick={() => {
-                  setShowManualEntry(true);
-                  setError('');
-                  // Log the bypass usage
-                  logBypassUsage();
-                }}
-                style={{
-                  background: '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-              >
-                📝 Skip Search - Enter Manually
-              </button>
-            </div>
-          )}
         </div>
       )}
 
-      {/* Manual Committee Entry Form */}
-      {showManualEntry && (
+      {/* Success Message */}
+      {success && (
         <div style={{ 
-          background: '#f8f9fa', 
-          padding: '1.5rem', 
-          borderRadius: '8px', 
-          marginBottom: '2rem',
-          border: '1px solid #e9ecef'
+          background: '#efe', 
+          color: '#393', 
+          padding: '1rem', 
+          borderRadius: '4px', 
+          marginBottom: '1rem',
+          border: '1px solid #cfc'
         }}>
-          <h4 style={{ color: '#495057', marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-            📝 Manual Committee Entry
-            <button
-              onClick={() => setShowManualEntry(false)}
-              style={{
-                marginLeft: 'auto',
-                background: 'transparent',
-                border: 'none',
-                fontSize: '18px',
-                cursor: 'pointer',
-                color: '#6c757d'
-              }}
-            >
-              ✕
-            </button>
-          </h4>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-            <div className="form-group">
-              <label>Committee Name *</label>
-              <input
-                className="form-input"
-                type="text"
-                value={manualCommittee.name}
-                onChange={(e) => setManualCommittee({...manualCommittee, name: e.target.value})}
-                placeholder="Enter committee name"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Committee ID</label>
-              <input
-                className="form-input"
-                type="text"
-                value={manualCommittee.id}
-                onChange={(e) => setManualCommittee({...manualCommittee, id: e.target.value})}
-                placeholder="FEC ID (optional)"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Committee Type</label>
-              <select
-                className="form-input"
-                value={manualCommittee.type}
-                onChange={(e) => setManualCommittee({...manualCommittee, type: e.target.value})}
-              >
-                <option value="N">PAC</option>
-                <option value="P">Presidential</option>
-                <option value="H">House</option>
-                <option value="S">Senate</option>
-                <option value="Q">Qualified Non-Profit</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label>Candidate Name</label>
-              <input
-                className="form-input"
-                type="text"
-                value={manualCommittee.candidateName}
-                onChange={(e) => setManualCommittee({...manualCommittee, candidateName: e.target.value})}
-                placeholder="Candidate name (if applicable)"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>City</label>
-              <input
-                className="form-input"
-                type="text"
-                value={manualCommittee.city}
-                onChange={(e) => setManualCommittee({...manualCommittee, city: e.target.value})}
-                placeholder="City"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>State</label>
-              <input
-                className="form-input"
-                type="text"
-                value={manualCommittee.state}
-                onChange={(e) => setManualCommittee({...manualCommittee, state: e.target.value})}
-                placeholder="State"
-                maxLength="2"
-              />
-            </div>
-          </div>
-          
-          <button
-            onClick={handleManualCommitteeSubmit}
-            style={{
-              background: '#2a2a72',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            ✓ Use This Committee
-          </button>
+          ✅ {success}
         </div>
       )}
+
+      {/* Simple Committee Entry */}
+      <div style={{ 
+        background: '#f8f9fa', 
+        padding: '1.5rem', 
+        borderRadius: '8px', 
+        marginBottom: '2rem',
+        border: '1px solid #e9ecef',
+        textAlign: 'center'
+      }}>
+        <h4 style={{ color: '#495057', marginBottom: '1rem' }}>
+          📝 Add Committee Name
+        </h4>
+        <p style={{ color: '#6c757d', marginBottom: '1rem', fontSize: '14px' }}>
+          Can't find your committee? Add it manually
+        </p>
+        
+        <div className="form-group" style={{ marginBottom: '1rem' }}>
+          <input
+            className="form-input"
+            type="text"
+            value={manualCommittee.name}
+            onChange={(e) => setManualCommittee({...manualCommittee, name: e.target.value})}
+            placeholder="Enter your committee name"
+            style={{ 
+              width: '100%',
+              maxWidth: '400px',
+              margin: '0 auto',
+              display: 'block'
+            }}
+            onKeyPress={(e) => e.key === 'Enter' && handleManualCommitteeSubmit()}
+          />
+        </div>
+        
+        <button
+          onClick={handleManualCommitteeSubmit}
+          disabled={loading || !manualCommittee.name.trim()}
+          style={{
+            background: '#2a2a72',
+            color: 'white',
+            border: 'none',
+            padding: '0.75rem 2rem',
+            borderRadius: '4px',
+            cursor: loading || !manualCommittee.name.trim() ? 'not-allowed' : 'pointer',
+            fontSize: '16px',
+            fontWeight: '500',
+            opacity: loading || !manualCommittee.name.trim() ? 0.7 : 1
+          }}
+        >
+          {loading ? '⏳ Saving...' : '✓ Save Committee & Continue'}
+        </button>
+      </div>
 
       {/* Committee Results */}
       {committees.length > 0 && (
@@ -596,7 +557,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           onClick={handleConfirmCommittee}
           disabled={!selectedCommittee || (validation && !validation.isValid)}
         >
-          Next: Connect Bank Account →
+          Next →
         </button>
         
         {/* Always show skip button for testing */}
@@ -622,24 +583,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         </button>
       </div>
 
-      {/* Instructions */}
-      <div style={{ 
-        marginTop: '2rem',
-        padding: '1rem',
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '6px',
-        fontSize: '14px',
-        color: '#6c757d'
-      }}>
-        <strong style={{ color: '#495057' }}>📌 Committee Selection Help:</strong>
-        <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
-          <li>Search results include both real FEC committees and test committees</li>
-          <li>Test committees are marked with 🧪 and are used for development</li>
-          <li>All committee information must be complete for ActBlue compliance</li>
-          <li>Contact admin if you can't find your committee</li>
-        </ul>
-      </div>
     </div>
   );
 };
