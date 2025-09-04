@@ -53,17 +53,17 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
   return (
     <div>
-      <h2 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '2rem', color: 'white' }}>
+      <h2 style={{ fontSize: 'var(--text-heading-xl)', fontWeight: '800', textAlign: 'center', marginBottom: '2rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
         Campaign Setup
       </h2>
-      <p style={{ textAlign: 'center', marginBottom: '2rem', color: '#a0a0a0' }}>
+      <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'hsl(var(--crypto-white) / 0.9)', fontSize: 'var(--text-body-lg)' }}>
         Step 1 of 8: Campaign Info
       </p>
       
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
         {/* Campaign Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'white', fontSize: '14px', fontWeight: '500' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
             Campaign Name *
           </label>
           <div style={{ position: 'relative' }}>
@@ -72,12 +72,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               className="form-input"
               style={{ 
                 width: '100%', 
-                padding: '12px 12px 12px 40px', 
-                border: validationErrors.campaignName ? '1px solid #ef4444' : '1px solid #374151',
-                borderRadius: '8px',
-                background: '#1f2937',
-                color: 'white',
-                fontSize: '14px'
+                padding: 'var(--space-sm) var(--space-sm) var(--space-sm) 40px', 
+                border: validationErrors.campaignName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--border))',
+                borderRadius: 'var(--radius)',
+                background: 'hsl(var(--input))',
+                color: 'hsl(var(--foreground))',
+                fontSize: 'var(--text-body-sm)',
+                fontFamily: 'Inter, sans-serif'
               }}
               value={formData.campaignName || ''}
               onChange={(e) => handleChange('campaignName', e.target.value)}
@@ -93,7 +94,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin First Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'white', fontSize: '14px', fontWeight: '500' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
             Admin First Name *
           </label>
           <div style={{ position: 'relative' }}>
@@ -102,12 +103,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               className="form-input"
               style={{ 
                 width: '100%', 
-                padding: '12px 12px 12px 40px', 
-                border: validationErrors.adminFirstName ? '1px solid #ef4444' : '1px solid #374151',
-                borderRadius: '8px',
-                background: '#1f2937',
-                color: 'white',
-                fontSize: '14px'
+                padding: 'var(--space-sm) var(--space-sm) var(--space-sm) 40px', 
+                border: validationErrors.adminFirstName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--border))',
+                borderRadius: 'var(--radius)',
+                background: 'hsl(var(--input))',
+                color: 'hsl(var(--foreground))',
+                fontSize: 'var(--text-body-sm)',
+                fontFamily: 'Inter, sans-serif'
               }}
               value={formData.adminFirstName || ''}
               onChange={(e) => handleChange('adminFirstName', e.target.value)}
@@ -123,7 +125,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Last Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'white', fontSize: '14px', fontWeight: '500' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
             Admin Last Name *
           </label>
           <div style={{ position: 'relative' }}>
@@ -132,12 +134,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               className="form-input"
               style={{ 
                 width: '100%', 
-                padding: '12px 12px 12px 40px', 
-                border: validationErrors.adminLastName ? '1px solid #ef4444' : '1px solid #374151',
-                borderRadius: '8px',
-                background: '#1f2937',
-                color: 'white',
-                fontSize: '14px'
+                padding: 'var(--space-sm) var(--space-sm) var(--space-sm) 40px', 
+                border: validationErrors.adminLastName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--border))',
+                borderRadius: 'var(--radius)',
+                background: 'hsl(var(--input))',
+                color: 'hsl(var(--foreground))',
+                fontSize: 'var(--text-body-sm)',
+                fontFamily: 'Inter, sans-serif'
               }}
               value={formData.adminLastName || ''}
               onChange={(e) => handleChange('adminLastName', e.target.value)}
@@ -153,7 +156,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Email */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'white', fontSize: '14px', fontWeight: '500' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
             Admin Email *
           </label>
           <div style={{ position: 'relative' }}>
@@ -163,12 +166,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               type="email"
               style={{ 
                 width: '100%', 
-                padding: '12px 12px 12px 40px', 
-                border: validationErrors.adminEmail ? '1px solid #ef4444' : '1px solid #374151',
-                borderRadius: '8px',
-                background: '#1f2937',
-                color: 'white',
-                fontSize: '14px'
+                padding: 'var(--space-sm) var(--space-sm) var(--space-sm) 40px', 
+                border: validationErrors.adminEmail ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--border))',
+                borderRadius: 'var(--radius)',
+                background: 'hsl(var(--input))',
+                color: 'hsl(var(--foreground))',
+                fontSize: 'var(--text-body-sm)',
+                fontFamily: 'Inter, sans-serif'
               }}
               value={formData.adminEmail || ''}
               onChange={(e) => handleChange('adminEmail', e.target.value)}
@@ -184,7 +188,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Phone */}
         <div className="form-group" style={{ marginBottom: '2rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'white', fontSize: '14px', fontWeight: '500' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
             Admin Phone *
           </label>
           <div style={{ position: 'relative' }}>
@@ -194,12 +198,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               type="tel"
               style={{ 
                 width: '100%', 
-                padding: '12px 12px 12px 40px', 
-                border: validationErrors.adminPhone ? '1px solid #ef4444' : '1px solid #374151',
-                borderRadius: '8px',
-                background: '#1f2937',
-                color: 'white',
-                fontSize: '14px'
+                padding: 'var(--space-sm) var(--space-sm) var(--space-sm) 40px', 
+                border: validationErrors.adminPhone ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--border))',
+                borderRadius: 'var(--radius)',
+                background: 'hsl(var(--input))',
+                color: 'hsl(var(--foreground))',
+                fontSize: 'var(--text-body-sm)',
+                fontFamily: 'Inter, sans-serif'
               }}
               value={formData.adminPhone || ''}
               onChange={(e) => handleChange('adminPhone', e.target.value)}
@@ -218,14 +223,16 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
             className="btn btn-secondary" 
             onClick={onPrev}
             style={{
-              padding: '12px 24px',
-              borderRadius: '8px',
-              border: '1px solid #fbbf24',
-              background: '#fbbf24',
-              color: '#000',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
+              padding: 'var(--space-sm) var(--space-lg)',
+              borderRadius: 'var(--radius)',
+              border: 'none',
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: 'var(--text-body)',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)'
             }}
           >
             Back
@@ -234,14 +241,16 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
             className="btn btn-primary" 
             onClick={validateAndProceed}
             style={{
-              padding: '12px 24px',
-              borderRadius: '8px',
-              border: '1px solid #1e40af',
-              background: '#1e40af',
-              color: 'white',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
+              padding: 'var(--space-sm) var(--space-lg)',
+              borderRadius: 'var(--radius)',
+              border: 'none',
+              background: 'hsl(var(--crypto-navy))',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: 'var(--text-body)',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)'
             }}
           >
             Next
