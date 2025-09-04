@@ -532,7 +532,7 @@ Import Successful
                     <input 
                       type="text" 
                       placeholder="$100" 
-                      className="w-full px-3 py-2 border border-border bg-background text-foreground rounded"
+                      className="w-full px-3 py-2 border border-border bg-white text-black rounded"
                       readOnly
                     />
                   </div>
@@ -599,7 +599,7 @@ Import Successful
                   <input 
                     type="text" 
                     placeholder="$100" 
-                    className="w-full px-3 py-2 border rounded"
+                    className="w-full px-3 py-2 border rounded bg-white text-black"
                     style={{ 
                       borderColor: styles.primaryColor,
                       fontFamily: styles.fontFamily
