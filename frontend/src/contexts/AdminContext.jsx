@@ -3,6 +3,19 @@ import { supabase } from '../lib/supabase';
 
 const AdminContext = createContext();
 
+// Development auth bypass configuration (shared with other auth contexts)
+const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
+const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
+
+// Test admin user for bypass
+const TEST_ADMIN = {
+  id: 'test-admin-bypass-id',
+  email: 'test@dkdev.io',
+  full_name: 'Test Admin (Bypass)',
+  role: 'super_admin',
+  permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+};
+
 export const useAdmin = () => {
   const context = useContext(AdminContext);
   if (!context) {
@@ -17,8 +30,24 @@ export const AdminProvider = ({ children }) => {
   const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
+    // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 ADMIN AUTH BYPASS ACTIVE - Using test admin: test@dkdev.io')
+      setAdmin(TEST_ADMIN)
+      setPermissions(TEST_ADMIN.permissions)
+      localStorage.setItem('admin_user', JSON.stringify(TEST_ADMIN))
+      setLoading(false)
+      return
+    }
+
+    // Normal admin auth flow
     checkAdminAuth();
     
+    // Don't set up auth listeners if bypass is active
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      return () => {} // No cleanup needed
+    }
+
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {

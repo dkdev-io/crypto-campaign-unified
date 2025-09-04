@@ -3,6 +3,33 @@ import { supabase } from '../lib/supabase';
 
 const DonorAuthContext = createContext({});
 
+// Development auth bypass configuration (shared with main AuthContext)
+const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
+const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
+
+// Test donor user for bypass
+const TEST_DONOR = {
+  id: 'test-donor-bypass-id',
+  email: 'test@dkdev.io',
+  user_metadata: {
+    user_type: 'donor',
+    full_name: 'Test Donor (Bypass)'
+  },
+  profile: {
+    id: 'test-donor-bypass-id',
+    email: 'test@dkdev.io',
+    full_name: 'Test Donor (Bypass)',
+    phone: '+1-555-0123',
+    address: '123 Test St',
+    city: 'Test City',
+    state: 'TS',
+    zip_code: '12345',
+    employer: 'Test Company',
+    occupation: 'Developer',
+    created_at: new Date().toISOString()
+  }
+};
+
 export const useDonorAuth = () => {
   const context = useContext(DonorAuthContext);
   if (!context) {
@@ -17,8 +44,22 @@ export const DonorAuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 DONOR AUTH BYPASS ACTIVE - Using test donor: test@dkdev.io')
+      setDonor(TEST_DONOR)
+      setLoading(false)
+      return
+    }
+
+    // Normal donor auth flow
     // Check if donor is logged in
     checkDonor();
+
+    // Don't set up auth listeners if bypass is active
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      return () => {} // No cleanup needed
+    }
 
     // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
