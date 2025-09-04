@@ -346,7 +346,7 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost') && (
+                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
                   <Button
                     type="button"
                     onClick={() => {
@@ -509,7 +509,7 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost') && (
+                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
                   <Button
                     type="button"
                     onClick={() => {

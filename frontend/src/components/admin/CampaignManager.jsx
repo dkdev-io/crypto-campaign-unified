@@ -153,12 +153,12 @@ const CampaignManager = () => {
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-secondary">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Campaign</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Suggested Amounts</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Max Donation</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Campaign</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Suggested Amounts</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Max Donation</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Created</th>
+                <th className="px-6 py-3 text-center text-sm font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-card divide-y divide-border">
@@ -166,7 +166,7 @@ const CampaignManager = () => {
                 <tr key={campaign.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-foreground">{campaign.campaign_name}</div>
+                      <div className="text-base font-medium text-foreground">{campaign.campaign_name}</div>
                       <div className="text-sm text-muted-foreground">
                         <a 
                           href={`http://localhost:5173/?campaign=${campaign.id}`} 
@@ -179,7 +179,7 @@ const CampaignManager = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                  <td className="px-6 py-4 whitespace-nowrap text-base text-muted-foreground">
                     {campaign.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -195,28 +195,28 @@ const CampaignManager = () => {
                         <div className="flex gap-2 mt-2">
                           <button
                             onClick={() => saveAmounts(campaign.id)}
-                            className="px-2 py-1 bg-accent text-accent-foreground rounded text-xs"
+                            className="px-2 py-1 bg-accent text-accent-foreground rounded text-sm"
                           >
                             ✅ Save
                           </button>
                           <button
                             onClick={cancelEdit}
-                            className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs"
+                            className="px-2 py-1 bg-muted text-muted-foreground rounded text-sm"
                           >
                             ❌ Cancel
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <div className="text-sm font-medium text-foreground">
+                      <div className="text-base font-medium text-foreground">
                         [{campaign.suggested_amounts?.join(', ') || 'none'}]
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                  <td className="px-6 py-4 whitespace-nowrap text-base text-foreground">
                     ${campaign.max_donation_limit || 3300}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                  <td className="px-6 py-4 whitespace-nowrap text-base text-muted-foreground">
                     {new Date(campaign.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -224,13 +224,13 @@ const CampaignManager = () => {
                       <div className="flex justify-center gap-2">
                         <button
                           onClick={() => startEdit(campaign)}
-                          className="px-2 py-1 bg-accent text-accent-foreground rounded text-xs hover:bg-accent/80"
+                          className="px-2 py-1 bg-accent text-accent-foreground rounded text-sm hover:bg-accent/80"
                         >
                           ✏️ Edit
                         </button>
                         <button
                           onClick={() => deleteCampaign(campaign.id, campaign.campaign_name)}
-                          className="px-2 py-1 bg-destructive text-destructive-foreground rounded text-xs hover:bg-destructive/80"
+                          className="px-2 py-1 bg-destructive text-destructive-foreground rounded text-sm hover:bg-destructive/80"
                         >
                           🗑️ Delete
                         </button>

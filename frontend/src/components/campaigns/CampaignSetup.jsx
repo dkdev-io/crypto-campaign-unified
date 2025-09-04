@@ -21,7 +21,7 @@ const CampaignSetup = () => {
   // Check for bypass flag in URL
   const params = new URLSearchParams(location.search);
   const isBypass = params.get('bypass') === 'true';
-  const isDev = import.meta.env.DEV || window.location.hostname === 'localhost';
+  const isDev = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app');
   
   // If bypass is enabled in dev mode, skip auth
   if (isDev && isBypass) {
