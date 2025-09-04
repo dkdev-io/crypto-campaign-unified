@@ -293,7 +293,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
   };
 
   return (
-    <div>
+    <div style={{background: 'red !important', padding: '2rem', border: '10px solid yellow'}}>
+      <h1 style={{color: 'white', fontSize: '3rem', textAlign: 'center'}}>🔥 TESTING 123 - CHANGES ARE WORKING 🔥</h1>
       <p className="text-center mb-2" style={{ fontSize: 'var(--text-body-lg)', color: 'hsl(var(--crypto-white) / 0.9)', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
         Step 2 of 8: Committee Search
       </p>
