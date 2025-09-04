@@ -28,13 +28,13 @@ const CampaignPage = () => {
         console.log('Campaign lookup result:', { data: !!data, error: error?.message });
 
         if (error) {
-          throw error;
+          console.error('Database error:', error);
+          setError('Database error: ' + error.message);
+        } else if (!data) {
+          setError('Campaign "' + campaignName + '" not found');
+        } else {
+          setCampaign(data);
         }
-
-        setCampaign(data);
-      } catch (err) {
-        console.error('Failed to load campaign:', err);
-        setError('Campaign not found or not active');
       } finally {
         setLoading(false);
       }

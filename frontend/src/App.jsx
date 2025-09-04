@@ -64,39 +64,7 @@ function App() {
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
             <Route path="/testing" element={<TestingDashboard />} />
-            <Route path="/invite-test" element={
-              <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-                <h2>Team Invitation System</h2>
-                <RealWorkingInvites campaignId="test-campaign" />
-              </div>
-            } />
             {/* <Route path="/donation-test" element={<DonationTest />} /> */}
-            <Route path="/analytics-demo" element={
-              <div style={{ 
-                minHeight: '100vh', 
-                background: 'var(--gradient-section)',
-                padding: '2rem 0'
-              }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-                  <div style={{ 
-                    textAlign: 'center', 
-                    marginBottom: '3rem',
-                    background: 'white',
-                    padding: '2rem',
-                    borderRadius: '1rem',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                  }}>
-                    <h1 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem' }}>
-                      🚀 Analytics Demo - Live Campaign Form
-                    </h1>
-                    <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: '1.1rem', marginBottom: '1rem' }}>
-                      This is your actual EmbeddedDonorForm component with integrated analytics tracking.
-                    </p>
-                  </div>
-                  <EmbeddedDonorForm campaignId={null} />
-                </div>
-              </div>
-            } />
             
             {/* Admin Routes */}
             <Route path="/minda" element={<AdminLogin />} />
@@ -140,11 +108,6 @@ function App() {
             {/* Embed Form Route - for iframe embeds */}
             <Route path="/embed-form.html" element={
               <EmbedDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
-            } />
-            <Route path="/embed-form" element={
-              <div style={{ minHeight: '100vh', padding: '1rem' }}>
-                <EmbeddedDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
-              </div>
             } />
             
             {/* Dynamic Campaign Pages - must be last before 404 */}
