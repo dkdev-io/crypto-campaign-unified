@@ -130,12 +130,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
   };
 
   const handleNext = () => {
-    // For development, allow continuing without bank connection
-    if (!bankInfo?.isVerified && !formData.skipBankConnection) {
-      setError('Please connect a bank account or choose to skip for development purposes');
-      return;
-    }
-    
     onNext();
   };
 
@@ -267,7 +261,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
               marginBottom: '1rem'
             }}
           >
-            {loading ? '⏳ Connecting...' : !plaidReady ? '⏳ Loading...' : '🔗 Connect Bank Account'}
+            {loading ? '⏳ Connecting...' : !plaidReady ? '⏳ Loading...' : '🔗 Connect Bank Account - Powered by Plaid'}
           </button>
           
           {!plaidReady && (
@@ -278,25 +272,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </div>
       )}
 
-      {/* Security Information */}
-      <div style={{ 
-        background: '#e7f3ff',
-        border: '1px solid #b6d7ff',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h5 style={{ color: '#0066cc', marginTop: 0 }}>
-          🔒 Your Security is Our Priority
-        </h5>
-        <ul style={{ color: '#004499', fontSize: '14px', margin: 0, paddingLeft: '1.2rem' }}>
-          <li>Bank connections are powered by Plaid, used by thousands of financial apps</li>
-          <li>Your login credentials are never stored on our servers</li>
-          <li>All data transmission is encrypted with bank-level security</li>
-          <li>We only access basic account information needed for processing</li>
-          <li>You can disconnect your bank account at any time</li>
-        </ul>
-      </div>
 
       {/* Skip Option */}
       <div style={{ 
