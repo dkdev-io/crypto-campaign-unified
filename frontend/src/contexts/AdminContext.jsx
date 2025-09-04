@@ -122,9 +122,15 @@ export const AdminProvider = ({ children }) => {
       setLoading(true);
       console.log('🔍 ADMIN LOGIN - Attempting login for:', email);
       
+      // Clear any existing state first
+      setAdmin(null);
+      setPermissions([]);
+      localStorage.removeItem('admin_user');
+      
       // Hardcoded admin credentials since you're the only admin
       if (email === 'test@dkdev.io' && password === 'TestDonor123!') {
         console.log('🔍 ADMIN LOGIN - Credentials match, creating admin user...');
+        
         // Create mock admin user
         const mockAdmin = {
           id: 'admin-user',
@@ -134,18 +140,21 @@ export const AdminProvider = ({ children }) => {
           permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
         };
         
+        // Set admin state
         setAdmin(mockAdmin);
         setPermissions(mockAdmin.permissions);
         
         // Store in localStorage for persistence
         localStorage.setItem('admin_user', JSON.stringify(mockAdmin));
         console.log('🔍 ADMIN LOGIN - Admin user set and stored in localStorage');
+        console.log('🔍 ADMIN LOGIN - Admin state:', mockAdmin);
         
         return { success: true };
       }
       
-      // If Supabase is configured, use it as fallback
+      // For any other email/password combination, check Supabase
       try {
+        console.log('🔍 ADMIN LOGIN - Trying Supabase authentication...');
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -158,10 +167,11 @@ export const AdminProvider = ({ children }) => {
         await checkAdminPermissions(data.user);
         return { success: true };
       } catch (supabaseError) {
-        // If Supabase fails, return generic error
+        console.log('🔍 ADMIN LOGIN - Supabase auth failed:', supabaseError.message);
         throw new Error('Invalid credentials');
       }
     } catch (error) {
+      console.error('🔍 ADMIN LOGIN - Error:', error);
       return { success: false, error: error.message };
     } finally {
       setLoading(false);
@@ -171,9 +181,23 @@ export const AdminProvider = ({ children }) => {
   const logout = async () => {
     try {
       setLoading(true);
-      await supabase.auth.signOut();
+      console.log('🔍 ADMIN LOGOUT - Clearing admin session...');
+      
+      // Clear admin state
       setAdmin(null);
       setPermissions([]);
+      
+      // Clear localStorage
+      localStorage.removeItem('admin_user');
+      
+      // Sign out from Supabase (if connected)
+      try {
+        await supabase.auth.signOut();
+      } catch (supabaseError) {
+        console.log('🔍 Supabase signout failed (expected if not connected):', supabaseError.message);
+      }
+      
+      console.log('🔍 ADMIN LOGOUT - Admin session cleared');
     } catch (error) {
       console.error('Error logging out:', error);
     } finally {

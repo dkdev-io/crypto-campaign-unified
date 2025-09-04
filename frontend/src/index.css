@@ -424,15 +424,29 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     transition: var(--transition-smooth);
   }
   
-  /* Global form input override - ensure all inputs use unified styling */
-  input[type="text"], 
-  input[type="email"], 
-  input[type="password"], 
-  input[type="url"], 
-  input[type="number"], 
-  input[type="tel"], 
-  textarea, 
-  select {
+  /* Auth form inputs - white background for readability */
+  .auth-card input[type="text"], 
+  .auth-card input[type="email"], 
+  .auth-card input[type="password"] {
+    background-color: hsl(var(--crypto-white)) !important;
+    color: hsl(var(--crypto-navy)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    padding: var(--space-sm) !important;
+    font-size: var(--text-body) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Setup form inputs - navy background with white text */
+  .setup-container input[type="text"], 
+  .setup-container input[type="email"], 
+  .setup-container input[type="password"], 
+  .setup-container input[type="url"], 
+  .setup-container input[type="number"], 
+  .setup-container input[type="tel"], 
+  .setup-container textarea, 
+  .setup-container select {
     background-color: hsl(var(--crypto-navy)) !important;
     color: hsl(var(--crypto-white)) !important;
     border: 1px solid hsl(var(--crypto-white) / 0.3) !important;

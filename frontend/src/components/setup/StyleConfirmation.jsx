@@ -127,17 +127,17 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
     
     return (
       <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
+        background: 'hsl(var(--crypto-white))',
+        border: '1px solid hsl(var(--border)),',
         borderRadius: '8px',
         padding: '1.5rem',
         marginBottom: '2rem'
       }}>
-        <h4 style={{ color: '#495057', marginTop: 0, display: 'flex', alignItems: 'center' }}>
+        <h4 style={{ color: 'hsl(var(--crypto-navy))', marginTop: 0, display: 'flex', alignItems: 'center' }}>
           🎨 Color Palette
           <span style={{ 
-            background: '#e7f3ff', 
-            color: '#0066cc', 
+            background: 'hsl(var(--crypto-blue) / 0.1)', 
+            color: 'hsl(var(--crypto-blue))', 
             padding: '0.25rem 0.5rem', 
             borderRadius: '12px', 
             fontSize: '0.75rem', 
@@ -159,11 +159,11 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                 display: 'block', 
                 fontWeight: '500', 
                 marginBottom: '0.5rem',
-                color: '#495057'
+                color: 'hsl(var(--crypto-navy))'
               }}>
                 {label}
               </label>
-              <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
+              <p style={{ fontSize: '0.85rem', color: 'hsl(var(--crypto-medium-gray))', margin: '0 0 0.75rem 0' }}>
                 {description}
               </p>
               
@@ -174,7 +174,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                     width: '50px',
                     height: '50px',
                     backgroundColor: selectedColors[key],
-                    border: '2px solid #28a745',
+                    border: '2px solid hsl(var(--crypto-gold))',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     position: 'relative',
@@ -188,7 +188,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                     right: '-8px',
                     width: '20px',
                     height: '20px',
-                    backgroundColor: '#28a745',
+                    backgroundColor: 'hsl(var(--crypto-gold))',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -209,7 +209,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                       width: '50px',
                       height: '50px',
                       backgroundColor: color.hex,
-                      border: '1px solid #ddd',
+                      border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
                       cursor: 'pointer',
                       transition: 'transform 0.2s',
@@ -225,7 +225,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                       left: '50%',
                       transform: 'translateX(-50%)',
                       fontSize: '0.7rem',
-                      color: '#666',
+                      color: 'hsl(var(--crypto-medium-gray))',
                       whiteSpace: 'nowrap'
                     }}>
                       {color.hex}
@@ -248,17 +248,17 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
     
     return (
       <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
+        background: 'hsl(var(--crypto-white))',
+        border: '1px solid hsl(var(--border)),',
         borderRadius: '8px',
         padding: '1.5rem',
         marginBottom: '2rem'
       }}>
-        <h4 style={{ color: '#495057', marginTop: 0, display: 'flex', alignItems: 'center' }}>
+        <h4 style={{ color: 'hsl(var(--crypto-navy))', marginTop: 0, display: 'flex', alignItems: 'center' }}>
           🔤 Typography
           <span style={{ 
-            background: '#e7f3ff', 
-            color: '#0066cc', 
+            background: 'hsl(var(--crypto-blue) / 0.1)', 
+            color: 'hsl(var(--crypto-blue))', 
             padding: '0.25rem 0.5rem', 
             borderRadius: '12px', 
             fontSize: '0.75rem', 
@@ -280,18 +280,18 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                 display: 'block', 
                 fontWeight: '500', 
                 marginBottom: '0.5rem',
-                color: '#495057'
+                color: 'hsl(var(--crypto-navy))'
               }}>
                 {label}
               </label>
-              <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
+              <p style={{ fontSize: '0.85rem', color: 'hsl(var(--crypto-medium-gray))', margin: '0 0 0.75rem 0' }}>
                 {description}
               </p>
 
               {/* Current selection preview */}
               <div style={{
-                background: '#f8f9fa',
-                border: '2px solid #28a745',
+                background: 'hsl(var(--crypto-light-gray))',
+                border: '2px solid hsl(var(--crypto-gold))',
                 borderRadius: '8px',
                 padding: '1rem',
                 marginBottom: '0.75rem'
@@ -309,12 +309,12 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                     >
                       {sample}
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#666' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'hsl(var(--crypto-medium-gray))' }}>
                       {selectedFonts[key]?.suggested || selectedFonts[key]?.family || 'Default'}
                     </div>
                   </div>
                   <div style={{
-                    backgroundColor: '#28a745',
+                    backgroundColor: 'hsl(var(--crypto-gold))',
                     color: 'white',
                     padding: '0.25rem 0.5rem',
                     borderRadius: '4px',
@@ -332,8 +332,8 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                     key={index}
                     onClick={() => handleFontSelection(key, { ...selectedFonts[key], family, suggested: family })}
                     style={{
-                      background: 'white',
-                      border: '1px solid #ddd',
+                      background: 'hsl(var(--crypto-white))',
+                      border: '1px solid hsl(var(--border))',
                       borderRadius: '4px',
                       padding: '0.75rem',
                       cursor: 'pointer',
@@ -362,7 +362,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                       >
                         {sample}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#666' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'hsl(var(--crypto-medium-gray))' }}>
                         {family}
                       </div>
                     </div>
@@ -414,14 +414,14 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
 
     return (
       <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
+        background: 'hsl(var(--crypto-white))',
+        border: '1px solid hsl(var(--border)),',
         borderRadius: '8px',
         padding: '1.5rem',
         marginBottom: '2rem'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h4 style={{ color: '#495057', margin: 0 }}>
+          <h4 style={{ color: 'hsl(var(--crypto-navy))', margin: 0 }}>
             👁️ Preview Your Styled Form
           </h4>
           
@@ -458,7 +458,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
           {/* Original Form (only in split mode) */}
           {previewMode === 'split' && (
             <div>
-              <h6 style={{ color: '#6c757d', marginBottom: '1rem', textAlign: 'center' }}>
+              <h6 style={{ color: 'hsl(var(--crypto-medium-gray))', marginBottom: '1rem', textAlign: 'center' }}>
                 Before (Current Style)
               </h6>
               <div style={{
@@ -560,13 +560,13 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
         ✨ Review & Apply Styles - Step 5
       </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
+      <p style={{ textAlign: 'center', color: 'hsl(var(--crypto-medium-gray))', marginBottom: '2rem' }}>
         Review the extracted styles and customize as needed
       </p>
 
       {/* Website Info */}
       <div style={{
-        background: '#e7f3ff',
+        background: 'hsl(var(--crypto-blue) / 0.1)',
         border: '1px solid #b6d7ff',
         borderRadius: '8px',
         padding: '1rem',
@@ -576,7 +576,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
       }}>
         <div style={{ fontSize: '32px', marginRight: '1rem' }}>🌐</div>
         <div>
-          <strong style={{ color: '#0066cc' }}>Analyzing: {analysis.url}</strong>
+          <strong style={{ color: 'hsl(var(--crypto-blue))' }}>Analyzing: {analysis.url}</strong>
           <div style={{ fontSize: '0.9rem', color: '#004499', marginTop: '0.25rem' }}>
             Confidence: {analysis.confidence}% • 
             Found {analysis.summary.colorsExtracted} colors, {analysis.summary.fontsFound} fonts
@@ -596,15 +596,15 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Action Buttons */}
       <div style={{
         background: '#f8f9fa',
-        border: '1px solid #e9ecef',
+        border: '1px solid hsl(var(--border)),',
         borderRadius: '8px',
         padding: '2rem',
         textAlign: 'center'
       }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
+        <h4 style={{ color: 'hsl(var(--crypto-navy))', marginTop: 0 }}>
           Ready to Apply These Styles?
         </h4>
-        <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
+        <p style={{ color: 'hsl(var(--crypto-medium-gray))', marginBottom: '2rem' }}>
           Your form will be updated with the selected colors and fonts
         </p>
 
@@ -632,7 +632,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
             disabled={applying}
             style={{
               background: 'transparent',
-              color: '#6c757d',
+              color: 'hsl(var(--crypto-medium-gray))',
               border: '1px solid #6c757d',
               padding: '1rem 2rem',
               borderRadius: '6px',

@@ -302,7 +302,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       </p>
 
       {/* Search Section */}
-      <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy))', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>
+      <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy)) !important', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>      
         <div className="form-group" style={{ marginBottom: '1rem' }}>
           <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -380,7 +380,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       )}
 
       {/* Manual Committee Entry */}
-      <div className="crypto-card mb-8 text-center" style={{background: 'hsl(var(--crypto-navy))', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>
+      <div className="crypto-card mb-8 text-center" style={{background: 'hsl(var(--crypto-navy)) !important', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>
         <h4 className="mb-4" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-white))'}}>
           Can't find your committee? Add it manually
         </h4>
@@ -516,8 +516,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                   padding: '1rem',
                   borderBottom: index < committees.length - 1 ? '1px solid hsl(var(--border))' : 'none',
                   cursor: 'pointer',
-                  background: selectedCommittee?.id === committee.id ? '#1976d2' : '#e3f2fd',
-                  borderLeft: selectedCommittee?.id === committee.id ? '4px solid #2a2a72' : 'none'
+                  background: selectedCommittee?.id === committee.id ? 'hsl(var(--crypto-blue))' : 'hsl(var(--crypto-white))',
+                  borderLeft: selectedCommittee?.id === committee.id ? '4px solid hsl(var(--crypto-navy))' : 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (selectedCommittee?.id !== committee.id) {
@@ -526,7 +526,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                 }}
                 onMouseLeave={(e) => {
                   if (selectedCommittee?.id !== committee.id) {
-                    e.target.style.background = '#e3f2fd';
+                    e.target.style.background = 'hsl(var(--crypto-white))';
                   }
                 }}
               >
@@ -543,8 +543,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                     
                     <div style={{ marginBottom: '0.5rem' }}>
                       <span style={{ 
-                        background: committee.source === 'test' ? '#fff3cd' : '#e3f2fd', 
-                        color: committee.source === 'test' ? '#856404' : '#1565c0', 
+                        background: committee.source === 'test' ? 'hsl(var(--crypto-gold) / 0.1)' : 'hsl(var(--crypto-white))', 
+                        color: committee.source === 'test' ? 'hsl(var(--crypto-navy))' : 'hsl(var(--crypto-navy))', 
                         padding: '0.25rem 0.5rem', 
                         borderRadius: '4px', 
                         fontSize: '12px',
@@ -556,7 +556,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                       
                       {committee.source === 'test' && (
                         <span style={{ 
-                          background: '#d4edda', 
+                          background: 'hsl(var(--crypto-gold) / 0.1)', 
                           color: 'hsl(var(--crypto-navy))', 
                           padding: '0.25rem 0.5rem', 
                           borderRadius: '4px', 
@@ -607,14 +607,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       {/* Committee Validation */}
       {selectedCommittee && validation && (
         <div style={{ 
-          background: validation.isValid ? '#d4edda' : '#f8d7da',
-          border: `1px solid ${validation.isValid ? '#c3e6cb' : '#f5c6cb'}`,
+          background: validation.isValid ? 'hsl(var(--crypto-gold) / 0.1)' : 'hsl(var(--destructive) / 0.1)',
+          border: `1px solid ${validation.isValid ? 'hsl(var(--crypto-gold) / 0.3)' : 'hsl(var(--destructive) / 0.3)'}`,
           borderRadius: '6px',
           padding: '1rem',
           marginBottom: '2rem'
         }}>
           <h5 style={{ 
-            color: validation.isValid ? '#155724' : '#721c24',
+            color: validation.isValid ? 'hsl(var(--crypto-navy))' : 'hsl(var(--destructive))',
             margin: '0 0 1rem 0'
           }}>
             {validation.isValid ? 'Committee Validation Passed' : 'Committee Validation Issues'}
@@ -648,7 +648,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               {Object.entries(validation.requiredFields).map(([field, status]) => (
                 <div key={field} style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={{ 
-                    color: status ? '#155724' : '#721c24',
+                    color: status ? 'hsl(var(--crypto-navy))' : 'hsl(var(--destructive))',
                     marginRight: '0.5rem'
                   }}>
                     {status ? 'YES' : 'NO'}

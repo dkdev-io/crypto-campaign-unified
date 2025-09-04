@@ -12,7 +12,7 @@ const Index = () => {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen" style={{backgroundColor: '#2D1B69', color: 'hsl(var(--crypto-white))'}}>
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
         
         {/* Development Auth Bypass Panel */}
         {showAuthBypass && (
@@ -20,12 +20,12 @@ const Index = () => {
             position: 'fixed',
             top: '10px',
             right: '10px',
-            background: '#ff4444',
+            background: 'hsl(var(--destructive))',
             color: 'white',
             padding: '15px',
             borderRadius: '8px',
             zIndex: 9999,
-            border: '2px solid #ff6666',
+            border: '2px solid hsl(var(--destructive) / 0.7)',
             boxShadow: '0 4px 12px rgba(255,68,68,0.3)'
           }}>
             <div style={{ fontWeight: 'bold', marginBottom: '10px', fontSize: '14px' }}>
@@ -35,7 +35,7 @@ const Index = () => {
               <a 
                 href="/donors/dashboard" 
                 style={{
-                  background: '#007bff',
+                  background: 'hsl(var(--crypto-blue))',
                   color: 'white',
                   padding: '8px 12px',
                   borderRadius: '4px',
@@ -49,7 +49,7 @@ const Index = () => {
               <a 
                 href="/campaigns/auth/setup" 
                 style={{
-                  background: '#28a745',
+                  background: 'hsl(var(--crypto-navy))',
                   color: 'white',
                   padding: '8px 12px',
                   borderRadius: '4px',
@@ -63,7 +63,7 @@ const Index = () => {
               <a 
                 href="/debug" 
                 style={{
-                  background: '#6f42c1',
+                  background: 'hsl(var(--crypto-gold))',
                   color: 'white',
                   padding: '8px 12px',
                   borderRadius: '4px',
@@ -77,7 +77,7 @@ const Index = () => {
               <a 
                 href="/testing" 
                 style={{
-                  background: '#fd7e14',
+                  background: 'hsl(var(--crypto-medium-gray))',
                   color: 'white',
                   padding: '8px 12px',
                   borderRadius: '4px',

@@ -201,11 +201,11 @@ const CampaignAuth = () => {
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
-          <div className="rounded-2xl shadow-2xl p-8" style={{backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)'}}>
+          <div className="auth-card rounded-2xl shadow-2xl p-8" style={{backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)'}}>
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)', fontFamily: 'Inter, sans-serif', fontWeight: '800'}}>
-                Campaign Setup
+                Campaign Portal
               </h2>
               <p className="text-muted-foreground">
                 Sign in to your account or create a new one
