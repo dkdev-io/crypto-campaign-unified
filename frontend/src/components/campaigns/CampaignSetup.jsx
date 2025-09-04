@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import CampaignAuth from './CampaignAuth';
+import SetupWizard from '../setup/SetupWizard';
 import { Spinner } from '../ui/spinner';
 
 /**
@@ -17,11 +18,9 @@ const CampaignSetup = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
-  // Redirect authenticated users to Step 1 (Campaign Information)
+  // Show SetupWizard for authenticated users  
   useEffect(() => {
-    if (user && !loading) {
-      navigate('/YourInfo', { replace: true });
-    }
+    // Don't redirect, let component handle the flow
   }, [user, loading, navigate]);
 
   // Loading state
@@ -43,17 +42,8 @@ const CampaignSetup = () => {
     return <CampaignAuth />;
   }
 
-  // Redirecting to YourInfo...
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
-      <div className="flex items-center justify-center px-4 py-12">
-        <div className="text-center">
-          <Spinner size="lg" />
-          <p className="mt-4 text-primary-foreground">Redirecting to campaign setup...</p>
-        </div>
-      </div>
-    </div>
-  );
+  // Show SetupWizard for authenticated users
+  return <SetupWizard />;
 };
 
 export default CampaignSetup;

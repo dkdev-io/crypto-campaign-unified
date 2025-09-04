@@ -134,12 +134,17 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
   };
 
   const handleSkipForDev = () => {
+    console.log('Skip button clicked, current formData:', formData);
+    console.log('onNext function:', onNext);
+    
     updateFormData({ 
       skipBankConnection: true,
       bankAccountVerified: false
     });
-    setSuccess('Bank connection skipped for development purposes');
+    setSuccess('Bank connection skipped - proceeding to next step');
+    
     setTimeout(() => {
+      console.log('Calling onNext() after timeout');
       onNext();
     }, 1000);
   };
