@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 
 const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
-  const [agreements, setAgreements] = useState({
-    terms: formData.termsAccepted || false,
-    privacy: formData.privacyAccepted || false,
-    compliance: formData.complianceAccepted || false
-  });
+  const [termsAccepted, setTermsAccepted] = useState(formData.termsAccepted || false);
   const [showErrors, setShowErrors] = useState(false);
 
-  const handleAgreementChange = (field, value) => {
-    const newAgreements = { ...agreements, [field]: value };
-    setAgreements(newAgreements);
+  const handleAgreementChange = (value) => {
+    setTermsAccepted(value);
     
-    // Update form data
     updateFormData({
-      [`${field}Accepted`]: value,
-      allTermsAccepted: Object.values(newAgreements).every(v => v)
+      termsAccepted: value
     });
 
     if (showErrors) {
@@ -23,25 +16,22 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
     }
   };
 
-  const handleLaunch = () => {
-    const allAccepted = Object.values(agreements).every(v => v);
-    
-    if (!allAccepted) {
+  const handleComplete = () => {
+    if (!termsAccepted) {
       setShowErrors(true);
       return;
     }
 
-    // Record agreement timestamp and proceed
+    // Record agreement timestamp and complete setup
     updateFormData({
       termsAcceptedAt: new Date().toISOString(),
       termsIpAddress: '127.0.0.1', // In production, get real IP
       setupCompleted: true
     });
 
-    onNext();
+    // This could redirect to dashboard or show success
+    alert('🎉 Campaign setup completed successfully! Your campaign is now live.');
   };
-
-  const allTermsAccepted = Object.values(agreements).every(v => v);
 
   return (
     <div>

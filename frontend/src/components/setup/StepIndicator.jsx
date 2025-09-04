@@ -7,8 +7,8 @@ const StepIndicator = ({ currentStep, totalSteps }) => {
     'Bank Connection', 
     'Form Customization',
     'Style Confirmation',
-    'Terms Agreement',
-    'Launch & QR Code'
+    'Launch & QR Code',
+    'Terms Agreement'
   ];
 
   return (

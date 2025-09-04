@@ -275,9 +275,9 @@ const SetupWizard = () => {
       case 5:
         return <StyleConfirmation {...stepProps} />;
       case 6:
-        return <TermsAgreement {...stepProps} />;
-      case 7:
         return <EmbedCode {...stepProps} />;
+      case 7:
+        return <TermsAgreement {...stepProps} />;
       default:
         return <CampaignInfo {...stepProps} />;
     }

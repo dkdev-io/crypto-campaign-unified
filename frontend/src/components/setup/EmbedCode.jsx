@@ -184,7 +184,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🎉 Setup Complete! - Step 7
+        🚀 Get Your Embed Code - Step 6
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Your contribution form is ready to embed on your website
@@ -202,10 +202,10 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       }}>
         <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🚀</div>
         <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
-          Campaign Setup Completed Successfully!
+          Your Embed Code is Ready!
         </h3>
         <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
-          Your contribution form is live and ready to accept donations
+          Your contribution form is configured and ready for deployment
         </p>
       </div>
 
@@ -739,29 +739,28 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back to Terms
+          ← Back to Style Confirmation
         </button>
-        <button className="btn" onClick={handleStartOver}>
-          🔄 Setup New Campaign
+        <button className="btn btn-primary" onClick={() => onNext()}>
+          Complete Setup: Terms & Conditions →
         </button>
       </div>
 
-      {/* Final Success Message */}
+      {/* Next Steps Info */}
       <div style={{ 
         marginTop: '2rem',
         padding: '1.5rem',
-        background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
-        border: '1px solid #dee2e6',
+        background: '#f8f9fa',
+        border: '1px solid #e9ecef',
         borderRadius: '8px',
         textAlign: 'center'
       }}>
-        <div style={{ fontSize: '32px', marginBottom: '1rem' }}>🎉</div>
+        <div style={{ fontSize: '32px', marginBottom: '1rem' }}>📋</div>
         <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>
-          Congratulations!
+          Almost Done!
         </h4>
         <p style={{ color: '#6c757d', margin: 0 }}>
-          Your campaign contribution system is now live and ready to help you raise funds 
-          for your political campaign in compliance with FEC regulations.
+          Your embed code is ready. Complete the final step to launch your campaign.
         </p>
       </div>
     </div>
