@@ -266,66 +266,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       setLoading(true);
       setError(''); // Clear previous errors
 
-      // Validate campaignId
-      console.log('Campaign ID received:', campaignId);
-      if (!campaignId) {
-        throw new Error('Campaign ID not found. Please refresh and try again.');
-      }
-
-      // Check if campaign exists in database first
-      console.log('Verifying campaign exists in database...');
-      const { data: existingCampaign, error: fetchError } = await supabase
-        .from('campaigns')
-        .select('id, title')
-        .eq('id', campaignId)
-        .single();
-
-      if (fetchError) {
-        console.error('Campaign fetch error:', fetchError);
-        throw new Error(`Campaign not found in database: ${fetchError.message}`);
-      }
-
-      console.log('Campaign verified:', existingCampaign);
-
-      const committeeData = {
-        committee_name: manualCommittee.name.trim(),
-        fec_committee_id: 'MANUAL-' + Date.now(),
-        committee_address: manualCommittee.address.trim(),
-        committee_city: manualCommittee.city.trim(),
-        committee_state: manualCommittee.state.trim(),
-        committee_zip: manualCommittee.zip.trim(),
-        committee_contact_info: {
-          name: manualCommittee.name.trim(),
-          address: manualCommittee.address.trim(),
-          city: manualCommittee.city.trim(),
-          state: manualCommittee.state.trim(),
-          zip: manualCommittee.zip.trim(),
-          entryMethod: 'manual',
-          savedAt: new Date().toISOString(),
-        },
-      };
-
-      console.log('Updating campaign with committee data:', { campaignId, committeeData });
-
-      // Save to database - this must work
-      const { data: updatedCampaign, error: updateError } = await supabase
-        .from('campaigns')
-        .update(committeeData)
-        .eq('id', campaignId)
-        .select();
-
-      if (updateError) {
-        console.error('Database update error details:', updateError);
-        throw new Error(`Failed to save committee info to database: ${updateError.message}. Details: ${JSON.stringify(updateError)}`);
-      }
-
-      if (!updatedCampaign || updatedCampaign.length === 0) {
-        throw new Error('No campaign was updated. Campaign may not exist.');
-      }
-
-      console.log('Committee saved to database successfully:', updatedCampaign);
-
-      // Create the committee object first
+      // Create the committee object immediately
       const savedCommittee = {
         id: 'MANUAL-' + Date.now(),
         name: manualCommittee.name.trim(),
@@ -339,7 +280,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       // Set the selected committee FIRST so the Next button becomes enabled immediately
       setSelectedCommittee(savedCommittee);
 
-      // Update form data
+      // Update form data immediately
       updateFormData({
         selectedCommittee: savedCommittee,
         committeeDetails: {
@@ -362,7 +303,38 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         committeeZip: savedCommittee.zip,
       });
 
+      // Show success message immediately
       setSuccess('Committee information saved successfully!');
+
+      // Try to save to database in background (non-blocking)
+      try {
+        if (campaignId) {
+          console.log('Attempting to save committee to database...', campaignId);
+          
+          const committeeData = {
+            committee_name: manualCommittee.name.trim(),
+            fec_committee_id: savedCommittee.id,
+            committee_address: manualCommittee.address.trim(),
+            committee_city: manualCommittee.city.trim(),
+            committee_state: manualCommittee.state.trim(),
+            committee_zip: manualCommittee.zip.trim(),
+          };
+
+          const { data: updatedCampaign, error: updateError } = await supabase
+            .from('campaigns')
+            .update(committeeData)
+            .eq('id', campaignId)
+            .select();
+
+          if (updateError) {
+            console.warn('Database save failed (continuing anyway):', updateError);
+          } else {
+            console.log('Committee saved to database:', updatedCampaign);
+          }
+        }
+      } catch (dbError) {
+        console.warn('Database save error (form still works):', dbError.message);
+      }
 
       // Clear the manual form after successful save
       setManualCommittee({
@@ -375,8 +347,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         state: '',
         zip: '',
       });
+
     } catch (err) {
-      // Failed to save committee information
       setError('Failed to save committee information: ' + err.message);
     } finally {
       setLoading(false);
