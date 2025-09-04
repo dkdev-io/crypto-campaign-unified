@@ -35,7 +35,6 @@ import SystemSettings from './components/admin/SystemSettings';
 // Donor Components
 import { DonorAuthProvider } from './contexts/DonorAuthContext';
 import DonorAuth from './components/donor/DonorAuth';
-import DonorAuthDirect from './components/donor/DonorAuthDirect';
 import DonorDashboard from './pages/donors/Dashboard';
 import DonorProfile from './components/donor/DonorProfile';
 import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
@@ -80,7 +79,6 @@ function App() {
             
             {/* Donor Routes */}
             <Route path="/donors/auth" element={<DonorAuth />} />
-            <Route path="/donors/auth/direct" element={<DonorAuthDirect />} />
             <Route path="/donors/auth/register" element={<DonorAuth />} />
             <Route path="/donors/auth/login" element={<DonorAuth />} />
             <Route path="/donors/auth/terms" element={<TermsOfService />} />
