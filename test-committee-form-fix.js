@@ -16,7 +16,7 @@ async function testCommitteeFormFix() {
     
     // Navigate to campaign setup
     console.log('1️⃣ Navigating to campaign setup page...');
-    await page.goto('http://localhost:5176/campaigns/auth/setup?bypass=true', { 
+    await page.goto('http://localhost:5173/campaigns/auth/setup?bypass=true', { 
       waitUntil: 'networkidle0' 
     });
     
