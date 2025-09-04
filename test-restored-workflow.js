@@ -22,7 +22,11 @@ const testRestoredWorkflow = async () => {
     
     // Step 2: Use dev bypass to skip auth
     console.log('\n🚀 Step 2: Using dev bypass to access setup...');
-    await page.click('button:has-text("DEV BYPASS → Setup")');
+    await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'));
+      const button = buttons.find(b => b.textContent.includes('DEV BYPASS'));
+      if (button) button.click();
+    });
     await page.waitForTimeout(2000);
     
     const currentUrl = page.url();
@@ -63,13 +67,20 @@ const testRestoredWorkflow = async () => {
     
     // Step 5: Test step navigation (look for Next button)
     console.log('\n➡️ Step 5: Testing step navigation...');
-    const nextButton = await page.$('button:has-text("Next"), button:has-text("Continue"), [class*="next"]').catch(() => null);
+    const nextButton = await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'));
+      return buttons.find(b => 
+        b.textContent.includes('Next') || 
+        b.textContent.includes('Continue') ||
+        b.className.includes('next')
+      );
+    }).catch(() => null);
     
     if (nextButton) {
       console.log('✅ Next button found - step navigation available');
       
       // Try to click Next to advance to step 2
-      await nextButton.click();
+      await page.evaluate((btn) => btn.click(), nextButton);
       await page.waitForTimeout(2000);
       console.log('✅ Clicked Next button - checking for step 2...');
     } else {

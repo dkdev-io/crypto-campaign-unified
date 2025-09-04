@@ -91,7 +91,7 @@ const SetupWizard = () => {
           };
           
           setFormData(existingFormData);
-          setCurrentStep(savedData?.currentStep || 1);
+          setCurrentStep(1);
         } else {
           // No existing campaign - start fresh
           const newFormData = {
@@ -108,7 +108,7 @@ const SetupWizard = () => {
           }
           
           setFormData(newFormData);
-          setCurrentStep(newFormData.currentStep || 1);
+          setCurrentStep(1);
         }
       } catch (error) {
         console.error('Error initializing setup:', error);
@@ -119,7 +119,7 @@ const SetupWizard = () => {
           if (saved) {
             const savedData = JSON.parse(saved);
             setFormData(savedData);
-            setCurrentStep(savedData.currentStep || 1);
+            setCurrentStep(1);
           } else {
             // Complete fallback
             setFormData({
@@ -134,7 +134,7 @@ const SetupWizard = () => {
             userFullName: user.user_metadata?.full_name || '',
             email: user.email
           });
-          setCurrentStep(2);
+          setCurrentStep(1);
         }
       } finally {
         setLoading(false);
