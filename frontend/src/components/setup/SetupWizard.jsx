@@ -23,6 +23,58 @@ const SetupWizard = () => {
   const [loading, setLoading] = useState(true);
 
   const totalSteps = 8;
+  
+  // Create campaign when reaching step 2 if not already created
+  useEffect(() => {
+    const createCampaignIfNeeded = async () => {
+      if (currentStep === 2 && !campaignId && user && formData.email) {
+        try {
+          console.log('Creating campaign as user reached step 2...');
+          const newCampaignData = {
+            email: formData.email || user.email,
+            title: formData.campaignName || 'New Campaign',
+            website: formData.website || '',
+            // Required existing fields
+            wallet_address: 'temp-wallet-' + Date.now(),
+            max_donation_limit: 3300,
+            suggested_amounts: [25, 50, 100, 250],
+            theme_color: formData.themeColor || '#2a2a72',
+            status: 'setup'
+          };
+
+          const { data: newCampaign, error } = await supabase
+            .from('campaigns')
+            .insert([newCampaignData])
+            .select()
+            .single();
+
+          if (!error && newCampaign) {
+            console.log('Campaign created successfully:', newCampaign.id);
+            setCampaignId(newCampaign.id);
+            setFormData(prev => ({ ...prev, campaignId: newCampaign.id }));
+            
+            // Save to localStorage as well
+            const updatedData = { ...formData, campaignId: newCampaign.id };
+            localStorage.setItem('campaignSetupData', JSON.stringify(updatedData));
+          } else {
+            console.warn('Could not create campaign:', error);
+            // Use a demo campaign ID as fallback
+            const fallbackId = 'demo-campaign-' + Date.now();
+            setCampaignId(fallbackId);
+            setFormData(prev => ({ ...prev, campaignId: fallbackId }));
+          }
+        } catch (error) {
+          console.error('Error creating campaign:', error);
+          // Use a demo campaign ID as fallback
+          const fallbackId = 'demo-campaign-' + Date.now();
+          setCampaignId(fallbackId);
+          setFormData(prev => ({ ...prev, campaignId: fallbackId }));
+        }
+      }
+    };
+    
+    createCampaignIfNeeded();
+  }, [currentStep, campaignId, user, formData.email]);
 
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
@@ -164,7 +216,8 @@ const SetupWizard = () => {
       console.warn('Could not save to localStorage:', e);
     }
     
-    if (campaignId) {
+    // Save to database if we have a real campaign ID (not a demo one)
+    if (campaignId && !campaignId.startsWith('demo-')) {
       try {
         // Only update existing columns to avoid DB errors
         const dbData = {};
@@ -179,14 +232,14 @@ const SetupWizard = () => {
         if (updatedData.stylesApplied !== undefined) dbData.styles_applied = updatedData.stylesApplied;
         if (updatedData.styleMethod) dbData.style_method = updatedData.styleMethod;
         
-        // Committee information fields
-        if (updatedData.committeeName) dbData.committee_name = updatedData.committeeName;
-        if (updatedData.fecCommitteeId) dbData.fec_committee_id = updatedData.fecCommitteeId;
-        if (updatedData.committeeAddress) dbData.committee_address = updatedData.committeeAddress;
-        if (updatedData.committeeCity) dbData.committee_city = updatedData.committeeCity;
-        if (updatedData.committeeState) dbData.committee_state = updatedData.committeeState;
-        if (updatedData.committeeZip) dbData.committee_zip = updatedData.committeeZip;
-        if (updatedData.selectedCommittee) dbData.committee_contact_info = updatedData.selectedCommittee;
+        // Committee information fields - save if they were just added
+        if (updatedData.committeeDataSaved || updatedData.committeeName) dbData.committee_name = updatedData.committeeName;
+        if (updatedData.committeeDataSaved || updatedData.fecCommitteeId) dbData.fec_committee_id = updatedData.fecCommitteeId;
+        if (updatedData.committeeDataSaved || updatedData.committeeAddress) dbData.committee_address = updatedData.committeeAddress;
+        if (updatedData.committeeDataSaved || updatedData.committeeCity) dbData.committee_city = updatedData.committeeCity;
+        if (updatedData.committeeDataSaved || updatedData.committeeState) dbData.committee_state = updatedData.committeeState;
+        if (updatedData.committeeDataSaved || updatedData.committeeZip) dbData.committee_zip = updatedData.committeeZip;
+        if (updatedData.committeeDataSaved || updatedData.selectedCommittee) dbData.committee_contact_info = updatedData.selectedCommittee;
         
         // Handle suggested amounts
         if (updatedData.suggestedAmounts !== undefined) {
@@ -225,8 +278,9 @@ const SetupWizard = () => {
   const nextStep = async () => {
     console.log('Moving to next step, current data:', formData);
     
-    // Create campaign if we don't have one (using only existing columns)
-    if (!campaignId && user) {
+    // Campaign should already be created when entering step 2
+    // This is just a fallback in case it wasn't created
+    if (!campaignId && user && currentStep === 1) {
       try {
         const newCampaignData = {
           email: formData.email || user.email,
@@ -240,7 +294,7 @@ const SetupWizard = () => {
           status: 'setup'
         };
 
-        console.log('Creating new campaign with existing columns:', newCampaignData);
+        console.log('Creating new campaign (fallback):', newCampaignData);
         const { data: newCampaign, error } = await supabase
           .from('campaigns')
           .insert([newCampaignData])

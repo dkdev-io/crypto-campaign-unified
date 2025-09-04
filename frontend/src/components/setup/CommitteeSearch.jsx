@@ -12,6 +12,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
   const [searched, setSearched] = useState(false);
   const [validation, setValidation] = useState(null);
   const [showManualEntry, setShowManualEntry] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchTimeout, setSearchTimeout] = useState(null);
   const [manualCommittee, setManualCommittee] = useState({
     name: '',
     id: '',
@@ -30,9 +32,29 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
     }
   }, []);
 
+  // Auto-search as user types with debounce
+  useEffect(() => {
+    if (searchTimeout) clearTimeout(searchTimeout);
+    
+    if (searchTerm && searchTerm.length >= 3) {
+      const timeout = setTimeout(() => {
+        handleSearch(searchTerm);
+      }, 500); // 500ms debounce
+      setSearchTimeout(timeout);
+    } else {
+      setCommittees([]);
+      setShowDropdown(false);
+    }
+    
+    return () => {
+      if (searchTimeout) clearTimeout(searchTimeout);
+    };
+  }, [searchTerm]);
+
   const handleSearch = async (term = searchTerm) => {
-    if (!term.trim()) {
-      setError('Please enter a committee name or search term');
+    if (!term.trim() || term.trim().length < 3) {
+      setCommittees([]);
+      setShowDropdown(false);
       return;
     }
 
@@ -42,17 +64,52 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       setSuccess('');
       setSearched(true);
       
-      const result = await fecAPI.searchCommittees(term.trim(), 20);
-      setCommittees(result.committees);
+      console.log('Searching FEC API for:', term);
       
-      if (result.committees.length === 0) {
-        setError(`No committees found for "${term}". Try different keywords or contact admin to add a test committee.`);
+      // Call FEC API directly with the API key
+      const apiKey = 'F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD';
+      const url = `https://api.open.fec.gov/v1/committees/?q=${encodeURIComponent(term.trim())}&per_page=10&is_active=true&sort=name&api_key=${apiKey}`;
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`FEC API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('FEC API Response:', data);
+      
+      if (data.results && data.results.length > 0) {
+        const formattedCommittees = data.results.map(committee => ({
+          id: committee.committee_id,
+          name: committee.name,
+          candidateName: committee.candidate_name || null,
+          type: committee.committee_type,
+          organizationType: committee.organization_type,
+          city: committee.city,
+          state: committee.state,
+          treasurerName: committee.treasurer_name,
+          isActive: true,
+          source: 'fec'
+        }));
+        
+        setCommittees(formattedCommittees);
+        setShowDropdown(true);
+        
+        if (formattedCommittees.length === 0) {
+          setError(`No committees found for "${term}". Try different keywords.`);
+        }
+      } else {
+        setCommittees([]);
+        setShowDropdown(false);
+        setError(`No committees found for "${term}". Try different keywords.`);
       }
 
     } catch (err) {
-      // FEC API search failed, showing manual entry option
+      console.error('FEC API search error:', err);
       setError('FEC API search temporarily unavailable. You can enter committee information manually below.');
       setCommittees([]);
+      setShowDropdown(false);
     } finally {
       setLoading(false);
     }
@@ -175,11 +232,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
     
     try {
       setLoading(true);
-      
-      // Save complete committee information to the current campaign in Supabase
-      if (!campaignId) {
-        throw new Error('Campaign ID not found. Please refresh and try again.');
-      }
+      setError('');
       
       const committeeId = 'MANUAL-' + Date.now();
       const committeeData = {
@@ -200,27 +253,31 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         }
       };
       
-      // Saving committee data to Supabase
-      
-      // Try to save to database first
+      // Try to save to database if we have a campaign ID
       let savedToDatabase = false;
-      try {
-        const { data: updatedCampaign, error: updateError } = await supabase
-          .from('campaigns')
-          .update(committeeData)
-          .eq('id', campaignId)
-          .select();
-          
-        if (updateError) {
-          // Database save failed (columns may not exist yet)
-        } else {
-          savedToDatabase = true;
+      if (campaignId && campaignId !== 'demo-campaign' && !campaignId.startsWith('demo-')) {
+        try {
+          console.log('Attempting to save committee to campaign:', campaignId);
+          const { data: updatedCampaign, error: updateError } = await supabase
+            .from('campaigns')
+            .update(committeeData)
+            .eq('id', campaignId)
+            .select();
+            
+          if (updateError) {
+            console.warn('Database save failed:', updateError.message);
+          } else {
+            savedToDatabase = true;
+            console.log('Committee saved to database successfully');
+          }
+        } catch (dbError) {
+          console.warn('Database save error:', dbError);
         }
-      } catch (dbError) {
-        // Database save error, using localStorage fallback
+      } else {
+        console.log('No campaign ID yet - saving to form data only');
       }
       
-      // Update form data with the saved committee
+      // Create the saved committee object
       const savedCommittee = {
         id: committeeId,
         name: manualCommittee.name.trim(),
@@ -231,6 +288,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         zip: manualCommittee.zip.trim()
       };
       
+      // Always update form data (this includes localStorage via updateFormData)
       updateFormData({
         selectedCommittee: savedCommittee,
         committeeDetails: {
@@ -250,21 +308,25 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         committeeAddress: manualCommittee.address.trim(),
         committeeCity: manualCommittee.city.trim(),
         committeeState: manualCommittee.state.trim(),
-        committeeZip: manualCommittee.zip.trim()
+        committeeZip: manualCommittee.zip.trim(),
+        committeeDataSaved: true
       });
       
       // Set the selected committee so the Next button becomes enabled
       setSelectedCommittee(savedCommittee);
       
-      setSuccess(savedToDatabase ? 
-        'Committee information saved to database successfully!' : 
-        'Committee information saved successfully!');
+      // Show success message
+      if (savedToDatabase) {
+        setSuccess('Committee information saved successfully!');
+      } else {
+        setSuccess('Committee information saved! It will be added to your campaign when you proceed.');
+      }
       
       // Don't clear the form - keep it filled so user can see what they saved
       
     } catch (err) {
-      // Failed to save committee information
-      setError('Failed to save committee information: ' + err.message);
+      console.error('Failed to save committee information:', err);
+      setError('Failed to save committee information. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -293,45 +355,84 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
       {/* Search Section */}
       <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy)) !important', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>      
-        <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <div className="form-group" style={{ marginBottom: '1rem', position: 'relative' }}>
           <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ position: 'relative' }}>
             <input
               className="form-input"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Enter committee name or keywords..."
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              style={{ flex: 1 }}
+              placeholder="Enter committee name (type at least 3 characters)..."
+              style={{ width: '100%' }}
             />
-            <button 
-              onClick={() => handleSearch()}
-              disabled={loading || !searchTerm.trim()}
-              style={{
-                background: loading || !searchTerm.trim() ? 
-                  'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: 'none',
-                padding: 'var(--space-sm) var(--space-lg)',
-                borderRadius: 'var(--radius)',
-                cursor: loading || !searchTerm.trim() ? 'not-allowed' : 'pointer',
-                minWidth: '120px',
-                fontSize: 'var(--text-body)',
-                fontWeight: '600',
-                fontFamily: 'Inter, sans-serif',
-                opacity: loading || !searchTerm.trim() ? 0.6 : 1,
-                transition: 'var(--transition-smooth)'
-              }}
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </button>
+            {loading && (
+              <div style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: 'hsl(var(--crypto-white) / 0.6)',
+                fontSize: '14px'
+              }}>
+                Searching...
+              </div>
+            )}
+            
+            {/* Dropdown for search results */}
+            {showDropdown && committees.length > 0 && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                background: 'white',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '6px',
+                marginTop: '4px',
+                maxHeight: '300px',
+                overflowY: 'auto',
+                zIndex: 10,
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }}>
+                {committees.map((committee, index) => (
+                  <div
+                    key={committee.id}
+                    onClick={() => {
+                      handleSelectCommittee(committee);
+                      setShowDropdown(false);
+                      setSearchTerm(committee.name);
+                    }}
+                    style={{
+                      padding: '10px 15px',
+                      borderBottom: index < committees.length - 1 ? '1px solid hsl(var(--border))' : 'none',
+                      cursor: 'pointer',
+                      background: selectedCommittee?.id === committee.id ? 'hsl(var(--crypto-blue) / 0.1)' : 'white',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = 'hsl(var(--crypto-blue) / 0.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = selectedCommittee?.id === committee.id ? 'hsl(var(--crypto-blue) / 0.1)' : 'white';
+                    }}
+                  >
+                    <div style={{ fontWeight: '500', color: 'hsl(var(--crypto-navy))' }}>
+                      {committee.name}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'hsl(var(--crypto-navy) / 0.6)', marginTop: '2px' }}>
+                      ID: {committee.id} • {committee.city && committee.state ? `${committee.city}, ${committee.state}` : 'Location not available'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {searched && (
+        {searched && !showDropdown && committees.length > 0 && (
           <div className="text-sm text-muted-foreground">
-            Searching: "{searchTerm}" • Found {committees.length} result{committees.length !== 1 ? 's' : ''}
+            Found {committees.length} committee{committees.length !== 1 ? 's' : ''}
           </div>
         )}
       </div>
@@ -459,111 +560,98 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </button>
       </div>
 
-      {/* Committee Results */}
-      {committees.length > 0 && (
+      {/* Committee Results - Only show if dropdown is closed and we have a selected committee */}
+      {selectedCommittee && !showDropdown && (
         <div style={{ marginBottom: '2rem' }}>
           <h4 className="text-foreground" style={{marginBottom: '1rem', fontSize: 'var(--text-heading-sm)'}}>
-            Select Your Committee ({committees.length} found)
+            Selected Committee
           </h4>
           
           <div style={{ 
-            maxHeight: '400px', 
-            overflowY: 'auto',
             border: '1px solid hsl(var(--border))',
-            borderRadius: '6px'
+            borderRadius: '6px',
+            padding: '1rem',
+            background: 'hsl(var(--crypto-blue) / 0.05)'
           }}>
-            {committees.map((committee, index) => (
-              <div
-                key={committee.id}
-                onClick={() => handleSelectCommittee(committee)}
-                style={{
-                  padding: '1rem',
-                  borderBottom: index < committees.length - 1 ? '1px solid hsl(var(--border))' : 'none',
-                  cursor: 'pointer',
-                  background: selectedCommittee?.id === committee.id ? 'hsl(var(--crypto-blue))' : 'hsl(var(--crypto-white))',
-                  borderLeft: selectedCommittee?.id === committee.id ? '4px solid hsl(var(--crypto-navy))' : 'none'
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedCommittee?.id !== committee.id) {
-                    e.target.style.background = 'hsl(var(--muted))';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedCommittee?.id !== committee.id) {
-                    e.target.style.background = 'hsl(var(--crypto-white))';
-                  }
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                  <div style={{ flex: 1 }}>
-                    <h5 style={{ 
-                      margin: '0 0 0.5rem 0', 
-                      color: 'hsl(var(--crypto-navy))',
-                      fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif'
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+              <div style={{ flex: 1 }}>
+                <h5 style={{ 
+                  margin: '0 0 0.5rem 0', 
+                  color: 'hsl(var(--crypto-navy))',
+                  fontSize: 'var(--text-body)',
+                  fontFamily: 'Inter, sans-serif'
+                }}>
+                  {selectedCommittee.name}
+                </h5>
+                
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <span style={{ 
+                    background: 'hsl(var(--crypto-white))', 
+                    color: 'hsl(var(--crypto-navy))', 
+                    padding: '0.25rem 0.5rem', 
+                    borderRadius: '4px', 
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    marginRight: '0.5rem'
+                  }}>
+                    {formatCommitteeType(selectedCommittee.type)}
+                  </span>
+                  
+                  {selectedCommittee.source === 'fec' && (
+                    <span style={{ 
+                      background: 'hsl(var(--crypto-gold) / 0.1)', 
+                      color: 'hsl(var(--crypto-navy))', 
+                      padding: '0.25rem 0.5rem', 
+                      borderRadius: '4px', 
+                      fontSize: '12px',
+                      fontWeight: '500'
                     }}>
-                      {committee.name}
-                    </h5>
-                    
-                    <div style={{ marginBottom: '0.5rem' }}>
-                      <span style={{ 
-                        background: committee.source === 'test' ? 'hsl(var(--crypto-gold) / 0.1)' : 'hsl(var(--crypto-white))', 
-                        color: committee.source === 'test' ? 'hsl(var(--crypto-navy))' : 'hsl(var(--crypto-navy))', 
-                        padding: '0.25rem 0.5rem', 
-                        borderRadius: '4px', 
-                        fontSize: '12px',
-                        fontWeight: '500',
-                        marginRight: '0.5rem'
-                      }}>
-                        {formatCommitteeType(committee.type)}
-                      </span>
-                      
-                      {committee.source === 'test' && (
-                        <span style={{ 
-                          background: 'hsl(var(--crypto-gold) / 0.1)', 
-                          color: 'hsl(var(--crypto-navy))', 
-                          padding: '0.25rem 0.5rem', 
-                          borderRadius: '4px', 
-                          fontSize: '12px',
-                          fontWeight: '500'
-                        }}>
-                          TEST COMMITTEE
-                        </span>
-                      )}
-                    </div>
+                      FEC VERIFIED
+                    </span>
+                  )}
+                </div>
 
-                    <div className="text-sm text-muted-foreground">
-                      <div><strong>ID:</strong> {committee.id}</div>
-                      {committee.candidateName && (
-                        <div><strong>Candidate:</strong> {committee.candidateName}</div>
-                      )}
-                      {committee.city && committee.state && (
-                        <div><strong>Location:</strong> {committee.city}, {committee.state}</div>
-                      )}
-                      {committee.source === 'test' && committee.testPurpose && (
-                        <div><strong>Test Purpose:</strong> {committee.testPurpose}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ marginLeft: '1rem' }}>
-                    {selectedCommittee?.id === committee.id ? (
-                      <span style={{ 
-                        color: 'hsl(var(--crypto-navy))', 
-                        fontSize: '20px',
-                        fontWeight: 'bold'
-                      }}>
-                        SELECTED
-                      </span>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">
-                        Click to select
-                      </span>
-                    )}
-                  </div>
+                <div className="text-sm text-muted-foreground">
+                  <div><strong>ID:</strong> {selectedCommittee.id}</div>
+                  {selectedCommittee.candidateName && (
+                    <div><strong>Candidate:</strong> {selectedCommittee.candidateName}</div>
+                  )}
+                  {selectedCommittee.city && selectedCommittee.state && (
+                    <div><strong>Location:</strong> {selectedCommittee.city}, {selectedCommittee.state}</div>
+                  )}
                 </div>
               </div>
-            ))}
+
+              <div style={{ marginLeft: '1rem' }}>
+                <span style={{ 
+                  color: 'hsl(var(--crypto-navy))', 
+                  fontSize: '16px',
+                  fontWeight: 'bold'
+                }}>
+                  ✓ SELECTED
+                </span>
+                <button
+                  onClick={() => {
+                    setSelectedCommittee(null);
+                    setSearchTerm('');
+                    setValidation(null);
+                  }}
+                  style={{
+                    display: 'block',
+                    marginTop: '10px',
+                    background: 'transparent',
+                    color: 'hsl(var(--crypto-navy))',
+                    border: '1px solid hsl(var(--crypto-navy))',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                  }}
+                >
+                  Change Selection
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -654,41 +742,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       )}
 
-      {/* Success Message with Continue Button */}
-      {success && (
-        <div style={{ 
-          background: 'hsl(120 60% 95%)', 
-          border: '1px solid hsl(120 60% 80%)',
-          borderRadius: '6px',
-          padding: '2rem',
-          marginBottom: '2rem',
-          textAlign: 'center'
-        }}>
-          <h4 style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 1rem 0', fontSize: 'var(--text-heading-md)' }}>
-            Committee Information Saved!
-          </h4>
-          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 2rem 0', fontSize: '16px' }}>
-            {success}
-          </p>
-          <button 
-            onClick={onNext}
-            style={{
-              background: 'hsl(var(--crypto-navy))',
-              color: 'white',
-              border: 'none',
-              padding: '1rem 2rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: '600',
-              transition: 'all 0.2s'
-            }}
-          >
-            Continue to Next Step
-          </button>
-        </div>
-      )}
-
       {/* Navigation */}
       <div style={{ 
         display: 'flex', 
@@ -716,32 +769,27 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           Back
         </button>
         
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          {/* Only show standard next button if no committee saved yet */}
-          {!success && (
-            <button 
-              className="btn btn-primary"
-              onClick={handleConfirmCommittee}
-              disabled={!selectedCommittee || (validation && !validation.isValid)}
-              style={{
-                background: !selectedCommittee || (validation && !validation.isValid) ? 
-                  'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: 'none',
-                padding: 'var(--space-sm) var(--space-lg)',
-                borderRadius: 'var(--radius)',
-                cursor: !selectedCommittee || (validation && !validation.isValid) ? 
-                  'not-allowed' : 'pointer',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '600',
-                opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1
-              }}
-            >
-              Next
-            </button>
-          )}
-        </div>
+        <button 
+          className="btn btn-primary"
+          onClick={handleConfirmCommittee}
+          disabled={!selectedCommittee || (validation && !validation.isValid)}
+          style={{
+            background: !selectedCommittee || (validation && !validation.isValid) ? 
+              'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
+            color: 'hsl(var(--crypto-white))',
+            border: 'none',
+            padding: 'var(--space-sm) var(--space-lg)',
+            borderRadius: 'var(--radius)',
+            cursor: !selectedCommittee || (validation && !validation.isValid) ? 
+              'not-allowed' : 'pointer',
+            fontSize: 'var(--text-body)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '600',
+            opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1
+          }}
+        >
+          Next
+        </button>
       </div>
       
 

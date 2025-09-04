@@ -62,9 +62,9 @@ const CampaignPage = () => {
         <Header />
         <div className="flex items-center justify-center px-4 py-12">
           <div className="max-w-md w-full text-center">
-            <div className="bg-white rounded-lg p-8 shadow-xl">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Campaign Not Found</h2>
-              <p className="text-gray-600 mb-6">
+            <div className="bg-[#1e40af] rounded-lg p-8 shadow-xl">
+              <h2 className="text-2xl font-bold text-white mb-4">Campaign Not Found</h2>
+              <p className="text-white/90 mb-6">
                 The campaign "{campaignName}" could not be found or is not currently active.
               </p>
               <a
@@ -100,13 +100,13 @@ const CampaignPage = () => {
           </div>
 
           {/* Donation Form */}
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-[#1e40af] rounded-2xl shadow-2xl overflow-hidden">
             <div className="p-8">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-white mb-2">
                   Support Our Campaign
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-white/90">
                   Make a secure contribution with cryptocurrency
                 </p>
               </div>
