@@ -20,20 +20,30 @@ body {
 .setup-card {
   max-width: 800px;
   margin: 0 auto;
-  background: hsl(var(--crypto-white));
+  background: hsl(var(--crypto-navy));
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
 }
 
 .step-indicator {
-  background: hsl(var(--primary));
+  background: hsl(var(--crypto-navy));
   padding: 2rem;
-  color: hsl(var(--primary-foreground));
+  color: hsl(var(--crypto-white));
   text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.step-indicator h1,
+.step-indicator h2 {
+  font-size: var(--text-heading-xl);
+  font-weight: 800;
+  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .form-content {
   padding: 2rem;
+  color: hsl(var(--crypto-white));
 }
 
 .form-group {
@@ -45,8 +55,9 @@ body {
   padding: 0.75rem;
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  background-color: hsl(var(--input));
-  color: hsl(var(--foreground));
+  background-color: hsl(var(--crypto-white));
+  color: hsl(var(--crypto-navy));
+  font-family: 'Inter', sans-serif;
 }
 
 .btn {
