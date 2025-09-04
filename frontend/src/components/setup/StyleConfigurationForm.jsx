@@ -29,9 +29,9 @@ const StyleConfigurationForm = () => {
   const [formData, setFormData] = useState({});
   const [styleMethod, setStyleMethod] = useState('manual'); // 'manual' or 'import'
   const [manualStyles, setManualStyles] = useState({
-    primaryColor: '#2a2a72',
-    secondaryColor: '#ffffff',
-    accentColor: '#28a745',
+    primaryColor: 'hsl(214 100% 21%)',
+    secondaryColor: 'hsl(0 0% 100%)',
+    accentColor: 'hsl(45 100% 51%)',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     logoImage: null
   });
@@ -51,9 +51,9 @@ const StyleConfigurationForm = () => {
         // Load any existing style data
         if (savedData.appliedStyles) {
           setManualStyles({
-            primaryColor: savedData.appliedStyles.colors?.primary || '#2a2a72',
-            secondaryColor: savedData.appliedStyles.colors?.secondary || '#ffffff',
-            accentColor: savedData.appliedStyles.colors?.accent || '#28a745',
+            primaryColor: savedData.appliedStyles.colors?.primary || 'hsl(214 100% 21%)',
+            secondaryColor: savedData.appliedStyles.colors?.secondary || 'hsl(0 0% 100%)',
+            accentColor: savedData.appliedStyles.colors?.accent || 'hsl(45 100% 51%)',
             fontFamily: savedData.appliedStyles.fonts?.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
             logoImage: savedData.appliedStyles.logoImage || null
           });
@@ -192,11 +192,11 @@ const StyleConfigurationForm = () => {
 
       const finalStyles = styleMethod === 'import' ? {
         colors: {
-          primary: importedStyles.colors?.primary || '#2a2a72',
-          secondary: importedStyles.colors?.secondary || '#ffffff', 
-          accent: importedStyles.colors?.accent || '#28a745',
-          background: importedStyles.colors?.background || '#ffffff',
-          text: importedStyles.colors?.text || '#333333'
+          primary: importedStyles.colors?.primary || 'hsl(214 100% 21%)',
+          secondary: importedStyles.colors?.secondary || 'hsl(0 0% 100%)', 
+          accent: importedStyles.colors?.accent || 'hsl(45 100% 51%)',
+          background: importedStyles.colors?.background || 'hsl(0 0% 100%)',
+          text: importedStyles.colors?.text || 'hsl(214 100% 21%)'
         },
         fonts: {
           primary: importedStyles.fonts?.primary || 'Arial, sans-serif',
@@ -215,8 +215,8 @@ const StyleConfigurationForm = () => {
           primary: manualStyles.primaryColor,
           secondary: manualStyles.secondaryColor,
           accent: manualStyles.accentColor,
-          background: '#ffffff',
-          text: '#333333'
+          background: 'hsl(0 0% 100%)',
+          text: 'hsl(214 100% 21%)'
         },
         fonts: {
           primary: manualStyles.fontFamily,
@@ -284,7 +284,7 @@ const StyleConfigurationForm = () => {
             <Input
               value={manualStyles.primaryColor}
               onChange={(e) => handleManualStyleChange('primaryColor', e.target.value)}
-              placeholder="#2a2a72"
+              placeholder="hsl(214 100% 21%)"
               className="flex-1"
             />
           </div>
@@ -304,7 +304,7 @@ const StyleConfigurationForm = () => {
             <Input
               value={manualStyles.secondaryColor}
               onChange={(e) => handleManualStyleChange('secondaryColor', e.target.value)}
-              placeholder="#ffffff"
+              placeholder="hsl(0 0% 100%)"
               className="flex-1"
             />
           </div>
@@ -324,7 +324,7 @@ const StyleConfigurationForm = () => {
             <Input
               value={manualStyles.accentColor}
               onChange={(e) => handleManualStyleChange('accentColor', e.target.value)}
-              placeholder="#28a745"
+              placeholder="hsl(45 100% 51%)"
               className="flex-1"
             />
           </div>
