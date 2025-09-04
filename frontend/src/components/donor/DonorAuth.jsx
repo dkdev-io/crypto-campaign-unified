@@ -338,6 +338,18 @@ const DonorAuth = () => {
                   )}
                 </Button>
 
+                {/* Development Bypass Button */}
+                <Button
+                  type="button"
+                  onClick={() => {
+                    console.log('🚨 DONOR BYPASS: Navigating to dashboard...');
+                    navigate('/donors/dashboard');
+                  }}
+                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                >
+                  🚨 DEV BYPASS → Dashboard
+                </Button>
+
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-sm text-primary hover:underline">
                     Forgot your password?
@@ -503,6 +515,18 @@ const DonorAuth = () => {
                   ) : (
                     'Create Account'
                   )}
+                </Button>
+
+                {/* Development Bypass Button */}
+                <Button
+                  type="button"
+                  onClick={() => {
+                    console.log('🚨 DONOR BYPASS: Navigating to dashboard...');
+                    navigate('/donors/dashboard');
+                  }}
+                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                >
+                  🚨 DEV BYPASS → Dashboard
                 </Button>
               </form>
             )}

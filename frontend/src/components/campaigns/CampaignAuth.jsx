@@ -345,6 +345,18 @@ const CampaignAuth = () => {
                   )}
                 </Button>
 
+                {/* Development Bypass Button */}
+                <Button
+                  type="button"
+                  onClick={() => {
+                    console.log('🚨 BYPASS: Navigating to setup...');
+                    navigate('/campaigns/auth/setup');
+                  }}
+                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                >
+                  🚨 DEV BYPASS → Setup
+                </Button>
+
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-sm text-primary hover:underline">
                     Forgot your password?
@@ -492,6 +504,18 @@ const CampaignAuth = () => {
                   ) : (
                     'Create Account'
                   )}
+                </Button>
+
+                {/* Development Bypass Button */}
+                <Button
+                  type="button"
+                  onClick={() => {
+                    console.log('🚨 BYPASS: Navigating to setup...');
+                    navigate('/campaigns/auth/setup');
+                  }}
+                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                >
+                  🚨 DEV BYPASS → Setup
                 </Button>
               </form>
             )}
