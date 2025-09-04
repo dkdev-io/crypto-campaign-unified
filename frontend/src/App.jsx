@@ -35,7 +35,6 @@ import SystemSettings from './components/admin/SystemSettings';
 // Donor Components
 import { DonorAuthProvider } from './contexts/DonorAuthContext';
 import DonorAuth from './components/donor/DonorAuth';
-import TestDonorRoute from './components/donor/TestDonorRoute';
 import DonorDashboard from './pages/donors/Dashboard';
 import DonorProfile from './components/donor/DonorProfile';
 import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
