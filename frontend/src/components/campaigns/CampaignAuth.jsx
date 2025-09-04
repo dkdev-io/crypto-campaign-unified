@@ -221,7 +221,7 @@ const CampaignAuth = () => {
                   setValidationErrors({});
                   if (error) clearError();
                 }}
-                className={`flex-1 py-3 px-4 text-sm font-medium rounded-l-lg transition-colors ${
+                className={`flex-1 py-3 px-4 text-base font-medium rounded-l-lg transition-colors ${
                   activeTab === 'signin'
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -236,7 +236,7 @@ const CampaignAuth = () => {
                   setValidationErrors({});
                   if (error) clearError();
                 }}
-                className={`flex-1 py-3 px-4 text-sm font-medium rounded-r-lg transition-colors ${
+                className={`flex-1 py-3 px-4 text-base font-medium rounded-r-lg transition-colors ${
                   activeTab === 'signup'
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-muted text-muted-foreground hover:bg-muted/80'
@@ -250,7 +250,7 @@ const CampaignAuth = () => {
             {error && (
               <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-destructive" />
-                <span className="text-sm text-destructive">
+                <span className="text-base text-destructive">
                   {error.message || 'An error occurred. Please try again.'}
                 </span>
               </div>
@@ -268,7 +268,7 @@ const CampaignAuth = () => {
                     ? 'text-green-600' 
                     : 'text-destructive'
                 }`} />
-                <span className={`text-sm ${
+                <span className={`text-base ${
                   validationErrors.submit.includes('Account created') 
                     ? 'text-green-700' 
                     : 'text-destructive'
@@ -282,7 +282,7 @@ const CampaignAuth = () => {
             {activeTab === 'signin' && (
               <form onSubmit={handleSignIn} className="space-y-6">
                 <div>
-                  <label htmlFor="signin-email" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signin-email" className="block text-base font-medium text-foreground mb-2">
                     Email Address
                   </label>
                   <div className="relative">
@@ -298,12 +298,12 @@ const CampaignAuth = () => {
                     />
                   </div>
                   {validationErrors.email && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.email}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="signin-password" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signin-password" className="block text-base font-medium text-foreground mb-2">
                     Password
                   </label>
                   <div className="relative">
@@ -326,7 +326,7 @@ const CampaignAuth = () => {
                     </button>
                   </div>
                   {validationErrors.password && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.password}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.password}</p>
                   )}
                 </div>
 
@@ -364,7 +364,7 @@ const CampaignAuth = () => {
                 )}
 
                 <div className="text-center">
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link to="/forgot-password" className="text-base text-primary hover:underline">
                     Forgot your password?
                   </Link>
                 </div>
@@ -375,7 +375,7 @@ const CampaignAuth = () => {
             {activeTab === 'signup' && (
               <form onSubmit={handleSignUp} className="space-y-6">
                 <div>
-                  <label htmlFor="signup-fullname" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signup-fullname" className="block text-base font-medium text-foreground mb-2">
                     Full Name
                   </label>
                   <div className="relative">
@@ -391,12 +391,12 @@ const CampaignAuth = () => {
                     />
                   </div>
                   {validationErrors.fullName && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.fullName}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.fullName}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="signup-email" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signup-email" className="block text-base font-medium text-foreground mb-2">
                     Email Address
                   </label>
                   <div className="relative">
@@ -412,12 +412,12 @@ const CampaignAuth = () => {
                     />
                   </div>
                   {validationErrors.email && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.email}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="signup-password" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signup-password" className="block text-base font-medium text-foreground mb-2">
                     Password
                   </label>
                   <div className="relative">
@@ -440,12 +440,12 @@ const CampaignAuth = () => {
                     </button>
                   </div>
                   {validationErrors.password && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.password}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.password}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="signup-confirmpassword" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="signup-confirmpassword" className="block text-base font-medium text-foreground mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -468,7 +468,7 @@ const CampaignAuth = () => {
                     </button>
                   </div>
                   {validationErrors.confirmPassword && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.confirmPassword}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.confirmPassword}</p>
                   )}
                 </div>
 
@@ -481,7 +481,7 @@ const CampaignAuth = () => {
                       onChange={handleSignUpChange}
                       className="mt-1 w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary"
                     />
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-base text-muted-foreground">
                       I agree to the{' '}
                       <Link to="/campaigns/auth/terms" className="text-primary hover:underline">
                         Terms of Service
@@ -493,7 +493,7 @@ const CampaignAuth = () => {
                     </span>
                   </label>
                   {validationErrors.agreeToTerms && (
-                    <p className="mt-1 text-xs text-destructive">{validationErrors.agreeToTerms}</p>
+                    <p className="mt-1 text-sm text-destructive">{validationErrors.agreeToTerms}</p>
                   )}
                 </div>
 
