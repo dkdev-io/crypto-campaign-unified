@@ -1,0 +1,98 @@
+{
+  "pageInfo": {
+    "url": "http://localhost:5174/campaigns/auth?devbypass=true",
+    "title": "NEXTRAISE - Political Campaign Fundraising Platform"
+  },
+  "headers": [
+    {
+      "text": "Campaign Portal",
+      "fontSize": "48px",
+      "fontWeight": "800",
+      "fontFamily": "Inter",
+      "color": "rgb(255, 255, 255)",
+      "textAlign": "center",
+      "marginBottom": "8px"
+    }
+  ],
+  "inputs": [
+    {
+      "type": "email",
+      "placeholder": "Enter your email",
+      "fontSize": "16px",
+      "fontFamily": "Inter",
+      "padding": "16px",
+      "border": "1px solid rgb(224, 230, 235)",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "rgb(17, 69, 182)",
+      "borderRadius": "8px"
+    }
+  ],
+  "buttons": [
+    {
+      "text": "Campaigns",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "0px 12px",
+      "backgroundColor": "rgb(60, 131, 246)",
+      "color": "rgb(17, 69, 182)",
+      "borderRadius": "6px",
+      "border": "0px solid rgb(224, 230, 235)"
+    },
+    {
+      "text": "Donors",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "0px 12px",
+      "backgroundColor": "rgb(17, 69, 182)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "6px",
+      "border": "0px solid rgb(224, 230, 235)"
+    },
+    {
+      "text": "Sign In",
+      "fontSize": "16px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "12px 16px",
+      "backgroundColor": "rgb(17, 69, 182)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "8px 0px 0px 8px",
+      "border": "0px solid rgb(224, 230, 235)"
+    },
+    {
+      "text": "Sign Up",
+      "fontSize": "16px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "12px 16px",
+      "backgroundColor": "rgb(220, 235, 254)",
+      "color": "rgb(173, 181, 189)",
+      "borderRadius": "0px 8px 8px 0px",
+      "border": "0px solid rgb(224, 230, 235)"
+    },
+    {
+      "text": "Sign In",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "8px 16px",
+      "backgroundColor": "rgb(17, 69, 182)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "6px",
+      "border": "0px solid rgb(224, 230, 235)"
+    },
+    {
+      "text": "DEV BYPASS → Setup",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "fontFamily": "Inter",
+      "padding": "8px 16px",
+      "backgroundColor": "rgb(234, 179, 8)",
+      "color": "rgb(0, 0, 0)",
+      "borderRadius": "6px",
+      "border": "0px solid rgb(224, 230, 235)"
+    }
+  ]
+}

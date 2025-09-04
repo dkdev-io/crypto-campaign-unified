@@ -1,0 +1,129 @@
+{
+  "url": "http://localhost:5174/campaigns/auth/setup?bypass=true",
+  "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+  "forms": {
+    "headers": [
+      {
+        "tag": "H1",
+        "text": "Campaign Setup",
+        "fontSize": "48px",
+        "fontFamily": "Inter",
+        "fontWeight": "800",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "border": "0px solid rgb(224, 230, 235)"
+      },
+      {
+        "tag": "H2",
+        "text": "Campaign Setup",
+        "fontSize": "32px",
+        "fontFamily": "Inter",
+        "fontWeight": "700",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "padding": "0px",
+        "border": "0px solid rgb(224, 230, 235)"
+      }
+    ],
+    "inputs": [
+      {
+        "type": "text",
+        "placeholder": "Enter your campaign name",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "400",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "padding": "12px 12px 12px 40px",
+        "border": "1px solid rgb(224, 230, 235)"
+      },
+      {
+        "type": "text",
+        "placeholder": "Enter first name",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "400",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "padding": "12px 12px 12px 40px",
+        "border": "1px solid rgb(224, 230, 235)"
+      },
+      {
+        "type": "text",
+        "placeholder": "Enter last name",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "400",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "padding": "12px 12px 12px 40px",
+        "border": "1px solid rgb(224, 230, 235)"
+      },
+      {
+        "type": "email",
+        "placeholder": "Enter email address",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "400",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "padding": "16px",
+        "border": "1px solid rgb(224, 230, 235)"
+      },
+      {
+        "type": "tel",
+        "placeholder": "Enter phone number",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "400",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "padding": "16px",
+        "border": "1px solid rgb(224, 230, 235)"
+      }
+    ],
+    "buttons": [
+      {
+        "text": "Campaigns",
+        "fontSize": "14px",
+        "fontFamily": "Inter",
+        "fontWeight": "500",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(60, 131, 246)",
+        "padding": "0px 12px",
+        "border": "0px solid rgb(224, 230, 235)"
+      },
+      {
+        "text": "Donors",
+        "fontSize": "14px",
+        "fontFamily": "Inter",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(17, 69, 182)",
+        "padding": "0px 12px",
+        "border": "0px solid rgb(224, 230, 235)"
+      },
+      {
+        "text": "Back",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "700",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(60, 131, 246)",
+        "padding": "12px 32px",
+        "border": "0px none rgb(17, 69, 182)"
+      },
+      {
+        "text": "Next",
+        "fontSize": "16px",
+        "fontFamily": "Inter",
+        "fontWeight": "700",
+        "color": "rgb(17, 69, 182)",
+        "backgroundColor": "rgb(60, 131, 246)",
+        "padding": "12px 32px",
+        "border": "2px solid rgb(60, 131, 246)"
+      }
+    ]
+  }
+}
