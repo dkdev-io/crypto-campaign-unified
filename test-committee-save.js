@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-const TEST_URL = 'http://localhost:5173/campaigns/auth/setup?bypass=dev';
+const TEST_URL = 'http://localhost:5173/setup';
 
 async function testCommitteeSave() {
   const browser = await chromium.launch({ 
@@ -23,27 +23,26 @@ async function testCommitteeSave() {
     await page.screenshot({ path: 'committee-form-initial.png', fullPage: true });
     console.log('📸 Initial screenshot saved');
     
-    // Try different selectors
-    try {
-      await page.waitForSelector('input[placeholder*="committee name"]', { timeout: 5000 });
-    } catch (e) {
-      console.log('⚠️ Primary selector failed, trying alternatives...');
-      
-      // Check if we need to navigate to step 2 first
-      const nextButton = page.locator('button:has-text("Next")');
-      if (await nextButton.isVisible()) {
-        console.log('🔄 Clicking Next to go to committee step...');
-        await nextButton.click();
-        await page.waitForTimeout(2000);
-      }
-      
-      await page.waitForSelector('input[placeholder*="Enter your committee name"]', { timeout: 5000 });
-    }
+    // Navigate through setup to committee step
+    console.log('🧭 Navigating to committee step...');
+    
+    // Fill step 1 - Campaign Info
+    await page.fill('input[placeholder*="Campaign Name"]', 'Test Campaign');
+    await page.fill('input[placeholder*="email"]', 'test@example.com');
+    await page.fill('input[placeholder*="website"]', 'https://test.com');
+    
+    // Click Next to go to committee step
+    const nextButton = page.locator('button:has-text("Next")');
+    await nextButton.click();
+    await page.waitForTimeout(2000);
+    
+    // Now wait for committee form
+    await page.waitForSelector('input[placeholder*="Enter your committee name"]', { timeout: 10000 });
     
     // Fill out the manual committee form
     console.log('📝 Filling out committee form...');
-    await page.fill('input[placeholder*="committee name"]', 'Test Committee for Verification');
-    await page.fill('input[placeholder*="address"]', '123 Test Street');
+    await page.fill('input[placeholder*="Enter your committee name"]', 'Test Committee for Verification');
+    await page.fill('input[placeholder*="Committee address"]', '123 Test Street');
     await page.fill('input[placeholder*="City"]', 'Test City');
     await page.fill('input[placeholder*="State"]', 'TX');
     await page.fill('input[placeholder*="ZIP"]', '12345');
