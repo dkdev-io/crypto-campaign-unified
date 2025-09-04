@@ -19,7 +19,7 @@ const DonorDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <h1 className="text-2xl font-bold text-white">Donor Dashboard</h1>
+              <h1 className="font-bold text-white" style={{fontSize: 'var(--text-heading-lg)'}}>Donor Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-white/80">
@@ -40,60 +40,60 @@ const DonorDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white mb-8">
-          <h2 className="text-3xl font-bold mb-2">
+        <div style={{background: 'var(--gradient-hero)'}} className="rounded-2xl p-8 mb-8">
+          <h2 className="font-bold mb-2 text-white" style={{fontSize: 'var(--text-heading-xl)'}}>
             Welcome to Your Donor Dashboard
           </h2>
-          <p className="text-blue-100">
+          <p className="text-white/90" style={{fontSize: 'var(--text-body-lg)'}}>
             Thank you for being part of our community. Your generosity makes a difference.
           </p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <Heart className="w-8 h-8 text-red-500" />
-              <span className="text-sm text-gray-500">Total</span>
+              <Heart className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <span className="text-sm text-muted-foreground">Total</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">$0.00</p>
-            <p className="text-sm text-gray-600 mt-1">Donated</p>
+            <p className="text-2xl font-bold text-foreground">$0.00</p>
+            <p className="text-sm text-muted-foreground mt-1">Donated</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8 text-green-500" />
-              <span className="text-sm text-gray-500">Campaigns</span>
+              <TrendingUp className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <span className="text-sm text-muted-foreground">Campaigns</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">0</p>
-            <p className="text-sm text-gray-600 mt-1">Supported</p>
+            <p className="text-2xl font-bold text-foreground">0</p>
+            <p className="text-sm text-muted-foreground mt-1">Supported</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="w-8 h-8 text-blue-500" />
-              <span className="text-sm text-gray-500">Last</span>
+              <Calendar className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <span className="text-sm text-muted-foreground">Last</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">--</p>
-            <p className="text-sm text-gray-600 mt-1">Donation</p>
+            <p className="text-2xl font-bold text-foreground">--</p>
+            <p className="text-sm text-muted-foreground mt-1">Donation</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <User className="w-8 h-8 text-purple-500" />
-              <span className="text-sm text-gray-500">Status</span>
+              <User className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <span className="text-sm text-muted-foreground">Status</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">Active</p>
-            <p className="text-sm text-gray-600 mt-1">Member</p>
+            <p className="text-2xl font-bold text-foreground">Active</p>
+            <p className="text-sm text-muted-foreground mt-1">Member</p>
           </div>
         </div>
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Activity */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+          <div className="lg:col-span-2 crypto-card">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Recent Activity</h3>
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
               <Heart className="w-16 h-16 mb-4 opacity-20" />
               <p className="text-center">
                 No recent donations yet.
@@ -104,56 +104,56 @@ const DonorDashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div className="crypto-card">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
             <div className="space-y-3">
               <button
                 onClick={() => navigate('/campaigns')}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/80 rounded-lg transition-colors flex items-center justify-between group"
               >
-                <span className="text-gray-700">Browse Campaigns</span>
-                <span className="text-gray-400 group-hover:text-gray-600">→</span>
+                <span className="text-foreground">Browse Campaigns</span>
+                <span className="text-muted-foreground group-hover:text-foreground">→</span>
               </button>
               <button
                 onClick={() => navigate('/donors/profile')}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/80 rounded-lg transition-colors flex items-center justify-between group"
               >
-                <span className="text-gray-700">Edit Profile</span>
-                <span className="text-gray-400 group-hover:text-gray-600">→</span>
+                <span className="text-foreground">Edit Profile</span>
+                <span className="text-muted-foreground group-hover:text-foreground">→</span>
               </button>
               <button
                 onClick={() => navigate('/donors/donations')}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/80 rounded-lg transition-colors flex items-center justify-between group"
               >
-                <span className="text-gray-700">Donation History</span>
-                <span className="text-gray-400 group-hover:text-gray-600">→</span>
+                <span className="text-foreground">Donation History</span>
+                <span className="text-muted-foreground group-hover:text-foreground">→</span>
               </button>
               <button
                 onClick={() => navigate('/donors/settings')}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/80 rounded-lg transition-colors flex items-center justify-between group"
               >
-                <span className="text-gray-700">Account Settings</span>
-                <span className="text-gray-400 group-hover:text-gray-600">→</span>
+                <span className="text-foreground">Account Settings</span>
+                <span className="text-muted-foreground group-hover:text-foreground">→</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Featured Campaigns */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Featured Campaigns</h3>
+        <div className="mt-8 crypto-card">
+          <h3 className="text-lg font-semibold text-foreground mb-4">Featured Campaigns</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Placeholder campaign cards */}
             {[1, 2, 3].map((i) => (
-              <div key={i} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3"></div>
-                <h4 className="font-medium text-gray-900 mb-1">Campaign Title {i}</h4>
-                <p className="text-sm text-gray-600 mb-3">
+              <div key={i} className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card">
+                <div className="h-32 rounded-lg mb-3" style={{background: 'var(--gradient-section)'}}></div>
+                <h4 className="font-medium text-foreground mb-1">Campaign Title {i}</h4>
+                <p className="text-sm text-muted-foreground mb-3">
                   Campaign description will appear here...
                 </p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">$0 raised</span>
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                  <span className="text-sm text-muted-foreground">$0 raised</span>
+                  <button className="text-sm font-medium" style={{color: 'hsl(var(--crypto-blue))'}}>
                     View →
                   </button>
                 </div>
