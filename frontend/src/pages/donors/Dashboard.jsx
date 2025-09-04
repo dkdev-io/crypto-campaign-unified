@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import { User, Heart, Calendar, TrendingUp, Settings, LogOut } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -7,6 +7,7 @@ const DonorDashboard = () => {
   const { donor, signOut } = useDonorAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState('given');
   
   // Check for bypass mode
   const searchParams = new URLSearchParams(location.search);
@@ -60,17 +61,55 @@ const DonorDashboard = () => {
         </div>
       </header>
 
+      {/* Given/Raised Toggle */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="crypto-card">
+          <div className="flex items-center justify-center">
+            <div className="flex bg-muted rounded-lg p-1" role="tablist">
+              <button
+                role="tab"
+                aria-selected={activeTab === 'given'}
+                onClick={() => setActiveTab('given')}
+                className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
+                  activeTab === 'given'
+                    ? 'bg-white text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+                data-testid="given-tab"
+              >
+                Given
+              </button>
+              <button
+                role="tab"
+                aria-selected={activeTab === 'raised'}
+                onClick={() => setActiveTab('raised')}
+                className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
+                  activeTab === 'raised'
+                    ? 'bg-white text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+                data-testid="raised-tab"
+              >
+                Raised
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div style={{ background: 'var(--gradient-hero)' }} className="rounded-2xl p-8 mb-8">
-          <h2 className="font-bold mb-2 text-white" style={{ fontSize: 'var(--text-heading-xl)' }}>
-            Welcome to Your Donor Dashboard
-          </h2>
-          <p className="text-white/90" style={{ fontSize: 'var(--text-body-lg)' }}>
-            Thank you for being part of our community. Your generosity makes a difference.
-          </p>
-        </div>
+        {activeTab === 'given' && (
+          <>
+            {/* Welcome Section */}
+            <div style={{ background: 'var(--gradient-hero)' }} className="rounded-2xl p-8 mb-8">
+              <h2 className="font-bold mb-2 text-white" style={{ fontSize: 'var(--text-heading-xl)' }}>
+                Welcome to Your Donor Dashboard
+              </h2>
+              <p className="text-white/90" style={{ fontSize: 'var(--text-body-lg)' }}>
+                Thank you for being part of our community. Your generosity makes a difference.
+              </p>
+            </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -164,37 +203,54 @@ const DonorDashboard = () => {
           </div>
         </div>
 
-        {/* Featured Campaigns */}
-        <div className="mt-8 crypto-card">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Featured Campaigns</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Placeholder campaign cards */}
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card"
-              >
-                <div
-                  className="h-32 rounded-lg mb-3"
-                  style={{ background: 'var(--gradient-section)' }}
-                ></div>
-                <h4 className="font-medium text-foreground mb-1">Campaign Title {i}</h4>
-                <p className="text-base text-muted-foreground mb-3">
-                  Campaign description will appear here...
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">$0 raised</span>
-                  <button
-                    className="text-sm font-medium"
-                    style={{ color: 'hsl(var(--crypto-blue))' }}
+            {/* Featured Campaigns */}
+            <div className="mt-8 crypto-card">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Featured Campaigns</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Placeholder campaign cards */}
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card"
                   >
-                    View →
-                  </button>
-                </div>
+                    <div
+                      className="h-32 rounded-lg mb-3"
+                      style={{ background: 'var(--gradient-section)' }}
+                    ></div>
+                    <h4 className="font-medium text-foreground mb-1">Campaign Title {i}</h4>
+                    <p className="text-base text-muted-foreground mb-3">
+                      Campaign description will appear here...
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">$0 raised</span>
+                      <button
+                        className="text-sm font-medium"
+                        style={{ color: 'hsl(var(--crypto-blue))' }}
+                      >
+                        View →
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </>
+        )}
+
+        {activeTab === 'raised' && (
+          <div className="crypto-card p-12">
+            <div className="text-center">
+              <TrendingUp className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+              <h2 className="text-2xl font-semibold text-foreground mb-2">Raised Funds Dashboard</h2>
+              <p className="text-muted-foreground">
+                This section will display information about funds you've helped raise for campaigns.
+              </p>
+              <div className="mt-6 py-8 border-2 border-dashed border-muted rounded-lg">
+                <p className="text-muted-foreground text-sm">Content coming soon...</p>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

@@ -361,34 +361,6 @@ const DonorAuth = () => {
                   )}
                 </Button>
 
-                {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      console.log('DEV BYPASS: Button clicked!');
-                      console.log('Current location:', window.location.href);
-                      console.log('About to navigate to: /donors/dashboard?bypass=true');
-                      
-                      try {
-                        navigate('/donors/dashboard?bypass=true');
-                        console.log('Navigate called successfully');
-                      } catch (error) {
-                        console.error('Navigation error:', error);
-                      }
-                      
-                      // Fallback - direct window navigation
-                      setTimeout(() => {
-                        console.log('Fallback: Using window.location');
-                        window.location.href = '/donors/dashboard?bypass=true';
-                      }, 1000);
-                    }}
-                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                  >
-                    DEV BYPASS → Dashboard
-                  </Button>
-                )}
-
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-base text-primary hover:underline">
                     Forgot your password?
@@ -572,35 +544,29 @@ const DonorAuth = () => {
                     'Create Account'
                   )}
                 </Button>
-
-                {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      console.log('DEV BYPASS: Button clicked!');
-                      console.log('Current location:', window.location.href);
-                      console.log('About to navigate to: /donors/dashboard?bypass=true');
-                      
-                      try {
-                        navigate('/donors/dashboard?bypass=true');
-                        console.log('Navigate called successfully');
-                      } catch (error) {
-                        console.error('Navigation error:', error);
-                      }
-                      
-                      // Fallback - direct window navigation
-                      setTimeout(() => {
-                        console.log('Fallback: Using window.location');
-                        window.location.href = '/donors/dashboard?bypass=true';
-                      }, 1000);
-                    }}
-                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                  >
-                    DEV BYPASS → Dashboard
-                  </Button>
-                )}
               </form>
+            )}
+            
+            {/* Development Bypass Button - OUTSIDE forms */}
+            {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
+              <div className="mt-4">
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🚨 DEV BYPASS: Button clicked!');
+                    console.log('Current location:', window.location.href);
+                    console.log('About to navigate to: /donors/dashboard?bypass=true');
+                    
+                    // Use direct window navigation for reliability
+                    window.location.href = '/donors/dashboard?bypass=true';
+                  }}
+                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                >
+                  DEV BYPASS → Dashboard
+                </Button>
+              </div>
             )}
           </div>
         </div>
