@@ -27,7 +27,11 @@ const SetupWizard = () => {
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
     const initializeSetup = async () => {
-      if (!user) {
+      // Check for dev bypass
+      const urlParams = new URLSearchParams(window.location.search);
+      const devBypass = urlParams.get('bypass') === 'dev' || localStorage.getItem('devBypass') === 'true';
+      
+      if (!user && !devBypass) {
         setLoading(false);
         return;
       }
@@ -45,14 +49,22 @@ const SetupWizard = () => {
           console.warn('Could not recover from localStorage:', e);
         }
 
-        // Look for existing campaign (only select existing columns to avoid errors)
-        const { data: existingCampaign, error } = await supabase
-          .from('campaigns')
-          .select('id, title, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at, applied_styles, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info')
-          .eq('email', user.email)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
+        // Look for existing campaign (only if we have a user)
+        let existingCampaign = null;
+        let error = null;
+        
+        if (user) {
+          const result = await supabase
+            .from('campaigns')
+            .select('id, title, email, website, wallet_address, status, created_at, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info')
+            .eq('email', user.email)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+          
+          existingCampaign = result.data;
+          error = result.error;
+        }
 
         if (existingCampaign && !error) {
           setCampaignId(existingCampaign.id);
@@ -64,10 +76,10 @@ const SetupWizard = () => {
             campaignName: existingCampaign.title || existingCampaign.campaign_name || savedData?.campaignName || '',
             email: existingCampaign.email || user.email,
             website: existingCampaign.website || savedData?.website || '',
-            themeColor: existingCampaign.theme_color || savedData?.themeColor || '#2a2a72',
-            suggestedAmounts: existingCampaign.suggested_amounts || [25, 50, 100, 250],
-            maxDonation: existingCampaign.max_donation_limit || 3300,
-            appliedStyles: existingCampaign.applied_styles || savedData?.appliedStyles || null,
+            themeColor: savedData?.themeColor || '#2a2a72',
+            suggestedAmounts: [25, 50, 100, 250],
+            maxDonation: 3300,
+            appliedStyles: savedData?.appliedStyles || null,
             stylesApplied: existingCampaign.styles_applied || savedData?.stylesApplied || false,
             styleMethod: existingCampaign.style_method || savedData?.styleMethod || null,
             
@@ -95,8 +107,8 @@ const SetupWizard = () => {
         } else {
           // No existing campaign - start fresh
           const newFormData = {
-            userFullName: user.user_metadata?.full_name || '',
-            email: user.email,
+            userFullName: user?.user_metadata?.full_name || 'Dev User',
+            email: user?.email || 'dev@test.com',
             campaignName: '',
             website: '',
             currentStep: 2
