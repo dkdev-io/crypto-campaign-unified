@@ -517,7 +517,7 @@ Import Successful
               <h6 className="text-sm font-medium text-muted-foreground mb-3 text-center">
                 Current Style
               </h6>
-              <div className="p-6 bg-card border border-border rounded-lg"
+              <div className="p-6 bg-card border border-border rounded-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
                     <Building2 className="w-6 h-6 text-muted-foreground" />
