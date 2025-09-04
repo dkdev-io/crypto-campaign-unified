@@ -101,18 +101,55 @@ const SetupWizard = () => {
           setFormData(existingFormData);
           setCurrentStep(savedData?.currentStep || 2);
         } else {
-          // No existing campaign - start fresh
+          // No existing campaign - create one immediately
+          console.log('No existing campaign found, creating new campaign...');
+          
           const newFormData = {
             userFullName: user.user_metadata?.full_name || '',
             email: user.email,
-            campaignName: '',
-            website: '',
-            currentStep: 2
+            campaignName: savedData?.campaignName || '',
+            website: savedData?.website || '',
+            currentStep: savedData?.currentStep || 2
           };
           
           // Recover from localStorage if available
           if (savedData) {
             Object.assign(newFormData, savedData);
+          }
+          
+          // Create campaign immediately so it's available for step 2
+          try {
+            const newCampaignData = {
+              email: newFormData.email,
+              title: newFormData.campaignName || 'New Campaign',
+              website: newFormData.website || '',
+              wallet_address: 'temp-wallet-' + Date.now(),
+              max_donation_limit: 3300,
+              suggested_amounts: [25, 50, 100, 250],
+              theme_color: '#2a2a72',
+              status: 'setup'
+            };
+
+            console.log('Creating new campaign:', newCampaignData);
+            const { data: newCampaign, error: createError } = await supabase
+              .from('campaigns')
+              .insert([newCampaignData])
+              .select()
+              .single();
+
+            if (!createError && newCampaign) {
+              console.log('Campaign created successfully:', newCampaign.id);
+              setCampaignId(newCampaign.id);
+              newFormData.campaignId = newCampaign.id;
+              localStorage.setItem('campaignSetupData', JSON.stringify(newFormData));
+            } else {
+              console.error('Failed to create campaign:', createError);
+              throw new Error('Campaign creation failed');
+            }
+          } catch (createError) {
+            console.error('Error creating campaign during initialization:', createError);
+            // Don't use fallback IDs - we need real campaign IDs for Supabase
+            throw new Error('Campaign creation is required for setup');
           }
           
           setFormData(newFormData);
