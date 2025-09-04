@@ -711,9 +711,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
             <li>Just the candidate's last name</li>
             <li>The committee's short name</li>
           </ul>
-          <p className="text-sm text-muted-foreground">
-            <strong>For testing:</strong> Admin can add test committees via the admin panel
-          </p>
         </div>
       )}
 
