@@ -48,7 +48,7 @@ const EmbedDonorForm = ({ campaignId }) => {
     setErrorMessage('');
     
     try {
-      const effectiveCampaignId = campaignId || 'demo-campaign';
+      const effectiveCampaignId = campaignId || 'standalone-form';
       
       if (!formData.amount || parseFloat(formData.amount) <= 0) {
         throw new Error('Please enter a valid contribution amount');
@@ -93,7 +93,7 @@ const EmbedDonorForm = ({ campaignId }) => {
     return <div style={styles.loading}>Loading campaign...</div>;
   }
 
-  if (errorMessage && !campaignData) {
+  if (errorMessage && !campaignData && campaignId) {
     return (
       <div style={styles.errorContainer}>
         <h3 style={styles.errorTitle}>Unable to Load Campaign</h3>
