@@ -298,7 +298,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </ul>
       </div>
 
-      {/* Development Skip Option */}
+      {/* Skip Option */}
       <div style={{ 
         background: '#fff3cd',
         border: '1px solid #ffeaa7',
@@ -306,13 +306,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         padding: '1.5rem',
         marginBottom: '2rem'
       }}>
-        <h5 style={{ color: '#856404', marginTop: 0 }}>
-          🔧 Development Mode
-        </h5>
-        <p style={{ color: '#856404', fontSize: '14px', margin: '0 0 1rem 0' }}>
-          For development and testing purposes, you can skip bank connection 
-          and continue with the setup process.
-        </p>
         <button
           onClick={handleSkipForDev}
           style={{
@@ -326,50 +319,10 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
             fontWeight: '500'
           }}
         >
-          ⚠️ Skip Bank Connection (Dev Only)
+          ⚠️ Skip Bank Connection
         </button>
       </div>
 
-      {/* How It Works */}
-      <div style={{ 
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h5 style={{ color: '#495057', marginTop: 0 }}>
-          💡 How Bank Connection Works
-        </h5>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '1rem',
-          fontSize: '14px'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>1️⃣</div>
-            <strong>Connect Securely</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Login to your bank through Plaid's secure interface
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>2️⃣</div>
-            <strong>Select Account</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Choose your campaign's checking account
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>3️⃣</div>
-            <strong>Start Processing</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Begin accepting contributions immediately
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Navigation */}
       <div className="form-actions">
@@ -385,20 +338,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </button>
       </div>
 
-      {/* Technical Notes */}
-      <div style={{ 
-        marginTop: '2rem',
-        padding: '1rem',
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '6px',
-        fontSize: '13px',
-        color: '#6c757d'
-      }}>
-        <strong>🔧 Technical Implementation:</strong> This component requires a backend 
-        server to create Plaid link tokens and exchange public tokens. In production, 
-        implement the required API endpoints as described in the error messages above.
-      </div>
     </div>
   );
 };

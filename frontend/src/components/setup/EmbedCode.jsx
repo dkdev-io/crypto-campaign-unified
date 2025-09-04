@@ -15,25 +15,33 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   }, [campaignId]);
 
   const generateEmbedCode = async () => {
-    // Generate campaign ID if not provided (for demo users)
-    const actualCampaignId = campaignId || `demo-${Date.now()}`;
-    
+    if (!campaignId) {
+      setError('Campaign ID is required to generate embed code');
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
 
-      // Generate URLs
+      // Call the database function to generate embed code
+      const { data, error: dbError } = await supabase
+        .rpc('generate_embed_code', {
+          p_campaign_id: campaignId,
+          p_base_url: window.location.origin
+        });
+
+      if (dbError) throw dbError;
+
+      setEmbedCode(data);
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-      const donationUrl = `${baseUrl}/embed-form.html?campaign=${actualCampaignId}`;
-      const campaignPageUrl = formData.campaignName 
-        ? `${baseUrl}/campaign/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
-        : `${baseUrl}/campaign/${actualCampaignId}`;
-      
+      const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
       setTestUrl(donationUrl);
       
-      // Generate fallback embed code immediately
-      const fallbackCode = generateFallbackEmbedCode(actualCampaignId);
-      setEmbedCode(fallbackCode);
+      // Also generate campaign page URL
+      const campaignPageUrl = formData.campaignName 
+        ? `${baseUrl}/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
+        : null;
       
       // Generate QR code for the donation URL
       try {
@@ -46,27 +54,8 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           }
         });
         setQrCodeDataUrl(qrDataUrl);
-        console.log('QR code generated successfully');
       } catch (qrError) {
         console.error('Failed to generate QR code:', qrError);
-        setError('QR code generation failed: ' + qrError.message);
-      }
-
-      // Try database function if we have a real campaign ID
-      if (campaignId && campaignId !== actualCampaignId) {
-        try {
-          const { data, error: dbError } = await supabase
-            .rpc('generate_embed_code', {
-              p_campaign_id: campaignId,
-              p_base_url: window.location.origin
-            });
-
-          if (!dbError && data) {
-            setEmbedCode(typeof data === 'string' ? data : data.embedCode || fallbackCode);
-          }
-        } catch (dbErr) {
-          console.warn('Database embed generation failed, using fallback:', dbErr);
-        }
       }
       
       // Mark setup as completed and trigger donor page automation
@@ -132,26 +121,25 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
     }
   };
 
-  const generateFallbackEmbedCode = (id) => {
-    const useId = id || campaignId || `demo-${Date.now()}`;
+  const generateFallbackEmbedCode = () => {
     const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
     return `<!-- Campaign Contribution Form Embed -->
-<div id="crypto-campaign-embed-${useId}"></div>
+<div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${baseUrl}/embed-form.html?campaign=${useId}";
+    iframe.src = "${baseUrl}/embed-form.html?campaign=${campaignId}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";
     iframe.style.border = "1px solid #ddd";
     iframe.style.borderRadius = "8px";
     iframe.style.backgroundColor = "white";
-    document.getElementById("crypto-campaign-embed-${useId}").appendChild(iframe);
+    document.getElementById("crypto-campaign-embed-${campaignId}").appendChild(iframe);
     
     // Auto-resize iframe based on content
     window.addEventListener("message", function(event) {
-        if (event.data && event.data.type === "resize" && event.data.campaignId === "${useId}") {
+        if (event.data && event.data.type === "resize" && event.data.campaignId === "${campaignId}") {
             iframe.height = event.data.height + "px";
         }
     });
@@ -196,97 +184,64 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🚀 Get Your Embed Code - Step 6
+        🎉 Setup Complete! - Step 7
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Your contribution form is ready to embed on your website
       </p>
 
-      {/* Congratulations Banner */}
+      {/* Success Banner */}
       <div style={{ 
-        background: 'linear-gradient(135deg, #FF6B6B, #4ECDC4)',
-        color: 'white',
-        padding: '3rem',
-        borderRadius: '16px',
-        textAlign: 'center',
-        marginBottom: '3rem',
-        boxShadow: '0 8px 24px rgba(255, 107, 107, 0.3)'
-      }}>
-        <div style={{ fontSize: '80px', marginBottom: '1rem' }}>🎉</div>
-        <h2 style={{ margin: '0 0 1rem 0', fontSize: '32px', fontWeight: '700' }}>
-          Congratulations!
-        </h2>
-        <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px', opacity: 0.9 }}>
-          Your Campaign Form is Approved & Live!
-        </h3>
-        <p style={{ margin: 0, fontSize: '18px', opacity: 0.8 }}>
-          Everything is configured perfectly. Your supporters can now contribute to your campaign.
-        </p>
-      </div>
-
-      {/* Campaign Profile Link */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        background: 'linear-gradient(135deg, #28a745, #20c997)',
         color: 'white',
         padding: '2rem',
         borderRadius: '12px',
         textAlign: 'center',
-        marginBottom: '3rem',
-        boxShadow: '0 6px 20px rgba(102, 126, 234, 0.3)'
+        marginBottom: '2rem',
+        boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
+        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🚀</div>
         <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
-          Your Campaign Profile is Live!
+          Campaign Setup Completed Successfully!
         </h3>
+        <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
+          Your contribution form is live and ready to accept donations
+        </p>
+      </div>
+
+      {/* Campaign Summary */}
+      <div style={{ 
+        background: '#f8f9fa',
+        border: '1px solid #e9ecef',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        <h4 style={{ color: '#495057', marginTop: 0 }}>
+          📊 Campaign Details
+        </h4>
         <div style={{ 
-          background: 'rgba(255,255,255,0.2)',
-          padding: '1rem',
-          borderRadius: '8px',
-          marginBottom: '1.5rem',
-          fontFamily: 'monospace',
-          fontSize: '16px',
-          wordBreak: 'break-all',
-          fontWeight: '500'
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+          gap: '1rem',
+          fontSize: '14px'
         }}>
-          {window.location.origin}/campaign/{formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}
-        </div>
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a
-            href={`/campaign/${formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              border: '2px solid white',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: '500'
-            }}
-          >
-            🌐 View Your Campaign Profile
-          </a>
-          <button
-            onClick={() => {
-              const profileUrl = `${window.location.origin}/campaign/${formData.campaignName ? encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-')) : campaignId}`;
-              navigator.clipboard.writeText(profileUrl);
-              alert('Campaign profile URL copied!');
-            }}
-            style={{
-              background: 'white',
-              color: '#667eea',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: '500'
-            }}
-          >
-            📋 Copy Profile URL
-          </button>
+          <div>
+            <strong>Campaign:</strong><br />
+            <span style={{ color: '#6c757d' }}>{formData.campaignName}</span>
+          </div>
+          <div>
+            <strong>Committee:</strong><br />
+            <span style={{ color: '#6c757d' }}>{formData.committeeName}</span>
+          </div>
+          <div>
+            <strong>Setup by:</strong><br />
+            <span style={{ color: '#6c757d' }}>{formData.userFullName}</span>
+          </div>
+          <div>
+            <strong>Campaign ID:</strong><br />
+            <span style={{ color: '#6c757d', fontFamily: 'monospace' }}>{campaignId}</span>
+          </div>
         </div>
       </div>
 
@@ -371,194 +326,121 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       </div>
 
-      {/* Three Key Items Section */}
+      {/* QR Code and Test Section */}
       <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '2rem',
-        marginBottom: '3rem'
+        background: '#e7f3ff',
+        border: '1px solid #b6d7ff',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        marginBottom: '2rem'
       }}>
+        <h4 style={{ color: '#0066cc', marginTop: 0 }}>
+          📱 QR Code & Testing
+        </h4>
+        <p style={{ color: '#004499', marginBottom: '1.5rem' }}>
+          Share your donation form via QR code or test it directly:
+        </p>
         
-        {/* 1. QR Code */}
         <div style={{ 
-          background: 'white',
-          border: '2px solid #e7f3ff',
-          borderRadius: '12px',
-          padding: '2rem',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          display: 'grid', 
+          gridTemplateColumns: 'auto 1fr',
+          gap: '2rem',
+          alignItems: 'start'
         }}>
-          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem' }}>
-            📱 Your QR Code
-          </h4>
-          <div style={{ 
-            background: '#f8f9fa',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            border: '1px solid #e9ecef',
-            marginBottom: '1.5rem',
-            display: 'inline-block'
-          }}>
-            {qrCodeDataUrl ? (
-              <img 
-                src={qrCodeDataUrl} 
-                alt="Campaign QR Code"
-                style={{ display: 'block', width: '180px', height: '180px' }}
-              />
-            ) : (
-              <div style={{
-                width: '180px',
-                height: '180px',
-                background: '#f8f9fa',
-                border: '2px dashed #ccc',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#666',
-                borderRadius: '8px'
-              }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>⏳</div>
-                  <div>Generating QR...</div>
-                </div>
-              </div>
-            )}
-          </div>
-          <p style={{ color: '#6c757d', fontSize: '14px', margin: '0 0 1rem 0' }}>
-            Supporters can scan this to donate instantly
-          </p>
-          <button
-            onClick={() => {
-              if (qrCodeDataUrl) {
-                const link = document.createElement('a');
-                link.download = `${formData.campaignName || 'campaign'}-qr-code.png`;
-                link.href = qrCodeDataUrl;
-                link.click();
-              }
-            }}
-            disabled={!qrCodeDataUrl}
-            style={{
-              background: '#2a2a72',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1rem',
-              borderRadius: '4px',
-              cursor: qrCodeDataUrl ? 'pointer' : 'not-allowed',
-              fontSize: '14px',
-              opacity: qrCodeDataUrl ? 1 : 0.5
-            }}
-          >
-            💾 Download QR Code
-          </button>
-        </div>
-
-        {/* 2. Embed Code */}
-        <div style={{ 
-          background: 'white',
-          border: '2px solid #e7f3ff',
-          borderRadius: '12px',
-          padding: '2rem',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem', textAlign: 'center' }}>
-            📝 Your Embed Code
-          </h4>
-          <div style={{ 
-            background: '#f8f9fa',
-            border: '1px solid #e9ecef',
-            borderRadius: '8px',
-            padding: '1rem',
-            marginBottom: '1.5rem',
-            fontFamily: 'Monaco, monospace',
-            fontSize: '11px',
-            lineHeight: '1.4',
-            maxHeight: '200px',
-            overflowY: 'auto',
-            color: '#495057'
-          }}>
-            {embedCode || 'Generating embed code...'}
-          </div>
+          {/* QR Code */}
           <div style={{ textAlign: 'center' }}>
-            <button
-              onClick={handleCopyCode}
-              disabled={loading || !embedCode}
-              style={{
-                background: copied ? '#28a745' : '#2a2a72',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '6px',
-                cursor: loading || !embedCode ? 'not-allowed' : 'pointer',
-                fontSize: '16px',
-                fontWeight: '500',
-                opacity: loading || !embedCode ? 0.7 : 1,
-                transition: 'background 0.2s ease'
-              }}
-            >
-              {loading ? '⏳ Generating...' : copied ? '✅ Copied!' : '📋 Copy Embed Code'}
-            </button>
+            <div style={{ 
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '8px',
+              border: '1px solid #b6d7ff',
+              marginBottom: '1rem',
+              display: 'inline-block'
+            }}>
+              {qrCodeDataUrl ? (
+                <img 
+                  src={qrCodeDataUrl} 
+                  alt="Donation Form QR Code"
+                  style={{ display: 'block' }}
+                />
+              ) : (
+                <div style={{
+                  width: '200px',
+                  height: '200px',
+                  background: '#f8f9fa',
+                  border: '1px dashed #ccc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#666'
+                }}>
+                  Generating QR...
+                </div>
+              )}
+            </div>
+            <div style={{ 
+              fontSize: '14px', 
+              color: '#0066cc', 
+              fontWeight: '500'
+            }}>
+              📱 Scan to Donate
+            </div>
           </div>
-        </div>
-
-        {/* 3. Direct Link */}
-        <div style={{ 
-          background: 'white',
-          border: '2px solid #e7f3ff',
-          borderRadius: '12px',
-          padding: '2rem',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem' }}>
-            🔗 Direct Donation Link
-          </h4>
-          <div style={{ 
-            background: '#f8f9fa',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1.5rem',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            wordBreak: 'break-all',
-            border: '1px solid #e9ecef',
-            color: '#495057'
-          }}>
-            {testUrl}
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button
-              onClick={handleTestForm}
-              disabled={!campaignId}
-              style={{
-                background: '#28a745',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1rem',
+          
+          {/* Testing Options */}
+          <div>
+            <div style={{ marginBottom: '1rem' }}>
+              <strong style={{ color: '#0066cc', display: 'block', marginBottom: '0.5rem' }}>
+                🔗 Donation URL:
+              </strong>
+              <div style={{ 
+                background: 'white',
+                padding: '0.75rem',
                 borderRadius: '4px',
-                cursor: !campaignId ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
-                opacity: !campaignId ? 0.7 : 1
-              }}
-            >
-              🚀 Test Form
-            </button>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(testUrl);
-                alert('Direct link copied!');
-              }}
-              style={{
-                background: '#2a2a72',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 1rem',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px'
-              }}
-            >
-              📋 Copy Link
-            </button>
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                wordBreak: 'break-all',
+                border: '1px solid #b6d7ff'
+              }}>
+                {testUrl}
+              </div>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={handleTestForm}
+                disabled={!campaignId}
+                style={{
+                  background: '#0066cc',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '4px',
+                  cursor: !campaignId ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: !campaignId ? 0.7 : 1
+                }}
+              >
+                🚀 Test Form
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(testUrl);
+                  alert('Donation URL copied!');
+                }}
+                style={{
+                  background: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                📋 Copy URL
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -857,28 +739,29 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back to Style Confirmation
+          ← Back to Terms
         </button>
-        <button className="btn btn-primary" onClick={() => onNext()}>
-          Complete Setup: Terms & Conditions →
+        <button className="btn" onClick={handleStartOver}>
+          🔄 Setup New Campaign
         </button>
       </div>
 
-      {/* Next Steps Info */}
+      {/* Final Success Message */}
       <div style={{ 
         marginTop: '2rem',
         padding: '1.5rem',
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
+        background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
+        border: '1px solid #dee2e6',
         borderRadius: '8px',
         textAlign: 'center'
       }}>
-        <div style={{ fontSize: '32px', marginBottom: '1rem' }}>📋</div>
+        <div style={{ fontSize: '32px', marginBottom: '1rem' }}>🎉</div>
         <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>
-          Almost Done!
+          Congratulations!
         </h4>
         <p style={{ color: '#6c757d', margin: 0 }}>
-          Your embed code is ready. Complete the final step to launch your campaign.
+          Your campaign contribution system is now live and ready to help you raise funds 
+          for your political campaign in compliance with FEC regulations.
         </p>
       </div>
     </div>
