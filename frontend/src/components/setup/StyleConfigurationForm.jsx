@@ -419,7 +419,7 @@ const StyleConfigurationForm = () => {
       {importedStyles && (
         <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
           <h4 className="text-lg font-semibold text-green-900 mb-4">
-            ✅ Import Successful
+Import Successful
           </h4>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

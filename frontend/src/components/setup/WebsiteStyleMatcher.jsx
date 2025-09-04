@@ -306,10 +306,10 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
 
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🎨 Match Your Website Style - Step 4
+      <h2 className="text-center mb-4 font-bold text-foreground" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
+        Match Your Website Style - Step 4
       </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
+      <p className="text-center mb-8 text-muted-foreground">
         Enter your website URL to automatically match your form styling
       </p>
 

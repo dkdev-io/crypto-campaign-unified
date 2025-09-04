@@ -164,67 +164,41 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🏦 Connect Bank Account - Step 3
+      <h2 className="text-center mb-4 font-bold text-foreground" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
+        Connect Bank Account - Step 3
       </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
+      <p className="text-center mb-8 text-muted-foreground">
         Securely connect your campaign's bank account for contribution processing
       </p>
 
       {/* Status Messages */}
       {error && (
-        <div style={{ 
-          background: '#fee', 
-          color: '#c33', 
-          padding: '1rem', 
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #fcc',
-          whiteSpace: 'pre-line'
-        }}>
-          ❌ {error}
+        <div className="bg-destructive/10 border border-destructive/20 text-destructive p-4 rounded-lg mb-4" style={{whiteSpace: 'pre-line'}}>
+          {error}
         </div>
       )}
 
       {success && (
-        <div style={{ 
-          background: '#efe', 
-          color: '#393', 
-          padding: '1rem', 
-          borderRadius: '4px', 
-          marginBottom: '1rem',
-          border: '1px solid #cfc'
-        }}>
-          ✅ {success}
+        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
+          {success}
         </div>
       )}
 
       {/* Current Bank Account Status */}
       {bankInfo?.isVerified ? (
-        <div style={{ 
-          background: '#d4edda',
-          border: '1px solid #c3e6cb',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem'
-        }}>
-          <h4 style={{ color: '#155724', marginTop: 0 }}>
-            ✅ Bank Account Connected
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+          <h4 className="text-green-700 mt-0">
+            Bank Account Connected
           </h4>
           
-          <div style={{ 
-            background: 'white',
-            padding: '1rem',
-            borderRadius: '6px',
-            marginBottom: '1rem'
-          }}>
-            <div style={{ fontSize: '16px', fontWeight: '500', marginBottom: '0.5rem' }}>
+          <div className="bg-white p-4 rounded mb-4">
+            <div className="text-base font-medium mb-2">
               {bankInfo.details?.institution_name || 'Connected Bank'}
             </div>
-            <div style={{ color: '#6c757d', fontSize: '14px' }}>
+            <div className="text-muted-foreground text-sm">
               Account: {bankInfo.accountName} (...{bankInfo.lastFour})
             </div>
-            <div style={{ color: '#6c757d', fontSize: '12px', marginTop: '0.5rem' }}>
+            <div className="text-muted-foreground text-xs mt-2">
               Connected: {new Date(bankInfo.details?.created_at).toLocaleDateString()}
             </div>
           </div>
@@ -243,7 +217,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
               opacity: loading ? 0.7 : 1
             }}
           >
-            {loading ? '⏳ Removing...' : '🗑️ Remove Bank Account'}
+            {loading ? 'Removing...' : 'Remove Bank Account'}
           </button>
         </div>
       ) : (
@@ -255,32 +229,21 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           marginBottom: '2rem',
           textAlign: 'center'
         }}>
-          <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🏦</div>
-          <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
+          <div className="mb-4"></div>
+          <p className="text-muted-foreground mb-8">
             Connect your campaign's bank account to process contributions securely through Plaid.
           </p>
           
           <button
             onClick={handleConnectBank}
             disabled={loading || !plaidReady}
-            style={{
-              background: '#2a2a72',
-              color: 'white',
-              border: 'none',
-              padding: '1rem 2rem',
-              borderRadius: '6px',
-              cursor: loading || !plaidReady ? 'not-allowed' : 'pointer',
-              fontSize: '16px',
-              fontWeight: '500',
-              opacity: loading || !plaidReady ? 0.7 : 1,
-              marginBottom: '1rem'
-            }}
+            className="bg-primary text-primary-foreground px-8 py-4 rounded-md text-base font-medium mb-4 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {loading ? '⏳ Connecting...' : !plaidReady ? '⏳ Loading...' : '🔗 Connect Bank Account - Powered by Plaid'}
+            {loading ? 'Connecting...' : !plaidReady ? 'Loading...' : 'Connect Bank Account - Powered by Plaid'}
           </button>
           
           {!plaidReady && (
-            <div style={{ fontSize: '14px', color: '#6c757d' }}>
+            <div className="text-sm text-muted-foreground">
               Loading Plaid SDK...
             </div>
           )}
@@ -311,7 +274,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
             opacity: loading ? 0.7 : 1
           }}
         >
-          {loading ? '⏳ Skipping...' : '⚠️ Skip Bank Connection'}
+          {loading ? 'Skipping...' : 'Skip Bank Connection'}
         </button>
       </div>
 
