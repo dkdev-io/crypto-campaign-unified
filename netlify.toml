@@ -3,6 +3,7 @@
   base = "frontend"
   publish = "dist"
   environment = { NPM_FLAGS = "--legacy-peer-deps", NODE_VERSION = "22", VITE_APP_URL = "https://cryptocampaign.netlify.app" }
+  # Force deployment: Thu Sep  4 16:48:48 PDT 2025
 
 [[redirects]]
   from = "/api/*"
