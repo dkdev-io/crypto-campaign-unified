@@ -16,7 +16,7 @@ const FormCustomization = ({ formData, updateFormData, onNext, onPrev }) => {
           {formData.appliedStyles?.colors?.primary && (
             <div style={{ 
               fontSize: '0.9rem', 
-              color: 'hsl(120 60% 40%)',
+              color: 'hsl(var(--crypto-gold))',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem'

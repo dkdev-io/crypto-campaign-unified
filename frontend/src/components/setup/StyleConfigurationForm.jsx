@@ -29,9 +29,9 @@ const StyleConfigurationForm = () => {
   const [formData, setFormData] = useState({});
   const [styleMethod, setStyleMethod] = useState('manual'); // 'manual' or 'import'
   const [manualStyles, setManualStyles] = useState({
-    primaryColor: 'hsl(214 100% 21%)',
-    secondaryColor: 'hsl(0 0% 100%)',
-    accentColor: 'hsl(45 100% 51%)',
+    primaryColor: 'hsl(var(--crypto-navy))',
+    secondaryColor: 'hsl(var(--crypto-white))',
+    accentColor: 'hsl(var(--crypto-gold))',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     logoImage: null
   });
@@ -51,9 +51,9 @@ const StyleConfigurationForm = () => {
         // Load any existing style data
         if (savedData.appliedStyles) {
           setManualStyles({
-            primaryColor: savedData.appliedStyles.colors?.primary || 'hsl(214 100% 21%)',
-            secondaryColor: savedData.appliedStyles.colors?.secondary || 'hsl(0 0% 100%)',
-            accentColor: savedData.appliedStyles.colors?.accent || 'hsl(45 100% 51%)',
+            primaryColor: savedData.appliedStyles.colors?.primary || 'hsl(var(--crypto-navy))',
+            secondaryColor: savedData.appliedStyles.colors?.secondary || 'hsl(var(--crypto-white))',
+            accentColor: savedData.appliedStyles.colors?.accent || 'hsl(var(--crypto-gold))',
             fontFamily: savedData.appliedStyles.fonts?.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
             logoImage: savedData.appliedStyles.logoImage || null
           });
@@ -192,16 +192,16 @@ const StyleConfigurationForm = () => {
 
       const finalStyles = styleMethod === 'import' ? {
         colors: {
-          primary: importedStyles.colors?.primary || 'hsl(214 100% 21%)',
-          secondary: importedStyles.colors?.secondary || 'hsl(0 0% 100%)', 
-          accent: importedStyles.colors?.accent || 'hsl(45 100% 51%)',
-          background: importedStyles.colors?.background || 'hsl(0 0% 100%)',
-          text: importedStyles.colors?.text || 'hsl(214 100% 21%)'
+          primary: importedStyles.colors?.primary || 'hsl(var(--crypto-navy))',
+          secondary: importedStyles.colors?.secondary || 'hsl(var(--crypto-white))', 
+          accent: importedStyles.colors?.accent || 'hsl(var(--crypto-gold))',
+          background: importedStyles.colors?.background || 'hsl(var(--crypto-white))',
+          text: importedStyles.colors?.text || 'hsl(var(--crypto-navy))'
         },
         fonts: {
-          primary: importedStyles.fonts?.primary || 'Arial, sans-serif',
-          heading: importedStyles.fonts?.heading || 'Arial, sans-serif',
-          body: importedStyles.fonts?.body || 'Arial, sans-serif'
+          primary: importedStyles.fonts?.primary || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+          heading: importedStyles.fonts?.heading || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+          body: importedStyles.fonts?.body || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
         },
         images: {
           logo: importedStyles.images?.logo || null,
@@ -341,7 +341,7 @@ const StyleConfigurationForm = () => {
           onChange={(e) => handleManualStyleChange('fontFamily', e.target.value)}
           className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
         >
-          <option value="Arial, sans-serif">Arial</option>
+          <option value="Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;Roboto&quot;, sans-serif">Inter</option>
           <option value="Helvetica, sans-serif">Helvetica</option>
           <option value="'Times New Roman', serif">Times New Roman</option>
           <option value="Georgia, serif">Georgia</option>

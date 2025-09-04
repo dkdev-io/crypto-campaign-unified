@@ -300,7 +300,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                   <div>
                     <div
                       style={{
-                        fontFamily: selectedFonts[key]?.family || selectedFonts[key]?.suggested || 'Arial',
+                        fontFamily: selectedFonts[key]?.family || selectedFonts[key]?.suggested || 'Inter',
                         fontSize: key === 'heading' ? '1.5rem' : '1rem',
                         fontWeight: selectedFonts[key]?.weight || (key === 'heading' ? '600' : '400'),
                         color: selectedColors.text,
@@ -386,7 +386,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
     const previewStyles = {
       backgroundColor: selectedColors.background || '#ffffff',
       color: selectedColors.text || '#333333',
-      fontFamily: selectedFonts.body?.suggested || 'Arial, sans-serif',
+      fontFamily: selectedFonts.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
       padding: '2rem',
       borderRadius: '8px',
       border: '1px solid #e9ecef'
@@ -398,14 +398,14 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
       border: 'none',
       padding: '0.75rem 2rem',
       borderRadius: '4px',
-      fontFamily: selectedFonts.button?.suggested || selectedFonts.body?.suggested || 'Arial, sans-serif',
+      fontFamily: selectedFonts.button?.suggested || selectedFonts.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
       fontWeight: selectedFonts.button?.weight || '500',
       fontSize: '1rem',
       cursor: 'pointer'
     };
 
     const headingStyles = {
-      fontFamily: selectedFonts.heading?.suggested || 'Arial, sans-serif',
+      fontFamily: selectedFonts.heading?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
       fontWeight: selectedFonts.heading?.weight || '600',
       fontSize: '1.5rem',
       color: selectedColors.primary,
@@ -464,13 +464,13 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
               <div style={{
                 backgroundColor: '#ffffff',
                 color: '#333333',
-                fontFamily: 'Arial, sans-serif',
+                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                 padding: '2rem',
                 borderRadius: '8px',
                 border: '1px solid #e9ecef'
               }}>
                 <h3 style={{
-                  fontFamily: 'Arial, sans-serif',
+                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                   fontWeight: '600',
                   fontSize: '1.5rem',
                   color: '#2a2a72',
@@ -500,7 +500,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                   border: 'none',
                   padding: '0.75rem 2rem',
                   borderRadius: '4px',
-                  fontFamily: 'Arial, sans-serif',
+                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
                   fontWeight: '500',
                   fontSize: '1rem'
                 }}>
@@ -528,7 +528,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                   display: 'block', 
                   marginBottom: '0.5rem', 
                   fontWeight: '500',
-                  fontFamily: selectedFonts.body?.suggested || 'Arial, sans-serif'
+                  fontFamily: selectedFonts.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
                 }}>
                   Donation Amount
                 </label>
@@ -540,7 +540,7 @@ const StyleConfirmation = ({ formData, updateFormData, onNext, onPrev }) => {
                     padding: '0.75rem',
                     border: `1px solid ${selectedColors.secondary || '#ced4da'}`,
                     borderRadius: '4px',
-                    fontFamily: selectedFonts.body?.suggested || 'Arial, sans-serif'
+                    fontFamily: selectedFonts.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
                   }}
                   readOnly
                 />

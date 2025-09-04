@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react';
 
 const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   const [selectedColors, setSelectedColors] = useState({
-    primary: '#2a2a72',
-    secondary: '#4a4a95',
-    accent: '#28a745',
-    background: '#ffffff',
-    text: '#333333'
+    primary: 'hsl(var(--crypto-navy))',
+    secondary: 'hsl(var(--crypto-blue))',
+    accent: 'hsl(var(--crypto-gold))',
+    background: 'hsl(var(--crypto-white))',
+    text: 'hsl(var(--crypto-dark-gray))'
   });
   
   const [selectedFonts, setSelectedFonts] = useState({
-    heading: { family: 'Arial, sans-serif', weight: '600' },
-    body: { family: 'Arial, sans-serif', weight: '400' },
-    button: { family: 'Arial, sans-serif', weight: '500' }
+    heading: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '600' },
+    body: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '400' },
+    button: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '500' }
   });
 
   const [applying, setApplying] = useState(false);
 
   // Font options
   const fontOptions = [
-    'Arial, sans-serif',
+    'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     'Helvetica, sans-serif', 
     'Georgia, serif',
     'Times New Roman, serif',

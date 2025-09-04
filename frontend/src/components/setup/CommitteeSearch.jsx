@@ -507,7 +507,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                   <div style={{ flex: 1 }}>
                     <h5 style={{ 
                       margin: '0 0 0.5rem 0', 
-                      color: '#2a2a72',
+                      color: 'hsl(var(--crypto-navy))',
                       fontSize: '16px'
                     }}>
                       {committee.name}
@@ -529,7 +529,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                       {committee.source === 'test' && (
                         <span style={{ 
                           background: '#d4edda', 
-                          color: '#155724', 
+                          color: 'hsl(var(--crypto-navy))', 
                           padding: '0.25rem 0.5rem', 
                           borderRadius: '4px', 
                           fontSize: '12px',
@@ -557,7 +557,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                   <div style={{ marginLeft: '1rem' }}>
                     {selectedCommittee?.id === committee.id ? (
                       <span style={{ 
-                        color: '#2a2a72', 
+                        color: 'hsl(var(--crypto-navy))', 
                         fontSize: '20px',
                         fontWeight: 'bold'
                       }}>
@@ -594,8 +594,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
 
           {validation.errors.length > 0 && (
             <div style={{ marginBottom: '1rem' }}>
-              <strong style={{ color: '#721c24' }}>Errors:</strong>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: '#721c24' }}>
+              <strong style={{ color: 'hsl(var(--destructive))' }}>Errors:</strong>
+              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: 'hsl(var(--destructive))' }}>
                 {validation.errors.map((error, index) => (
                   <li key={index}>{error}</li>
                 ))}
@@ -605,8 +605,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
 
           {validation.warnings.length > 0 && (
             <div style={{ marginBottom: '1rem' }}>
-              <strong style={{ color: '#856404' }}>Warnings:</strong>
-              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: '#856404' }}>
+              <strong style={{ color: 'hsl(var(--crypto-navy))' }}>Warnings:</strong>
+              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem', color: 'hsl(var(--crypto-navy))' }}>
                 {validation.warnings.map((warning, index) => (
                   <li key={index}>{warning}</li>
                 ))}
@@ -675,17 +675,17 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           marginBottom: '2rem',
           textAlign: 'center'
         }}>
-          <h4 style={{ color: '#155724', margin: '0 0 1rem 0' }}>
+          <h4 style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 1rem 0' }}>
             Committee Information Saved!
           </h4>
-          <p style={{ color: '#155724', margin: '0 0 2rem 0' }}>
+          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 2rem 0' }}>
             {success}
           </p>
           <button 
             className="btn btn-primary"
             onClick={onNext}
             style={{
-              background: '#28a745',
+              background: 'hsl(var(--crypto-gold))',
               color: 'white',
               border: 'none',
               padding: '1rem 2rem',
@@ -730,7 +730,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
               }}
               style={{ 
                 marginTop: '1rem', 
-                background: '#6c757d', 
+                background: 'hsl(var(--muted))', 
                 color: 'white',
                 display: 'block',
                 width: '100%'
