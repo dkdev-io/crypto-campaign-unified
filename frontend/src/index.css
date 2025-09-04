@@ -157,6 +157,16 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     line-height: 1.2;
     color: hsl(var(--foreground));
   }
+  
+  /* Global minimum font size for better readability */
+  p, span, div, label, a, button {
+    font-size: max(var(--text-body-sm), 14px);
+  }
+  
+  /* Ensure form labels are readable */
+  label {
+    font-size: max(var(--text-body), 16px) !important;
+  }
 
   h1 {
     font-size: var(--text-hero);

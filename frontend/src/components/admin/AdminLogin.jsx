@@ -132,7 +132,7 @@ const AdminLogin = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-green-800">
+                <p className="text-base font-medium text-green-800">
                   Admin account created successfully! You can now log in.
                 </p>
               </div>
@@ -149,7 +149,7 @@ const AdminLogin = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{error}</p>
+                <p className="text-base font-medium text-red-800">{error}</p>
               </div>
             </div>
           </div>
