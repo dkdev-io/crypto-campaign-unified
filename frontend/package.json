@@ -26,6 +26,7 @@
     "dompurify": "^3.2.6",
     "ethers": "^6.15.0",
     "lucide-react": "^0.356.0",
+    "playwright": "^1.55.0",
     "postcss-selector-parser": "^7.1.0",
     "puppeteer": "^24.18.0",
     "qrcode": "^1.5.4",

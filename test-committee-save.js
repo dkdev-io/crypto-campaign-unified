@@ -1,9 +1,9 @@
-import puppeteer from 'puppeteer';
+import { chromium } from 'playwright';
 
 const TEST_URL = 'http://localhost:5173/campaigns/auth/setup?bypass=dev';
 
 async function testCommitteeSave() {
-  const browser = await puppeteer.launch({ 
+  const browser = await chromium.launch({ 
     headless: false,
     devtools: true,
     slowMo: 500
@@ -18,7 +18,27 @@ async function testCommitteeSave() {
     
     // Wait for the form to load
     console.log('⏱️ Waiting for committee form to load...');
-    await page.waitForSelector('input[placeholder*="committee name"]', { timeout: 10000 });
+    
+    // Take initial screenshot to see what's there
+    await page.screenshot({ path: 'committee-form-initial.png', fullPage: true });
+    console.log('📸 Initial screenshot saved');
+    
+    // Try different selectors
+    try {
+      await page.waitForSelector('input[placeholder*="committee name"]', { timeout: 5000 });
+    } catch (e) {
+      console.log('⚠️ Primary selector failed, trying alternatives...');
+      
+      // Check if we need to navigate to step 2 first
+      const nextButton = page.locator('button:has-text("Next")');
+      if (await nextButton.isVisible()) {
+        console.log('🔄 Clicking Next to go to committee step...');
+        await nextButton.click();
+        await page.waitForTimeout(2000);
+      }
+      
+      await page.waitForSelector('input[placeholder*="Enter your committee name"]', { timeout: 5000 });
+    }
     
     // Fill out the manual committee form
     console.log('📝 Filling out committee form...');
@@ -63,19 +83,19 @@ async function testCommitteeSave() {
     console.log('⏱️ Waiting for save result...');
     
     try {
-      // Wait for success message
-      await page.waitForSelector('.text-sm.text-muted-foreground:has-text("Committee information saved")', { timeout: 10000 });
+      // Wait for success message - look for the success div
+      await page.waitForSelector('div:has-text("Committee Information Saved!")', { timeout: 10000 });
       console.log('✅ SUCCESS: Committee save completed!');
       
       // Check if continue button appears
-      const continueButton = await page.locator('button:has-text("Continue to Next Step")').isVisible();
-      if (continueButton) {
+      const continueButton = page.locator('button:has-text("Continue to Next Step")');
+      if (await continueButton.isVisible()) {
         console.log('✅ Continue button is visible - save was successful!');
       }
       
     } catch (waitError) {
       // Check for error message
-      const errorElement = await page.locator('.text-sm.text-muted-foreground:has-text("Failed to save")');
+      const errorElement = page.locator('div:has-text("Failed to save")');
       if (await errorElement.isVisible()) {
         const errorText = await errorElement.textContent();
         console.log('❌ ERROR: Committee save failed:', errorText);
