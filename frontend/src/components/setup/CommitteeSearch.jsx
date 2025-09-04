@@ -199,25 +199,21 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         }
       };
       
-      // Saving committee data to Supabase
+      console.log('Saving committee data to Supabase:', { campaignId, committeeData });
       
-      // Try to save to database first
-      let savedToDatabase = false;
-      try {
-        const { data: updatedCampaign, error: updateError } = await supabase
-          .from('campaigns')
-          .update(committeeData)
-          .eq('id', campaignId)
-          .select();
-          
-        if (updateError) {
-          // Database save failed (columns may not exist yet)
-        } else {
-          savedToDatabase = true;
-        }
-      } catch (dbError) {
-        // Database save error, using localStorage fallback
+      // Save to database - this must work
+      const { data: updatedCampaign, error: updateError } = await supabase
+        .from('campaigns')
+        .update(committeeData)
+        .eq('id', campaignId)
+        .select();
+        
+      if (updateError) {
+        console.error('Database save error:', updateError);
+        throw new Error(`Failed to save to database: ${updateError.message}`);
       }
+      
+      console.log('Committee saved to database successfully:', updatedCampaign);
       
       // Update form data and proceed
       updateFormData({
@@ -250,9 +246,19 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         committeeZip: manualCommittee.zip.trim()
       });
       
-      setSuccess(savedToDatabase ? 
-        'Committee information saved to database successfully!' : 
-        'Committee information saved successfully!');
+      // Set the selected committee so the Next button becomes enabled
+      const savedCommittee = {
+        id: 'MANUAL-' + Date.now(),
+        name: manualCommittee.name.trim(),
+        source: 'manual',
+        address: manualCommittee.address.trim(),
+        city: manualCommittee.city.trim(),
+        state: manualCommittee.state.trim(),
+        zip: manualCommittee.zip.trim()
+      };
+      setSelectedCommittee(savedCommittee);
+      
+      setSuccess('Committee information saved to database successfully!');
       
       // Clear the manual form after successful save
       setManualCommittee({
@@ -298,7 +304,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       {/* Search Section */}
       <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy)) !important', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>      
         <div className="form-group" style={{ marginBottom: '1rem' }}>
-          <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
+          <label style={{ fontSize: '0.875rem', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: '0.5rem', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
               className="form-input"
