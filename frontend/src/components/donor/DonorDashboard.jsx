@@ -149,7 +149,7 @@ const DonorDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="font-bold mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
+              <h1 className="font-bold mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Welcome back, {donor?.profile?.full_name || 'Donor'}!
               </h1>
               <p className="text-blue-200">

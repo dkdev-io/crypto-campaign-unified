@@ -632,7 +632,7 @@ const StyleConfigurationForm = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="mb-4"></div>
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Style Your Form
               </h2>
               <p className="text-muted-foreground">

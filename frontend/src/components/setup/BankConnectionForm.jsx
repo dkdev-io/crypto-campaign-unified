@@ -63,7 +63,7 @@ const BankConnectionForm = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="mb-4"></div>
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Connect Bank Account
               </h2>
               <p className="text-muted-foreground">
@@ -75,7 +75,7 @@ const BankConnectionForm = () => {
             <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
               <div className="text-center">
                 <div className="mb-3"></div>
-                <h3 className="font-semibold mb-2" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>'
+                <h3 className="font-semibold mb-2" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>
                   Plaid Integration Coming Soon
                 </h3>
                 <p className="text-blue-700 text-sm mb-4">
