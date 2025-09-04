@@ -256,9 +256,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🏦</div>
-          <h4 style={{ color: '#495057', marginBottom: '1rem' }}>
-            No Bank Account Connected
-          </h4>
           <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
             Connect your campaign's bank account to process contributions securely through Plaid.
           </p>

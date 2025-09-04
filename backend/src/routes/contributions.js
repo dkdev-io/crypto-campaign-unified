@@ -1,11 +1,10 @@
 import express from 'express';
 import { body, param, query, validationResult } from 'express-validator';
-import Web3Service from '../services/web3Service.js';
+import web3Service from '../services/web3Service.js';
 import { supabase } from '../services/supabaseService.js';
 import { logger } from '../utils/logger.js';
 
 const router = express.Router();
-const web3Service = new Web3Service();
 
 // Initialize Web3 service
 const initWeb3 = async () => {

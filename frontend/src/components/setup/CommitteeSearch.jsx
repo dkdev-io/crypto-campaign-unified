@@ -17,8 +17,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
     id: '',
     type: 'N',
     candidateName: '',
+    address: '',
     city: '',
-    state: ''
+    state: '',
+    zip: ''
   });
 
   // Auto-search on component mount if we have a search term
@@ -158,6 +160,22 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       setError('Committee name is required');
       return;
     }
+    if (!manualCommittee.address.trim()) {
+      setError('Committee address is required');
+      return;
+    }
+    if (!manualCommittee.city.trim()) {
+      setError('Committee city is required');
+      return;
+    }
+    if (!manualCommittee.state.trim()) {
+      setError('Committee state is required');
+      return;
+    }
+    if (!manualCommittee.zip.trim()) {
+      setError('Committee ZIP code is required');
+      return;
+    }
     
     try {
       setLoading(true);
@@ -185,13 +203,33 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         selectedCommittee: {
           id: 'MANUAL-' + Date.now(),
           name: manualCommittee.name.trim(),
-          source: 'manual'
+          source: 'manual',
+          address: manualCommittee.address.trim(),
+          city: manualCommittee.city.trim(),
+          state: manualCommittee.state.trim(),
+          zip: manualCommittee.zip.trim()
+        },
+        committeeDetails: {
+          id: 'MANUAL-' + Date.now(),
+          name: manualCommittee.name.trim(),
+          source: 'manual',
+          address: {
+            street1: manualCommittee.address.trim(),
+            city: manualCommittee.city.trim(),
+            state: manualCommittee.state.trim(),
+            zipCode: manualCommittee.zip.trim()
+          },
+          isActive: true
         },
         committeeName: manualCommittee.name.trim(),
-        fecCommitteeId: 'MANUAL-' + Date.now()
+        fecCommitteeId: 'MANUAL-' + Date.now(),
+        committeeAddress: manualCommittee.address.trim(),
+        committeeCity: manualCommittee.city.trim(),
+        committeeState: manualCommittee.state.trim(),
+        committeeZip: manualCommittee.zip.trim()
       });
       
-      setSuccess('Committee name saved successfully!');
+      setSuccess('Committee information saved successfully!');
       setTimeout(() => {
         onNext();
       }, 1000);
@@ -324,29 +362,82 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
             style={{ 
               width: '100%',
               maxWidth: '400px',
-              margin: '0 auto',
+              margin: '0 auto 1rem auto',
               display: 'block'
             }}
-            onKeyPress={(e) => e.key === 'Enter' && handleManualCommitteeSubmit()}
           />
+          
+          <input
+            className="form-input"
+            type="text"
+            value={manualCommittee.address}
+            onChange={(e) => setManualCommittee({...manualCommittee, address: e.target.value})}
+            placeholder="Committee address"
+            style={{ 
+              width: '100%',
+              maxWidth: '400px',
+              margin: '0 auto 1rem auto',
+              display: 'block'
+            }}
+          />
+          
+          <div style={{ 
+            display: 'flex', 
+            gap: '0.5rem', 
+            justifyContent: 'center',
+            marginBottom: '1rem'
+          }}>
+            <input
+              className="form-input"
+              type="text"
+              value={manualCommittee.city}
+              onChange={(e) => setManualCommittee({...manualCommittee, city: e.target.value})}
+              placeholder="City"
+              style={{ 
+                width: '120px'
+              }}
+            />
+            <input
+              className="form-input"
+              type="text"
+              value={manualCommittee.state}
+              onChange={(e) => setManualCommittee({...manualCommittee, state: e.target.value})}
+              placeholder="State"
+              style={{ 
+                width: '80px'
+              }}
+              maxLength="2"
+            />
+            <input
+              className="form-input"
+              type="text"
+              value={manualCommittee.zip}
+              onChange={(e) => setManualCommittee({...manualCommittee, zip: e.target.value})}
+              placeholder="ZIP"
+              style={{ 
+                width: '100px'
+              }}
+              maxLength="10"
+            />
+          </div>
         </div>
         
         <button
           onClick={handleManualCommitteeSubmit}
-          disabled={loading || !manualCommittee.name.trim()}
+          disabled={loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim()}
           style={{
             background: '#2a2a72',
             color: 'white',
             border: 'none',
             padding: '0.75rem 2rem',
             borderRadius: '4px',
-            cursor: loading || !manualCommittee.name.trim() ? 'not-allowed' : 'pointer',
+            cursor: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 'not-allowed' : 'pointer',
             fontSize: '16px',
             fontWeight: '500',
-            opacity: loading || !manualCommittee.name.trim() ? 0.7 : 1
+            opacity: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 0.7 : 1
           }}
         >
-          {loading ? '⏳ Saving...' : '✓ Save Committee & Continue'}
+          {loading ? '⏳ Saving...' : '✓ Save Committee Info & Continue'}
         </button>
       </div>
 

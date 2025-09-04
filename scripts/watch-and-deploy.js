@@ -316,10 +316,12 @@ ${colors.cyan}Options:${colors.reset}
 
 ${colors.cyan}Examples:${colors.reset}
   node scripts/watch-and-deploy.js
-  node scripts/watch-and-deploy.js --debounce 10 --cooldown 120`);
-  node scripts/watch-and-deploy.js --skip-lint --watch-paths "frontend/src,backend/src"
+  node scripts/watch-and-deploy.js --debounce 10 --cooldown 120
+  node scripts/watch-and-deploy.js --skip-lint --watch-paths "frontend/src,backend/src"`);
+}
 
-${colors.cyan}What this does:${colors.reset}
+function showInfo() {
+  console.log(`${colors.cyan}What this does:${colors.reset}
   👀 Watches source files for changes
   ⏱️  Waits for changes to settle (debounce)
   🚀 Automatically builds and deploys
