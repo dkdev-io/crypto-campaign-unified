@@ -51,6 +51,7 @@ const CommitteeSearchPage = () => {
               updateFormData={updateFormData}
               onNext={handleNext}
               onPrev={handlePrev}
+              campaignId={formData.campaignId}
             />
           </div>
         </div>

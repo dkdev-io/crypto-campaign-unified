@@ -48,7 +48,7 @@ const SetupWizard = () => {
         // Look for existing campaign (only select existing columns to avoid errors)
         const { data: existingCampaign, error } = await supabase
           .from('campaigns')
-          .select('id, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at, applied_styles, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info')
+          .select('id, title, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at, applied_styles, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info')
           .eq('email', user.email)
           .order('created_at', { ascending: false })
           .limit(1)
@@ -59,8 +59,9 @@ const SetupWizard = () => {
           
           // Build form data from available DB fields + localStorage
           const existingFormData = {
+            campaignId: existingCampaign.id,
             userFullName: savedData?.userFullName || user.user_metadata?.full_name || '',
-            campaignName: existingCampaign.campaign_name || savedData?.campaignName || '',
+            campaignName: existingCampaign.title || existingCampaign.campaign_name || savedData?.campaignName || '',
             email: existingCampaign.email || user.email,
             website: existingCampaign.website || savedData?.website || '',
             themeColor: existingCampaign.theme_color || savedData?.themeColor || '#2a2a72',
@@ -160,7 +161,7 @@ const SetupWizard = () => {
         const dbData = {};
         
         // Only include fields that exist in current schema
-        if (updatedData.campaignName) dbData.campaign_name = updatedData.campaignName;
+        if (updatedData.campaignName) dbData.title = updatedData.campaignName;
         if (updatedData.email) dbData.email = updatedData.email;
         if (updatedData.website) dbData.website = updatedData.website;
         if (updatedData.themeColor) dbData.theme_color = updatedData.themeColor;
@@ -220,7 +221,7 @@ const SetupWizard = () => {
       try {
         const newCampaignData = {
           email: formData.email || user.email,
-          campaign_name: formData.campaignName || 'New Campaign',
+          title: formData.campaignName || 'New Campaign',
           website: formData.website || '',
           // Required existing fields
           wallet_address: 'temp-wallet-' + Date.now(),
@@ -239,14 +240,19 @@ const SetupWizard = () => {
 
         if (error) {
           console.error('Failed to create campaign:', error);
-          setCampaignId('demo-campaign-' + Date.now());
+          const fallbackId = 'demo-campaign-' + Date.now();
+          setCampaignId(fallbackId);
+          setFormData(prev => ({ ...prev, campaignId: fallbackId }));
         } else {
           setCampaignId(newCampaign.id);
+          setFormData(prev => ({ ...prev, campaignId: newCampaign.id }));
           console.log('Campaign created successfully:', newCampaign);
         }
       } catch (error) {
         console.error('Error creating campaign:', error);
-        setCampaignId('demo-campaign-' + Date.now());
+        const fallbackId = 'demo-campaign-' + Date.now();
+        setCampaignId(fallbackId);
+        setFormData(prev => ({ ...prev, campaignId: fallbackId }));
       }
     }
     

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fecAPI } from '../../lib/fec-api.js';
 import { supabase } from '../../lib/supabase';
 
-const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
+const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId }) => {
   const [searchTerm, setSearchTerm] = useState(formData.committeeNameSearch || '');
   const [committees, setCommittees] = useState([]);
   const [selectedCommittee, setSelectedCommittee] = useState(null);
@@ -181,7 +181,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       setLoading(true);
       
       // Save complete committee information to the current campaign in Supabase
-      const campaignId = formData.campaignId;
       if (!campaignId) {
         throw new Error('Campaign ID not found. Please refresh and try again.');
       }
