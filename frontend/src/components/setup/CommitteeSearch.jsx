@@ -288,11 +288,11 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
   return (
     <div>
-      <p className="text-center mb-2" style={{ fontSize: 'var(--text-body-lg)', color: 'hsl(var(--crypto-white) / 0.9)', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
-        Step 2 of 8: Committee Search
-      </p>
-      <p className="text-center mb-8" style={{ fontSize: 'var(--text-body-sm)', color: 'hsl(var(--crypto-white) / 0.7)', fontFamily: 'Inter, sans-serif' }}>
-        Search for your FEC committee to complete registration
+      <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
+        Committee Search
+      </h2>
+      <p className="text-center mb-8" style={{ fontSize: '1rem', color: 'hsl(var(--crypto-gold))', fontWeight: '500', textAlign: 'center', marginBottom: '2rem' }}>
+        Step 2 of 8: Search for your FEC committee
       </p>
 
       {/* Search Section */}

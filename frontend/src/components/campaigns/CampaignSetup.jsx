@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 import SetupWizard from '../setup/SetupWizard';
 import CampaignAuth from './CampaignAuth';
 import { Spinner } from '../ui/spinner';
@@ -15,6 +16,18 @@ import { Spinner } from '../ui/spinner';
  */
 const CampaignSetup = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
+  
+  // Check for bypass flag in URL
+  const params = new URLSearchParams(location.search);
+  const isBypass = params.get('bypass') === 'true';
+  const isDev = import.meta.env.DEV || window.location.hostname === 'localhost';
+  
+  // If bypass is enabled in dev mode, skip auth
+  if (isDev && isBypass) {
+    console.log('DEV BYPASS: Skipping auth check, showing setup wizard');
+    return <SetupWizard />;
+  }
 
   // Loading state
   if (loading) {
