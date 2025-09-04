@@ -3,11 +3,12 @@
  * Handles website style analysis requests and provides styling data
  */
 
-const express = require('express');
-const WebsiteStyleAnalyzer = require('../../services/websiteStyleAnalyzer');
-const { supabase } = require('../../lib/supabase');
-const rateLimit = require('express-rate-limit');
-const { createErrorResponse, WebsiteAnalysisError } = require('../../utils/errorHandler');
+import express from 'express';
+import WebsiteStyleAnalyzer from '../../services/websiteStyleAnalyzer.js';
+import { supabase } from '../../lib/supabase.js';
+import rateLimit from 'express-rate-limit';
+import { createErrorResponse, WebsiteAnalysisError } from '../../utils/errorHandler.js';
+import { createHash } from 'crypto';
 
 const router = express.Router();
 
@@ -291,7 +292,7 @@ router.post('/apply-website-styles', async (req, res) => {
  */
 async function storeAnalysisResult(url, analysis, clientIp) {
   try {
-    const urlHash = require('crypto').createHash('md5').update(url).digest('hex');
+    const urlHash = createHash('md5').update(url).digest('hex');
 
     await supabase
       .from('website_analyses')
@@ -316,7 +317,7 @@ async function storeAnalysisResult(url, analysis, clientIp) {
  */
 async function logAnalysisError(url, error, clientIp) {
   try {
-    const urlHash = require('crypto').createHash('md5').update(url).digest('hex');
+    const urlHash = createHash('md5').update(url).digest('hex');
 
     await supabase
       .from('website_analyses')
