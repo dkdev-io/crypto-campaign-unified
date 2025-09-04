@@ -12,6 +12,7 @@ import campaignRoutes from './routes/campaign.js';
 import contributionRoutes from './routes/contributions.js';
 import kycRoutes from './routes/kyc.js';
 import webhookRoutes from './routes/webhooks.js';
+import websiteAnalysisRoutes from './routes/api/websiteAnalysis.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -87,6 +88,7 @@ app.use('/api/campaign', campaignRoutes);
 app.use('/api/contributions', contributionLimiter, contributionRoutes);
 app.use('/api/kyc', kycRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api', websiteAnalysisRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
