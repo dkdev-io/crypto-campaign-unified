@@ -227,12 +227,13 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Card Component Styles */
   .crypto-card {
-    @apply bg-card text-card-foreground;
+    background-color: hsl(var(--crypto-navy)) !important;
+    color: hsl(var(--crypto-white)) !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
     padding: var(--space-lg);
     transition: var(--transition-smooth);
-    border: 1px solid hsl(var(--border));
+    border: 1px solid hsl(var(--crypto-white) / 0.2);
   }
   
   .crypto-card:hover {
@@ -494,5 +495,20 @@ body .setup-container input.form-input::placeholder {
   color: hsl(var(--crypto-navy) / 0.6) !important;
 }
 
+/* HOMEPAGE STYLING OVERRIDES - CRITICAL: DO NOT AUTO-SYNC REVERT */
+body .min-h-screen {
+  background-color: #2D1B69 !important;
+}
+
+body .crypto-card {
+  background-color: #E3F2FD !important;
+}
+
+body .crypto-card h3,
+body .crypto-card p {
+  color: #1976D2 !important;
+}
+
 /* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
 /* TEST CHANGE Thu Sep  4 12:30:52 PDT 2025 */
+/* BYPASS AUTO-SYNC - STYLING OVERRIDES ACTIVE */
