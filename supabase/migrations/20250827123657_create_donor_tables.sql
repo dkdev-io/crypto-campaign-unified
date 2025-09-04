@@ -125,20 +125,27 @@ CREATE POLICY "Donors view own tax receipts" ON donor_tax_receipts
 GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
 
--- Insert test donor record
+-- Insert test donor record (using consistent UUID with email verification migration)
 INSERT INTO donors (id, email, full_name, phone, donor_type)
-VALUES (
-    'a6dd2983-3dd4-4e0d-b3f6-17d38772ff32',
-    'test@dkdev.io',
+SELECT 
+    id,
+    email,
     'Test Donor Account',
     '555-0123',
     'individual'
-) ON CONFLICT (id) DO UPDATE SET
+FROM auth.users 
+WHERE email = 'test@dkdev.io'
+ON CONFLICT (id) DO UPDATE SET
     email = EXCLUDED.email,
     full_name = EXCLUDED.full_name;
 
+-- Insert donor profile using the same UUID
 INSERT INTO donor_profiles (donor_id, bio)
-VALUES ('a6dd2983-3dd4-4e0d-b3f6-17d38772ff32', 'Test donor account')
+SELECT 
+    id,
+    'Test donor account'
+FROM auth.users 
+WHERE email = 'test@dkdev.io'
 ON CONFLICT (donor_id) DO NOTHING;
 
 -- Verify

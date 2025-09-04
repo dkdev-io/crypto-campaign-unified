@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import SetupWizard from '../setup/SetupWizard';
+import EmbedDonorForm from '../EmbedDonorForm';
 import CampaignAuth from './CampaignAuth';
 import { Spinner } from '../ui/spinner';
 
@@ -35,8 +35,8 @@ const CampaignSetup = () => {
     return <CampaignAuth />;
   }
 
-  // User is authenticated, show the setup wizard
-  return <SetupWizard />;
+  // User is authenticated, show the embedded contribution form
+  return <EmbedDonorForm campaignId="demo-campaign" />;
 };
 
 export default CampaignSetup;
