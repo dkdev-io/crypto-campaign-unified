@@ -495,18 +495,32 @@ body .setup-container input.form-input::placeholder {
   color: hsl(var(--crypto-navy) / 0.6) !important;
 }
 
-/* HOMEPAGE STYLING OVERRIDES - CRITICAL: DO NOT AUTO-SYNC REVERT */
+/* HOMEPAGE STYLING OVERRIDES - CONSISTENT BLUE THEME */
+body {
+  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+}
+
+body .hero-section,
 body .min-h-screen {
-  background-color: #2D1B69 !important;
+  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
 }
 
+/* All cards use navy background with white text */
 body .crypto-card {
-  background-color: #E3F2FD !important;
+  background-color: hsl(var(--crypto-navy)) !important;
+  color: hsl(var(--crypto-white)) !important;
+  border: 1px solid hsl(var(--crypto-white) / 0.2) !important;
 }
 
+body .crypto-card h1,
+body .crypto-card h2,
 body .crypto-card h3,
-body .crypto-card p {
-  color: #1976D2 !important;
+body .crypto-card h4,
+body .crypto-card h5,
+body .crypto-card p,
+body .crypto-card span,
+body .crypto-card div {
+  color: hsl(var(--crypto-white)) !important;
 }
 
 /* Force deployment Thu Sep  4 09:32:36 PDT 2025 */

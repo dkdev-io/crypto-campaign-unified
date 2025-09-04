@@ -16,7 +16,6 @@ const CampaignPage = () => {
       try {
         // Convert URL-friendly name back to campaign name and try multiple variations
         const decodedName = decodeURIComponent(campaignName).replace(/-/g, ' ');
-        console.log('Looking for campaign:', { urlParam: campaignName, decoded: decodedName });
         
         // Simplified query - just get the campaign
         const { data, error } = await supabase
@@ -24,11 +23,8 @@ const CampaignPage = () => {
           .select('*')
           .ilike('campaign_name', decodedName)
           .maybeSingle();
-        
-        console.log('Campaign lookup result:', { data: !!data, error: error?.message });
 
         if (error) {
-          console.error('Database error:', error);
           setError('Database error: ' + error.message);
         } else if (!data) {
           setError('Campaign "' + campaignName + '" not found');

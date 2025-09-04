@@ -50,7 +50,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       }
 
     } catch (err) {
-      console.warn('FEC API search failed:', err.message);
+      // FEC API search failed, showing manual entry option
       setError('FEC API search temporarily unavailable. You can enter committee information manually below.');
       setCommittees([]);
     } finally {
@@ -126,7 +126,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       try {
         await supabase.rpc('create_error_logs_table_if_not_exists');
       } catch (rpcError) {
-        console.log('RPC function not available, table should be created manually');
+        // RPC function not available, table should be created manually
       }
       
       // Log the bypass event - will fail gracefully if table doesn't exist
@@ -144,14 +144,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         .insert([logData]);
         
       if (logError) {
-        // If table doesn't exist, log to console instead
-        console.log('FEC API Bypass logged locally:', logData);
-        console.warn('Could not log to database (table may not exist):', logError.message);
-      } else {
-        console.log('Bypass usage logged to database successfully');
+        // Table doesn't exist, bypass logging failed
       }
     } catch (err) {
-      console.warn('Error logging bypass usage:', err);
+      // Error logging bypass usage
     }
   };
 
@@ -203,7 +199,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         }
       };
       
-      console.log('Saving committee data to Supabase:', committeeData);
+      // Saving committee data to Supabase
       
       // Try to save to database first
       let savedToDatabase = false;
@@ -215,14 +211,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           .select();
           
         if (updateError) {
-          console.warn('Database save failed (columns may not exist yet):', updateError.message);
-          // Don't throw here, continue with localStorage
+          // Database save failed (columns may not exist yet)
         } else {
-          console.log('✅ Committee information saved to Supabase:', updatedCampaign);
           savedToDatabase = true;
         }
       } catch (dbError) {
-        console.warn('Database save error, using localStorage fallback:', dbError.message);
+        // Database save error, using localStorage fallback
       }
       
       // Update form data and proceed
@@ -273,7 +267,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       });
       
     } catch (err) {
-      console.error('Failed to save committee information:', err);
+      // Failed to save committee information
       setError('Failed to save committee information: ' + err.message);
     } finally {
       setLoading(false);
@@ -293,8 +287,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
   };
 
   return (
-    <div style={{background: 'red !important', padding: '2rem', border: '10px solid yellow'}}>
-      <h1 style={{color: 'white', fontSize: '3rem', textAlign: 'center'}}>🔥 TESTING 123 - CHANGES ARE WORKING 🔥</h1>
+    <div>
       <p className="text-center mb-2" style={{ fontSize: 'var(--text-body-lg)', color: 'hsl(var(--crypto-white) / 0.9)', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
         Step 2 of 8: Committee Search
       </p>

@@ -48,6 +48,9 @@ const Features = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div style={{background: 'red', color: 'white', padding: '2rem', margin: '1rem', textAlign: 'center'}}>
+            🔥 TESTING: If you can see this red box, changes ARE working! 🔥
+          </div>
           {features.map((feature, index) => (
             <div key={index} className="crypto-card">
               <div className="w-14 h-14 rounded-lg flex items-center justify-center mb-6" 
