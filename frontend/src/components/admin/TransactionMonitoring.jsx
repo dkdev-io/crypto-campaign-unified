@@ -138,11 +138,11 @@ const TransactionMonitoring = () => {
     <div className="crypto-card">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-base font-medium text-muted-foreground">{title}</p>
           <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
           {change && (
             <div className={`flex items-center mt-2 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              <span className="text-sm font-medium">{change >= 0 ? '↗' : '↘'} {Math.abs(change)}%</span>
+              <span className="text-base font-medium">{change >= 0 ? '↗' : '↘'} {Math.abs(change)}%</span>
             </div>
           )}
         </div>
