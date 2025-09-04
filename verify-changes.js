@@ -12,7 +12,7 @@ async function verifyChanges() {
     
     const bankPageTest = await page.evaluate(() => {
       const heading = document.querySelector('h2');
-      const emojis = document.body.textContent.match(/🏦|🎨|🌐|🔗|🗑️|⚠️|⏳|❌/g);
+      const emojis = document.body.textContent.match(/🏦|🎨|🌐|🔗|🗑️|⚠️|⏳|❌|•/g);
       
       return {
         headingText: heading?.textContent?.trim(),
@@ -27,7 +27,7 @@ async function verifyChanges() {
     
     const stylePageTest = await page.evaluate(() => {
       const heading = document.querySelector('h2');
-      const emojis = document.body.textContent.match(/🏦|🎨|🌐|🔗|🗑️|⚠️|⏳|❌/g);
+      const emojis = document.body.textContent.match(/🏦|🎨|🌐|🔗|🗑️|⚠️|⏳|❌|•/g);
       
       return {
         headingText: heading?.textContent?.trim(),

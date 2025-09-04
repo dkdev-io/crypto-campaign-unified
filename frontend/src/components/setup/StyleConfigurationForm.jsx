@@ -13,7 +13,8 @@ import {
   ArrowRight, 
   Download,
   AlertCircle,
-  Check
+  Check,
+  Building2
 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
