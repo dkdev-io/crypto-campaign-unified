@@ -221,7 +221,7 @@ const DonorAuth = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Donors
               </h2>
               <p className="text-muted-foreground">
@@ -342,12 +342,12 @@ const DonorAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 DONOR BYPASS: Navigating to dashboard...');
+                    console.log('DONOR BYPASS: Navigating to dashboard...');
                     navigate('/donors/dashboard');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  🚨 DEV BYPASS → Dashboard
+                  DEV BYPASS → Dashboard
                 </Button>
 
                 <div className="text-center">
@@ -521,12 +521,12 @@ const DonorAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 DONOR BYPASS: Navigating to dashboard...');
+                    console.log('DONOR BYPASS: Navigating to dashboard...');
                     navigate('/donors/dashboard');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  🚨 DEV BYPASS → Dashboard
+                  DEV BYPASS → Dashboard
                 </Button>
               </form>
             )}

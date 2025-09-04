@@ -63,18 +63,18 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'verified') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900">
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-navy-900 mb-2">
+            <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
               Email Verified!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Your email has been successfully verified. You can now access your donor account.
             </p>
             <Link
@@ -92,18 +92,18 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'error') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900">
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
-            <h2 className="text-2xl font-bold text-navy-900 mb-2">
+            <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
               Verification Failed
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               We couldn't verify your email. The link may have expired or is invalid.
             </p>
             <div className="space-y-3">
@@ -129,21 +129,21 @@ const DonorVerifyEmail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-navy-800 to-blue-900">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
       <DonorBreadcrumb />
       <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+        <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <Mail className="w-8 h-8 text-blue-600" />
           </div>
-          <h2 className="text-2xl font-bold text-navy-900 mb-2">
+          <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
             Check Your Email
           </h2>
-          <p className="text-gray-600 mb-2">
+          <p className="text-muted-foreground mb-2">
             We've sent a verification email to:
           </p>
-          <p className="font-medium text-gray-900 mb-6">
+          <p className="font-medium text-foreground mb-6">
             {email || 'your registered email'}
           </p>
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
@@ -167,12 +167,12 @@ const DonorVerifyEmail = () => {
             <button
               onClick={resendVerificationEmail}
               disabled={resendLoading || !email}
-              className="w-full bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-card border border-gray-300 text-foreground font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {resendLoading ? 'Sending...' : "Didn't receive the email? Resend"}
             </button>
             
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               <p>Already verified?</p>
               <Link to="/donors/auth" className="text-blue-600 hover:underline font-medium">
                 Sign in to your account
@@ -181,7 +181,7 @@ const DonorVerifyEmail = () => {
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               If you're having trouble, please check your spam folder or contact support at{' '}
               <a href="mailto:support@nextraise.com" className="text-blue-600 hover:underline">
                 support@nextraise.com

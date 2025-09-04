@@ -30,13 +30,13 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
     });
 
     // This could redirect to dashboard or show success
-    alert('🎉 Campaign setup completed successfully! Your campaign is now live.');
+    alert('Campaign setup completed successfully! Your campaign is now live.');
   };
 
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        📋 Terms & Conditions - Step 7
+      <h2 className="text-center mb-4 font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}>
+        Terms & Conditions - Step 7
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem' }}>
         Final step: Accept terms to complete your campaign setup
@@ -51,7 +51,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
         marginBottom: '3rem'
       }}>
         <h4 style={{ color: '#495057', marginTop: 0 }}>
-          📊 Setup Summary
+          Setup Summary
         </h4>
         <div style={{ fontSize: '14px', color: '#6c757d' }}>
           <div style={{ marginBottom: '0.5rem' }}>
@@ -66,14 +66,14 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           <div style={{ marginBottom: '0.5rem' }}>
             <strong>Bank Account:</strong> {
               formData.bankAccountVerified ? 
-                `✅ Connected (${formData.bankAccountInfo?.accountName})` : 
+                `Connected (${formData.bankAccountInfo?.accountName})` : 
                 formData.skipBankConnection ? 
-                  '⚠️ Skipped (Dev Mode)' : 
-                  '❌ Not connected'
+                  'Skipped (Dev Mode)' : 
+                  'Not connected'
             }
           </div>
           <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Embed Code:</strong> ✅ Generated and ready
+            <strong>Embed Code:</strong> Generated and ready
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           border: '1px solid #fcc',
           textAlign: 'center'
         }}>
-          ❌ You must accept the terms and conditions to complete setup
+          You must accept the terms and conditions to complete setup
         </div>
       )}
 
@@ -147,8 +147,8 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
         textAlign: 'center',
         marginBottom: '2rem'
       }}>
-        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>
-          {termsAccepted ? '🎉' : '📝'}
+        <div style={{ marginBottom: '1rem' }}>
+          {termsAccepted ? '' : ''}
         </div>
         <h3 style={{ 
           color: termsAccepted ? '#155724' : '#495057',
@@ -188,7 +188,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
             transition: 'all 0.3s ease'
           }}
         >
-          {termsAccepted ? '🚀 Launch Campaign!' : '📝 Accept Terms First'}
+          {termsAccepted ? 'Launch Campaign!' : 'Accept Terms First'}
         </button>
       </div>
 

@@ -204,7 +204,7 @@ const CampaignAuth = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Campaigns
               </h2>
               <p className="text-muted-foreground">
@@ -349,13 +349,13 @@ const CampaignAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 BYPASS: Setting dev bypass and navigating to setup...');
+                    console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
                     navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  🚨 DEV BYPASS → Setup
+                  DEV BYPASS → Setup
                 </Button>
 
                 <div className="text-center">
@@ -511,13 +511,13 @@ const CampaignAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 BYPASS: Setting dev bypass and navigating to setup...');
+                    console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
                     navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
-                  🚨 DEV BYPASS → Setup
+                  DEV BYPASS → Setup
                 </Button>
               </form>
             )}

@@ -184,7 +184,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🎉 Setup Complete! - Step 8
+        Setup Complete! - Step 8
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Your contribution form is ready to embed on your website
@@ -200,7 +200,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem',
         boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)'
       }}>
-        <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🚀</div>
+        <div style={{ marginBottom: '1rem' }}></div>
         <h3 style={{ margin: '0 0 1rem 0', fontSize: '24px' }}>
           Campaign Setup Completed Successfully!
         </h3>
@@ -218,7 +218,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <h4 style={{ color: '#495057', marginTop: 0 }}>
-          📊 Campaign Details
+          Campaign Details
         </h4>
         <div style={{ 
           display: 'grid', 
@@ -255,7 +255,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           marginBottom: '1rem',
           border: '1px solid #fcc'
         }}>
-          ❌ {error}
+          {error}
         </div>
       )}
 
@@ -276,7 +276,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           alignItems: 'center'
         }}>
           <h4 style={{ margin: 0, color: '#495057' }}>
-            📝 Your Embed Code
+            Your Embed Code
           </h4>
           <button
             onClick={handleCopyCode}
@@ -293,7 +293,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
               transition: 'background 0.2s ease'
             }}
           >
-            {loading ? '⏳ Generating...' : copied ? '✅ Copied!' : '📋 Copy Code'}
+            {loading ? 'Generating...' : copied ? 'Copied!' : 'Copy Code'}
           </button>
         </div>
         
@@ -304,7 +304,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
               padding: '3rem',
               color: '#6c757d'
             }}>
-              ⏳ Generating your embed code...
+              Generating your embed code...
             </div>
           ) : (
             <div style={{ 
@@ -335,7 +335,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <h4 style={{ color: '#0066cc', marginTop: 0 }}>
-          📱 QR Code & Testing
+          QR Code & Testing
         </h4>
         <p style={{ color: '#004499', marginBottom: '1.5rem' }}>
           Share your donation form via QR code or test it directly:
@@ -383,7 +383,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
               color: '#0066cc', 
               fontWeight: '500'
             }}>
-              📱 Scan to Donate
+              Scan to Donate
             </div>
           </div>
           
@@ -391,7 +391,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           <div>
             <div style={{ marginBottom: '1rem' }}>
               <strong style={{ color: '#0066cc', display: 'block', marginBottom: '0.5rem' }}>
-                🔗 Donation URL:
+                Donation URL:
               </strong>
               <div style={{ 
                 background: 'white',
@@ -421,7 +421,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                   opacity: !campaignId ? 0.7 : 1
                 }}
               >
-                🚀 Test Form
+                Test Form
               </button>
               <button
                 onClick={() => {
@@ -438,7 +438,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                   fontSize: '14px'
                 }}
               >
-                📋 Copy URL
+                Copy URL
               </button>
             </div>
           </div>
@@ -454,7 +454,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <h4 style={{ color: '#495057', marginTop: 0 }}>
-          🛠️ How to Add to Your Website
+          How to Add to Your Website
         </h4>
         <div style={{ fontSize: '14px', color: '#6c757d', lineHeight: '1.6' }}>
           <ol style={{ paddingLeft: '1.2rem' }}>
@@ -480,7 +480,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           padding: '1rem',
           marginTop: '1rem'
         }}>
-          <strong style={{ color: '#856404' }}>💡 Pro Tip:</strong>
+          <strong style={{ color: '#856404' }}>Pro Tip:</strong>
           <span style={{ color: '#856404', fontSize: '14px' }}>
             {' '}The form automatically resizes to fit your content and matches your campaign's branding.
           </span>

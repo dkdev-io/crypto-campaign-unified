@@ -29,7 +29,7 @@ const Index = () => {
             boxShadow: '0 4px 12px rgba(255,68,68,0.3)'
           }}>
             <div style={{ fontWeight: 'bold', marginBottom: '10px', fontSize: '14px' }}>
-              🚨 AUTH BYPASS ACTIVE
+              AUTH BYPASS ACTIVE
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <a 
