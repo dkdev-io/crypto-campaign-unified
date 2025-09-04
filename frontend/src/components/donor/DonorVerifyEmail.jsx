@@ -71,7 +71,7 @@ const DonorVerifyEmail = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
+            <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
               Email Verified!
             </h2>
             <p className="text-muted-foreground mb-6">
@@ -100,7 +100,7 @@ const DonorVerifyEmail = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
-            <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
+            <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
               Verification Failed
             </h2>
             <p className="text-muted-foreground mb-6">
@@ -137,7 +137,7 @@ const DonorVerifyEmail = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <Mail className="w-8 h-8 text-blue-600" />
           </div>
-          <h2 className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)' mb-2">
+          <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
             Check Your Email
           </h2>
           <p className="text-muted-foreground mb-2">

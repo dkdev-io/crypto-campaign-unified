@@ -134,7 +134,7 @@ const BankConnectionForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'1</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>1</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Connect Securely</div>
                   <div className="text-sm text-gray-600">
@@ -143,7 +143,7 @@ const BankConnectionForm = () => {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'2</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>2</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Select Account</div>
                   <div className="text-sm text-gray-600">
@@ -152,7 +152,7 @@ const BankConnectionForm = () => {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'3</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>3</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Start Processing</div>
                   <div className="text-sm text-gray-600">

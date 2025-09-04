@@ -202,7 +202,7 @@ const DonorProfile = () => {
             <ArrowLeft className="w-5 h-5" />
             Back to Dashboard
           </button>
-          <h1 className="text-3xl font-bold">Profile Settings</h1>
+          <h1 className="font-bold" style={{fontSize: 'var(--text-heading-xl)'}}>Profile Settings</h1>
           <p className="text-blue-200 mt-2">Manage your account information and preferences</p>
         </div>
       </div>
