@@ -66,9 +66,9 @@ function App() {
             <Route path="/testing" element={<TestingDashboard />} />
             {/* <Route path="/donation-test" element={<DonationTest />} /> */}
             
-            {/* Admin Routes - Fixed route conflict */}
+            {/* Admin Routes - MUST be before /:campaignName to prevent conflicts */}
+            <Route path="/minda" element={<AdminLogin />} />
             <Route path="/minda/*" element={<AdminLayout />}>
-              <Route index element={<AdminLogin />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<UserManagement />} />
               <Route path="campaigns" element={<CampaignManagement />} />
