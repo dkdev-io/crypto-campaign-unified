@@ -129,7 +129,7 @@ const BankConnectionForm = () => {
             {/* How It Works */}
             <div className="mb-8 p-6 bg-muted border border-border rounded-lg">
               <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                💡 How Bank Connection Will Work
+How Bank Connection Will Work
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">

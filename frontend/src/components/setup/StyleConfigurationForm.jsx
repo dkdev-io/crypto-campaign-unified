@@ -536,7 +536,7 @@ const StyleConfigurationForm = () => {
                     />
                   </div>
                   <button 
-                    className="w-full py-2 bg-blue-600 text-white rounded font-medium"
+                    className="w-full py-2 rounded font-medium bg-primary text-primary-foreground"
                     style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif' }}
                   >
                     Donate Now

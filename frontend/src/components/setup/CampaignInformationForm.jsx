@@ -236,7 +236,7 @@ const CampaignInformationForm = () => {
             {/* Help Text */}
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
               <h4 className="text-sm font-medium text-foreground mb-2">
-                💡 What happens next?
+What happens next?
               </h4>
               <ul className="text-xs text-muted-foreground space-y-1">
                 <li>• We'll search for your FEC committee information</li>
