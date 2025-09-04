@@ -14,9 +14,20 @@ const DonorAuth = () => {
   
   // If auth bypass is enabled and user is already authenticated, redirect to dashboard
   React.useEffect(() => {
+    console.log('🔍 DonorAuth useEffect - Debug info:', {
+      loading,
+      donor: donor ? 'EXISTS' : 'NULL',
+      donorEmail: donor?.email,
+      pathname: location.pathname
+    });
+    
     if (!loading && donor) {
+      console.log('🚨 DonorAuth REDIRECT triggered - donor exists, redirecting...');
       const redirectTo = location.state?.from?.pathname || '/donors/dashboard';
+      console.log('📍 Redirecting to:', redirectTo);
       navigate(redirectTo, { replace: true });
+    } else {
+      console.log('✅ DonorAuth - No redirect needed, showing login form');
     }
   }, [donor, loading, navigate, location.state?.from?.pathname]);
   
