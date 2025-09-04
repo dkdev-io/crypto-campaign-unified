@@ -111,7 +111,7 @@ const CampaignPage = () => {
                   Support Our Campaign
                 </h2>
                 <p className="text-gray-600">
-                  Make a secure contribution with cryptocurrency or traditional payment
+                  Make a secure contribution with cryptocurrency
                 </p>
               </div>
               
