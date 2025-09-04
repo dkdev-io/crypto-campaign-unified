@@ -205,7 +205,7 @@ const CampaignAuth = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)', fontFamily: 'Inter, sans-serif', fontWeight: '800'}}>
-                Campaign Portal
+                Campaign Setup
               </h2>
               <p className="text-muted-foreground">
                 Sign in to your account or create a new one
