@@ -431,7 +431,7 @@ Import Successful
                 {importedStyles.colors?.palette?.slice(0, 5).map((color, index) => (
                   <div
                     key={index}
-                    className="w-8 h-8 rounded border border-gray-300"
+                    className="w-8 h-8 rounded border border-border"
                     style={{ backgroundColor: color.hex }}
                     title={`${color.name}: ${color.hex}`}
                   />
@@ -517,10 +517,10 @@ Import Successful
               <h6 className="text-sm font-medium text-muted-foreground mb-3 text-center">
                 Current Style
               </h6>
-              <div className="p-6 bg-white border border-gray-200 rounded-lg">
+              <div className="p-6 bg-card border border-border rounded-lg"
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-gray-600" />
+                  <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-muted-foreground" />
                   </div>
                   <h4 className="text-lg font-semibold" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', color: 'hsl(var(--crypto-navy))' }}>
                     {formData.campaignName || 'Your Campaign'}
@@ -532,7 +532,7 @@ Import Successful
                     <input 
                       type="text" 
                       placeholder="$100" 
-                      className="w-full px-3 py-2 border border-gray-300 rounded"
+                      className="w-full px-3 py-2 border border-border bg-background text-foreground rounded"
                       readOnly
                     />
                   </div>

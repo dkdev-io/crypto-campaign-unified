@@ -296,7 +296,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        🔍 Find Your Committee - Step 2
+        Find Your Committee - Step 2
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Search for your FEC committee to complete registration
@@ -336,7 +336,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                 opacity: loading ? 0.7 : 1
               }}
             >
-              {loading ? '⏳' : '🔍 Search'}
+              {loading ? 'Searching...' : 'Search'}
             </button>
           </div>
         </div>
@@ -386,7 +386,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         textAlign: 'center'
       }}>
         <h4 style={{ color: '#495057', marginBottom: '1rem' }}>
-          📝 Add Committee Name
+          Add Committee Name
         </h4>
         <p style={{ color: '#6c757d', marginBottom: '1rem', fontSize: '14px' }}>
           Can't find your committee? Add it manually
@@ -477,7 +477,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
             opacity: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 0.7 : 1
           }}
         >
-          {loading ? '⏳ Saving...' : '✓ Save Committee Info & Continue'}
+          {loading ? 'Saving...' : 'Save Committee Info & Continue'}
         </button>
       </div>
 
@@ -574,7 +574,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                         fontSize: '20px',
                         fontWeight: 'bold'
                       }}>
-                        ✓ SELECTED
+                        SELECTED
                       </span>
                     ) : (
                       <span style={{ color: '#6c757d', fontSize: '14px' }}>
@@ -636,7 +636,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                     color: status ? '#155724' : '#721c24',
                     marginRight: '0.5rem'
                   }}>
-                    {status ? '✓' : '✗'}
+                    {status ? 'YES' : 'NO'}
                   </span>
                   <span style={{ textTransform: 'capitalize' }}>
                     {field.replace(/([A-Z])/g, ' $1').trim()}
@@ -657,7 +657,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           borderRadius: '8px',
           border: '1px solid #e9ecef'
         }}>
-          <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🔍</div>
+          <div style={{ fontSize: '48px', marginBottom: '1rem' }}>Search</div>
           <h4 style={{ color: '#495057', marginBottom: '1rem' }}>No committees found</h4>
           <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
             We couldn't find any committees matching "{searchTerm}". Try:

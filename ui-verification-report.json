@@ -1,0 +1,85 @@
+{
+  "homePageReference": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "color": "rgb(255, 255, 255)",
+    "fontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+    "h1FontSize": "72px",
+    "h1FontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+    "h1FontWeight": "800"
+  },
+  "donorWorkflow": [
+    {
+      "name": "Donor Auth",
+      "url": "http://localhost:5173/donors/auth",
+      "hasHeader": true,
+      "pageTitle": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "emojisFound": [],
+      "emojiCount": 0,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundMatches": true,
+      "fontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "fontMatches": true,
+      "headingText": "Donors",
+      "headingFontSize": "48px",
+      "headingFontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "headingUsesDesignSystem": true
+    },
+    {
+      "name": "Donor Dashboard (bypassed)",
+      "url": "http://localhost:5173/donors/auth/login",
+      "hasHeader": true,
+      "useBypass": true,
+      "pageTitle": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "emojisFound": [],
+      "emojiCount": 0,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundMatches": true,
+      "fontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "fontMatches": true,
+      "headingText": "Donors",
+      "headingFontSize": "48px",
+      "headingFontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "headingUsesDesignSystem": true
+    }
+  ],
+  "campaignWorkflow": [
+    {
+      "name": "Campaign Auth",
+      "url": "http://localhost:5173/campaigns/auth",
+      "hasHeader": true,
+      "pageTitle": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "emojisFound": [],
+      "emojiCount": 0,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundMatches": true,
+      "fontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "fontMatches": true,
+      "headingText": "Campaigns",
+      "headingFontSize": "48px",
+      "headingFontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "headingUsesDesignSystem": true
+    },
+    {
+      "name": "Campaign Setup (bypassed)",
+      "url": "http://localhost:5173/campaigns/auth/setup?bypass=dev",
+      "hasHeader": true,
+      "useBypass": true,
+      "pageTitle": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "emojisFound": [],
+      "emojiCount": 0,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "backgroundMatches": true,
+      "fontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+      "fontMatches": true,
+      "headingText": "Campaign Setup",
+      "headingFontSize": "72px",
+      "headingFontFamily": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+    }
+  ],
+  "summary": {
+    "emojisRemoved": 100,
+    "backgroundsConsistent": 100,
+    "fontsConsistent": 100,
+    "totalPages": 4
+  }
+}

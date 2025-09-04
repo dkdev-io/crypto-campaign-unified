@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# Agent Checkin Script - Mandatory Guard Rails Verification
+# Prevents agents from working outside their scope and directory
+
+set -e
+
+echo "🚨 AGENT CHECKIN - MANDATORY GUARDRAILS VERIFICATION 🚨"
+echo "=============================================="
+
+# Get the current working directory
+CURRENT_DIR=$(pwd)
+PROJECT_DIR=$(basename "$CURRENT_DIR")
+
+echo "📍 Current Directory: $CURRENT_DIR"
+echo "📁 Project Name: $PROJECT_DIR"
+echo
+
+# Check for CLAUDE.md in current directory
+if [ -f "CLAUDE.md" ]; then
+    echo "✅ Found project-specific CLAUDE.md guardrails"
+    echo
+    echo "📋 PROJECT GUARDRAILS:"
+    echo "======================"
+    head -20 CLAUDE.md
+    echo
+    echo "... (see full file for complete guardrails)"
+    echo
+else
+    echo "❌ No CLAUDE.md found in current directory"
+    echo "⚠️  Using general guardrails only"
+    echo
+fi
+
+# Supabase capabilities section
+echo "🔄 SUPABASE CAPABILITIES & RESTRICTIONS:"
+echo "========================================"
+echo
+echo "AGENTS CAN:"
+echo "- Start/stop Supabase: 'npm run supabase:start' or 'supabase start'"
+echo "- Push schema changes: 'supabase db push'"
+echo "- Reset database: 'npm run db:reset' or 'supabase db reset'"
+echo "- Generate types: 'supabase gen types typescript'"
+echo "- View logs: 'supabase logs'"
+echo
+echo "AGENTS CANNOT:"
+echo "- Modify production databases directly"
+echo "- Access production secrets or credentials"
+echo "- Perform destructive operations without user confirmation"
+echo "- Add mock/sample data (see NO MOCK DATA POLICY)"
+echo
+
+# Port configuration check
+echo "🌐 PORT CONFIGURATION:"
+echo "====================="
+if [ -f "PORT_CONFIGURATION.md" ] || [ -f "../PORT_CONFIGURATION.md" ]; then
+    echo "✅ Port configuration file found"
+    echo "📌 This project uses port 3000 (http://localhost:3000)"
+    echo "🚨 NEVER use ports 3001, 3002, 5173 - they are reserved"
+else
+    echo "⚠️  No specific port configuration found"
+    echo "🔧 Default assumption: Check for existing dev server first"
+fi
+echo
+
+# File management rules
+echo "📁 FILE MANAGEMENT RESTRICTIONS:"
+echo "================================"
+echo "✅ AGENTS CAN work in:"
+echo "   - $CURRENT_DIR (current project directory)"
+echo "   - $CURRENT_DIR/src/"
+echo "   - $CURRENT_DIR/components/"
+echo "   - $CURRENT_DIR/tests/"
+echo "   - $CURRENT_DIR/docs/"
+echo
+echo "❌ AGENTS CANNOT:"
+echo "   - Modify files in /Users/Danallovertheplace/ (root)"
+echo "   - Work in other project directories"
+echo "   - Save temporary files to root folder"
+echo "   - Create files outside project scope"
+echo
+
+# Application summary
+echo "🏗️ APPLICATION SUMMARY:"
+echo "======================"
+if [ -f "package.json" ]; then
+    echo "📦 Project Type: $(grep -o '"name":\s*"[^"]*"' package.json | cut -d'"' -f4 2>/dev/null || echo 'Unknown')"
+    
+    # Get framework information
+    if grep -q '"react"' package.json 2>/dev/null; then
+        echo "⚛️  Framework: React"
+    fi
+    if grep -q '"next"' package.json 2>/dev/null; then
+        echo "▲ Framework: Next.js"
+    fi
+    if grep -q '"@supabase"' package.json 2>/dev/null; then
+        echo "🗄️  Database: Supabase"
+    fi
+    if grep -q '"typescript"' package.json 2>/dev/null; then
+        echo "📘 Language: TypeScript"
+    fi
+    
+    echo "🏃 Available Commands:"
+    grep -A 10 '"scripts"' package.json | grep -E '^\s*"[^"]+":' | sed 's/^[[:space:]]*/   - npm run /' | sed 's/"://' | sed 's/",*//' | sed 's/"//g' || echo "   - No scripts found"
+else
+    echo "⚠️  No package.json found - not a Node.js project"
+fi
+
+echo
+echo "🎯 AGENT CONFIRMATION REQUIRED:"
+echo "==============================="
+echo "Before proceeding, confirm you understand:"
+echo "1. ✅ I will ONLY work in: $CURRENT_DIR"
+echo "2. ✅ I will NEVER add mock/sample data"
+echo "3. ✅ I will use port 3000 for local development"
+echo "4. ✅ I will ask user before destructive operations"
+echo "5. ✅ I will follow project-specific CLAUDE.md guardrails"
+echo
+echo "Type 'CONFIRMED' to proceed with your work in this project."
+echo "=============================================="
