@@ -181,9 +181,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         throw new Error('Campaign ID not found. Please refresh and try again.');
       }
       
+      const committeeId = 'MANUAL-' + Date.now();
       const committeeData = {
         committee_name: manualCommittee.name.trim(),
-        fec_committee_id: 'MANUAL-' + Date.now(),
+        fec_committee_id: committeeId,
         committee_address: manualCommittee.address.trim(),
         committee_city: manualCommittee.city.trim(),
         committee_state: manualCommittee.state.trim(),
@@ -219,19 +220,21 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         // Database save error, using localStorage fallback
       }
       
-      // Update form data and proceed
+      // Update form data with the saved committee
+      const savedCommittee = {
+        id: committeeId,
+        name: manualCommittee.name.trim(),
+        source: 'manual',
+        address: manualCommittee.address.trim(),
+        city: manualCommittee.city.trim(),
+        state: manualCommittee.state.trim(),
+        zip: manualCommittee.zip.trim()
+      };
+      
       updateFormData({
-        selectedCommittee: {
-          id: 'MANUAL-' + Date.now(),
-          name: manualCommittee.name.trim(),
-          source: 'manual',
-          address: manualCommittee.address.trim(),
-          city: manualCommittee.city.trim(),
-          state: manualCommittee.state.trim(),
-          zip: manualCommittee.zip.trim()
-        },
+        selectedCommittee: savedCommittee,
         committeeDetails: {
-          id: 'MANUAL-' + Date.now(),
+          id: committeeId,
           name: manualCommittee.name.trim(),
           source: 'manual',
           address: {
@@ -243,28 +246,21 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           isActive: true
         },
         committeeName: manualCommittee.name.trim(),
-        fecCommitteeId: 'MANUAL-' + Date.now(),
+        fecCommitteeId: committeeId,
         committeeAddress: manualCommittee.address.trim(),
         committeeCity: manualCommittee.city.trim(),
         committeeState: manualCommittee.state.trim(),
         committeeZip: manualCommittee.zip.trim()
       });
       
+      // Set the selected committee so the Next button becomes enabled
+      setSelectedCommittee(savedCommittee);
+      
       setSuccess(savedToDatabase ? 
         'Committee information saved to database successfully!' : 
         'Committee information saved successfully!');
       
-      // Clear the manual form after successful save
-      setManualCommittee({
-        name: '',
-        id: '',
-        type: 'N',
-        candidateName: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: ''
-      });
+      // Don't clear the form - keep it filled so user can see what they saved
       
     } catch (err) {
       // Failed to save committee information
@@ -748,35 +744,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       </div>
       
-      {/* Always show skip button for testing */}
-      {!success && (
-        <button 
-          onClick={() => {
-            updateFormData({
-              fecCommitteeId: 'manual-entry',
-              committeeName: 'Manual Entry - To Be Updated',
-              selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
-            });
-            onNext();
-          }}
-          style={{ 
-            marginTop: '1rem', 
-            background: 'hsl(var(--crypto-medium-gray))', 
-            color: 'hsl(var(--crypto-white))',
-            display: 'block',
-            width: '100%',
-            border: 'none',
-            padding: 'var(--space-sm)',
-            borderRadius: 'var(--radius)',
-            cursor: 'pointer',
-            fontSize: 'var(--text-body-sm)',
-            fontFamily: 'Inter, sans-serif',
-            transition: 'var(--transition-smooth)'
-          }}
-        >
-          Continue Without Committee (Can Update Later)
-        </button>
-      )}
 
     </div>
   );
