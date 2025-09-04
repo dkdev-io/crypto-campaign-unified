@@ -11,6 +11,7 @@ import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import CampaignAuth from './components/campaigns/CampaignAuth';
 import CampaignInformationForm from './components/setup/CampaignInformationForm';
+import CommitteeSearchForm from './components/setup/CommitteeSearchForm';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
