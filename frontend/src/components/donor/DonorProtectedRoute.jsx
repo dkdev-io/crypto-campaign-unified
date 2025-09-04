@@ -19,7 +19,7 @@ const DonorProtectedRoute = ({ children }) => {
 
   if (!donor) {
     // Redirect to login page but save the attempted location
-    return <Navigate to="/donor/login" state={{ from: location }} replace />;
+    return <Navigate to="/donors/auth/login" state={{ from: location }} replace />;
   }
 
   return children;
