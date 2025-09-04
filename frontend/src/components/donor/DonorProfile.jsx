@@ -196,7 +196,7 @@ const DonorProfile = () => {
       <div className="bg-gradient-to-r from-navy-900 to-blue-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <button
-            onClick={() => navigate('/donor/dashboard')}
+            onClick={() => navigate('/donors/dashboard')}
             className="flex items-center gap-2 text-blue-200 hover:text-white mb-4 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />

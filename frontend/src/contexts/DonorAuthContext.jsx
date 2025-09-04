@@ -143,7 +143,7 @@ export const DonorAuthProvider = ({ children }) => {
     try {
       setError(null);
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/donor/reset-password`
+        redirectTo: `${window.location.origin}/donors/auth/reset-password`
       });
       if (error) throw error;
       return { error: null };
