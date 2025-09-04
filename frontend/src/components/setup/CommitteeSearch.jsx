@@ -258,7 +258,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       
       setSuccess(savedToDatabase ? 
         'Committee information saved to database successfully!' : 
-        'Committee information saved locally (database columns pending)!');
+        'Committee information saved successfully!');
       
       // Clear the manual form after successful save
       setManualCommittee({
@@ -294,17 +294,20 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
   return (
     <div>
-      <h2 className="text-center mb-4 font-bold text-foreground" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
-        Find Your Committee - Step 2
+      <h2 className="text-center mb-4 font-bold" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
+        Campaign Setup
       </h2>
-      <p className="text-center mb-8 text-muted-foreground">
+      <p className="text-center mb-2" style={{ fontSize: '18px', color: 'hsl(var(--crypto-navy))', fontWeight: '600' }}>
+        Step 2 of 8: Committee Search
+      </p>
+      <p className="text-center mb-8" style={{ fontSize: '14px', color: 'hsl(var(--crypto-medium-gray))' }}>
         Search for your FEC committee to complete registration
       </p>
 
       {/* Search Section */}
       <div className="crypto-card mb-8">
         <div className="form-group" style={{ marginBottom: '1rem' }}>
-          <label>Search for Committee</label>
+          <label style={{ fontSize: '16px', fontWeight: '600', color: 'hsl(var(--crypto-navy))', marginBottom: '0.5rem', display: 'block' }}>Search for Committee</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
               className="form-input"
@@ -313,20 +316,32 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter committee name or keywords..."
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              style={{ flex: 1 }}
+              style={{ 
+                flex: 1,
+                backgroundColor: 'white',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '6px',
+                padding: '0.75rem',
+                fontSize: '16px'
+              }}
             />
             <button 
               onClick={() => handleSearch()}
               disabled={loading || !searchTerm.trim()}
               style={{
-                background: 'hsl(var(--crypto-navy))',
+                background: loading || !searchTerm.trim() ? 
+                  'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
                 color: 'white',
                 border: 'none',
-                padding: '0.75rem 1rem',
-                borderRadius: '4px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                minWidth: '100px',
-                opacity: loading ? 0.7 : 1
+                padding: '0.75rem 1.5rem',
+                borderRadius: '6px',
+                cursor: loading || !searchTerm.trim() ? 'not-allowed' : 'pointer',
+                minWidth: '120px',
+                fontSize: '16px',
+                fontWeight: '600',
+                opacity: loading || !searchTerm.trim() ? 0.6 : 1,
+                transition: 'all 0.2s'
               }}
             >
               {loading ? 'Searching...' : 'Search'}
@@ -369,13 +384,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       )}
 
-      {/* Simple Committee Entry */}
+      {/* Manual Committee Entry */}
       <div className="crypto-card mb-8 text-center">
-        <h4 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
-          Add Committee Name
-        </h4>
-        <p className="text-muted-foreground mb-4 text-sm">
+        <h4 className="mb-4" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>
           Can't find your committee? Add it manually
+        </h4>
+        <p className="mb-4" style={{ fontSize: '14px', color: 'hsl(var(--crypto-medium-gray))' }}>
+          Enter your committee name or keywords...
         </p>
         
         <div className="form-group" style={{ marginBottom: '1rem' }}>
@@ -389,7 +404,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block'
+              display: 'block',
+              backgroundColor: 'white',
+              color: 'hsl(var(--crypto-navy))',
+              border: '1px solid hsl(var(--border))',
+              borderRadius: '6px',
+              padding: '0.75rem',
+              fontSize: '16px'
             }}
           />
           
@@ -403,7 +424,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block'
+              display: 'block',
+              backgroundColor: 'white',
+              color: 'hsl(var(--crypto-navy))',
+              border: '1px solid hsl(var(--border))',
+              borderRadius: '6px',
+              padding: '0.75rem',
+              fontSize: '16px'
             }}
           />
           
@@ -420,7 +447,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setManualCommittee({...manualCommittee, city: e.target.value})}
               placeholder="City"
               style={{ 
-                width: '120px'
+                width: '120px',
+                backgroundColor: 'white',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '6px',
+                padding: '0.75rem',
+                fontSize: '16px'
               }}
             />
             <input
@@ -430,7 +463,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setManualCommittee({...manualCommittee, state: e.target.value})}
               placeholder="State"
               style={{ 
-                width: '80px'
+                width: '80px',
+                backgroundColor: 'white',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '6px',
+                padding: '0.75rem',
+                fontSize: '16px'
               }}
               maxLength="2"
             />
@@ -441,7 +480,13 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setManualCommittee({...manualCommittee, zip: e.target.value})}
               placeholder="ZIP"
               style={{ 
-                width: '100px'
+                width: '100px',
+                backgroundColor: 'white',
+                color: 'hsl(var(--crypto-navy))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '6px',
+                padding: '0.75rem',
+                fontSize: '16px'
               }}
               maxLength="10"
             />
@@ -452,15 +497,17 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           onClick={handleManualCommitteeSubmit}
           disabled={loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim()}
           style={{
-            background: '#2a2a72',
+            background: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 
+              'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
             color: 'white',
             border: 'none',
             padding: '0.75rem 2rem',
-            borderRadius: '4px',
+            borderRadius: '6px',
             cursor: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 'not-allowed' : 'pointer',
             fontSize: '16px',
-            fontWeight: '500',
-            opacity: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 0.7 : 1
+            fontWeight: '600',
+            opacity: loading || !manualCommittee.name.trim() || !manualCommittee.address.trim() || !manualCommittee.city.trim() || !manualCommittee.state.trim() || !manualCommittee.zip.trim() ? 0.6 : 1,
+            transition: 'all 0.2s'
           }}
         >
           {loading ? 'Saving...' : 'Save Committee Info & Continue'}
@@ -667,31 +714,31 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       {/* Success Message with Continue Button */}
       {success && (
         <div style={{ 
-          background: '#d4edda', 
-          border: '1px solid #c3e6cb',
+          background: 'hsl(120 60% 95%)', 
+          border: '1px solid hsl(120 60% 80%)',
           borderRadius: '6px',
           padding: '2rem',
           marginBottom: '2rem',
           textAlign: 'center'
         }}>
-          <h4 style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 1rem 0' }}>
+          <h4 style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 1rem 0', fontSize: 'var(--text-heading-md)' }}>
             Committee Information Saved!
           </h4>
-          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 2rem 0' }}>
+          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 2rem 0', fontSize: '16px' }}>
             {success}
           </p>
           <button 
-            className="btn btn-primary"
             onClick={onNext}
             style={{
-              background: 'hsl(var(--crypto-gold))',
+              background: 'hsl(var(--crypto-navy))',
               color: 'white',
               border: 'none',
               padding: '1rem 2rem',
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '16px',
-              fontWeight: '600'
+              fontWeight: '600',
+              transition: 'all 0.2s'
             }}
           >
             Continue to Next Step

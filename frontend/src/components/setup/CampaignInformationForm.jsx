@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
-import { Building2, Globe, FileText, AlertCircle } from 'lucide-react';
+import { Building2, User, Mail, Phone, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
@@ -14,8 +14,10 @@ const CampaignInformationForm = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     campaignName: '',
-    website: '',
-    description: ''
+    adminFirstName: '',
+    adminLastName: '',
+    adminEmail: '',
+    adminPhone: ''
   });
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -42,13 +44,31 @@ const CampaignInformationForm = () => {
       errors.campaignName = 'Campaign name is required';
     }
 
-    if (!formData.website.trim()) {
-      errors.website = 'Website URL is required';
+    if (!formData.adminFirstName.trim()) {
+      errors.adminFirstName = 'Admin first name is required';
+    }
+
+    if (!formData.adminLastName.trim()) {
+      errors.adminLastName = 'Admin last name is required';
+    }
+
+    if (!formData.adminEmail.trim()) {
+      errors.adminEmail = 'Admin email is required';
     } else {
-      // Basic URL validation
-      const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-      if (!urlPattern.test(formData.website.trim())) {
-        errors.website = 'Please enter a valid website URL';
+      // Basic email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(formData.adminEmail.trim())) {
+        errors.adminEmail = 'Please enter a valid email address';
+      }
+    }
+
+    if (!formData.adminPhone.trim()) {
+      errors.adminPhone = 'Admin phone is required';
+    } else {
+      // Basic phone validation (US format)
+      const phonePattern = /^[\+]?[1]?[\s]?[\(]?[\d{3}]?[\)]?[\s]?[\d{3}]?[\-]?[\d{4}]$/;
+      if (!phonePattern.test(formData.adminPhone.trim())) {
+        errors.adminPhone = 'Please enter a valid phone number';
       }
     }
 
@@ -79,11 +99,10 @@ const CampaignInformationForm = () => {
         .insert([
           {
             title: formData.campaignName,
-            description: formData.description,
-            email: user.email,
+            description: '',
+            email: formData.adminEmail,
             user_id: user.id,
             status: 'setup',
-            // Add website info to description for now since no website column exists
             goal_amount: 0,
             current_amount: 0
           }
@@ -99,10 +118,10 @@ const CampaignInformationForm = () => {
       localStorage.setItem('campaignSetupData', JSON.stringify({
         campaignId: campaign.id,
         campaignName: formData.campaignName,
-        website: formData.website,
-        description: formData.description,
-        email: user.email,
-        userFullName: user.user_metadata?.full_name || '',
+        adminFirstName: formData.adminFirstName,
+        adminLastName: formData.adminLastName,
+        adminEmail: formData.adminEmail,
+        adminPhone: formData.adminPhone,
         currentStep: 2
       }));
 
@@ -164,7 +183,7 @@ const CampaignInformationForm = () => {
                     value={formData.campaignName}
                     onChange={handleChange}
                     className={`pl-10 ${validationErrors.campaignName ? 'border-destructive' : ''}`}
-                    placeholder="e.g., Smith for Congress 2024"
+                    placeholder=""
                     disabled={loading}
                   />
                 </div>
@@ -173,47 +192,96 @@ const CampaignInformationForm = () => {
                 )}
               </div>
 
-              {/* Website URL */}
+              {/* Admin First Name */}
               <div>
-                <label htmlFor="website" className="block text-sm font-medium text-foreground mb-2">
-                  Campaign Website *
+                <label htmlFor="adminFirstName" className="block text-sm font-medium text-foreground mb-2">
+                  Admin First Name *
                 </label>
                 <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    id="website"
-                    name="website"
-                    type="url"
-                    value={formData.website}
+                    id="adminFirstName"
+                    name="adminFirstName"
+                    type="text"
+                    value={formData.adminFirstName}
                     onChange={handleChange}
-                    className={`pl-10 ${validationErrors.website ? 'border-destructive' : ''}`}
-                    placeholder="https://www.yourcampaign.com"
+                    className={`pl-10 ${validationErrors.adminFirstName ? 'border-destructive' : ''}`}
+                    placeholder=""
                     disabled={loading}
                   />
                 </div>
-                {validationErrors.website && (
-                  <p className="mt-1 text-xs text-destructive">{validationErrors.website}</p>
+                {validationErrors.adminFirstName && (
+                  <p className="mt-1 text-xs text-destructive">{validationErrors.adminFirstName}</p>
                 )}
               </div>
 
-              {/* Campaign Description */}
+              {/* Admin Last Name */}
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-foreground mb-2">
-                  Campaign Description
+                <label htmlFor="adminLastName" className="block text-sm font-medium text-foreground mb-2">
+                  Admin Last Name *
                 </label>
                 <div className="relative">
-                  <FileText className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="adminLastName"
+                    name="adminLastName"
+                    type="text"
+                    value={formData.adminLastName}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Brief description of your campaign..."
-                    rows={4}
+                    className={`pl-10 ${validationErrors.adminLastName ? 'border-destructive' : ''}`}
+                    placeholder=""
                     disabled={loading}
                   />
                 </div>
+                {validationErrors.adminLastName && (
+                  <p className="mt-1 text-xs text-destructive">{validationErrors.adminLastName}</p>
+                )}
+              </div>
+
+              {/* Admin Email */}
+              <div>
+                <label htmlFor="adminEmail" className="block text-sm font-medium text-foreground mb-2">
+                  Admin Email *
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="adminEmail"
+                    name="adminEmail"
+                    type="email"
+                    value={formData.adminEmail}
+                    onChange={handleChange}
+                    className={`pl-10 ${validationErrors.adminEmail ? 'border-destructive' : ''}`}
+                    placeholder=""
+                    disabled={loading}
+                  />
+                </div>
+                {validationErrors.adminEmail && (
+                  <p className="mt-1 text-xs text-destructive">{validationErrors.adminEmail}</p>
+                )}
+              </div>
+
+              {/* Admin Phone */}
+              <div>
+                <label htmlFor="adminPhone" className="block text-sm font-medium text-foreground mb-2">
+                  Admin Phone *
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="adminPhone"
+                    name="adminPhone"
+                    type="tel"
+                    value={formData.adminPhone}
+                    onChange={handleChange}
+                    className={`pl-10 ${validationErrors.adminPhone ? 'border-destructive' : ''}`}
+                    placeholder=""
+                    disabled={loading}
+                  />
+                </div>
+                {validationErrors.adminPhone && (
+                  <p className="mt-1 text-xs text-destructive">{validationErrors.adminPhone}</p>
+                )}
               </div>
 
               {/* Submit Button */}
