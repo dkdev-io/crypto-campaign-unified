@@ -7,6 +7,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [campaignData, setCampaignData] = useState(null);
+  const [appliedStyles, setAppliedStyles] = useState(null);
 
   useEffect(() => {
     if (campaignId) {
@@ -18,7 +19,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
     try {
       const { data, error } = await supabase
         .from('campaigns')
-        .select('*')
+        .select('*, applied_styles')
         .eq('id', campaignId)
         .single();
 
@@ -26,6 +27,9 @@ const EmbeddedDonorForm = ({ campaignId }) => {
         console.error('Failed to load campaign:', error);
       } else {
         setCampaignData(data);
+        if (data.applied_styles) {
+          setAppliedStyles(data.applied_styles);
+        }
       }
     } catch (err) {
       console.error('Error loading campaign:', err);
@@ -95,26 +99,81 @@ const EmbeddedDonorForm = ({ campaignId }) => {
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
 
+  // Get styled components based on applied styles
+  const getStyledComponents = () => {
+    if (!appliedStyles) return styles;
+
+    const { colors, fonts } = appliedStyles;
+    
+    return {
+      ...styles,
+      container: {
+        ...styles.container,
+        fontFamily: fonts?.body?.family || styles.container.fontFamily,
+        backgroundColor: colors?.background || styles.container.backgroundColor,
+        color: colors?.text || styles.container.color,
+      },
+      title: {
+        ...styles.title,
+        fontFamily: fonts?.heading?.family || styles.title.fontFamily,
+        fontWeight: fonts?.heading?.weight || styles.title.fontWeight,
+        color: colors?.primary || styles.title.color,
+      },
+      label: {
+        ...styles.label,
+        fontFamily: fonts?.body?.family || styles.label.fontFamily,
+        color: colors?.text || styles.label.color,
+      },
+      input: {
+        ...styles.input,
+        fontFamily: fonts?.body?.family || styles.input.fontFamily,
+        borderColor: colors?.secondary || '#e0e0e0',
+        backgroundColor: colors?.background || styles.input.backgroundColor,
+        color: colors?.text || styles.input.color,
+      },
+      amountButton: {
+        ...styles.amountButton,
+        fontFamily: fonts?.button?.family || styles.amountButton.fontFamily,
+        borderColor: colors?.primary || styles.amountButton.borderColor,
+        color: colors?.primary || styles.amountButton.color,
+      },
+      amountButtonActive: {
+        ...styles.amountButtonActive,
+        backgroundColor: colors?.primary || styles.amountButtonActive.backgroundColor,
+        color: colors?.background || styles.amountButtonActive.color,
+      },
+      submitButton: {
+        ...styles.submitButton,
+        fontFamily: fonts?.button?.family || styles.submitButton.fontFamily,
+        fontWeight: fonts?.button?.weight || styles.submitButton.fontWeight,
+        backgroundColor: colors?.primary || styles.submitButton.backgroundColor,
+        color: colors?.background || styles.submitButton.color,
+      }
+    };
+  };
+
+  const dynamicStyles = getStyledComponents();
+
   return (
-    <div style={styles.container}>
-      <div style={styles.formCard}>
-        <h1 style={styles.title}>{campaignName}</h1>
+    <div style={dynamicStyles.container}>
+      <div style={dynamicStyles.formCard}>
+        <h1 style={dynamicStyles.title}>{campaignName}</h1>
         
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.row}>
-            <div style={styles.halfField}>
-              <label style={styles.label}>First Name *</label>
+        <form onSubmit={handleSubmit} style={dynamicStyles.form}>
+          <div style={dynamicStyles.row}>
+            <div style={dynamicStyles.halfField}>
+              <label style={dynamicStyles.label}>First Name *</label>
               <input 
-                style={styles.input}
+                style={dynamicStyles.input}
                 required
                 value={formData.firstName || ''}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
               />
             </div>
-            <div style={styles.halfField}>
-              <label style={styles.label}>Last Name *</label>
+            <div style={dynamicStyles.halfField}>
+              <label style={dynamicStyles.label}>Last Name *</label>
               <input 
-                style={styles.input}
+                style={dynamicStyles.input}
                 required
                 value={formData.lastName || ''}
                 onChange={(e) => setFormData({...formData, lastName: e.target.value})}
@@ -122,44 +181,44 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             </div>
           </div>
 
-          <div style={styles.field}>
+          <div style={dynamicStyles.field}>
             <label style={styles.label}>Email *</label>
             <input 
               type="email"
-              style={styles.input}
+              style={dynamicStyles.input}
               required
               value={formData.email || ''}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
           </div>
 
-          <div style={styles.field}>
+          <div style={dynamicStyles.field}>
             <label style={styles.label}>Address *</label>
             <input 
               placeholder="Street Address"
-              style={styles.input}
+              style={dynamicStyles.input}
               required
               value={formData.street || ''}
               onChange={(e) => setFormData({...formData, street: e.target.value})}
             />
-            <div style={styles.addressRow}>
+            <div style={dynamicStyles.addressRow}>
               <input 
                 placeholder="City"
-                style={{...styles.input, ...styles.cityInput}}
+                style={{...dynamicStyles.input, ...dynamicStyles.cityInput}}
                 required
                 value={formData.city || ''}
                 onChange={(e) => setFormData({...formData, city: e.target.value})}
               />
               <input 
                 placeholder="State"
-                style={{...styles.input, ...styles.stateInput}}
+                style={{...dynamicStyles.input, ...dynamicStyles.stateInput}}
                 required
                 value={formData.state || ''}
                 onChange={(e) => setFormData({...formData, state: e.target.value})}
               />
               <input 
                 placeholder="ZIP"
-                style={{...styles.input, ...styles.zipInput}}
+                style={{...dynamicStyles.input, ...dynamicStyles.zipInput}}
                 required
                 value={formData.zip || ''}
                 onChange={(e) => setFormData({...formData, zip: e.target.value})}
@@ -167,20 +226,20 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             </div>
           </div>
 
-          <div style={styles.row}>
-            <div style={styles.halfField}>
-              <label style={styles.label}>Employer *</label>
+          <div style={dynamicStyles.row}:
+            <div style={dynamicStyles.halfField}>
+              <label style={dynamicStyles.label}>Employer *</label>
               <input 
-                style={styles.input}
+                style={dynamicStyles.input}
                 required
                 value={formData.employer || ''}
                 onChange={(e) => setFormData({...formData, employer: e.target.value})}
               />
             </div>
-            <div style={styles.halfField}>
-              <label style={styles.label}>Occupation *</label>
+            <div style={dynamicStyles.halfField}>
+              <label style={dynamicStyles.label}>Occupation *</label>
               <input 
-                style={styles.input}
+                style={dynamicStyles.input}
                 required
                 value={formData.occupation || ''}
                 onChange={(e) => setFormData({...formData, occupation: e.target.value})}
@@ -188,17 +247,17 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             </div>
           </div>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Contribution Amount * (Max: ${maxDonation})</label>
-            <div style={styles.amountButtons}>
+          <div style={dynamicStyles.field}>
+            <label style={dynamicStyles.label}>Contribution Amount * (Max: ${maxDonation})</label>
+            <div style={dynamicStyles.amountButtons}>
               {suggestedAmounts.map(amount => (
                 <button 
                   key={amount}
                   type="button"
                   onClick={() => setFormData({...formData, amount})}
                   style={{
-                    ...styles.amountButton,
-                    ...(formData.amount === amount ? styles.amountButtonActive : {})
+                    ...dynamicStyles.amountButton,
+                    ...(formData.amount === amount ? dynamicStyles.amountButtonActive : {})
                   }}
                 >
                   ${amount}
@@ -210,7 +269,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
               placeholder="Custom amount"
               min="1"
               max={maxDonation}
-              style={styles.input}
+              style={dynamicStyles.input}
               value={formData.amount || ''}
               onChange={(e) => {
                 const value = parseFloat(e.target.value);
@@ -224,14 +283,14 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             />
           </div>
 
-          <div style={styles.disclaimerBox}>
-            <label style={styles.checkboxLabel}>
+          <div style={dynamicStyles.disclaimerBox}>
+            <label style={dynamicStyles.checkboxLabel}>
               <input 
                 type="checkbox"
                 required
-                style={styles.checkbox}
+                style={dynamicStyles.checkbox}
               />
-              <span style={styles.disclaimerText}>
+              <span style={dynamicStyles.disclaimerText}>
                 I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
                 this contribution is made from my own funds, I am not a federal contractor, 
                 and I am at least 18 years old.
@@ -240,7 +299,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
           </div>
 
           {errorMessage && (
-            <div style={styles.errorBox}>
+            <div style={dynamicStyles.errorBox}>
               ⚠️ {errorMessage}
             </div>
           )}
@@ -249,8 +308,8 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             type="submit"
             disabled={isSubmitting}
             style={{
-              ...styles.submitButton,
-              ...(isSubmitting ? styles.submitButtonDisabled : {})
+              ...dynamicStyles.submitButton,
+              ...(isSubmitting ? dynamicStyles.submitButtonDisabled : {})
             }}
           >
             {isSubmitting ? '⏳ Processing...' : '💝 Contribute Now'}
