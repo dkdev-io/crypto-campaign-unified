@@ -7,6 +7,22 @@ const AuthContext = createContext({})
 const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
 const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
 
+// PRODUCTION SAFETY CHECK - Prevent bypass in production
+if (SKIP_AUTH && !IS_DEVELOPMENT) {
+  console.error('🚨 CRITICAL SECURITY ERROR: AUTH BYPASS IS ENABLED IN PRODUCTION!')
+  console.error('🚨 This is a major security vulnerability. Set VITE_SKIP_AUTH=false immediately.')
+  throw new Error('AUTH BYPASS ENABLED IN PRODUCTION - ABORTING')
+}
+
+if (SKIP_AUTH && IS_DEVELOPMENT) {
+  console.warn('🚨 ='.repeat(50))
+  console.warn('🚨 DEVELOPMENT AUTH BYPASS IS ACTIVE')
+  console.warn('🚨 All authentication is bypassed!')
+  console.warn('🚨 Authenticated as: test@dkdev.io')
+  console.warn('🚨 To disable: Set VITE_SKIP_AUTH=false in .env')
+  console.warn('🚨 ='.repeat(50))
+}
+
 // Test user configuration for bypass
 const TEST_USER = {
   id: 'test-user-bypass-id',
@@ -185,6 +201,15 @@ export const AuthProvider = ({ children }) => {
 
   // Sign in with email and password
   const signIn = async (email, password) => {
+    // DEVELOPMENT AUTH BYPASS - Skip actual signin
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 AUTH BYPASS - Signin bypassed, already authenticated as test user')
+      return { 
+        data: { user: TEST_USER, session: TEST_SESSION }, 
+        error: null 
+      }
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -222,6 +247,14 @@ export const AuthProvider = ({ children }) => {
 
   // Sign out
   const signOut = async () => {
+    // DEVELOPMENT AUTH BYPASS - Warning about signout
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 AUTH BYPASS - Signout bypassed, user remains authenticated for development')
+      // Still clear local state if someone really wants to sign out
+      // But show a warning that they're still authenticated
+      return { error: null }
+    }
+
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
