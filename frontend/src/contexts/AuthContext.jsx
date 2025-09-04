@@ -74,6 +74,8 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    let subscription = null;
+    
     // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
     if (SKIP_AUTH && IS_DEVELOPMENT) {
       console.warn('🚨 DEVELOPMENT AUTH BYPASS ACTIVE - Using test user: test@dkdev.io')
@@ -90,46 +92,43 @@ export const AuthProvider = ({ children }) => {
         email_confirmed: true
       })
       setLoading(false)
-      return
-    }
-
-    // Production/normal auth flow
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error('Error getting session:', error)
-      }
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchUserProfile(session.user.id)
-      }
-      setLoading(false)
-    })
-
-    // Don't set up auth listeners if bypass is active
-    if (SKIP_AUTH && IS_DEVELOPMENT) {
-      return () => {} // No cleanup needed
-    }
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state change:', event, session)
+    } else {
+      // Production/normal auth flow
+      // Get initial session
+      supabase.auth.getSession().then(({ data: { session }, error }) => {
+        if (error) {
+          console.error('Error getting session:', error)
+        }
         setSession(session)
         setUser(session?.user ?? null)
-        
         if (session?.user) {
-          await fetchUserProfile(session.user.id)
-        } else {
-          setUserProfile(null)
+          fetchUserProfile(session.user.id)
         }
-        
         setLoading(false)
-      }
-    )
+      })
 
-    return () => subscription.unsubscribe()
+      // Listen for auth changes
+      const { data: { subscription: authSubscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          console.log('Auth state change:', event, session)
+          setSession(session)
+          setUser(session?.user ?? null)
+          
+          if (session?.user) {
+            await fetchUserProfile(session.user.id)
+          } else {
+            setUserProfile(null)
+          }
+          
+          setLoading(false)
+        }
+      )
+      
+      subscription = authSubscription;
+    }
+
+    // Always return the same cleanup function structure
+    return () => subscription?.unsubscribe()
   }, [])
 
   const fetchUserProfile = async (userId) => {

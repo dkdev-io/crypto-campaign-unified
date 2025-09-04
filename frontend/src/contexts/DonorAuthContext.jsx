@@ -44,36 +44,35 @@ export const DonorAuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let subscription = null;
+    
     // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
     if (SKIP_AUTH && IS_DEVELOPMENT) {
       console.warn('🚨 DONOR AUTH BYPASS ACTIVE - Using test donor: test@dkdev.io')
       setDonor(TEST_DONOR)
       setLoading(false)
-      return
-    }
+    } else {
+      // Normal donor auth flow
+      // Check if donor is logged in
+      checkDonor();
 
-    // Normal donor auth flow
-    // Check if donor is logged in
-    checkDonor();
-
-    // Don't set up auth listeners if bypass is active
-    if (SKIP_AUTH && IS_DEVELOPMENT) {
-      return () => {} // No cleanup needed
-    }
-
-    // Listen for auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user?.user_metadata?.user_type === 'donor') {
-          await checkDonor();
-        } else if (event === 'SIGNED_OUT') {
-          setDonor(null);
+      // Listen for auth changes
+      const { data: authListener } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          if (event === 'SIGNED_IN' && session?.user?.user_metadata?.user_type === 'donor') {
+            await checkDonor();
+          } else if (event === 'SIGNED_OUT') {
+            setDonor(null);
+          }
         }
-      }
-    );
+      );
+      
+      subscription = authListener.subscription;
+    }
 
+    // Always return the same cleanup function structure
     return () => {
-      authListener?.subscription?.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 

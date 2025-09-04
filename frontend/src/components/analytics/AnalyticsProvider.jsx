@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../../lib/supabase';
 import CampaignAnalytics from '../../utils/campaignAnalytics';
 
 const AnalyticsContext = createContext();
@@ -16,10 +16,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
   const [analytics, setAnalytics] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [trackingStatus, setTrackingStatus] = useState(null);
-  const [supabase] = useState(() => createClient(
-    import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co',
-    import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key'
-  ));
+  // Use the shared Supabase client instead of creating a new one
 
   useEffect(() => {
     initializeAnalytics();
