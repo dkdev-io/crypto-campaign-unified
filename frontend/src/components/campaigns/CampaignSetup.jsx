@@ -14,7 +14,15 @@ import { Spinner } from '../ui/spinner';
  * This should be accessible at /campaigns/auth/setup
  */
 const CampaignSetup = () => {
+  const navigate = useNavigate();
   const { user, loading } = useAuth();
+
+  // Redirect authenticated users to Step 1 (Campaign Information)
+  useEffect(() => {
+    if (user && !loading) {
+      navigate('/YourInfo', { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   // Loading state
   if (loading) {
@@ -35,8 +43,17 @@ const CampaignSetup = () => {
     return <CampaignAuth />;
   }
 
-  // User is authenticated, show the embedded contribution form
-  return <EmbedDonorForm campaignId={null} />;
+  // Redirecting to YourInfo...
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <div className="flex items-center justify-center px-4 py-12">
+        <div className="text-center">
+          <Spinner size="lg" />
+          <p className="mt-4 text-primary-foreground">Redirecting to campaign setup...</p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default CampaignSetup;
