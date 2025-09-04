@@ -164,11 +164,11 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
   return (
     <div>
-      <h2 className="text-center mb-4 font-bold text-foreground" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
-        Connect Bank Account - Step 3
+      <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
+        Bank Account Connection
       </h2>
-      <p className="text-center mb-8 text-muted-foreground">
-        Securely connect your campaign's bank account for contribution processing
+      <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'hsl(var(--crypto-gold))', fontSize: '1rem', fontWeight: '500' }}>
+        Step 3 of 8: Securely connect your campaign's bank account
       </p>
 
       {/* Status Messages */}

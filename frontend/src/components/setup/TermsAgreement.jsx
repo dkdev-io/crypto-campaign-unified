@@ -35,11 +35,11 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
 
   return (
     <div>
-      <h2 className="text-center mb-4 font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}>
-        Terms & Conditions - Step 7
+      <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
+        Terms & Conditions
       </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem' }}>
-        Final step: Accept terms to complete your campaign setup
+      <p style={{ textAlign: 'center', marginBottom: '3rem', color: 'hsl(var(--crypto-gold))', fontSize: '1rem', fontWeight: '500' }}>
+        Step 7 of 8: Accept terms to complete your campaign setup
       </p>
 
       {/* Campaign Summary */}
@@ -104,8 +104,10 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           alignItems: 'center', 
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 'var(--text-body)',
-          color: termsAccepted ? '#28a745' : '#495057'
+          fontSize: '1rem',
+          fontWeight: '600',
+          fontFamily: 'Inter, sans-serif',
+          color: termsAccepted ? '#28a745' : 'hsl(var(--crypto-navy))'
         }}>
           <input
             type="checkbox"
