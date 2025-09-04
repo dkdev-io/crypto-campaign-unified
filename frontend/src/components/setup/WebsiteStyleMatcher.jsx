@@ -59,7 +59,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
       setError('');
       setValidationError('');
 
-      console.log('🔍 Starting website style analysis for:', websiteUrl);
+      console.log('Starting website style analysis for:', websiteUrl);
 
       const response = await fetch('/api/analyze-website-styles', {
         method: 'POST',
@@ -75,7 +75,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
         throw new Error(data.error || 'Analysis failed');
       }
 
-      console.log('✅ Website analysis completed:', data);
+      console.log('Website analysis completed:', data);
 
       setAnalysis(data);
       updateFormData({ 
@@ -85,7 +85,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
       });
 
     } catch (err) {
-      console.error('❌ Website analysis failed:', err);
+      console.error('Website analysis failed:', err);
       setError(err.message || 'Failed to analyze website. Please check the URL and try again.');
       setAnalysis(null);
     } finally {
@@ -161,7 +161,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
         marginTop: '1.5rem'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-          <div style={{ fontSize: '24px', marginRight: '0.5rem' }}>✨</div>
+          <div className="mr-2"></div>
           <div>
             <h4 style={{ margin: 0, color: '#28a745' }}>Analysis Complete!</h4>
             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', color: '#666' }}>
@@ -244,7 +244,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
               fontWeight: '500'
             }}
           >
-            🎨 Review & Apply Styles
+            Review & Apply Styles
           </button>
           <button
             onClick={() => setAnalysis(null)}
@@ -318,7 +318,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
         <div className="bg-card border border-border rounded-lg p-12 my-8">
           <div className="mb-10 text-center">
             <div className="mb-6"></div>
-            <h3 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>'
+            <h3 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
               Analyze Your Website
             </h3>
             <p style={{ color: '#6c757d', margin: 0, fontSize: '1.1rem' }}>
@@ -388,7 +388,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
                   opacity: validationError || !websiteUrl ? 0.6 : 1
                 }}
               >
-                🔍 Analyze Website
+                Analyze Website
               </button>
               
               <button
@@ -426,7 +426,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
           marginTop: '1rem',
           border: '1px solid #fcc'
         }}>
-          <strong>❌ Analysis Failed</strong><br />
+          <strong>Analysis Failed</strong><br />
           {error}
           <div style={{ marginTop: '1rem' }}>
             <button
@@ -469,7 +469,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Navigation */}
       <div className="form-actions" style={{ marginTop: '2rem' }}>
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back to Form Options
+          Back to Form Options
         </button>
         
         {analysis ? (
@@ -477,14 +477,14 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
             className="btn btn-primary" 
             onClick={continueToConfirmation}
           >
-            Review Styles →
+            Review Styles
           </button>
         ) : (
           <button 
             className="btn btn-primary" 
             onClick={skipStyleMatching}
           >
-            Skip Style Matching →
+            Skip Style Matching
           </button>
         )}
       </div>

@@ -187,7 +187,7 @@ How Bank Connection Will Work
                       </>
                     ) : (
                       <>
-                        ⚠️ Skip Bank Connection (Dev Only)
+                        Skip Bank Connection (Dev Only)
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </>
                     )}
@@ -209,7 +209,7 @@ How Bank Connection Will Work
               
               <div className="text-center flex-1 mx-4">
                 <div className="text-sm text-muted-foreground">
-                  Step 3 of 7 • Bank Connection
+                  Step 3 of 7 - Bank Connection
                 </div>
               </div>
               
