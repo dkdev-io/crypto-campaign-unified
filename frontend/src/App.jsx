@@ -5,7 +5,7 @@ import NotFound from './pages/NotFound';
 import CampaignPage from './pages/CampaignPage';
 import SetupWizard from './components/setup/SetupWizard';
 import CampaignSetup from './components/campaigns/CampaignSetup';
-import SimpleDonorForm from './components/SimpleDonorForm';
+import EmbeddedDonorForm from './components/EmbeddedDonorForm';
 import EmbedDonorForm from './components/EmbedDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
@@ -90,10 +90,10 @@ function App() {
                       🚀 Analytics Demo - Live Campaign Form
                     </h1>
                     <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: '1.1rem', marginBottom: '1rem' }}>
-                      This is your actual SimpleDonorForm component with integrated analytics tracking.
+                      This is your actual EmbeddedDonorForm component with integrated analytics tracking.
                     </p>
                   </div>
-                  <SimpleDonorForm campaignId={null} />
+                  <EmbeddedDonorForm campaignId={null} />
                 </div>
               </div>
             } />
@@ -143,7 +143,7 @@ function App() {
             } />
             <Route path="/embed-form" element={
               <div style={{ minHeight: '100vh', padding: '1rem' }}>
-                <SimpleDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
+                <EmbeddedDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
               </div>
             } />
             
