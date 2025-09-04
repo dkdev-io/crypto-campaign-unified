@@ -14,11 +14,23 @@ const DonorAuth = () => {
 
   // If auth bypass is enabled and user is already authenticated, redirect to dashboard
   React.useEffect(() => {
-    if (!loading && donor) {
-      const redirectTo = location.state?.from?.pathname || '/donors/dashboard';
+    // Only redirect if we're actually on the auth page and user is authenticated
+    if (!loading && donor && (location.pathname === '/donors/auth' || location.pathname === '/donors/auth/login' || location.pathname === '/donors/auth/register')) {
+      // Preserve bypass parameter if present
+      const searchParams = new URLSearchParams(location.search);
+      const bypassParam = searchParams.get('bypass');
+      
+      let redirectTo = location.state?.from?.pathname || '/donors/dashboard';
+      
+      // Add bypass parameter if it exists
+      if (bypassParam === 'true') {
+        redirectTo += '?bypass=true';
+      }
+      
+      console.log('🚨 DONOR AUTH - Redirecting authenticated user to:', redirectTo);
       navigate(redirectTo, { replace: true });
     }
-  }, [donor, loading, navigate, location.state?.from?.pathname]);
+  }, [donor, loading, navigate, location.state?.from?.pathname, location.search, location.pathname]);
 
   // Set initial tab based on route - MUST be called before any early returns
   const getInitialTab = () => {

@@ -1,11 +1,26 @@
 import React from 'react';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import { User, Heart, Calendar, TrendingUp, Settings, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DonorDashboard = () => {
   const { donor, signOut } = useDonorAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check for bypass mode
+  const searchParams = new URLSearchParams(location.search);
+  const bypassMode = searchParams.get('bypass') === 'true';
+  const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app');
+  
+  // Log debug info
+  React.useEffect(() => {
+    if (bypassMode && isDevelopment) {
+      console.log('🚨 DONOR DASHBOARD - BYPASS MODE ACTIVE');
+      console.log('Donor object:', donor);
+      console.log('Location:', location.pathname + location.search);
+    }
+  }, [bypassMode, isDevelopment, donor, location]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -27,7 +42,12 @@ const DonorDashboard = () => {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-base text-white/80">Welcome, {donor?.email || 'Donor'}</span>
+              <span className="text-base text-white/80">Welcome, {donor?.email || (bypassMode ? 'Donor (Bypass Mode)' : 'Donor')}</span>
+              {bypassMode && isDevelopment && (
+                <span className="ml-2 px-2 py-1 bg-yellow-500 text-black text-xs font-bold rounded">
+                  DEV BYPASS
+                </span>
+              )}
               <button
                 onClick={handleSignOut}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"

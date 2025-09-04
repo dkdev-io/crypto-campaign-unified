@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-04T21:08:41.589Z",
+  "testType": "simple-form-test",
+  "screenshotsTaken": 2,
+  "screenshots": [
+    "landing-page.png",
+    "simple-test-error.png"
+  ],
+  "status": "completed"
+}

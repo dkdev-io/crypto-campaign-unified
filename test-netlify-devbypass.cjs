@@ -80,13 +80,18 @@ async function testNetlifyDonorDevbypass() {
       await devBypassButtons[0].click();
       console.log('   Button clicked');
       
-      // Wait for potential navigation
+      // Wait for potential navigation and capture console logs
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       try {
-        await page.waitForNavigation({ timeout: 5000 });
+        await page.waitForNavigation({ timeout: 3000 });
         console.log('   Navigation detected');
       } catch (e) {
-        console.log('   No navigation detected within 5 seconds');
+        console.log('   No additional navigation detected');
       }
+      
+      // Wait a bit more for any async operations
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       const finalUrl = page.url();
       console.log(`   Final URL: ${finalUrl}`);
