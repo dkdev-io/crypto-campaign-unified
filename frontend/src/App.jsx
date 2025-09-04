@@ -64,6 +64,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
+            <Route path="/setup" element={<SetupWizard />} />
             <Route path="/YourInfo" element={<CampaignInformationForm />} />
             <Route path="/CommitteeSearch" element={<CommitteeSearchPage />} />
             <Route path="/BankConnection" element={<BankConnectionForm />} />
