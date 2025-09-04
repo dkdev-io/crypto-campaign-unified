@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-09-04T02:56:09.416Z",
+  "campaignWorkflow": {
+    "initialLoad": {
+      "status": 200,
+      "success": true,
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth/setup"
+    },
+    "elements": {
+      "hasEmailInput": true,
+      "hasPasswordInput": true,
+      "hasSignInButton": true,
+      "hasBypassButton": true
+    },
+    "bypassTest": {
+      "urlBefore": "https://cryptocampaign.netlify.app/campaigns/auth/setup",
+      "urlAfter": "https://cryptocampaign.netlify.app/campaigns/auth/setup",
+      "navigationSuccess": false,
+      "redirectedTo": "/campaigns/auth/setup"
+    },
+    "formInteraction": {
+      "canFillEmail": true,
+      "canFillPassword": true,
+      "formReady": true
+    },
+    "overallSuccess": true
+  },
+  "donorWorkflow": {
+    "initialLoad": {
+      "status": 200,
+      "success": true,
+      "url": "https://cryptocampaign.netlify.app/donors/auth"
+    },
+    "error": "SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"Sign Up\")' is not a valid selector."
+  },
+  "interactionTests": {
+    "formFilling": {
+      "emailFilled": true,
+      "passwordFilled": true,
+      "success": true
+    }
+  },
+  "errors": [
+    "Donor workflow: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"Sign Up\")' is not a valid selector."
+  ],
+  "success": true,
+  "responsiveDesign": {
+    "success": true
+  }
+}

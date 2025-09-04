@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import EmbedDonorForm from '../EmbedDonorForm';
 import CampaignAuth from './CampaignAuth';
 import { Spinner } from '../ui/spinner';
 
