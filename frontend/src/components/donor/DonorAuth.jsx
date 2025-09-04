@@ -54,7 +54,7 @@ const DonorAuth = () => {
   // Show loading spinner while checking auth
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="text-center text-white">
           <Spinner size="lg" className="mb-4" />
           <p>Loading donor authentication...</p>
@@ -214,7 +214,7 @@ const DonorAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">

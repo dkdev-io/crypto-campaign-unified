@@ -624,7 +624,7 @@ const StyleConfigurationForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-4xl w-full">
