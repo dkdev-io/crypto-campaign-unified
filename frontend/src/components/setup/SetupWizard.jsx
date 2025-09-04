@@ -48,7 +48,7 @@ const SetupWizard = () => {
         // Look for existing campaign (only select existing columns to avoid errors)
         const { data: existingCampaign, error } = await supabase
           .from('campaigns')
-          .select('id, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at')
+          .select('id, campaign_name, email, website, wallet_address, max_donation_limit, suggested_amounts, theme_color, supported_cryptos, status, created_at, applied_styles, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info')
           .eq('email', user.email)
           .order('created_at', { ascending: false })
           .limit(1)
@@ -66,6 +66,9 @@ const SetupWizard = () => {
             themeColor: existingCampaign.theme_color || savedData?.themeColor || '#2a2a72',
             suggestedAmounts: existingCampaign.suggested_amounts || [25, 50, 100, 250],
             maxDonation: existingCampaign.max_donation_limit || 3300,
+            appliedStyles: existingCampaign.applied_styles || savedData?.appliedStyles || null,
+            stylesApplied: existingCampaign.styles_applied || savedData?.stylesApplied || false,
+            styleMethod: existingCampaign.style_method || savedData?.styleMethod || null,
             
             // Data that exists only in localStorage (until DB is fixed)
             fecCommitteeId: savedData?.fecCommitteeId || '',
@@ -77,8 +80,6 @@ const SetupWizard = () => {
             allTermsAccepted: savedData?.allTermsAccepted || false,
             websiteUrl: savedData?.websiteUrl || '',
             styleAnalysis: savedData?.styleAnalysis || null,
-            appliedStyles: savedData?.appliedStyles || null,
-            stylesApplied: savedData?.stylesApplied || false,
             embedCode: savedData?.embedCode || '',
             setupCompleted: savedData?.setupCompleted || false,
             currentStep: savedData?.currentStep || 2
@@ -160,6 +161,18 @@ const SetupWizard = () => {
         if (updatedData.website) dbData.website = updatedData.website;
         if (updatedData.themeColor) dbData.theme_color = updatedData.themeColor;
         if (updatedData.supportedCryptos) dbData.supported_cryptos = updatedData.supportedCryptos;
+        if (updatedData.appliedStyles) dbData.applied_styles = updatedData.appliedStyles;
+        if (updatedData.stylesApplied !== undefined) dbData.styles_applied = updatedData.stylesApplied;
+        if (updatedData.styleMethod) dbData.style_method = updatedData.styleMethod;
+        
+        // Committee information fields
+        if (updatedData.committeeName) dbData.committee_name = updatedData.committeeName;
+        if (updatedData.fecCommitteeId) dbData.fec_committee_id = updatedData.fecCommitteeId;
+        if (updatedData.committeeAddress) dbData.committee_address = updatedData.committeeAddress;
+        if (updatedData.committeeCity) dbData.committee_city = updatedData.committeeCity;
+        if (updatedData.committeeState) dbData.committee_state = updatedData.committeeState;
+        if (updatedData.committeeZip) dbData.committee_zip = updatedData.committeeZip;
+        if (updatedData.selectedCommittee) dbData.committee_contact_info = updatedData.selectedCommittee;
         
         // Handle suggested amounts
         if (updatedData.suggestedAmounts !== undefined) {

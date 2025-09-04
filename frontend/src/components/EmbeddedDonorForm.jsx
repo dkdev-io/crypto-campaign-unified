@@ -226,7 +226,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
             </div>
           </div>
 
-          <div style={dynamicStyles.row}:
+          <div style={dynamicStyles.row}>
             <div style={dynamicStyles.halfField}>
               <label style={dynamicStyles.label}>Employer *</label>
               <input 

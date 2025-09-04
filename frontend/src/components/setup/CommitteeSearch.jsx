@@ -180,23 +180,44 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
     try {
       setLoading(true);
       
-      // Save committee name directly to the current campaign in Supabase
+      // Save complete committee information to the current campaign in Supabase
       const campaignId = formData.campaignId;
       if (!campaignId) {
         throw new Error('Campaign ID not found. Please refresh and try again.');
       }
       
-      const { error: updateError } = await supabase
+      const committeeData = {
+        committee_name: manualCommittee.name.trim(),
+        fec_committee_id: 'MANUAL-' + Date.now(),
+        committee_address: manualCommittee.address.trim(),
+        committee_city: manualCommittee.city.trim(),
+        committee_state: manualCommittee.state.trim(),
+        committee_zip: manualCommittee.zip.trim(),
+        committee_contact_info: {
+          name: manualCommittee.name.trim(),
+          address: manualCommittee.address.trim(),
+          city: manualCommittee.city.trim(),
+          state: manualCommittee.state.trim(),
+          zip: manualCommittee.zip.trim(),
+          entryMethod: 'manual',
+          savedAt: new Date().toISOString()
+        }
+      };
+      
+      console.log('Saving committee data to Supabase:', committeeData);
+      
+      const { data: updatedCampaign, error: updateError } = await supabase
         .from('campaigns')
-        .update({ 
-          committee_name: manualCommittee.name.trim(),
-          fec_committee_id: 'MANUAL-' + Date.now()
-        })
-        .eq('id', campaignId);
+        .update(committeeData)
+        .eq('id', campaignId)
+        .select();
         
       if (updateError) {
-        throw updateError;
+        console.error('Supabase update error:', updateError);
+        throw new Error('Failed to save committee information: ' + updateError.message);
       }
+      
+      console.log('✅ Committee information saved to Supabase:', updatedCampaign);
       
       // Update form data and proceed
       updateFormData({
@@ -229,10 +250,19 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         committeeZip: manualCommittee.zip.trim()
       });
       
-      setSuccess('Committee information saved successfully!');
-      setTimeout(() => {
-        onNext();
-      }, 1000);
+      setSuccess('Committee information saved to database successfully!');
+      
+      // Clear the manual form after successful save
+      setManualCommittee({
+        name: '',
+        id: '',
+        type: 'N',
+        candidateName: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: ''
+      });
       
     } catch (err) {
       setError('Failed to save committee name: ' + err.message);
@@ -638,40 +668,81 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         </div>
       )}
 
+      {/* Success Message with Continue Button */}
+      {success && (
+        <div style={{ 
+          background: '#d4edda', 
+          border: '1px solid #c3e6cb',
+          borderRadius: '6px',
+          padding: '2rem',
+          marginBottom: '2rem',
+          textAlign: 'center'
+        }}>
+          <h4 style={{ color: '#155724', margin: '0 0 1rem 0' }}>
+            ✅ Committee Information Saved!
+          </h4>
+          <p style={{ color: '#155724', margin: '0 0 2rem 0' }}>
+            Your committee details have been saved to the database.
+          </p>
+          <button 
+            className="btn btn-primary"
+            onClick={onNext}
+            style={{
+              background: '#28a745',
+              color: 'white',
+              border: 'none',
+              padding: '1rem 2rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: '600'
+            }}
+          >
+            Continue to Next Step →
+          </button>
+        </div>
+      )}
+
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
           ← Back
         </button>
-        <button 
-          className="btn btn-primary"
-          onClick={handleConfirmCommittee}
-          disabled={!selectedCommittee || (validation && !validation.isValid)}
-        >
-          Next →
-        </button>
         
-        {/* Always show skip button for testing */}
-        <button 
-          className="btn btn-secondary"
-          onClick={() => {
-            updateFormData({
-              fecCommitteeId: 'manual-entry',
-              committeeName: 'Manual Entry - To Be Updated',
-              selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
-            });
-            onNext();
-          }}
-          style={{ 
-            marginTop: '1rem', 
-            background: '#6c757d', 
-            color: 'white',
-            display: 'block',
-            width: '100%'
-          }}
-        >
-          Continue Without Committee (Can Update Later) →
-        </button>
+        {/* Only show standard next button if no committee saved yet */}
+        {!success && (
+          <>
+            <button 
+              className="btn btn-primary"
+              onClick={handleConfirmCommittee}
+              disabled={!selectedCommittee || (validation && !validation.isValid)}
+            >
+              Next →
+            </button>
+            
+            {/* Always show skip button for testing */}
+            <button 
+              className="btn btn-secondary"
+              onClick={() => {
+                updateFormData({
+                  fecCommitteeId: 'manual-entry',
+                  committeeName: 'Manual Entry - To Be Updated',
+                  selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
+                });
+                onNext();
+              }}
+              style={{ 
+                marginTop: '1rem', 
+                background: '#6c757d', 
+                color: 'white',
+                display: 'block',
+                width: '100%'
+              }}
+            >
+              Continue Without Committee (Can Update Later) →
+            </button>
+          </>
+        )}
       </div>
 
     </div>
