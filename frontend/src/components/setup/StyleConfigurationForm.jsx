@@ -263,7 +263,7 @@ const StyleConfigurationForm = () => {
 
   const renderManualEntry = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-foreground mb-4">
+      <h3 className="font-semibold text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
         Manual Style Entry
       </h3>
       
@@ -383,7 +383,7 @@ const StyleConfigurationForm = () => {
 
   const renderImportSection = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-foreground mb-4">
+      <h3 className="font-semibold text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
         Import from Website
       </h3>
       
@@ -482,7 +482,7 @@ const StyleConfigurationForm = () => {
     return (
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-semibold text-foreground">
+          <h3 className="font-semibold text-foreground" style={{fontSize: 'var(--text-heading-md)'}}>
             Form Preview
           </h3>
           <div className="flex bg-muted rounded-lg p-1">
@@ -631,8 +631,8 @@ const StyleConfigurationForm = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🎨</div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <div className="mb-4"></div>
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
                 Style Your Form
               </h2>
               <p className="text-muted-foreground">

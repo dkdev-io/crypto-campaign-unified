@@ -25,9 +25,9 @@ serve(async (req) => {
       body: JSON.stringify({
         sql: `
           ALTER TABLE campaigns 
-          ADD COLUMN IF NOT EXISTS user_id UUID,
-          ADD COLUMN IF NOT EXISTS user_full_name TEXT,
-          ADD COLUMN IF NOT EXISTS setup_completed BOOLEAN DEFAULT false;
+          ADD COLUMN IF NOT EXISTS applied_styles JSONB,
+          ADD COLUMN IF NOT EXISTS styles_applied BOOLEAN DEFAULT false,
+          ADD COLUMN IF NOT EXISTS style_method TEXT;
         `
       })
     });

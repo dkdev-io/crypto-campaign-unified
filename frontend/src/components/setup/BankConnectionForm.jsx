@@ -62,8 +62,8 @@ const BankConnectionForm = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🏦</div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <div className="mb-4"></div>
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
                 Connect Bank Account
               </h2>
               <p className="text-muted-foreground">
@@ -74,8 +74,8 @@ const BankConnectionForm = () => {
             {/* Coming Soon Banner */}
             <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
               <div className="text-center">
-                <div className="text-4xl mb-3">🚧</div>
-                <h3 className="text-xl font-semibold text-blue-900 mb-2">
+                <div className="mb-3"></div>
+                <h3 className="font-semibold mb-2" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>'
                   Plaid Integration Coming Soon
                 </h3>
                 <p className="text-blue-700 text-sm mb-4">
@@ -134,7 +134,7 @@ const BankConnectionForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold text-blue-600">1</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'1</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Connect Securely</div>
                   <div className="text-sm text-gray-600">
@@ -143,7 +143,7 @@ const BankConnectionForm = () => {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold text-blue-600">2</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'2</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Select Account</div>
                   <div className="text-sm text-gray-600">
@@ -152,7 +152,7 @@ const BankConnectionForm = () => {
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-xl font-bold text-blue-600">3</span>
+                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue)'}}">'3</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Start Processing</div>
                   <div className="text-sm text-gray-600">

@@ -183,7 +183,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
+      <h2 className="text-center mb-4 font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}>
         Setup Complete! - Step 8
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
@@ -497,7 +497,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           marginBottom: '2rem'
         }}>
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🎉</div>
+            <div style={{ marginBottom: '1rem' }}></div>
             <h3 style={{ color: '#0066cc', margin: '0 0 0.5rem 0' }}>
               Your Donor Page is Live!
             </h3>
@@ -514,7 +514,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>
             <h5 style={{ color: '#495057', marginTop: 0 }}>
-              📄 Your Dedicated Donor Page
+              Your Dedicated Donor Page
             </h5>
             <div style={{ 
               background: '#f8f9fa',
@@ -543,7 +543,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                   fontWeight: '500'
                 }}
               >
-                🌐 View Your Page
+                View Your Page
               </a>
               <button
                 onClick={() => {
@@ -562,7 +562,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                   fontWeight: '500'
                 }}
               >
-                📋 Copy Page URL
+                Copy Page URL
               </button>
             </div>
           </div>
@@ -612,7 +612,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 fontWeight: '500'
               }}
             >
-              🌐 Visit Campaign Page
+              Visit Campaign Page
             </a>
             <button
               onClick={() => {
@@ -630,7 +630,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 fontWeight: '500'
               }}
             >
-              📋 Copy Campaign URL
+              Copy Campaign URL
             </button>
           </div>
         </div>
@@ -645,7 +645,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         marginBottom: '2rem'
       }}>
         <h4 style={{ color: '#495057', marginTop: 0 }}>
-          📈 What's Next?
+          What's Next?
         </h4>
         <div style={{ 
           display: 'grid', 
@@ -655,7 +655,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         }}>
           {formData.donorPageGenerated && formData.donorPageUrl ? (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🌐</div>
+              <div style={{ marginBottom: '0.5rem' }}></div>
               <strong>Share Donor Page</strong>
               <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
                 Direct supporters to your custom page
@@ -663,7 +663,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             </div>
           ) : (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🌐</div>
+              <div style={{ marginBottom: '0.5rem' }}></div>
               <strong>Embed on Website</strong>
               <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
                 Add the form to your campaign website
@@ -671,21 +671,21 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             </div>
           )}
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>📱</div>
+            <div style={{ marginBottom: '0.5rem' }}></div>
             <strong>Share on Social</strong>
             <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
               Share your donation page on social media
             </div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>📊</div>
+            <div style={{ marginBottom: '0.5rem' }}></div>
             <strong>Monitor Donations</strong>
             <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
               Track contributions in the admin panel
             </div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>⚖️</div>
+            <div style={{ marginBottom: '0.5rem' }}></div>
             <strong>Stay Compliant</strong>
             <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
               Regular FEC reporting and compliance
@@ -716,7 +716,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             fontWeight: '500'
           }}
         >
-          📊 Go to Admin Panel
+          Go to Admin Panel
         </a>
         
         <button
@@ -742,7 +742,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           ← Back to Terms
         </button>
         <button className="btn" onClick={handleStartOver}>
-          🔄 Setup New Campaign
+          Setup New Campaign
         </button>
       </div>
 
@@ -755,7 +755,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         borderRadius: '8px',
         textAlign: 'center'
       }}>
-        <div style={{ fontSize: '32px', marginBottom: '1rem' }}>🎉</div>
+        <div style={{ marginBottom: '1rem' }}></div>
         <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>
           Congratulations!
         </h4>

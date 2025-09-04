@@ -149,7 +149,7 @@ const DonorDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-3xl font-bold mb-2">
+              <h1 className="font-bold mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>'
                 Welcome back, {donor?.profile?.full_name || 'Donor'}!
               </h1>
               <p className="text-blue-200">
@@ -186,7 +186,7 @@ const DonorDashboard = () => {
               </div>
               <TrendingUp className="w-4 h-4 text-green-600" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {formatCurrency(stats.totalDonated)}
             </p>
             <p className="text-sm text-gray-600">Total Donated</p>
@@ -198,7 +198,7 @@ const DonorDashboard = () => {
                 <Heart className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {stats.donationCount}
             </p>
             <p className="text-sm text-gray-600">Total Donations</p>
@@ -210,7 +210,7 @@ const DonorDashboard = () => {
                 <Award className="w-6 h-6 text-purple-600" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {stats.campaignsSupported}
             </p>
             <p className="text-sm text-gray-600">Campaigns Supported</p>
@@ -222,7 +222,7 @@ const DonorDashboard = () => {
                 <Clock className="w-6 h-6 text-yellow-600" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {formatDate(stats.lastDonationDate)}
             </p>
             <p className="text-sm text-gray-600">Last Donation</p>

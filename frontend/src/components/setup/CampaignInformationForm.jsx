@@ -129,8 +129,8 @@ const CampaignInformationForm = () => {
           <div className="bg-card rounded-2xl shadow-2xl p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🏛️</div>
-              <h2 className="text-3xl font-bold text-foreground mb-2">
+              <div className="mb-4"></div>
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
                 Campaign Information
               </h2>
               <p className="text-muted-foreground">
