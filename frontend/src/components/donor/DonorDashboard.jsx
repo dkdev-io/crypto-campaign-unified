@@ -116,7 +116,7 @@ const DonorDashboard = () => {
       completed: 'bg-green-100 text-green-800',
       pending: 'bg-yellow-100 text-yellow-800',
       failed: 'bg-red-100 text-red-800',
-      refunded: 'bg-gray-100 text-gray-800'
+      refunded: 'bg-muted text-muted-foreground'
     };
 
     return (
@@ -194,7 +194,7 @@ const DonorDashboard = () => {
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2 bg-accent rounded-lg">
                 <Heart className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -250,7 +250,7 @@ const DonorDashboard = () => {
               <div className="divide-y divide-gray-200">
                 {recentDonations.length > 0 ? (
                   recentDonations.map((donation) => (
-                    <div key={donation.id} className="p-6 hover:bg-gray-50 transition-colors">
+                    <div key={donation.id} className="p-6 hover:bg-muted transition-colors">
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-medium text-gray-900">
@@ -331,7 +331,7 @@ const DonorDashboard = () => {
                         <Link 
                           key={saved.id}
                           to={`/campaigns/${campaign?.id}`}
-                          className="block hover:bg-gray-50 rounded-lg p-3 transition-colors"
+                          className="block hover:bg-muted rounded-lg p-3 transition-colors"
                         >
                           <div className="flex gap-3">
                             {campaign?.image_url && (
@@ -349,9 +349,9 @@ const DonorDashboard = () => {
                                 {campaign?.organization_name}
                               </p>
                               <div className="mt-2">
-                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div className="w-full bg-muted rounded-full h-2">
                                   <div 
-                                    className="bg-blue-600 h-2 rounded-full"
+                                    className="bg-primary h-2 rounded-full"
                                     style={{ width: `${progress}%` }}
                                   ></div>
                                 </div>
@@ -380,7 +380,7 @@ const DonorDashboard = () => {
               <div className="space-y-2">
                 <Link
                   to="/campaigns"
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 hover:bg-muted rounded-lg transition-colors"
                 >
                   <span className="flex items-center gap-3">
                     <Heart className="w-5 h-5 text-gray-600" />
@@ -390,7 +390,7 @@ const DonorDashboard = () => {
                 </Link>
                 <Link
                   to="/donor/tax-receipts"
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 hover:bg-muted rounded-lg transition-colors"
                 >
                   <span className="flex items-center gap-3">
                     <FileText className="w-5 h-5 text-gray-600" />
@@ -400,7 +400,7 @@ const DonorDashboard = () => {
                 </Link>
                 <Link
                   to="/donor/profile"
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="flex items-center justify-between p-3 hover:bg-muted rounded-lg transition-colors"
                 >
                   <span className="flex items-center gap-3">
                     <Settings className="w-5 h-5 text-gray-600" />

@@ -31,7 +31,7 @@ const StyleConfigurationForm = () => {
     primaryColor: '#2a2a72',
     secondaryColor: '#ffffff',
     accentColor: '#28a745',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     logoImage: null
   });
   const [importedStyles, setImportedStyles] = useState(null);
@@ -53,7 +53,7 @@ const StyleConfigurationForm = () => {
             primaryColor: savedData.appliedStyles.colors?.primary || '#2a2a72',
             secondaryColor: savedData.appliedStyles.colors?.secondary || '#ffffff',
             accentColor: savedData.appliedStyles.colors?.accent || '#28a745',
-            fontFamily: savedData.appliedStyles.fonts?.body?.suggested || 'Arial, sans-serif',
+            fontFamily: savedData.appliedStyles.fonts?.body?.suggested || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
             logoImage: savedData.appliedStyles.logoImage || null
           });
         }
@@ -219,8 +219,8 @@ const StyleConfigurationForm = () => {
         },
         fonts: {
           primary: manualStyles.fontFamily,
-          heading: manualStyles.fontFamily,
-          body: manualStyles.fontFamily
+          heading: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+          body: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif'
         },
         images: {
           logo: manualStyles.logoImage
@@ -475,7 +475,7 @@ const StyleConfigurationForm = () => {
       primaryColor: importedStyles.colors?.primary || '#2a2a72',
       secondaryColor: importedStyles.colors?.secondary || '#ffffff',
       accentColor: importedStyles.colors?.accent || '#28a745',
-      fontFamily: importedStyles.fonts?.primary || 'Arial, sans-serif',
+      fontFamily: importedStyles.fonts?.primary || 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
       logoImage: importedStyles.images?.logo || null
     } : manualStyles;
 
@@ -521,7 +521,7 @@ const StyleConfigurationForm = () => {
                   <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
                     <Building2 className="w-6 h-6 text-gray-600" />
                   </div>
-                  <h4 className="text-lg font-semibold" style={{ fontFamily: 'Arial, sans-serif', color: '#2a2a72' }}>
+                  <h4 className="text-lg font-semibold" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', color: 'hsl(var(--crypto-navy))' }}>
                     {formData.campaignName || 'Your Campaign'}
                   </h4>
                 </div>
@@ -537,7 +537,7 @@ const StyleConfigurationForm = () => {
                   </div>
                   <button 
                     className="w-full py-2 bg-blue-600 text-white rounded font-medium"
-                    style={{ fontFamily: 'Arial, sans-serif' }}
+                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif' }}
                   >
                     Donate Now
                   </button>

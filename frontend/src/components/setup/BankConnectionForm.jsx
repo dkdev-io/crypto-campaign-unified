@@ -72,7 +72,7 @@ const BankConnectionForm = () => {
             </div>
 
             {/* Coming Soon Banner */}
-            <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
+            <div className="mb-8 p-6 bg-muted border border-border rounded-xl">
               <div className="text-center">
                 <div className="mb-3"></div>
                 <h3 className="font-semibold mb-2" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>
@@ -82,7 +82,7 @@ const BankConnectionForm = () => {
                   We're currently implementing secure bank account integration with Plaid. 
                   This will allow you to safely connect your campaign's bank account for contribution processing.
                 </p>
-                <div className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                <div className="inline-block bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-medium">
                   Expected: Next Update
                 </div>
               </div>
@@ -127,13 +127,13 @@ const BankConnectionForm = () => {
             </div>
 
             {/* How It Works */}
-            <div className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg">
+            <div className="mb-8 p-6 bg-muted border border-border rounded-lg">
               <h4 className="text-lg font-semibold text-gray-900 mb-4">
                 💡 How Bank Connection Will Work
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>1</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Connect Securely</div>
@@ -142,7 +142,7 @@ const BankConnectionForm = () => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>2</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Select Account</div>
@@ -151,7 +151,7 @@ const BankConnectionForm = () => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>3</span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Start Processing</div>

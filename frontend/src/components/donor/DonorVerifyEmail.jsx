@@ -63,7 +63,7 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'verified') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
@@ -79,7 +79,7 @@ const DonorVerifyEmail = () => {
             </p>
             <Link
               to="/donors/dashboard"
-              className="inline-block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200"
+              className="inline-block w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200"
             >
               Go to Dashboard
             </Link>
@@ -92,7 +92,7 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'error') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
@@ -110,7 +110,7 @@ const DonorVerifyEmail = () => {
               <button
                 onClick={resendVerificationEmail}
                 disabled={resendLoading || !email}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {resendLoading ? 'Sending...' : 'Resend Verification Email'}
               </button>
@@ -129,12 +129,12 @@ const DonorVerifyEmail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       <DonorBreadcrumb />
       <div className="flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
         <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
             <Mail className="w-8 h-8 text-blue-600" />
           </div>
           <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
@@ -146,7 +146,7 @@ const DonorVerifyEmail = () => {
           <p className="font-medium text-foreground mb-6">
             {email || 'your registered email'}
           </p>
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
+          <div className="bg-muted rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-800">
               Please click the verification link in the email to activate your donor account.
               The link will expire in 24 hours.
@@ -167,7 +167,7 @@ const DonorVerifyEmail = () => {
             <button
               onClick={resendVerificationEmail}
               disabled={resendLoading || !email}
-              className="w-full bg-card border border-gray-300 text-foreground font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-card border border-border text-foreground font-semibold py-3 px-4 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {resendLoading ? 'Sending...' : "Didn't receive the email? Resend"}
             </button>

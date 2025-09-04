@@ -189,11 +189,11 @@ const DonorProfile = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       {/* Breadcrumb Navigation */}
       <DonorBreadcrumb />
       {/* Header */}
-      <div className="bg-gradient-to-r from-navy-900 to-blue-900 text-white">
+      <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <button
             onClick={() => navigate('/donors/dashboard')}
@@ -294,7 +294,7 @@ const DonorProfile = () => {
                       value={profileData.email}
                       onChange={handleProfileChange}
                       disabled
-                      className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-300 rounded-lg cursor-not-allowed"
+                      className="w-full pl-10 pr-3 py-2 bg-muted border border-gray-300 rounded-lg cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -405,7 +405,7 @@ const DonorProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save className="w-4 h-4" />
                   {loading ? 'Saving...' : 'Save Profile'}
@@ -419,7 +419,7 @@ const DonorProfile = () => {
               <div className="space-y-4">
                 <h3 className="font-medium text-gray-900">Communication Preferences</h3>
                 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Email notifications</p>
                     <p className="text-sm text-gray-600">Receive updates via email</p>
@@ -432,7 +432,7 @@ const DonorProfile = () => {
                   />
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">SMS notifications</p>
                     <p className="text-sm text-gray-600">Receive text messages for important updates</p>
@@ -445,7 +445,7 @@ const DonorProfile = () => {
                   />
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Newsletter</p>
                     <p className="text-sm text-gray-600">Monthly updates about campaigns and impact</p>
@@ -458,7 +458,7 @@ const DonorProfile = () => {
                   />
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Donation updates</p>
                     <p className="text-sm text-gray-600">Updates about your donations and their impact</p>
@@ -471,7 +471,7 @@ const DonorProfile = () => {
                   />
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Campaign updates</p>
                     <p className="text-sm text-gray-600">Updates from campaigns you've supported</p>
@@ -489,7 +489,7 @@ const DonorProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save className="w-4 h-4" />
                   {loading ? 'Saving...' : 'Save Preferences'}
@@ -552,7 +552,7 @@ const DonorProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Shield className="w-4 h-4" />
                   {loading ? 'Updating...' : 'Update Password'}
