@@ -349,8 +349,9 @@ const CampaignAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 BYPASS: Navigating to setup...');
-                    navigate('/campaigns/auth/setup');
+                    console.log('🚨 BYPASS: Setting dev bypass and navigating to setup...');
+                    localStorage.setItem('devBypass', 'true');
+                    navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
@@ -510,8 +511,9 @@ const CampaignAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('🚨 BYPASS: Navigating to setup...');
-                    navigate('/campaigns/auth/setup');
+                    console.log('🚨 BYPASS: Setting dev bypass and navigating to setup...');
+                    localStorage.setItem('devBypass', 'true');
+                    navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >

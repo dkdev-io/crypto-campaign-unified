@@ -37,12 +37,16 @@ const CampaignSetup = () => {
     );
   }
 
-  // If user is not authenticated, show the auth component
-  if (!user) {
+  // Check for dev bypass in URL or localStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  const devBypass = urlParams.get('bypass') === 'dev' || localStorage.getItem('devBypass') === 'true';
+  
+  // If user is not authenticated and no dev bypass, show auth component
+  if (!user && !devBypass) {
     return <CampaignAuth />;
   }
 
-  // Show SetupWizard for authenticated users
+  // Show SetupWizard for authenticated users or dev bypass
   return <SetupWizard />;
 };
 

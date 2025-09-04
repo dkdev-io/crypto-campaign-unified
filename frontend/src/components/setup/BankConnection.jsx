@@ -133,20 +133,33 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
     onNext();
   };
 
-  const handleSkipForDev = () => {
+  const handleSkipForDev = async () => {
     console.log('Skip button clicked, current formData:', formData);
-    console.log('onNext function:', onNext);
     
-    updateFormData({ 
-      skipBankConnection: true,
-      bankAccountVerified: false
-    });
-    setSuccess('Bank connection skipped - proceeding to next step');
-    
-    setTimeout(() => {
-      console.log('Calling onNext() after timeout');
-      onNext();
-    }, 1000);
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Update form data first
+      await updateFormData({ 
+        skipBankConnection: true,
+        bankAccountVerified: false
+      });
+      
+      setSuccess('Bank connection skipped - proceeding to next step');
+      
+      // Call onNext directly without timeout
+      setTimeout(() => {
+        console.log('Calling onNext() after brief delay');
+        onNext();
+      }, 500);
+      
+    } catch (err) {
+      console.error('Error in handleSkipForDev:', err);
+      setError('Failed to skip bank connection: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -288,18 +301,20 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       }}>
         <button
           onClick={handleSkipForDev}
+          disabled={loading}
           style={{
             background: '#ffc107',
             color: '#212529',
             border: 'none',
             padding: '0.75rem 1rem',
             borderRadius: '4px',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             fontSize: '14px',
-            fontWeight: '500'
+            fontWeight: '500',
+            opacity: loading ? 0.7 : 1
           }}
         >
-          ⚠️ Skip Bank Connection
+          {loading ? '⏳ Skipping...' : '⚠️ Skip Bank Connection'}
         </button>
       </div>
 
