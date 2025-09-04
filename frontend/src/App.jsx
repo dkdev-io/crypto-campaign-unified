@@ -11,7 +11,7 @@ import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import CampaignAuth from './components/campaigns/CampaignAuth';
 import CampaignInformationForm from './components/setup/CampaignInformationForm';
-import CommitteeSearchForm from './components/setup/CommitteeSearchForm';
+import CommitteeSearchPage from './components/setup/CommitteeSearchPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
@@ -63,6 +63,7 @@ function App() {
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
             <Route path="/YourInfo" element={<CampaignInformationForm />} />
+            <Route path="/CommitteeSearch" element={<CommitteeSearchPage />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/debug" element={<CampaignDebug />} />
