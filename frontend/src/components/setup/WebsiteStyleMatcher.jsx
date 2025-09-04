@@ -7,6 +7,10 @@ import React, { useState } from 'react';
 
 const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
   const [websiteUrl, setWebsiteUrl] = useState(formData.websiteUrl || '');
+  const [primaryColor, setPrimaryColor] = useState(formData.primaryColor || '#2a2a72');
+  const [secondaryColor, setSecondaryColor] = useState(formData.secondaryColor || '#ff6b6b');
+  const [selectedFont, setSelectedFont] = useState(formData.selectedFont || 'Inter');
+  const [logoImage, setLogoImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState(null);
   const [error, setError] = useState('');
@@ -41,6 +45,39 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
     // Clear previous analysis if URL changes significantly
     if (analysis && !url.includes(analysis.domain)) {
       setAnalysis(null);
+    }
+  };
+
+  /**
+   * Handle color input changes
+   */
+  const handleColorChange = (colorType, value) => {
+    if (colorType === 'primary') {
+      setPrimaryColor(value);
+      updateFormData({ primaryColor: value });
+    } else if (colorType === 'secondary') {
+      setSecondaryColor(value);
+      updateFormData({ secondaryColor: value });
+    }
+  };
+
+  /**
+   * Handle font selection change
+   */
+  const handleFontChange = (e) => {
+    const font = e.target.value;
+    setSelectedFont(font);
+    updateFormData({ selectedFont: font });
+  };
+
+  /**
+   * Handle image upload
+   */
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogoImage(file);
+      updateFormData({ logoImage: file });
     }
   };
 
