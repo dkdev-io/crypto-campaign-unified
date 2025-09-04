@@ -681,7 +681,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             <div style={{ marginBottom: '0.5rem' }}></div>
             <strong>Monitor Donations</strong>
             <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Track contributions in the admin panel
+              Track contributions in your dashboard
             </div>
           </div>
           <div style={{ textAlign: 'center' }}>
@@ -716,7 +716,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
             fontWeight: '500'
           }}
         >
-          Go to Admin Panel
+          Go to Dashboard
         </a>
         
         <button

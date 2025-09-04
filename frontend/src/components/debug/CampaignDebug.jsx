@@ -106,7 +106,6 @@ const CampaignDebug = () => {
         <h4>Debug Actions</h4>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <a href="/" style={{ color: '#007bff' }}>Setup Wizard</a>
-          <a href="/admin" style={{ color: '#007bff' }}>Admin Panel</a>
           <a href="/supabase-check" style={{ color: '#007bff' }}>Supabase Check</a>
           <a href="/test-form" style={{ color: '#007bff' }}>Test Form (Fake ID)</a>
         </div>

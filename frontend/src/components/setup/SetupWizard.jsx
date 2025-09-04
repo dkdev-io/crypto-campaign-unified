@@ -354,7 +354,7 @@ const SetupWizard = () => {
                 background: '#f8f9fa'
               }}
             >
-              Admin Panel
+              Dashboard
             </a>
           </div>
           <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
