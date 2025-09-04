@@ -74,26 +74,37 @@ const StyleConfigurationForm = () => {
       console.warn('Could not save to localStorage:', e);
     }
 
-    // Save to Supabase if we have campaign ID
+    // Save to Supabase using proper style columns
     if (updatedData.campaignId) {
       try {
-        const { error } = await supabase
-          .from('campaigns')
-          .update({
-            // Store style data as JSON in description field for now
-            description: JSON.stringify({
-              original_description: updatedData.description,
-              style_data: newData.styleData,
-              style_method: newData.styleMethod,
-              styles_applied: newData.stylesApplied
-            })
-          })
-          .eq('id', updatedData.campaignId);
+        const dbUpdates = {};
+        
+        if (newData.styleData) {
+          dbUpdates.style_analysis = newData.styleData;
+          dbUpdates.website_analyzed = formData.website;
+        }
+        
+        if (newData.appliedStyles) {
+          dbUpdates.applied_styles = newData.appliedStyles;
+          dbUpdates.styles_applied = true;
+          dbUpdates.styles_applied_at = new Date().toISOString();
+        }
+        
+        if (newData.styleMethod) {
+          dbUpdates.style_method = newData.styleMethod;
+        }
 
-        if (error) {
-          console.warn('Could not save styles to database:', error);
-        } else {
-          console.log('Styles saved to database successfully');
+        if (Object.keys(dbUpdates).length > 0) {
+          const { error } = await supabase
+            .from('campaigns')
+            .update(dbUpdates)
+            .eq('id', updatedData.campaignId);
+
+          if (error) {
+            console.warn('Could not save styles to database:', error);
+          } else {
+            console.log('Styles saved to database successfully:', dbUpdates);
+          }
         }
       } catch (err) {
         console.warn('Database save error:', err);
