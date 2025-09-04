@@ -221,14 +221,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           </button>
         </div>
       ) : (
-        <div style={{ 
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-          textAlign: 'center'
-        }}>
+        <div className="bg-muted border border-border rounded-lg p-6 mb-8 text-center">
           <div className="mb-4"></div>
           <p className="text-muted-foreground mb-8">
             Connect your campaign's bank account to process contributions securely through Plaid.
@@ -252,27 +245,11 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
 
       {/* Skip Option */}
-      <div style={{ 
-        background: '#fff3cd',
-        border: '1px solid #ffeaa7',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
+      <div className="bg-accent/20 border border-accent rounded-lg p-6 mb-8">
         <button
           onClick={handleSkipForDev}
           disabled={loading}
-          style={{
-            background: '#ffc107',
-            color: '#212529',
-            border: 'none',
-            padding: '0.75rem 1rem',
-            borderRadius: '4px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '14px',
-            fontWeight: '500',
-            opacity: loading ? 0.7 : 1
-          }}
+          className="bg-accent text-accent-foreground px-4 py-3 rounded text-sm font-medium disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {loading ? 'Skipping...' : 'Skip Bank Connection'}
         </button>

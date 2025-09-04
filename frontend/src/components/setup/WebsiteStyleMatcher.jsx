@@ -315,16 +315,10 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
 
       {/* URL Input Section */}
       {!analysis && !analyzing && (
-        <div style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '3rem',
-          margin: '2rem 0'
-        }}>
-          <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '48px', marginBottom: '1.5rem' }}>🌐</div>
-            <h3 style={{ color: '#495057', margin: '0 0 1rem 0' }}>
+        <div className="bg-card border border-border rounded-lg p-12 my-8">
+          <div className="mb-10 text-center">
+            <div className="mb-6"></div>
+            <h3 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>'
               Analyze Your Website
             </h3>
             <p style={{ color: '#6c757d', margin: 0, fontSize: '1.1rem' }}>
