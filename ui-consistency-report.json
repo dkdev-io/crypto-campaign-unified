@@ -1,0 +1,192 @@
+{
+  "pages": [
+    {
+      "name": "Home",
+      "url": "/",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Campaign Auth",
+      "url": "/campaigns/auth",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Donor Auth",
+      "url": "/donors/auth",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Campaign Setup",
+      "url": "/campaigns/auth/setup",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Campaign Info Form",
+      "url": "/YourInfo",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Committee Search",
+      "url": "/CommitteeSearch",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Bank Connection",
+      "url": "/BankConnection",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    },
+    {
+      "name": "Website Style",
+      "url": "/WebsiteStyle",
+      "emojis": [
+        "🔧"
+      ],
+      "fontSizes": [
+        {
+          "tag": "H1",
+          "fontSize": "96px",
+          "text": "Storey",
+          "hasInlineStyle": true
+        },
+        {
+          "tag": "H2",
+          "fontSize": "48px",
+          "text": "is the place",
+          "hasInlineStyle": true
+        }
+      ],
+      "hardcodedColors": [],
+      "status": "success"
+    }
+  ],
+  "errors": [],
+  "emojis": [],
+  "inconsistentFonts": [],
+  "inconsistentColors": []
+}

@@ -220,7 +220,7 @@ const BankConnectionForm = () => {
             {/* Technical Note */}
             <div className="mt-6 p-4 bg-muted/30 rounded-lg">
               <div className="text-xs text-muted-foreground">
-                <strong>🔧 Technical Note:</strong> Plaid integration requires backend 
+                <strong>Technical Note:</strong> Plaid integration requires backend 
                 API endpoints for creating link tokens and exchanging public tokens. 
                 Implementation is in progress.
               </div>
