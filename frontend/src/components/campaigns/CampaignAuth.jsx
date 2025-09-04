@@ -134,7 +134,7 @@ const CampaignAuth = () => {
       }
 
       // Redirect to setup wizard after successful login
-      navigate('/campaigns/auth/setup/campaign-info', { replace: true });
+      navigate('/campaigns/auth/setup', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       setValidationErrors({ 
@@ -197,7 +197,7 @@ const CampaignAuth = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
@@ -205,7 +205,7 @@ const CampaignAuth = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
-                Campaigns
+                Campaign Portal
               </h2>
               <p className="text-muted-foreground">
                 Sign in to your account or create a new one
@@ -351,7 +351,7 @@ const CampaignAuth = () => {
                   onClick={() => {
                     console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup/campaign-info?bypass=dev');
+                    navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
@@ -513,7 +513,7 @@ const CampaignAuth = () => {
                   onClick={() => {
                     console.log('BYPASS: Setting dev bypass and navigating to setup...');
                     localStorage.setItem('devBypass', 'true');
-                    navigate('/campaigns/auth/setup/campaign-info?bypass=dev');
+                    navigate('/campaigns/auth/setup?bypass=dev');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                 >
