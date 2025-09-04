@@ -754,35 +754,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       </div>
       
-      {/* Always show skip button for testing */}
-      {!success && (
-        <button 
-          onClick={() => {
-            updateFormData({
-              fecCommitteeId: 'manual-entry',
-              committeeName: 'Manual Entry - To Be Updated',
-              selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
-            });
-            onNext();
-          }}
-          style={{ 
-            marginTop: '1rem', 
-            background: 'hsl(var(--crypto-medium-gray))', 
-            color: 'hsl(var(--crypto-white))',
-            display: 'block',
-            width: '100%',
-            border: 'none',
-            padding: 'var(--space-sm)',
-            borderRadius: 'var(--radius)',
-            cursor: 'pointer',
-            fontSize: 'var(--text-body-sm)',
-            fontFamily: 'Inter, sans-serif',
-            transition: 'var(--transition-smooth)'
-          }}
-        >
-          Continue Without Committee (Can Update Later)
-        </button>
-      )}
 
     </div>
   );
