@@ -159,14 +159,14 @@ const DonorDashboard = () => {
             <div className="flex gap-2">
               <Link
                 to="/donor/profile"
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-2 bg-[#3b82f6]/20 hover:bg-[#3b82f6]/30 rounded-lg transition-colors"
                 title="Profile Settings"
               >
                 <Settings className="w-5 h-5" />
               </Link>
               <button
                 onClick={signOut}
-                className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                className="p-2 bg-[#3b82f6]/20 hover:bg-[#3b82f6]/30 rounded-lg transition-colors"
                 title="Sign Out"
               >
                 <LogOut className="w-5 h-5" />
@@ -179,9 +179,9 @@ const DonorDashboard = () => {
       {/* Stats Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-[#1e40af] rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2 bg-[#3b82f6]/20 rounded-lg">
                 <DollarSign className="w-6 h-6 text-green-600" />
               </div>
               <TrendingUp className="w-4 h-4 text-green-600" />
@@ -189,43 +189,43 @@ const DonorDashboard = () => {
             <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {formatCurrency(stats.totalDonated)}
             </p>
-            <p className="text-sm text-gray-600">Total Donated</p>
+            <p className="text-sm text-white/80">Total Donated</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-[#1e40af] rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-accent rounded-lg">
-                <Heart className="w-6 h-6 text-blue-600" />
+                <Heart className="w-6 h-6 text-[#3b82f6]" />
               </div>
             </div>
             <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {stats.donationCount}
             </p>
-            <p className="text-sm text-gray-600">Total Donations</p>
+            <p className="text-sm text-white/80">Total Donations</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-[#1e40af] rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-purple-100 rounded-lg">
+              <div className="p-2 bg-[#3b82f6]/20 rounded-lg">
                 <Award className="w-6 h-6 text-purple-600" />
               </div>
             </div>
             <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {stats.campaignsSupported}
             </p>
-            <p className="text-sm text-gray-600">Campaigns Supported</p>
+            <p className="text-sm text-white/80">Campaigns Supported</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-[#1e40af] rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-yellow-100 rounded-lg">
+              <div className="p-2 bg-[#0ea5e9]/20 rounded-lg">
                 <Clock className="w-6 h-6 text-yellow-600" />
               </div>
             </div>
             <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
               {formatDate(stats.lastDonationDate)}
             </p>
-            <p className="text-sm text-gray-600">Last Donation</p>
+            <p className="text-sm text-white/80">Last Donation</p>
           </div>
         </div>
       </div>
@@ -235,10 +235,10 @@ const DonorDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Donations */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-[#1e40af] rounded-xl shadow-sm">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">Recent Donations</h2>
+                  <h2 className="text-lg font-semibold text-white">Recent Donations</h2>
                   <Link 
                     to="/donor/donations" 
                     className="text-sm text-blue-600 hover:underline flex items-center gap-1"
@@ -253,10 +253,10 @@ const DonorDashboard = () => {
                     <div key={donation.id} className="p-6 hover:bg-muted transition-colors">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-medium text-gray-900">
+                          <h3 className="font-medium text-white">
                             {donation.campaigns?.title || 'Anonymous Campaign'}
                           </h3>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-sm text-white/80 mt-1">
                             {donation.campaigns?.organization_name || 'Organization'}
                           </p>
                           <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
@@ -308,10 +308,10 @@ const DonorDashboard = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Saved Campaigns */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-[#1e40af] rounded-xl shadow-sm">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">Saved Campaigns</h2>
+                  <h2 className="text-lg font-semibold text-white">Saved Campaigns</h2>
                   <Link 
                     to="/donor/campaigns" 
                     className="text-sm text-blue-600 hover:underline"
@@ -375,7 +375,7 @@ const DonorDashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-[#1e40af] rounded-xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-2">
                 <Link

@@ -72,7 +72,7 @@ const DonorBreadcrumb = () => {
                 ) : (
                   <Link
                     to={breadcrumb.path}
-                    className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
+                    className="text-sm font-medium text-[#3b82f6] hover:text-[#0ea5e9] flex items-center gap-1 transition-colors"
                   >
                     {breadcrumb.icon && <breadcrumb.icon className="w-4 h-4" />}
                     {breadcrumb.label}

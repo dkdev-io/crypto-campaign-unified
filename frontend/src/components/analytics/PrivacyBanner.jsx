@@ -59,7 +59,7 @@ const PrivacyBanner = ({
 
   const themeClasses = {
     dark: 'bg-gray-800 text-white',
-    light: 'bg-white text-gray-900 border border-gray-200',
+    light: 'bg-[#1e40af] text-white border border-[#3b82f6]/30',
     blue: 'bg-blue-900 text-white',
     transparent: 'bg-black bg-opacity-80 text-white backdrop-blur-sm'
   };
@@ -282,13 +282,13 @@ export const PrivacySettings = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+      <div className="bg-[#1e40af] rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Privacy Settings</h2>
+            <h2 className="text-2xl font-bold text-white">Privacy Settings</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-white/60 hover:text-white"
               aria-label="Close privacy settings"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

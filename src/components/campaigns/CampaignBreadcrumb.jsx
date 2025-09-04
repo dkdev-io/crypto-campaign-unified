@@ -77,8 +77,8 @@ const CampaignBreadcrumb = () => {
                 onClick={() => handleNavigation(breadcrumb.path)}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   breadcrumb.current
-                    ? 'text-crypto-navy cursor-default'
-                    : 'text-gray-500 hover:text-crypto-blue cursor-pointer'
+                    ? 'text-white cursor-default'
+                    : 'text-white/60 hover:text-[#3b82f6] cursor-pointer'
                 }`}
                 aria-current={breadcrumb.current ? 'page' : undefined}
                 disabled={breadcrumb.current}
@@ -91,7 +91,7 @@ const CampaignBreadcrumb = () => {
         
         {/* Optional: Show current page description */}
         {location.pathname.includes('/setup') && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-white/60 mt-1">
             Complete your campaign setup to start accepting cryptocurrency donations
           </p>
         )}

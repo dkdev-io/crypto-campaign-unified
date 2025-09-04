@@ -52,7 +52,7 @@ const CampaignDebug = () => {
       </div>
       
       {campaigns.length === 0 ? (
-        <div style={{ background: '#fff3cd', padding: '1rem', borderRadius: '4px' }}>
+        <div style={{ background: '#1e40af', padding: '1rem', borderRadius: '4px', color: '#ffffff' }}>
           <p><strong>No campaigns found!</strong></p>
           <p>You need to create a campaign first using the setup wizard at <code>/</code></p>
         </div>
@@ -61,11 +61,12 @@ const CampaignDebug = () => {
           <h3>Available Campaigns</h3>
           {campaigns.map((campaign, index) => (
             <div key={campaign.id} style={{ 
-              background: '#f8f9fa', 
+              background: '#1e40af', 
               padding: '1rem', 
               marginBottom: '1rem', 
               borderRadius: '4px',
-              border: '1px solid #dee2e6'
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              color: '#ffffff'
             }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '1rem' }}>
                 <div>
@@ -83,7 +84,7 @@ const CampaignDebug = () => {
                   <div><strong>Theme:</strong> <span style={{ color: campaign.theme_color }}>{campaign.theme_color}</span></div>
                 </div>
               </div>
-              <div style={{ marginTop: '1rem', padding: '0.5rem', background: 'white', borderRadius: '4px' }}>
+              <div style={{ marginTop: '1rem', padding: '0.5rem', background: '#1e3a8a', borderRadius: '4px', color: '#ffffff' }}>
                 <strong>Test URLs:</strong>
                 <div>
                   <a 

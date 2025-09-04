@@ -628,3 +628,40 @@ body .step-indicator *,
 body .breadcrumb * {
   color: hsl(var(--crypto-white)) !important;
 }
+
+/* ENHANCED FORM TYPOGRAPHY AND STYLING */
+/* Form focus states for better accessibility */
+body .form-input:focus,
+body input:focus,
+body textarea:focus,
+body select:focus {
+  outline: none !important;
+  border-color: hsl(var(--crypto-gold)) !important;
+  box-shadow: 0 0 0 3px hsl(var(--crypto-gold) / 0.2) !important;
+  background: hsl(223 57% 25% / 0.7) !important;
+}
+
+/* Form placeholder styling for better readability */
+body .form-input::placeholder,
+body input::placeholder,
+body textarea::placeholder {
+  color: hsl(var(--crypto-white) / 0.5) !important;
+  font-size: 0.9rem !important;
+  font-style: italic !important;
+}
+
+/* Form validation error text */
+body .error-text,
+body .form-error {
+  color: hsl(var(--destructive)) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  margin-top: 0.25rem !important;
+}
+
+/* Button hover states */
+body .btn:hover,
+body button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px hsl(0 0% 0% / 0.15) !important;
+}

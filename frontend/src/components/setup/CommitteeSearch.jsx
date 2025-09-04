@@ -51,6 +51,18 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
     };
   }, [searchTerm]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.committee-search-dropdown')) {
+        setShowDropdown(false);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   const handleSearch = async (term = searchTerm) => {
     if (!term.trim() || term.trim().length < 3) {
       setCommittees([]);
@@ -355,7 +367,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
       {/* Search Section */}
       <div className="crypto-card mb-8" style={{background: 'hsl(var(--crypto-navy)) !important', border: '1px solid hsl(var(--crypto-white) / 0.2)'}}>      
-        <div className="form-group" style={{ marginBottom: '1rem', position: 'relative' }}>
+        <div className="form-group committee-search-dropdown" style={{ marginBottom: '1rem', position: 'relative' }}>
           <label style={{ fontSize: 'var(--text-body)', fontWeight: '600', color: 'hsl(var(--crypto-white))', marginBottom: 'var(--space-xs)', display: 'block', fontFamily: 'Inter, sans-serif' }}>Search for Committee</label>
           <div style={{ position: 'relative' }}>
             <input
