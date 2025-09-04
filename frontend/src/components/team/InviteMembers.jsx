@@ -118,8 +118,7 @@ const InviteMembers = ({ campaignId, onInviteSent }) => {
         return
       }
 
-      // TODO: Send invitation email via email service
-      // For now, we'll just show the invitation link
+      // Email service integration will be implemented later
       const invitationUrl = `${window.location.origin}/accept-invitation/${token}`
       
       setSuccess(`Invitation sent successfully! Share this link: ${invitationUrl}`)

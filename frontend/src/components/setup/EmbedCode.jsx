@@ -426,7 +426,7 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(testUrl);
-                  alert('Donation URL copied!');
+                  // URL copied to clipboard
                 }}
                 style={{
                   background: '#28a745',

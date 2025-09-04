@@ -139,8 +139,7 @@ export class SmartContractHandler {
       };
     }
     
-    // TODO: KYC requirements check (to be added later)
-    // This would check against KYC verification status
+    // KYC verification will be implemented in future version
     
     // All checks passed
     return {

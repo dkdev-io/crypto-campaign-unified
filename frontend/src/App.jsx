@@ -66,9 +66,9 @@ function App() {
             <Route path="/testing" element={<TestingDashboard />} />
             {/* <Route path="/donation-test" element={<DonationTest />} /> */}
             
-            {/* Admin Routes */}
-            <Route path="/minda" element={<AdminLogin />} />
+            {/* Admin Routes - Fixed route conflict */}
             <Route path="/minda/*" element={<AdminLayout />}>
+              <Route index element={<AdminLogin />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<UserManagement />} />
               <Route path="campaigns" element={<CampaignManagement />} />

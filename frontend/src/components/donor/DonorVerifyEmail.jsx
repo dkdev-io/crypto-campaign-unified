@@ -30,7 +30,7 @@ const DonorVerifyEmail = () => {
         setVerificationStatus('verified');
       }
     } catch (error) {
-      console.error('Verification error:', error);
+      // Verification error occurred
       setVerificationStatus('error');
     }
   };
@@ -54,7 +54,7 @@ const DonorVerifyEmail = () => {
       
       setResendMessage('Verification email sent! Please check your inbox.');
     } catch (error) {
-      console.error('Resend error:', error);
+      // Resend error occurred
       setResendMessage('Failed to resend email. Please try again later.');
     } finally {
       setResendLoading(false);

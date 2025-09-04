@@ -160,7 +160,7 @@ const DonorAuth = () => {
 
       navigate(from, { replace: true });
     } catch (error) {
-      console.error('Login error:', error);
+      // Login error occurred
       setValidationErrors({ 
         submit: error.message || 'Login failed. Please try again.' 
       });
@@ -196,7 +196,7 @@ const DonorAuth = () => {
         state: { email: signUpData.email } 
       });
     } catch (error) {
-      console.error('Registration error:', error);
+      // Registration error occurred
       setValidationErrors({ 
         submit: error.message || 'Registration failed. Please try again.' 
       });
@@ -342,7 +342,7 @@ const DonorAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('DONOR BYPASS: Navigating to dashboard...');
+                    // Navigating to dashboard
                     navigate('/donors/dashboard');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
@@ -521,7 +521,7 @@ const DonorAuth = () => {
                 <Button
                   type="button"
                   onClick={() => {
-                    console.log('DONOR BYPASS: Navigating to dashboard...');
+                    // Navigating to dashboard
                     navigate('/donors/dashboard');
                   }}
                   className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"

@@ -89,7 +89,7 @@ const DonorDashboard = () => {
         setSavedCampaigns(savedData || []);
       }
     } catch (error) {
-      console.error('Error fetching donor data:', error);
+      // Error fetching donor data
     } finally {
       setLoading(false);
     }
