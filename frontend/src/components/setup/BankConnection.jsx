@@ -332,7 +332,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         <button 
           className="btn btn-primary"
           onClick={handleNext}
-          disabled={!bankInfo?.isVerified && !formData.skipBankConnection}
         >
           Next: Website Style →
         </button>

@@ -27,13 +27,6 @@ const SetupWizard = () => {
   useEffect(() => {
     const initializeSetup = async () => {
       if (!user) {
-        // For development, allow setup without authentication
-        setFormData({
-          userFullName: 'Demo User',
-          email: 'demo@example.com',
-          campaignName: '',
-          website: ''
-        });
         setLoading(false);
         return;
       }
@@ -99,7 +92,7 @@ const SetupWizard = () => {
             email: user.email,
             campaignName: '',
             website: '',
-            currentStep: 1
+            currentStep: 2
           };
           
           // Recover from localStorage if available
@@ -123,21 +116,18 @@ const SetupWizard = () => {
           } else {
             // Complete fallback
             setFormData({
-              userFullName: user.user_metadata?.full_name || 'Demo User',
-              email: user.email || 'demo@example.com',
-              campaignName: '',
-              website: ''
+              userFullName: user.user_metadata?.full_name || '',
+              email: user.email,
+              currentStep: 2
             });
             setCurrentStep(1);
           }
         } catch (e) {
           setFormData({
-            userFullName: user.user_metadata?.full_name || 'Demo User',
-            email: user.email || 'demo@example.com',
-            campaignName: '',
-            website: ''
+            userFullName: user.user_metadata?.full_name || '',
+            email: user.email
           });
-          setCurrentStep(1);
+          setCurrentStep(2);
         }
       } finally {
         setLoading(false);
@@ -208,40 +198,37 @@ const SetupWizard = () => {
     console.log('Moving to next step, current data:', formData);
     
     // Create campaign if we don't have one (using only existing columns)
-    if (!campaignId) {
-      // Always create a demo campaign ID for development
-      const demoCampaignId = 'demo-campaign-' + Date.now();
-      setCampaignId(demoCampaignId);
-      console.log('Using demo campaign ID:', demoCampaignId);
-      
-      // Try to create in database if user is authenticated
-      if (user) {
-        try {
-          const newCampaignData = {
-            email: formData.email || user.email,
-            campaign_name: formData.campaignName || 'New Campaign',
-            website: formData.website || '',
-            wallet_address: 'temp-wallet-' + Date.now(),
-            max_donation_limit: 3300,
-            suggested_amounts: [25, 50, 100, 250],
-            theme_color: formData.themeColor || '#2a2a72',
-            status: 'setup'
-          };
+    if (!campaignId && user) {
+      try {
+        const newCampaignData = {
+          email: formData.email || user.email,
+          campaign_name: formData.campaignName || 'New Campaign',
+          website: formData.website || '',
+          // Required existing fields
+          wallet_address: 'temp-wallet-' + Date.now(),
+          max_donation_limit: 3300,
+          suggested_amounts: [25, 50, 100, 250],
+          theme_color: formData.themeColor || '#2a2a72',
+          status: 'setup'
+        };
 
-          console.log('Attempting to create campaign in database:', newCampaignData);
-          const { data: newCampaign, error } = await supabase
-            .from('campaigns')
-            .insert([newCampaignData])
-            .select()
-            .single();
+        console.log('Creating new campaign with existing columns:', newCampaignData);
+        const { data: newCampaign, error } = await supabase
+          .from('campaigns')
+          .insert([newCampaignData])
+          .select()
+          .single();
 
-          if (!error && newCampaign) {
-            setCampaignId(newCampaign.id);
-            console.log('Campaign created successfully:', newCampaign);
-          }
-        } catch (error) {
-          console.warn('Database campaign creation failed, using demo ID:', error);
+        if (error) {
+          console.error('Failed to create campaign:', error);
+          setCampaignId('demo-campaign-' + Date.now());
+        } else {
+          setCampaignId(newCampaign.id);
+          console.log('Campaign created successfully:', newCampaign);
         }
+      } catch (error) {
+        console.error('Error creating campaign:', error);
+        setCampaignId('demo-campaign-' + Date.now());
       }
     }
     
@@ -288,9 +275,9 @@ const SetupWizard = () => {
       case 5:
         return <StyleConfirmation {...stepProps} />;
       case 6:
-        return <EmbedCode {...stepProps} />;
-      case 7:
         return <TermsAgreement {...stepProps} />;
+      case 7:
+        return <EmbedCode {...stepProps} />;
       default:
         return <CampaignInfo {...stepProps} />;
     }
