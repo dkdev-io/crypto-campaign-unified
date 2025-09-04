@@ -12,11 +12,24 @@ const DonorAuth = () => {
   const location = useLocation();
   const { signIn, signUp, error, donor, loading } = useDonorAuth();
 
-  // If auth bypass is enabled and user is already authenticated, redirect to dashboard
+  // Only redirect if user is genuinely authenticated (not just bypass enabled)
   React.useEffect(() => {
+    // Check if bypass is enabled
+    const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+    const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development';
+    const bypassEnabled = SKIP_AUTH && IS_DEVELOPMENT;
+    
     // Only redirect if we're actually on the auth page and user is authenticated
+    // BUT NOT if we're just here because bypass is enabled - let them see the auth page
     if (!loading && donor && (location.pathname === '/donors/auth' || location.pathname === '/donors/auth/login' || location.pathname === '/donors/auth/register')) {
-      // Preserve bypass parameter if present
+      
+      // Don't auto-redirect if bypass is enabled - let user choose to use bypass button
+      if (bypassEnabled) {
+        console.log('🚨 DONOR AUTH - Bypass enabled, showing auth page with bypass option');
+        return;
+      }
+      
+      // For real authentication, do redirect
       const searchParams = new URLSearchParams(location.search);
       const bypassParam = searchParams.get('bypass');
       
