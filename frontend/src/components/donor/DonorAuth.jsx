@@ -214,7 +214,7 @@ const DonorAuth = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
+    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
