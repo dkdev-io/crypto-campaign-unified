@@ -3,6 +3,45 @@ import { supabase } from '../lib/supabase.js'
 
 const AuthContext = createContext({})
 
+// Development auth bypass configuration
+const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
+const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
+
+// Test user configuration for bypass
+const TEST_USER = {
+  id: 'test-user-bypass-id',
+  email: 'test@dkdev.io',
+  aud: 'authenticated',
+  role: 'authenticated',
+  email_confirmed_at: new Date().toISOString(),
+  phone_confirmed_at: null,
+  confirmation_sent_at: new Date().toISOString(),
+  recovery_sent_at: null,
+  email_change_sent_at: null,
+  new_email: null,
+  invited_at: null,
+  action_link: null,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  is_anonymous: false,
+  user_metadata: {
+    full_name: 'Test User (Bypass)'
+  },
+  app_metadata: {
+    provider: 'email',
+    providers: ['email']
+  }
+}
+
+const TEST_SESSION = {
+  access_token: 'bypass-access-token',
+  token_type: 'bearer',
+  expires_in: 3600,
+  expires_at: Math.floor(Date.now() / 1000) + 3600,
+  refresh_token: 'bypass-refresh-token',
+  user: TEST_USER
+}
+
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
@@ -19,6 +58,26 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 DEVELOPMENT AUTH BYPASS ACTIVE - Using test user: test@dkdev.io')
+      console.warn('🚨 This bypasses all authentication - NEVER use in production!')
+      
+      setSession(TEST_SESSION)
+      setUser(TEST_USER)
+      setUserProfile({
+        id: TEST_USER.id,
+        email: TEST_USER.email,
+        full_name: TEST_USER.user_metadata.full_name,
+        role: 'admin', // Grant admin role for testing
+        created_at: TEST_USER.created_at,
+        email_confirmed: true
+      })
+      setLoading(false)
+      return
+    }
+
+    // Production/normal auth flow
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
@@ -31,6 +90,11 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false)
     })
+
+    // Don't set up auth listeners if bypass is active
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      return () => {} // No cleanup needed
+    }
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -73,6 +137,15 @@ export const AuthProvider = ({ children }) => {
 
   // Sign up with email and password
   const signUp = async (email, password, fullName) => {
+    // DEVELOPMENT AUTH BYPASS - Skip actual signup
+    if (SKIP_AUTH && IS_DEVELOPMENT) {
+      console.warn('🚨 AUTH BYPASS - Signup bypassed, already authenticated as test user')
+      return { 
+        data: { user: TEST_USER, session: TEST_SESSION }, 
+        error: null 
+      }
+    }
+
     try {
       console.log('🔐 Starting signup process...')
       console.log(`📧 Email: ${email}`)
