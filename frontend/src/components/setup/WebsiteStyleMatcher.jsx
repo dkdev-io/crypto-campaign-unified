@@ -319,25 +319,27 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
           background: 'white',
           border: '1px solid #e9ecef',
           borderRadius: '8px',
-          padding: '2rem'
+          padding: '3rem',
+          margin: '2rem 0'
         }}>
-          <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🌐</div>
-            <h3 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>
+          <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
+            <div style={{ fontSize: '48px', marginBottom: '1.5rem' }}>🌐</div>
+            <h3 style={{ color: '#495057', margin: '0 0 1rem 0' }}>
               Analyze Your Website
             </h3>
-            <p style={{ color: '#6c757d', margin: 0 }}>
+            <p style={{ color: '#6c757d', margin: 0, fontSize: '1.1rem' }}>
               We'll extract colors, fonts, and styling to match your campaign form
             </p>
           </div>
 
           {/* URL Input */}
-          <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
             <label style={{ 
               display: 'block', 
-              marginBottom: '0.5rem', 
+              marginBottom: '1rem', 
               fontWeight: '500',
-              color: '#495057'
+              color: '#495057',
+              fontSize: '1.1rem'
             }}>
               Your Website URL
             </label>
@@ -348,11 +350,12 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
               placeholder="https://yoursite.com"
               style={{
                 width: '100%',
-                padding: '0.75rem',
+                padding: '1rem',
                 border: `1px solid ${validationError ? '#dc3545' : '#ced4da'}`,
-                borderRadius: '4px',
-                fontSize: '1rem',
-                backgroundColor: validationError ? '#fee' : 'white'
+                borderRadius: '6px',
+                fontSize: '1.1rem',
+                backgroundColor: validationError ? '#fee' : 'white',
+                marginBottom: '1rem'
               }}
               onKeyPress={(e) => {
                 if (e.key === 'Enter' && !validationError) {
@@ -362,7 +365,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
             />
             
             {validationError && (
-              <div style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+              <div style={{ color: '#dc3545', fontSize: '0.875rem', marginBottom: '1rem' }}>
                 {validationError}
               </div>
             )}
@@ -372,9 +375,9 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
             {/* Action Buttons */}
             <div style={{ 
               display: 'flex', 
-              gap: '1rem', 
+              gap: '1.5rem', 
               justifyContent: 'center',
-              marginTop: '2rem'
+              marginTop: '3rem'
             }}>
               <button
                 onClick={analyzeWebsite}
@@ -383,10 +386,10 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
                   background: validationError || !websiteUrl ? '#ccc' : '#2a2a72',
                   color: 'white',
                   border: 'none',
-                  padding: '0.75rem 2rem',
-                  borderRadius: '4px',
+                  padding: '1rem 2.5rem',
+                  borderRadius: '6px',
                   cursor: validationError || !websiteUrl ? 'not-allowed' : 'pointer',
-                  fontSize: '1rem',
+                  fontSize: '1.1rem',
                   fontWeight: '500',
                   opacity: validationError || !websiteUrl ? 0.6 : 1
                 }}
@@ -400,10 +403,10 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
                   background: 'transparent',
                   color: '#6c757d',
                   border: '1px solid #6c757d',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '4px',
+                  padding: '1rem 2rem',
+                  borderRadius: '6px',
                   cursor: 'pointer',
-                  fontSize: '1rem'
+                  fontSize: '1.1rem'
                 }}
               >
                 Skip Style Matching
@@ -468,48 +471,6 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
         </div>
       )}
 
-      {/* Benefits Section */}
-      {!analysis && !analyzing && (
-        <div style={{
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginTop: '2rem'
-        }}>
-          <h4 style={{ color: '#495057', marginTop: 0 }}>
-            ✨ Why Match Your Website Style?
-          </h4>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            fontSize: '0.9rem'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>🎨</div>
-              <strong>Brand Consistency</strong>
-              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-                Form matches your existing brand
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>👁️</div>
-              <strong>Professional Look</strong>
-              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-                Seamless integration with your site
-              </div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '32px', marginBottom: '0.5rem' }}>⚡</div>
-              <strong>Automatic Setup</strong>
-              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-                No manual color picking required
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Navigation */}
       <div className="form-actions" style={{ marginTop: '2rem' }}>
