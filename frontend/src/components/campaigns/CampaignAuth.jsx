@@ -10,7 +10,7 @@ import CampaignAuthNav from './CampaignAuthNav';
 const CampaignAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signUp, error, clearError } = useAuth();
+  const { signIn, signUp, error, clearError, devBypass } = useAuth();
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -346,16 +346,22 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    console.log('CAMPAIGN BYPASS: Navigating to setup...');
-                    navigate('/campaigns/auth/setup');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Setup
-                </Button>
+                {(import.meta.env.DEV || window.location.hostname === 'localhost') && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      console.log('CAMPAIGN BYPASS: Activating bypass and navigating...');
+                      if (devBypass && devBypass()) {
+                        navigate('/campaigns/auth/setup');
+                      } else {
+                        console.error('Failed to activate bypass');
+                      }
+                    }}
+                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                  >
+                    DEV BYPASS → Setup
+                  </Button>
+                )}
 
                 <div className="text-center">
                   <Link to="/forgot-password" className="text-sm text-primary hover:underline">
@@ -507,16 +513,22 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                <Button
-                  type="button"
-                  onClick={() => {
-                    console.log('CAMPAIGN BYPASS: Navigating to setup...');
-                    navigate('/campaigns/auth/setup');
-                  }}
-                  className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                >
-                  DEV BYPASS → Setup
-                </Button>
+                {(import.meta.env.DEV || window.location.hostname === 'localhost') && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      console.log('CAMPAIGN BYPASS: Activating bypass and navigating...');
+                      if (devBypass && devBypass()) {
+                        navigate('/campaigns/auth/setup');
+                      } else {
+                        console.error('Failed to activate bypass');
+                      }
+                    }}
+                    className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
+                  >
+                    DEV BYPASS → Setup
+                  </Button>
+                )}
 
               </form>
             )}

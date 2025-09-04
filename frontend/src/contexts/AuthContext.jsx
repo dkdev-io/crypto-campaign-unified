@@ -470,6 +470,31 @@ export const AuthProvider = ({ children }) => {
     setError(null)
   }
 
+  // Development-only bypass function
+  const devBypass = () => {
+    if (!IS_DEVELOPMENT) {
+      console.error('DEV BYPASS: Not available in production');
+      return false;
+    }
+    
+    console.warn('🚨 DEV BYPASS: Activating development authentication bypass');
+    console.warn('🚨 Setting mock user: test@dkdev.io');
+    
+    setSession(TEST_SESSION);
+    setUser(TEST_USER);
+    setUserProfile({
+      id: TEST_USER.id,
+      email: TEST_USER.email,
+      full_name: TEST_USER.user_metadata.full_name,
+      role: 'admin',
+      created_at: TEST_USER.created_at,
+      email_confirmed: true
+    });
+    setLoading(false);
+    
+    return true;
+  }
+
   const value = {
     user,
     session,
@@ -491,7 +516,8 @@ export const AuthProvider = ({ children }) => {
     updatePassword,
     checkSession,
     getUserRole,
-    isAdmin
+    isAdmin,
+    devBypass
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
