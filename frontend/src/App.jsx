@@ -62,9 +62,11 @@ function App() {
             <Router>
             <Routes>
             <Route path="/" element={<Index />} />
+            
+            {/* Setup Routes - Must be before dynamic routes */}
+            <Route path="/setup" element={<SetupWizard />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
-            <Route path="/setup" element={<SetupWizard />} />
             <Route path="/YourInfo" element={<CampaignInformationForm />} />
             <Route path="/CommitteeSearch" element={<CommitteeSearchPage />} />
             <Route path="/BankConnection" element={<BankConnectionForm />} />

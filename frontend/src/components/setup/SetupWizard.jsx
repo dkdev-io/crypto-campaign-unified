@@ -27,6 +27,13 @@ const SetupWizard = () => {
   useEffect(() => {
     const initializeSetup = async () => {
       if (!user) {
+        // For development, allow setup without authentication
+        setFormData({
+          userFullName: 'Demo User',
+          email: 'demo@example.com',
+          campaignName: '',
+          website: ''
+        });
         setLoading(false);
         return;
       }
