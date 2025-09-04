@@ -88,7 +88,7 @@ const FECApiTest = () => {
         }`}>
           {FEC_CONFIG.API_KEY ? '✅ FEC API Key Status' : '❌ FEC API Key Status'}
         </h4>
-        <div className="text-sm space-y-2">
+        <div className="text-base space-y-2">
           <div><strong>Status:</strong> {apiKeyStatus}</div>
           {FEC_CONFIG.API_KEY && (
             <div><strong>Key:</strong> {FEC_CONFIG.API_KEY.substring(0, 8)}...{FEC_CONFIG.API_KEY.substring(-4)}</div>
@@ -128,14 +128,14 @@ const FECApiTest = () => {
             <button
               onClick={() => handleTestSpecificCommittee('C00401224')}
               disabled={loading}
-              className="btn-secondary text-xs disabled:opacity-50"
+              className="btn-secondary text-sm disabled:opacity-50"
             >
               Test Biden Committee
             </button>
             <button
               onClick={() => handleTestSpecificCommittee('C00618371')}
               disabled={loading}
-              className="btn-secondary text-xs disabled:opacity-50"
+              className="btn-secondary text-sm disabled:opacity-50"
             >
               Test Trump Committee
             </button>
@@ -178,11 +178,11 @@ const FECApiTest = () => {
                         </h5>
                         
                         <div className="mb-2 space-x-2">
-                          <span className="bg-primary/20 text-primary px-2 py-1 rounded text-xs font-medium">
+                          <span className="bg-primary/20 text-primary px-2 py-1 rounded text-sm font-medium">
                             {FEC_CONFIG.COMMITTEE_TYPES[committee.type] || committee.type}
                           </span>
                           
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          <span className={`px-2 py-1 rounded text-sm font-medium ${
                             results.source === 'fec' 
                               ? 'bg-green-100 text-green-700' 
                               : 'bg-accent/20 text-accent-foreground'
@@ -191,7 +191,7 @@ const FECApiTest = () => {
                           </span>
                         </div>
 
-                        <div className="text-sm text-muted-foreground space-y-1">
+                        <div className="text-base text-muted-foreground space-y-1">
                           <div><strong>ID:</strong> {committee.id}</div>
                           {committee.candidateName && (
                             <div><strong>Candidate:</strong> {committee.candidateName}</div>
@@ -209,7 +209,7 @@ const FECApiTest = () => {
                         <button
                           onClick={() => handleTestSpecificCommittee(committee.id)}
                           disabled={loading}
-                          className="btn-primary text-xs disabled:opacity-50"
+                          className="btn-primary text-sm disabled:opacity-50"
                         >
                           Get Details
                         </button>
@@ -226,7 +226,7 @@ const FECApiTest = () => {
       {/* Instructions */}
       <div className="crypto-card bg-secondary">
         <h4 className="text-lg font-medium text-foreground mb-4">📋 Test Instructions</h4>
-        <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside mb-4">
+        <ul className="text-base text-muted-foreground space-y-2 list-disc list-inside mb-4">
           <li>Search for committee names, candidate names, or committee IDs</li>
           <li>Try popular names like "Biden", "Trump", "Harris", "Senate", "House"</li>
           <li>Results will show FEC data if API key is working</li>
@@ -235,7 +235,7 @@ const FECApiTest = () => {
         </ul>
         
         <div className="crypto-card bg-accent/10 border-accent/20 text-accent-foreground">
-          <div className="text-sm">
+          <div className="text-base">
             <strong>🔧 Troubleshooting:</strong>
             <div className="mt-2">
               If you get CORS errors, the FEC API may need to be called from a backend server.
