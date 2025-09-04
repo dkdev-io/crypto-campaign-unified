@@ -58,8 +58,6 @@ function App() {
           }}>
             <Router>
             <Routes>
-            {/* DEBUG: Test route to verify routing works */}
-            <Route path="/test-route" element={<div style={{padding: '50px', fontSize: '30px', backgroundColor: 'red', color: 'white'}}>TEST ROUTE WORKING!</div>} />
             <Route path="/" element={<Index />} />
             <Route path="/campaigns/auth" element={<CampaignAuth />} />
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
@@ -81,9 +79,9 @@ function App() {
             </Route>
             
             {/* Donor Routes */}
-            <Route path="/donors/auth" element={<TestDonorRoute />} />
-            <Route path="/donors/auth/register" element={<TestDonorRoute />} />
-            <Route path="/donors/auth/login" element={<TestDonorRoute />} />
+            <Route path="/donors/auth" element={<DonorAuth />} />
+            <Route path="/donors/auth/register" element={<DonorAuth />} />
+            <Route path="/donors/auth/login" element={<DonorAuth />} />
             <Route path="/donors/auth/terms" element={<TermsOfService />} />
             <Route path="/donors/auth/privacy" element={<PrivacyPolicy />} />
             <Route path="/donors/auth/verify-email" element={<DonorVerifyEmail />} />
