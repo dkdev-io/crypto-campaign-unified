@@ -7,6 +7,8 @@ import SetupWizard from './components/setup/SetupWizard';
 import CampaignSetup from './components/campaigns/CampaignSetup';
 import EmbeddedDonorForm from './components/EmbeddedDonorForm';
 import EmbedDonorForm from './components/EmbedDonorForm';
+import CampaignDebug from './components/debug/CampaignDebug';
+import TestingDashboard from './components/TestingDashboard';
 import CampaignAuth from './components/campaigns/CampaignAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
@@ -60,6 +62,8 @@ function App() {
             <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
             <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
             <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
+            <Route path="/debug" element={<CampaignDebug />} />
+            <Route path="/testing" element={<TestingDashboard />} />
             {/* <Route path="/donation-test" element={<DonationTest />} /> */}
             
             {/* Admin Routes */}
