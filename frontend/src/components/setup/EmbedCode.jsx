@@ -15,33 +15,25 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   }, [campaignId]);
 
   const generateEmbedCode = async () => {
-    if (!campaignId) {
-      setError('Campaign ID is required to generate embed code');
-      return;
-    }
-
+    // Generate campaign ID if not provided (for demo users)
+    const actualCampaignId = campaignId || `demo-${Date.now()}`;
+    
     try {
       setLoading(true);
       setError('');
 
-      // Call the database function to generate embed code
-      const { data, error: dbError } = await supabase
-        .rpc('generate_embed_code', {
-          p_campaign_id: campaignId,
-          p_base_url: window.location.origin
-        });
-
-      if (dbError) throw dbError;
-
-      setEmbedCode(data);
+      // Generate URLs
       const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-      const donationUrl = `${baseUrl}/embed-form.html?campaign=${campaignId}`;
+      const donationUrl = `${baseUrl}/embed-form.html?campaign=${actualCampaignId}`;
+      const campaignPageUrl = formData.campaignName 
+        ? `${baseUrl}/campaign/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
+        : `${baseUrl}/campaign/${actualCampaignId}`;
+      
       setTestUrl(donationUrl);
       
-      // Also generate campaign page URL
-      const campaignPageUrl = formData.campaignName 
-        ? `${baseUrl}/${encodeURIComponent(formData.campaignName.toLowerCase().replace(/\s+/g, '-'))}`
-        : null;
+      // Generate fallback embed code immediately
+      const fallbackCode = generateFallbackEmbedCode(actualCampaignId);
+      setEmbedCode(fallbackCode);
       
       // Generate QR code for the donation URL
       try {
@@ -54,8 +46,27 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
           }
         });
         setQrCodeDataUrl(qrDataUrl);
+        console.log('QR code generated successfully');
       } catch (qrError) {
         console.error('Failed to generate QR code:', qrError);
+        setError('QR code generation failed: ' + qrError.message);
+      }
+
+      // Try database function if we have a real campaign ID
+      if (campaignId && campaignId !== actualCampaignId) {
+        try {
+          const { data, error: dbError } = await supabase
+            .rpc('generate_embed_code', {
+              p_campaign_id: campaignId,
+              p_base_url: window.location.origin
+            });
+
+          if (!dbError && data) {
+            setEmbedCode(typeof data === 'string' ? data : data.embedCode || fallbackCode);
+          }
+        } catch (dbErr) {
+          console.warn('Database embed generation failed, using fallback:', dbErr);
+        }
       }
       
       // Mark setup as completed and trigger donor page automation
@@ -121,25 +132,26 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
     }
   };
 
-  const generateFallbackEmbedCode = () => {
+  const generateFallbackEmbedCode = (id) => {
+    const useId = id || campaignId || `demo-${Date.now()}`;
     const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
     return `<!-- Campaign Contribution Form Embed -->
-<div id="crypto-campaign-embed-${campaignId}"></div>
+<div id="crypto-campaign-embed-${useId}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${baseUrl}/embed-form.html?campaign=${campaignId}";
+    iframe.src = "${baseUrl}/embed-form.html?campaign=${useId}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";
     iframe.style.border = "1px solid #ddd";
     iframe.style.borderRadius = "8px";
     iframe.style.backgroundColor = "white";
-    document.getElementById("crypto-campaign-embed-${campaignId}").appendChild(iframe);
+    document.getElementById("crypto-campaign-embed-${useId}").appendChild(iframe);
     
     // Auto-resize iframe based on content
     window.addEventListener("message", function(event) {
-        if (event.data && event.data.type === "resize" && event.data.campaignId === "${campaignId}") {
+        if (event.data && event.data.type === "resize" && event.data.campaignId === "${useId}") {
             iframe.height = event.data.height + "px";
         }
     });

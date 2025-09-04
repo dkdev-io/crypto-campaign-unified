@@ -99,7 +99,7 @@ const SetupWizard = () => {
             email: user.email,
             campaignName: '',
             website: '',
-            currentStep: 2
+            currentStep: 1
           };
           
           // Recover from localStorage if available
@@ -123,18 +123,21 @@ const SetupWizard = () => {
           } else {
             // Complete fallback
             setFormData({
-              userFullName: user.user_metadata?.full_name || '',
-              email: user.email,
-              currentStep: 2
+              userFullName: user.user_metadata?.full_name || 'Demo User',
+              email: user.email || 'demo@example.com',
+              campaignName: '',
+              website: ''
             });
             setCurrentStep(1);
           }
         } catch (e) {
           setFormData({
-            userFullName: user.user_metadata?.full_name || '',
-            email: user.email
+            userFullName: user.user_metadata?.full_name || 'Demo User',
+            email: user.email || 'demo@example.com',
+            campaignName: '',
+            website: ''
           });
-          setCurrentStep(2);
+          setCurrentStep(1);
         }
       } finally {
         setLoading(false);
@@ -205,37 +208,40 @@ const SetupWizard = () => {
     console.log('Moving to next step, current data:', formData);
     
     // Create campaign if we don't have one (using only existing columns)
-    if (!campaignId && user) {
-      try {
-        const newCampaignData = {
-          email: formData.email || user.email,
-          campaign_name: formData.campaignName || 'New Campaign',
-          website: formData.website || '',
-          // Required existing fields
-          wallet_address: 'temp-wallet-' + Date.now(),
-          max_donation_limit: 3300,
-          suggested_amounts: [25, 50, 100, 250],
-          theme_color: formData.themeColor || '#2a2a72',
-          status: 'setup'
-        };
+    if (!campaignId) {
+      // Always create a demo campaign ID for development
+      const demoCampaignId = 'demo-campaign-' + Date.now();
+      setCampaignId(demoCampaignId);
+      console.log('Using demo campaign ID:', demoCampaignId);
+      
+      // Try to create in database if user is authenticated
+      if (user) {
+        try {
+          const newCampaignData = {
+            email: formData.email || user.email,
+            campaign_name: formData.campaignName || 'New Campaign',
+            website: formData.website || '',
+            wallet_address: 'temp-wallet-' + Date.now(),
+            max_donation_limit: 3300,
+            suggested_amounts: [25, 50, 100, 250],
+            theme_color: formData.themeColor || '#2a2a72',
+            status: 'setup'
+          };
 
-        console.log('Creating new campaign with existing columns:', newCampaignData);
-        const { data: newCampaign, error } = await supabase
-          .from('campaigns')
-          .insert([newCampaignData])
-          .select()
-          .single();
+          console.log('Attempting to create campaign in database:', newCampaignData);
+          const { data: newCampaign, error } = await supabase
+            .from('campaigns')
+            .insert([newCampaignData])
+            .select()
+            .single();
 
-        if (error) {
-          console.error('Failed to create campaign:', error);
-          setCampaignId('demo-campaign-' + Date.now());
-        } else {
-          setCampaignId(newCampaign.id);
-          console.log('Campaign created successfully:', newCampaign);
+          if (!error && newCampaign) {
+            setCampaignId(newCampaign.id);
+            console.log('Campaign created successfully:', newCampaign);
+          }
+        } catch (error) {
+          console.warn('Database campaign creation failed, using demo ID:', error);
         }
-      } catch (error) {
-        console.error('Error creating campaign:', error);
-        setCampaignId('demo-campaign-' + Date.now());
       }
     }
     
