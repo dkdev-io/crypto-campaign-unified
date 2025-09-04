@@ -116,9 +116,37 @@ If you see errors about "AUTH BYPASS ENABLED IN PRODUCTION":
 3. Redeploy
 
 ## Implementation Details
-The bypass is implemented in:
-- `frontend/src/contexts/AuthContext.jsx` - Main bypass logic
-- `frontend/.env` - Configuration variable
-- Multiple safety checks throughout the auth flow
+The bypass is implemented across all auth contexts:
+- `frontend/src/contexts/AuthContext.jsx` - Main auth bypass logic
+- `frontend/src/contexts/DonorAuthContext.jsx` - Donor-specific auth bypass  
+- `frontend/src/contexts/AdminContext.jsx` - Admin auth bypass
+- `frontend/.env` - Configuration variable (`VITE_SKIP_AUTH`)
+- Multiple safety checks throughout all auth flows
 
-The bypass creates a mock user session that matches Supabase's expected format, allowing all auth-dependent features to work normally.
+### Auth Contexts Covered
+1. **Main AuthContext**: Primary authentication system
+2. **DonorAuthContext**: Donor-specific authentication flow
+3. **AdminContext**: Admin panel authentication system
+
+Each context gets a tailored test user:
+- **Main Auth**: `Test User (Bypass)` with admin role
+- **Donor Auth**: `Test Donor (Bypass)` with complete donor profile
+- **Admin Auth**: `Test Admin (Bypass)` with super_admin permissions
+
+## Quick Commands
+
+```bash
+# Check current status
+node toggle-auth-bypass.js status
+
+# Enable bypass
+node toggle-auth-bypass.js on
+
+# Disable bypass  
+node toggle-auth-bypass.js off
+
+# Verify implementation
+node verify-auth-bypass-complete.js
+```
+
+The bypass creates mock user sessions that match each system's expected format, allowing all auth-dependent features to work normally across the entire application.
