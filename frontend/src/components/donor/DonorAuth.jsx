@@ -51,7 +51,7 @@ const DonorAuth = () => {
   };
   
   const [activeTab, setActiveTab] = useState(getInitialTab());
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -157,7 +157,7 @@ const DonorAuth = () => {
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
     try {
       const { error } = await signIn({
         email: signInData.email,
@@ -175,7 +175,7 @@ const DonorAuth = () => {
         submit: error.message || 'Login failed. Please try again.' 
       });
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -188,7 +188,7 @@ const DonorAuth = () => {
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
     try {
       const { error } = await signUp({
         email: signUpData.email,
@@ -211,7 +211,7 @@ const DonorAuth = () => {
         submit: error.message || 'Registration failed. Please try again.' 
       });
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -335,10 +335,10 @@ const DonorAuth = () => {
 
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={submitting}
                   className="w-full"
                 >
-                  {loading ? (
+                  {submitting ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
                       Signing In...
@@ -502,10 +502,10 @@ const DonorAuth = () => {
 
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={submitting}
                   className="w-full"
                 >
-                  {loading ? (
+                  {submitting ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
                       Creating Account...
