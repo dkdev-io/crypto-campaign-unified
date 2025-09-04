@@ -700,46 +700,84 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
       )}
 
       {/* Navigation */}
-      <div className="form-actions">
-        <button className="btn btn-secondary" onClick={onPrev}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        marginTop: '2rem',
+        gap: '1rem'
+      }}>
+        <button 
+          className="btn btn-secondary" 
+          onClick={onPrev}
+          style={{
+            background: 'hsl(var(--crypto-gold))',
+            color: 'hsl(var(--crypto-navy))',
+            border: 'none',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: '600'
+          }}
+        >
           Back
         </button>
         
-        {/* Only show standard next button if no committee saved yet */}
-        {!success && (
-          <>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          {/* Only show standard next button if no committee saved yet */}
+          {!success && (
             <button 
               className="btn btn-primary"
               onClick={handleConfirmCommittee}
               disabled={!selectedCommittee || (validation && !validation.isValid)}
+              style={{
+                background: !selectedCommittee || (validation && !validation.isValid) ? 
+                  'hsl(var(--crypto-medium-gray))' : 'hsl(var(--crypto-navy))',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '6px',
+                cursor: !selectedCommittee || (validation && !validation.isValid) ? 
+                  'not-allowed' : 'pointer',
+                fontSize: '16px',
+                fontWeight: '600',
+                opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1
+              }}
             >
               Next
             </button>
-            
-            {/* Always show skip button for testing */}
-            <button 
-              className="btn btn-secondary"
-              onClick={() => {
-                updateFormData({
-                  fecCommitteeId: 'manual-entry',
-                  committeeName: 'Manual Entry - To Be Updated',
-                  selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
-                });
-                onNext();
-              }}
-              style={{ 
-                marginTop: '1rem', 
-                background: 'hsl(var(--muted))', 
-                color: 'white',
-                display: 'block',
-                width: '100%'
-              }}
-            >
-              Continue Without Committee (Can Update Later)
-            </button>
-          </>
-        )}
+          )}
+        </div>
       </div>
+      
+      {/* Always show skip button for testing */}
+      {!success && (
+        <button 
+          onClick={() => {
+            updateFormData({
+              fecCommitteeId: 'manual-entry',
+              committeeName: 'Manual Entry - To Be Updated',
+              selectedCommittee: { id: 'manual', name: 'Manual Entry', source: 'manual' }
+            });
+            onNext();
+          }}
+          style={{ 
+            marginTop: '1rem', 
+            background: 'hsl(var(--crypto-medium-gray))', 
+            color: 'white',
+            display: 'block',
+            width: '100%',
+            border: 'none',
+            padding: '0.75rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px'
+          }}
+        >
+          Continue Without Committee (Can Update Later)
+        </button>
+      )}
 
     </div>
   );
