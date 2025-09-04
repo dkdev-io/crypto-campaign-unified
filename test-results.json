@@ -1,0 +1,93 @@
+{
+  "campaignWorkflow": {
+    "authPage": {
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 8452,
+      "success": true
+    },
+    "setupPage": {
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth/setup",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 8452,
+      "success": true
+    }
+  },
+  "donorWorkflow": {
+    "authPage": {
+      "url": "https://cryptocampaign.netlify.app/donors/auth",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 8453,
+      "success": true
+    },
+    "dashboardPage": {
+      "url": "https://cryptocampaign.netlify.app/donors/dashboard",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 8453,
+      "success": true
+    }
+  },
+  "generalPages": {
+    "Home Page": {
+      "url": "https://cryptocampaign.netlify.app",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 18281,
+      "success": true
+    },
+    "Campaign Terms": {
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth/terms",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 9339,
+      "success": true
+    },
+    "Campaign Privacy": {
+      "url": "https://cryptocampaign.netlify.app/campaigns/auth/privacy",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 11305,
+      "success": true
+    },
+    "Donor Terms": {
+      "url": "https://cryptocampaign.netlify.app/donors/auth/terms",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 9349,
+      "success": true
+    },
+    "Donor Privacy": {
+      "url": "https://cryptocampaign.netlify.app/donors/auth/privacy",
+      "status": 200,
+      "title": "NEXTRAISE - Political Campaign Fundraising Platform",
+      "hasContent": true,
+      "hasReactError": false,
+      "contentLength": 11315,
+      "success": true
+    }
+  },
+  "errors": [
+    "Campaign workflow error: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"BYPASS\")' is not a valid selector.",
+    "Donor workflow error: SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:contains(\"Sign In\")' is not a valid selector."
+  ]
+}
