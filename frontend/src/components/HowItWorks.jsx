@@ -33,10 +33,10 @@ const HowItWorks = () => {
     <section id="how-it-works" className="content-section">
       <div className="container-responsive">
         <div className="text-center mb-16">
-          <h2 className="mb-6" style={{color: 'hsl(var(--crypto-white))'}}>
+          <h2 className="text-3xl md:text-5xl mb-6 font-bold leading-tight" style={{color: 'hsl(var(--crypto-white))'}}>
             How It Works
           </h2>
-          <p className="text-xl max-w-3xl mx-auto" style={{color: 'hsl(var(--crypto-white) / 0.9)'}}>
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto font-semibold leading-relaxed" style={{color: 'hsl(var(--crypto-white) / 0.9)'}}>
             Get started in minutes with our simple 4-step process
           </p>
         </div>
@@ -60,10 +60,10 @@ const HowItWorks = () => {
                       </span>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-4" style={{color: 'hsl(var(--crypto-white))'}}>
+                  <h3 className="text-lg md:text-xl font-medium mb-4 leading-relaxed" style={{color: 'hsl(var(--crypto-white))'}}>
                     {step.title}
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{color: 'hsl(var(--crypto-white) / 0.9)'}}>
+                  <p className="text-base md:text-lg leading-relaxed" style={{color: 'hsl(var(--crypto-white) / 0.9)'}}>
                     {step.description}
                   </p>
                 </div>

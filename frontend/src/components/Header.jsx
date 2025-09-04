@@ -26,25 +26,25 @@ const Header = () => {
           <nav className="hidden md:flex items-center gap-6">
             <a 
               href="#features" 
-              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+              className="text-base font-medium text-white/80 hover:text-white transition-colors"
             >
               FEATURES
             </a>
             <a 
               href="#how-it-works" 
-              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+              className="text-base font-medium text-white/80 hover:text-white transition-colors"
             >
               HOW IT WORKS
             </a>
             <a 
               href="#pricing" 
-              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+              className="text-base font-medium text-white/80 hover:text-white transition-colors"
             >
               PRICING
             </a>
             <a 
               href="#contact" 
-              className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+              className="text-base font-medium text-white/80 hover:text-white transition-colors"
             >
               CONTACT
             </a>
@@ -53,16 +53,16 @@ const Header = () => {
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <Button 
-              size="sm"
-              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              size="default"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-base font-medium"
               style={{backgroundColor: 'hsl(var(--crypto-gold))', color: 'hsl(var(--crypto-navy))'}}
               onClick={() => navigate('/campaigns/auth')}
             >
               Campaigns
             </Button>
             <Button 
-              size="sm"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              size="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 text-base font-medium"
               style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'white'}}
               onClick={() => navigate('/donors/auth')}
             >

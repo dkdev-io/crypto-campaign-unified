@@ -34,7 +34,7 @@ const Hero = () => {
       <div className="container-responsive relative">
         <div className="max-w-5xl mx-auto text-center animate-fade-in">
           <div className="space-y-8">
-            <h1 className="text-balance leading-tight font-extrabold">
+            <h1 className="text-4xl md:text-6xl text-balance leading-relaxed font-bold">
               Raise More—Faster.
               <span className="block" style={{color: 'hsl(var(--crypto-gold))'}}>
                 The Easiest Way
@@ -48,7 +48,7 @@ const Hero = () => {
             </h1>
             
             <div className="space-y-4 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center gap-3 text-lg text-white">
+              <div className="flex items-center justify-center gap-3 text-xl md:text-2xl text-white font-semibold">
                 <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
                 <span>Onboard in minutes. No setup fees, ever.</span>
               </div>

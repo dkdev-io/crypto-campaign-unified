@@ -89,11 +89,11 @@ const CampaignPage = () => {
         <div className="max-w-4xl mx-auto">
           {/* Campaign Header */}
           <div className="text-center text-white mb-12">
-            <h1 className="text-4xl font-bold mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
               {campaign.campaign_name}
             </h1>
             {campaign.description && (
-              <p className="text-xl opacity-90 max-w-2xl mx-auto">
+              <p className="text-xl md:text-2xl font-semibold opacity-90 max-w-2xl mx-auto leading-relaxed">
                 {campaign.description}
               </p>
             )}

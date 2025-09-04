@@ -8,7 +8,7 @@ const Footer = () => {
               <span className="text-primary-foreground">NEXT</span>
               <span className="text-accent">RAISE</span>
             </div>
-            <p className="text-sm leading-relaxed text-primary-foreground/80">
+            <p className="text-base leading-relaxed text-primary-foreground/80">
               The easiest way for campaigns to accept secure and compliant cryptocurrency donations.
             </p>
           </div>
@@ -17,7 +17,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold">
               Product
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-base">
               <li>
                 <a href="#features" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Features
@@ -40,7 +40,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold">
               Resources
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-base">
               <li>
                 <a href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Developer Notes
@@ -63,7 +63,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold">
               Support
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-base">
               <li>
                 <a href="#contact" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Contact
@@ -84,7 +84,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center">
-          <p className="text-sm text-primary-foreground/60">
+          <p className="text-base text-primary-foreground/60">
             © 2024 NEXTRAISE. All rights reserved.
           </p>
         </div>
