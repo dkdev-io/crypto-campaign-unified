@@ -55,10 +55,8 @@ const CommitteeSearchPage = () => {
             email: user.email,
             title: savedData?.campaignName || 'New Campaign',
             wallet_address: 'temp-wallet-' + Date.now(),
-            max_donation_limit: 3300,
-            suggested_amounts: [25, 50, 100, 250],
-            theme_color: '#2a2a72',
-            status: 'setup'
+            status: 'setup',
+            user_id: user.id
           };
 
           const { data: newCampaign, error: createError } = await supabase

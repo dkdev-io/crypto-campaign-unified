@@ -108,14 +108,18 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin, prefillEmail = '' }) => {
 
   if (emailSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight">Check Your Email</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We've sent a verification link to <strong className="text-foreground">{formData.email}</strong>
-            </p>
-          </div>
+      <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+        <div className="flex items-center justify-center px-4 py-12">
+          <div className="max-w-md w-full">
+            <div className="bg-card rounded-2xl shadow-2xl p-8">
+              <div className="text-center mb-8">
+                <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
+                  Check Your Email
+                </h2>
+                <p className="text-muted-foreground">
+                  We've sent a verification link to <strong className="text-foreground">{formData.email}</strong>
+                </p>
+              </div>
           
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div>
@@ -139,16 +143,18 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin, prefillEmail = '' }) => {
             </div>
           </div>
 
-          <div className="text-center text-sm">
-            <p className="text-muted-foreground">
-              Already have an account?{' '}
-              <button 
-                className="font-medium text-primary hover:underline" 
-                onClick={onSwitchToLogin}
-              >
-                Sign In
-              </button>
-            </p>
+              <div className="text-center text-sm">
+                <p className="text-muted-foreground">
+                  Already have an account?{' '}
+                  <button 
+                    className="font-medium text-primary hover:underline" 
+                    onClick={onSwitchToLogin}
+                  >
+                    Sign In
+                  </button>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -156,14 +162,20 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin, prefillEmail = '' }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight">Create Your Account</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Start managing your campaign today</p>
-        </div>
+    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+      <div className="flex items-center justify-center px-4 py-12">
+        <div className="max-w-md w-full">
+          <div className="bg-card rounded-2xl shadow-2xl p-8">
+            <div className="text-center mb-8">
+              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
+                Create Your Account
+              </h2>
+              <p className="text-muted-foreground">
+                Start managing your campaign today
+              </p>
+            </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium mb-2">
@@ -261,18 +273,20 @@ const AuthSignUp = ({ onSuccess, onSwitchToLogin, prefillEmail = '' }) => {
               'Create Account'
             )}
           </Button>
-        </form>
+            </form>
 
-        <div className="text-center text-sm">
-          <p className="text-muted-foreground">
-            Already have an account?{' '}
-            <button 
-              className="font-medium text-primary hover:underline" 
-              onClick={onSwitchToLogin}
-            >
-              Sign In
-            </button>
-          </p>
+            <div className="text-center text-sm mt-6">
+              <p className="text-muted-foreground">
+                Already have an account?{' '}
+                <button 
+                  className="font-medium text-primary hover:underline" 
+                  onClick={onSwitchToLogin}
+                >
+                  Sign In
+                </button>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
