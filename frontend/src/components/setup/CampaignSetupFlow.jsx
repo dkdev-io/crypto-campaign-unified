@@ -248,8 +248,19 @@ const CampaignSetupFlow = () => {
             <h2>Campaign Information</h2>
             <p>Let's set up your campaign details</p>
 
-            <div className="form-group">
-              <label htmlFor="campaignName">Campaign Name *</label>
+            <div className="form-group" style={{ marginBottom: '1rem' }}>
+              <label 
+                htmlFor="campaignName" 
+                className="form-label"
+                style={{ 
+                  fontFamily: 'Inter, sans-serif', 
+                  color: 'hsl(var(--crypto-white))',
+                  fontSize: 'var(--text-body)',
+                  fontWeight: '500'
+                }}
+              >
+                Campaign Name *
+              </label>
               <input
                 id="campaignName"
                 type="text"
@@ -257,12 +268,31 @@ const CampaignSetupFlow = () => {
                 onChange={(e) => updateFormData({ campaignName: e.target.value })}
                 className={`form-input ${errors.campaignName ? 'error' : ''}`}
                 placeholder="e.g., Smith for Congress 2024"
+                style={{ fontFamily: 'Inter, sans-serif' }}
               />
-              {errors.campaignName && <span className="error-message">{errors.campaignName}</span>}
+              {errors.campaignName && (
+                <span 
+                  className="error-message" 
+                  style={{ color: '#ef4444', fontFamily: 'Inter, sans-serif', fontSize: '0.875rem' }}
+                >
+                  {errors.campaignName}
+                </span>
+              )}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="website">Campaign Website *</label>
+            <div className="form-group" style={{ marginBottom: '1rem' }}>
+              <label 
+                htmlFor="website" 
+                className="form-label"
+                style={{ 
+                  fontFamily: 'Inter, sans-serif', 
+                  color: 'hsl(var(--crypto-white))',
+                  fontSize: 'var(--text-body)',
+                  fontWeight: '500'
+                }}
+              >
+                Campaign Website *
+              </label>
               <input
                 id="website"
                 type="url"
@@ -270,12 +300,31 @@ const CampaignSetupFlow = () => {
                 onChange={(e) => updateFormData({ website: e.target.value })}
                 className={`form-input ${errors.website ? 'error' : ''}`}
                 placeholder="https://www.yourcampaign.com"
+                style={{ fontFamily: 'Inter, sans-serif' }}
               />
-              {errors.website && <span className="error-message">{errors.website}</span>}
+              {errors.website && (
+                <span 
+                  className="error-message" 
+                  style={{ color: '#ef4444', fontFamily: 'Inter, sans-serif', fontSize: '0.875rem' }}
+                >
+                  {errors.website}
+                </span>
+              )}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="description">Campaign Description</label>
+            <div className="form-group" style={{ marginBottom: '1rem' }}>
+              <label 
+                htmlFor="description" 
+                className="form-label"
+                style={{ 
+                  fontFamily: 'Inter, sans-serif', 
+                  color: 'hsl(var(--crypto-white))',
+                  fontSize: 'var(--text-body)',
+                  fontWeight: '500'
+                }}
+              >
+                Campaign Description
+              </label>
               <textarea
                 id="description"
                 value={formData.description}
@@ -283,6 +332,7 @@ const CampaignSetupFlow = () => {
                 className="form-input"
                 placeholder="Brief description of your campaign..."
                 rows={4}
+                style={{ fontFamily: 'Inter, sans-serif' }}
               />
             </div>
           </div>
@@ -376,33 +426,53 @@ const CampaignSetupFlow = () => {
   };
 
   return (
-    <div className="setup-container">
-      <div className="setup-card">
-        <div className="setup-header">
-          <h1>Campaign Setup</h1>
-          <p>Welcome {userProfile?.full_name || user?.email}</p>
-        </div>
+    <div className="campaign-setup">
+      <div className="setup-container">
+        <div className="setup-card">
+          <div className="step-indicator">
+            <h1 style={{ fontFamily: 'Inter, sans-serif', fontSize: 'var(--text-heading-xl)', fontWeight: '800' }}>
+              Campaign Setup
+            </h1>
+            <p style={{ fontFamily: 'Inter, sans-serif', color: 'hsl(var(--crypto-white))' }}>
+              Welcome {userProfile?.full_name || user?.email}
+            </p>
+            <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+          </div>
 
-        <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+          <div className="form-content">
+            {renderStep()}
 
-        <div className="form-content">
-          {renderStep()}
+            {errors.init && <div className="error-banner">{errors.init}</div>}
 
-          {errors.init && <div className="error-banner">{errors.init}</div>}
+            {errors.complete && <div className="error-banner">{errors.complete}</div>}
+          </div>
 
-          {errors.complete && <div className="error-banner">{errors.complete}</div>}
-        </div>
+          <div className="form-actions">
+            {currentStep > 1 && (
+              <button 
+                className="btn-primary" 
+                onClick={prevStep} 
+                disabled={loading}
+                style={{ 
+                  backgroundColor: 'transparent',
+                  border: '2px solid hsl(var(--crypto-white))',
+                  color: 'hsl(var(--crypto-white))',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Back
+              </button>
+            )}
 
-        <div className="form-actions">
-          {currentStep > 1 && (
-            <button className="btn btn-secondary" onClick={prevStep} disabled={loading}>
-              Back
+            <button 
+              className="btn-primary" 
+              onClick={nextStep} 
+              disabled={loading}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {loading ? 'Processing...' : currentStep === totalSteps ? 'Go to Dashboard' : 'Next'}
             </button>
-          )}
-
-          <button className="btn btn-primary" onClick={nextStep} disabled={loading}>
-            {loading ? 'Processing...' : currentStep === totalSteps ? 'Go to Dashboard' : 'Next'}
-          </button>
+          </div>
         </div>
       </div>
     </div>

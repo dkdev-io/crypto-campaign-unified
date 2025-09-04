@@ -5,8 +5,7 @@ import StepIndicator from './StepIndicator';
 import CampaignInfo from './CampaignInfo';
 import CommitteeSearch from './CommitteeSearch';
 import BankConnection from './BankConnection';
-import WebsiteStyleMatcher from './WebsiteStyleMatcher';
-import StyleConfirmation from './StyleConfirmation';
+import WebsiteStyleAnalyzer from './WebsiteStyleAnalyzer';
 import StylePreferences from './StylePreferences';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
@@ -22,7 +21,7 @@ const SetupWizard = () => {
   const [campaignId, setCampaignId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const totalSteps = 8;
+  const totalSteps = 7;
 
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
@@ -103,11 +102,11 @@ const SetupWizard = () => {
             styleAnalysis: savedData?.styleAnalysis || null,
             embedCode: savedData?.embedCode || '',
             setupCompleted: savedData?.setupCompleted || false,
-            currentStep: savedData?.currentStep || 2,
+            currentStep: savedData?.currentStep || 1,
           };
 
           setFormData(existingFormData);
-          setCurrentStep(savedData?.currentStep || 2);
+          setCurrentStep(savedData?.currentStep || 1);
         } else {
           // No existing campaign - create one immediately
           console.log('No existing campaign found, creating new campaign...');
@@ -117,7 +116,7 @@ const SetupWizard = () => {
             email: user.email,
             campaignName: savedData?.campaignName || '',
             website: savedData?.website || '',
-            currentStep: savedData?.currentStep || 2,
+            currentStep: savedData?.currentStep || 1,
           };
 
           // Recover from localStorage if available
@@ -125,7 +124,7 @@ const SetupWizard = () => {
             Object.assign(newFormData, savedData);
           }
 
-          // Create campaign immediately so it's available for step 2
+          // Create campaign immediately so it's available for step 1
           try {
             const newCampaignData = {
               email: newFormData.email,
@@ -161,7 +160,7 @@ const SetupWizard = () => {
           }
 
           setFormData(newFormData);
-          setCurrentStep(newFormData.currentStep || 2);
+          setCurrentStep(newFormData.currentStep || 1);
         }
       } catch (error) {
         console.error('Error initializing setup:', error);
@@ -172,15 +171,15 @@ const SetupWizard = () => {
           if (saved) {
             const savedData = JSON.parse(saved);
             setFormData(savedData);
-            setCurrentStep(savedData.currentStep || 2);
+            setCurrentStep(savedData.currentStep || 1);
           } else {
             // Complete fallback
             setFormData({
               userFullName: user.user_metadata?.full_name || '',
               email: user.email,
-              currentStep: 2,
+              currentStep: 1,
             });
-            setCurrentStep(2);
+            setCurrentStep(1);
           }
         } catch (e) {
           setFormData({
@@ -358,14 +357,12 @@ const SetupWizard = () => {
       case 3:
         return <BankConnection {...stepProps} />;
       case 4:
-        return <WebsiteStyleMatcher {...stepProps} />;
+        return <WebsiteStyleAnalyzer {...stepProps} />;
       case 5:
-        return <StyleConfirmation {...stepProps} />;
-      case 6:
         return <StylePreferences {...stepProps} />;
-      case 7:
+      case 6:
         return <TermsAgreement {...stepProps} />;
-      case 8:
+      case 7:
         return <EmbedCode {...stepProps} />;
       default:
         return <CampaignInfo {...stepProps} />;

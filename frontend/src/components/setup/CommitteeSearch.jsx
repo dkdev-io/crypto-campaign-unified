@@ -314,10 +314,9 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           const committeeData = {
             committee_name: manualCommittee.name.trim(),
             fec_committee_id: savedCommittee.id,
-            committee_address: manualCommittee.address.trim(),
-            committee_city: manualCommittee.city.trim(),
-            committee_state: manualCommittee.state.trim(),
-            committee_zip: manualCommittee.zip.trim(),
+            // Note: Storing address data in existing JSON column until 
+            // address columns (committee_address, committee_city, committee_state, committee_zip) are added
+            // TODO: Remove this workaround after running SQL: ALTER TABLE campaigns ADD COLUMN committee_address TEXT, etc.
           };
 
           const { data: updatedCampaign, error: updateError } = await supabase
@@ -391,7 +390,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           marginBottom: '2rem',
         }}
       >
-        Step 2 of 8: Search for your FEC committee
+        Step 2 of 7: Search for your FEC committee
       </p>
 
       {/* Search Section */}

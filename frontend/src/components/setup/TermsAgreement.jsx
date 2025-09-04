@@ -56,7 +56,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
           fontWeight: '500',
         }}
       >
-        Step 7 of 8: Accept terms to complete your campaign setup
+        Step 6 of 7: Accept terms to complete your campaign setup
       </p>
 
       {/* Campaign Summary */}

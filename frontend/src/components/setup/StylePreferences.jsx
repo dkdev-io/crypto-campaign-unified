@@ -191,7 +191,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   return (
     <div>
       <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        Customize Your Form Style - Step 4.5
+        Customize Your Form Style - Step 5 of 7
       </h2>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
         Choose colors and fonts for your donation form

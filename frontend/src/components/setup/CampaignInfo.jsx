@@ -74,7 +74,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
           fontWeight: '500',
         }}
       >
-        Step 1 of 8: Campaign Info
+        Step 1 of 7: Campaign Info
       </p>
 
       <div className="crypto-card" style={{ maxWidth: '500px', margin: '0 auto' }}>

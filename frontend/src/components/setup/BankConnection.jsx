@@ -182,7 +182,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           fontWeight: '500',
         }}
       >
-        Step 3 of 8: Securely connect your campaign's bank account
+        Step 3 of 7: Securely connect your campaign's bank account
       </p>
 
       {/* Status Messages */}
