@@ -8,12 +8,12 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
 @layer base {
   :root {
-    /* Crypto Campaign Brand Colors */
-    --crypto-navy: 214 100% 21%; /* Deep navy blue #1a237e */
-    --crypto-blue: 207 90% 54%; /* Bright blue #2196f3 */
-    --crypto-gold: 45 100% 51%; /* Gold #ffc107 */
+    /* Crypto Campaign Brand Colors - Dark Blue Theme */
+    --crypto-navy: 223 57% 33%; /* Dark blue #1e3a8a */
+    --crypto-blue: 217 91% 60%; /* Bright blue #3b82f6 */
+    --crypto-gold: 199 89% 49%; /* Bright accent #0ea5e9 */
     --crypto-white: 0 0% 100%; /* Pure white */
-    --crypto-light-gray: 210 20% 98%; /* Light gray #f8f9fa */
+    --crypto-light-gray: 221 83% 39%; /* Darker blue #1e40af */
     --crypto-medium-gray: 210 11% 71%; /* Medium gray #9e9e9e */
     --crypto-dark-gray: 210 9% 31%; /* Dark gray #424242 */
     
@@ -49,7 +49,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --radius: 0.5rem; /* 8px rounded corners */
     
     /* Crypto Campaign Design Tokens */
-    --gradient-hero: linear-gradient(135deg, #2D1B69, #1F0E52);
+    --gradient-hero: linear-gradient(135deg, #1e3a8a, #1e40af);
     --gradient-section: linear-gradient(135deg, hsl(var(--crypto-light-gray)), hsl(210 20% 95%));
     --shadow-card: 0 4px 20px -4px hsl(var(--crypto-navy) / 0.1);
     --shadow-button: 0 2px 12px -2px hsl(var(--crypto-gold) / 0.3);
@@ -274,7 +274,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   }
   
   .btn-secondary {
-    @apply bg-accent text-accent-foreground;
+    background: #3b82f6;
+    color: #ffffff;
     padding: var(--space-sm) var(--space-lg);
     border-radius: var(--radius);
     font-weight: 600;
@@ -290,14 +291,14 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   }
   
   .btn-secondary:hover {
-    background: hsl(var(--crypto-gold) / 0.9);
+    background: #0ea5e9;
     transform: translateY(-1px);
   }
 
   /* Form Styles - Unified System */
   .form-input {
-    background-color: hsl(var(--crypto-white));
-    color: hsl(var(--crypto-navy));
+    background-color: #1e3a8a;
+    color: #ffffff;
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     padding: var(--space-sm);
@@ -314,9 +315,9 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   
   /* Setup-specific form input override for readability */
   .setup-container .form-input {
-    background-color: hsl(var(--crypto-navy));
-    color: hsl(var(--crypto-white));
-    border: 1px solid hsl(var(--crypto-white) / 0.3);
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border: 1px solid rgba(59, 130, 246, 0.3);
   }
   
   .form-input:focus {
@@ -373,22 +374,22 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   /* Setup Wizard Styles */
   .setup-container {
     min-height: 100vh;
-    background-color: hsl(var(--crypto-navy));
+    background-color: #1e3a8a;
     padding: 2rem;
   }
 
   .setup-card {
     max-width: 800px;
     margin: 0 auto;
-    background: hsl(var(--crypto-navy));
+    background: #1e40af;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
   }
 
   .step-indicator {
-    background: hsl(var(--crypto-navy));
+    background: #1e3a8a;
     padding: 2rem;
-    color: hsl(var(--crypto-white));
+    color: #ffffff;
     text-align: center;
     font-family: 'Inter', sans-serif;
   }
@@ -403,7 +404,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   .form-content {
     padding: 2rem;
-    color: hsl(var(--crypto-white));
+    color: #ffffff;
   }
 
   .form-group {
@@ -422,12 +423,12 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: hsl(var(--crypto-navy));
+    background-color: #1e3a8a;
     padding: var(--space-lg);
   }
 
   .auth-card {
-    background: hsl(var(--crypto-white));
+    background: #1e40af;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
     padding: var(--space-2xl) var(--space-lg);
@@ -436,12 +437,12 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     transition: var(--transition-smooth);
   }
   
-  /* Auth form inputs - white background for readability */
+  /* Auth form inputs - dark blue background for consistency */
   .auth-card input[type="text"], 
   .auth-card input[type="email"], 
   .auth-card input[type="password"] {
-    background-color: hsl(var(--crypto-white)) !important;
-    color: hsl(var(--crypto-navy)) !important;
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
     border: 1px solid hsl(var(--border)) !important;
     border-radius: var(--radius) !important;
     padding: var(--space-sm) !important;
@@ -450,7 +451,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     font-weight: 400 !important;
   }
   
-  /* Setup form inputs - white background with navy text */
+  /* Setup form inputs - dark blue background with white text */
   .setup-container input[type="text"], 
   .setup-container input[type="email"], 
   .setup-container input[type="password"], 
@@ -459,8 +460,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   .setup-container input[type="tel"], 
   .setup-container textarea, 
   .setup-container select {
-    background-color: hsl(var(--crypto-white)) !important;
-    color: hsl(var(--crypto-navy)) !important;
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
     border: 1px solid hsl(var(--border)) !important;
     border-radius: var(--radius) !important;
     padding: var(--space-sm) !important;
@@ -471,7 +472,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   
   input::placeholder, 
   textarea::placeholder {
-    color: hsl(var(--crypto-navy) / 0.6) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
   }
   
   /* Focus states for form inputs */
@@ -487,56 +488,56 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   .form-container,
   .donor-form,
   .donation-form {
-    background-color: hsl(var(--crypto-navy)) !important;
-    color: hsl(var(--crypto-white)) !important;
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
   }
 }
 
-/* CRITICAL OVERRIDE: Force WHITE background for committee search form inputs */
+/* CRITICAL OVERRIDE: Force DARK BLUE background for committee search form inputs */
 body .setup-container .crypto-card .form-input,
 body .setup-container .crypto-card input[type="text"],
 body .setup-container .form-input {
-  background-color: hsl(var(--crypto-white)) !important;
-  color: hsl(var(--crypto-navy)) !important;
-  border: 1px solid hsl(var(--border)) !important;
+  background-color: #1e3a8a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
 }
 
 body .setup-container .crypto-card input::placeholder,
 body .setup-container input.form-input::placeholder {
-  color: hsl(var(--crypto-navy) / 0.6) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* HOMEPAGE STYLING OVERRIDES - CONSISTENT BLUE THEME */
+/* HOMEPAGE STYLING OVERRIDES - DARK BLUE THEME */
 body {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
 }
 
 body .hero-section,
 body .min-h-screen {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
 }
 
-/* Force all sections to have transparent background */
+/* Force all sections to have dark blue background */
 body .content-section,
 body #features,
 body #how-it-works {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #1e3a8a !important;
+  background-color: #1e3a8a !important;
 }
 
 /* Override any white/light backgrounds */
 body .bg-background,
 body .bg-white,
 body .bg-transparent {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #1e3a8a !important;
+  background-color: #1e3a8a !important;
 }
 
-/* All cards use navy background with white text */
+/* All cards use darker blue background with white text */
 body .crypto-card {
-  background-color: hsl(var(--crypto-navy)) !important;
-  color: hsl(var(--crypto-white)) !important;
-  border: 1px solid hsl(var(--crypto-white) / 0.2) !important;
+  background-color: #1e40af !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
 }
 
 body .crypto-card h1,
@@ -547,7 +548,7 @@ body .crypto-card h5,
 body .crypto-card p,
 body .crypto-card span,
 body .crypto-card div {
-  color: hsl(var(--crypto-white)) !important;
+  color: #ffffff !important;
 }
 
 /* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
@@ -563,8 +564,8 @@ body .donor-form,
 body .donor-dashboard,
 body .campaign-auth,
 body .donor-auth {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
-  color: hsl(var(--crypto-white)) !important;
+  background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
+  color: #ffffff !important;
 }
 
 /* All headings in workflow get white text */

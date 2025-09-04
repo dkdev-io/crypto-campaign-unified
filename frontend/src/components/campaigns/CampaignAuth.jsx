@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Mail, Lock, User, Building2, AlertCircle, Eye, EyeOff } from 'lucide-react';
@@ -10,24 +10,15 @@ import CampaignAuthNav from './CampaignAuthNav';
 const CampaignAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signUp, error, clearError, devBypass, user } = useAuth();
+  const { signIn, signUp, error, clearError } = useAuth();
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [bypassClicked, setBypassClicked] = useState(false);
 
   // If on setup flow, redirect back to setup after auth, otherwise go to homepage
   const from = location.state?.from?.pathname || 
                (location.pathname.includes('/campaigns/auth/setup') ? '/campaigns/auth/setup' : '/');
-
-  // Watch for user being set after bypass is clicked
-  useEffect(() => {
-    if (bypassClicked && user) {
-      console.log('DEV BYPASS: User authenticated, navigating to setup...');
-      navigate('/campaigns/auth/setup', { replace: true });
-    }
-  }, [bypassClicked, user, navigate]);
 
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
@@ -359,12 +350,9 @@ const CampaignAuth = () => {
                   <Button
                     type="button"
                     onClick={() => {
-                      console.log('CAMPAIGN BYPASS: Activating bypass and navigating...');
-                      if (devBypass && devBypass()) {
-                        navigate('/campaigns/auth/setup');
-                      } else {
-                        console.error('Failed to activate bypass');
-                      }
+                      console.log('DEV BYPASS: Navigating directly to setup...');
+                      // Just navigate with bypass flag
+                      navigate('/campaigns/auth/setup?bypass=true');
                     }}
                     className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                   >
@@ -526,12 +514,9 @@ const CampaignAuth = () => {
                   <Button
                     type="button"
                     onClick={() => {
-                      console.log('CAMPAIGN BYPASS: Activating bypass and navigating...');
-                      if (devBypass && devBypass()) {
-                        navigate('/campaigns/auth/setup');
-                      } else {
-                        console.error('Failed to activate bypass');
-                      }
+                      console.log('DEV BYPASS: Navigating directly to setup...');
+                      // Just navigate with bypass flag
+                      navigate('/campaigns/auth/setup?bypass=true');
                     }}
                     className="w-full mt-2 bg-yellow-500 hover:bg-yellow-600 text-black"
                   >

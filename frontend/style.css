@@ -1,18 +1,19 @@
 /* Campaign Contributions Frontend Styles */
 
 :root {
-    --primary-color: #0d6efd;
-    --success-color: #198754;
-    --warning-color: #ffc107;
+    --primary-color: #1e3a8a;
+    --success-color: #3b82f6;
+    --warning-color: #0ea5e9;
     --danger-color: #dc3545;
     --info-color: #0dcaf0;
-    --light-gray: #f8f9fa;
-    --dark-gray: #6c757d;
+    --light-gray: #1e40af;
+    --dark-gray: #1e3a8a;
 }
 
 body {
-    background-color: var(--light-gray);
+    background-color: #1e3a8a;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
 }
 
 /* Navbar Styling */
@@ -22,14 +23,16 @@ body {
 }
 
 .navbar-brand i {
-    color: #ffc107;
+    color: #3b82f6;
 }
 
 /* Card Enhancements */
 .card {
-    border: none;
+    border: 1px solid rgba(59, 130, 246, 0.3);
     border-radius: 12px;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #1e40af;
+    color: #ffffff;
 }
 
 .card:hover {
@@ -50,26 +53,29 @@ body {
 /* Form Styling */
 .form-label {
     font-weight: 500;
-    color: #495057;
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
 .form-control, .form-select {
     border-radius: 8px;
-    border: 1px solid #ced4da;
+    border: 1px solid rgba(59, 130, 246, 0.3);
     padding: 0.75rem 1rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: #1e3a8a;
+    color: #ffffff;
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
 }
 
 .input-group-text {
     border-radius: 8px 0 0 8px;
-    background-color: var(--light-gray);
-    border-color: #ced4da;
+    background-color: #1e40af;
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #ffffff;
 }
 
 /* Button Styling */
@@ -90,17 +96,19 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
+    color: #ffffff;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     border: none;
+    color: #ffffff;
 }
 
 .btn-outline-light:hover {
@@ -123,14 +131,15 @@ body {
 /* Form Check Styling */
 .form-check {
     padding: 1rem;
-    background-color: #f8f9fa;
+    background-color: #1e40af;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(59, 130, 246, 0.3);
     transition: background-color 0.2s ease;
+    color: #ffffff;
 }
 
 .form-check:hover {
-    background-color: #e9ecef;
+    background-color: #2563eb;
 }
 
 .form-check-input {
@@ -189,11 +198,12 @@ body {
 
 /* Wallet Address Styling */
 .font-monospace {
-    background-color: #f8f9fa;
+    background-color: #1e40af;
     padding: 0.5rem;
     border-radius: 4px;
-    border: 1px solid #e9ecef;
+    border: 1px solid rgba(59, 130, 246, 0.3);
     word-break: break-all;
+    color: #ffffff;
 }
 
 /* Toast Styling */
@@ -310,7 +320,7 @@ h5.text-primary {
 .form-select:focus,
 .form-check-input:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
 /* Accessibility improvements */
