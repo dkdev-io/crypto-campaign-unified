@@ -359,121 +359,194 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       </div>
 
-      {/* QR Code and Test Section */}
+      {/* Three Key Items Section */}
       <div style={{ 
-        background: '#e7f3ff',
-        border: '1px solid #b6d7ff',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '2rem',
+        marginBottom: '3rem'
       }}>
-        <h4 style={{ color: '#0066cc', marginTop: 0 }}>
-          📱 QR Code & Testing
-        </h4>
-        <p style={{ color: '#004499', marginBottom: '1.5rem' }}>
-          Share your donation form via QR code or test it directly:
-        </p>
         
+        {/* 1. QR Code */}
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'auto 1fr',
-          gap: '2rem',
-          alignItems: 'start'
+          background: 'white',
+          border: '2px solid #e7f3ff',
+          borderRadius: '12px',
+          padding: '2rem',
+          textAlign: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
         }}>
-          {/* QR Code */}
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ 
-              background: 'white',
-              padding: '1rem',
-              borderRadius: '8px',
-              border: '1px solid #b6d7ff',
-              marginBottom: '1rem',
-              display: 'inline-block'
-            }}>
-              {qrCodeDataUrl ? (
-                <img 
-                  src={qrCodeDataUrl} 
-                  alt="Donation Form QR Code"
-                  style={{ display: 'block' }}
-                />
-              ) : (
-                <div style={{
-                  width: '200px',
-                  height: '200px',
-                  background: '#f8f9fa',
-                  border: '1px dashed #ccc',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#666'
-                }}>
-                  Generating QR...
-                </div>
-              )}
-            </div>
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#0066cc', 
-              fontWeight: '500'
-            }}>
-              📱 Scan to Donate
-            </div>
-          </div>
-          
-          {/* Testing Options */}
-          <div>
-            <div style={{ marginBottom: '1rem' }}>
-              <strong style={{ color: '#0066cc', display: 'block', marginBottom: '0.5rem' }}>
-                🔗 Donation URL:
-              </strong>
-              <div style={{ 
-                background: 'white',
-                padding: '0.75rem',
-                borderRadius: '4px',
-                fontFamily: 'monospace',
-                fontSize: '12px',
-                wordBreak: 'break-all',
-                border: '1px solid #b6d7ff'
+          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem' }}>
+            📱 Your QR Code
+          </h4>
+          <div style={{ 
+            background: '#f8f9fa',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            border: '1px solid #e9ecef',
+            marginBottom: '1.5rem',
+            display: 'inline-block'
+          }}>
+            {qrCodeDataUrl ? (
+              <img 
+                src={qrCodeDataUrl} 
+                alt="Campaign QR Code"
+                style={{ display: 'block', width: '180px', height: '180px' }}
+              />
+            ) : (
+              <div style={{
+                width: '180px',
+                height: '180px',
+                background: '#f8f9fa',
+                border: '2px dashed #ccc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#666',
+                borderRadius: '8px'
               }}>
-                {testUrl}
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>⏳</div>
+                  <div>Generating QR...</div>
+                </div>
               </div>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <button
-                onClick={handleTestForm}
-                disabled={!campaignId}
-                style={{
-                  background: '#0066cc',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '4px',
-                  cursor: !campaignId ? 'not-allowed' : 'pointer',
-                  fontSize: '14px',
-                  opacity: !campaignId ? 0.7 : 1
-                }}
-              >
-                🚀 Test Form
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(testUrl);
-                  alert('Donation URL copied!');
-                }}
-                style={{
-                  background: '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-              >
-                📋 Copy URL
-              </button>
-            </div>
+            )}
+          </div>
+          <p style={{ color: '#6c757d', fontSize: '14px', margin: '0 0 1rem 0' }}>
+            Supporters can scan this to donate instantly
+          </p>
+          <button
+            onClick={() => {
+              if (qrCodeDataUrl) {
+                const link = document.createElement('a');
+                link.download = `${formData.campaignName || 'campaign'}-qr-code.png`;
+                link.href = qrCodeDataUrl;
+                link.click();
+              }
+            }}
+            disabled={!qrCodeDataUrl}
+            style={{
+              background: '#2a2a72',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1rem',
+              borderRadius: '4px',
+              cursor: qrCodeDataUrl ? 'pointer' : 'not-allowed',
+              fontSize: '14px',
+              opacity: qrCodeDataUrl ? 1 : 0.5
+            }}
+          >
+            💾 Download QR Code
+          </button>
+        </div>
+
+        {/* 2. Embed Code */}
+        <div style={{ 
+          background: 'white',
+          border: '2px solid #e7f3ff',
+          borderRadius: '12px',
+          padding: '2rem',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem', textAlign: 'center' }}>
+            📝 Your Embed Code
+          </h4>
+          <div style={{ 
+            background: '#f8f9fa',
+            border: '1px solid #e9ecef',
+            borderRadius: '8px',
+            padding: '1rem',
+            marginBottom: '1.5rem',
+            fontFamily: 'Monaco, monospace',
+            fontSize: '11px',
+            lineHeight: '1.4',
+            maxHeight: '200px',
+            overflowY: 'auto',
+            color: '#495057'
+          }}>
+            {embedCode || 'Generating embed code...'}
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <button
+              onClick={handleCopyCode}
+              disabled={loading || !embedCode}
+              style={{
+                background: copied ? '#28a745' : '#2a2a72',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '6px',
+                cursor: loading || !embedCode ? 'not-allowed' : 'pointer',
+                fontSize: '16px',
+                fontWeight: '500',
+                opacity: loading || !embedCode ? 0.7 : 1,
+                transition: 'background 0.2s ease'
+              }}
+            >
+              {loading ? '⏳ Generating...' : copied ? '✅ Copied!' : '📋 Copy Embed Code'}
+            </button>
+          </div>
+        </div>
+
+        {/* 3. Direct Link */}
+        <div style={{ 
+          background: 'white',
+          border: '2px solid #e7f3ff',
+          borderRadius: '12px',
+          padding: '2rem',
+          textAlign: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <h4 style={{ color: '#2a2a72', marginTop: 0, marginBottom: '1.5rem' }}>
+            🔗 Direct Donation Link
+          </h4>
+          <div style={{ 
+            background: '#f8f9fa',
+            padding: '1rem',
+            borderRadius: '8px',
+            marginBottom: '1.5rem',
+            fontFamily: 'monospace',
+            fontSize: '12px',
+            wordBreak: 'break-all',
+            border: '1px solid #e9ecef',
+            color: '#495057'
+          }}>
+            {testUrl}
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleTestForm}
+              disabled={!campaignId}
+              style={{
+                background: '#28a745',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1rem',
+                borderRadius: '4px',
+                cursor: !campaignId ? 'not-allowed' : 'pointer',
+                fontSize: '14px',
+                opacity: !campaignId ? 0.7 : 1
+              }}
+            >
+              🚀 Test Form
+            </button>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(testUrl);
+                alert('Direct link copied!');
+              }}
+              style={{
+                background: '#2a2a72',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1rem',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              📋 Copy Link
+            </button>
           </div>
         </div>
       </div>
