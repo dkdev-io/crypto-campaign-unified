@@ -318,7 +318,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               style={{ 
                 flex: 1,
-                backgroundColor: 'white',
+                backgroundColor: '#e3f2fd',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
@@ -448,7 +448,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="City"
               style={{ 
                 width: '120px',
-                backgroundColor: 'white',
+                backgroundColor: '#e3f2fd',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
@@ -464,7 +464,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="State"
               style={{ 
                 width: '80px',
-                backgroundColor: 'white',
+                backgroundColor: '#e3f2fd',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
@@ -481,7 +481,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               placeholder="ZIP"
               style={{ 
                 width: '100px',
-                backgroundColor: 'white',
+                backgroundColor: '#e3f2fd',
                 color: 'hsl(var(--crypto-navy))',
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '6px',
@@ -535,7 +535,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                   padding: '1rem',
                   borderBottom: index < committees.length - 1 ? '1px solid hsl(var(--border))' : 'none',
                   cursor: 'pointer',
-                  background: selectedCommittee?.id === committee.id ? '#e3f2fd' : 'white',
+                  background: selectedCommittee?.id === committee.id ? '#1976d2' : '#e3f2fd',
                   borderLeft: selectedCommittee?.id === committee.id ? '4px solid #2a2a72' : 'none'
                 }}
                 onMouseEnter={(e) => {
@@ -545,7 +545,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
                 }}
                 onMouseLeave={(e) => {
                   if (selectedCommittee?.id !== committee.id) {
-                    e.target.style.background = 'white';
+                    e.target.style.background = '#e3f2fd';
                   }
                 }}
               >
