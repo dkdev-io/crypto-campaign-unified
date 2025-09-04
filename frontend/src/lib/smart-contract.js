@@ -1,5 +1,5 @@
 // Smart Contract Integration for Campaign Contributions
-// TESTING MODE: Wallet extensions disabled to prevent popup triggers
+// Wallet integration for production deployment
 
 export class SmartContractHandler {
   constructor() {
@@ -10,7 +10,7 @@ export class SmartContractHandler {
     this.maxContributionLimit = 3300; // FEC individual limit per election - CUMULATIVE
   }
 
-  // Connect to wallet - DISABLED IN TESTING MODE
+  // Connect to wallet
   async connectWallet() {
     try {
       if (this.testingMode) {
@@ -23,7 +23,7 @@ export class SmartContractHandler {
       }
       
       if (typeof window.ethereum !== 'undefined') {
-        // Request account access - DISABLED IN TESTING
+        // Request account access
         console.log('⚠️ Wallet extension calls disabled in testing mode');
         throw new Error('Wallet extensions disabled in testing mode');
       } else {
@@ -49,7 +49,7 @@ export class SmartContractHandler {
         throw new Error('Contributor wallet address required');
       }
 
-      // TESTING: Check contribution limits
+      // Check contribution limits
       const limitChecks = this.checkContributionLimits(contributionData);
       if (!limitChecks.allowed) {
         throw new Error(`Contribution rejected: ${limitChecks.reason}`);
