@@ -21,8 +21,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --background: var(--crypto-navy);
     --foreground: var(--crypto-white);
 
-    --card: var(--crypto-white);
-    --card-foreground: var(--crypto-navy);
+    --card: var(--crypto-navy);
+    --card-foreground: var(--crypto-white);
 
     --popover: var(--crypto-white);
     --popover-foreground: var(--crypto-navy);
@@ -284,9 +284,9 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Form Styles - Unified System */
   .form-input {
-    background-color: hsl(var(--crypto-navy));
-    color: hsl(var(--crypto-white));
-    border: 1px solid hsl(var(--crypto-white) / 0.3);
+    background-color: hsl(var(--crypto-white));
+    color: hsl(var(--crypto-navy));
+    border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     padding: var(--space-sm);
     font-size: var(--text-body);
@@ -438,7 +438,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     font-weight: 400 !important;
   }
   
-  /* Setup form inputs - navy background with white text */
+  /* Setup form inputs - white background with navy text */
   .setup-container input[type="text"], 
   .setup-container input[type="email"], 
   .setup-container input[type="password"], 
@@ -447,9 +447,9 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   .setup-container input[type="tel"], 
   .setup-container textarea, 
   .setup-container select {
-    background-color: hsl(var(--crypto-navy)) !important;
-    color: hsl(var(--crypto-white)) !important;
-    border: 1px solid hsl(var(--crypto-white) / 0.3) !important;
+    background-color: hsl(var(--crypto-white)) !important;
+    color: hsl(var(--crypto-navy)) !important;
+    border: 1px solid hsl(var(--border)) !important;
     border-radius: var(--radius) !important;
     padding: var(--space-sm) !important;
     font-size: var(--text-body) !important;
@@ -459,7 +459,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   
   input::placeholder, 
   textarea::placeholder {
-    color: hsl(var(--crypto-white) / 0.6) !important;
+    color: hsl(var(--crypto-navy) / 0.6) !important;
   }
   
   /* Focus states for form inputs */
@@ -478,4 +478,20 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     background-color: hsl(var(--crypto-navy)) !important;
     color: hsl(var(--crypto-white)) !important;
   }
-}/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
+}
+
+/* CRITICAL OVERRIDE: Force WHITE background for committee search form inputs */
+body .setup-container .crypto-card .form-input,
+body .setup-container .crypto-card input[type="text"],
+body .setup-container .form-input {
+  background-color: hsl(var(--crypto-white)) !important;
+  color: hsl(var(--crypto-navy)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+body .setup-container .crypto-card input::placeholder,
+body .setup-container input.form-input::placeholder {
+  color: hsl(var(--crypto-navy) / 0.6) !important;
+}
+
+/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
