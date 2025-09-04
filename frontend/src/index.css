@@ -282,16 +282,29 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     transform: translateY(-1px);
   }
 
-  /* Form Styles */
+  /* Form Styles - Unified System */
   .form-input {
-    background-color: white;
-    color: black;
-    border: 1px solid hsl(var(--border));
+    background-color: hsl(var(--crypto-navy));
+    color: hsl(var(--crypto-white));
+    border: 1px solid hsl(var(--crypto-white) / 0.3);
     border-radius: var(--radius);
     padding: var(--space-sm);
     font-size: var(--text-body);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
     transition: var(--transition-smooth);
     width: 100%;
+  }
+  
+  .form-input::placeholder {
+    color: hsl(var(--crypto-white) / 0.6);
+  }
+  
+  /* Setup-specific form input override for readability */
+  .setup-container .form-input {
+    background-color: hsl(var(--crypto-navy));
+    color: hsl(var(--crypto-white));
+    border: 1px solid hsl(var(--crypto-white) / 0.3);
   }
   
   .form-input:focus {
@@ -343,5 +356,71 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  /* Setup Wizard Styles */
+  .setup-container {
+    min-height: 100vh;
+    background-color: hsl(var(--crypto-navy));
+    padding: 2rem;
+  }
+
+  .setup-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: hsl(var(--crypto-navy));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+  }
+
+  .step-indicator {
+    background: hsl(var(--crypto-navy));
+    padding: 2rem;
+    color: hsl(var(--crypto-white));
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .step-indicator h1,
+  .step-indicator h2 {
+    font-size: var(--text-heading-xl);
+    font-weight: 800;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-content {
+    padding: 2rem;
+    color: hsl(var(--crypto-white));
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+
+  /* Auth Pages Styles */
+  .auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(var(--crypto-navy));
+    padding: var(--space-lg);
+  }
+
+  .auth-card {
+    background: hsl(var(--crypto-white));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-2xl) var(--space-lg);
+    width: 100%;
+    max-width: 480px;
+    transition: var(--transition-smooth);
   }
 }/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */

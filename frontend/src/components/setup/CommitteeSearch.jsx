@@ -316,17 +316,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Enter committee name or keywords..."
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              style={{ 
-                flex: 1,
-                backgroundColor: 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: '1px solid hsl(var(--crypto-white) / 0.3)',
-                borderRadius: 'var(--radius)',
-                padding: 'var(--space-sm)',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '400'
-              }}
+              style={{ flex: 1 }}
             />
             <button 
               onClick={() => handleSearch()}
@@ -407,15 +397,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block',
-              backgroundColor: 'hsl(var(--crypto-navy))',
-              color: 'hsl(var(--crypto-white))',
-              border: '1px solid hsl(var(--crypto-white) / 0.3)',
-              borderRadius: 'var(--radius)',
-              padding: 'var(--space-sm)',
-              fontSize: 'var(--text-body)',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '400'
+              display: 'block'
             }}
           />
           
@@ -429,15 +411,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               width: '100%',
               maxWidth: '400px',
               margin: '0 auto 1rem auto',
-              display: 'block',
-              backgroundColor: 'hsl(var(--crypto-navy))',
-              color: 'hsl(var(--crypto-white))',
-              border: '1px solid hsl(var(--crypto-white) / 0.3)',
-              borderRadius: 'var(--radius)',
-              padding: 'var(--space-sm)',
-              fontSize: 'var(--text-body)',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '400'
+              display: 'block'
             }}
           />
           
@@ -453,17 +427,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.city}
               onChange={(e) => setManualCommittee({...manualCommittee, city: e.target.value})}
               placeholder="City"
-              style={{ 
-                width: '120px',
-                backgroundColor: 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: '1px solid hsl(var(--crypto-white) / 0.3)',
-                borderRadius: 'var(--radius)',
-                padding: 'var(--space-sm)',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '400'
-              }}
+              style={{ width: '120px' }}
             />
             <input
               className="form-input"
@@ -471,17 +435,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.state}
               onChange={(e) => setManualCommittee({...manualCommittee, state: e.target.value})}
               placeholder="State"
-              style={{ 
-                width: '80px',
-                backgroundColor: 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: '1px solid hsl(var(--crypto-white) / 0.3)',
-                borderRadius: 'var(--radius)',
-                padding: 'var(--space-sm)',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '400'
-              }}
+              style={{ width: '80px' }}
               maxLength="2"
             />
             <input
@@ -490,17 +444,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
               value={manualCommittee.zip}
               onChange={(e) => setManualCommittee({...manualCommittee, zip: e.target.value})}
               placeholder="ZIP"
-              style={{ 
-                width: '100px',
-                backgroundColor: 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: '1px solid hsl(var(--crypto-white) / 0.3)',
-                borderRadius: 'var(--radius)',
-                padding: 'var(--space-sm)',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '400'
-              }}
+              style={{ width: '100px' }}
               maxLength="10"
             />
           </div>

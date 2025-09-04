@@ -12,7 +12,7 @@ import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
 import CampaignAuthNav from '../campaigns/CampaignAuthNav';
 import { supabase } from '../../lib/supabase';
-import '../../styles/setup.css';
+// All styles now consolidated in index.css
 
 const SetupWizard = () => {
   const { user } = useAuth();

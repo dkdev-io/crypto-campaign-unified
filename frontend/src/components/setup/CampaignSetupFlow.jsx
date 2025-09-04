@@ -8,7 +8,7 @@ import InviteMembers from '../team/InviteMembers'
 import WebsiteStyleMatcher from './WebsiteStyleMatcher'
 import StyleConfirmation from './StyleConfirmation'
 import EmbedCode from './EmbedCode'
-import '../../styles/setup.css'
+// All styles now consolidated in index.css
 
 const CampaignSetupFlow = () => {
   const navigate = useNavigate()
