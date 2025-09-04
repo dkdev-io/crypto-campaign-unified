@@ -206,18 +206,25 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       
       console.log('Saving committee data to Supabase:', committeeData);
       
-      const { data: updatedCampaign, error: updateError } = await supabase
-        .from('campaigns')
-        .update(committeeData)
-        .eq('id', campaignId)
-        .select();
-        
-      if (updateError) {
-        console.error('Supabase update error:', updateError);
-        throw new Error('Failed to save committee information: ' + updateError.message);
+      // Try to save to database first
+      let savedToDatabase = false;
+      try {
+        const { data: updatedCampaign, error: updateError } = await supabase
+          .from('campaigns')
+          .update(committeeData)
+          .eq('id', campaignId)
+          .select();
+          
+        if (updateError) {
+          console.warn('Database save failed (columns may not exist yet):', updateError.message);
+          // Don't throw here, continue with localStorage
+        } else {
+          console.log('✅ Committee information saved to Supabase:', updatedCampaign);
+          savedToDatabase = true;
+        }
+      } catch (dbError) {
+        console.warn('Database save error, using localStorage fallback:', dbError.message);
       }
-      
-      console.log('✅ Committee information saved to Supabase:', updatedCampaign);
       
       // Update form data and proceed
       updateFormData({
@@ -250,7 +257,9 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         committeeZip: manualCommittee.zip.trim()
       });
       
-      setSuccess('Committee information saved to database successfully!');
+      setSuccess(savedToDatabase ? 
+        'Committee information saved to database successfully!' : 
+        'Committee information saved locally (database columns pending)!');
       
       // Clear the manual form after successful save
       setManualCommittee({
@@ -265,7 +274,8 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       });
       
     } catch (err) {
-      setError('Failed to save committee name: ' + err.message);
+      console.error('Failed to save committee information:', err);
+      setError('Failed to save committee information: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -682,7 +692,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
             ✅ Committee Information Saved!
           </h4>
           <p style={{ color: '#155724', margin: '0 0 2rem 0' }}>
-            Your committee details have been saved to the database.
+            {success}
           </p>
           <button 
             className="btn btn-primary"

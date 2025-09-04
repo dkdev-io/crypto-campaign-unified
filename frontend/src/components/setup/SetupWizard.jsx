@@ -70,10 +70,14 @@ const SetupWizard = () => {
             stylesApplied: existingCampaign.styles_applied || savedData?.stylesApplied || false,
             styleMethod: existingCampaign.style_method || savedData?.styleMethod || null,
             
-            // Data that exists only in localStorage (until DB is fixed)
-            fecCommitteeId: savedData?.fecCommitteeId || '',
-            committeeName: savedData?.committeeName || '',
-            selectedCommittee: savedData?.selectedCommittee || null,
+            // Committee data from database or localStorage
+            fecCommitteeId: existingCampaign.fec_committee_id || savedData?.fecCommitteeId || '',
+            committeeName: existingCampaign.committee_name || savedData?.committeeName || '',
+            committeeAddress: existingCampaign.committee_address || savedData?.committeeAddress || '',
+            committeeCity: existingCampaign.committee_city || savedData?.committeeCity || '',
+            committeeState: existingCampaign.committee_state || savedData?.committeeState || '',
+            committeeZip: existingCampaign.committee_zip || savedData?.committeeZip || '',
+            selectedCommittee: existingCampaign.committee_contact_info || savedData?.selectedCommittee || null,
             committeeDetails: savedData?.committeeDetails || null,
             bankAccountVerified: savedData?.bankAccountVerified || false,
             bankAccountInfo: savedData?.bankAccountInfo || null,
