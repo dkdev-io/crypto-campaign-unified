@@ -13,7 +13,7 @@ class Web3Service {
   }
 
   // Initialize Web3 connection
-    // Initialize Web3 connection
+  // Initialize Web3 connection
   async init() {
     try {
       if (typeof window === 'undefined' || typeof window.ethereum === 'undefined') {
@@ -21,7 +21,7 @@ class Web3Service {
         this.demoMode = true;
         return await web3DemoService.init();
       }
-      
+
       this.provider = new ethers.BrowserProvider(window.ethereum);
       console.log('✅ Web3 provider initialized');
       return true;
@@ -35,7 +35,7 @@ class Web3Service {
   // Connect wallet (MetaMask)
   async connectWallet() {
     try {
-          if (this.demoMode) return await web3DemoService.connectWallet();
+      if (this.demoMode) return await web3DemoService.connectWallet();
 
       if (!this.provider) {
         throw new Error('Web3 provider not initialized');
@@ -43,7 +43,7 @@ class Web3Service {
 
       // Request account access
       const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
+        method: 'eth_requestAccounts',
       });
 
       if (accounts.length === 0) {
@@ -71,15 +71,14 @@ class Web3Service {
       return {
         success: true,
         account: this.account,
-        network: await this.getNetworkInfo()
+        network: await this.getNetworkInfo(),
       };
-
     } catch (error) {
       console.error('❌ Wallet connection failed:', error);
       this.isConnected = false;
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -98,12 +97,14 @@ class Web3Service {
     try {
       const network = await this.provider.getNetwork();
       const chainId = network.chainId.toString();
-      
+
       if (chainId !== CONTRACT_CONFIG.NETWORK_ID) {
-        console.warn(`⚠️ Wrong network. Expected: ${CONTRACT_CONFIG.NETWORK_NAME} (${CONTRACT_CONFIG.NETWORK_ID}), Got: ${chainId}`);
+        console.warn(
+          `⚠️ Wrong network. Expected: ${CONTRACT_CONFIG.NETWORK_NAME} (${CONTRACT_CONFIG.NETWORK_ID}), Got: ${chainId}`
+        );
         return false;
       }
-      
+
       console.log(`✅ Connected to ${CONTRACT_CONFIG.NETWORK_NAME}`);
       return true;
     } catch (error) {
@@ -118,7 +119,7 @@ class Web3Service {
       const network = await this.provider.getNetwork();
       return {
         chainId: network.chainId.toString(),
-        name: network.name
+        name: network.name,
       };
     } catch (error) {
       console.error('❌ Failed to get network info:', error);
@@ -129,7 +130,7 @@ class Web3Service {
   // Get account balance
   async getBalance() {
     try {
-          if (this.demoMode) return await web3DemoService.getBalance();
+      if (this.demoMode) return await web3DemoService.getBalance();
 
       if (!this.account || !this.provider) {
         throw new Error('Wallet not connected');
@@ -171,7 +172,7 @@ class Web3Service {
         cumulativeAmount: ethers.formatEther(info.cumulativeAmount),
         remainingCapacity: ethers.formatEther(info.remainingCapacity),
         isKYCVerified: info.isKYCVerified,
-        hasContributedBefore: info.hasContributedBefore
+        hasContributedBefore: info.hasContributedBefore,
       };
     } catch (error) {
       console.error('❌ Failed to get contributor info:', error);
@@ -188,16 +189,16 @@ class Web3Service {
 
       const amountInWei = ethers.parseEther(amountInETH.toString());
       const result = await this.contract.canContribute(address, amountInWei);
-      
+
       return {
         canContribute: result.canContribute,
-        reason: result.reason
+        reason: result.reason,
       };
     } catch (error) {
       console.error('❌ Failed to check contribution eligibility:', error);
       return {
         canContribute: false,
-        reason: error.message
+        reason: error.message,
       };
     }
   }
@@ -205,7 +206,7 @@ class Web3Service {
   // Make a contribution
   async contribute(amountInETH) {
     try {
-          if (this.demoMode) return await web3DemoService.contribute(amountInETH);
+      if (this.demoMode) return await web3DemoService.contribute(amountInETH);
 
       if (!this.contract || !this.signer) {
         throw new Error('Contract or signer not initialized');
@@ -214,7 +215,7 @@ class Web3Service {
       console.log(`💰 Contributing ${amountInETH} ETH...`);
 
       const amountInWei = ethers.parseEther(amountInETH.toString());
-      
+
       // Check if contribution is allowed first
       const eligibility = await this.canContribute(this.account, amountInETH);
       if (!eligibility.canContribute) {
@@ -223,13 +224,13 @@ class Web3Service {
 
       // Estimate gas
       const gasEstimate = await this.contract.contribute.estimateGas({
-        value: amountInWei
+        value: amountInWei,
       });
 
       // Send transaction
       const tx = await this.contract.contribute({
         value: amountInWei,
-        gasLimit: gasEstimate * 120n / 100n // Add 20% buffer
+        gasLimit: (gasEstimate * 120n) / 100n, // Add 20% buffer
       });
 
       console.log('📤 Transaction sent:', tx.hash);
@@ -242,15 +243,14 @@ class Web3Service {
         success: true,
         txHash: receipt.hash,
         blockNumber: receipt.blockNumber,
-        gasUsed: receipt.gasUsed.toString()
+        gasUsed: receipt.gasUsed.toString(),
       };
-
     } catch (error) {
       console.error('❌ Contribution failed:', error);
       return {
         success: false,
         error: error.message,
-        code: error.code
+        code: error.code,
       };
     }
   }
@@ -267,7 +267,7 @@ class Web3Service {
         totalReceived: ethers.formatEther(stats.totalReceived),
         uniqueContributors: stats.uniqueContributors.toString(),
         maxContribution: ethers.formatEther(stats.maxContribution),
-        currentEthPrice: ethers.formatUnits(stats.currentEthPrice, 18)
+        currentEthPrice: ethers.formatUnits(stats.currentEthPrice, 18),
       };
     } catch (error) {
       console.error('❌ Failed to get campaign stats:', error);

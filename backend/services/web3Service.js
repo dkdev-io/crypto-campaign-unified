@@ -36,16 +36,11 @@ class Web3Service {
       await this.loadContractInfo(network);
 
       // Initialize contract instance
-      this.contract = new ethers.Contract(
-        this.contractAddress,
-        this.contractABI,
-        this.provider
-      );
+      this.contract = new ethers.Contract(this.contractAddress, this.contractABI, this.provider);
 
       this.initialized = true;
       console.log(`✅ Web3Service initialized for ${network}`);
       console.log(`📍 Contract address: ${this.contractAddress}`);
-      
     } catch (error) {
       console.error('❌ Failed to initialize Web3Service:', error);
       throw error;
@@ -57,7 +52,7 @@ class Web3Service {
       // Load deployment info
       const deploymentFile = path.join(__dirname, `../../contracts/deployments/${network}_*.json`);
       const deploymentFiles = await this.findDeploymentFile(network);
-      
+
       if (!deploymentFiles.length) {
         throw new Error(`No deployment found for network: ${network}`);
       }
@@ -66,14 +61,16 @@ class Web3Service {
       this.contractAddress = deploymentData.contractAddress;
 
       // Load ABI
-      const abiFile = path.join(__dirname, '../../frontend/src/contracts/CampaignContributions.json');
+      const abiFile = path.join(
+        __dirname,
+        '../../frontend/src/contracts/CampaignContributions.json'
+      );
       if (fs.existsSync(abiFile)) {
         const abiData = JSON.parse(fs.readFileSync(abiFile, 'utf8'));
         this.contractABI = abiData.abi;
       } else {
         throw new Error('Contract ABI file not found');
       }
-
     } catch (error) {
       console.error('❌ Failed to load contract info:', error);
       throw error;
@@ -88,16 +85,16 @@ class Web3Service {
 
     const files = fs.readdirSync(deploymentsDir);
     return files
-      .filter(file => file.startsWith(network) && file.endsWith('.json'))
-      .map(file => path.join(deploymentsDir, file));
+      .filter((file) => file.startsWith(network) && file.endsWith('.json'))
+      .map((file) => path.join(deploymentsDir, file));
   }
 
   // Contract interaction methods
   async getCampaignStats() {
     this.ensureInitialized();
-    
+
     try {
-      const [totalReceived, uniqueContributors, maxContribution, currentEthPrice] = 
+      const [totalReceived, uniqueContributors, maxContribution, currentEthPrice] =
         await this.contract.getCampaignStats();
 
       return {
@@ -105,7 +102,7 @@ class Web3Service {
         uniqueContributors: Number(uniqueContributors),
         maxContribution: ethers.formatEther(maxContribution),
         currentEthPrice: ethers.formatUnits(currentEthPrice, 18),
-        maxContributionUSD: 3300 // Fixed FEC limit
+        maxContributionUSD: 3300, // Fixed FEC limit
       };
     } catch (error) {
       console.error('❌ Failed to get campaign stats:', error);
@@ -115,13 +112,13 @@ class Web3Service {
 
   async getContributorInfo(address) {
     this.ensureInitialized();
-    
+
     if (!ethers.isAddress(address)) {
       throw new Error('Invalid Ethereum address');
     }
 
     try {
-      const [cumulativeAmount, remainingCapacity, isKYCVerified, hasContributedBefore] = 
+      const [cumulativeAmount, remainingCapacity, isKYCVerified, hasContributedBefore] =
         await this.contract.getContributorInfo(address);
 
       return {
@@ -129,7 +126,7 @@ class Web3Service {
         remainingCapacity: ethers.formatEther(remainingCapacity),
         isKYCVerified,
         hasContributedBefore,
-        address
+        address,
       };
     } catch (error) {
       console.error('❌ Failed to get contributor info:', error);
@@ -139,7 +136,7 @@ class Web3Service {
 
   async canContribute(address, amountETH) {
     this.ensureInitialized();
-    
+
     if (!ethers.isAddress(address)) {
       throw new Error('Invalid Ethereum address');
     }
@@ -152,7 +149,7 @@ class Web3Service {
         canContribute,
         reason,
         amountETH: amountETH.toString(),
-        amountWei: amountWei.toString()
+        amountWei: amountWei.toString(),
       };
     } catch (error) {
       console.error('❌ Failed to check contribution eligibility:', error);
@@ -162,7 +159,7 @@ class Web3Service {
 
   async isKYCVerified(address) {
     this.ensureInitialized();
-    
+
     if (!ethers.isAddress(address)) {
       throw new Error('Invalid Ethereum address');
     }
@@ -177,13 +174,13 @@ class Web3Service {
 
   async getMaxContributionWei() {
     this.ensureInitialized();
-    
+
     try {
       const maxWei = await this.contract.getMaxContributionWei();
       return {
         wei: maxWei.toString(),
         eth: ethers.formatEther(maxWei),
-        usd: 3300 // Fixed FEC limit
+        usd: 3300, // Fixed FEC limit
       };
     } catch (error) {
       console.error('❌ Failed to get max contribution:', error);
@@ -194,20 +191,23 @@ class Web3Service {
   // Event listening methods
   async listenToContributions(callback) {
     this.ensureInitialized();
-    
+
     try {
-      this.contract.on('ContributionAccepted', (contributor, amount, cumulativeAmount, timestamp, transactionHash, event) => {
-        const contributionData = {
-          contributor,
-          amount: ethers.formatEther(amount),
-          cumulativeAmount: ethers.formatEther(cumulativeAmount),
-          timestamp: new Date(Number(timestamp) * 1000),
-          transactionHash: event.transactionHash,
-          blockNumber: event.blockNumber
-        };
-        
-        callback(contributionData);
-      });
+      this.contract.on(
+        'ContributionAccepted',
+        (contributor, amount, cumulativeAmount, timestamp, transactionHash, event) => {
+          const contributionData = {
+            contributor,
+            amount: ethers.formatEther(amount),
+            cumulativeAmount: ethers.formatEther(cumulativeAmount),
+            timestamp: new Date(Number(timestamp) * 1000),
+            transactionHash: event.transactionHash,
+            blockNumber: event.blockNumber,
+          };
+
+          callback(contributionData);
+        }
+      );
 
       this.contract.on('ContributionRejected', (contributor, amount, reason, timestamp, event) => {
         const rejectionData = {
@@ -216,9 +216,9 @@ class Web3Service {
           reason,
           timestamp: new Date(Number(timestamp) * 1000),
           transactionHash: event.transactionHash,
-          blockNumber: event.blockNumber
+          blockNumber: event.blockNumber,
         };
-        
+
         callback(rejectionData, true); // true indicates rejection
       });
 
@@ -239,7 +239,7 @@ class Web3Service {
   // Transaction monitoring
   async waitForTransaction(txHash) {
     this.ensureInitialized();
-    
+
     try {
       const receipt = await this.provider.waitForTransaction(txHash);
       return {
@@ -247,7 +247,7 @@ class Web3Service {
         transactionHash: receipt.hash,
         blockNumber: receipt.blockNumber,
         gasUsed: receipt.gasUsed.toString(),
-        effectiveGasPrice: receipt.effectiveGasPrice?.toString()
+        effectiveGasPrice: receipt.effectiveGasPrice?.toString(),
       };
     } catch (error) {
       console.error('❌ Failed to wait for transaction:', error);
@@ -258,16 +258,16 @@ class Web3Service {
   // Network info
   async getNetworkInfo() {
     this.ensureInitialized();
-    
+
     try {
       const network = await this.provider.getNetwork();
       const blockNumber = await this.provider.getBlockNumber();
-      
+
       return {
         chainId: Number(network.chainId),
         name: network.name,
         currentBlock: blockNumber,
-        contractAddress: this.contractAddress
+        contractAddress: this.contractAddress,
       };
     } catch (error) {
       console.error('❌ Failed to get network info:', error);

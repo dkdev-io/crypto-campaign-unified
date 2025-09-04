@@ -90,29 +90,29 @@ SELECT 'Database fixes applied successfully!' as result;
 
 async function applySupabaseFixes() {
   console.log('🚀 Launching Puppeteer to apply Supabase database fixes...');
-  
+
   const browser = await puppeteer.launch({
     headless: false, // Show browser for debugging
     defaultViewport: { width: 1200, height: 800 },
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
   const page = await browser.newPage();
-  
+
   try {
-    
     // Navigate to the exact SQL editor URL provided
-    await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8', {
-      waitUntil: 'networkidle0',
-      timeout: 30000
-    });
+    await page.goto(
+      'https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8',
+      {
+        waitUntil: 'networkidle0',
+        timeout: 30000,
+      }
+    );
 
-    
     // Wait for the SQL editor to be present
-    await page.waitForSelector('.monaco-editor, .sql-editor, textarea, [role="textbox"]', { 
-      timeout: 15000 
+    await page.waitForSelector('.monaco-editor, .sql-editor, textarea, [role="textbox"]', {
+      timeout: 15000,
     });
-
 
     // Multiple strategies to find and interact with the SQL editor
     let editorFound = false;
@@ -120,20 +120,19 @@ async function applySupabaseFixes() {
     // Strategy 1: Monaco Editor (most common)
     try {
       await page.waitForSelector('.monaco-editor', { timeout: 5000 });
-      
+
       // Click in the editor area
       await page.click('.monaco-editor .view-lines');
-      
+
       // Select all and delete
       await page.keyboard.down('Meta'); // Cmd on Mac
       await page.keyboard.press('a');
       await page.keyboard.up('Meta');
       await page.keyboard.press('Backspace');
-      
+
       // Type the SQL
       await page.keyboard.type(cleanSQL, { delay: 10 });
       editorFound = true;
-      
     } catch (err) {
       console.log('⚠️  Monaco editor not found, trying other methods...');
     }
@@ -162,7 +161,7 @@ async function applySupabaseFixes() {
         if (editableElements.length > 0) {
           await editableElements[0].click();
           await page.keyboard.down('Meta');
-          await page.keyboard.press('a');  
+          await page.keyboard.press('a');
           await page.keyboard.up('Meta');
           await page.keyboard.type(cleanSQL, { delay: 10 });
           editorFound = true;
@@ -174,41 +173,42 @@ async function applySupabaseFixes() {
 
     if (!editorFound) {
       console.log('❌ Could not find SQL editor input area');
-      
+
       // Take a screenshot for debugging
       await page.screenshot({ path: 'supabase-editor-debug.png', fullPage: true });
-      
+
       // Print page content selectors for debugging
       const selectors = await page.evaluate(() => {
         const elements = document.querySelectorAll('*');
         const selectorList = [];
-        elements.forEach(el => {
-          if (el.className && (
-            el.className.includes('editor') || 
-            el.className.includes('monaco') || 
-            el.className.includes('sql') ||
-            el.tagName === 'TEXTAREA'
-          )) {
+        elements.forEach((el) => {
+          if (
+            el.className &&
+            (el.className.includes('editor') ||
+              el.className.includes('monaco') ||
+              el.className.includes('sql') ||
+              el.tagName === 'TEXTAREA')
+          ) {
             selectorList.push(`${el.tagName}.${el.className}`);
           }
         });
         return selectorList.slice(0, 10); // First 10 matches
       });
-      
+
       throw new Error('SQL editor not found');
     }
 
     console.log('✅ SQL entered successfully!');
-    
+
     // Look for and click the Run button
-    
+
     const runButtonSelectors = [
       'button[data-testid="run-sql"]',
       'button:contains("Run")',
       '.run-button',
       '[data-test="run-sql"]',
       'button[title="Run"]',
-      'button[aria-label="Run"]'
+      'button[aria-label="Run"]',
     ];
 
     let runButtonFound = false;
@@ -228,12 +228,13 @@ async function applySupabaseFixes() {
       try {
         const runButton = await page.evaluateHandle(() => {
           const buttons = Array.from(document.querySelectorAll('button'));
-          return buttons.find(btn => 
-            btn.textContent.toLowerCase().includes('run') ||
-            btn.textContent.toLowerCase().includes('execute')
+          return buttons.find(
+            (btn) =>
+              btn.textContent.toLowerCase().includes('run') ||
+              btn.textContent.toLowerCase().includes('execute')
           );
         });
-        
+
         if (runButton) {
           await runButton.click();
           console.log('✅ Clicked Run button found by text content');
@@ -253,25 +254,24 @@ async function applySupabaseFixes() {
     }
 
     if (runButtonFound) {
-      
       // Wait a bit for execution
       await page.waitForTimeout(5000);
-      
+
       // Look for success/error indicators
       try {
         const resultElements = await page.$$('.result, .success, .error, .output');
         if (resultElements.length > 0) {
           const results = await page.evaluate(() => {
             const resultEls = document.querySelectorAll('.result, .success, .error, .output');
-            return Array.from(resultEls).map(el => el.textContent).join('\n');
+            return Array.from(resultEls)
+              .map((el) => el.textContent)
+              .join('\n');
           });
           console.log('📊 Execution results:', results);
         }
       } catch (err) {
         console.log('⚠️  Could not read execution results');
       }
-      
-      
     } else {
       console.log('❌ Could not find or click Run button');
       throw new Error('Run button not found');
@@ -280,21 +280,19 @@ async function applySupabaseFixes() {
     // Take final screenshot
     await page.screenshot({ path: 'supabase-final-result.png', fullPage: true });
     console.log('📸 Final screenshot saved as supabase-final-result.png');
-
   } catch (error) {
     console.error('❌ Error during automation:', error.message);
-    
+
     // Take error screenshot
     await page.screenshot({ path: 'supabase-error.png', fullPage: true });
     console.log('📸 Error screenshot saved as supabase-error.png');
-    
+
     throw error;
-    
   } finally {
     // Keep browser open for 10 seconds to see results
     console.log('⏳ Keeping browser open for 10 seconds to see results...');
     await page.waitForTimeout(10000);
-    
+
     await browser.close();
   }
 }

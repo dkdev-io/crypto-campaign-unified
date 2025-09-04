@@ -2,9 +2,9 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 
 async function testNewFeatures() {
   const results = [];
@@ -19,8 +19,7 @@ async function testNewFeatures() {
       .limit(5);
 
     if (!error && activeCampaigns) {
-      activeCampaigns.forEach(c => {
-      });
+      activeCampaigns.forEach((c) => {});
       results.push({ test: 'Status-based queries', passed: true, count: activeCampaigns.length });
     } else {
       results.push({ test: 'Status-based queries', passed: false, error: error?.message });
@@ -40,12 +39,12 @@ async function testNewFeatures() {
 
     if (campaigns && campaigns.length > 0) {
       const campaign = campaigns[0];
-      
+
       // CREATE contribution
       const newContrib = {
         campaign_id: campaign.id,
         user_id: 'test-user-' + Date.now(),
-        amount: 150.00,
+        amount: 150.0,
         currency: 'USD',
         status: 'completed',
         donor_email: 'test@example.com',
@@ -59,7 +58,6 @@ async function testNewFeatures() {
         .single();
 
       if (!createError && created) {
-
         // READ contribution
         const { data: retrieved, error: readError } = await supabase
           .from('contributions')
@@ -68,17 +66,15 @@ async function testNewFeatures() {
           .single();
 
         if (!readError && retrieved) {
-
           // UPDATE contribution
           const { data: updated, error: updateError } = await supabase
             .from('contributions')
-            .update({ amount: 200.00, status: 'completed' })
+            .update({ amount: 200.0, status: 'completed' })
             .eq('id', created.id)
             .select()
             .single();
 
           if (!updateError && updated) {
-
             // DELETE contribution
             const { error: deleteError } = await supabase
               .from('contributions')
@@ -87,12 +83,24 @@ async function testNewFeatures() {
 
             if (!deleteError) {
               console.log('   ✅ Deleted contribution successfully');
-              results.push({ test: 'Contributions CRUD', passed: true, operations: 'CREATE/READ/UPDATE/DELETE all working' });
+              results.push({
+                test: 'Contributions CRUD',
+                passed: true,
+                operations: 'CREATE/READ/UPDATE/DELETE all working',
+              });
             } else {
-              results.push({ test: 'Contributions CRUD', passed: false, error: deleteError.message });
+              results.push({
+                test: 'Contributions CRUD',
+                passed: false,
+                error: deleteError.message,
+              });
             }
           } else {
-            results.push({ test: 'Contributions CRUD', passed: false, error: updateError?.message });
+            results.push({
+              test: 'Contributions CRUD',
+              passed: false,
+              error: updateError?.message,
+            });
           }
         } else {
           results.push({ test: 'Contributions CRUD', passed: false, error: readError?.message });
@@ -113,7 +121,7 @@ async function testNewFeatures() {
       user_id: 'kyc-test-' + Date.now(),
       full_name: 'John Smith',
       email: 'john.smith@test.com',
-      verification_status: 'pending'
+      verification_status: 'pending',
     };
 
     const { data: createdKYC, error: kycCreateError } = await supabase
@@ -123,7 +131,6 @@ async function testNewFeatures() {
       .single();
 
     if (!kycCreateError && createdKYC) {
-
       // UPDATE KYC status
       const { data: updatedKYC, error: kycUpdateError } = await supabase
         .from('kyc_data')
@@ -133,7 +140,6 @@ async function testNewFeatures() {
         .single();
 
       if (!kycUpdateError && updatedKYC) {
-
         // Query approved KYC records
         const { data: approved, error: queryError } = await supabase
           .from('kyc_data')
@@ -141,11 +147,14 @@ async function testNewFeatures() {
           .eq('verification_status', 'approved');
 
         if (!queryError && approved) {
-
           // Cleanup
           await supabase.from('kyc_data').delete().eq('id', createdKYC.id);
 
-          results.push({ test: 'KYC data management', passed: true, approved_count: approved.length });
+          results.push({
+            test: 'KYC data management',
+            passed: true,
+            approved_count: approved.length,
+          });
         }
       }
     }
@@ -158,7 +167,8 @@ async function testNewFeatures() {
   try {
     const { data: campaignsWithContribs, error } = await supabase
       .from('campaigns')
-      .select(`
+      .select(
+        `
         campaign_name,
         status,
         max_donation_limit,
@@ -169,14 +179,19 @@ async function testNewFeatures() {
           donor_name,
           created_at
         )
-      `)
+      `
+      )
       .limit(3);
 
     if (!error && campaignsWithContribs) {
-      campaignsWithContribs.forEach(campaign => {
+      campaignsWithContribs.forEach((campaign) => {
         const contribCount = campaign.contributions?.length || 0;
       });
-      results.push({ test: 'Table relationships', passed: true, joined_tables: 'campaigns + contributions' });
+      results.push({
+        test: 'Table relationships',
+        passed: true,
+        joined_tables: 'campaigns + contributions',
+      });
     } else {
       results.push({ test: 'Table relationships', passed: false, error: error?.message });
     }
@@ -190,15 +205,14 @@ async function testNewFeatures() {
     const { data: stats, error } = await supabase.rpc('get_dashboard_stats');
 
     if (!error && stats) {
-      
-      results.push({ 
-        test: 'Dashboard analytics', 
-        passed: true, 
+      results.push({
+        test: 'Dashboard analytics',
+        passed: true,
         stats: {
           campaigns: stats.total_campaigns,
           contributions: stats.total_contributions,
-          raised: stats.total_raised
-        }
+          raised: stats.total_raised,
+        },
       });
     } else {
       results.push({ test: 'Dashboard analytics', passed: false, error: error?.message });
@@ -213,13 +227,13 @@ async function testNewFeatures() {
 
 async function main() {
   const results = await testNewFeatures();
-  
+
   console.log('📊 NEW FEATURES TEST RESULTS');
 
-  const passedTests = results.filter(r => r.passed).length;
+  const passedTests = results.filter((r) => r.passed).length;
   const totalTests = results.length;
 
-  results.forEach(result => {
+  results.forEach((result) => {
     const status = result.passed ? '✅' : '❌';
     console.log(`${status} ${result.test}: ${result.passed ? 'WORKING' : 'FAILED'}`);
     if (result.error) {
@@ -227,7 +241,6 @@ async function main() {
     }
   });
 
-  
   if (passedTests === totalTests) {
     console.log('🚀 Database transformation COMPLETE!');
   } else if (passedTests >= totalTests * 0.8) {
@@ -235,7 +248,6 @@ async function main() {
   } else {
     console.log('⚠️  Some new features need attention.');
   }
-
 }
 
 main().catch(console.error);

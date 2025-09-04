@@ -1,15 +1,15 @@
 // Edge Function to create users table with elevated permissions
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.0'
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
@@ -17,7 +17,7 @@ serve(async (req) => {
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
     // SQL to create users table
     const createUsersTableSQL = `
@@ -96,48 +96,47 @@ serve(async (req) => {
       CREATE TRIGGER on_auth_user_created
           AFTER INSERT ON auth.users
           FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-    `
+    `;
 
     // Execute the SQL with service role permissions
     const { data, error } = await supabaseServiceRole.rpc('exec', {
-      query: createUsersTableSQL
-    })
+      query: createUsersTableSQL,
+    });
 
     if (error) {
-      throw error
+      throw error;
     }
 
     // Test that the table was created
     const { data: testData, error: testError } = await supabaseServiceRole
       .from('users')
-      .select('*', { count: 'exact', head: true })
+      .select('*', { count: 'exact', head: true });
 
     if (testError) {
-      throw new Error(`Table creation failed: ${testError.message}`)
+      throw new Error(`Table creation failed: ${testError.message}`);
     }
 
     return new Response(
       JSON.stringify({
         success: true,
         message: 'Users table created successfully',
-        tableExists: true
+        tableExists: true,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
-      },
-    )
-
+      }
+    );
   } catch (error) {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message
+        error: error.message,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
-      },
-    )
+      }
+    );
   }
-})
+});

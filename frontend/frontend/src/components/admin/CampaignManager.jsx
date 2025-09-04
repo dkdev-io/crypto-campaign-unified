@@ -46,8 +46,8 @@ const CampaignManager = () => {
     try {
       const amounts = editAmounts
         .split(',')
-        .map(a => parseFloat(a.trim()))
-        .filter(a => !isNaN(a) && a > 0);
+        .map((a) => parseFloat(a.trim()))
+        .filter((a) => !isNaN(a) && a > 0);
 
       if (amounts.length === 0) {
         alert('Please enter valid amounts (e.g., "25, 50, 100, 250")');
@@ -64,11 +64,9 @@ const CampaignManager = () => {
       if (error) {
         alert(`Failed to update amounts: ${error.message}`);
       } else {
-        setCampaigns(prev => prev.map(c => 
-          c.id === campaignId 
-            ? { ...c, suggested_amounts: amounts }
-            : c
-        ));
+        setCampaigns((prev) =>
+          prev.map((c) => (c.id === campaignId ? { ...c, suggested_amounts: amounts } : c))
+        );
         setEditingCampaign(null);
         setEditAmounts('');
         alert(`✅ Amounts updated to: [${amounts.join(', ')}]`);
@@ -84,15 +82,12 @@ const CampaignManager = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('campaigns')
-        .delete()
-        .eq('id', campaignId);
+      const { error } = await supabase.from('campaigns').delete().eq('id', campaignId);
 
       if (error) {
         alert(`Failed to delete campaign: ${error.message}`);
       } else {
-        setCampaigns(prev => prev.filter(c => c.id !== campaignId));
+        setCampaigns((prev) => prev.filter((c) => c.id !== campaignId));
         alert(`✅ Deleted "${campaignName}"`);
       }
     } catch (err) {
@@ -153,12 +148,24 @@ const CampaignManager = () => {
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-secondary">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Campaign</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Suggested Amounts</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Max Donation</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Campaign
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Suggested Amounts
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Max Donation
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Created
+                </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-card divide-y divide-border">
@@ -166,11 +173,13 @@ const CampaignManager = () => {
                 <tr key={campaign.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-foreground">{campaign.campaign_name}</div>
+                      <div className="text-sm font-medium text-foreground">
+                        {campaign.campaign_name}
+                      </div>
                       <div className="text-sm text-muted-foreground">
-                        <a 
-                          href={`http://localhost:5173/?campaign=${campaign.id}`} 
-                          target="_blank" 
+                        <a
+                          href={`http://localhost:5173/?campaign=${campaign.id}`}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-primary hover:text-primary/80"
                         >
@@ -248,10 +257,18 @@ const CampaignManager = () => {
       <div className="crypto-card">
         <h3 className="text-lg font-semibold text-foreground mb-4">💡 Usage Tips:</h3>
         <ul className="space-y-2 text-muted-foreground">
-          <li>✏️ <strong>Edit Amounts:</strong> Click "Edit" to modify suggested donation amounts</li>
-          <li>🔗 <strong>Test Campaigns:</strong> Click "View Form" to see the live donation form</li>
-          <li>🗑️ <strong>Delete Campaigns:</strong> Remove test campaigns you no longer need</li>
-          <li>💰 <strong>Amount Format:</strong> Enter amounts as "25, 50, 100, 250" (comma-separated)</li>
+          <li>
+            ✏️ <strong>Edit Amounts:</strong> Click "Edit" to modify suggested donation amounts
+          </li>
+          <li>
+            🔗 <strong>Test Campaigns:</strong> Click "View Form" to see the live donation form
+          </li>
+          <li>
+            🗑️ <strong>Delete Campaigns:</strong> Remove test campaigns you no longer need
+          </li>
+          <li>
+            💰 <strong>Amount Format:</strong> Enter amounts as "25, 50, 100, 250" (comma-separated)
+          </li>
         </ul>
       </div>
     </div>

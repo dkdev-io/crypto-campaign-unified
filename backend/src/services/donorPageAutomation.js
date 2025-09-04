@@ -22,25 +22,24 @@ class DonorPageAutomationService {
   async triggerPageCreation(campaignData) {
     try {
       console.log('🚀 Triggering donor page automation for:', campaignData.campaign_name);
-      
+
       // 1. Create page directory structure
       await this.ensureDirectories();
-      
+
       // 2. Generate donor page
       const pageData = await this.generateDonorPage(campaignData);
-      
+
       // 3. Set up webhooks for auto-sync
       await this.setupWebhooks(campaignData);
-      
+
       // 4. Update campaign with page URL
       await this.updateCampaignWithPageUrl(campaignData.id, pageData.url);
-      
+
       // 5. Add to admin management system
       await this.addToAdminDashboard(campaignData, pageData);
-      
+
       console.log('✅ Donor page automation completed:', pageData.url);
       return pageData;
-      
     } catch (error) {
       console.error('❌ Donor page automation failed:', error);
       await this.logError(campaignData.id, error);
@@ -55,19 +54,19 @@ class DonorPageAutomationService {
     const sanitizedName = sanitizeCampaignName(campaignData.campaign_name);
     const pagePath = path.join(this.pagesDirectory, `${sanitizedName}.html`);
     const pageUrl = `/donors/${sanitizedName}`;
-    
+
     // Load template
     const template = await fs.readFile(this.templatePath, 'utf8');
-    
+
     // Generate embed code
     const embedCode = await this.generateEmbedCode(campaignData.id);
-    
+
     // Generate SEO metadata
     const seoData = generateSEOMetadata(campaignData);
-    
+
     // Extract campaign styles for template replacement
     const campaignStyles = this.extractCampaignStylesForTemplate(campaignData);
-    
+
     // Replace template variables with full style guide data
     const pageContent = template
       .replace(/\{\{CAMPAIGN_NAME\}\}/g, campaignData.campaign_name)
@@ -92,19 +91,19 @@ class DonorPageAutomationService {
       .replace(/\{\{CAMPAIGN_ID\}\}/g, campaignData.id)
       .replace(/\{\{PAGE_URL\}\}/g, pageUrl)
       .replace(/\{\{CREATED_DATE\}\}/g, new Date().toISOString());
-    
+
     // Save page
     await fs.writeFile(pagePath, pageContent, 'utf8');
-    
+
     // Log page creation
     await this.logPageCreation(campaignData.id, pageUrl, pagePath);
-    
+
     return {
       url: pageUrl,
       filePath: pagePath,
       embedCode,
       seoData,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
   }
 
@@ -123,57 +122,50 @@ class DonorPageAutomationService {
 
     return {
       colors: {
-        primary: appliedStyles?.colors?.primary || 
-                 customStyles?.colors?.primary || 
-                 themeColor || 
-                 '#2a2a72',
-        secondary: appliedStyles?.colors?.secondary || 
-                   customStyles?.colors?.secondary || 
-                   '#666666',
-        accent: appliedStyles?.colors?.accent || 
-                customStyles?.colors?.accent || 
-                '#28a745',
-        background: appliedStyles?.colors?.background || 
-                    customStyles?.colors?.background || 
-                    '#ffffff',
-        text: appliedStyles?.colors?.text || 
-              customStyles?.colors?.text || 
-              '#333333'
+        primary:
+          appliedStyles?.colors?.primary ||
+          customStyles?.colors?.primary ||
+          themeColor ||
+          '#2a2a72',
+        secondary: appliedStyles?.colors?.secondary || customStyles?.colors?.secondary || '#666666',
+        accent: appliedStyles?.colors?.accent || customStyles?.colors?.accent || '#28a745',
+        background:
+          appliedStyles?.colors?.background || customStyles?.colors?.background || '#ffffff',
+        text: appliedStyles?.colors?.text || customStyles?.colors?.text || '#333333',
       },
       fonts: {
         heading: {
-          family: appliedStyles?.fonts?.heading?.suggested || 
-                  customStyles?.fonts?.heading?.family || 
-                  'Inter, system-ui, -apple-system, sans-serif',
-          weight: appliedStyles?.fonts?.heading?.weight || 
-                  customStyles?.fonts?.heading?.weight || 
-                  '700'
+          family:
+            appliedStyles?.fonts?.heading?.suggested ||
+            customStyles?.fonts?.heading?.family ||
+            'Inter, system-ui, -apple-system, sans-serif',
+          weight:
+            appliedStyles?.fonts?.heading?.weight || customStyles?.fonts?.heading?.weight || '700',
         },
         body: {
-          family: appliedStyles?.fonts?.body?.suggested || 
-                  customStyles?.fonts?.body?.family || 
-                  'Inter, system-ui, -apple-system, sans-serif',
-          weight: appliedStyles?.fonts?.body?.weight || 
-                  customStyles?.fonts?.body?.weight || 
-                  '400'
+          family:
+            appliedStyles?.fonts?.body?.suggested ||
+            customStyles?.fonts?.body?.family ||
+            'Inter, system-ui, -apple-system, sans-serif',
+          weight: appliedStyles?.fonts?.body?.weight || customStyles?.fonts?.body?.weight || '400',
         },
         button: {
-          family: appliedStyles?.fonts?.button?.suggested || 
-                  customStyles?.fonts?.button?.family || 
-                  'Inter, system-ui, -apple-system, sans-serif',
-          weight: appliedStyles?.fonts?.button?.weight || 
-                  customStyles?.fonts?.button?.weight || 
-                  '500'
-        }
+          family:
+            appliedStyles?.fonts?.button?.suggested ||
+            customStyles?.fonts?.button?.family ||
+            'Inter, system-ui, -apple-system, sans-serif',
+          weight:
+            appliedStyles?.fonts?.button?.weight || customStyles?.fonts?.button?.weight || '500',
+        },
       },
       layout: {
-        borderRadius: appliedStyles?.layout?.recommendations?.borderRadius || 
-                      customStyles?.layout?.borderRadius || 
-                      '8px',
-        spacing: appliedStyles?.layout?.recommendations?.margin || 
-                 customStyles?.layout?.spacing || 
-                 '1rem'
-      }
+        borderRadius:
+          appliedStyles?.layout?.recommendations?.borderRadius ||
+          customStyles?.layout?.borderRadius ||
+          '8px',
+        spacing:
+          appliedStyles?.layout?.recommendations?.margin || customStyles?.layout?.spacing || '1rem',
+      },
     };
   }
 
@@ -187,26 +179,26 @@ class DonorPageAutomationService {
         secondary: '#666666',
         accent: '#28a745',
         background: '#ffffff',
-        text: '#333333'
+        text: '#333333',
       },
       fonts: {
         heading: {
           family: 'Inter, system-ui, -apple-system, sans-serif',
-          weight: '700'
+          weight: '700',
         },
         body: {
           family: 'Inter, system-ui, -apple-system, sans-serif',
-          weight: '400'
+          weight: '400',
         },
         button: {
           family: 'Inter, system-ui, -apple-system, sans-serif',
-          weight: '500'
-        }
+          weight: '500',
+        },
       },
       layout: {
         borderRadius: '8px',
-        spacing: '1rem'
-      }
+        spacing: '1rem',
+      },
     };
   }
 
@@ -215,11 +207,10 @@ class DonorPageAutomationService {
    */
   async generateEmbedCode(campaignId) {
     try {
-      const { data, error } = await supabase
-        .rpc('generate_embed_code', {
-          p_campaign_id: campaignId,
-          p_base_url: process.env.BASE_URL || 'http://localhost:5173'
-        });
+      const { data, error } = await supabase.rpc('generate_embed_code', {
+        p_campaign_id: campaignId,
+        p_base_url: process.env.BASE_URL || 'http://localhost:5173',
+      });
 
       if (error) throw error;
       return data;
@@ -268,12 +259,11 @@ class DonorPageAutomationService {
         campaignId: campaignData.id,
         events: ['campaign.updated', 'form.customized', 'embed.regenerated'],
         endpoint: `/api/webhooks/donor-page-sync/${campaignData.id}`,
-        secret: process.env.WEBHOOK_SECRET
+        secret: process.env.WEBHOOK_SECRET,
       });
 
       // Set up database trigger for auto-sync
       await this.createDatabaseTrigger(campaignData.id);
-      
     } catch (error) {
       console.error('Webhook setup failed:', error);
       // Continue without webhooks - manual sync will still work
@@ -285,7 +275,7 @@ class DonorPageAutomationService {
    */
   async createDatabaseTrigger(campaignId) {
     const { error } = await supabase.rpc('create_donor_page_sync_trigger', {
-      campaign_id: campaignId
+      campaign_id: campaignId,
     });
 
     if (error) {
@@ -302,7 +292,7 @@ class DonorPageAutomationService {
       .update({
         donor_page_url: pageUrl,
         donor_page_generated: true,
-        donor_page_generated_at: new Date().toISOString()
+        donor_page_generated_at: new Date().toISOString(),
       })
       .eq('id', campaignId);
 
@@ -316,7 +306,7 @@ class DonorPageAutomationService {
    */
   async addToAdminDashboard(campaignData, pageData) {
     await this.ensureAdminDirectory();
-    
+
     const adminRecord = {
       campaignId: campaignData.id,
       campaignName: campaignData.campaign_name,
@@ -327,30 +317,33 @@ class DonorPageAutomationService {
       createdAt: pageData.createdAt,
       lastSyncAt: pageData.createdAt,
       embedCode: pageData.embedCode,
-      seoData: pageData.seoData
+      seoData: pageData.seoData,
     };
 
     // Save to admin tracking file
     const adminPath = path.join(this.adminDirectory, 'pages-registry.json');
     let registry = [];
-    
+
     try {
       const existingData = await fs.readFile(adminPath, 'utf8');
       registry = JSON.parse(existingData);
     } catch {
       // File doesn't exist yet
     }
-    
+
     // Remove any existing entry for this campaign
-    registry = registry.filter(r => r.campaignId !== campaignData.id);
-    
+    registry = registry.filter((r) => r.campaignId !== campaignData.id);
+
     // Add new entry
     registry.push(adminRecord);
-    
+
     await fs.writeFile(adminPath, JSON.stringify(registry, null, 2));
-    
+
     // Also create individual page admin file
-    const pageAdminPath = path.join(this.adminDirectory, `${sanitizeCampaignName(campaignData.campaign_name)}.json`);
+    const pageAdminPath = path.join(
+      this.adminDirectory,
+      `${sanitizeCampaignName(campaignData.campaign_name)}.json`
+    );
     await fs.writeFile(pageAdminPath, JSON.stringify(adminRecord, null, 2));
   }
 
@@ -360,7 +353,7 @@ class DonorPageAutomationService {
   async syncPageFromWebhook(campaignId, changes) {
     try {
       console.log('🔄 Syncing donor page from webhook:', campaignId);
-      
+
       // Get updated campaign data
       const { data: campaignData, error } = await supabase
         .from('campaigns')
@@ -372,13 +365,12 @@ class DonorPageAutomationService {
 
       // Regenerate page with updated data
       const pageData = await this.generateDonorPage(campaignData);
-      
+
       // Update admin dashboard
       await this.addToAdminDashboard(campaignData, pageData);
-      
+
       console.log('✅ Donor page synced successfully');
       return pageData;
-      
     } catch (error) {
       console.error('❌ Webhook sync failed:', error);
       await this.logError(campaignId, error);
@@ -404,15 +396,13 @@ class DonorPageAutomationService {
    * Log page creation event
    */
   async logPageCreation(campaignId, pageUrl, filePath) {
-    const { error } = await supabase
-      .from('donor_page_logs')
-      .insert({
-        campaign_id: campaignId,
-        event_type: 'page_created',
-        page_url: pageUrl,
-        file_path: filePath,
-        created_at: new Date().toISOString()
-      });
+    const { error } = await supabase.from('donor_page_logs').insert({
+      campaign_id: campaignId,
+      event_type: 'page_created',
+      page_url: pageUrl,
+      file_path: filePath,
+      created_at: new Date().toISOString(),
+    });
 
     if (error) {
       console.error('Failed to log page creation:', error);
@@ -423,15 +413,13 @@ class DonorPageAutomationService {
    * Log error events
    */
   async logError(campaignId, error) {
-    const { error: logError } = await supabase
-      .from('donor_page_logs')
-      .insert({
-        campaign_id: campaignId,
-        event_type: 'error',
-        error_message: error.message,
-        error_stack: error.stack,
-        created_at: new Date().toISOString()
-      });
+    const { error: logError } = await supabase.from('donor_page_logs').insert({
+      campaign_id: campaignId,
+      event_type: 'error',
+      error_message: error.message,
+      error_stack: error.stack,
+      created_at: new Date().toISOString(),
+    });
 
     if (logError) {
       console.error('Failed to log error:', logError);
@@ -458,35 +446,38 @@ class DonorPageAutomationService {
     try {
       // Get page info
       const pages = await this.getAllGeneratedPages();
-      const page = pages.find(p => p.campaignId === campaignId);
-      
+      const page = pages.find((p) => p.campaignId === campaignId);
+
       if (!page) return false;
 
       // Delete file
       await fs.unlink(page.filePath);
-      
+
       // Update registry
-      const updatedPages = pages.filter(p => p.campaignId !== campaignId);
+      const updatedPages = pages.filter((p) => p.campaignId !== campaignId);
       const adminPath = path.join(this.adminDirectory, 'pages-registry.json');
       await fs.writeFile(adminPath, JSON.stringify(updatedPages, null, 2));
-      
+
       // Delete individual admin file
-      const pageAdminPath = path.join(this.adminDirectory, `${path.basename(page.filePath, '.html')}.json`);
+      const pageAdminPath = path.join(
+        this.adminDirectory,
+        `${path.basename(page.filePath, '.html')}.json`
+      );
       try {
         await fs.unlink(pageAdminPath);
       } catch {}
-      
+
       // Update campaign record
       await supabase
         .from('campaigns')
         .update({
           donor_page_url: null,
-          donor_page_generated: false
+          donor_page_generated: false,
         })
         .eq('id', campaignId);
 
       await this.logPageCreation(campaignId, page.pageUrl, 'DELETED');
-      
+
       return true;
     } catch (error) {
       console.error('Failed to delete page:', error);

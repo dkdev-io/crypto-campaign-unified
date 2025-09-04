@@ -7,7 +7,8 @@ import { writeFileSync } from 'fs';
 
 // Initialize Supabase client with production credentials
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Test report structure
@@ -18,18 +19,18 @@ const testReport = {
     CREATE: { passed: [], failed: [] },
     READ: { passed: [], failed: [] },
     UPDATE: { passed: [], failed: [] },
-    DELETE: { passed: [], failed: [] }
+    DELETE: { passed: [], failed: [] },
   },
   queries: {
     working: [],
-    broken: []
+    broken: [],
   },
   summary: {
     totalTests: 0,
     passed: 0,
     failed: 0,
-    brokenFlows: []
-  }
+    brokenFlows: [],
+  },
 };
 
 // Helper function to log test results
@@ -38,7 +39,7 @@ function logTest(operation, table, success, details) {
   testReport.operations[operation][status].push({
     table,
     details,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
   testReport.summary.totalTests++;
   if (success) {
@@ -68,16 +69,15 @@ async function testQuery(queryName, queryFunction) {
 
 // 1. LIST ALL TABLES AND RELATIONSHIPS
 async function listTablesAndRelationships() {
-  
   const tables = [
     'campaigns',
-    'contributions', 
+    'contributions',
     'kyc_data',
     'fec_committees',
     'committee_test_data',
     'donation_amounts',
     'blockchain_transactions',
-    'admin_users'
+    'admin_users',
   ];
 
   for (const table of tables) {
@@ -91,13 +91,10 @@ async function listTablesAndRelationships() {
         console.log(`❌ Table '${table}': NOT ACCESSIBLE - ${error.message}`);
       } else {
         testReport.tables[table] = { exists: true, count: count || 0 };
-        
+
         // Get sample record to understand structure
-        const { data: sample } = await supabase
-          .from(table)
-          .select('*')
-          .limit(1);
-        
+        const { data: sample } = await supabase.from(table).select('*').limit(1);
+
         if (sample && sample.length > 0) {
           testReport.tables[table].columns = Object.keys(sample[0]);
         }
@@ -109,20 +106,22 @@ async function listTablesAndRelationships() {
   }
 
   // Test relationships
-  
+
   // Campaign -> Contributions relationship
   const { data: campaignWithContribs } = await supabase
     .from('campaigns')
-    .select(`
+    .select(
+      `
       *,
       contributions (
         id,
         amount,
         user_id
       )
-    `)
+    `
+    )
     .limit(1);
-  
+
   if (campaignWithContribs && campaignWithContribs[0]?.contributions) {
     console.log('✅ campaigns -> contributions relationship WORKING');
   } else {
@@ -132,7 +131,6 @@ async function listTablesAndRelationships() {
 
 // 2. TEST CREATE OPERATIONS
 async function testCreateOperations() {
-
   // Test campaign creation
   const testCampaign = {
     campaign_name: `Test Campaign ${Date.now()}`,
@@ -140,7 +138,7 @@ async function testCreateOperations() {
     suggested_amounts: [25, 50, 100, 250],
     max_donation_limit: 3300,
     description: 'Test campaign for CRUD verification',
-    status: 'active'
+    status: 'active',
   };
 
   const { data: newCampaign, error: campaignError } = await supabase
@@ -162,7 +160,7 @@ async function testCreateOperations() {
       payment_method: 'test',
       status: 'pending',
       donor_email: 'donor@test.com',
-      donor_name: 'Test Donor'
+      donor_name: 'Test Donor',
     };
 
     const { data: newContribution, error: contribError } = await supabase
@@ -193,7 +191,7 @@ async function testCreateOperations() {
     state: 'CA',
     postal_code: '90210',
     country: 'USA',
-    verification_status: 'pending'
+    verification_status: 'pending',
   };
 
   const { data: newKYC, error: kycError } = await supabase
@@ -212,7 +210,6 @@ async function testCreateOperations() {
 
 // 3. TEST READ OPERATIONS
 async function testReadOperations() {
-
   // Test loading all campaigns
   const { data: allCampaigns, error: campaignsError } = await supabase
     .from('campaigns')
@@ -229,7 +226,8 @@ async function testReadOperations() {
   if (testReport.testCampaignId) {
     const { data: campaign, error: campaignError } = await supabase
       .from('campaigns')
-      .select(`
+      .select(
+        `
         *,
         contributions (
           id,
@@ -238,15 +236,25 @@ async function testReadOperations() {
           status,
           created_at
         )
-      `)
+      `
+      )
       .eq('id', testReport.testCampaignId)
       .single();
 
     if (!campaignError && campaign) {
-      logTest('READ', 'campaign with contributions', true, 
-        `Loaded campaign "${campaign.campaign_name}" with ${campaign.contributions?.length || 0} contributions`);
+      logTest(
+        'READ',
+        'campaign with contributions',
+        true,
+        `Loaded campaign "${campaign.campaign_name}" with ${campaign.contributions?.length || 0} contributions`
+      );
     } else {
-      logTest('READ', 'campaign with contributions', false, campaignError?.message || 'Unknown error');
+      logTest(
+        'READ',
+        'campaign with contributions',
+        false,
+        campaignError?.message || 'Unknown error'
+      );
     }
   }
 
@@ -269,14 +277,18 @@ async function testReadOperations() {
     .eq('verification_status', 'approved');
 
   if (!kycError) {
-    logTest('READ', 'kyc_data (approved)', true, `Found ${approvedKYC?.length || 0} approved KYC records`);
+    logTest(
+      'READ',
+      'kyc_data (approved)',
+      true,
+      `Found ${approvedKYC?.length || 0} approved KYC records`
+    );
   } else {
     logTest('READ', 'kyc_data', false, kycError?.message || 'Unknown error');
   }
 
   // Test admin dashboard statistics
-  const { data: stats, error: statsError } = await supabase
-    .rpc('get_dashboard_stats', {});
+  const { data: stats, error: statsError } = await supabase.rpc('get_dashboard_stats', {});
 
   if (!statsError) {
     logTest('READ', 'dashboard statistics', true, 'Dashboard stats loaded');
@@ -285,14 +297,18 @@ async function testReadOperations() {
     const { count: campaignCount } = await supabase
       .from('campaigns')
       .select('*', { count: 'exact', head: true });
-    
+
     const { count: contribCount } = await supabase
       .from('contributions')
       .select('*', { count: 'exact', head: true });
 
     if (campaignCount !== null && contribCount !== null) {
-      logTest('READ', 'dashboard statistics (manual)', true, 
-        `${campaignCount} campaigns, ${contribCount} contributions`);
+      logTest(
+        'READ',
+        'dashboard statistics (manual)',
+        true,
+        `${campaignCount} campaigns, ${contribCount} contributions`
+      );
     } else {
       logTest('READ', 'dashboard statistics', false, 'Unable to get counts');
     }
@@ -301,12 +317,11 @@ async function testReadOperations() {
 
 // 4. TEST UPDATE OPERATIONS
 async function testUpdateOperations() {
-
   // Update campaign details
   if (testReport.testCampaignId) {
     const updateData = {
       description: 'Updated description at ' + new Date().toISOString(),
-      suggested_amounts: [50, 100, 250, 500]
+      suggested_amounts: [50, 100, 250, 500],
     };
 
     const { data: updatedCampaign, error: updateError } = await supabase
@@ -333,7 +348,12 @@ async function testUpdateOperations() {
       .single();
 
     if (!contribUpdateError && updatedContrib) {
-      logTest('UPDATE', 'contributions', true, `Updated contribution status to: ${updatedContrib.status}`);
+      logTest(
+        'UPDATE',
+        'contributions',
+        true,
+        `Updated contribution status to: ${updatedContrib.status}`
+      );
     } else {
       logTest('UPDATE', 'contributions', false, contribUpdateError?.message || 'Unknown error');
     }
@@ -349,7 +369,12 @@ async function testUpdateOperations() {
       .single();
 
     if (!kycUpdateError && updatedKYC) {
-      logTest('UPDATE', 'kyc_data', true, `Updated KYC status to: ${updatedKYC.verification_status}`);
+      logTest(
+        'UPDATE',
+        'kyc_data',
+        true,
+        `Updated KYC status to: ${updatedKYC.verification_status}`
+      );
     } else {
       logTest('UPDATE', 'kyc_data', false, kycUpdateError?.message || 'Unknown error');
     }
@@ -358,7 +383,6 @@ async function testUpdateOperations() {
 
 // 5. TEST DELETE OPERATIONS
 async function testDeleteOperations() {
-
   // Test soft delete (if implemented)
   // Note: Checking if soft delete is implemented by updating status instead of hard delete
   if (testReport.testCampaignId) {
@@ -395,7 +419,12 @@ async function testDeleteOperations() {
       .single();
 
     if (!contribution && !error) {
-      logTest('DELETE', 'contributions (cascade)', true, 'Contribution cascade deleted with campaign');
+      logTest(
+        'DELETE',
+        'contributions (cascade)',
+        true,
+        'Contribution cascade deleted with campaign'
+      );
     } else if (contribution) {
       // Manual cleanup if cascade didn't work
       const { error: deleteError } = await supabase
@@ -428,56 +457,47 @@ async function testDeleteOperations() {
 
 // 6. TEST SPECIFIC QUERIES
 async function testSpecificQueries() {
-
   const queries = [
     {
       name: 'Active Campaigns',
-      query: () => supabase
-        .from('campaigns')
-        .select('*')
-        .eq('status', 'active')
+      query: () => supabase.from('campaigns').select('*').eq('status', 'active'),
     },
     {
       name: 'User Contributions',
-      query: () => supabase
-        .from('contributions')
-        .select('*')
-        .limit(10)
+      query: () => supabase.from('contributions').select('*').limit(10),
     },
     {
       name: 'Approved KYC',
-      query: () => supabase
-        .from('kyc_data')
-        .select('*')
-        .eq('verification_status', 'approved')
+      query: () => supabase.from('kyc_data').select('*').eq('verification_status', 'approved'),
     },
     {
       name: 'Campaign with Total Raised',
-      query: () => supabase
-        .from('campaigns')
-        .select(`
+      query: () =>
+        supabase
+          .from('campaigns')
+          .select(
+            `
           *,
           contributions (
             amount
           )
-        `)
-        .limit(1)
+        `
+          )
+          .limit(1),
     },
     {
       name: 'Recent Contributions',
-      query: () => supabase
-        .from('contributions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10)
+      query: () =>
+        supabase
+          .from('contributions')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10),
     },
     {
       name: 'Test Committees',
-      query: () => supabase
-        .from('committee_test_data')
-        .select('*')
-        .eq('is_active', true)
-    }
+      query: () => supabase.from('committee_test_data').select('*').eq('is_active', true),
+    },
   ];
 
   for (const { name, query } of queries) {
@@ -488,7 +508,6 @@ async function testSpecificQueries() {
 
 // Generate comprehensive test report
 function generateReport() {
-  
   console.log('📊 TABLE STATUS:');
   for (const [table, info] of Object.entries(testReport.tables)) {
     if (info.exists) {
@@ -500,22 +519,19 @@ function generateReport() {
 
   for (const [operation, results] of Object.entries(testReport.operations)) {
     if (results.passed.length > 0) {
-      results.passed.forEach(test => {
-      });
+      results.passed.forEach((test) => {});
     }
   }
 
   for (const [operation, results] of Object.entries(testReport.operations)) {
     if (results.failed.length > 0) {
-      results.failed.forEach(test => {
-      });
+      results.failed.forEach((test) => {});
     }
   }
 
-  testReport.queries.working.forEach(q => {
-  });
+  testReport.queries.working.forEach((q) => {});
 
-  testReport.queries.broken.forEach(q => {
+  testReport.queries.broken.forEach((q) => {
     console.log(`  ❌ ${q.name}: ${q.error}`);
   });
 
@@ -523,11 +539,12 @@ function generateReport() {
   console.log(`  Total Tests: ${testReport.summary.totalTests}`);
   console.log(`  Passed: ${testReport.summary.passed}`);
   console.log(`  Failed: ${testReport.summary.failed}`);
-  console.log(`  Success Rate: ${((testReport.summary.passed / testReport.summary.totalTests) * 100).toFixed(1)}%`);
+  console.log(
+    `  Success Rate: ${((testReport.summary.passed / testReport.summary.totalTests) * 100).toFixed(1)}%`
+  );
 
   if (testReport.summary.brokenFlows.length > 0) {
-    testReport.summary.brokenFlows.forEach(flow => {
-    });
+    testReport.summary.brokenFlows.forEach((flow) => {});
   }
 
   // Save report to file
@@ -552,7 +569,6 @@ async function runAllTests() {
   } finally {
     generateReport();
   }
-
 }
 
 // Run tests

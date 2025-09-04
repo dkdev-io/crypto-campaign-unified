@@ -20,66 +20,50 @@ export const extractCampaignStyles = (campaignData) => {
 
   return {
     colors: {
-      primary: appliedStyles?.colors?.primary || 
-               customStyles?.colors?.primary || 
-               themeColor || 
-               '#2a2a72',
-      secondary: appliedStyles?.colors?.secondary || 
-                 customStyles?.colors?.secondary || 
-                 '#666666',
-      accent: appliedStyles?.colors?.accent || 
-              customStyles?.colors?.accent || 
-              '#28a745',
-      background: appliedStyles?.colors?.background || 
-                  customStyles?.colors?.background || 
-                  '#ffffff',
-      text: appliedStyles?.colors?.text || 
-            customStyles?.colors?.text || 
-            '#333333'
+      primary:
+        appliedStyles?.colors?.primary || customStyles?.colors?.primary || themeColor || '#2a2a72',
+      secondary: appliedStyles?.colors?.secondary || customStyles?.colors?.secondary || '#666666',
+      accent: appliedStyles?.colors?.accent || customStyles?.colors?.accent || '#28a745',
+      background:
+        appliedStyles?.colors?.background || customStyles?.colors?.background || '#ffffff',
+      text: appliedStyles?.colors?.text || customStyles?.colors?.text || '#333333',
     },
     fonts: {
       heading: {
-        family: appliedStyles?.fonts?.heading?.suggested || 
-                customStyles?.fonts?.heading?.family || 
-                'Inter, system-ui, -apple-system, sans-serif',
-        weight: appliedStyles?.fonts?.heading?.weight || 
-                customStyles?.fonts?.heading?.weight || 
-                '600',
-        size: appliedStyles?.fonts?.heading?.size || 
-              customStyles?.fonts?.heading?.size || 
-              '1.5rem'
+        family:
+          appliedStyles?.fonts?.heading?.suggested ||
+          customStyles?.fonts?.heading?.family ||
+          'Inter, system-ui, -apple-system, sans-serif',
+        weight:
+          appliedStyles?.fonts?.heading?.weight || customStyles?.fonts?.heading?.weight || '600',
+        size: appliedStyles?.fonts?.heading?.size || customStyles?.fonts?.heading?.size || '1.5rem',
       },
       body: {
-        family: appliedStyles?.fonts?.body?.suggested || 
-                customStyles?.fonts?.body?.family || 
-                'Inter, system-ui, -apple-system, sans-serif',
-        weight: appliedStyles?.fonts?.body?.weight || 
-                customStyles?.fonts?.body?.weight || 
-                '400',
-        size: appliedStyles?.fonts?.body?.size || 
-              customStyles?.fonts?.body?.size || 
-              '1rem'
+        family:
+          appliedStyles?.fonts?.body?.suggested ||
+          customStyles?.fonts?.body?.family ||
+          'Inter, system-ui, -apple-system, sans-serif',
+        weight: appliedStyles?.fonts?.body?.weight || customStyles?.fonts?.body?.weight || '400',
+        size: appliedStyles?.fonts?.body?.size || customStyles?.fonts?.body?.size || '1rem',
       },
       button: {
-        family: appliedStyles?.fonts?.button?.suggested || 
-                customStyles?.fonts?.button?.family || 
-                appliedStyles?.fonts?.heading?.suggested ||
-                'Inter, system-ui, -apple-system, sans-serif',
-        weight: appliedStyles?.fonts?.button?.weight || 
-                customStyles?.fonts?.button?.weight || 
-                '500',
-        size: appliedStyles?.fonts?.button?.size || 
-              customStyles?.fonts?.button?.size || 
-              '1rem'
-      }
+        family:
+          appliedStyles?.fonts?.button?.suggested ||
+          customStyles?.fonts?.button?.family ||
+          appliedStyles?.fonts?.heading?.suggested ||
+          'Inter, system-ui, -apple-system, sans-serif',
+        weight:
+          appliedStyles?.fonts?.button?.weight || customStyles?.fonts?.button?.weight || '500',
+        size: appliedStyles?.fonts?.button?.size || customStyles?.fonts?.button?.size || '1rem',
+      },
     },
     layout: {
-      borderRadius: appliedStyles?.layout?.recommendations?.borderRadius || 
-                    customStyles?.layout?.borderRadius || 
-                    '8px',
-      spacing: appliedStyles?.layout?.recommendations?.margin || 
-               customStyles?.layout?.spacing || 
-               '1rem'
+      borderRadius:
+        appliedStyles?.layout?.recommendations?.borderRadius ||
+        customStyles?.layout?.borderRadius ||
+        '8px',
+      spacing:
+        appliedStyles?.layout?.recommendations?.margin || customStyles?.layout?.spacing || '1rem',
     },
     // Source information for debugging
     source: {
@@ -87,8 +71,8 @@ export const extractCampaignStyles = (campaignData) => {
       hasCustomStyles: !!customStyles,
       hasThemeColor: !!themeColor,
       websiteAnalyzed: campaignData.website_analyzed,
-      stylesApplied: campaignData.styles_applied
-    }
+      stylesApplied: campaignData.styles_applied,
+    },
   };
 };
 
@@ -99,39 +83,39 @@ export const extractCampaignStyles = (campaignData) => {
 export const getDefaultStyles = () => ({
   colors: {
     primary: '#2a2a72',
-    secondary: '#666666', 
+    secondary: '#666666',
     accent: '#28a745',
     background: '#ffffff',
-    text: '#333333'
+    text: '#333333',
   },
   fonts: {
     heading: {
       family: 'Inter, system-ui, -apple-system, sans-serif',
       weight: '600',
-      size: '1.5rem'
+      size: '1.5rem',
     },
     body: {
       family: 'Inter, system-ui, -apple-system, sans-serif',
       weight: '400',
-      size: '1rem'
+      size: '1rem',
     },
     button: {
       family: 'Inter, system-ui, -apple-system, sans-serif',
       weight: '500',
-      size: '1rem'
-    }
+      size: '1rem',
+    },
   },
   layout: {
     borderRadius: '8px',
-    spacing: '1rem'
+    spacing: '1rem',
   },
   source: {
     hasAppliedStyles: false,
     hasCustomStyles: false,
     hasThemeColor: false,
     websiteAnalyzed: null,
-    stylesApplied: false
-  }
+    stylesApplied: false,
+  },
 });
 
 /**
@@ -141,7 +125,7 @@ export const getDefaultStyles = () => ({
  */
 export const generateCSSProperties = (campaignData) => {
   const styles = extractCampaignStyles(campaignData);
-  
+
   return {
     '--campaign-color-primary': styles.colors.primary,
     '--campaign-color-secondary': styles.colors.secondary,
@@ -152,7 +136,7 @@ export const generateCSSProperties = (campaignData) => {
     '--campaign-font-body': styles.fonts.body.family,
     '--campaign-font-button': styles.fonts.button.family,
     '--campaign-border-radius': styles.layout.borderRadius,
-    '--campaign-spacing': styles.layout.spacing
+    '--campaign-spacing': styles.layout.spacing,
   };
 };
 
@@ -165,14 +149,14 @@ export const generateCSSProperties = (campaignData) => {
 export const applyCampaignStyles = (campaignData, baseStyles = {}) => {
   const styles = extractCampaignStyles(campaignData);
   const cssProps = generateCSSProperties(campaignData);
-  
+
   return {
     ...baseStyles,
     ...cssProps,
     // Common style applications
     '--primary-color': styles.colors.primary,
     '--text-color': styles.colors.text,
-    '--font-family': styles.fonts.body.family
+    '--font-family': styles.fonts.body.family,
   };
 };
 
@@ -184,7 +168,7 @@ export const applyCampaignStyles = (campaignData, baseStyles = {}) => {
  */
 export const getCampaignButtonStyles = (campaignData, variant = 'primary') => {
   const styles = extractCampaignStyles(campaignData);
-  
+
   const baseButton = {
     fontFamily: styles.fonts.button.family,
     fontWeight: styles.fonts.button.weight,
@@ -193,7 +177,7 @@ export const getCampaignButtonStyles = (campaignData, variant = 'primary') => {
     padding: `calc(${styles.layout.spacing} * 0.75) calc(${styles.layout.spacing} * 1.5)`,
     border: 'none',
     cursor: 'pointer',
-    transition: 'all 0.2s ease-in-out'
+    transition: 'all 0.2s ease-in-out',
   };
 
   switch (variant) {
@@ -201,19 +185,19 @@ export const getCampaignButtonStyles = (campaignData, variant = 'primary') => {
       return {
         ...baseButton,
         backgroundColor: styles.colors.primary,
-        color: '#ffffff'
+        color: '#ffffff',
       };
     case 'secondary':
       return {
         ...baseButton,
         backgroundColor: styles.colors.secondary,
-        color: '#ffffff'
+        color: '#ffffff',
       };
     case 'accent':
       return {
         ...baseButton,
         backgroundColor: styles.colors.accent,
-        color: '#ffffff'
+        color: '#ffffff',
       };
     default:
       return baseButton;
@@ -226,21 +210,21 @@ export const getCampaignButtonStyles = (campaignData, variant = 'primary') => {
  */
 export const debugCampaignStyles = (campaignData) => {
   const styles = extractCampaignStyles(campaignData);
-  
+
   console.log('🎨 Campaign Style Debug:', {
     campaignId: campaignData?.id,
     source: styles.source,
     extractedStyles: {
       primaryColor: styles.colors.primary,
       headingFont: styles.fonts.heading.family,
-      bodyFont: styles.fonts.body.family
+      bodyFont: styles.fonts.body.family,
     },
     rawData: {
       applied_styles: campaignData?.applied_styles,
       custom_styles: campaignData?.custom_styles,
-      theme_color: campaignData?.theme_color
-    }
+      theme_color: campaignData?.theme_color,
+    },
   });
-  
+
   return styles;
 };

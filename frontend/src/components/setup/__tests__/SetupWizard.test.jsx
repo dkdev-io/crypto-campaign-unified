@@ -11,7 +11,7 @@ vi.mock('../Signup', () => ({
       <button onClick={onNext}>Next</button>
       <button onClick={onPrev}>Previous</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('../CommitteeSearch', () => ({
@@ -21,7 +21,7 @@ vi.mock('../CommitteeSearch', () => ({
       <button onClick={onNext}>Next</button>
       <button onClick={onPrev}>Previous</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('../BankConnection', () => ({
@@ -32,7 +32,7 @@ vi.mock('../BankConnection', () => ({
       <button onClick={onNext}>Next</button>
       <button onClick={onPrev}>Previous</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('../TermsAgreement', () => ({
@@ -42,7 +42,7 @@ vi.mock('../TermsAgreement', () => ({
       <button onClick={onNext}>Next</button>
       <button onClick={onPrev}>Previous</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('../EmbedCode', () => ({
@@ -52,7 +52,7 @@ vi.mock('../EmbedCode', () => ({
       <button onClick={onNext}>Next</button>
       <button onClick={onPrev}>Previous</button>
     </div>
-  )
+  ),
 }));
 
 vi.mock('../StepIndicator', () => ({
@@ -60,12 +60,12 @@ vi.mock('../StepIndicator', () => ({
     <div data-testid="step-indicator">
       Step {currentStep} of {totalSteps}
     </div>
-  )
+  ),
 }));
 
 // Mock the supabase module
-vi.mock('../../../lib/supabase', () => ({ 
-  supabase: supabase
+vi.mock('../../../lib/supabase', () => ({
+  supabase: supabase,
 }));
 
 // Mock the CSS import
@@ -81,7 +81,7 @@ describe('SetupWizard', () => {
     suggested_amounts: [25, 50, 100, 250],
     max_donation_limit: 3300,
     theme_color: '#2a2a72',
-    supported_cryptos: ['ETH']
+    supported_cryptos: ['ETH'],
   };
 
   beforeEach(() => {
@@ -89,7 +89,7 @@ describe('SetupWizard', () => {
     configureSupabaseMock.setInsertResponse(mockCampaign);
     configureSupabaseMock.setUpdateResponse(mockCampaign);
     vi.clearAllMocks();
-    
+
     // Mock console methods
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -103,7 +103,7 @@ describe('SetupWizard', () => {
   describe('Component Rendering', () => {
     it('renders setup wizard with step indicator and admin link', () => {
       render(<SetupWizard />);
-      
+
       expect(screen.getByTestId('step-indicator')).toBeInTheDocument();
       expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
       expect(screen.getByText('🔧 Admin Panel')).toBeInTheDocument();
@@ -111,14 +111,14 @@ describe('SetupWizard', () => {
 
     it('renders signup step initially', () => {
       render(<SetupWizard />);
-      
+
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
       expect(screen.getByText('Signup Step')).toBeInTheDocument();
     });
 
     it('has admin panel link with correct href', () => {
       render(<SetupWizard />);
-      
+
       const adminLink = screen.getByText('🔧 Admin Panel');
       expect(adminLink).toHaveAttribute('href', '/admin');
     });
@@ -133,10 +133,10 @@ describe('SetupWizard', () => {
 
     it('advances to next step when next is clicked', async () => {
       render(<SetupWizard />);
-      
+
       const nextButton = screen.getByText('Next');
       await user.click(nextButton);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('committee-search-step')).toBeInTheDocument();
         expect(screen.getByText('Step 2 of 5')).toBeInTheDocument();
@@ -145,50 +145,50 @@ describe('SetupWizard', () => {
 
     it('goes back to previous step when previous is clicked', async () => {
       render(<SetupWizard />);
-      
+
       // Go to step 2
       const nextButton = screen.getByText('Next');
       await user.click(nextButton);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('committee-search-step')).toBeInTheDocument();
       });
-      
+
       // Go back to step 1
       const prevButton = screen.getByText('Previous');
       await user.click(prevButton);
-      
+
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
       expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
     });
 
     it('renders all steps correctly as user navigates', async () => {
       render(<SetupWizard />);
-      
+
       // Step 1 - Signup
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
-      
+
       // Navigate through all steps
       const nextButton = screen.getByText('Next');
-      
+
       // Step 2 - Committee Search
       await user.click(nextButton);
       await waitFor(() => {
         expect(screen.getByTestId('committee-search-step')).toBeInTheDocument();
       });
-      
+
       // Step 3 - Bank Connection
       await user.click(screen.getByText('Next'));
       await waitFor(() => {
         expect(screen.getByTestId('bank-connection-step')).toBeInTheDocument();
       });
-      
-      // Step 4 - Terms Agreement  
+
+      // Step 4 - Terms Agreement
       await user.click(screen.getByText('Next'));
       await waitFor(() => {
         expect(screen.getByTestId('terms-agreement-step')).toBeInTheDocument();
       });
-      
+
       // Step 5 - Embed Code
       await user.click(screen.getByText('Next'));
       await waitFor(() => {
@@ -199,7 +199,7 @@ describe('SetupWizard', () => {
 
     it('does not go beyond last step', async () => {
       render(<SetupWizard />);
-      
+
       // Navigate to last step
       for (let i = 0; i < 5; i++) {
         if (i > 0) {
@@ -207,10 +207,10 @@ describe('SetupWizard', () => {
           await waitFor(() => {});
         }
       }
-      
+
       // Try to go beyond
       await user.click(screen.getByText('Next'));
-      
+
       // Should still be on step 5
       expect(screen.getByText('Step 5 of 5')).toBeInTheDocument();
       expect(screen.getByTestId('embed-code-step')).toBeInTheDocument();
@@ -218,10 +218,10 @@ describe('SetupWizard', () => {
 
     it('does not go before first step', async () => {
       render(<SetupWizard />);
-      
+
       const prevButton = screen.getByText('Previous');
       await user.click(prevButton);
-      
+
       // Should still be on step 1
       expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
@@ -237,25 +237,25 @@ describe('SetupWizard', () => {
 
     it('creates campaign when advancing from step 1', async () => {
       render(<SetupWizard />);
-      
+
       const nextButton = screen.getByText('Next');
       await user.click(nextButton);
-      
+
       await waitFor(() => {
         expect(supabase.from).toHaveBeenCalledWith('campaigns');
       });
-      
+
       // Should advance to step 2 with campaign created
       expect(screen.getByTestId('committee-search-step')).toBeInTheDocument();
     });
 
     it('passes campaign ID to subsequent steps', async () => {
       render(<SetupWizard />);
-      
+
       // Advance to step 3 (BankConnection) which shows campaign ID
       await user.click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
-      
+
       await user.click(screen.getByText('Next'));
       await waitFor(() => {
         expect(screen.getByTestId('bank-connection-step')).toBeInTheDocument();
@@ -265,28 +265,28 @@ describe('SetupWizard', () => {
 
     it('handles campaign creation failure', async () => {
       configureSupabaseMock.setInsertResponse(null, { message: 'Database error' });
-      
+
       render(<SetupWizard />);
-      
+
       const nextButton = screen.getByText('Next');
       await user.click(nextButton);
-      
+
       await waitFor(() => {
         expect(window.alert).toHaveBeenCalledWith(
           expect.stringContaining('Campaign creation failed: Database error')
         );
       });
-      
+
       // Should not advance step
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
     });
 
     it('creates campaign with default data', async () => {
       render(<SetupWizard />);
-      
+
       const nextButton = screen.getByText('Next');
       await user.click(nextButton);
-      
+
       await waitFor(() => {
         expect(supabase.from().insert).toHaveBeenCalledWith([
           expect.objectContaining({
@@ -296,20 +296,20 @@ describe('SetupWizard', () => {
             suggested_amounts: [25, 50, 100, 250],
             max_donation_limit: 3300,
             theme_color: '#2a2a72',
-            supported_cryptos: ['ETH']
-          })
+            supported_cryptos: ['ETH'],
+          }),
         ]);
       });
     });
 
     it('uses form data when creating campaign', async () => {
       render(<SetupWizard />);
-      
+
       // Simulate form data being set
       const wizard = screen.getByTestId('signup-step').closest('.setup-container');
-      
+
       await user.click(screen.getByText('Next'));
-      
+
       await waitFor(() => {
         expect(supabase.from).toHaveBeenCalledWith('campaigns');
       });
@@ -325,17 +325,17 @@ describe('SetupWizard', () => {
 
     it('updates form data and syncs with database when campaign exists', async () => {
       render(<SetupWizard />);
-      
+
       // Create campaign first
       await user.click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
-      
+
       // Reset mock to track update calls
       vi.clearAllMocks();
-      
+
       // Navigate to trigger form data update
       await user.click(screen.getByText('Next'));
-      
+
       await waitFor(() => {
         expect(supabase.from).toHaveBeenCalledWith('campaigns');
       });
@@ -343,7 +343,7 @@ describe('SetupWizard', () => {
 
     it('maps form data to database fields correctly', async () => {
       render(<SetupWizard />);
-      
+
       // Create campaign first
       await user.click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
@@ -351,13 +351,13 @@ describe('SetupWizard', () => {
 
     it('handles database update errors gracefully', async () => {
       configureSupabaseMock.setUpdateResponse(null, { message: 'Update failed' });
-      
+
       render(<SetupWizard />);
-      
+
       // Create campaign first
       await user.click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
-      
+
       // Should not crash on update error
       expect(screen.getByTestId('committee-search-step')).toBeInTheDocument();
     });
@@ -366,21 +366,21 @@ describe('SetupWizard', () => {
   describe('Step Rendering Logic', () => {
     it('renders default step for invalid step number', () => {
       render(<SetupWizard />);
-      
+
       // Manually test renderStep logic by checking default case
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
     });
 
     it('passes correct props to step components', async () => {
       render(<SetupWizard />);
-      
+
       // All step components should receive formData, updateFormData, onNext, onPrev
       expect(screen.getByTestId('signup-step')).toBeInTheDocument();
-      
+
       // After creating campaign, BankConnection should receive campaignId
       await userEvent.setup().click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
-      
+
       await userEvent.setup().click(screen.getByText('Next'));
       await waitFor(() => {
         expect(screen.getByTestId('campaign-id')).toBeInTheDocument();
@@ -391,7 +391,7 @@ describe('SetupWizard', () => {
   describe('UI Styling and Layout', () => {
     it('has correct CSS classes applied', () => {
       const { container } = render(<SetupWizard />);
-      
+
       expect(container.querySelector('.setup-container')).toBeInTheDocument();
       expect(container.querySelector('.setup-card')).toBeInTheDocument();
       expect(container.querySelector('.form-content')).toBeInTheDocument();
@@ -399,7 +399,7 @@ describe('SetupWizard', () => {
 
     it('styles admin panel link correctly', () => {
       render(<SetupWizard />);
-      
+
       const adminLink = screen.getByText('🔧 Admin Panel');
       expect(adminLink).toHaveStyle({
         color: '#666',
@@ -408,7 +408,7 @@ describe('SetupWizard', () => {
         padding: '0.5rem',
         border: '1px solid #ddd',
         borderRadius: '4px',
-        background: '#f8f9fa'
+        background: '#f8f9fa',
       });
     });
   });
@@ -419,19 +419,17 @@ describe('SetupWizard', () => {
     });
 
     it('handles supabase connection errors', async () => {
-      configureSupabaseMock.setInsertResponse(null, { 
+      configureSupabaseMock.setInsertResponse(null, {
         message: 'Connection failed',
-        details: 'Network timeout'
+        details: 'Network timeout',
       });
-      
+
       render(<SetupWizard />);
-      
+
       await userEvent.setup().click(screen.getByText('Next'));
-      
+
       await waitFor(() => {
-        expect(window.alert).toHaveBeenCalledWith(
-          expect.stringContaining('Connection failed')
-        );
+        expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Connection failed'));
       });
     });
 
@@ -440,25 +438,23 @@ describe('SetupWizard', () => {
       supabase.from.mockImplementation(() => {
         throw new Error('Unexpected error');
       });
-      
+
       render(<SetupWizard />);
-      
+
       await userEvent.setup().click(screen.getByText('Next'));
-      
+
       await waitFor(() => {
-        expect(window.alert).toHaveBeenCalledWith(
-          'Campaign creation error: Unexpected error'
-        );
+        expect(window.alert).toHaveBeenCalledWith('Campaign creation error: Unexpected error');
       });
     });
 
     it('logs errors to console', async () => {
       configureSupabaseMock.setInsertResponse(null, { message: 'Test error' });
-      
+
       render(<SetupWizard />);
-      
+
       await userEvent.setup().click(screen.getByText('Next'));
-      
+
       await waitFor(() => {
         expect(console.error).toHaveBeenCalledWith(
           'Failed to create campaign:',
@@ -476,11 +472,11 @@ describe('SetupWizard', () => {
 
     it('matches snapshot for different steps', async () => {
       render(<SetupWizard />);
-      
+
       // Step 2 snapshot
       await userEvent.setup().click(screen.getByText('Next'));
       await waitFor(() => screen.getByTestId('committee-search-step'));
-      
+
       const { container } = render(<SetupWizard />);
       expect(container.firstChild).toMatchSnapshot();
     });

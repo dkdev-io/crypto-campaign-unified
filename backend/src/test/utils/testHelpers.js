@@ -21,7 +21,7 @@ export class TestHelpers {
       documentType: 'drivers_license',
       documentNumber: 'DL123456789',
       documentImages: ['image1.jpg', 'image2.jpg'],
-      selfieImage: 'selfie.jpg'
+      selfieImage: 'selfie.jpg',
     };
   }
 
@@ -30,14 +30,14 @@ export class TestHelpers {
       campaign_name: 'Test Campaign',
       email: 'campaign@dkdev.io',
       website: 'https://example.com',
-      description: 'A test campaign'
+      description: 'A test campaign',
     };
   }
 
   static generateMockContributionData(address = this.generateMockAddress()) {
     return {
       address,
-      amount: '1.0'
+      amount: '1.0',
     };
   }
 
@@ -45,18 +45,21 @@ export class TestHelpers {
     return {
       data,
       error,
-      count: Array.isArray(data) ? data.length : (data ? 1 : 0)
+      count: Array.isArray(data) ? data.length : data ? 1 : 0,
     };
   }
 
-  static createMockWeb3Receipt(success = true, transactionHash = this.generateMockTransactionHash()) {
+  static createMockWeb3Receipt(
+    success = true,
+    transactionHash = this.generateMockTransactionHash()
+  ) {
     return {
       success,
       transactionHash,
       blockNumber: 12345,
       gasUsed: 21000,
       effectiveGasPrice: '20000000000',
-      logs: []
+      logs: [],
     };
   }
 
@@ -68,7 +71,7 @@ export class TestHelpers {
       post: jest.fn(),
       put: jest.fn(),
       delete: jest.fn(),
-      listen: jest.fn()
+      listen: jest.fn(),
     };
     return mockApp;
   }
@@ -79,7 +82,7 @@ export class TestHelpers {
       params: {},
       query: {},
       headers: {},
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -97,7 +100,7 @@ export class TestHelpers {
   }
 
   static async wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -112,7 +115,7 @@ export const MockFactories = {
     setup_completed: false,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }),
 
   kycRecord: (overrides = {}) => ({
@@ -127,7 +130,7 @@ export const MockFactories = {
     submitted_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }),
 
   contributionLog: (overrides = {}) => ({
@@ -139,7 +142,7 @@ export const MockFactories = {
     block_number: 12345,
     status: 'completed',
     created_at: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }),
 
   formSubmission: (overrides = {}) => ({
@@ -151,8 +154,8 @@ export const MockFactories = {
     wallet_address: TestHelpers.generateMockAddress().toLowerCase(),
     transaction_hash: TestHelpers.generateMockTransactionHash(),
     created_at: new Date().toISOString(),
-    ...overrides
-  })
+    ...overrides,
+  }),
 };
 
 export default TestHelpers;

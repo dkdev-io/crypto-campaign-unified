@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 
 /**
  * Smart Contract Security Test Suite
- * 
+ *
  * These tests validate security measures in the CampaignContributions contract
  * against common attack vectors and edge cases.
  */
@@ -15,7 +15,7 @@ test.describe('Smart Contract Security Tests', () => {
 
   test.beforeEach(async ({ page: testPage }) => {
     page = testPage;
-    
+
     // Mock Web3 provider with security test scenarios
     await page.addInitScript(() => {
       // Mock provider for security testing
@@ -25,7 +25,7 @@ test.describe('Smart Contract Security Tests', () => {
         request: async (request) => {
           // Simulate various security scenarios
           return null;
-        }
+        },
       };
     });
 
@@ -43,26 +43,29 @@ test.describe('Smart Contract Security Tests', () => {
         request: async () => {
           // Attempt to return malicious data
           return ['0xmaliciousaddress123456789'];
-        }
+        },
       };
-      
+
       // Try to override the legitimate wallet
       Object.defineProperty(window, 'ethereum', {
         value: maliciousWallet,
-        writable: false
+        writable: false,
       });
     });
 
     // Verify the app detects and rejects malicious wallets
-    const connectButton = page.locator('button').filter({ hasText: /connect.*wallet/i }).first();
+    const connectButton = page
+      .locator('button')
+      .filter({ hasText: /connect.*wallet/i })
+      .first();
     if (await connectButton.isVisible()) {
       await connectButton.click();
       await page.waitForTimeout(2000);
-      
+
       // Look for security warnings or rejection
       const securityWarning = page.locator('.security-warning, .error, [data-testid*="security"]');
-      const hasSecurityCheck = await securityWarning.count() > 0;
-      
+      const hasSecurityCheck = (await securityWarning.count()) > 0;
+
       // Take screenshot of security response
       await expect(page).toHaveScreenshot('wallet-injection-security-test.png', {
         fullPage: true,
@@ -74,7 +77,7 @@ test.describe('Smart Contract Security Tests', () => {
     // Mock wallet for transaction testing
     await page.addInitScript(() => {
       let transactionNonce = 0;
-      
+
       window.ethereum = {
         isMetaMask: true,
         selectedAddress: '0x1234567890123456789012345678901234567890',
@@ -87,7 +90,7 @@ test.describe('Smart Contract Security Tests', () => {
             };
           }
           return null;
-        }
+        },
       };
     });
 
@@ -95,7 +98,7 @@ test.describe('Smart Contract Security Tests', () => {
     const amountInput = page.locator('input[name="amount"], input[type="number"]').first();
     const submitButton = page.locator('button[type="submit"]').first();
 
-    if (await amountInput.isVisible() && await submitButton.isVisible()) {
+    if ((await amountInput.isVisible()) && (await submitButton.isVisible())) {
       // First transaction
       await amountInput.fill('0.1');
       await submitButton.click();
@@ -128,7 +131,7 @@ test.describe('Smart Contract Security Tests', () => {
             throw new Error('Gas price too high - possible manipulation detected');
           }
           return null;
-        }
+        },
       };
     });
 
@@ -136,14 +139,14 @@ test.describe('Smart Contract Security Tests', () => {
     const amountInput = page.locator('input[name="amount"], input[type="number"]').first();
     if (await amountInput.isVisible()) {
       await amountInput.fill('0.1');
-      
+
       const submitButton = page.locator('button[type="submit"]').first();
       await submitButton.click();
       await page.waitForTimeout(2000);
 
       // Look for gas price warnings
       const gasWarning = page.locator('[data-testid*="gas"], .gas-warning, .fee-warning');
-      const hasGasValidation = await gasWarning.count() > 0;
+      const hasGasValidation = (await gasWarning.count()) > 0;
 
       await expect(page).toHaveScreenshot('gas-manipulation-protection.png', {
         fullPage: true,
@@ -163,7 +166,7 @@ test.describe('Smart Contract Security Tests', () => {
             return '0xmaliciousdata';
           }
           return null;
-        }
+        },
       };
     });
 
@@ -172,7 +175,7 @@ test.describe('Smart Contract Security Tests', () => {
 
     // Verify contract address validation
     const contractInfo = page.locator('[data-testid*="contract"], .contract-address');
-    if (await contractInfo.count() > 0) {
+    if ((await contractInfo.count()) > 0) {
       await expect(page).toHaveScreenshot('contract-address-validation.png');
     }
   });
@@ -182,7 +185,7 @@ test.describe('Smart Contract Security Tests', () => {
     const networks = [
       { name: 'mainnet', chainId: '0x1' },
       { name: 'malicious', chainId: '0x999999' }, // Fake network
-      { name: 'testnet', chainId: '0xaa36a7' }
+      { name: 'testnet', chainId: '0xaa36a7' },
     ];
 
     for (const network of networks) {
@@ -196,7 +199,7 @@ test.describe('Smart Contract Security Tests', () => {
               return net.chainId;
             }
             return null;
-          }
+          },
         };
       }, network);
 
@@ -222,18 +225,18 @@ test.describe('Smart Contract Security Tests', () => {
         request: async (request) => {
           if (request.method === 'eth_sendTransaction') {
             transactionCount++;
-            
+
             // Simulate front-running by returning pending transactions
             if (transactionCount > 1) {
               return {
-                error: 'Transaction with higher gas price detected - possible front-running'
+                error: 'Transaction with higher gas price detected - possible front-running',
               };
             }
-            
+
             return '0x' + 'a'.repeat(64); // Mock transaction hash
           }
           return null;
-        }
+        },
       };
     });
 
@@ -241,9 +244,9 @@ test.describe('Smart Contract Security Tests', () => {
     const amountInput = page.locator('input[name="amount"], input[type="number"]').first();
     const submitButton = page.locator('button[type="submit"]').first();
 
-    if (await amountInput.isVisible() && await submitButton.isVisible()) {
+    if ((await amountInput.isVisible()) && (await submitButton.isVisible())) {
       await amountInput.fill('0.5');
-      
+
       // Rapid transaction attempts
       await submitButton.click();
       await page.waitForTimeout(100);
@@ -270,8 +273,8 @@ test.describe('Smart Contract Security Tests', () => {
           total: '3299', // Just under $3,300 limit
           transactions: [
             { amount: '1000', timestamp: Date.now() - 86400000 },
-            { amount: '2299', timestamp: Date.now() - 3600000 }
-          ]
+            { amount: '2299', timestamp: Date.now() - 3600000 },
+          ],
         },
         request: async (request) => {
           if (request.method === 'eth_call') {
@@ -279,7 +282,7 @@ test.describe('Smart Contract Security Tests', () => {
             return '0x' + parseInt('3299').toString(16).padStart(64, '0');
           }
           return null;
-        }
+        },
       };
     });
 
@@ -288,14 +291,14 @@ test.describe('Smart Contract Security Tests', () => {
     if (await amountInput.isVisible()) {
       // Try to contribute $10 (should exceed $3,300 limit)
       await amountInput.fill('0.0033'); // Assuming ~$3,000 ETH price
-      
+
       const submitButton = page.locator('button[type="submit"]').first();
       await submitButton.click();
       await page.waitForTimeout(2000);
 
       // Verify limit enforcement
       const errorMessage = page.locator('.error, .alert-error, [data-testid*="error"]');
-      const hasLimitError = await errorMessage.count() > 0;
+      const hasLimitError = (await errorMessage.count()) > 0;
 
       await expect(page).toHaveScreenshot('contribution-limit-bypass-prevention.png', {
         fullPage: true,
@@ -325,7 +328,7 @@ test.describe('Smart Contract Security Tests', () => {
             return ['0x1234567890123456789012345678901234567890'];
           }
           return null;
-        }
+        },
       };
     });
 
@@ -333,7 +336,7 @@ test.describe('Smart Contract Security Tests', () => {
     const amountInput = page.locator('input[name="amount"], input[type="number"]').first();
     const submitButton = page.locator('button[type="submit"]').first();
 
-    if (await amountInput.isVisible() && await submitButton.isVisible()) {
+    if ((await amountInput.isVisible()) && (await submitButton.isVisible())) {
       await amountInput.fill('0.1');
       await submitButton.click();
       await page.waitForTimeout(2000);
@@ -357,25 +360,25 @@ test.describe('Smart Contract Security Tests', () => {
         request: async (request) => {
           if (request.method === 'eth_sendTransaction') {
             const txAmount = parseInt(request.params[0].value, 16);
-            
+
             // Check if this would cause double spending
             const totalPending = pendingTransactions.reduce((sum, tx) => sum + tx.amount, 0);
             const currentBalance = parseInt(this.balance, 16);
-            
+
             if (totalPending + txAmount > currentBalance) {
               throw new Error('Insufficient funds - double spending detected');
             }
-            
+
             pendingTransactions.push({ amount: txAmount, hash: '0x' + Date.now().toString(16) });
             return pendingTransactions[pendingTransactions.length - 1].hash;
           }
-          
+
           if (request.method === 'eth_getBalance') {
             return '0x' + this.balance.toString(16);
           }
-          
+
           return null;
-        }
+        },
       };
     });
 
@@ -383,7 +386,7 @@ test.describe('Smart Contract Security Tests', () => {
     const amountInput = page.locator('input[name="amount"], input[type="number"]').first();
     const submitButton = page.locator('button[type="submit"]').first();
 
-    if (await amountInput.isVisible() && await submitButton.isVisible()) {
+    if ((await amountInput.isVisible()) && (await submitButton.isVisible())) {
       // First transaction
       await amountInput.fill('0.8');
       await submitButton.click();

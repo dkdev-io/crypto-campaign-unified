@@ -15,8 +15,8 @@ vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'test-anon-key');
 // Mock crypto API
 Object.defineProperty(window, 'crypto', {
   value: {
-    randomUUID: () => 'test-uuid-' + Math.random().toString(36).substr(2, 9)
-  }
+    randomUUID: () => 'test-uuid-' + Math.random().toString(36).substr(2, 9),
+  },
 });
 
 // Mock window.ethereum (MetaMask)
@@ -28,9 +28,9 @@ Object.defineProperty(window, 'ethereum', {
     removeListener: vi.fn(),
     selectedAddress: null,
     chainId: '0x1',
-    networkVersion: '1'
+    networkVersion: '1',
   },
-  writable: true
+  writable: true,
 });
 
 // Mock console methods to reduce noise in tests
@@ -40,7 +40,7 @@ global.console = {
   warn: vi.fn(),
   error: vi.fn(),
   info: vi.fn(),
-  debug: vi.fn()
+  debug: vi.fn(),
 };
 
 // Mock fetch for API calls
@@ -50,7 +50,7 @@ global.fetch = vi.fn(() =>
     json: () => Promise.resolve({}),
     text: () => Promise.resolve(''),
     status: 200,
-    statusText: 'OK'
+    statusText: 'OK',
   })
 );
 
@@ -58,14 +58,14 @@ global.fetch = vi.fn(() =>
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn()
+  disconnect: vi.fn(),
 }));
 
 // Mock IntersectionObserver
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn()
+  disconnect: vi.fn(),
 }));
 
 // Mock localStorage
@@ -75,7 +75,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
   length: 0,
-  key: vi.fn()
+  key: vi.fn(),
 };
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
@@ -96,9 +96,9 @@ Object.defineProperty(window, 'location', {
     hash: '',
     reload: vi.fn(),
     replace: vi.fn(),
-    assign: vi.fn()
+    assign: vi.fn(),
   },
-  writable: true
+  writable: true,
 });
 
 // Mock performance API
@@ -108,8 +108,8 @@ Object.defineProperty(window, 'performance', {
     mark: vi.fn(),
     measure: vi.fn(),
     getEntriesByName: vi.fn(() => []),
-    getEntriesByType: vi.fn(() => [])
-  }
+    getEntriesByType: vi.fn(() => []),
+  },
 });
 
 // Mock URL constructor for Node.js compatibility
@@ -125,7 +125,7 @@ if (!global.URL) {
       this.search = '';
       this.hash = '';
     }
-    
+
     toString() {
       return this.href;
     }

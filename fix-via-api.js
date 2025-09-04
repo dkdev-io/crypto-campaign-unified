@@ -2,10 +2,11 @@ import fetch from 'node-fetch';
 
 async function fixCampaignsViaAPI() {
   console.log('🚀 Using Supabase Management API to fix campaigns table...\n');
-  
+
   const PROJECT_REF = 'kmepcdsklnnxokoimvzo';
-  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
-  
+  const ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+
   // SQL to fix the table
   const sql = `
     -- Fix campaigns table for setup wizard
@@ -40,37 +41,38 @@ async function fixCampaignsViaAPI() {
     const response = await fetch(`https://${PROJECT_REF}.supabase.co/rest/v1/rpc/query`, {
       method: 'POST',
       headers: {
-        'apikey': ANON_KEY,
-        'Authorization': `Bearer ${ANON_KEY}`,
+        apikey: ANON_KEY,
+        Authorization: `Bearer ${ANON_KEY}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
+        Prefer: 'return=representation',
       },
-      body: JSON.stringify({ query: sql })
+      body: JSON.stringify({ query: sql }),
     });
 
     const result = await response.text();
     console.log('API Response:', result);
-    
+
     if (response.ok) {
       console.log('✅ SUCCESS! Table fixed via API');
     } else {
       console.log('❌ API execution failed');
-      
+
       // Alternative: Create a migration file
       console.log('\n📁 Creating migration file instead...');
       const migrationName = `20250903_fix_campaigns_table`;
       const migrationPath = `supabase/migrations/${migrationName}.sql`;
-      
+
       const fs = await import('fs');
       fs.writeFileSync(migrationPath, sql);
-      
+
       console.log(`✅ Migration created: ${migrationPath}`);
       console.log('\n🎯 NEXT STEPS:');
       console.log('1. Run: npx supabase db push --no-verify-emails');
       console.log('   OR');
-      console.log('2. Go to Supabase Dashboard SQL Editor and run the SQL from FIX_CAMPAIGNS_TABLE.sql');
+      console.log(
+        '2. Go to Supabase Dashboard SQL Editor and run the SQL from FIX_CAMPAIGNS_TABLE.sql'
+      );
     }
-    
   } catch (error) {
     console.error('Error:', error.message);
   }

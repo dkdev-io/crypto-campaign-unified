@@ -14,45 +14,48 @@ async function createWorkingUser() {
     {
       auth: {
         autoRefreshToken: false,
-        persistSession: false
-      }
+        persistSession: false,
+      },
     }
   );
 
   try {
     console.log('1. Creating user with Admin SDK...');
-    
+
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email: 'dan@dkdev.io',
       password: 'DanPassword123!',
       email_confirm: true, // Skip email verification
       user_metadata: {
-        full_name: 'Dan Developer'
-      }
+        full_name: 'Dan Developer',
+      },
     });
 
     if (error) {
       console.log('❌ Admin create failed:', error.message);
-      
-      if (error.message.includes('already exists') || error.message.includes('already registered')) {
+
+      if (
+        error.message.includes('already exists') ||
+        error.message.includes('already registered')
+      ) {
         console.log('2. User exists, updating password...');
-        
+
         // Get the user first
         const { data: users } = await supabaseAdmin.auth.admin.listUsers();
-        const existingUser = users.users?.find(u => u.email === 'dan@dkdev.io');
-        
+        const existingUser = users.users?.find((u) => u.email === 'dan@dkdev.io');
+
         if (existingUser) {
           console.log('   Found user:', existingUser.id);
-          
+
           // Update password and confirm email
           const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
             existingUser.id,
             {
               password: 'DanPassword123!',
-              email_confirm: true
+              email_confirm: true,
             }
           );
-          
+
           if (updateError) {
             console.log('   ❌ Update failed:', updateError.message);
           } else {
@@ -74,7 +77,7 @@ async function createWorkingUser() {
 
     const { data: loginData, error: loginError } = await supabaseClient.auth.signInWithPassword({
       email: 'dan@dkdev.io',
-      password: 'DanPassword123!'
+      password: 'DanPassword123!',
     });
 
     if (loginError) {
@@ -84,7 +87,6 @@ async function createWorkingUser() {
       console.log('🎉 YOUR ACCOUNT WORKS NOW!');
       await supabaseClient.auth.signOut();
     }
-
   } catch (error) {
     console.error('❌ Error:', error.message);
   }

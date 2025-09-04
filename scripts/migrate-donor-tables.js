@@ -14,16 +14,16 @@ if (!SERVICE_ROLE_KEY) {
 async function executeSql(sql) {
   // Using Supabase's SQL endpoint with service role key
   const response = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/rpc`, {
-    method: 'POST', 
+    method: 'POST',
     headers: {
-      'apikey': SERVICE_ROLE_KEY,
-      'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+      apikey: SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      Prefer: 'return=representation',
     },
     body: JSON.stringify({
-      query: sql
-    })
+      query: sql,
+    }),
   });
 
   if (!response.ok) {
@@ -36,7 +36,7 @@ async function executeSql(sql) {
 
 async function runMigration() {
   console.log('🚀 Creating donor tables...\n');
-  
+
   // Split migration into smaller chunks
   const migrations = [
     // 1. Drop existing tables
@@ -47,11 +47,11 @@ async function runMigration() {
     `DROP TABLE IF EXISTS donors CASCADE;`,
     `DROP TYPE IF EXISTS donor_type CASCADE;`,
     `DROP TYPE IF EXISTS donation_status CASCADE;`,
-    
+
     // 2. Create types
     `CREATE TYPE donor_type AS ENUM ('individual', 'organization');`,
     `CREATE TYPE donation_status AS ENUM ('pending', 'completed', 'failed', 'refunded');`,
-    
+
     // 3. Create donors table
     `CREATE TABLE donors (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -65,7 +65,7 @@ async function runMigration() {
       is_active BOOLEAN DEFAULT TRUE,
       donor_type donor_type NOT NULL DEFAULT 'individual'
     );`,
-    
+
     // 4. Create donor_profiles table
     `CREATE TABLE donor_profiles (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -80,7 +80,7 @@ async function runMigration() {
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(donor_id)
     );`,
-    
+
     // 5. Create campaigns table if not exists
     `CREATE TABLE IF NOT EXISTS campaigns (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -88,7 +88,7 @@ async function runMigration() {
       description TEXT,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
-    
+
     // 6. Create donations table
     `CREATE TABLE IF NOT EXISTS donations (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -105,7 +105,7 @@ async function runMigration() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );`,
-    
+
     // 7. Create donor_saved_campaigns table
     `CREATE TABLE donor_saved_campaigns (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -114,7 +114,7 @@ async function runMigration() {
       saved_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(donor_id, campaign_id)
     );`,
-    
+
     // 8. Create donor_tax_receipts table
     `CREATE TABLE donor_tax_receipts (
       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -127,22 +127,22 @@ async function runMigration() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(donation_id)
     );`,
-    
+
     // 9. Create indexes
     `CREATE INDEX idx_donors_email ON donors(email);`,
     `CREATE INDEX idx_donors_active ON donors(is_active);`,
     `CREATE INDEX idx_donations_donor ON donations(donor_id);`,
     `CREATE INDEX idx_donations_campaign ON donations(campaign_id);`,
-    
+
     // 10. Enable RLS
     `ALTER TABLE donors ENABLE ROW LEVEL SECURITY;`,
     `ALTER TABLE donor_profiles ENABLE ROW LEVEL SECURITY;`,
     `ALTER TABLE donations ENABLE ROW LEVEL SECURITY;`,
-    
+
     // 11. Create policies
     `CREATE POLICY "Enable insert for registration" ON donors FOR INSERT WITH CHECK (true);`,
     `CREATE POLICY "Donors can view own record" ON donors FOR SELECT USING (auth.uid() = id);`,
-    `CREATE POLICY "Donors can insert own profile" ON donor_profiles FOR INSERT WITH CHECK (true);`
+    `CREATE POLICY "Donors can insert own profile" ON donor_profiles FOR INSERT WITH CHECK (true);`,
   ];
 
   let successCount = 0;
@@ -163,7 +163,7 @@ async function runMigration() {
   }
 
   console.log(`\n📊 Results: ${successCount} successful, ${failCount} failed`);
-  
+
   if (failCount > 0) {
     console.log('\n⚠️  Some migrations failed. This might be because:');
     console.log('1. Tables already exist (which is fine)');

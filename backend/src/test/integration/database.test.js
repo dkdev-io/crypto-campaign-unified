@@ -21,9 +21,7 @@ describe('Database Integration Tests', () => {
     it('should test database connection successfully', async () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.limit.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([{ count: 5 }])
-      );
+      mockChain.limit.mockResolvedValue(TestHelpers.createMockSupabaseResponse([{ count: 5 }]));
 
       const result = await supabaseService.testConnection();
 
@@ -48,9 +46,7 @@ describe('Database Integration Tests', () => {
     it('should handle database exceptions', async () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.limit.mockRejectedValue(
-        new Error('Database exception')
-      );
+      mockChain.limit.mockRejectedValue(new Error('Database exception'));
 
       const result = await supabaseService.testConnection();
 
@@ -67,9 +63,7 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.insert.mockReturnValue(mockChain);
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockCampaign));
 
       const result = await supabaseService.createCampaign(mockCampaignData);
 
@@ -85,9 +79,9 @@ describe('Database Integration Tests', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Insert failed' })
       );
 
-      await expect(
-        supabaseService.createCampaign(mockCampaignData)
-      ).rejects.toThrow('Insert failed');
+      await expect(supabaseService.createCampaign(mockCampaignData)).rejects.toThrow(
+        'Insert failed'
+      );
     });
 
     it('should get campaign successfully', async () => {
@@ -95,9 +89,7 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockCampaign));
 
       const result = await supabaseService.getCampaign(campaignId);
 
@@ -114,9 +106,7 @@ describe('Database Integration Tests', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Not found' })
       );
 
-      await expect(
-        supabaseService.getCampaign(campaignId)
-      ).rejects.toThrow('Not found');
+      await expect(supabaseService.getCampaign(campaignId)).rejects.toThrow('Not found');
     });
 
     it('should update campaign successfully', async () => {
@@ -128,9 +118,7 @@ describe('Database Integration Tests', () => {
       mockChain.update.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(updatedCampaign)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(updatedCampaign));
 
       const result = await supabaseService.updateCampaign(campaignId, updateData);
 
@@ -149,9 +137,9 @@ describe('Database Integration Tests', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Update failed' })
       );
 
-      await expect(
-        supabaseService.updateCampaign(campaignId, updateData)
-      ).rejects.toThrow('Update failed');
+      await expect(supabaseService.updateCampaign(campaignId, updateData)).rejects.toThrow(
+        'Update failed'
+      );
     });
   });
 
@@ -159,7 +147,7 @@ describe('Database Integration Tests', () => {
     const campaignId = '123e4567-e89b-12d3-a456-426614174000';
     const mockContributions = [
       MockFactories.formSubmission({ campaign_id: campaignId }),
-      MockFactories.formSubmission({ campaign_id: campaignId })
+      MockFactories.formSubmission({ campaign_id: campaignId }),
     ];
 
     it('should get contributions successfully', async () => {
@@ -167,9 +155,7 @@ describe('Database Integration Tests', () => {
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
       mockChain.order.mockReturnValue(mockChain);
-      mockChain.range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockContributions)
-      );
+      mockChain.range.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockContributions));
 
       const result = await supabaseService.getContributions(campaignId);
 
@@ -204,9 +190,7 @@ describe('Database Integration Tests', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Query failed' })
       );
 
-      await expect(
-        supabaseService.getContributions(campaignId)
-      ).rejects.toThrow('Query failed');
+      await expect(supabaseService.getContributions(campaignId)).rejects.toThrow('Query failed');
     });
 
     it('should handle empty contributions', async () => {
@@ -214,9 +198,7 @@ describe('Database Integration Tests', () => {
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
       mockChain.order.mockReturnValue(mockChain);
-      mockChain.range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([])
-      );
+      mockChain.range.mockResolvedValue(TestHelpers.createMockSupabaseResponse([]));
 
       const result = await supabaseService.getContributions(campaignId);
 
@@ -227,16 +209,14 @@ describe('Database Integration Tests', () => {
   describe('KYC Operations', () => {
     const mockKYCData = TestHelpers.generateMockKYCData();
     const mockKYCRecord = MockFactories.kycRecord({
-      wallet_address: mockKYCData.address.toLowerCase()
+      wallet_address: mockKYCData.address.toLowerCase(),
     });
 
     it('should create KYC record successfully', async () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.insert.mockReturnValue(mockChain);
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockKYCRecord)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockKYCRecord));
 
       const result = await supabaseService.createKYCRecord(mockKYCData);
 
@@ -252,9 +232,7 @@ describe('Database Integration Tests', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Insert failed' })
       );
 
-      await expect(
-        supabaseService.createKYCRecord(mockKYCData)
-      ).rejects.toThrow('Insert failed');
+      await expect(supabaseService.createKYCRecord(mockKYCData)).rejects.toThrow('Insert failed');
     });
 
     it('should get KYC status successfully', async () => {
@@ -262,9 +240,7 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockKYCRecord)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockKYCRecord));
 
       const result = await supabaseService.getKYCStatus(walletAddress);
 
@@ -291,12 +267,15 @@ describe('Database Integration Tests', () => {
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
       mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST001', message: 'Permission denied' })
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: 'PGRST001',
+          message: 'Permission denied',
+        })
       );
 
-      await expect(
-        supabaseService.getKYCStatus(walletAddress)
-      ).rejects.toThrow('Permission denied');
+      await expect(supabaseService.getKYCStatus(walletAddress)).rejects.toThrow(
+        'Permission denied'
+      );
     });
 
     it('should handle case-insensitive wallet address lookup', async () => {
@@ -304,9 +283,7 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
       mockChain.eq.mockReturnValue(mockChain);
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockKYCRecord)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockKYCRecord));
 
       const result = await supabaseService.getKYCStatus(walletAddress);
 
@@ -325,17 +302,13 @@ describe('Database Integration Tests', () => {
       const mockChain1 = mockSupabaseClient.from();
       mockChain1.insert.mockReturnValue(mockChain1);
       mockChain1.select.mockReturnValue(mockChain1);
-      mockChain1.single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
-      
+      mockChain1.single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockCampaign));
+
       // Mock second call for KYC creation
       const mockChain2 = mockSupabaseClient.from();
       mockChain2.insert.mockReturnValue(mockChain2);
       mockChain2.select.mockReturnValue(mockChain2);
-      mockChain2.single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockKYC)
-      );
+      mockChain2.single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockKYC));
 
       const campaignResult = await supabaseService.createCampaign(campaignData);
       const kycResult = await supabaseService.createKYCRecord(kycData);
@@ -353,10 +326,8 @@ describe('Database Integration Tests', () => {
       const mockChain1 = mockSupabaseClient.from();
       mockChain1.insert.mockReturnValue(mockChain1);
       mockChain1.select.mockReturnValue(mockChain1);
-      mockChain1.single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
-      
+      mockChain1.single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockCampaign));
+
       // Mock failed KYC creation
       const mockChain2 = mockSupabaseClient.from();
       mockChain2.insert.mockReturnValue(mockChain2);
@@ -368,9 +339,7 @@ describe('Database Integration Tests', () => {
       const campaignResult = await supabaseService.createCampaign(campaignData);
       expect(campaignResult).toEqual(mockCampaign);
 
-      await expect(
-        supabaseService.createKYCRecord(kycData)
-      ).rejects.toThrow('KYC creation failed');
+      await expect(supabaseService.createKYCRecord(kycData)).rejects.toThrow('KYC creation failed');
     });
   });
 
@@ -378,9 +347,7 @@ describe('Database Integration Tests', () => {
     it('should handle network timeouts', async () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
-      mockChain.limit.mockRejectedValue(
-        new Error('ETIMEDOUT')
-      );
+      mockChain.limit.mockRejectedValue(new Error('ETIMEDOUT'));
 
       const result = await supabaseService.testConnection();
 
@@ -392,9 +359,9 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
       mockChain.limit.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: 'PGRST301', 
-          message: 'JWT expired' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: 'PGRST301',
+          message: 'JWT expired',
         })
       );
 
@@ -408,9 +375,9 @@ describe('Database Integration Tests', () => {
       const mockChain = mockSupabaseClient.from();
       mockChain.select.mockReturnValue(mockChain);
       mockChain.limit.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: '42P01', 
-          message: 'Rate limit exceeded' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: '42P01',
+          message: 'Rate limit exceeded',
         })
       );
 
@@ -421,24 +388,24 @@ describe('Database Integration Tests', () => {
     });
 
     it('should handle malformed data errors', async () => {
-      const invalidCampaignData = { 
+      const invalidCampaignData = {
         campaign_name: null, // Invalid data
-        email: 'not-an-email'
+        email: 'not-an-email',
       };
 
       const mockChain = mockSupabaseClient.from();
       mockChain.insert.mockReturnValue(mockChain);
       mockChain.select.mockReturnValue(mockChain);
       mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: '23502', 
-          message: 'null value in column "campaign_name" violates not-null constraint' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: '23502',
+          message: 'null value in column "campaign_name" violates not-null constraint',
         })
       );
 
-      await expect(
-        supabaseService.createCampaign(invalidCampaignData)
-      ).rejects.toThrow('null value in column "campaign_name" violates not-null constraint');
+      await expect(supabaseService.createCampaign(invalidCampaignData)).rejects.toThrow(
+        'null value in column "campaign_name" violates not-null constraint'
+      );
     });
   });
 });

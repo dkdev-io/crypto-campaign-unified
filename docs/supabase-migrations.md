@@ -3,12 +3,14 @@
 Since we cannot create tables programmatically with the anon key, you have two options:
 
 ## Option 1: Supabase Dashboard (Easiest)
+
 1. Go to: https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql
 2. Click "New Query"
 3. Copy and paste the SQL below
 4. Click "Run"
 
 ## Option 2: Supabase CLI (If you have it installed)
+
 ```bash
 supabase db push
 ```
@@ -20,40 +22,40 @@ supabase db push
 CREATE TABLE IF NOT EXISTS form_submissions (
   id BIGSERIAL PRIMARY KEY,
   campaign_id UUID REFERENCES campaigns(id),
-  
+
   -- Donor Information
   first_name VARCHAR(100) NOT NULL,
   last_name VARCHAR(100) NOT NULL,
   email VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
-  
+
   -- Address Information
   address VARCHAR(255) NOT NULL,
   city VARCHAR(100) NOT NULL,
   state VARCHAR(2) NOT NULL,
   zip_code VARCHAR(10) NOT NULL,
-  
+
   -- Contribution Information
   amount DECIMAL(10,2) NOT NULL,
   payment_method VARCHAR(50) DEFAULT 'crypto',
   contributor_wallet VARCHAR(255),
   transaction_hash VARCHAR(255),
-  
+
   -- Employment Information (FEC Required)
   employer VARCHAR(255),
   occupation VARCHAR(255),
-  
+
   -- FEC Compliance
   contribution_type VARCHAR(50) DEFAULT 'individual',
   is_us_citizen BOOLEAN DEFAULT true,
   is_prohibited_source BOOLEAN DEFAULT false,
   acknowledgment_signed BOOLEAN DEFAULT true,
-  
+
   -- Metadata
   form_version VARCHAR(10) DEFAULT '1.0',
   user_agent TEXT,
   ip_address INET,
-  
+
   -- Timestamps
   submitted_at TIMESTAMPTZ DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -100,4 +102,5 @@ CREATE INDEX IF NOT EXISTS idx_error_logs_timestamp ON error_logs(timestamp);
 ```
 
 ## Direct Link to SQL Editor:
+
 https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/new

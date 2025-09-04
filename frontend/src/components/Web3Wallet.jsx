@@ -13,7 +13,7 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
   useEffect(() => {
     initializeWeb3();
     setupEventListeners();
-    
+
     return () => {
       web3Service.removeEventListeners();
     };
@@ -26,7 +26,7 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
         account,
         balance,
         network,
-        contributorInfo
+        contributorInfo,
       });
     }
   }, [isConnected, account, balance, network, contributorInfo]);
@@ -62,10 +62,10 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
   const connectWallet = async () => {
     setIsLoading(true);
     setError('');
-    
+
     try {
       const result = await web3Service.connectWallet();
-      
+
       if (result.success) {
         setIsConnected(true);
         setAccount(result.account);
@@ -106,9 +106,10 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
         const info = await web3Service.getContributorInfo(accountAddress);
         setContributorInfo(info);
       } catch (error) {
-        console.log('Contract not available yet - contributor info will load when contract is deployed');
+        console.log(
+          'Contract not available yet - contributor info will load when contract is deployed'
+        );
       }
-
     } catch (error) {
       console.error('Failed to load account data:', error);
     }
@@ -137,25 +138,27 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
 
   if (error && error.includes('MetaMask not found')) {
     return (
-      <div style={{ 
-        padding: '1rem', 
-        background: '#fff3cd', 
-        border: '1px solid #ffeaa7', 
-        borderRadius: '8px', 
-        margin: '1rem 0' 
-      }}>
+      <div
+        style={{
+          padding: '1rem',
+          background: '#fff3cd',
+          border: '1px solid #ffeaa7',
+          borderRadius: '8px',
+          margin: '1rem 0',
+        }}
+      >
         <h4 style={{ margin: '0 0 0.5rem 0', color: '#856404' }}>🦊 MetaMask Required</h4>
         <p style={{ margin: '0 0 1rem 0', color: '#856404' }}>
           To make crypto contributions, you need MetaMask wallet installed.
         </p>
-        <a 
-          href="https://metamask.io/" 
-          target="_blank" 
+        <a
+          href="https://metamask.io/"
+          target="_blank"
           rel="noopener noreferrer"
-          style={{ 
-            color: '#007bff', 
-            textDecoration: 'none', 
-            fontWeight: 'bold' 
+          style={{
+            color: '#007bff',
+            textDecoration: 'none',
+            fontWeight: 'bold',
           }}
         >
           📥 Install MetaMask →
@@ -183,20 +186,22 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem'
+            gap: '0.5rem',
           }}
         >
           {isLoading ? '⏳ Connecting...' : '🦊 Connect MetaMask Wallet'}
         </button>
         {error && (
-          <div style={{ 
-            marginTop: '0.5rem', 
-            padding: '0.5rem', 
-            background: '#f8d7da', 
-            color: '#721c24', 
-            borderRadius: '4px', 
-            fontSize: '14px' 
-          }}>
+          <div
+            style={{
+              marginTop: '0.5rem',
+              padding: '0.5rem',
+              background: '#f8d7da',
+              color: '#721c24',
+              borderRadius: '4px',
+              fontSize: '14px',
+            }}
+          >
             ⚠️ {error}
           </div>
         )}
@@ -205,14 +210,23 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
   }
 
   return (
-    <div style={{ 
-      margin: '1rem 0', 
-      padding: '1rem', 
-      background: '#e7f3ff', 
-      borderRadius: '8px', 
-      border: '1px solid #b8daff' 
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+    <div
+      style={{
+        margin: '1rem 0',
+        padding: '1rem',
+        background: '#e7f3ff',
+        borderRadius: '8px',
+        border: '1px solid #b8daff',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '0.5rem',
+        }}
+      >
         <h4 style={{ margin: 0, color: '#004085' }}>🦊 Wallet Connected</h4>
         <button
           onClick={disconnectWallet}
@@ -223,35 +237,49 @@ const Web3Wallet = ({ onWalletChange, showBalance = true }) => {
             border: 'none',
             borderRadius: '4px',
             fontSize: '12px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Disconnect
         </button>
       </div>
-      
+
       <div style={{ fontSize: '14px', color: '#004085' }}>
         <div style={{ marginBottom: '0.25rem' }}>
           <strong>Address:</strong> {formatAddress(account)}
         </div>
-        
+
         {showBalance && (
           <div style={{ marginBottom: '0.25rem' }}>
             <strong>Balance:</strong> {formatBalance(balance)} ETH
           </div>
         )}
-        
+
         {network && (
           <div style={{ marginBottom: '0.25rem' }}>
             <strong>Network:</strong> {network.name} ({network.chainId})
           </div>
         )}
-        
+
         {contributorInfo && (
-          <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: '#d1ecf1', borderRadius: '4px' }}>
-            <div><strong>KYC Status:</strong> {contributorInfo.isKYCVerified ? '✅ Verified' : '❌ Not Verified'}</div>
-            <div><strong>Previous Contributions:</strong> {contributorInfo.cumulativeAmount} ETH</div>
-            <div><strong>Remaining Capacity:</strong> {contributorInfo.remainingCapacity} ETH</div>
+          <div
+            style={{
+              marginTop: '0.5rem',
+              padding: '0.5rem',
+              background: '#d1ecf1',
+              borderRadius: '4px',
+            }}
+          >
+            <div>
+              <strong>KYC Status:</strong>{' '}
+              {contributorInfo.isKYCVerified ? '✅ Verified' : '❌ Not Verified'}
+            </div>
+            <div>
+              <strong>Previous Contributions:</strong> {contributorInfo.cumulativeAmount} ETH
+            </div>
+            <div>
+              <strong>Remaining Capacity:</strong> {contributorInfo.remainingCapacity} ETH
+            </div>
           </div>
         )}
       </div>

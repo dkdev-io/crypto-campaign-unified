@@ -6,7 +6,7 @@ test.describe('Live Campaign Site Monitoring', () => {
   test('live site accessibility and form loading check', async ({ page }) => {
     // Navigate to the live site
     await page.goto(LIVE_SITE_URL);
-    
+
     // Wait for page to fully load
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(3000); // Extra wait for any dynamic content
@@ -21,7 +21,6 @@ test.describe('Live Campaign Site Monitoring', () => {
     expect(title).toBeTruthy();
     expect(title).not.toBe('Error');
 
-
     // Check for main content containers
     const mainContent = page.locator('main, #root, .app, body > div').first();
     await expect(mainContent).toBeVisible();
@@ -31,7 +30,9 @@ test.describe('Live Campaign Site Monitoring', () => {
     const formCount = await forms.count();
 
     // Look for input fields (donation/contribution forms)
-    const inputs = page.locator('input[type="text"], input[type="email"], input[type="number"], input[name*="amount"], input[name*="name"]');
+    const inputs = page.locator(
+      'input[type="text"], input[type="email"], input[type="number"], input[name*="amount"], input[name*="name"]'
+    );
     const inputCount = await inputs.count();
 
     // Look for buttons (submit, connect wallet, etc.)
@@ -39,7 +40,9 @@ test.describe('Live Campaign Site Monitoring', () => {
     const buttonCount = await buttons.count();
 
     // Check for specific campaign elements
-    const campaignElements = page.locator('[data-testid*="campaign"], .campaign, [class*="campaign"], [id*="campaign"]');
+    const campaignElements = page.locator(
+      '[data-testid*="campaign"], .campaign, [class*="campaign"], [id*="campaign"]'
+    );
     const campaignCount = await campaignElements.count();
 
     // Verify no obvious error states
@@ -63,9 +66,8 @@ test.describe('Live Campaign Site Monitoring', () => {
       errorsFound: errorCount,
       loadingElementsFound: loadingCount,
       isAccessible: formCount > 0 || inputCount > 0 || buttonCount > 0,
-      status: errorCount === 0 && (formCount > 0 || inputCount > 0) ? 'HEALTHY' : 'NEEDS_ATTENTION'
+      status: errorCount === 0 && (formCount > 0 || inputCount > 0) ? 'HEALTHY' : 'NEEDS_ATTENTION',
     };
-
   });
 
   test('live site form functionality test', async ({ page }) => {
@@ -74,15 +76,21 @@ test.describe('Live Campaign Site Monitoring', () => {
     await page.waitForTimeout(2000);
 
     // Try to interact with form elements if present
-    const nameInput = page.locator('input[name="name"], input[name="donorName"], input[placeholder*="name" i]').first();
-    const emailInput = page.locator('input[name="email"], input[type="email"], input[placeholder*="email" i]').first();
-    const amountInput = page.locator('input[name="amount"], input[type="number"], input[placeholder*="amount" i]').first();
+    const nameInput = page
+      .locator('input[name="name"], input[name="donorName"], input[placeholder*="name" i]')
+      .first();
+    const emailInput = page
+      .locator('input[name="email"], input[type="email"], input[placeholder*="email" i]')
+      .first();
+    const amountInput = page
+      .locator('input[name="amount"], input[type="number"], input[placeholder*="amount" i]')
+      .first();
 
     let interactionResults = {
       canFillName: false,
       canFillEmail: false,
       canFillAmount: false,
-      hasSubmitButton: false
+      hasSubmitButton: false,
     };
 
     // Test name input
@@ -119,11 +127,18 @@ test.describe('Live Campaign Site Monitoring', () => {
     }
 
     // Check for submit button
-    const submitButton = page.locator('button[type="submit"], button').filter({ hasText: /submit|donate|contribute|send/i }).first();
+    const submitButton = page
+      .locator('button[type="submit"], button')
+      .filter({ hasText: /submit|donate|contribute|send/i })
+      .first();
     interactionResults.hasSubmitButton = await submitButton.isVisible();
 
     // Take screenshot of form with filled data
-    if (interactionResults.canFillName || interactionResults.canFillEmail || interactionResults.canFillAmount) {
+    if (
+      interactionResults.canFillName ||
+      interactionResults.canFillEmail ||
+      interactionResults.canFillAmount
+    ) {
       await expect(page).toHaveScreenshot('live-site-form-filled.png', {
         fullPage: true,
       });
@@ -132,12 +147,16 @@ test.describe('Live Campaign Site Monitoring', () => {
     console.log('Form Interaction Results:', JSON.stringify(interactionResults, null, 2));
 
     // Overall form health assessment
-    const formIsHealthy = (interactionResults.canFillName || interactionResults.canFillEmail || interactionResults.canFillAmount) && interactionResults.hasSubmitButton;
+    const formIsHealthy =
+      (interactionResults.canFillName ||
+        interactionResults.canFillEmail ||
+        interactionResults.canFillAmount) &&
+      interactionResults.hasSubmitButton;
   });
 
   test('live site mobile responsiveness check', async ({ page }) => {
     await page.goto(LIVE_SITE_URL);
-    
+
     // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await page.waitForLoadState('networkidle');
@@ -170,10 +189,10 @@ test.describe('Live Campaign Site Monitoring', () => {
 
   test('live site performance and loading speed', async ({ page }) => {
     const startTime = Date.now();
-    
+
     await page.goto(LIVE_SITE_URL);
     await page.waitForLoadState('networkidle');
-    
+
     const loadTime = Date.now() - startTime;
 
     // Performance should be under 5 seconds for a good user experience
@@ -181,7 +200,7 @@ test.describe('Live Campaign Site Monitoring', () => {
 
     // Check for any console errors
     const logs = [];
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         logs.push(msg.text());
       }
@@ -203,9 +222,10 @@ test.describe('Live Campaign Site Monitoring', () => {
     await page.waitForTimeout(2000);
 
     // Look for wallet connection elements
-    const walletButtons = page.locator('button').filter({ hasText: /connect.*wallet|wallet.*connect|metamask/i });
+    const walletButtons = page
+      .locator('button')
+      .filter({ hasText: /connect.*wallet|wallet.*connect|metamask/i });
     const walletCount = await walletButtons.count();
-
 
     if (walletCount > 0) {
       // Take screenshot of wallet integration

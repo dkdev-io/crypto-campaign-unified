@@ -5,9 +5,9 @@
 
 async function fixViaManagementAPI() {
   console.log('🚀 Attempting fix via Supabase Management API\n');
-  
+
   const projectRef = 'kmepcdsklnnxokoimvzo';
-  
+
   // The SQL to execute
   const sql = `
     -- Fix campaigns table for setup wizard
@@ -45,38 +45,38 @@ async function fixViaManagementAPI() {
         terms_accepted_at = created_at
     WHERE setup_completed IS NULL OR setup_completed = false;
   `;
-  
+
   // Try different API endpoints
   const endpoints = [
     `https://${projectRef}.supabase.co/rest/v1/rpc/query`,
     `https://api.supabase.com/v1/projects/${projectRef}/database/query`,
-    `https://${projectRef}.supabase.co/pg/query`
+    `https://${projectRef}.supabase.co/pg/query`,
   ];
-  
+
   // Try different auth tokens
   const tokens = [
     // Service role key
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNTU0NjI0OCwiZXhwIjoyMDUxMTIyMjQ4fQ.HgFnPg4pLT3pqX-tVlB3HhNWdLgOGf0J3X8-mTgCmPo',
     // Anon key
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI',
   ];
-  
+
   for (const endpoint of endpoints) {
     for (const token of tokens) {
       console.log(`Trying endpoint: ${endpoint.substring(0, 50)}...`);
-      
+
       try {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'apikey': token,
+            Authorization: `Bearer ${token}`,
+            apikey: token,
             'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
+            Prefer: 'return=minimal',
           },
-          body: JSON.stringify({ query: sql })
+          body: JSON.stringify({ query: sql }),
         });
-        
+
         if (response.ok) {
           console.log('✅ SUCCESS! SQL executed via Management API');
           console.log('🎉 Campaigns table has been fixed!');
@@ -92,10 +92,10 @@ async function fixViaManagementAPI() {
       }
     }
   }
-  
+
   console.log('\n❌ Management API approach failed');
   console.log('📋 Falling back to creating a database function...\n');
-  
+
   // Try creating a function that we can call
   const functionName = `fix_campaigns_${Date.now()}`;
   const createFunction = `
@@ -110,27 +110,29 @@ async function fixViaManagementAPI() {
     END;
     $$;
   `;
-  
+
   // Import Supabase client
   const { createClient } = await import('@supabase/supabase-js');
   const supabase = createClient(
     `https://${projectRef}.supabase.co`,
     tokens[0] // Use service role key
   );
-  
+
   // Try to execute via RPC
   console.log('Attempting RPC approach...');
-  const { data, error } = await supabase.rpc('query', {
-    query: sql
-  }).catch(err => ({ error: err }));
-  
+  const { data, error } = await supabase
+    .rpc('query', {
+      query: sql,
+    })
+    .catch((err) => ({ error: err }));
+
   if (!error) {
     console.log('✅ SUCCESS via RPC!');
     return true;
   }
-  
+
   console.log('❌ RPC failed:', error?.message || 'Unknown error');
-  
+
   // Final attempt: Create a migration file that will be picked up
   console.log('\n📝 Creating migration file for next deployment...');
   const fs = await import('fs');
@@ -138,7 +140,7 @@ async function fixViaManagementAPI() {
   fs.writeFileSync(migrationPath, sql);
   console.log(`✅ Migration created at: ${migrationPath}`);
   console.log('This will be applied on next deployment or when you run: npx supabase db push');
-  
+
   return false;
 }
 

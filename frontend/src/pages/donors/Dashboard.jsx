@@ -13,18 +13,21 @@ const DonorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
       {/* Header */}
-      <header className="shadow-sm border-b" style={{backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))'}}>
+      <header
+        className="shadow-sm border-b"
+        style={{ backgroundColor: 'hsl(var(--crypto-navy))', color: 'hsl(var(--crypto-white))' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <h1 className="font-bold text-white" style={{fontSize: 'var(--text-heading-lg)'}}>Donor Dashboard</h1>
+              <h1 className="font-bold text-white" style={{ fontSize: 'var(--text-heading-lg)' }}>
+                Donor Dashboard
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-white/80">
-                Welcome, {donor?.email || 'Donor'}
-              </span>
+              <span className="text-base text-white/80">Welcome, {donor?.email || 'Donor'}</span>
               <button
                 onClick={handleSignOut}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"
@@ -40,11 +43,11 @@ const DonorDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div style={{background: 'var(--gradient-hero)'}} className="rounded-2xl p-8 mb-8">
-          <h2 className="font-bold mb-2 text-white" style={{fontSize: 'var(--text-heading-xl)'}}>
+        <div style={{ background: 'var(--gradient-hero)' }} className="rounded-2xl p-8 mb-8">
+          <h2 className="font-bold mb-2 text-white" style={{ fontSize: 'var(--text-heading-xl)' }}>
             Welcome to Your Donor Dashboard
           </h2>
-          <p className="text-white/90" style={{fontSize: 'var(--text-body-lg)'}}>
+          <p className="text-white/90" style={{ fontSize: 'var(--text-body-lg)' }}>
             Thank you for being part of our community. Your generosity makes a difference.
           </p>
         </div>
@@ -53,7 +56,7 @@ const DonorDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <Heart className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <Heart className="w-8 h-8" style={{ color: 'hsl(var(--crypto-blue))' }} />
               <span className="text-sm text-muted-foreground">Total</span>
             </div>
             <p className="text-2xl font-bold text-foreground">$0.00</p>
@@ -62,7 +65,7 @@ const DonorDashboard = () => {
 
           <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <TrendingUp className="w-8 h-8" style={{ color: 'hsl(var(--crypto-blue))' }} />
               <span className="text-sm text-muted-foreground">Campaigns</span>
             </div>
             <p className="text-2xl font-bold text-foreground">0</p>
@@ -71,7 +74,7 @@ const DonorDashboard = () => {
 
           <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <Calendar className="w-8 h-8" style={{ color: 'hsl(var(--crypto-blue))' }} />
               <span className="text-sm text-muted-foreground">Last</span>
             </div>
             <p className="text-2xl font-bold text-foreground">--</p>
@@ -80,7 +83,7 @@ const DonorDashboard = () => {
 
           <div className="crypto-card">
             <div className="flex items-center justify-between mb-4">
-              <User className="w-8 h-8" style={{color: 'hsl(var(--crypto-blue))'}} />
+              <User className="w-8 h-8" style={{ color: 'hsl(var(--crypto-blue))' }} />
               <span className="text-sm text-muted-foreground">Status</span>
             </div>
             <p className="text-2xl font-bold text-foreground">Active</p>
@@ -98,7 +101,9 @@ const DonorDashboard = () => {
               <p className="text-center">
                 No recent donations yet.
                 <br />
-                <span className="text-sm">Start supporting campaigns to see your activity here.</span>
+                <span className="text-base">
+                  Start supporting campaigns to see your activity here.
+                </span>
               </p>
             </div>
           </div>
@@ -145,15 +150,24 @@ const DonorDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Placeholder campaign cards */}
             {[1, 2, 3].map((i) => (
-              <div key={i} className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card">
-                <div className="h-32 rounded-lg mb-3" style={{background: 'var(--gradient-section)'}}></div>
+              <div
+                key={i}
+                className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card"
+              >
+                <div
+                  className="h-32 rounded-lg mb-3"
+                  style={{ background: 'var(--gradient-section)' }}
+                ></div>
                 <h4 className="font-medium text-foreground mb-1">Campaign Title {i}</h4>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-base text-muted-foreground mb-3">
                   Campaign description will appear here...
                 </p>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">$0 raised</span>
-                  <button className="text-sm font-medium" style={{color: 'hsl(var(--crypto-blue))'}}>
+                  <button
+                    className="text-sm font-medium"
+                    style={{ color: 'hsl(var(--crypto-blue))' }}
+                  >
                     View →
                   </button>
                 </div>

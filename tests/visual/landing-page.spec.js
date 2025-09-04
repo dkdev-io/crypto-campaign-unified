@@ -29,14 +29,16 @@ test.describe('Landing Page Visual Tests', () => {
     } else {
       // Fallback: capture top portion of page
       await expect(page.locator('body')).toHaveScreenshot('landing-page-above-fold.png', {
-        clip: { x: 0, y: 0, width: 1200, height: 600 }
+        clip: { x: 0, y: 0, width: 1200, height: 600 },
       });
     }
   });
 
   test('landing page campaign cards/grid', async ({ page }) => {
     // Look for campaign cards or grid layout
-    const campaignGrid = page.locator('.campaign-grid, .cards, .grid, [data-testid*="campaign"]').first();
+    const campaignGrid = page
+      .locator('.campaign-grid, .cards, .grid, [data-testid*="campaign"]')
+      .first();
     if (await campaignGrid.isVisible()) {
       await expect(campaignGrid).toHaveScreenshot('landing-page-campaign-grid.png');
     }
@@ -52,11 +54,14 @@ test.describe('Landing Page Visual Tests', () => {
 
   test('landing page navigation menu', async ({ page }) => {
     // Test navigation menu
-    const menuButton = page.locator('button').filter({ hasText: /menu|☰/i }).first();
+    const menuButton = page
+      .locator('button')
+      .filter({ hasText: /menu|☰/i })
+      .first();
     if (await menuButton.isVisible()) {
       await menuButton.click();
       await page.waitForTimeout(500);
-      
+
       await expect(page).toHaveScreenshot('landing-page-navigation-menu.png');
     }
   });
@@ -98,7 +103,7 @@ test.describe('Landing Page Visual Tests', () => {
     if (await buttons.isVisible()) {
       await buttons.hover();
       await page.waitForTimeout(500);
-      
+
       await expect(page).toHaveScreenshot('landing-page-button-hover.png');
     }
   });
@@ -107,7 +112,7 @@ test.describe('Landing Page Visual Tests', () => {
     // Reload page and capture loading state quickly
     await page.reload();
     await page.waitForTimeout(100); // Very quick to catch loading state
-    
+
     try {
       await expect(page).toHaveScreenshot('landing-page-loading.png', {
         fullPage: true,
@@ -127,9 +132,11 @@ test.describe('Landing Page Visual Tests', () => {
 
   test('landing page call-to-action buttons', async ({ page }) => {
     // Find primary CTA buttons
-    const ctaButtons = page.locator('button, a').filter({ hasText: /donate|contribute|support|start|create/i });
+    const ctaButtons = page
+      .locator('button, a')
+      .filter({ hasText: /donate|contribute|support|start|create/i });
     const count = await ctaButtons.count();
-    
+
     if (count > 0) {
       for (let i = 0; i < Math.min(count, 3); i++) {
         const button = ctaButtons.nth(i);
@@ -141,7 +148,9 @@ test.describe('Landing Page Visual Tests', () => {
 
   test('landing page social proof section', async ({ page }) => {
     // Look for testimonials, stats, or social proof
-    const socialProof = page.locator('.testimonials, .stats, .social-proof, [data-testid*="testimonial"]').first();
+    const socialProof = page
+      .locator('.testimonials, .stats, .social-proof, [data-testid*="testimonial"]')
+      .first();
     if (await socialProof.isVisible()) {
       await socialProof.scrollIntoViewIfNeeded();
       await expect(socialProof).toHaveScreenshot('landing-page-social-proof.png');

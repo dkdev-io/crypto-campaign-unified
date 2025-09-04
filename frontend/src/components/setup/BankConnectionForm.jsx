@@ -26,7 +26,7 @@ const BankConnectionForm = () => {
   const updateFormData = (newData) => {
     const updatedData = { ...formData, ...newData };
     setFormData(updatedData);
-    
+
     // Save to localStorage
     try {
       localStorage.setItem('campaignSetupData', JSON.stringify(updatedData));
@@ -37,13 +37,13 @@ const BankConnectionForm = () => {
 
   const handleSkipForDev = () => {
     setLoading(true);
-    
-    updateFormData({ 
+
+    updateFormData({
       skipBankConnection: true,
       bankAccountVerified: false,
-      bankConnectionStatus: 'skipped'
+      bankConnectionStatus: 'skipped',
     });
-    
+
     setTimeout(() => {
       setLoading(false);
       navigate('/WebsiteStyle');
@@ -55,7 +55,8 @@ const BankConnectionForm = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
+      '
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl w-full">
@@ -63,7 +64,10 @@ const BankConnectionForm = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="mb-4"></div>
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
+              <h2
+                className="font-bold text-foreground mb-2"
+                style={{ fontSize: 'var(--text-heading-xl)' }}
+              >
                 Connect Bank Account
               </h2>
               <p className="text-muted-foreground">
@@ -75,12 +79,16 @@ const BankConnectionForm = () => {
             <div className="mb-8 p-6 bg-muted border border-border rounded-xl">
               <div className="text-center">
                 <div className="mb-3"></div>
-                <h3 className="font-semibold mb-2" style={{fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))'}}>
+                <h3
+                  className="font-semibold mb-2"
+                  style={{ fontSize: 'var(--text-heading-md)', color: 'hsl(var(--crypto-navy))' }}
+                >
                   Plaid Integration Coming Soon
                 </h3>
-                <p className="text-blue-700 text-sm mb-4">
-                  We're currently implementing secure bank account integration with Plaid. 
-                  This will allow you to safely connect your campaign's bank account for contribution processing.
+                <p className="text-blue-700 text-base mb-4">
+                  We're currently implementing secure bank account integration with Plaid. This will
+                  allow you to safely connect your campaign's bank account for contribution
+                  processing.
                 </p>
                 <div className="inline-block bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-medium">
                   Expected: Next Update
@@ -94,7 +102,7 @@ const BankConnectionForm = () => {
                 <Shield className="w-5 h-5" />
                 Your Security is Our Priority
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-base text-green-800">
                 <div className="flex items-start gap-2">
                   <Lock className="w-4 h-4 mt-0.5 text-green-600" />
                   <div>
@@ -129,33 +137,57 @@ const BankConnectionForm = () => {
             {/* How It Works */}
             <div className="mb-8 p-6 bg-muted border border-border rounded-lg">
               <h4 className="text-lg font-semibold text-gray-900 mb-4">
-How Bank Connection Will Work
+                How Bank Connection Will Work
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>1</span>
+                    <span
+                      className="font-bold"
+                      style={{
+                        fontSize: 'var(--text-heading-sm)',
+                        color: 'hsl(var(--crypto-blue))',
+                      }}
+                    >
+                      1
+                    </span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Connect Securely</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-base text-gray-600">
                     Login through Plaid's secure interface
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>2</span>
+                    <span
+                      className="font-bold"
+                      style={{
+                        fontSize: 'var(--text-heading-sm)',
+                        color: 'hsl(var(--crypto-blue))',
+                      }}
+                    >
+                      2
+                    </span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Select Account</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-base text-gray-600">
                     Choose your campaign's checking account
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="font-bold" style={{fontSize: 'var(--text-heading-sm)', color: 'hsl(var(--crypto-blue))'}}>3</span>
+                    <span
+                      className="font-bold"
+                      style={{
+                        fontSize: 'var(--text-heading-sm)',
+                        color: 'hsl(var(--crypto-blue))',
+                      }}
+                    >
+                      3
+                    </span>
                   </div>
                   <div className="font-medium text-gray-900 mb-1">Start Processing</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-base text-gray-600">
                     Begin accepting contributions immediately
                   </div>
                 </div>
@@ -167,13 +199,10 @@ How Bank Connection Will Work
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-yellow-600 mt-1" />
                 <div className="flex-1">
-                  <h4 className="font-semibold text-yellow-900 mb-2">
-                    Development Mode
-                  </h4>
-                  <p className="text-yellow-800 text-sm mb-4">
-                    For development and testing purposes, you can skip bank connection 
-                    and continue with the campaign setup process. This will be required 
-                    for production campaigns.
+                  <h4 className="font-semibold text-yellow-900 mb-2">Development Mode</h4>
+                  <p className="text-yellow-800 text-base mb-4">
+                    For development and testing purposes, you can skip bank connection and continue
+                    with the campaign setup process. This will be required for production campaigns.
                   </p>
                   <Button
                     onClick={handleSkipForDev}
@@ -198,31 +227,24 @@ How Bank Connection Will Work
 
             {/* Navigation */}
             <div className="flex justify-between">
-              <Button
-                onClick={handleBack}
-                variant="outline"
-                disabled={loading}
-              >
+              <Button onClick={handleBack} variant="outline" disabled={loading}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Committee
               </Button>
-              
+
               <div className="text-center flex-1 mx-4">
-                <div className="text-sm text-muted-foreground">
-                  Step 3 of 7 - Bank Connection
-                </div>
+                <div className="text-sm text-muted-foreground">Step 3 of 7 - Bank Connection</div>
               </div>
-              
-              <div className="w-32"> {/* Spacer for alignment */}
-              </div>
+
+              <div className="w-32"> {/* Spacer for alignment */}</div>
             </div>
 
             {/* Technical Note */}
             <div className="mt-6 p-4 bg-muted/30 rounded-lg">
               <div className="text-xs text-muted-foreground">
-                <strong>Technical Note:</strong> Plaid integration requires backend 
-                API endpoints for creating link tokens and exchanging public tokens. 
-                Implementation is in progress.
+                <strong>Technical Note:</strong> Plaid integration requires backend API endpoints
+                for creating link tokens and exchanging public tokens. Implementation is in
+                progress.
               </div>
             </div>
           </div>

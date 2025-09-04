@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import { supabase } from '../../lib/supabase';
-import { 
-  Heart, 
-  DollarSign, 
-  TrendingUp, 
+import {
+  Heart,
+  DollarSign,
+  TrendingUp,
   Award,
   Clock,
   Download,
@@ -15,7 +15,7 @@ import {
   Settings,
   LogOut,
   FileText,
-  Star
+  Star,
 } from 'lucide-react';
 
 const DonorDashboard = () => {
@@ -24,7 +24,7 @@ const DonorDashboard = () => {
     totalDonated: 0,
     donationCount: 0,
     campaignsSupported: 0,
-    lastDonationDate: null
+    lastDonationDate: null,
   });
   const [recentDonations, setRecentDonations] = useState([]);
   const [savedCampaigns, setSavedCampaigns] = useState([]);
@@ -41,8 +41,9 @@ const DonorDashboard = () => {
       setLoading(true);
 
       // Fetch donation statistics
-      const { data: statsData, error: statsError } = await supabase
-        .rpc('get_donor_stats', { p_donor_id: donor.id });
+      const { data: statsData, error: statsError } = await supabase.rpc('get_donor_stats', {
+        p_donor_id: donor.id,
+      });
 
       if (!statsError && statsData && statsData.length > 0) {
         setStats(statsData[0]);
@@ -51,13 +52,15 @@ const DonorDashboard = () => {
       // Fetch recent donations
       const { data: donationsData, error: donationsError } = await supabase
         .from('donations')
-        .select(`
+        .select(
+          `
           *,
           campaigns (
             title,
             organization_name
           )
-        `)
+        `
+        )
         .eq('donor_id', donor.id)
         .order('donation_date', { ascending: false })
         .limit(5);
@@ -69,7 +72,8 @@ const DonorDashboard = () => {
       // Fetch saved campaigns
       const { data: savedData, error: savedError } = await supabase
         .from('donor_saved_campaigns')
-        .select(`
+        .select(
+          `
           *,
           campaigns (
             id,
@@ -80,7 +84,8 @@ const DonorDashboard = () => {
             end_date,
             image_url
           )
-        `)
+        `
+        )
         .eq('donor_id', donor.id)
         .order('saved_at', { ascending: false })
         .limit(3);
@@ -98,7 +103,7 @@ const DonorDashboard = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(amount || 0);
   };
 
@@ -107,7 +112,7 @@ const DonorDashboard = () => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -116,11 +121,13 @@ const DonorDashboard = () => {
       completed: 'bg-green-100 text-green-800',
       pending: 'bg-yellow-100 text-yellow-800',
       failed: 'bg-red-100 text-red-800',
-      refunded: 'bg-muted text-muted-foreground'
+      refunded: 'bg-muted text-muted-foreground',
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusClasses[status] || statusClasses.pending}`}>
+      <span
+        className={`px-2 py-1 text-xs font-medium rounded-full ${statusClasses[status] || statusClasses.pending}`}
+      >
         {status?.charAt(0).toUpperCase() + status?.slice(1) || 'Unknown'}
       </span>
     );
@@ -133,7 +140,10 @@ const DonorDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}
+      >
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
           <p className="mt-4 text-white/80">Loading your dashboard...</p>
@@ -143,13 +153,16 @@ const DonorDashboard = () => {
   }
 
   return (
-    <div className="donor-dashboard min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div
+      className="donor-dashboard min-h-screen"
+      style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}
+    >
       {/* Header */}
-      <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div className="text-white" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="font-bold mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
+              <h1 className="font-bold mb-2" style={{ fontSize: 'var(--text-heading-xl)' }}>
                 Welcome back, {donor?.profile?.full_name || 'Donor'}!
               </h1>
               <p className="text-blue-200">
@@ -186,10 +199,10 @@ const DonorDashboard = () => {
               </div>
               <TrendingUp className="w-4 h-4 text-green-600" />
             </div>
-            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
+            <p className="font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)' }}>
               {formatCurrency(stats.totalDonated)}
             </p>
-            <p className="text-sm text-gray-600">Total Donated</p>
+            <p className="text-base text-gray-600">Total Donated</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -198,10 +211,10 @@ const DonorDashboard = () => {
                 <Heart className="w-6 h-6 text-blue-600" />
               </div>
             </div>
-            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
+            <p className="font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)' }}>
               {stats.donationCount}
             </p>
-            <p className="text-sm text-gray-600">Total Donations</p>
+            <p className="text-base text-gray-600">Total Donations</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -210,10 +223,10 @@ const DonorDashboard = () => {
                 <Award className="w-6 h-6 text-purple-600" />
               </div>
             </div>
-            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
+            <p className="font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)' }}>
               {stats.campaignsSupported}
             </p>
-            <p className="text-sm text-gray-600">Campaigns Supported</p>
+            <p className="text-base text-gray-600">Campaigns Supported</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -222,10 +235,10 @@ const DonorDashboard = () => {
                 <Clock className="w-6 h-6 text-yellow-600" />
               </div>
             </div>
-            <p className="font-bold text-foreground" style={{fontSize: 'var(--text-heading-lg)'}}>
+            <p className="font-bold text-foreground" style={{ fontSize: 'var(--text-heading-lg)' }}>
               {formatDate(stats.lastDonationDate)}
             </p>
-            <p className="text-sm text-gray-600">Last Donation</p>
+            <p className="text-base text-gray-600">Last Donation</p>
           </div>
         </div>
       </div>
@@ -239,9 +252,9 @@ const DonorDashboard = () => {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
                   <h2 className="text-lg font-semibold text-gray-900">Recent Donations</h2>
-                  <Link 
-                    to="/donor/donations" 
-                    className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+                  <Link
+                    to="/donor/donations"
+                    className="text-base text-blue-600 hover:underline flex items-center gap-1"
                   >
                     View all <ChevronRight className="w-4 h-4" />
                   </Link>
@@ -276,9 +289,7 @@ const DonorDashboard = () => {
                           <p className="text-lg font-semibold text-gray-900">
                             {formatCurrency(donation.amount)}
                           </p>
-                          <div className="mt-1">
-                            {getStatusBadge(donation.status)}
-                          </div>
+                          <div className="mt-1">{getStatusBadge(donation.status)}</div>
                           {donation.status === 'completed' && (
                             <button className="mt-2 text-sm text-blue-600 hover:underline flex items-center gap-1 ml-auto">
                               <Download className="w-4 h-4" />
@@ -293,8 +304,8 @@ const DonorDashboard = () => {
                   <div className="p-6 text-center">
                     <Heart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                     <p className="text-gray-500">No donations yet</p>
-                    <Link 
-                      to="/campaigns" 
+                    <Link
+                      to="/campaigns"
                       className="mt-3 inline-block text-blue-600 hover:underline"
                     >
                       Browse campaigns to support
@@ -312,10 +323,7 @@ const DonorDashboard = () => {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex justify-between items-center">
                   <h2 className="text-lg font-semibold text-gray-900">Saved Campaigns</h2>
-                  <Link 
-                    to="/donor/campaigns" 
-                    className="text-sm text-blue-600 hover:underline"
-                  >
+                  <Link to="/donor/campaigns" className="text-sm text-blue-600 hover:underline">
                     View all
                   </Link>
                 </div>
@@ -326,17 +334,17 @@ const DonorDashboard = () => {
                     {savedCampaigns.map((saved) => {
                       const campaign = saved.campaigns;
                       const progress = calculateProgress(campaign);
-                      
+
                       return (
-                        <Link 
+                        <Link
                           key={saved.id}
                           to={`/campaigns/${campaign?.id}`}
                           className="block hover:bg-muted rounded-lg p-3 transition-colors"
                         >
                           <div className="flex gap-3">
                             {campaign?.image_url && (
-                              <img 
-                                src={campaign.image_url} 
+                              <img
+                                src={campaign.image_url}
                                 alt={campaign.title}
                                 className="w-16 h-16 rounded-lg object-cover"
                               />
@@ -350,13 +358,14 @@ const DonorDashboard = () => {
                               </p>
                               <div className="mt-2">
                                 <div className="w-full bg-muted rounded-full h-2">
-                                  <div 
+                                  <div
                                     className="bg-primary h-2 rounded-full"
                                     style={{ width: `${progress}%` }}
                                   ></div>
                                 </div>
                                 <p className="text-xs text-gray-500 mt-1">
-                                  {formatCurrency(campaign?.current_amount)} of {formatCurrency(campaign?.goal_amount)}
+                                  {formatCurrency(campaign?.current_amount)} of{' '}
+                                  {formatCurrency(campaign?.goal_amount)}
                                 </p>
                               </div>
                             </div>

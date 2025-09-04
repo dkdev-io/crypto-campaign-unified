@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const Signup = ({ formData, updateFormData, onNext }) => {
   const { user, userProfile } = useAuth();
   const [showErrors, setShowErrors] = useState(false);
-  
+
   const handleInputChange = (field, value) => {
     updateFormData({ [field]: value });
     if (showErrors) {
@@ -17,7 +17,7 @@ const Signup = ({ formData, updateFormData, onNext }) => {
     if (user && userProfile && !formData.userFullName && !formData.email) {
       updateFormData({
         userFullName: userProfile.full_name || user.user_metadata?.full_name || '',
-        email: user.email || ''
+        email: user.email || '',
       });
     }
   }, [user, userProfile, formData.userFullName, formData.email, updateFormData]);
@@ -25,23 +25,35 @@ const Signup = ({ formData, updateFormData, onNext }) => {
   const handleNext = () => {
     // Validate all required fields
     const requiredFields = ['userFullName', 'email', 'campaignName', 'committeeNameSearch'];
-    const missingFields = requiredFields.filter(field => !formData[field]?.trim());
-    
+    const missingFields = requiredFields.filter((field) => !formData[field]?.trim());
+
     if (missingFields.length > 0) {
       setShowErrors(true);
       return;
     }
-    
+
     onNext();
   };
 
   return (
     <div className="container-responsive">
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem', fontSize: 'var(--text-heading-lg)' }}>
+        <h2
+          style={{
+            color: 'hsl(var(--crypto-navy))',
+            marginBottom: '1rem',
+            fontSize: 'var(--text-heading-lg)',
+          }}
+        >
           Campaign Information
         </h2>
-        <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-lg)', marginBottom: '0' }}>
+        <p
+          style={{
+            color: 'hsl(var(--crypto-medium-gray))',
+            fontSize: 'var(--text-body-lg)',
+            marginBottom: '0',
+          }}
+        >
           Tell us about yourself and your campaign
         </p>
       </div>
@@ -59,16 +71,33 @@ const Signup = ({ formData, updateFormData, onNext }) => {
           placeholder="Enter your full name"
           required
           aria-required="true"
-          style={{ 
-            borderColor: showErrors && !formData.userFullName ? 'hsl(var(--destructive))' : 'hsl(var(--border))'
+          style={{
+            borderColor:
+              showErrors && !formData.userFullName
+                ? 'hsl(var(--destructive))'
+                : 'hsl(var(--border))',
           }}
         />
         {showErrors && !formData.userFullName && (
-          <small style={{ color: 'hsl(var(--destructive))', fontSize: 'var(--text-body-sm)', display: 'block', marginTop: 'var(--space-xs)' }}>
+          <small
+            style={{
+              color: 'hsl(var(--destructive))',
+              fontSize: 'var(--text-body-sm)',
+              display: 'block',
+              marginTop: 'var(--space-xs)',
+            }}
+          >
             Your full name is required
           </small>
         )}
-        <small style={{ color: 'hsl(var(--muted-foreground))', fontSize: 'var(--text-body-sm)', display: 'block', marginTop: 'var(--space-xs)' }}>
+        <small
+          style={{
+            color: 'hsl(var(--muted-foreground))',
+            fontSize: 'var(--text-body-sm)',
+            display: 'block',
+            marginTop: 'var(--space-xs)',
+          }}
+        >
           This will be used for FEC reporting
         </small>
       </div>
@@ -84,8 +113,8 @@ const Signup = ({ formData, updateFormData, onNext }) => {
           placeholder="your.email@domain.com"
           required
           aria-required="true"
-          style={{ 
-            borderColor: showErrors && !formData.email ? '#dc3545' : '#ced4da' 
+          style={{
+            borderColor: showErrors && !formData.email ? '#dc3545' : '#ced4da',
           }}
         />
         {showErrors && !formData.email && (
@@ -107,8 +136,8 @@ const Signup = ({ formData, updateFormData, onNext }) => {
           placeholder="e.g., Smith for Mayor 2024"
           required
           aria-required="true"
-          style={{ 
-            borderColor: showErrors && !formData.campaignName ? '#dc3545' : '#ced4da' 
+          style={{
+            borderColor: showErrors && !formData.campaignName ? '#dc3545' : '#ced4da',
           }}
         />
         {showErrors && !formData.campaignName && (
@@ -130,16 +159,16 @@ const Signup = ({ formData, updateFormData, onNext }) => {
           placeholder="Friends of John Smith Committee"
           required
           aria-required="true"
-          style={{ 
-            borderColor: showErrors && !formData.committeeNameSearch ? '#dc3545' : '#ced4da' 
+          style={{
+            borderColor: showErrors && !formData.committeeNameSearch ? '#dc3545' : '#ced4da',
           }}
         />
         {showErrors && !formData.committeeNameSearch && (
           <small style={{ color: '#dc3545' }}>Committee name is required</small>
         )}
         <small className="field-help" style={{ color: '#6c757d', fontSize: '12px' }}>
-          Enter your FEC committee name or keywords to search. 
-          We'll help you find the exact match in the next step.
+          Enter your FEC committee name or keywords to search. We'll help you find the exact match
+          in the next step.
         </small>
       </div>
 
@@ -200,38 +229,59 @@ const Signup = ({ formData, updateFormData, onNext }) => {
       </div>
 
       {/* Information Sections */}
-      <div style={{ 
-        marginTop: '2rem',
-        padding: '1rem',
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '6px',
-        fontSize: '14px',
-        color: '#6c757d'
-      }}>
+      <div
+        style={{
+          marginTop: '2rem',
+          padding: '1rem',
+          background: '#f8f9fa',
+          border: '1px solid #e9ecef',
+          borderRadius: '6px',
+          fontSize: '14px',
+          color: '#6c757d',
+        }}
+      >
         <h3>What Happens Next</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
-          <li><strong>Find Your FEC Committee:</strong> We'll search for your registered committee</li>
-          <li><strong>Connect Bank Account:</strong> Secure connection via Plaid</li>
-          <li><strong>Launch Your Form:</strong> Get your embed code and start collecting</li>
+          <li>
+            <strong>Find Your FEC Committee:</strong> We'll search for your registered committee
+          </li>
+          <li>
+            <strong>Connect Bank Account:</strong> Secure connection via Plaid
+          </li>
+          <li>
+            <strong>Launch Your Form:</strong> Get your embed code and start collecting
+          </li>
         </ul>
-        
+
         <h3 style={{ marginTop: '1rem' }}>Privacy & Security</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
-          <li><strong>Your information is encrypted</strong> and stored securely</li>
-          <li><strong>FEC-compliant data handling</strong> with audit trails</li>
-          <li><strong>You control your campaign data</strong> - export anytime</li>
+          <li>
+            <strong>Your information is encrypted</strong> and stored securely
+          </li>
+          <li>
+            <strong>FEC-compliant data handling</strong> with audit trails
+          </li>
+          <li>
+            <strong>You control your campaign data</strong> - export anytime
+          </li>
         </ul>
-        
+
         <h3 style={{ marginTop: '1rem' }}>Requirements</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
-          <li><strong>Valid FEC committee</strong> registration required</li>
-          <li><strong>Campaign bank account</strong> for processing donations</li>
-          <li><strong>Official campaign website</strong> (recommended)</li>
+          <li>
+            <strong>Valid FEC committee</strong> registration required
+          </li>
+          <li>
+            <strong>Campaign bank account</strong> for processing donations
+          </li>
+          <li>
+            <strong>Official campaign website</strong> (recommended)
+          </li>
         </ul>
-        
+
         <p style={{ marginTop: '1rem', textAlign: 'center', color: '#495057' }}>
-          <strong>We'll guide you through the complete setup process.</strong><br/>
+          <strong>We'll guide you through the complete setup process.</strong>
+          <br />
           This process takes about 5-10 minutes to complete.
         </p>
       </div>

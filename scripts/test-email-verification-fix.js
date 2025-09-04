@@ -9,7 +9,7 @@ async function testSignupLogin() {
   const browser = await puppeteer.launch({
     headless: false,
     slowMo: 500,
-    defaultViewport: { width: 1200, height: 800 }
+    defaultViewport: { width: 1200, height: 800 },
   });
 
   try {
@@ -25,11 +25,11 @@ async function testSignupLogin() {
 
     // Look for auth/signup links
     console.log('2. Looking for signup/login links...');
-    
+
     // Try common signup/login selectors
     const authSelectors = [
       'a[href*="auth"]',
-      'a[href*="sign"]', 
+      'a[href*="sign"]',
       'a[href*="login"]',
       'a[href*="register"]',
       'button[class*="auth"]',
@@ -38,7 +38,7 @@ async function testSignupLogin() {
       'text=Sign Up',
       'text=Login',
       'text=Sign In',
-      'text=Register'
+      'text=Register',
     ];
 
     let authElement = null;
@@ -59,76 +59,85 @@ async function testSignupLogin() {
       console.log('   🔍 Searching page content for auth links...');
       const content = await page.content();
       console.log('   Page title:', await page.title());
-      
+
       // Look for auth-related paths in the URL or navigation
       const links = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll('a')).map(a => ({
+        return Array.from(document.querySelectorAll('a')).map((a) => ({
           href: a.href,
-          text: a.textContent.trim()
+          text: a.textContent.trim(),
         }));
       });
-      
-      console.log('   Available links:', links.filter(l => l.text));
+
+      console.log(
+        '   Available links:',
+        links.filter((l) => l.text)
+      );
     }
 
     // Try direct navigation to common auth paths
     const authPaths = [
       '/auth/signup',
-      '/auth/login', 
+      '/auth/login',
       '/auth/register',
       '/signup',
       '/login',
-      '/register'
+      '/register',
     ];
 
     for (const path of authPaths) {
       console.log(`3. Trying direct path: ${path}`);
       try {
-        await page.goto(`http://localhost:5173${path}`, { waitUntil: 'networkidle2', timeout: 5000 });
-        
+        await page.goto(`http://localhost:5173${path}`, {
+          waitUntil: 'networkidle2',
+          timeout: 5000,
+        });
+
         // Check if we got a signup form
-        const hasForm = await page.$('form') || await page.$('input[type="email"]');
+        const hasForm = (await page.$('form')) || (await page.$('input[type="email"]'));
         if (hasForm) {
           console.log(`   ✅ Found signup form at ${path}!`);
-          
+
           // Take screenshot
           await page.screenshot({ path: 'auth-test-filled.png' });
-          
+
           // Try to fill out the form with test credentials
           console.log('4. Filling out signup form...');
-          
-          const emailInput = await page.$('input[type="email"]') || await page.$('input[name="email"]');
+
+          const emailInput =
+            (await page.$('input[type="email"]')) || (await page.$('input[name="email"]'));
           if (emailInput) {
             await emailInput.type('test@dkdev.io');
             console.log('   ✅ Email filled');
           }
-          
-          const passwordInput = await page.$('input[type="password"]') || await page.$('input[name="password"]');
+
+          const passwordInput =
+            (await page.$('input[type="password"]')) || (await page.$('input[name="password"]'));
           if (passwordInput) {
             await passwordInput.type('TestDonor123!');
             console.log('   ✅ Password filled');
           }
-          
+
           // Look for submit button
-          const submitButton = await page.$('button[type="submit"]') || 
-                              await page.$('input[type="submit"]') || 
-                              await page.$('button:contains("Sign")') ||
-                              await page.$('button');
-          
+          const submitButton =
+            (await page.$('button[type="submit"]')) ||
+            (await page.$('input[type="submit"]')) ||
+            (await page.$('button:contains("Sign")')) ||
+            (await page.$('button'));
+
           if (submitButton) {
             console.log('5. Submitting form...');
             await submitButton.click();
-            
+
             // Wait for response
             await page.waitForTimeout(3000);
-            
+
             // Take screenshot after submit
             await page.screenshot({ path: 'auth-test-after-submit.png' });
-            
+
             // Check if we're now logged in or got an error
             const currentUrl = page.url();
             console.log('   Current URL after submit:', currentUrl);
-            
+
             // Look for success indicators
             const successIndicators = await page.evaluate(() => {
               const text = document.body.textContent.toLowerCase();
@@ -139,23 +148,30 @@ async function testSignupLogin() {
                 hasLogout: text.includes('logout'),
                 hasError: text.includes('error'),
                 hasVerification: text.includes('verification') || text.includes('verify'),
-                fullText: text
+                fullText: text,
               };
             });
-            
+
             if (successIndicators.hasError) {
               console.log('   ❌ Error detected in response');
               console.log('   Error content:', successIndicators.fullText.slice(0, 500));
             } else if (successIndicators.hasVerification) {
               console.log('   ❌ Still asking for email verification');
               console.log('   This means the fix did not work properly');
-            } else if (successIndicators.hasWelcome || successIndicators.hasDashboard || successIndicators.hasLogout) {
+            } else if (
+              successIndicators.hasWelcome ||
+              successIndicators.hasDashboard ||
+              successIndicators.hasLogout
+            ) {
               console.log('   ✅ SUCCESS! User appears to be logged in without email verification');
               console.log('   🎉 EMAIL VERIFICATION FIX WORKED!');
             } else {
-              console.log('   ⚠️ Unclear result. Page content:', successIndicators.fullText.slice(0, 300));
+              console.log(
+                '   ⚠️ Unclear result. Page content:',
+                successIndicators.fullText.slice(0, 300)
+              );
             }
-            
+
             break;
           }
         }
@@ -163,16 +179,15 @@ async function testSignupLogin() {
         // Path doesn't exist, continue
       }
     }
-
   } catch (error) {
     console.error('❌ Test error:', error);
   } finally {
     console.log('');
     console.log('📸 Screenshots saved:');
     console.log('   • auth-test-initial.png');
-    console.log('   • auth-test-filled.png'); 
+    console.log('   • auth-test-filled.png');
     console.log('   • auth-test-after-submit.png');
-    
+
     await browser.close();
   }
 }

@@ -8,9 +8,7 @@ const DonorBreadcrumb = () => {
 
   // Define breadcrumb structure for donor pages
   const getBreadcrumbs = () => {
-    const breadcrumbs = [
-      { label: 'Home', path: '/', icon: Home }
-    ];
+    const breadcrumbs = [{ label: 'Home', path: '/', icon: Home }];
 
     // Add donor section
     if (pathname.includes('/donors')) {
@@ -31,7 +29,11 @@ const DonorBreadcrumb = () => {
     } else if (pathname === '/donors/auth/verify-email') {
       breadcrumbs.push({ label: 'Verify Email', path: '/donors/auth/verify-email', current: true });
     } else if (pathname === '/donors/auth/forgot-password') {
-      breadcrumbs.push({ label: 'Reset Password', path: '/donors/auth/forgot-password', current: true });
+      breadcrumbs.push({
+        label: 'Reset Password',
+        path: '/donors/auth/forgot-password',
+        current: true,
+      });
     } else if (pathname === '/donors/dashboard') {
       breadcrumbs.push({ label: 'Dashboard', path: '/donors/dashboard', current: true });
     } else if (pathname === '/donors/profile') {
@@ -60,10 +62,8 @@ const DonorBreadcrumb = () => {
           <ol className="flex items-center space-x-2">
             {breadcrumbs.map((breadcrumb, index) => (
               <li key={breadcrumb.path} className="flex items-center">
-                {index > 0 && (
-                  <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
-                )}
-                
+                {index > 0 && <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />}
+
                 {breadcrumb.current ? (
                   <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
                     {breadcrumb.icon && <breadcrumb.icon className="w-4 h-4" />}

@@ -10,7 +10,7 @@ const router = express.Router();
 const validateAddress = [
   param('address')
     .matches(/^0x[a-fA-F0-9]{40}$/)
-    .withMessage('Invalid Ethereum address format')
+    .withMessage('Invalid Ethereum address format'),
 ];
 
 const validateKYCSubmission = [
@@ -20,19 +20,14 @@ const validateKYCSubmission = [
   body('fullName')
     .isLength({ min: 2, max: 100 })
     .withMessage('Full name must be between 2 and 100 characters'),
-  body('email')
-    .isEmail()
-    .withMessage('Valid email is required'),
-  body('phone')
-    .optional()
-    .isMobilePhone()
-    .withMessage('Valid phone number required'),
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('phone').optional().isMobilePhone().withMessage('Valid phone number required'),
   body('documentType')
     .isIn(['passport', 'drivers_license', 'national_id'])
     .withMessage('Document type must be passport, drivers_license, or national_id'),
   body('documentNumber')
     .isLength({ min: 5, max: 50 })
-    .withMessage('Document number must be between 5 and 50 characters')
+    .withMessage('Document number must be between 5 and 50 characters'),
 ];
 
 // Error handler for validation
@@ -41,7 +36,7 @@ const handleValidationErrors = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       error: 'Validation failed',
-      details: errors.array()
+      details: errors.array(),
     });
   }
   next();
@@ -83,11 +78,11 @@ router.get('/status/:address', validateAddress, handleValidationErrors, async (r
 
     const response = {
       address: address,
-      isVerified: onChainVerified || (kycRecord?.status === 'approved'),
+      isVerified: onChainVerified || kycRecord?.status === 'approved',
       onChainVerified,
       databaseStatus: kycRecord?.status || 'not_submitted',
       submissionDate: kycRecord?.created_at || null,
-      lastUpdated: kycRecord?.updated_at || null
+      lastUpdated: kycRecord?.updated_at || null,
     };
 
     res.json(response);
@@ -95,7 +90,7 @@ router.get('/status/:address', validateAddress, handleValidationErrors, async (r
     logger.error('Failed to check KYC status:', error);
     res.status(500).json({
       error: 'Failed to check KYC status',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -111,7 +106,7 @@ router.post('/submit', validateKYCSubmission, handleValidationErrors, async (req
       documentType,
       documentNumber,
       documentImages,
-      selfieImage
+      selfieImage,
     } = req.body;
 
     const addressLower = address.toLowerCase();
@@ -129,7 +124,7 @@ router.post('/submit', validateKYCSubmission, handleValidationErrors, async (req
 
     if (existingKYC && existingKYC.status === 'approved') {
       return res.status(400).json({
-        error: 'KYC already approved for this address'
+        error: 'KYC already approved for this address',
       });
     }
 
@@ -146,7 +141,7 @@ router.post('/submit', validateKYCSubmission, handleValidationErrors, async (req
       status: 'pending',
       submitted_at: new Date().toISOString(),
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     let kycRecord;
@@ -184,13 +179,13 @@ router.post('/submit', validateKYCSubmission, handleValidationErrors, async (req
       kycId: kycRecord.id,
       status: 'pending',
       message: 'KYC submission received and is being processed',
-      estimatedProcessingTime: '24-48 hours'
+      estimatedProcessingTime: '24-48 hours',
     });
   } catch (error) {
     logger.error('Failed to submit KYC:', error);
     res.status(500).json({
       error: 'Failed to submit KYC verification',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -211,7 +206,7 @@ router.put('/:id/approve', async (req, res) => {
     if (fetchError) {
       if (fetchError.code === 'PGRST116') {
         return res.status(404).json({
-          error: 'KYC record not found'
+          error: 'KYC record not found',
         });
       }
       throw fetchError;
@@ -219,7 +214,7 @@ router.put('/:id/approve', async (req, res) => {
 
     if (kycRecord.status === 'approved') {
       return res.status(400).json({
-        error: 'KYC already approved'
+        error: 'KYC already approved',
       });
     }
 
@@ -230,7 +225,7 @@ router.put('/:id/approve', async (req, res) => {
         status: 'approved',
         approved_by: approved_by || 'admin',
         approved_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -246,13 +241,13 @@ router.put('/:id/approve', async (req, res) => {
       kycId: id,
       status: 'approved',
       address: kycRecord.wallet_address,
-      message: 'KYC verification approved'
+      message: 'KYC verification approved',
     });
   } catch (error) {
     logger.error('Failed to approve KYC:', error);
     res.status(500).json({
       error: 'Failed to approve KYC verification',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -270,7 +265,7 @@ router.put('/:id/reject', async (req, res) => {
         rejection_reason: reason,
         rejected_by: rejected_by || 'admin',
         rejected_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -279,7 +274,7 @@ router.put('/:id/reject', async (req, res) => {
     if (error) {
       if (error.code === 'PGRST116') {
         return res.status(404).json({
-          error: 'KYC record not found'
+          error: 'KYC record not found',
         });
       }
       throw error;
@@ -291,13 +286,13 @@ router.put('/:id/reject', async (req, res) => {
       kycId: id,
       status: 'rejected',
       reason: reason,
-      message: 'KYC verification rejected'
+      message: 'KYC verification rejected',
     });
   } catch (error) {
     logger.error('Failed to reject KYC:', error);
     res.status(500).json({
       error: 'Failed to reject KYC verification',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -321,13 +316,13 @@ router.get('/pending', async (req, res) => {
       pending: pendingKYCs || [],
       count: pendingKYCs?.length || 0,
       limit,
-      offset
+      offset,
     });
   } catch (error) {
     logger.error('Failed to get pending KYCs:', error);
     res.status(500).json({
       error: 'Failed to retrieve pending KYC verifications',
-      details: error.message
+      details: error.message,
     });
   }
 });

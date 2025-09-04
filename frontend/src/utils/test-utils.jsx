@@ -15,7 +15,7 @@ export const createMockCampaign = (overrides = {}) => ({
   website: 'https://test.com',
   wallet_address: '0x123...',
   created_at: '2024-01-01T00:00:00.000Z',
-  ...overrides
+  ...overrides,
 });
 
 export const createMockDonorData = (overrides = {}) => ({
@@ -29,7 +29,7 @@ export const createMockDonorData = (overrides = {}) => ({
   employer: 'Test Corp',
   occupation: 'Engineer',
   amount: '100',
-  ...overrides
+  ...overrides,
 });
 
 export const createMockWalletInfo = (overrides = {}) => ({
@@ -38,14 +38,14 @@ export const createMockWalletInfo = (overrides = {}) => ({
   balance: '1.5678',
   network: {
     name: 'Ethereum Mainnet',
-    chainId: '0x1'
+    chainId: '0x1',
   },
   contributorInfo: {
     isKYCVerified: true,
     cumulativeAmount: 0.5,
-    remainingCapacity: 1.0
+    remainingCapacity: 1.0,
   },
-  ...overrides
+  ...overrides,
 });
 
 export const createMockFormSubmission = (overrides = {}) => ({
@@ -57,28 +57,21 @@ export const createMockFormSubmission = (overrides = {}) => ({
   transaction_hash: '0xabc123...',
   status: 'confirmed',
   created_at: '2024-01-01T12:00:00.000Z',
-  ...overrides
+  ...overrides,
 });
 
 // Custom render function with providers
-export const render = (ui, {
-  route = '/',
-  ...renderOptions
-} = {}) => {
+export const render = (ui, { route = '/', ...renderOptions } = {}) => {
   // Set initial URL for router
   window.history.pushState({}, 'Test page', route);
-  
-  const Wrapper = ({ children }) => (
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
-  );
+
+  const Wrapper = ({ children }) => <BrowserRouter>{children}</BrowserRouter>;
 
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
 // Utility to wait for async operations
-export const waitForAsync = () => new Promise(resolve => setTimeout(resolve, 0));
+export const waitForAsync = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 // Mock event creators
 export const createMockEvent = (overrides = {}) => ({
@@ -88,39 +81,41 @@ export const createMockEvent = (overrides = {}) => ({
     value: 'test-value',
     name: 'test-input',
     checked: false,
-    ...overrides.target
+    ...overrides.target,
   },
   currentTarget: {
     value: 'test-value',
-    ...overrides.currentTarget
+    ...overrides.currentTarget,
   },
-  ...overrides
+  ...overrides,
 });
 
-export const createChangeEvent = (value, name = 'test-input') => 
+export const createChangeEvent = (value, name = 'test-input') =>
   createMockEvent({
     target: { value, name },
-    currentTarget: { value }
+    currentTarget: { value },
   });
 
 export const createClickEvent = (overrides = {}) =>
   createMockEvent({
     type: 'click',
-    ...overrides
+    ...overrides,
   });
 
 export const createSubmitEvent = (overrides = {}) =>
   createMockEvent({
     type: 'submit',
-    ...overrides
+    ...overrides,
   });
 
 // Form validation helpers
 export const fillFormFields = async (user, formData) => {
   const fields = Object.entries(formData);
-  
+
   for (const [fieldName, value] of fields) {
-    const input = document.querySelector(`input[name="${fieldName}"], select[name="${fieldName}"], textarea[name="${fieldName}"]`);
+    const input = document.querySelector(
+      `input[name="${fieldName}"], select[name="${fieldName}"], textarea[name="${fieldName}"]`
+    );
     if (input) {
       if (input.type === 'checkbox' || input.type === 'radio') {
         if (value) {
@@ -137,7 +132,7 @@ export const fillFormFields = async (user, formData) => {
 export const expectFormField = (container, fieldName, expectedValue = null) => {
   const field = container.querySelector(`[name="${fieldName}"]`);
   expect(field).toBeInTheDocument();
-  
+
   if (expectedValue !== null) {
     if (field.type === 'checkbox' || field.type === 'radio') {
       expect(field.checked).toBe(Boolean(expectedValue));
@@ -145,12 +140,14 @@ export const expectFormField = (container, fieldName, expectedValue = null) => {
       expect(field.value).toBe(String(expectedValue));
     }
   }
-  
+
   return field;
 };
 
 export const expectErrorMessage = (container, message) => {
-  const errorElement = container.querySelector('[style*="background: #f8d7da"], [style*="color: #721c24"], .error-message');
+  const errorElement = container.querySelector(
+    '[style*="background: #f8d7da"], [style*="color: #721c24"], .error-message'
+  );
   expect(errorElement).toBeInTheDocument();
   if (message) {
     expect(errorElement).toHaveTextContent(message);
@@ -158,7 +155,9 @@ export const expectErrorMessage = (container, message) => {
 };
 
 export const expectSuccessMessage = (container, message) => {
-  const successElement = container.querySelector('[style*="background: #d4edda"], [style*="color: #155724"], .success-message');
+  const successElement = container.querySelector(
+    '[style*="background: #d4edda"], [style*="color: #155724"], .success-message'
+  );
   expect(successElement).toBeInTheDocument();
   if (message) {
     expect(successElement).toHaveTextContent(message);
@@ -167,20 +166,16 @@ export const expectSuccessMessage = (container, message) => {
 
 // Mock HTTP responses
 export const mockApiResponse = (data, options = {}) => {
-  const {
-    status = 200,
-    ok = true,
-    delay = 0
-  } = options;
-  
-  return new Promise(resolve => {
+  const { status = 200, ok = true, delay = 0 } = options;
+
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
         ok,
         status,
         statusText: ok ? 'OK' : 'Error',
         json: () => Promise.resolve(data),
-        text: () => Promise.resolve(JSON.stringify(data))
+        text: () => Promise.resolve(JSON.stringify(data)),
       });
     }, delay);
   });
@@ -216,7 +211,9 @@ export const selectSuggestedAmount = async (user, container, amount) => {
 
 // Wallet interaction helpers
 export const connectWallet = async (user, container) => {
-  const connectButton = container.querySelector('button:has-text("Connect"), button:has-text("MetaMask")');
+  const connectButton = container.querySelector(
+    'button:has-text("Connect"), button:has-text("MetaMask")'
+  );
   if (connectButton) {
     await user.click(connectButton);
   }

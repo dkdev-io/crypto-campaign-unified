@@ -24,8 +24,10 @@ const DonorVerifyEmail = () => {
 
   const handleEmailVerification = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (user?.email_confirmed_at) {
         setVerificationStatus('verified');
       }
@@ -37,21 +39,21 @@ const DonorVerifyEmail = () => {
 
   const resendVerificationEmail = async () => {
     if (!email) return;
-    
+
     setResendLoading(true);
     setResendMessage('');
-    
+
     try {
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: email,
         options: {
-          emailRedirectTo: `${window.location.origin}/donors/dashboard`
-        }
+          emailRedirectTo: `${window.location.origin}/donors/dashboard`,
+        },
       });
 
       if (error) throw error;
-      
+
       setResendMessage('Verification email sent! Please check your inbox.');
     } catch (error) {
       // Resend error occurred
@@ -63,28 +65,31 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'verified') {
     return (
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
-        <div className="max-w-md w-full">
-          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+          <div className="max-w-md w-full">
+            <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+              <h2
+                className="font-bold text-foreground mb-2"
+                style={{ fontSize: 'var(--text-heading-lg)' }}
+              >
+                Email Verified!
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Your email has been successfully verified. You can now access your donor account.
+              </p>
+              <Link
+                to="/donors/dashboard"
+                className="inline-block w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200"
+              >
+                Go to Dashboard
+              </Link>
             </div>
-            <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
-              Email Verified!
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Your email has been successfully verified. You can now access your donor account.
-            </p>
-            <Link
-              to="/donors/dashboard"
-              className="inline-block w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200"
-            >
-              Go to Dashboard
-            </Link>
           </div>
-        </div>
         </div>
       </div>
     );
@@ -92,104 +97,105 @@ const DonorVerifyEmail = () => {
 
   if (verificationStatus === 'error') {
     return (
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
         <DonorBreadcrumb />
         <div className="flex items-center justify-center px-4 py-12">
-        <div className="max-w-md w-full">
-          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-              <AlertCircle className="w-8 h-8 text-red-600" />
-            </div>
-            <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
-              Verification Failed
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              We couldn't verify your email. The link may have expired or is invalid.
-            </p>
-            <div className="space-y-3">
-              <button
-                onClick={resendVerificationEmail}
-                disabled={resendLoading || !email}
-                className="w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          <div className="max-w-md w-full">
+            <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                <AlertCircle className="w-8 h-8 text-red-600" />
+              </div>
+              <h2
+                className="font-bold text-foreground mb-2"
+                style={{ fontSize: 'var(--text-heading-lg)' }}
               >
-                {resendLoading ? 'Sending...' : 'Resend Verification Email'}
-              </button>
-              <Link
-                to="/donors/auth"
-                className="block text-blue-600 hover:underline"
-              >
-                Back to Login
-              </Link>
+                Verification Failed
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                We couldn't verify your email. The link may have expired or is invalid.
+              </p>
+              <div className="space-y-3">
+                <button
+                  onClick={resendVerificationEmail}
+                  disabled={resendLoading || !email}
+                  className="w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {resendLoading ? 'Sending...' : 'Resend Verification Email'}
+                </button>
+                <Link to="/donors/auth" className="block text-blue-600 hover:underline">
+                  Back to Login
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
       <DonorBreadcrumb />
       <div className="flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full">
-        <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
-            <Mail className="w-8 h-8 text-blue-600" />
-          </div>
-          <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-lg)'}}>
-            Check Your Email
-          </h2>
-          <p className="text-muted-foreground mb-2">
-            We've sent a verification email to:
-          </p>
-          <p className="font-medium text-foreground mb-6">
-            {email || 'your registered email'}
-          </p>
-          <div className="bg-muted rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-800">
-              Please click the verification link in the email to activate your donor account.
-              The link will expire in 24 hours.
-            </p>
-          </div>
-
-          {resendMessage && (
-            <div className={`mb-4 p-3 rounded-lg text-sm ${
-              resendMessage.includes('sent') 
-                ? 'bg-green-50 text-green-700 border border-green-200' 
-                : 'bg-red-50 text-red-700 border border-red-200'
-            }`}>
-              {resendMessage}
+        <div className="max-w-md w-full">
+          <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-full mb-4">
+              <Mail className="w-8 h-8 text-blue-600" />
             </div>
-          )}
-
-          <div className="space-y-3">
-            <button
-              onClick={resendVerificationEmail}
-              disabled={resendLoading || !email}
-              className="w-full bg-card border border-border text-foreground font-semibold py-3 px-4 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            <h2
+              className="font-bold text-foreground mb-2"
+              style={{ fontSize: 'var(--text-heading-lg)' }}
             >
-              {resendLoading ? 'Sending...' : "Didn't receive the email? Resend"}
-            </button>
-            
-            <div className="text-sm text-muted-foreground">
-              <p>Already verified?</p>
-              <Link to="/donors/auth" className="text-blue-600 hover:underline font-medium">
-                Sign in to your account
-              </Link>
+              Check Your Email
+            </h2>
+            <p className="text-muted-foreground mb-2">We've sent a verification email to:</p>
+            <p className="font-medium text-foreground mb-6">{email || 'your registered email'}</p>
+            <div className="bg-muted rounded-lg p-4 mb-6">
+              <p className="text-base text-blue-800">
+                Please click the verification link in the email to activate your donor account. The
+                link will expire in 24 hours.
+              </p>
             </div>
-          </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-muted-foreground">
-              If you're having trouble, please check your spam folder or contact support at{' '}
-              <a href="mailto:support@nextraise.com" className="text-blue-600 hover:underline">
-                support@nextraise.com
-              </a>
-            </p>
+            {resendMessage && (
+              <div
+                className={`mb-4 p-3 rounded-lg text-sm ${
+                  resendMessage.includes('sent')
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-red-50 text-red-700 border border-red-200'
+                }`}
+              >
+                {resendMessage}
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <button
+                onClick={resendVerificationEmail}
+                disabled={resendLoading || !email}
+                className="w-full bg-card border border-border text-foreground font-semibold py-3 px-4 rounded-lg hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {resendLoading ? 'Sending...' : "Didn't receive the email? Resend"}
+              </button>
+
+              <div className="text-base text-muted-foreground">
+                <p>Already verified?</p>
+                <Link to="/donors/auth" className="text-blue-600 hover:underline font-medium">
+                  Sign in to your account
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <p className="text-xs text-muted-foreground">
+                If you're having trouble, please check your spam folder or contact support at{' '}
+                <a href="mailto:support@nextraise.com" className="text-blue-600 hover:underline">
+                  support@nextraise.com
+                </a>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

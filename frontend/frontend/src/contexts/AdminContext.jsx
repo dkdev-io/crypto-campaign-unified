@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase';
 const AdminContext = createContext();
 
 // Development auth bypass configuration (shared with other auth contexts)
-const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
-const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
+const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development';
 
 // Test admin user for bypass
 const TEST_ADMIN = {
@@ -13,7 +13,7 @@ const TEST_ADMIN = {
   email: 'test@dkdev.io',
   full_name: 'Test Admin (Bypass)',
   role: 'super_admin',
-  permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+  permissions: ['admin', 'export', 'view', 'manage', 'super_admin'],
 };
 
 export const useAdmin = () => {
@@ -32,33 +32,33 @@ export const AdminProvider = ({ children }) => {
   useEffect(() => {
     // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
     if (SKIP_AUTH && IS_DEVELOPMENT) {
-      console.warn('🚨 ADMIN AUTH BYPASS ACTIVE - Using test admin: test@dkdev.io')
-      setAdmin(TEST_ADMIN)
-      setPermissions(TEST_ADMIN.permissions)
-      localStorage.setItem('admin_user', JSON.stringify(TEST_ADMIN))
-      setLoading(false)
-      return
+      console.warn('🚨 ADMIN AUTH BYPASS ACTIVE - Using test admin: test@dkdev.io');
+      setAdmin(TEST_ADMIN);
+      setPermissions(TEST_ADMIN.permissions);
+      localStorage.setItem('admin_user', JSON.stringify(TEST_ADMIN));
+      setLoading(false);
+      return;
     }
 
     // Normal admin auth flow
     checkAdminAuth();
-    
+
     // Don't set up auth listeners if bypass is active
     if (SKIP_AUTH && IS_DEVELOPMENT) {
-      return () => {} // No cleanup needed
+      return () => {}; // No cleanup needed
     }
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          await checkAdminPermissions(session.user);
-        } else if (event === 'SIGNED_OUT') {
-          setAdmin(null);
-          setPermissions([]);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        await checkAdminPermissions(session.user);
+      } else if (event === 'SIGNED_OUT') {
+        setAdmin(null);
+        setPermissions([]);
       }
-    );
+    });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -66,7 +66,7 @@ export const AdminProvider = ({ children }) => {
   const checkAdminAuth = async () => {
     try {
       console.log('🔍 ADMIN CONTEXT - Checking admin auth...');
-      
+
       // First check localStorage for stored admin
       const storedAdmin = localStorage.getItem('admin_user');
       if (storedAdmin) {
@@ -76,9 +76,11 @@ export const AdminProvider = ({ children }) => {
         setPermissions(parsedAdmin.permissions || []);
         return;
       }
-      
+
       // Fall back to Supabase session
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         console.log('🔍 ADMIN CONTEXT - Found Supabase session, checking permissions...');
         await checkAdminPermissions(session.user);
@@ -102,9 +104,9 @@ export const AdminProvider = ({ children }) => {
           email: user.email,
           full_name: user.user_metadata?.full_name || 'Test Admin',
           role: 'super_admin',
-          permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+          permissions: ['admin', 'export', 'view', 'manage', 'super_admin'],
         };
-        
+
         setAdmin(adminUser);
         setPermissions(adminUser.permissions);
         localStorage.setItem('admin_user', JSON.stringify(adminUser));
@@ -121,37 +123,37 @@ export const AdminProvider = ({ children }) => {
     try {
       setLoading(true);
       console.log('🔍 ADMIN LOGIN - Attempting login for:', email);
-      
+
       // Clear any existing state first
       setAdmin(null);
       setPermissions([]);
       localStorage.removeItem('admin_user');
-      
+
       // Hardcoded admin credentials since you're the only admin
       if (email === 'test@dkdev.io' && password === 'TestDonor123!') {
         console.log('🔍 ADMIN LOGIN - Credentials match, creating admin user...');
-        
+
         // Create mock admin user
         const mockAdmin = {
           id: 'admin-user',
           email: 'test@dkdev.io',
           full_name: 'Test Admin',
           role: 'super_admin',
-          permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+          permissions: ['admin', 'export', 'view', 'manage', 'super_admin'],
         };
-        
+
         // Set admin state
         setAdmin(mockAdmin);
         setPermissions(mockAdmin.permissions);
-        
+
         // Store in localStorage for persistence
         localStorage.setItem('admin_user', JSON.stringify(mockAdmin));
         console.log('🔍 ADMIN LOGIN - Admin user set and stored in localStorage');
         console.log('🔍 ADMIN LOGIN - Admin state:', mockAdmin);
-        
+
         return { success: true };
       }
-      
+
       // For any other email/password combination, check Supabase
       try {
         console.log('🔍 ADMIN LOGIN - Trying Supabase authentication...');
@@ -182,21 +184,24 @@ export const AdminProvider = ({ children }) => {
     try {
       setLoading(true);
       console.log('🔍 ADMIN LOGOUT - Clearing admin session...');
-      
+
       // Clear admin state
       setAdmin(null);
       setPermissions([]);
-      
+
       // Clear localStorage
       localStorage.removeItem('admin_user');
-      
+
       // Sign out from Supabase (if connected)
       try {
         await supabase.auth.signOut();
       } catch (supabaseError) {
-        console.log('🔍 Supabase signout failed (expected if not connected):', supabaseError.message);
+        console.log(
+          '🔍 Supabase signout failed (expected if not connected):',
+          supabaseError.message
+        );
       }
-      
+
       console.log('🔍 ADMIN LOGOUT - Admin session cleared');
     } catch (error) {
       console.error('Error logging out:', error);
@@ -208,7 +213,7 @@ export const AdminProvider = ({ children }) => {
   const setupAdminAccount = async (email, password, fullName) => {
     try {
       setLoading(true);
-      
+
       // Sign up the user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
@@ -220,17 +225,15 @@ export const AdminProvider = ({ children }) => {
       }
 
       // Create admin user record
-      const { error: userError } = await supabase
-        .from('users')
-        .insert({
-          id: signUpData.user.id,
-          email,
-          full_name: fullName,
-          role: 'admin',
-          permissions: ['admin', 'export', 'view'],
-          email_confirmed: true,
-          created_at: new Date().toISOString(),
-        });
+      const { error: userError } = await supabase.from('users').insert({
+        id: signUpData.user.id,
+        email,
+        full_name: fullName,
+        role: 'admin',
+        permissions: ['admin', 'export', 'view'],
+        email_confirmed: true,
+        created_at: new Date().toISOString(),
+      });
 
       if (userError) {
         throw userError;
@@ -268,9 +271,5 @@ export const AdminProvider = ({ children }) => {
     isSuperAdmin,
   };
 
-  return (
-    <AdminContext.Provider value={value}>
-      {children}
-    </AdminContext.Provider>
-  );
+  return <AdminContext.Provider value={value}>{children}</AdminContext.Provider>;
 };

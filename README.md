@@ -7,7 +7,7 @@ A production-ready platform for FEC-compliant political campaign donations using
 ## ✨ Features
 
 - **🔗 Smart Contract Integration** - FEC-compliant contribution limits ($3,300)
-- **🛡️ KYC Verification** - Built-in identity verification system  
+- **🛡️ KYC Verification** - Built-in identity verification system
 - **💰 Multi-Network Support** - Ethereum, Base, and testnets
 - **📊 Real-time Analytics** - Campaign statistics and contribution tracking
 - **🔒 Security First** - Rate limiting, input validation, comprehensive logging
@@ -22,6 +22,7 @@ This project supports development across **Lovable**, **Replit**, and **Local** 
 ### Quick Start
 
 1. **Initial Setup** (run once):
+
    ```bash
    ./sync-setup.sh
    # OR
@@ -29,6 +30,7 @@ This project supports development across **Lovable**, **Replit**, and **Local** 
    ```
 
 2. **Before Working** (always run first):
+
    ```bash
    ./sync-start.sh
    # OR
@@ -36,6 +38,7 @@ This project supports development across **Lovable**, **Replit**, and **Local** 
    ```
 
 3. **After Changes** (save your work):
+
    ```bash
    ./sync-save.sh
    # OR
@@ -54,7 +57,7 @@ This project supports development across **Lovable**, **Replit**, and **Local** 
 ```
 crypto-campaign-unified/
 ├── contracts/              # Smart contracts (Solidity + Hardhat)
-│   ├── src/               # Contract source code  
+│   ├── src/               # Contract source code
 │   ├── deploy/            # Deployment scripts
 │   ├── test/              # Smart contract tests
 │   └── hardhat.config.js  # Hardhat configuration
@@ -90,6 +93,7 @@ crypto-campaign-unified/
 ## 🚀 Installation & Setup
 
 ### Prerequisites
+
 - Node.js 18+
 - Git
 - MetaMask or compatible Web3 wallet
@@ -130,6 +134,7 @@ Visit `http://localhost:5173` to see the application.
 ## 🔧 Environment Setup
 
 ### Smart Contracts (.env in /contracts/)
+
 ```bash
 SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_PROJECT_ID
 MAINNET_RPC_URL=https://mainnet.infura.io/v3/YOUR_PROJECT_ID
@@ -139,6 +144,7 @@ BASESCAN_API_KEY=your_basescan_api_key
 ```
 
 ### Backend (.env in /backend/)
+
 ```bash
 PORT=3001
 NODE_ENV=development
@@ -148,6 +154,7 @@ WEB3_NETWORK=localhost
 ```
 
 ### Frontend (.env in /frontend/)
+
 ```bash
 VITE_API_URL=http://localhost:3001
 VITE_CONTRACT_ADDRESS_LOCAL=0x5FbDB2315678afecb367f032d93F642f64180aa3
@@ -176,18 +183,21 @@ npm run test:watch
 ## 🌐 Platform Integration
 
 ### Lovable
+
 - Automatically syncs with GitHub
 - Pull latest: `npm run sync:start`
 - Push changes: `npm run sync:save`
 - Focus on UI/UX development
 
 ### Replit
+
 - Manual GitHub sync required
 - Use sync scripts for two-way sync
 - Handles environment differences
 - Best for smart contract development
 
 ### Local Development
+
 - Full git control
 - All sync scripts available
 - Best for complex conflict resolution
@@ -196,6 +206,7 @@ npm run test:watch
 ## 🚀 Deployment
 
 ### Testnet Deployment
+
 ```bash
 # Deploy to Sepolia testnet
 npm run deploy:testnet
@@ -205,6 +216,7 @@ npm run verify
 ```
 
 ### Production Deployment
+
 ```bash
 # Deploy to mainnet (use with extreme caution)
 npm run deploy:mainnet
@@ -219,15 +231,18 @@ npm run start:prod
 ## 📚 API Documentation
 
 ### Campaign Endpoints
+
 - `GET /api/campaign/stats` - Get campaign statistics
 - `GET /api/campaign/info` - Get campaign information
 
-### Contribution Endpoints  
+### Contribution Endpoints
+
 - `POST /api/contributions/check` - Check contribution eligibility
 - `GET /api/contributions/contributor/:address` - Get contributor info
 - `POST /api/contributions/transaction/monitor` - Monitor transaction
 
 ### KYC Endpoints
+
 - `POST /api/kyc/verify` - Submit KYC verification
 - `GET /api/kyc/status/:address` - Check KYC status
 
@@ -264,8 +279,9 @@ npm run start:prod
 ## 📊 Sync Status
 
 The sync scripts provide clear status indicators:
+
 - ✅ **Green**: Success
-- ⚠️ **Yellow**: Warning or action needed  
+- ⚠️ **Yellow**: Warning or action needed
 - ❌ **Red**: Error requiring attention
 - 🔄 **Blue**: In progress
 

@@ -46,8 +46,9 @@ node scripts/deploy-to-github-pages.js -m "feat: Add new donation form"
 ```
 
 **What it does:**
+
 - ✅ Validates Git repository
-- 🔧 Builds frontend application  
+- 🔧 Builds frontend application
 - 🧹 Runs linter (unless --skip-lint)
 - 📝 Stages and commits changes
 - 🚀 Pushes to GitHub
@@ -69,6 +70,7 @@ node scripts/watch-and-deploy.js --debounce 10 --cooldown 120
 ```
 
 **Features:**
+
 - 👀 Watches source files for changes
 - ⏱️ Debounces changes (default: 5s)
 - 🚀 Auto-builds and deploys
@@ -76,6 +78,7 @@ node scripts/watch-and-deploy.js --debounce 10 --cooldown 120
 - 🔄 Continues watching after deployment
 
 **Watched Files:**
+
 - JavaScript/React (`.js`, `.jsx`, `.ts`, `.tsx`)
 - Styles (`.css`, `.scss`, `.sass`)
 - HTML and JSON files
@@ -87,11 +90,13 @@ node scripts/watch-and-deploy.js --debounce 10 --cooldown 120
 Automated deployment triggered by pushes to main branch:
 
 **Triggers:**
+
 - ✅ Push to `main` branch
 - ✅ Manual workflow dispatch
 - ✅ Changes in `frontend/`, `backend/`, `contracts/`
 
 **What it does:**
+
 - 🧪 Runs all tests and linting
 - 🔨 Builds application
 - 📊 Performance monitoring (Lighthouse)
@@ -100,6 +105,7 @@ Automated deployment triggered by pushes to main branch:
 - ✅ Verifies deployment
 
 **Manual Trigger:**
+
 1. Go to `Actions` tab in GitHub
 2. Select "Deploy to GitHub Pages"
 3. Click "Run workflow"
@@ -116,7 +122,7 @@ npm run dev
 # Frontend only
 npm run dev:frontend
 
-# Backend only  
+# Backend only
 npm run dev:backend
 ```
 
@@ -148,6 +154,7 @@ npm run dev:backend
 ### GitHub Actions Environment
 
 The workflow supports:
+
 - **Environment Variables:** Automatically set
 - **Manual Triggers:** With environment selection
 - **Artifact Storage:** Build outputs saved for 30 days
@@ -171,8 +178,9 @@ curl -I https://yourusername.github.io/your-repo/
 ### Performance Monitoring
 
 After deployment, Lighthouse CI runs automatically and provides:
+
 - Performance scores
-- Accessibility checks  
+- Accessibility checks
 - Best practices audit
 - SEO analysis
 
@@ -183,6 +191,7 @@ View reports in GitHub Actions artifacts.
 ### Common Issues
 
 **1. Build Failures**
+
 ```bash
 # Fix linting issues
 npm run lint:fix
@@ -192,6 +201,7 @@ cd frontend && npm run build
 ```
 
 **2. Git Push Rejected**
+
 ```bash
 # Pull latest changes
 git pull --rebase
@@ -201,11 +211,13 @@ npm run deploy
 ```
 
 **3. GitHub Pages Not Updating**
+
 - Check Actions tab for deployment status
 - Wait 5-10 minutes for propagation
 - Verify Pages settings in repository
 
 **4. Watch Mode Issues**
+
 ```bash
 # Check what's being watched
 node scripts/watch-and-deploy.js --help
@@ -217,6 +229,7 @@ pkill -f "watch-and-deploy"
 ### Getting Help
 
 **Deployment Logs:**
+
 ```bash
 # Detailed deployment with verbose output
 node scripts/deploy-to-github-pages.js --help
@@ -226,6 +239,7 @@ node scripts/watch-and-deploy.js --help
 ```
 
 **GitHub Actions Logs:**
+
 1. Go to repository Actions tab
 2. Click on failed workflow
 3. Expand failed step for details
@@ -242,7 +256,7 @@ import { GitHubPagesDeployer } from './scripts/deploy-to-github-pages.js';
 const deployer = new GitHubPagesDeployer({
   skipBuild: false,
   skipLint: true,
-  message: 'Custom deployment message'
+  message: 'Custom deployment message',
 });
 
 await deployer.deploy();
@@ -288,6 +302,7 @@ After successful deployment:
 ## 📝 Deployment Checklist
 
 Before deploying:
+
 - [ ] All tests pass locally
 - [ ] Linting passes
 - [ ] Build completes successfully
@@ -295,6 +310,7 @@ Before deploying:
 - [ ] Commit messages are clear
 
 After deploying:
+
 - [ ] Site loads correctly
 - [ ] All features work as expected
 - [ ] Performance is acceptable

@@ -16,7 +16,7 @@ const CampaignPage = () => {
       try {
         // Convert URL-friendly name back to campaign name and try multiple variations
         const decodedName = decodeURIComponent(campaignName).replace(/-/g, ' ');
-        
+
         // Simplified query - just get the campaign
         const { data, error } = await supabase
           .from('campaigns')
@@ -84,7 +84,7 @@ const CampaignPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Campaign Header */}
@@ -103,17 +103,11 @@ const CampaignPage = () => {
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <div className="p-8">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Support Our Campaign
-                </h2>
-                <p className="text-gray-600">
-                  Make a secure contribution with cryptocurrency
-                </p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Support Our Campaign</h2>
+                <p className="text-gray-600">Make a secure contribution with cryptocurrency</p>
               </div>
-              
-              <EmbeddedDonorForm 
-                campaignId={campaign.id}
-              />
+
+              <EmbeddedDonorForm campaignId={campaign.id} />
             </div>
           </div>
 
@@ -125,7 +119,7 @@ const CampaignPage = () => {
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

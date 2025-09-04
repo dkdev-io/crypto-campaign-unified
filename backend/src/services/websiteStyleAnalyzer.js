@@ -5,11 +5,11 @@
  */
 
 const puppeteer = require('puppeteer');
-const { 
-  handleAnalysisError, 
-  validateUrl, 
+const {
+  handleAnalysisError,
+  validateUrl,
   retryOperation,
-  logError 
+  logError,
 } = require('../utils/errorHandler');
 
 class WebsiteStyleAnalyzer {
@@ -25,10 +25,10 @@ class WebsiteStyleAnalyzer {
   async analyzeWebsite(url, context = {}) {
     try {
       console.log('🔍 Starting website style analysis for:', url);
-      
+
       // Validate and normalize URL
       const normalizedUrl = this.normalizeUrl(url);
-      
+
       // Check cache first
       const cacheKey = normalizedUrl;
       if (this.colorCache.has(cacheKey)) {
@@ -37,25 +37,28 @@ class WebsiteStyleAnalyzer {
       }
 
       // Perform analysis with retry logic
-      const analysis = await retryOperation(async () => {
-        // Initialize browser if needed
-        await this.initBrowser();
-        
-        // Analyze the website
-        return await this.performAnalysis(normalizedUrl);
-      }, 2, 1500);
-      
+      const analysis = await retryOperation(
+        async () => {
+          // Initialize browser if needed
+          await this.initBrowser();
+
+          // Analyze the website
+          return await this.performAnalysis(normalizedUrl);
+        },
+        2,
+        1500
+      );
+
       // Cache the results
       this.colorCache.set(cacheKey, analysis);
-      
+
       console.log('✅ Website analysis completed:', analysis.summary);
       return analysis;
-
     } catch (error) {
       // Handle and log the error
       const handledError = handleAnalysisError(error, url, context);
       await logError(handledError, url, context);
-      
+
       console.error('❌ Website analysis failed:', handledError.message);
       return this.generateFallbackAnalysis(url, handledError);
     }
@@ -67,7 +70,7 @@ class WebsiteStyleAnalyzer {
   normalizeUrl(url) {
     // Use the error handler's validation
     const validatedUrl = validateUrl(url);
-    
+
     try {
       // Add protocol if missing
       if (!validatedUrl.startsWith('http://') && !validatedUrl.startsWith('https://')) {
@@ -75,7 +78,7 @@ class WebsiteStyleAnalyzer {
       } else {
         url = validatedUrl;
       }
-      
+
       const urlObj = new URL(url);
       return urlObj.href;
     } catch (error) {
@@ -97,8 +100,8 @@ class WebsiteStyleAnalyzer {
           '--disable-gpu',
           '--no-first-run',
           '--no-zygote',
-          '--single-process'
-        ]
+          '--single-process',
+        ],
       });
     }
   }
@@ -108,16 +111,16 @@ class WebsiteStyleAnalyzer {
    */
   async performAnalysis(url) {
     const page = await this.browser.newPage();
-    
+
     try {
       // Set viewport and user agent
       await page.setViewport({ width: 1280, height: 720 });
       await page.setUserAgent('Mozilla/5.0 (compatible; StyleAnalyzer/1.0)');
-      
+
       // Navigate to page with timeout
-      await page.goto(url, { 
-        waitUntil: 'networkidle0', 
-        timeout: 30000 
+      await page.goto(url, {
+        waitUntil: 'networkidle0',
+        timeout: 30000,
       });
 
       // Wait for page to be fully loaded
@@ -128,7 +131,7 @@ class WebsiteStyleAnalyzer {
         this.extractColors(page),
         this.extractFonts(page),
         this.extractLayout(page),
-        this.extractContent(page)
+        this.extractContent(page),
       ]);
 
       // Take screenshot for visual reference
@@ -143,9 +146,8 @@ class WebsiteStyleAnalyzer {
         content,
         screenshot,
         summary: this.generateSummary(colors, fonts, layout),
-        confidence: this.calculateConfidence(colors, fonts, layout)
+        confidence: this.calculateConfidence(colors, fonts, layout),
       };
-
     } finally {
       await page.close();
     }
@@ -163,11 +165,11 @@ class WebsiteStyleAnalyzer {
         getComputedColors() {
           const elements = document.querySelectorAll('*');
           const colors = new Set();
-          
+
           for (let i = 0; i < Math.min(elements.length, 500); i++) {
             const element = elements[i];
             const styles = window.getComputedStyle(element);
-            
+
             // Get various color properties
             [
               'color',
@@ -178,15 +180,15 @@ class WebsiteStyleAnalyzer {
               'border-bottom-color',
               'border-left-color',
               'outline-color',
-              'text-decoration-color'
-            ].forEach(prop => {
+              'text-decoration-color',
+            ].forEach((prop) => {
               const value = styles.getPropertyValue(prop);
               if (value && value !== 'rgba(0, 0, 0, 0)' && value !== 'transparent') {
                 colors.add(value);
               }
             });
           }
-          
+
           return Array.from(colors);
         },
 
@@ -197,7 +199,7 @@ class WebsiteStyleAnalyzer {
             const r = parseInt(result[0]);
             const g = parseInt(result[1]);
             const b = parseInt(result[2]);
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
           }
           return rgb;
         },
@@ -206,16 +208,16 @@ class WebsiteStyleAnalyzer {
         getImageColors() {
           const images = document.querySelectorAll('img');
           const colors = [];
-          
+
           // This would need additional processing for actual color extraction
           // For now, we'll focus on CSS colors
-          
+
           return colors;
-        }
+        },
       };
 
       const rawColors = colorExtractor.getComputedColors();
-      const hexColors = rawColors.map(color => {
+      const hexColors = rawColors.map((color) => {
         if (color.startsWith('rgb')) {
           return colorExtractor.rgbToHex(color);
         }
@@ -223,14 +225,12 @@ class WebsiteStyleAnalyzer {
       });
 
       // Filter and categorize colors
-      const validHexColors = hexColors.filter(color => 
-        color.match(/^#[0-9A-F]{6}$/i)
-      );
+      const validHexColors = hexColors.filter((color) => color.match(/^#[0-9A-F]{6}$/i));
 
       return {
         raw: rawColors,
         hex: validHexColors,
-        count: validHexColors.length
+        count: validHexColors.length,
       };
     });
 
@@ -239,7 +239,7 @@ class WebsiteStyleAnalyzer {
 
     return {
       ...colors,
-      ...analyzed
+      ...analyzed,
     };
   }
 
@@ -254,28 +254,32 @@ class WebsiteStyleAnalyzer {
         accent: '#28a745',
         background: '#ffffff',
         text: '#333333',
-        palette: []
+        palette: [],
       };
     }
 
     // Count color frequency and remove duplicates
     const colorCount = {};
-    hexColors.forEach(color => {
+    hexColors.forEach((color) => {
       const normalized = color.toLowerCase();
       colorCount[normalized] = (colorCount[normalized] || 0) + 1;
     });
 
     // Sort by frequency
     const sortedColors = Object.entries(colorCount)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .map(([color]) => color);
 
     // Filter out very common colors (white, black, gray variants)
-    const filteredColors = sortedColors.filter(color => {
+    const filteredColors = sortedColors.filter((color) => {
       const c = color.toLowerCase();
-      return c !== '#ffffff' && c !== '#000000' && 
-             !c.match(/^#f{6}$/) && !c.match(/^#0{6}$/) &&
-             !c.match(/^#(.)\1(.)\2(.)\3$/); // Skip repeated chars like #aaaaaa
+      return (
+        c !== '#ffffff' &&
+        c !== '#000000' &&
+        !c.match(/^#f{6}$/) &&
+        !c.match(/^#0{6}$/) &&
+        !c.match(/^#(.)\1(.)\2(.)\3$/)
+      ); // Skip repeated chars like #aaaaaa
     });
 
     // Categorize colors
@@ -288,7 +292,7 @@ class WebsiteStyleAnalyzer {
       hex: color,
       name: this.getColorName(color, index),
       usage: Math.round((colorCount[color] / hexColors.length) * 100) + '%',
-      category: index === 0 ? 'primary' : index === 1 ? 'secondary' : 'accent'
+      category: index === 0 ? 'primary' : index === 1 ? 'secondary' : 'accent',
     }));
 
     return {
@@ -297,7 +301,7 @@ class WebsiteStyleAnalyzer {
       accent,
       background: '#ffffff',
       text: '#333333',
-      palette
+      palette,
     };
   }
 
@@ -306,8 +310,14 @@ class WebsiteStyleAnalyzer {
    */
   getColorName(hex, index) {
     const colorNames = [
-      'Primary Brand', 'Secondary', 'Accent', 'Highlight',
-      'Support', 'Detail', 'Emphasis', 'Feature'
+      'Primary Brand',
+      'Secondary',
+      'Accent',
+      'Highlight',
+      'Support',
+      'Detail',
+      'Emphasis',
+      'Feature',
     ];
     return colorNames[index] || `Color ${index + 1}`;
   }
@@ -324,31 +334,43 @@ class WebsiteStyleAnalyzer {
         getFontFamilies() {
           const elements = document.querySelectorAll('*');
           const fonts = new Set();
-          
+
           for (let i = 0; i < Math.min(elements.length, 200); i++) {
             const element = elements[i];
             const styles = window.getComputedStyle(element);
             const fontFamily = styles.getPropertyValue('font-family');
-            
+
             if (fontFamily && fontFamily !== 'inherit') {
               fonts.add(fontFamily);
             }
           }
-          
+
           return Array.from(fonts);
         },
 
         // Get font styles for different elements
         getFontStyles() {
           const selectors = [
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-            'p', 'span', 'div', 'a', 'button',
-            '.title', '.heading', '.subtitle', '.content'
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'p',
+            'span',
+            'div',
+            'a',
+            'button',
+            '.title',
+            '.heading',
+            '.subtitle',
+            '.content',
           ];
 
           const styles = {};
 
-          selectors.forEach(selector => {
+          selectors.forEach((selector) => {
             const element = document.querySelector(selector);
             if (element) {
               const computed = window.getComputedStyle(element);
@@ -358,13 +380,13 @@ class WebsiteStyleAnalyzer {
                 fontWeight: computed.fontWeight,
                 lineHeight: computed.lineHeight,
                 letterSpacing: computed.letterSpacing,
-                textTransform: computed.textTransform
+                textTransform: computed.textTransform,
               };
             }
           });
 
           return styles;
-        }
+        },
       };
 
       const families = fontExtractor.getFontFamilies();
@@ -373,7 +395,7 @@ class WebsiteStyleAnalyzer {
       return {
         families,
         styles,
-        count: families.length
+        count: families.length,
       };
     });
 
@@ -382,7 +404,7 @@ class WebsiteStyleAnalyzer {
 
     return {
       ...fonts,
-      ...analyzed
+      ...analyzed,
     };
   }
 
@@ -393,23 +415,28 @@ class WebsiteStyleAnalyzer {
     const { families, styles } = fonts;
 
     // Extract clean font names
-    const cleanFamilies = families.map(family => {
-      return family.split(',')[0].replace(/['"]/g, '').trim();
-    }).filter(family => 
-      !family.includes('serif') && 
-      !family.includes('sans-serif') && 
-      !family.includes('monospace')
-    );
+    const cleanFamilies = families
+      .map((family) => {
+        return family.split(',')[0].replace(/['"]/g, '').trim();
+      })
+      .filter(
+        (family) =>
+          !family.includes('serif') &&
+          !family.includes('sans-serif') &&
+          !family.includes('monospace')
+      );
 
     // Determine primary fonts
-    const headingFont = this.extractFontFromStyles(styles, ['h1', 'h2', 'h3']) || 
-                       cleanFamilies[0] || 
-                       'Arial, sans-serif';
-                       
-    const bodyFont = this.extractFontFromStyles(styles, ['p', 'div', 'span']) || 
-                     cleanFamilies[1] || 
-                     cleanFamilies[0] || 
-                     'Arial, sans-serif';
+    const headingFont =
+      this.extractFontFromStyles(styles, ['h1', 'h2', 'h3']) ||
+      cleanFamilies[0] ||
+      'Arial, sans-serif';
+
+    const bodyFont =
+      this.extractFontFromStyles(styles, ['p', 'div', 'span']) ||
+      cleanFamilies[1] ||
+      cleanFamilies[0] ||
+      'Arial, sans-serif';
 
     // Create font recommendations
     const recommendations = {
@@ -417,26 +444,26 @@ class WebsiteStyleAnalyzer {
         family: headingFont,
         weight: this.extractFontWeight(styles, ['h1', 'h2']) || '600',
         size: this.extractFontSize(styles, ['h1']) || '2rem',
-        suggested: this.suggestWebFont(headingFont, 'heading')
+        suggested: this.suggestWebFont(headingFont, 'heading'),
       },
       body: {
         family: bodyFont,
         weight: this.extractFontWeight(styles, ['p', 'div']) || '400',
         size: this.extractFontSize(styles, ['p']) || '1rem',
-        suggested: this.suggestWebFont(bodyFont, 'body')
+        suggested: this.suggestWebFont(bodyFont, 'body'),
       },
       button: {
         family: this.extractFontFromStyles(styles, ['button', 'a']) || headingFont,
         weight: '500',
-        size: '1rem'
-      }
+        size: '1rem',
+      },
     };
 
     return {
       cleanFamilies,
       recommendations,
       primary: headingFont,
-      secondary: bodyFont
+      secondary: bodyFont,
     };
   }
 
@@ -482,22 +509,33 @@ class WebsiteStyleAnalyzer {
   suggestWebFont(fontFamily, type) {
     const webSafeFonts = {
       heading: [
-        'Inter', 'Roboto', 'Open Sans', 'Lato', 'Poppins',
-        'Montserrat', 'Source Sans Pro', 'Nunito'
+        'Inter',
+        'Roboto',
+        'Open Sans',
+        'Lato',
+        'Poppins',
+        'Montserrat',
+        'Source Sans Pro',
+        'Nunito',
       ],
       body: [
-        'Inter', 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro',
-        'PT Sans', 'Nunito Sans', 'IBM Plex Sans'
-      ]
+        'Inter',
+        'Roboto',
+        'Open Sans',
+        'Lato',
+        'Source Sans Pro',
+        'PT Sans',
+        'Nunito Sans',
+        'IBM Plex Sans',
+      ],
     };
 
     const candidates = webSafeFonts[type] || webSafeFonts.body;
-    
+
     // Try to find a similar web font
     const lowerFont = fontFamily.toLowerCase();
     for (const webFont of candidates) {
-      if (lowerFont.includes(webFont.toLowerCase()) || 
-          webFont.toLowerCase().includes(lowerFont)) {
+      if (lowerFont.includes(webFont.toLowerCase()) || webFont.toLowerCase().includes(lowerFont)) {
         return webFont;
       }
     }
@@ -529,7 +567,7 @@ class WebsiteStyleAnalyzer {
 
           return {
             margins: margins.sort((a, b) => a - b),
-            paddings: paddings.sort((a, b) => a - b)
+            paddings: paddings.sort((a, b) => a - b),
           };
         },
 
@@ -547,10 +585,12 @@ class WebsiteStyleAnalyzer {
         },
 
         getButtonStyles() {
-          const buttons = document.querySelectorAll('button, .button, .btn, input[type="submit"], input[type="button"]');
+          const buttons = document.querySelectorAll(
+            'button, .button, .btn, input[type="submit"], input[type="button"]'
+          );
           const styles = [];
 
-          buttons.forEach(button => {
+          buttons.forEach((button) => {
             const computed = window.getComputedStyle(button);
             styles.push({
               borderRadius: computed.borderRadius,
@@ -559,12 +599,12 @@ class WebsiteStyleAnalyzer {
               color: computed.color,
               border: computed.border,
               fontSize: computed.fontSize,
-              fontWeight: computed.fontWeight
+              fontWeight: computed.fontWeight,
             });
           });
 
           return styles;
-        }
+        },
       };
 
       const spacing = layoutExtractor.getSpacing();
@@ -574,7 +614,7 @@ class WebsiteStyleAnalyzer {
       return {
         spacing,
         borderRadii,
-        buttonStyles
+        buttonStyles,
       };
     });
 
@@ -583,7 +623,7 @@ class WebsiteStyleAnalyzer {
 
     return {
       ...layout,
-      ...analyzed
+      ...analyzed,
     };
   }
 
@@ -607,7 +647,7 @@ class WebsiteStyleAnalyzer {
         padding: firstButton.padding,
         backgroundColor: firstButton.backgroundColor,
         fontSize: firstButton.fontSize,
-        fontWeight: firstButton.fontWeight
+        fontWeight: firstButton.fontWeight,
       };
     }
 
@@ -616,8 +656,8 @@ class WebsiteStyleAnalyzer {
         margin: commonMargins[0] || '1rem',
         padding: commonPaddings[0] || '1rem',
         borderRadius: commonRadii[0] || '4px',
-        buttonStyle: buttonPattern
-      }
+        buttonStyle: buttonPattern,
+      },
     };
   }
 
@@ -628,13 +668,13 @@ class WebsiteStyleAnalyzer {
     if (!values.length) return [];
 
     const counts = {};
-    values.forEach(value => {
+    values.forEach((value) => {
       const rounded = Math.round(value);
       counts[rounded] = (counts[rounded] || 0) + 1;
     });
 
     return Object.entries(counts)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .map(([value]) => parseInt(value) + 'px')
       .slice(0, 3);
   }
@@ -646,9 +686,11 @@ class WebsiteStyleAnalyzer {
     const content = await page.evaluate(() => {
       return {
         title: document.title,
-        headings: Array.from(document.querySelectorAll('h1, h2, h3')).slice(0, 5).map(h => h.textContent.trim()),
+        headings: Array.from(document.querySelectorAll('h1, h2, h3'))
+          .slice(0, 5)
+          .map((h) => h.textContent.trim()),
         description: document.querySelector('meta[name="description"]')?.content || '',
-        brandName: this.extractBrandName()
+        brandName: this.extractBrandName(),
       };
     });
 
@@ -663,13 +705,13 @@ class WebsiteStyleAnalyzer {
       const screenshot = await page.screenshot({
         fullPage: false,
         type: 'png',
-        encoding: 'base64'
+        encoding: 'base64',
       });
 
       return {
         data: screenshot,
         url,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       console.warn('Screenshot failed:', error);
@@ -686,7 +728,7 @@ class WebsiteStyleAnalyzer {
       fontsFound: fonts.cleanFamilies?.length || 0,
       primaryColor: colors.primary,
       primaryFont: fonts.primary,
-      confidence: this.calculateConfidence(colors, fonts, layout)
+      confidence: this.calculateConfidence(colors, fonts, layout),
     };
   }
 
@@ -718,7 +760,7 @@ class WebsiteStyleAnalyzer {
    */
   generateFallbackAnalysis(url, error) {
     console.warn('Using fallback analysis for:', url);
-    
+
     return {
       url,
       timestamp: new Date().toISOString(),
@@ -732,24 +774,24 @@ class WebsiteStyleAnalyzer {
         palette: [
           { hex: '#2a2a72', name: 'Primary', usage: '40%', category: 'primary' },
           { hex: '#666666', name: 'Secondary', usage: '30%', category: 'secondary' },
-          { hex: '#28a745', name: 'Accent', usage: '20%', category: 'accent' }
-        ]
+          { hex: '#28a745', name: 'Accent', usage: '20%', category: 'accent' },
+        ],
       },
       fonts: {
         recommendations: {
           heading: { family: 'Inter', weight: '600', size: '2rem', suggested: 'Inter' },
           body: { family: 'Inter', weight: '400', size: '1rem', suggested: 'Inter' },
-          button: { family: 'Inter', weight: '500', size: '1rem' }
+          button: { family: 'Inter', weight: '500', size: '1rem' },
         },
         primary: 'Inter',
-        secondary: 'Inter'
+        secondary: 'Inter',
       },
       layout: {
         recommendations: {
           margin: '1rem',
           padding: '1rem',
-          borderRadius: '4px'
-        }
+          borderRadius: '4px',
+        },
       },
       screenshot: null,
       summary: {
@@ -757,10 +799,10 @@ class WebsiteStyleAnalyzer {
         fontsFound: 1,
         primaryColor: '#2a2a72',
         primaryFont: 'Inter',
-        confidence: 50
+        confidence: 50,
       },
       confidence: 50,
-      fallback: true
+      fallback: true,
     };
   }
 

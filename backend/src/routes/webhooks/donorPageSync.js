@@ -17,22 +17,16 @@ function verifyWebhookSignature(req, res, next) {
   const signature = req.headers['x-webhook-signature'];
   const payload = JSON.stringify(req.body);
   const secret = process.env.WEBHOOK_SECRET || 'default-secret';
-  
+
   if (!signature) {
     return res.status(401).json({ error: 'Missing webhook signature' });
   }
 
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex');
+  const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
 
   const computedSignature = `sha256=${expectedSignature}`;
 
-  if (!crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(computedSignature)
-  )) {
+  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature))) {
     return res.status(401).json({ error: 'Invalid webhook signature' });
   }
 
@@ -51,7 +45,7 @@ router.post('/donor-page-sync/:campaignId', verifyWebhookSignature, async (req, 
     console.log('🔄 Received donor page sync webhook:', {
       campaignId,
       event,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Validate campaign exists
@@ -67,24 +61,24 @@ router.post('/donor-page-sync/:campaignId', verifyWebhookSignature, async (req, 
 
     // Handle different webhook events
     let result;
-    
+
     switch (event) {
       case 'campaign.updated':
         result = await handleCampaignUpdate(campaignId, changes);
         break;
-        
+
       case 'form.customized':
         result = await handleFormCustomization(campaignId, changes);
         break;
-        
+
       case 'embed.regenerated':
         result = await handleEmbedRegeneration(campaignId, changes);
         break;
-        
+
       case 'setup.completed':
         result = await handleSetupCompletion(campaignId, data);
         break;
-        
+
       default:
         console.warn('Unknown webhook event:', event);
         return res.status(400).json({ error: 'Unknown event type' });
@@ -98,21 +92,20 @@ router.post('/donor-page-sync/:campaignId', verifyWebhookSignature, async (req, 
       event,
       campaignId,
       result,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error('❌ Webhook processing error:', error);
-    
+
     // Log webhook error
     await logWebhookEvent(req.params.campaignId, req.body.event, 'error', {
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
 
     res.status(500).json({
       error: 'Webhook processing failed',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -122,23 +115,16 @@ router.post('/donor-page-sync/:campaignId', verifyWebhookSignature, async (req, 
  */
 async function handleCampaignUpdate(campaignId, changes) {
   console.log('📝 Handling campaign update:', changes);
-  
+
   // Check if changes affect the donor page
-  const affectingFields = [
-    'campaign_name',
-    'committee_name', 
-    'theme_color',
-    'description'
-  ];
-  
-  const needsUpdate = Object.keys(changes).some(field => 
-    affectingFields.includes(field)
-  );
-  
+  const affectingFields = ['campaign_name', 'committee_name', 'theme_color', 'description'];
+
+  const needsUpdate = Object.keys(changes).some((field) => affectingFields.includes(field));
+
   if (needsUpdate) {
     return await donorPageAutomation.syncPageFromWebhook(campaignId, changes);
   }
-  
+
   return { message: 'No donor page update required' };
 }
 
@@ -147,7 +133,7 @@ async function handleCampaignUpdate(campaignId, changes) {
  */
 async function handleFormCustomization(campaignId, changes) {
   console.log('🎨 Handling form customization:', changes);
-  
+
   // Form customization always affects the donor page
   return await donorPageAutomation.syncPageFromWebhook(campaignId, changes);
 }
@@ -157,7 +143,7 @@ async function handleFormCustomization(campaignId, changes) {
  */
 async function handleEmbedRegeneration(campaignId, changes) {
   console.log('🔄 Handling embed regeneration:', changes);
-  
+
   // Embed regeneration always requires page update
   return await donorPageAutomation.syncPageFromWebhook(campaignId, changes);
 }
@@ -167,7 +153,7 @@ async function handleEmbedRegeneration(campaignId, changes) {
  */
 async function handleSetupCompletion(campaignId, data) {
   console.log('✅ Handling setup completion:', campaignId);
-  
+
   // Get full campaign data
   const { data: campaignData, error } = await supabase
     .from('campaigns')
@@ -201,7 +187,7 @@ router.post('/donor-page-sync/:campaignId/test', async (req, res) => {
     // Trigger webhook processing
     const result = await donorPageAutomation.syncPageFromWebhook(campaignId, {
       test: true,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     res.json({
@@ -209,14 +195,13 @@ router.post('/donor-page-sync/:campaignId/test', async (req, res) => {
       test: true,
       campaignId,
       event,
-      result
+      result,
     });
-
   } catch (error) {
     console.error('Test webhook error:', error);
     res.status(500).json({
       error: 'Test webhook failed',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -245,14 +230,13 @@ router.get('/donor-page-sync/:campaignId/logs', async (req, res) => {
       success: true,
       campaignId,
       logs,
-      count: logs.length
+      count: logs.length,
     });
-
   } catch (error) {
     console.error('Failed to fetch webhook logs:', error);
     res.status(500).json({
       error: 'Failed to fetch logs',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -262,15 +246,13 @@ router.get('/donor-page-sync/:campaignId/logs', async (req, res) => {
  */
 async function logWebhookEvent(campaignId, event, status, data) {
   try {
-    const { error } = await supabase
-      .from('donor_page_logs')
-      .insert({
-        campaign_id: campaignId,
-        event_type: `webhook.${event}`,
-        status,
-        data: JSON.stringify(data),
-        created_at: new Date().toISOString()
-      });
+    const { error } = await supabase.from('donor_page_logs').insert({
+      campaign_id: campaignId,
+      event_type: `webhook.${event}`,
+      status,
+      data: JSON.stringify(data),
+      created_at: new Date().toISOString(),
+    });
 
     if (error) {
       console.error('Failed to log webhook event:', error);
@@ -289,7 +271,7 @@ router.get('/health', (req, res) => {
     status: 'healthy',
     service: 'donor-page-sync-webhooks',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 

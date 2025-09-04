@@ -11,7 +11,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY || SUPABASE_ANO
 
 async function createTables() {
   console.log('🚀 Creating form_submissions table...');
-  
+
   try {
     // Try using RPC to execute SQL (this requires proper permissions)
     const { data, error } = await supabase.rpc('exec_sql', {
@@ -65,7 +65,7 @@ async function createTables() {
         CREATE INDEX IF NOT EXISTS idx_form_submissions_email ON form_submissions(email);
         CREATE INDEX IF NOT EXISTS idx_form_submissions_submitted_at ON form_submissions(submitted_at);
         CREATE INDEX IF NOT EXISTS idx_form_submissions_transaction_hash ON form_submissions(transaction_hash);
-      `
+      `,
     });
 
     if (error) {
@@ -97,7 +97,10 @@ $$;
       .select('id')
       .limit(1);
 
-    if (testError && testError.message.includes('relation "public.form_submissions" does not exist')) {
+    if (
+      testError &&
+      testError.message.includes('relation "public.form_submissions" does not exist')
+    ) {
       console.error('❌ Table does not exist. Please create it manually in Supabase SQL Editor.');
       console.log('\n📋 Copy and run this SQL in your Supabase dashboard:');
       console.log('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql');
@@ -106,7 +109,6 @@ $$;
     } else {
       console.log('✅ Table exists and is accessible!');
     }
-
   } catch (err) {
     console.error('❌ Error:', err.message);
     console.log('\n📋 Please create the table manually in Supabase SQL Editor:');

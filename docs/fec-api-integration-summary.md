@@ -7,14 +7,18 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 ## 🔧 What's Been Configured
 
 ### 1. FEC API Configuration
+
 **File:** `frontend/src/lib/fec-config.js`
+
 - ✅ API key configured and stored securely
 - ✅ FEC API endpoints mapped
 - ✅ Committee types and designations defined
 - ✅ Default search parameters optimized
 
 ### 2. Enhanced FEC API Service
+
 **File:** `frontend/src/lib/fec-api.js`
+
 - ✅ Automatic fallback from local → FEC API
 - ✅ Real-time committee search
 - ✅ Committee validation for ActBlue compliance
@@ -22,8 +26,10 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 - ✅ Test committee support for development
 
 ### 3. Testing Interface
+
 **Route:** `/fec-test`
 **File:** `frontend/src/components/admin/FECApiTest.jsx`
+
 - ✅ Live FEC API testing interface
 - ✅ Search functionality verification
 - ✅ Committee details retrieval testing
@@ -32,6 +38,7 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 ## 🚀 How to Test
 
 ### **Development Server Running:**
+
 - **URL:** http://localhost:5175/
 - **Status:** ✅ Active
 
@@ -58,13 +65,15 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 ## 📊 Expected Behavior
 
 ### **Search Priority:**
+
 1. **Local Database First:** Searches your Supabase committee table
 2. **FEC API Fallback:** If no local results, searches FEC database
 3. **Combined Results:** Shows both sources with clear indicators
 
 ### **Committee Types Supported:**
+
 - **P:** Presidential committees
-- **H:** House committees  
+- **H:** House committees
 - **S:** Senate committees
 - **N:** PACs
 - **Q:** Qualified Non-Profits
@@ -72,6 +81,7 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 - And more...
 
 ### **Data Available:**
+
 - Committee name and ID
 - Candidate information
 - Address and contact details
@@ -82,12 +92,15 @@ Your FEC API key `F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD` has been successfull
 ## 🛡️ Security & Compliance
 
 ### **API Key Security:**
+
 - ✅ Stored in configuration file (not hardcoded)
 - ✅ Can be moved to environment variables for production
 - ✅ Masked in UI displays
 
 ### **ActBlue Validation:**
+
 The system automatically validates committees against ActBlue requirements:
+
 - ✅ Committee name and ID required
 - ✅ Valid address information
 - ✅ Treasurer information
@@ -97,6 +110,7 @@ The system automatically validates committees against ActBlue requirements:
 ## 🚧 Important Notes
 
 ### **CORS Considerations:**
+
 The FEC API may have CORS restrictions. If you encounter CORS errors:
 
 1. **Development Solution:** Browser extension to disable CORS
@@ -104,12 +118,15 @@ The FEC API may have CORS restrictions. If you encounter CORS errors:
 3. **Alternative:** The system gracefully falls back to local test data
 
 ### **Rate Limiting:**
+
 - FEC API has rate limits (1000 requests/hour for registered keys)
 - The system caches results locally to minimize API calls
 - Local database is searched first to reduce API usage
 
 ### **Database Schema Required:**
+
 Make sure to run the database schema:
+
 ```sql
 -- Apply this to your Supabase database
 -- File: docs/fec-committees-schema.sql
@@ -120,12 +137,14 @@ Make sure to run the database schema:
 ### **For Production:**
 
 1. **Environment Variables:**
+
    ```env
    VITE_FEC_API_KEY=F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD
    VITE_FEC_API_BASE=https://api.open.fec.gov/v1
    ```
 
 2. **Backend Proxy (Recommended):**
+
    ```javascript
    // Create API endpoint: /api/fec/search
    // Proxy requests to FEC API with your key
@@ -142,19 +161,23 @@ Make sure to run the database schema:
 ## 🔍 Debugging & Monitoring
 
 ### **Check These URLs:**
+
 - **Setup Flow:** http://localhost:5175/
-- **FEC Test:** http://localhost:5175/fec-test  
+- **FEC Test:** http://localhost:5175/fec-test
 - **Committee Admin:** http://localhost:5175/committees
 - **Campaign Admin:** http://localhost:5175/admin
 - **Debug Info:** http://localhost:5175/debug
 
 ### **Browser Console:**
+
 - FEC API requests are logged with full URLs
 - Response data is logged for debugging
 - Error messages include detailed information
 
 ### **Test Searches:**
+
 Try these search terms to verify FEC API connectivity:
+
 - **"Biden"** - Should find Biden for President committee
 - **"Trump"** - Should find Trump committee
 - **"DNC"** - Should find Democratic National Committee
@@ -164,6 +187,7 @@ Try these search terms to verify FEC API connectivity:
 ## 🎉 Success Indicators
 
 ### **✅ Working Correctly When:**
+
 1. FEC test page shows "✅ FEC API Key Status: Configured"
 2. Search returns results with 🏛️ icons (real FEC data)
 3. Committee details load successfully
@@ -171,6 +195,7 @@ Try these search terms to verify FEC API connectivity:
 5. Campaign setup flow finds real committees
 
 ### **❌ Troubleshooting If:**
+
 1. Only test committees (🧪) appear → Check API key or network
 2. CORS errors → Need backend proxy or browser CORS disabled
 3. No results → Try different search terms or check FEC API status
@@ -181,7 +206,7 @@ Try these search terms to verify FEC API connectivity:
 Your FEC API integration is complete and ready for testing! The system now provides:
 
 - **Real-time FEC committee search**
-- **Comprehensive committee validation** 
+- **Comprehensive committee validation**
 - **Seamless fallback to test data**
 - **Full ActBlue compliance checking**
 - **Professional testing interface**

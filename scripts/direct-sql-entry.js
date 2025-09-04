@@ -58,16 +58,15 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 SELECT 'Database fixes applied successfully!' as result;`;
 
 async function connectToExistingBrowser() {
-  
   try {
     // Connect to existing Chrome instance
     const browser = await puppeteer.connect({
       browserURL: 'http://localhost:9222', // Default Chrome DevTools port
-      defaultViewport: null
+      defaultViewport: null,
     });
 
     const pages = await browser.pages();
-    
+
     // Look for Supabase tab
     let supabasePage = null;
     for (const page of pages) {
@@ -81,18 +80,20 @@ async function connectToExistingBrowser() {
 
     if (!supabasePage) {
       // Navigate to the provided URL
-      const page = pages[0] || await browser.newPage();
-      await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8');
+      const page = pages[0] || (await browser.newPage());
+      await page.goto(
+        'https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8'
+      );
       supabasePage = page;
     }
 
     await supabasePage.bringToFront();
 
     // Wait a moment for page to be ready
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Clear and enter SQL
-    
+
     // Try to find and click in editor area
     try {
       // Look for Monaco editor or any code editor
@@ -103,28 +104,27 @@ async function connectToExistingBrowser() {
         'textarea',
         '[role="textbox"]',
         '.sql-editor',
-        '[contenteditable="true"]'
+        '[contenteditable="true"]',
       ];
 
       let success = false;
       for (const selector of editorSelectors) {
         try {
           await supabasePage.waitForSelector(selector, { timeout: 2000 });
-          
+
           // Click in editor
           await supabasePage.click(selector);
-          
+
           // Select all and replace
           await supabasePage.keyboard.down('Meta'); // Cmd on Mac
           await supabasePage.keyboard.press('a');
           await supabasePage.keyboard.up('Meta');
-          
+
           // Type the SQL
           await supabasePage.keyboard.type(cleanSQL, { delay: 5 });
-          
+
           success = true;
           break;
-          
         } catch (err) {
           continue;
         }
@@ -134,20 +134,19 @@ async function connectToExistingBrowser() {
         console.log('❌ Could not find editor - please paste manually');
         return;
       }
-
     } catch (err) {
       console.log('❌ Error entering SQL:', err.message);
       return;
     }
 
     // Look for and click Run button
-    
+
     const runSelectors = [
       'button[data-testid="run-sql"]',
       'button:has-text("Run")',
       '.run-button',
       '[data-test="run"]',
-      'button[title="Run query"]'
+      'button[title="Run query"]',
     ];
 
     let runSuccess = false;
@@ -169,13 +168,12 @@ async function connectToExistingBrowser() {
       await supabasePage.keyboard.up('Meta');
     }
 
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     console.log('🎉 SQL execution initiated! Check the Supabase interface for results.');
-    
+
     // Don't close the browser - let user see results
     console.log('✅ Automation complete - browser stays open for you to verify results');
-
   } catch (error) {
     console.error('❌ Failed to connect to existing browser:', error.message);
   }

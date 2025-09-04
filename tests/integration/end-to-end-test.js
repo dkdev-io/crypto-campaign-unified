@@ -26,8 +26,8 @@ class IntegrationTester {
         totalTests: 0,
         passed: 0,
         failed: 0,
-        critical: []
-      }
+        critical: [],
+      },
     };
   }
 
@@ -35,19 +35,19 @@ class IntegrationTester {
     this.browser = await puppeteer.launch({
       headless: false,
       slowMo: 100,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     this.page = await this.browser.newPage();
-    
+
     // Set up console log capture
-    this.page.on('console', msg => {
+    this.page.on('console', (msg) => {
       if (msg.type() === 'error') {
         this.logResult('Console Error', false, msg.text(), 'CRITICAL');
       }
     });
-    
+
     // Set up error capture
-    this.page.on('pageerror', error => {
+    this.page.on('pageerror', (error) => {
       this.logResult('Page Error', false, error.message, 'CRITICAL');
     });
   }
@@ -64,9 +64,9 @@ class IntegrationTester {
       passed,
       details,
       severity,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     this.results.summary.totalTests++;
     if (passed) {
       this.results.summary.passed++;
@@ -76,7 +76,7 @@ class IntegrationTester {
         this.results.summary.critical.push(testName);
       }
     }
-    
+
     return result;
   }
 
@@ -89,7 +89,7 @@ class IntegrationTester {
       journey.push(this.logResult('Homepage Load', true));
 
       // Check for hero section
-      const heroExists = await this.page.$('.hero-section') !== null;
+      const heroExists = (await this.page.$('.hero-section')) !== null;
       journey.push(this.logResult('Hero Section Visible', heroExists));
 
       // 2. Navigate to signup
@@ -99,17 +99,22 @@ class IntegrationTester {
         await this.page.waitForNavigation({ waitUntil: 'networkidle2' });
         journey.push(this.logResult('Navigate to Signup', true));
       } else {
-        journey.push(this.logResult('Navigate to Signup', false, 'Signup button not found', 'HIGH'));
+        journey.push(
+          this.logResult('Navigate to Signup', false, 'Signup button not found', 'HIGH')
+        );
       }
 
       // 3. Fill signup form
       const timestamp = Date.now();
       const testEmail = `testuser${timestamp}@test.com`;
-      
+
       await this.page.type('input[name="email"], input[type="email"]', testEmail);
       await this.page.type('input[name="password"], input[type="password"]', 'TestPass123!');
-      await this.page.type('input[name="confirmPassword"], input[placeholder*="confirm" i]', 'TestPass123!');
-      
+      await this.page.type(
+        'input[name="confirmPassword"], input[placeholder*="confirm" i]',
+        'TestPass123!'
+      );
+
       journey.push(this.logResult('Fill Signup Form', true));
 
       // 4. Submit signup
@@ -127,13 +132,15 @@ class IntegrationTester {
       const kycForm = await this.page.$('.kyc-form, form[class*="kyc"]');
       if (kycForm) {
         journey.push(this.logResult('KYC Form Displayed', true));
-        
+
         // Fill mock KYC data
         await this.page.type('input[name="firstName"], input[placeholder*="first" i]', 'Test');
         await this.page.type('input[name="lastName"], input[placeholder*="last" i]', 'User');
         await this.page.type('input[name="dateOfBirth"], input[type="date"]', '01/01/1990');
-        
-        const kycSubmit = await this.page.$('button:has-text("Submit KYC"), button:has-text("Complete")');
+
+        const kycSubmit = await this.page.$(
+          'button:has-text("Submit KYC"), button:has-text("Complete")'
+        );
         if (kycSubmit) {
           await kycSubmit.click();
           await this.page.waitForTimeout(2000);
@@ -145,29 +152,40 @@ class IntegrationTester {
       // 6. Browse campaigns
       await this.page.goto(`${BASE_URL}/campaigns`, { waitUntil: 'networkidle2' });
       const campaignCards = await this.page.$$('.campaign-card, .campaign-item');
-      journey.push(this.logResult('Campaign List Displayed', campaignCards.length > 0, 
-        `Found ${campaignCards.length} campaigns`));
+      journey.push(
+        this.logResult(
+          'Campaign List Displayed',
+          campaignCards.length > 0,
+          `Found ${campaignCards.length} campaigns`
+        )
+      );
 
       // 7. Make a contribution
       if (campaignCards.length > 0) {
         await campaignCards[0].click();
         await this.page.waitForTimeout(2000);
-        
-        const contributeButton = await this.page.$('button:has-text("Contribute"), button:has-text("Donate")');
+
+        const contributeButton = await this.page.$(
+          'button:has-text("Contribute"), button:has-text("Donate")'
+        );
         if (contributeButton) {
           await contributeButton.click();
           await this.page.waitForTimeout(1000);
-          
+
           // Fill contribution amount
           await this.page.type('input[name="amount"], input[type="number"]', '0.1');
-          
-          const confirmButton = await this.page.$('button:has-text("Confirm"), button:has-text("Submit")');
+
+          const confirmButton = await this.page.$(
+            'button:has-text("Confirm"), button:has-text("Submit")'
+          );
           if (confirmButton) {
             await confirmButton.click();
             journey.push(this.logResult('Make Contribution', true));
           }
         } else {
-          journey.push(this.logResult('Make Contribution', false, 'Contribute button not found', 'HIGH'));
+          journey.push(
+            this.logResult('Make Contribution', false, 'Contribute button not found', 'HIGH')
+          );
         }
       }
 
@@ -175,7 +193,6 @@ class IntegrationTester {
       await this.page.goto(`${BASE_URL}/profile`, { waitUntil: 'networkidle2' });
       const historySection = await this.page.$('.contribution-history, .transaction-history');
       journey.push(this.logResult('Contribution History', historySection !== null));
-
     } catch (error) {
       journey.push(this.logResult('New User Journey', false, error.message, 'CRITICAL'));
     }
@@ -190,10 +207,10 @@ class IntegrationTester {
     try {
       // 1. Login as admin
       await this.page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle2' });
-      
+
       await this.page.type('input[name="email"], input[type="email"]', 'admin@crypto-campaign.com');
       await this.page.type('input[name="password"], input[type="password"]', 'AdminPass123!');
-      
+
       const loginButton = await this.page.$('button[type="submit"], button:has-text("Login")');
       if (loginButton) {
         await loginButton.click();
@@ -209,17 +226,21 @@ class IntegrationTester {
       journey.push(this.logResult('Admin Dashboard Access', dashboard !== null));
 
       // 3. Create new campaign
-      const createCampaignButton = await this.page.$('button:has-text("Create Campaign"), a[href*="create"]');
+      const createCampaignButton = await this.page.$(
+        'button:has-text("Create Campaign"), a[href*="create"]'
+      );
       if (createCampaignButton) {
         await createCampaignButton.click();
         await this.page.waitForTimeout(2000);
-        
+
         // Fill campaign form
         await this.page.type('input[name="title"], input[placeholder*="title" i]', 'Test Campaign');
         await this.page.type('textarea[name="description"], textarea', 'Test campaign description');
         await this.page.type('input[name="goal"], input[placeholder*="goal" i]', '10');
-        
-        const submitCampaign = await this.page.$('button:has-text("Create"), button:has-text("Submit")');
+
+        const submitCampaign = await this.page.$(
+          'button:has-text("Create"), button:has-text("Submit")'
+        );
         if (submitCampaign) {
           await submitCampaign.click();
           journey.push(this.logResult('Create Campaign', true));
@@ -229,16 +250,19 @@ class IntegrationTester {
       }
 
       // 4. View all contributions
-      const contributionsLink = await this.page.$('a[href*="contributions"], button:has-text("Contributions")');
+      const contributionsLink = await this.page.$(
+        'a[href*="contributions"], button:has-text("Contributions")'
+      );
       if (contributionsLink) {
         await contributionsLink.click();
         await this.page.waitForTimeout(2000);
         const contributionsList = await this.page.$('.contributions-list, table');
         journey.push(this.logResult('View Contributions', contributionsList !== null));
       } else {
-        journey.push(this.logResult('View Contributions', false, 'Contributions link not found', 'LOW'));
+        journey.push(
+          this.logResult('View Contributions', false, 'Contributions link not found', 'LOW')
+        );
       }
-
     } catch (error) {
       journey.push(this.logResult('Admin Journey', false, error.message, 'HIGH'));
     }
@@ -253,10 +277,10 @@ class IntegrationTester {
     try {
       // 1. Login with existing account
       await this.page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle2' });
-      
+
       await this.page.type('input[name="email"], input[type="email"]', 'test@example.com');
       await this.page.type('input[name="password"], input[type="password"]', 'TestPass123!');
-      
+
       const loginButton = await this.page.$('button[type="submit"], button:has-text("Login")');
       if (loginButton) {
         await loginButton.click();
@@ -269,8 +293,13 @@ class IntegrationTester {
       // 2. View previous contributions
       await this.page.goto(`${BASE_URL}/profile`, { waitUntil: 'networkidle2' });
       const contributions = await this.page.$$('.contribution-item, .transaction-item');
-      journey.push(this.logResult('View Previous Contributions', true, 
-        `Found ${contributions.length} previous contributions`));
+      journey.push(
+        this.logResult(
+          'View Previous Contributions',
+          true,
+          `Found ${contributions.length} previous contributions`
+        )
+      );
 
       // 3. Make another contribution
       await this.page.goto(`${BASE_URL}/campaigns`, { waitUntil: 'networkidle2' });
@@ -278,14 +307,16 @@ class IntegrationTester {
       if (campaignCards.length > 0) {
         await campaignCards[0].click();
         await this.page.waitForTimeout(2000);
-        
+
         const contributeButton = await this.page.$('button:has-text("Contribute")');
         if (contributeButton) {
           await contributeButton.click();
           journey.push(this.logResult('Make Another Contribution', true));
         }
       } else {
-        journey.push(this.logResult('Make Another Contribution', false, 'No campaigns found', 'MEDIUM'));
+        journey.push(
+          this.logResult('Make Another Contribution', false, 'No campaigns found', 'MEDIUM')
+        );
       }
 
       // 4. Update profile information
@@ -299,7 +330,7 @@ class IntegrationTester {
             input.value = 'Updated Name';
           }
         });
-        
+
         const saveButton = await this.page.$('button:has-text("Save"), button:has-text("Update")');
         if (saveButton) {
           await saveButton.click();
@@ -308,7 +339,6 @@ class IntegrationTester {
       } else {
         journey.push(this.logResult('Update Profile', false, 'Profile form not found', 'LOW'));
       }
-
     } catch (error) {
       journey.push(this.logResult('Returning User Journey', false, error.message, 'HIGH'));
     }
@@ -337,13 +367,20 @@ class IntegrationTester {
       const consoleErrors = await this.page.evaluate(() => {
         return window.__consoleErrors || [];
       });
-      checks.push(this.logResult('No Console Errors', consoleErrors.length === 0, 
-        `Found ${consoleErrors.length} console errors`));
+      checks.push(
+        this.logResult(
+          'No Console Errors',
+          consoleErrors.length === 0,
+          `Found ${consoleErrors.length} console errors`
+        )
+      );
 
       // 3. Check mobile responsiveness
       await this.page.setViewport({ width: 375, height: 667 });
       await this.page.goto(BASE_URL, { waitUntil: 'networkidle2' });
-      const mobileMenu = await this.page.$('.mobile-menu, .hamburger, button[aria-label*="menu" i]');
+      const mobileMenu = await this.page.$(
+        '.mobile-menu, .hamburger, button[aria-label*="menu" i]'
+      );
       checks.push(this.logResult('Mobile Responsive', mobileMenu !== null));
       await this.page.setViewport({ width: 1366, height: 768 });
 
@@ -365,10 +402,11 @@ class IntegrationTester {
       // 6. Check images load
       const brokenImages = await this.page.evaluate(() => {
         const images = Array.from(document.querySelectorAll('img'));
-        return images.filter(img => !img.complete || img.naturalWidth === 0).length;
+        return images.filter((img) => !img.complete || img.naturalWidth === 0).length;
       });
-      checks.push(this.logResult('All Images Load', brokenImages === 0, 
-        `${brokenImages} broken images found`));
+      checks.push(
+        this.logResult('All Images Load', brokenImages === 0, `${brokenImages} broken images found`)
+      );
 
       // 7. Check API connectivity
       const apiResponse = await this.page.evaluate(async () => {
@@ -386,7 +424,6 @@ class IntegrationTester {
         return typeof window.ethereum !== 'undefined';
       });
       checks.push(this.logResult('Web3 Available', web3Connected));
-
     } catch (error) {
       checks.push(this.logResult('Critical Checks', false, error.message, 'CRITICAL'));
     }
@@ -397,18 +434,20 @@ class IntegrationTester {
 
   generateReport() {
     const report = [];
-    
+
     report.push('# END-TO-END INTEGRATION TEST REPORT');
     report.push(`\nGenerated: ${new Date().toISOString()}`);
     report.push(`\n## SUMMARY`);
     report.push(`- Total Tests: ${this.results.summary.totalTests}`);
     report.push(`- Passed: ${this.results.summary.passed} ✅`);
     report.push(`- Failed: ${this.results.summary.failed} ❌`);
-    report.push(`- Pass Rate: ${((this.results.summary.passed / this.results.summary.totalTests) * 100).toFixed(1)}%`);
-    
+    report.push(
+      `- Pass Rate: ${((this.results.summary.passed / this.results.summary.totalTests) * 100).toFixed(1)}%`
+    );
+
     if (this.results.summary.critical.length > 0) {
       report.push(`\n### ⚠️ CRITICAL ISSUES`);
-      this.results.summary.critical.forEach(issue => {
+      this.results.summary.critical.forEach((issue) => {
         report.push(`- ${issue}`);
       });
     }
@@ -432,25 +471,25 @@ class IntegrationTester {
     // Bug Summary
     report.push(`\n## BUG SUMMARY`);
     const bugs = this.categorizeBugs();
-    
+
     if (bugs.critical.length > 0) {
       report.push(`\n### CRITICAL (Must Fix Immediately)`);
-      bugs.critical.forEach(bug => report.push(`- ${bug}`));
+      bugs.critical.forEach((bug) => report.push(`- ${bug}`));
     }
-    
+
     if (bugs.high.length > 0) {
       report.push(`\n### HIGH (Should Fix Soon)`);
-      bugs.high.forEach(bug => report.push(`- ${bug}`));
+      bugs.high.forEach((bug) => report.push(`- ${bug}`));
     }
-    
+
     if (bugs.medium.length > 0) {
       report.push(`\n### MEDIUM (Can Fix Later)`);
-      bugs.medium.forEach(bug => report.push(`- ${bug}`));
+      bugs.medium.forEach((bug) => report.push(`- ${bug}`));
     }
-    
+
     if (bugs.low.length > 0) {
       report.push(`\n### LOW (Nice to Have)`);
-      bugs.low.forEach(bug => report.push(`- ${bug}`));
+      bugs.low.forEach((bug) => report.push(`- ${bug}`));
     }
 
     // Recommendations
@@ -461,7 +500,7 @@ class IntegrationTester {
   }
 
   formatJourneyResults(report, results) {
-    results.forEach(result => {
+    results.forEach((result) => {
       const status = result.passed ? '✅' : '❌';
       const severity = result.passed ? '' : ` [${result.severity}]`;
       report.push(`- ${status} ${result.test}${severity}`);
@@ -476,17 +515,17 @@ class IntegrationTester {
       critical: [],
       high: [],
       medium: [],
-      low: []
+      low: [],
     };
 
     const allResults = [
       ...this.results.newUserJourney,
       ...this.results.adminJourney,
       ...this.results.returningUserJourney,
-      ...this.results.criticalChecks
+      ...this.results.criticalChecks,
     ];
 
-    allResults.forEach(result => {
+    allResults.forEach((result) => {
       if (!result.passed) {
         const bug = `${result.test}: ${result.details || 'Failed'}`;
         switch (result.severity) {
@@ -511,16 +550,20 @@ class IntegrationTester {
 
   generateRecommendations() {
     const recommendations = [];
-    
+
     if (this.results.summary.critical.length > 0) {
-      recommendations.push('1. **IMMEDIATE ACTION REQUIRED**: Fix all critical bugs before deployment');
+      recommendations.push(
+        '1. **IMMEDIATE ACTION REQUIRED**: Fix all critical bugs before deployment'
+      );
     }
-    
+
     const passRate = (this.results.summary.passed / this.results.summary.totalTests) * 100;
     if (passRate < 80) {
-      recommendations.push('2. **Quality Concerns**: Pass rate below 80%, significant improvements needed');
+      recommendations.push(
+        '2. **Quality Concerns**: Pass rate below 80%, significant improvements needed'
+      );
     }
-    
+
     recommendations.push('3. Add comprehensive error handling for all user interactions');
     recommendations.push('4. Implement proper loading states for all async operations');
     recommendations.push('5. Add user feedback for all actions (success/error messages)');
@@ -533,36 +576,35 @@ class IntegrationTester {
 
   async run() {
     console.log('🚀 Starting End-to-End Integration Tests...\n');
-    
+
     try {
       await this.setup();
-      
+
       // Run all test suites
       await this.testNewUserJourney();
       await this.testAdminJourney();
       await this.testReturningUserJourney();
       await this.performCriticalChecks();
-      
+
       // Generate and save report
       const report = this.generateReport();
-      
+
       // Save report to file
       fs.writeFileSync('./test-results/integration-test-report.md', report);
       console.log('\n✅ Report saved to test-results/integration-test-report.md');
-      
     } catch (error) {
       console.error('Test suite failed:', error);
     } finally {
       await this.teardown();
     }
-    
+
     return this.results;
   }
 }
 
 // Run tests if executed directly
 const tester = new IntegrationTester();
-tester.run().then(results => {
+tester.run().then((results) => {
   process.exit(results.summary.critical.length > 0 ? 1 : 0);
 });
 

@@ -21,26 +21,25 @@ class BatchFormTester {
 
   async initialize() {
     console.log('🚀 Batch Form Tester - Optimized for Large Scale Testing');
-    
+
     // Load CSV data
     this.prospects = await this.loadCSV('../data/prospects.csv');
-    
+
     // Launch browser with optimized settings for batch processing
-    this.browser = await puppeteer.launch({ 
+    this.browser = await puppeteer.launch({
       headless: true,
       slowMo: 50, // Minimal delay for speed
       args: [
-        '--no-sandbox', 
+        '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
         '--no-first-run',
         '--no-default-browser-check',
-        '--disable-default-apps'
+        '--disable-default-apps',
       ],
-      defaultViewport: { width: 1024, height: 768 } // Smaller viewport for speed
+      defaultViewport: { width: 1024, height: 768 }, // Smaller viewport for speed
     });
-    
   }
 
   async loadCSV(filepath) {
@@ -58,11 +57,10 @@ class BatchFormTester {
     const page = await this.browser.newPage();
     page.setDefaultTimeout(20000); // Shorter timeout for batch processing
     page.setDefaultNavigationTimeout(20000);
-    
+
     const testId = `test-${prospect.unique_id}-${Date.now()}`;
     const startTime = Date.now();
-    
-    
+
     const testResult = {
       testId,
       index: index + 1,
@@ -71,15 +69,15 @@ class BatchFormTester {
       timestamp: new Date().toISOString(),
       success: false,
       duration: 0,
-      steps: {}
+      steps: {},
     };
 
     try {
       // Step 1: Navigate to form
       await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 20000 });
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Brief wait for dynamic content
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Brief wait for dynamic content
       testResult.steps.navigation = true;
-      
+
       // Step 2: Quick form analysis
       const formInfo = await page.evaluate(() => {
         const forms = document.querySelectorAll('form');
@@ -87,31 +85,32 @@ class BatchFormTester {
         return {
           formCount: forms.length,
           inputCount: inputs.length,
-          hasVisibleInputs: Array.from(inputs).some(i => i.offsetParent !== null)
+          hasVisibleInputs: Array.from(inputs).some((i) => i.offsetParent !== null),
         };
       });
-      
+
       testResult.steps.formAnalysis = formInfo;
-      
+
       if (!formInfo.hasVisibleInputs) {
         throw new Error('No visible form inputs found');
       }
-      
+
       // Step 3: Fast form filling
       const fillResult = await this.fastFillForm(page, prospect);
       testResult.steps.formFilling = fillResult;
-      
+
       // Step 4: Submit form
       const submitResult = await this.fastSubmitForm(page);
       testResult.steps.submission = submitResult;
-      
+
       if (submitResult.success) {
         testResult.success = true;
-        console.log(`  ✅ SUCCESS: ${fillResult.successful}/${fillResult.attempted} fields, submitted successfully`);
+        console.log(
+          `  ✅ SUCCESS: ${fillResult.successful}/${fillResult.attempted} fields, submitted successfully`
+        );
       } else {
         console.log(`  ❌ FAILED: ${submitResult.error}`);
       }
-      
     } catch (error) {
       console.log(`  💥 ERROR: ${error.message}`);
       testResult.error = error.message;
@@ -119,7 +118,7 @@ class BatchFormTester {
       testResult.duration = Date.now() - startTime;
       await page.close();
     }
-    
+
     return testResult;
   }
 
@@ -127,35 +126,59 @@ class BatchFormTester {
     const fillResults = {
       attempted: 0,
       successful: 0,
-      failed: []
+      failed: [],
     };
 
     // Generate test email
     const email = `${prospect.first_name.toLowerCase()}.${prospect.last_name.toLowerCase()}@test.com`;
-    
+
     // Fast field mapping - target the most common fields
     const quickMappings = [
-      { selectors: ['input[name*="address"]', 'input[placeholder*="address"]'], value: prospect.address_line_1, type: 'address' },
-      { selectors: ['input[name*="city"]', 'input[placeholder*="city"]'], value: prospect.city, type: 'city' },
-      { selectors: ['select[name*="state"]', 'input[name*="state"]'], value: prospect.state, type: 'state' },
-      { selectors: ['input[name*="zip"]', 'input[placeholder*="zip"]'], value: prospect.zip, type: 'zip' },
-      { selectors: ['input[name*="amount"]', 'input[placeholder*="amount"]'], value: '100', type: 'amount' },
-      { selectors: ['input[name*="wallet"]', 'input[placeholder*="wallet"]'], value: '0x742d35Cc6639C0532fCb5FbF7b51f4FA8B4B8B34', type: 'wallet' }
+      {
+        selectors: ['input[name*="address"]', 'input[placeholder*="address"]'],
+        value: prospect.address_line_1,
+        type: 'address',
+      },
+      {
+        selectors: ['input[name*="city"]', 'input[placeholder*="city"]'],
+        value: prospect.city,
+        type: 'city',
+      },
+      {
+        selectors: ['select[name*="state"]', 'input[name*="state"]'],
+        value: prospect.state,
+        type: 'state',
+      },
+      {
+        selectors: ['input[name*="zip"]', 'input[placeholder*="zip"]'],
+        value: prospect.zip,
+        type: 'zip',
+      },
+      {
+        selectors: ['input[name*="amount"]', 'input[placeholder*="amount"]'],
+        value: '100',
+        type: 'amount',
+      },
+      {
+        selectors: ['input[name*="wallet"]', 'input[placeholder*="wallet"]'],
+        value: '0x742d35Cc6639C0532fCb5FbF7b51f4FA8B4B8B34',
+        type: 'wallet',
+      },
     ];
 
     for (const mapping of quickMappings) {
       fillResults.attempted++;
-      
+
       try {
         let filled = false;
         for (const selector of mapping.selectors) {
           try {
             const element = await page.$(selector);
             if (element) {
-              const isVisible = await page.evaluate(el => el.offsetParent !== null, element);
+              const isVisible = await page.evaluate((el) => el.offsetParent !== null, element);
               if (isVisible && mapping.value) {
                 await element.click();
-                await element.evaluate(el => el.value = '');
+                await element.evaluate((el) => (el.value = ''));
                 await element.type(mapping.value.toString());
                 fillResults.successful++;
                 filled = true;
@@ -166,7 +189,7 @@ class BatchFormTester {
             continue;
           }
         }
-        
+
         if (!filled) {
           fillResults.failed.push(`${mapping.type}: No matching visible field found`);
         }
@@ -181,115 +204,124 @@ class BatchFormTester {
   async fastSubmitForm(page) {
     try {
       // Look for submit button quickly
-      const submitButton = await page.$('button[type="submit"], input[type="submit"], button:not([type="button"])');
-      
+      const submitButton = await page.$(
+        'button[type="submit"], input[type="submit"], button:not([type="button"])'
+      );
+
       if (!submitButton) {
         return { success: false, error: 'No submit button found' };
       }
 
       // Click and wait for result
       await submitButton.click();
-      await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for submission processing
-      
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait for submission processing
+
       // Assume success if no obvious errors (optimistic approach for batch testing)
-      return { 
-        success: true, 
+      return {
+        success: true,
         message: 'Form submitted (batch processing assumption)',
-        type: 'optimistic_success'
+        type: 'optimistic_success',
       };
-      
     } catch (error) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: `Submission failed: ${error.message}`,
-        type: 'exception'
+        type: 'exception',
       };
     }
   }
 
   async runBatchTest(batchSize = 10) {
-    
     const totalBatches = Math.ceil(this.prospects.length / batchSize);
-    
+
     for (let batchNum = 0; batchNum < totalBatches; batchNum++) {
       const start = batchNum * batchSize;
       const end = Math.min(start + batchSize, this.prospects.length);
       const batch = this.prospects.slice(start, end);
-      
-      
+
       // Process batch concurrently (but limit concurrency to avoid overwhelming)
-      const promises = batch.map((prospect, i) => 
-        this.testSingleForm(prospect, start + i)
-      );
-      
+      const promises = batch.map((prospect, i) => this.testSingleForm(prospect, start + i));
+
       const batchResults = await Promise.all(promises);
       this.testResults.push(...batchResults);
-      
+
       // Progress update
-      const successful = batchResults.filter(r => r.success).length;
+      const successful = batchResults.filter((r) => r.success).length;
       const successRate = ((successful / batchResults.length) * 100).toFixed(1);
-      console.log(`📊 Batch ${batchNum + 1} Complete: ${successful}/${batchResults.length} successful (${successRate}%)`);
-      
+      console.log(
+        `📊 Batch ${batchNum + 1} Complete: ${successful}/${batchResults.length} successful (${successRate}%)`
+      );
+
       // Brief pause between batches
       if (batchNum < totalBatches - 1) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     }
-    
+
     this.generateFinalReport();
   }
 
   generateFinalReport() {
     const endTime = Date.now();
     const totalDuration = (endTime - this.startTime) / 1000;
-    
-    
-    const successful = this.testResults.filter(r => r.success);
-    const failed = this.testResults.filter(r => !r.success);
+
+    const successful = this.testResults.filter((r) => r.success);
+    const failed = this.testResults.filter((r) => !r.success);
     const successRate = ((successful.length / this.testResults.length) * 100).toFixed(1);
-    
+
     console.log(`📊 FINAL RESULTS:`);
     console.log(`   Total Tests: ${this.testResults.length}`);
     console.log(`   ✅ Successful: ${successful.length} (${successRate}%)`);
     console.log(`   ❌ Failed: ${failed.length} (${(100 - successRate).toFixed(1)}%)`);
     console.log(`   ⚡ Avg per test: ${(totalDuration / this.testResults.length).toFixed(2)}s`);
-    
+
     // Field success analysis
     const fieldStats = {};
-    this.testResults.forEach(result => {
+    this.testResults.forEach((result) => {
       if (result.steps.formFilling) {
-        fieldStats.attempted = (fieldStats.attempted || 0) + (result.steps.formFilling.attempted || 0);
-        fieldStats.successful = (fieldStats.successful || 0) + (result.steps.formFilling.successful || 0);
+        fieldStats.attempted =
+          (fieldStats.attempted || 0) + (result.steps.formFilling.attempted || 0);
+        fieldStats.successful =
+          (fieldStats.successful || 0) + (result.steps.formFilling.successful || 0);
       }
     });
-    
+
     if (fieldStats.attempted > 0) {
       const fieldSuccessRate = ((fieldStats.successful / fieldStats.attempted) * 100).toFixed(1);
-      console.log(`📝 Field Filling: ${fieldStats.successful}/${fieldStats.attempted} (${fieldSuccessRate}%)`);
+      console.log(
+        `📝 Field Filling: ${fieldStats.successful}/${fieldStats.attempted} (${fieldSuccessRate}%)`
+      );
     }
-    
+
     // Save results
     const reportPath = `test-results/batch-test-results-${Date.now()}.json`;
     fs.mkdirSync('test-results', { recursive: true });
-    fs.writeFileSync(reportPath, JSON.stringify({
-      summary: {
-        totalTests: this.testResults.length,
-        successful: successful.length,
-        failed: failed.length,
-        successRate: parseFloat(successRate),
-        totalDuration: totalDuration,
-        avgDuration: totalDuration / this.testResults.length
-      },
-      results: this.testResults
-    }, null, 2));
-    
+    fs.writeFileSync(
+      reportPath,
+      JSON.stringify(
+        {
+          summary: {
+            totalTests: this.testResults.length,
+            successful: successful.length,
+            failed: failed.length,
+            successRate: parseFloat(successRate),
+            totalDuration: totalDuration,
+            avgDuration: totalDuration / this.testResults.length,
+          },
+          results: this.testResults,
+        },
+        null,
+        2
+      )
+    );
+
     console.log(`📁 Detailed results saved: ${reportPath}`);
-    
+
     if (successful.length > 0) {
       console.log('\n🎉 BATCH TESTING SUCCESSFUL!');
     } else {
     }
-    
+
     return reportPath;
   }
 
@@ -303,13 +335,12 @@ class BatchFormTester {
 // CLI Interface
 async function main() {
   const tester = new BatchFormTester();
-  
+
   try {
     await tester.initialize();
-    
+
     // Run batch test with all records (in batches of 5 for speed)
     await tester.runBatchTest(5);
-    
   } catch (error) {
     console.error('💥 Batch testing failed:', error);
   } finally {

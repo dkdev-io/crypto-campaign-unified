@@ -17,57 +17,47 @@ function extractCampaignStylesForEmbed(campaignData) {
 
   return {
     colors: {
-      primary: appliedStyles?.colors?.primary || 
-               customStyles?.colors?.primary || 
-               themeColor || 
-               '#2a2a72',
-      secondary: appliedStyles?.colors?.secondary || 
-                 customStyles?.colors?.secondary || 
-                 '#666666',
-      accent: appliedStyles?.colors?.accent || 
-              customStyles?.colors?.accent || 
-              '#28a745',
-      background: appliedStyles?.colors?.background || 
-                  customStyles?.colors?.background || 
-                  '#ffffff',
-      text: appliedStyles?.colors?.text || 
-            customStyles?.colors?.text || 
-            '#333333'
+      primary:
+        appliedStyles?.colors?.primary || customStyles?.colors?.primary || themeColor || '#2a2a72',
+      secondary: appliedStyles?.colors?.secondary || customStyles?.colors?.secondary || '#666666',
+      accent: appliedStyles?.colors?.accent || customStyles?.colors?.accent || '#28a745',
+      background:
+        appliedStyles?.colors?.background || customStyles?.colors?.background || '#ffffff',
+      text: appliedStyles?.colors?.text || customStyles?.colors?.text || '#333333',
     },
     fonts: {
       heading: {
-        family: appliedStyles?.fonts?.heading?.suggested || 
-                customStyles?.fonts?.heading?.family || 
-                'Inter, system-ui, sans-serif',
-        weight: appliedStyles?.fonts?.heading?.weight || 
-                customStyles?.fonts?.heading?.weight || 
-                '600'
+        family:
+          appliedStyles?.fonts?.heading?.suggested ||
+          customStyles?.fonts?.heading?.family ||
+          'Inter, system-ui, sans-serif',
+        weight:
+          appliedStyles?.fonts?.heading?.weight || customStyles?.fonts?.heading?.weight || '600',
       },
       body: {
-        family: appliedStyles?.fonts?.body?.suggested || 
-                customStyles?.fonts?.body?.family || 
-                'Inter, system-ui, sans-serif',
-        weight: appliedStyles?.fonts?.body?.weight || 
-                customStyles?.fonts?.body?.weight || 
-                '400'
+        family:
+          appliedStyles?.fonts?.body?.suggested ||
+          customStyles?.fonts?.body?.family ||
+          'Inter, system-ui, sans-serif',
+        weight: appliedStyles?.fonts?.body?.weight || customStyles?.fonts?.body?.weight || '400',
       },
       button: {
-        family: appliedStyles?.fonts?.button?.suggested || 
-                customStyles?.fonts?.button?.family || 
-                'Inter, system-ui, sans-serif',
-        weight: appliedStyles?.fonts?.button?.weight || 
-                customStyles?.fonts?.button?.weight || 
-                '500'
-      }
+        family:
+          appliedStyles?.fonts?.button?.suggested ||
+          customStyles?.fonts?.button?.family ||
+          'Inter, system-ui, sans-serif',
+        weight:
+          appliedStyles?.fonts?.button?.weight || customStyles?.fonts?.button?.weight || '500',
+      },
     },
     layout: {
-      borderRadius: appliedStyles?.layout?.recommendations?.borderRadius || 
-                    customStyles?.layout?.borderRadius || 
-                    '8px',
-      spacing: appliedStyles?.layout?.recommendations?.margin || 
-               customStyles?.layout?.spacing || 
-               '1rem'
-    }
+      borderRadius:
+        appliedStyles?.layout?.recommendations?.borderRadius ||
+        customStyles?.layout?.borderRadius ||
+        '8px',
+      spacing:
+        appliedStyles?.layout?.recommendations?.margin || customStyles?.layout?.spacing || '1rem',
+    },
   };
 }
 
@@ -81,7 +71,7 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
 
     // Get Supabase instance
     const { supabase } = require('../lib/supabase');
-    
+
     // Get campaign data
     const { data: campaignData, error: campaignError } = await supabase
       .from('campaigns')
@@ -107,7 +97,7 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
         setup_completed: true,
         setup_completed_at: new Date().toISOString(),
         setup_step: 5,
-        embed_code: embedCode
+        embed_code: embedCode,
       })
       .eq('id', campaignId);
 
@@ -119,25 +109,25 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
     // NEW: Trigger donor page automation
     try {
       console.log('🚀 Triggering donor page automation...');
-      
+
       // Check if page already exists to avoid duplicates
       if (!campaignData.donor_page_generated) {
         const pageResult = await donorPageAutomation.triggerPageCreation(campaignData);
         console.log('✅ Donor page created:', pageResult.url);
-        
+
         // Trigger webhooks for the completion event
         await triggerWebhooks(campaignId, 'setup.completed', {
           ...campaignData,
           embedCode,
-          donorPageUrl: pageResult.url
+          donorPageUrl: pageResult.url,
         });
-        
+
         // Return enhanced response with donor page info
         return {
           embedCode,
           donorPageUrl: pageResult.url,
           donorPageGenerated: true,
-          setupCompleted: true
+          setupCompleted: true,
         };
       } else {
         console.log('ℹ️ Donor page already exists for campaign');
@@ -145,22 +135,21 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
           embedCode,
           donorPageUrl: campaignData.donor_page_url,
           donorPageGenerated: true,
-          setupCompleted: true
+          setupCompleted: true,
         };
       }
     } catch (pageError) {
       console.error('❌ Donor page automation failed:', pageError);
-      
+
       // Return embed code anyway - the main functionality should still work
       return {
         embedCode,
         donorPageUrl: null,
         donorPageGenerated: false,
         donorPageError: pageError.message,
-        setupCompleted: true
+        setupCompleted: true,
       };
     }
-
   } catch (error) {
     console.error('❌ Enhanced embed code generation failed:', error);
     throw error;
@@ -172,8 +161,9 @@ async function generateEmbedCodeWithPageAutomation(campaignId, baseUrl) {
  */
 function generateEmbedCodeHTML(campaignId, baseUrl, campaignData = null) {
   // Use production URL if baseUrl is localhost
-  const embedBaseUrl = baseUrl && baseUrl.includes('localhost') ? 'https://cryptocampaign.netlify.app' : baseUrl;
-  
+  const embedBaseUrl =
+    baseUrl && baseUrl.includes('localhost') ? 'https://cryptocampaign.netlify.app' : baseUrl;
+
   // Extract style guide data for the embed
   let styleParams = '';
   if (campaignData) {
@@ -184,11 +174,11 @@ function generateEmbedCodeHTML(campaignId, baseUrl, campaignData = null) {
       accent: styles.colors.accent,
       headingFont: styles.fonts.heading.family,
       bodyFont: styles.fonts.body.family,
-      borderRadius: styles.layout.borderRadius
+      borderRadius: styles.layout.borderRadius,
     });
     styleParams = '&' + params.toString();
   }
-  
+
   return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>
@@ -236,9 +226,7 @@ async function handleEmbedCodeGeneration(req, res) {
     const { campaignId } = req.params;
     const { baseUrl } = req.body;
 
-    const finalBaseUrl = baseUrl || 
-                        req.headers.origin || 
-                        `${req.protocol}://${req.get('host')}`;
+    const finalBaseUrl = baseUrl || req.headers.origin || `${req.protocol}://${req.get('host')}`;
 
     console.log('📝 API: Generating embed code for campaign:', campaignId);
 
@@ -246,15 +234,14 @@ async function handleEmbedCodeGeneration(req, res) {
 
     res.json({
       success: true,
-      ...result
+      ...result,
     });
-
   } catch (error) {
     console.error('❌ API: Embed code generation failed:', error);
     res.status(500).json({
       success: false,
       error: error.message,
-      embedCode: null
+      embedCode: null,
     });
   }
 }
@@ -266,10 +253,10 @@ function interceptSupabaseEmbedGeneration(req, res, next) {
   // Check if this is a Supabase RPC call to generate_embed_code
   if (req.body && req.body.fn_name === 'generate_embed_code') {
     console.log('🔄 Intercepting Supabase embed code generation');
-    
+
     const campaignId = req.body.args?.p_campaign_id;
     const baseUrl = req.body.args?.p_base_url;
-    
+
     if (campaignId) {
       // Handle with our enhanced version
       req.params = { campaignId };
@@ -277,7 +264,7 @@ function interceptSupabaseEmbedGeneration(req, res, next) {
       return handleEmbedCodeGeneration(req, res);
     }
   }
-  
+
   // Continue to next middleware
   next();
 }
@@ -311,14 +298,14 @@ async function handleFormCustomizationWebhook(campaignId, changes) {
       .from('campaigns')
       .update({
         embed_code: newEmbedCode,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', campaignId);
 
     // Regenerate donor page with new settings
     const pageResult = await donorPageAutomation.syncPageFromWebhook(campaignId, {
       ...changes,
-      embedCode: newEmbedCode
+      embedCode: newEmbedCode,
     });
 
     // Trigger webhooks
@@ -326,15 +313,14 @@ async function handleFormCustomizationWebhook(campaignId, changes) {
       campaignId,
       changes,
       newEmbedCode,
-      donorPageUrl: pageResult?.url
+      donorPageUrl: pageResult?.url,
     });
 
     return {
       embedCode: newEmbedCode,
       donorPageUrl: pageResult?.url,
-      updated: true
+      updated: true,
     };
-
   } catch (error) {
     console.error('❌ Form customization webhook failed:', error);
     throw error;
@@ -348,43 +334,47 @@ async function handleFormCustomizationWebhook(campaignId, changes) {
 function enhanceEmbedCodeResponse(embedResult, campaignData) {
   const enhancement = {
     ...embedResult,
-    
+
     // Add donor page information
     donorPage: {
       url: embedResult.donorPageUrl,
       generated: embedResult.donorPageGenerated,
-      error: embedResult.donorPageError || null
+      error: embedResult.donorPageError || null,
     },
-    
+
     // Add sharing information
     sharing: {
       directUrl: embedResult.donorPageUrl,
       embedCode: embedResult.embedCode,
       socialText: `Support ${campaignData.campaign_name} - Donate with cryptocurrency`,
-      hashtags: ['CryptoDonations', 'PoliticalFundraising', campaignData.campaign_name.replace(/\s+/g, '')]
+      hashtags: [
+        'CryptoDonations',
+        'PoliticalFundraising',
+        campaignData.campaign_name.replace(/\s+/g, ''),
+      ],
     },
-    
+
     // Add next steps
     nextSteps: [
       {
         title: 'Share Your Donor Page',
         description: 'Direct supporters to your custom donor page',
         url: embedResult.donorPageUrl,
-        icon: '🌐'
+        icon: '🌐',
       },
       {
         title: 'Embed on Website',
         description: 'Add the form directly to your campaign website',
         action: 'copy_embed_code',
-        icon: '📝'
+        icon: '📝',
       },
       {
         title: 'Monitor Donations',
         description: 'Track contributions in the admin panel',
         url: '/admin',
-        icon: '📊'
-      }
-    ]
+        icon: '📊',
+      },
+    ],
   };
 
   return enhancement;
@@ -396,5 +386,5 @@ module.exports = {
   handleEmbedCodeGeneration,
   interceptSupabaseEmbedGeneration,
   handleFormCustomizationWebhook,
-  enhanceEmbedCodeResponse
+  enhanceEmbedCodeResponse,
 };

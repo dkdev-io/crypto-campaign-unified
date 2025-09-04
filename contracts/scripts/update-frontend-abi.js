@@ -2,16 +2,23 @@ const fs = require('fs');
 const path = require('path');
 
 async function updateFrontendABI() {
-  console.log("📄 Updating frontend ABI and contract config...");
+  console.log('📄 Updating frontend ABI and contract config...');
 
   // Read the compiled contract artifact
-  const artifactPath = path.join(__dirname, '../artifacts/src/CampaignContributions.sol/CampaignContributions.json');
+  const artifactPath = path.join(
+    __dirname,
+    '../artifacts/src/CampaignContributions.sol/CampaignContributions.json'
+  );
   const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
 
   // Read deployment info
   const deploymentsDir = path.join(__dirname, '../deployments');
-  const deploymentFiles = fs.readdirSync(deploymentsDir)
-    .filter(file => (file.startsWith('localhost') || file.startsWith('hardhat')) && file.endsWith('.json'))
+  const deploymentFiles = fs
+    .readdirSync(deploymentsDir)
+    .filter(
+      (file) =>
+        (file.startsWith('localhost') || file.startsWith('hardhat')) && file.endsWith('.json')
+    )
     .sort();
 
   if (deploymentFiles.length === 0) {
@@ -19,7 +26,9 @@ async function updateFrontendABI() {
   }
 
   const latestDeployment = deploymentFiles[deploymentFiles.length - 1];
-  const deploymentInfo = JSON.parse(fs.readFileSync(path.join(deploymentsDir, latestDeployment), 'utf8'));
+  const deploymentInfo = JSON.parse(
+    fs.readFileSync(path.join(deploymentsDir, latestDeployment), 'utf8')
+  );
 
   console.log(`📍 Using deployment: ${latestDeployment}`);
   console.log(`📍 Contract address: ${deploymentInfo.contractAddress}`);
@@ -32,21 +41,24 @@ async function updateFrontendABI() {
     networks: {
       localhost: {
         address: deploymentInfo.contractAddress,
-        chainId: 31337
-      }
+        chainId: 31337,
+      },
     },
     deployment: {
       network: deploymentInfo.network,
       chainId: deploymentInfo.chainId,
       deployer: deploymentInfo.deployer,
       blockNumber: deploymentInfo.blockNumber,
-      deploymentTime: deploymentInfo.deploymentTime
-    }
+      deploymentTime: deploymentInfo.deploymentTime,
+    },
   };
 
   // Update frontend contract config
-  const frontendConfigPath = path.join(__dirname, '../../frontend/src/contracts/CampaignContributions.json');
-  
+  const frontendConfigPath = path.join(
+    __dirname,
+    '../../frontend/src/contracts/CampaignContributions.json'
+  );
+
   // Ensure directory exists
   const frontendContractsDir = path.dirname(frontendConfigPath);
   if (!fs.existsSync(frontendContractsDir)) {
@@ -80,17 +92,17 @@ export default {
   fs.writeFileSync(contractAbiPath, contractAbiContent);
   console.log(`✅ Contract ABI updated: ${contractAbiPath}`);
 
-  console.log("\n🎉 Frontend configuration updated successfully!");
-  console.log("\n📋 Contract Details:");
+  console.log('\n🎉 Frontend configuration updated successfully!');
+  console.log('\n📋 Contract Details:');
   console.log(`   Address: ${deploymentInfo.contractAddress}`);
   console.log(`   Network: ${deploymentInfo.network} (${deploymentInfo.chainId})`);
-  console.log(`   ABI Methods: ${artifact.abi.filter(item => item.type === 'function').length}`);
-  console.log(`   Events: ${artifact.abi.filter(item => item.type === 'event').length}`);
+  console.log(`   ABI Methods: ${artifact.abi.filter((item) => item.type === 'function').length}`);
+  console.log(`   Events: ${artifact.abi.filter((item) => item.type === 'event').length}`);
 }
 
 updateFrontendABI()
-  .then(() => console.log("✅ ABI update completed"))
-  .catch(error => {
-    console.error("❌ ABI update failed:", error);
+  .then(() => console.log('✅ ABI update completed'))
+  .catch((error) => {
+    console.error('❌ ABI update failed:', error);
     process.exit(1);
   });

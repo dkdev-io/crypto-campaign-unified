@@ -47,7 +47,7 @@ const CommitteeSearchPage = () => {
           setFormData({
             ...savedData,
             campaignId: existingCampaign.id,
-            email: user.email
+            email: user.email,
           });
         } else {
           // Create new campaign
@@ -56,7 +56,7 @@ const CommitteeSearchPage = () => {
             title: savedData?.campaignName || 'New Campaign',
             wallet_address: 'temp-wallet-' + Date.now(),
             status: 'setup',
-            user_id: user.id
+            user_id: user.id,
           };
 
           const { data: newCampaign, error: createError } = await supabase
@@ -73,14 +73,14 @@ const CommitteeSearchPage = () => {
             setFormData({
               ...savedData,
               campaignId: fallbackId,
-              email: user.email
+              email: user.email,
             });
           } else {
             setCampaignId(newCampaign.id);
             setFormData({
               ...savedData,
               campaignId: newCampaign.id,
-              email: user.email
+              email: user.email,
             });
             console.log('Campaign created successfully:', newCampaign);
           }
@@ -92,7 +92,7 @@ const CommitteeSearchPage = () => {
         setCampaignId(fallbackId);
         setFormData({
           campaignId: fallbackId,
-          email: user.email
+          email: user.email,
         });
       } finally {
         setLoading(false);
@@ -105,7 +105,7 @@ const CommitteeSearchPage = () => {
   const updateFormData = async (newData) => {
     const updatedData = { ...formData, ...newData };
     setFormData(updatedData);
-    
+
     // Save to localStorage
     try {
       localStorage.setItem('campaignSetupData', JSON.stringify(updatedData));
@@ -114,7 +114,10 @@ const CommitteeSearchPage = () => {
     }
 
     // Save committee information to Supabase if we have a campaign ID
-    if (campaignId && (newData.committeeName || newData.fecCommitteeId || newData.committeeAddress)) {
+    if (
+      campaignId &&
+      (newData.committeeName || newData.fecCommitteeId || newData.committeeAddress)
+    ) {
       try {
         const dbData = {};
         if (updatedData.committeeName) dbData.committee_name = updatedData.committeeName;
@@ -123,13 +126,11 @@ const CommitteeSearchPage = () => {
         if (updatedData.committeeCity) dbData.committee_city = updatedData.committeeCity;
         if (updatedData.committeeState) dbData.committee_state = updatedData.committeeState;
         if (updatedData.committeeZip) dbData.committee_zip = updatedData.committeeZip;
-        if (updatedData.selectedCommittee) dbData.committee_contact_info = updatedData.selectedCommittee;
+        if (updatedData.selectedCommittee)
+          dbData.committee_contact_info = updatedData.selectedCommittee;
 
         if (Object.keys(dbData).length > 0) {
-          const { error } = await supabase
-            .from('campaigns')
-            .update(dbData)
-            .eq('id', campaignId);
+          const { error } = await supabase.from('campaigns').update(dbData).eq('id', campaignId);
 
           if (error) {
             console.warn('Failed to save committee data to database:', error.message);
@@ -153,22 +154,24 @@ const CommitteeSearchPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
         <CampaignAuthNav />
         <div className="flex items-center justify-center px-4 py-12">
           <div className="max-w-4xl w-full">
             <div className="bg-card rounded-2xl shadow-2xl p-8 text-center">
               <div>Loading your campaign...</div>
               <div style={{ marginTop: '1rem' }}>
-                <div style={{ 
-                  width: '30px', 
-                  height: '30px', 
-                  border: '3px solid #f3f3f3',
-                  borderTop: '3px solid hsl(var(--crypto-navy))',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite',
-                  margin: '0 auto'
-                }}></div>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    border: '3px solid #f3f3f3',
+                    borderTop: '3px solid hsl(var(--crypto-navy))',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    margin: '0 auto',
+                  }}
+                ></div>
               </div>
             </div>
           </div>
@@ -178,12 +181,12 @@ const CommitteeSearchPage = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-4xl w-full">
           <div className="bg-card rounded-2xl shadow-2xl p-8">
-            <CommitteeSearch 
+            <CommitteeSearch
               formData={formData}
               updateFormData={updateFormData}
               onNext={handleNext}

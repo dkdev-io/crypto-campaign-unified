@@ -29,7 +29,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
         debug: import.meta.env.DEV || config.debug,
         supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co',
         supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key',
-        apiEndpoint: '/rest/v1/rpc/create_or_update_session'
+        apiEndpoint: '/rest/v1/rpc/create_or_update_session',
       });
 
       // Override the flushEvents method to use Supabase
@@ -88,8 +88,8 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
           utm_medium: event.event_data?.traffic_medium,
           utm_campaign: event.event_data?.traffic_campaign,
           utm_content: event.event_data?.traffic_content,
-          utm_term: event.event_data?.traffic_term
-        }
+          utm_term: event.event_data?.traffic_term,
+        },
       });
 
       if (sessionData.error) {
@@ -112,7 +112,6 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
       if (event.event_type !== 'page_view' && event.event_type !== 'heartbeat') {
         await trackPageInteraction(event, sessionId);
       }
-
     } catch (error) {
       analyticsInstance.log('Error processing event:', error);
       throw error;
@@ -121,33 +120,31 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
 
   const insertPageView = async (event, sessionId) => {
     try {
-      const { error } = await supabase
-        .from('page_views')
-        .insert({
-          campaign_id: event.campaign_id,
-          visitor_id: event.visitor_id,
-          session_id: sessionId,
-          page_url: event.url,
-          page_title: event.event_data?.title,
-          referrer: event.event_data?.referrer,
-          utm_source: event.event_data?.traffic_source,
-          utm_medium: event.event_data?.traffic_medium,
-          utm_campaign: event.event_data?.traffic_campaign,
-          utm_content: event.event_data?.traffic_content,
-          utm_term: event.event_data?.traffic_term,
-          user_agent: event.user_agent,
-          ip_address: event.location?.ip,
-          browser: detectBrowser(event.user_agent),
-          os: detectOS(event.user_agent),
-          device_type: detectDeviceType(event.user_agent),
-          screen_resolution: event.screen_resolution,
-          country: event.location?.country,
-          region: event.location?.region,
-          city: event.location?.city,
-          timezone: event.location?.timezone,
-          session_start: new Date(event.timestamp),
-          page_load_time_ms: event.event_data?.load_time
-        });
+      const { error } = await supabase.from('page_views').insert({
+        campaign_id: event.campaign_id,
+        visitor_id: event.visitor_id,
+        session_id: sessionId,
+        page_url: event.url,
+        page_title: event.event_data?.title,
+        referrer: event.event_data?.referrer,
+        utm_source: event.event_data?.traffic_source,
+        utm_medium: event.event_data?.traffic_medium,
+        utm_campaign: event.event_data?.traffic_campaign,
+        utm_content: event.event_data?.traffic_content,
+        utm_term: event.event_data?.traffic_term,
+        user_agent: event.user_agent,
+        ip_address: event.location?.ip,
+        browser: detectBrowser(event.user_agent),
+        os: detectOS(event.user_agent),
+        device_type: detectDeviceType(event.user_agent),
+        screen_resolution: event.screen_resolution,
+        country: event.location?.country,
+        region: event.location?.region,
+        city: event.location?.city,
+        timezone: event.location?.timezone,
+        session_start: new Date(event.timestamp),
+        page_load_time_ms: event.event_data?.load_time,
+      });
 
       if (error) throw error;
     } catch (error) {
@@ -161,7 +158,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
       const { error } = await supabase.rpc('record_conversion', {
         session_id_param: sessionId,
         contribution_amount_param: event.event_data?.amount || 0,
-        transaction_hash_param: event.event_data?.transaction_hash || null
+        transaction_hash_param: event.event_data?.transaction_hash || null,
       });
 
       if (error) throw error;
@@ -175,7 +172,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
     try {
       // Update page views table with interaction data
       const updateData = {};
-      
+
       if (event.event_type === 'click') {
         updateData.clicks_count = supabase.sql`clicks_count + 1`;
       } else if (event.event_type === 'form_submit') {
@@ -204,7 +201,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
 
     try {
       // Calculate session duration
-      const sessionDuration = analyticsInstance.sessionStart 
+      const sessionDuration = analyticsInstance.sessionStart
         ? Math.floor((Date.now() - analyticsInstance.sessionStart.getTime()) / 1000)
         : 0;
 
@@ -213,10 +210,10 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
         .update({
           session_end: new Date().toISOString(),
           duration_seconds: sessionDuration,
-          page_count: analyticsInstance.events.filter(e => e.event_type === 'page_view').length,
+          page_count: analyticsInstance.events.filter((e) => e.event_type === 'page_view').length,
           scroll_depth_max: analyticsInstance.maxScrollDepth,
           clicks_total: analyticsInstance.clickCount,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('session_id', analyticsInstance.sessionId);
 
@@ -280,7 +277,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
       amount,
       transaction_hash: transactionHash,
       currency,
-      success: true
+      success: true,
     });
   };
 
@@ -301,7 +298,7 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
     analytics,
     isInitialized,
     trackingStatus,
-    
+
     // Tracking methods
     trackEvent,
     trackConversion,
@@ -311,16 +308,12 @@ export const AnalyticsProvider = ({ children, config = {} }) => {
     trackContributionAttempt,
     trackContributionSuccess,
     trackContributionFailure,
-    
+
     // Privacy methods
     setConsentStatus,
     getStatus,
-    clearData: () => analytics?.clearAllData()
+    clearData: () => analytics?.clearAllData(),
   };
 
-  return (
-    <AnalyticsContext.Provider value={value}>
-      {children}
-    </AnalyticsContext.Provider>
-  );
+  return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>;
 };

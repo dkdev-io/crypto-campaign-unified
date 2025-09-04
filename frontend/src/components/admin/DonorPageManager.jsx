@@ -38,7 +38,6 @@ const DonorPageManager = () => {
       }
 
       setPages(data.pages || []);
-      
     } catch (err) {
       console.error('Failed to load pages:', err);
       setError(err.message);
@@ -53,9 +52,9 @@ const DonorPageManager = () => {
   const regeneratePage = async (campaignId) => {
     try {
       setError('');
-      
+
       const response = await fetch(`/api/admin/donor-pages/${campaignId}/regenerate`, {
-        method: 'POST'
+        method: 'POST',
       });
 
       const data = await response.json();
@@ -66,9 +65,8 @@ const DonorPageManager = () => {
 
       // Refresh the list
       await loadGeneratedPages();
-      
-      alert('Page regenerated successfully!');
 
+      alert('Page regenerated successfully!');
     } catch (err) {
       console.error('Failed to regenerate page:', err);
       setError(err.message);
@@ -79,15 +77,19 @@ const DonorPageManager = () => {
    * Delete a donor page
    */
   const deletePage = async (campaignId, campaignName) => {
-    if (!confirm(`Are you sure you want to delete the donor page for "${campaignName}"? This action cannot be undone.`)) {
+    if (
+      !confirm(
+        `Are you sure you want to delete the donor page for "${campaignName}"? This action cannot be undone.`
+      )
+    ) {
       return;
     }
 
     try {
       setError('');
-      
+
       const response = await fetch(`/api/admin/donor-pages/${campaignId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
 
       const data = await response.json();
@@ -98,9 +100,8 @@ const DonorPageManager = () => {
 
       // Refresh the list
       await loadGeneratedPages();
-      
-      alert('Page deleted successfully!');
 
+      alert('Page deleted successfully!');
     } catch (err) {
       console.error('Failed to delete page:', err);
       setError(err.message);
@@ -119,15 +120,15 @@ const DonorPageManager = () => {
    * Filter and sort pages
    */
   const filteredAndSortedPages = pages
-    .filter(page => {
+    .filter((page) => {
       // Apply search filter
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        const matchesSearch = 
+        const matchesSearch =
           page.campaignName.toLowerCase().includes(searchLower) ||
           page.committeeName.toLowerCase().includes(searchLower) ||
           page.pageUrl.toLowerCase().includes(searchLower);
-        
+
         if (!matchesSearch) return false;
       }
 
@@ -143,7 +144,7 @@ const DonorPageManager = () => {
     .sort((a, b) => {
       let aValue = a[sortBy];
       let bValue = b[sortBy];
-      
+
       if (sortBy === 'createdAt' || sortBy === 'lastSyncAt') {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
@@ -191,12 +192,8 @@ const DonorPageManager = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="crypto-card text-center">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          🌐 Donor Page Manager
-        </h1>
-        <p className="text-muted-foreground">
-          Manage auto-generated donor pages for all campaigns
-        </p>
+        <h1 className="text-2xl font-bold text-foreground mb-2">🌐 Donor Page Manager</h1>
+        <p className="text-muted-foreground">Manage auto-generated donor pages for all campaigns</p>
       </div>
 
       {/* Error Message */}
@@ -210,27 +207,29 @@ const DonorPageManager = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="crypto-card text-center">
           <div className="text-2xl font-bold text-foreground">{pages.length}</div>
-          <div className="text-sm text-muted-foreground">Total Pages</div>
+          <div className="text-base text-muted-foreground">Total Pages</div>
         </div>
         <div className="crypto-card text-center">
           <div className="text-2xl font-bold text-green-600">
-            {pages.filter(p => p.status === 'active').length}
+            {pages.filter((p) => p.status === 'active').length}
           </div>
-          <div className="text-sm text-muted-foreground">Active</div>
+          <div className="text-base text-muted-foreground">Active</div>
         </div>
         <div className="crypto-card text-center">
           <div className="text-2xl font-bold text-destructive">
-            {pages.filter(p => p.status === 'error').length}
+            {pages.filter((p) => p.status === 'error').length}
           </div>
-          <div className="text-sm text-muted-foreground">Errors</div>
+          <div className="text-base text-muted-foreground">Errors</div>
         </div>
         <div className="crypto-card text-center">
           <div className="text-2xl font-bold text-primary">
-            {pages.filter(p => 
-              new Date(p.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-            ).length}
+            {
+              pages.filter(
+                (p) => new Date(p.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000)
+              ).length
+            }
           </div>
-          <div className="text-sm text-muted-foreground">Last 24h</div>
+          <div className="text-base text-muted-foreground">Last 24h</div>
         </div>
       </div>
 
@@ -277,10 +276,7 @@ const DonorPageManager = () => {
         </select>
 
         {/* Refresh Button */}
-        <button
-          onClick={loadGeneratedPages}
-          className="btn-primary"
-        >
+        <button onClick={loadGeneratedPages} className="btn-primary">
           🔄 Refresh
         </button>
       </div>
@@ -293,13 +289,17 @@ const DonorPageManager = () => {
               <>
                 <div className="text-5xl mb-4">📄</div>
                 <h3 className="text-lg font-semibold text-foreground">No donor pages found</h3>
-                <p className="text-muted-foreground">Generated donor pages will appear here after campaign setup completion.</p>
+                <p className="text-muted-foreground">
+                  Generated donor pages will appear here after campaign setup completion.
+                </p>
               </>
             ) : (
               <>
                 <div className="text-5xl mb-4">🔍</div>
                 <h3 className="text-lg font-semibold text-foreground">No matching pages</h3>
-                <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
+                <p className="text-muted-foreground">
+                  Try adjusting your search or filter criteria.
+                </p>
               </>
             )}
           </div>
@@ -335,58 +335,59 @@ const DonorPageManager = () => {
                     className={`border-b border-border ${index % 2 === 0 ? 'bg-card' : 'bg-secondary/30'}`}
                   >
                     <td className="p-4">
-                      <div className="font-medium text-foreground mb-1">
-                        {page.campaignName}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-mono">
+                      <div className="font-medium text-foreground mb-1">{page.campaignName}</div>
+                      <div className="text-sm text-muted-foreground font-mono">
                         ID: {page.campaignId}
                       </div>
                     </td>
-                    <td className="p-4 text-muted-foreground">
-                      {page.committeeName}
-                    </td>
+                    <td className="p-4 text-muted-foreground">{page.committeeName}</td>
                     <td className="p-4">
                       <a
                         href={page.pageUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary hover:text-primary/90 text-sm font-mono"
+                        className="text-primary hover:text-primary/90 text-base font-mono"
                       >
                         {page.pageUrl} ↗
                       </a>
                     </td>
                     <td className="p-4 text-center">
-                      <span className={`px-2 py-1 rounded text-xs font-medium uppercase ${
-                        page.status === 'active' ? 'bg-green-100 text-green-700' :
-                        page.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
-                        page.status === 'error' ? 'bg-red-100 text-red-700' :
-                        'bg-blue-100 text-blue-700'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded text-sm font-medium uppercase ${
+                          page.status === 'active'
+                            ? 'bg-green-100 text-green-700'
+                            : page.status === 'inactive'
+                              ? 'bg-gray-100 text-gray-700'
+                              : page.status === 'error'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
                         {page.status}
                       </span>
                     </td>
-                    <td className="p-4 text-muted-foreground text-sm">
+                    <td className="p-4 text-muted-foreground text-base">
                       {formatDate(page.createdAt)}
                     </td>
                     <td className="p-4 text-center">
                       <div className="flex gap-2 justify-center">
                         <button
                           onClick={() => viewPageDetails(page)}
-                          className="bg-primary text-primary-foreground border-none px-2 py-1 rounded text-xs cursor-pointer"
+                          className="bg-primary text-primary-foreground border-none px-2 py-1 rounded text-sm cursor-pointer"
                           title="View Details"
                         >
                           👁️
                         </button>
                         <button
                           onClick={() => regeneratePage(page.campaignId)}
-                          className="bg-green-600 text-white border-none px-2 py-1 rounded text-xs cursor-pointer"
+                          className="bg-green-600 text-white border-none px-2 py-1 rounded text-sm cursor-pointer"
                           title="Regenerate Page"
                         >
                           🔄
                         </button>
                         <button
                           onClick={() => deletePage(page.campaignId, page.campaignName)}
-                          className="bg-destructive text-destructive-foreground border-none px-2 py-1 rounded text-xs cursor-pointer"
+                          className="bg-destructive text-destructive-foreground border-none px-2 py-1 rounded text-sm cursor-pointer"
                           title="Delete Page"
                         >
                           🗑️
@@ -419,15 +420,18 @@ const DonorPageManager = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div>
-                <strong className="text-foreground">Campaign:</strong><br />
+                <strong className="text-foreground">Campaign:</strong>
+                <br />
                 <span className="text-muted-foreground">{selectedPage.campaignName}</span>
               </div>
               <div>
-                <strong className="text-foreground">Committee:</strong><br />
+                <strong className="text-foreground">Committee:</strong>
+                <br />
                 <span className="text-muted-foreground">{selectedPage.committeeName}</span>
               </div>
               <div>
-                <strong className="text-foreground">Page URL:</strong><br />
+                <strong className="text-foreground">Page URL:</strong>
+                <br />
                 <a
                   href={selectedPage.pageUrl}
                   target="_blank"
@@ -438,13 +442,19 @@ const DonorPageManager = () => {
                 </a>
               </div>
               <div>
-                <strong className="text-foreground">Status:</strong><br />
-                <span className={`px-2 py-1 rounded text-xs font-medium uppercase ${
-                  selectedPage.status === 'active' ? 'bg-green-100 text-green-700' :
-                  selectedPage.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
-                  selectedPage.status === 'error' ? 'bg-red-100 text-red-700' :
-                  'bg-blue-100 text-blue-700'
-                }`}>
+                <strong className="text-foreground">Status:</strong>
+                <br />
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium uppercase ${
+                    selectedPage.status === 'active'
+                      ? 'bg-green-100 text-green-700'
+                      : selectedPage.status === 'inactive'
+                        ? 'bg-gray-100 text-gray-700'
+                        : selectedPage.status === 'error'
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-blue-100 text-blue-700'
+                  }`}
+                >
                   {selectedPage.status}
                 </span>
               </div>
@@ -453,16 +463,23 @@ const DonorPageManager = () => {
             {selectedPage.seoData && (
               <div className="bg-secondary p-4 rounded mb-4">
                 <h5 className="font-medium text-foreground mb-2">SEO Information</h5>
-                <div className="text-sm text-muted-foreground space-y-1">
-                  <div><strong>Title:</strong> {selectedPage.seoData.title}</div>
-                  <div><strong>Description:</strong> {selectedPage.seoData.description}</div>
-                  <div><strong>Keywords:</strong> {selectedPage.seoData.keywords}</div>
+                <div className="text-base text-muted-foreground space-y-1">
+                  <div>
+                    <strong>Title:</strong> {selectedPage.seoData.title}
+                  </div>
+                  <div>
+                    <strong>Description:</strong> {selectedPage.seoData.description}
+                  </div>
+                  <div>
+                    <strong>Keywords:</strong> {selectedPage.seoData.keywords}
+                  </div>
                 </div>
               </div>
             )}
 
             <div className="bg-secondary p-4 rounded font-mono text-sm max-h-48 overflow-auto">
-              <strong className="text-foreground">File Path:</strong><br />
+              <strong className="text-foreground">File Path:</strong>
+              <br />
               <span className="text-muted-foreground">{selectedPage.filePath}</span>
             </div>
 

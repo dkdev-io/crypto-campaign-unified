@@ -44,42 +44,80 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
   const handleChange = (field, value) => {
     updateFormData({ [field]: value });
     if (validationErrors[field]) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        [field]: ''
+        [field]: '',
       }));
     }
   };
 
   return (
     <div>
-      <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
+      <h2
+        style={{
+          fontSize: '2rem',
+          fontWeight: '700',
+          textAlign: 'center',
+          marginBottom: '0.5rem',
+          color: 'hsl(var(--crypto-white))',
+          fontFamily: 'Inter, sans-serif',
+        }}
+      >
         Campaign Setup
       </h2>
-      <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'hsl(var(--crypto-gold))', fontSize: '1rem', fontWeight: '500' }}>
+      <p
+        style={{
+          textAlign: 'center',
+          marginBottom: '2rem',
+          color: 'hsl(var(--crypto-gold))',
+          fontSize: '1rem',
+          fontWeight: '500',
+        }}
+      >
         Step 1 of 8: Campaign Info
       </p>
-      
+
       <div className="crypto-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
         {/* Campaign Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: '0.875rem', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Campaign Name *
           </label>
           <div style={{ position: 'relative' }}>
-            <Building2 style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a0a0a0' }} />
-            <input 
+            <Building2
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                color: '#a0a0a0',
+              }}
+            />
+            <input
               className="form-input"
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem 0.75rem 0.75rem 40px', 
-                border: validationErrors.campaignName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--crypto-blue) / 0.4)',
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 40px',
+                border: validationErrors.campaignName
+                  ? '1px solid hsl(var(--destructive))'
+                  : '1px solid hsl(var(--crypto-blue) / 0.4)',
                 borderRadius: 'var(--radius)',
                 background: 'hsl(223 57% 25% / 0.5)',
                 color: 'hsl(var(--crypto-white))',
                 fontSize: '1rem',
                 fontFamily: 'Inter, sans-serif',
-                transition: 'var(--transition-smooth)'
+                transition: 'var(--transition-smooth)',
               }}
               value={formData.campaignName || ''}
               onChange={(e) => handleChange('campaignName', e.target.value)}
@@ -95,23 +133,44 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin First Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: '0.875rem', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Admin First Name *
           </label>
           <div style={{ position: 'relative' }}>
-            <User style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a0a0a0' }} />
-            <input 
+            <User
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                color: '#a0a0a0',
+              }}
+            />
+            <input
               className="form-input"
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem 0.75rem 0.75rem 40px', 
-                border: validationErrors.adminFirstName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--crypto-blue) / 0.4)',
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 40px',
+                border: validationErrors.adminFirstName
+                  ? '1px solid hsl(var(--destructive))'
+                  : '1px solid hsl(var(--crypto-blue) / 0.4)',
                 borderRadius: 'var(--radius)',
                 background: 'hsl(223 57% 25% / 0.5)',
                 color: 'hsl(var(--crypto-white))',
                 fontSize: '1rem',
                 fontFamily: 'Inter, sans-serif',
-                transition: 'var(--transition-smooth)'
+                transition: 'var(--transition-smooth)',
               }}
               value={formData.adminFirstName || ''}
               onChange={(e) => handleChange('adminFirstName', e.target.value)}
@@ -127,23 +186,44 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Last Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: '0.875rem', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Admin Last Name *
           </label>
           <div style={{ position: 'relative' }}>
-            <User style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a0a0a0' }} />
-            <input 
+            <User
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                color: '#a0a0a0',
+              }}
+            />
+            <input
               className="form-input"
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem 0.75rem 0.75rem 40px', 
-                border: validationErrors.adminLastName ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--crypto-blue) / 0.4)',
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 40px',
+                border: validationErrors.adminLastName
+                  ? '1px solid hsl(var(--destructive))'
+                  : '1px solid hsl(var(--crypto-blue) / 0.4)',
                 borderRadius: 'var(--radius)',
                 background: 'hsl(223 57% 25% / 0.5)',
                 color: 'hsl(var(--crypto-white))',
                 fontSize: '1rem',
                 fontFamily: 'Inter, sans-serif',
-                transition: 'var(--transition-smooth)'
+                transition: 'var(--transition-smooth)',
               }}
               value={formData.adminLastName || ''}
               onChange={(e) => handleChange('adminLastName', e.target.value)}
@@ -159,24 +239,45 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Email */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: '0.875rem', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Admin Email *
           </label>
           <div style={{ position: 'relative' }}>
-            <Mail style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a0a0a0' }} />
-            <input 
+            <Mail
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                color: '#a0a0a0',
+              }}
+            />
+            <input
               className="form-input"
               type="email"
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem 0.75rem 0.75rem 40px', 
-                border: validationErrors.adminEmail ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--crypto-blue) / 0.4)',
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 40px',
+                border: validationErrors.adminEmail
+                  ? '1px solid hsl(var(--destructive))'
+                  : '1px solid hsl(var(--crypto-blue) / 0.4)',
                 borderRadius: 'var(--radius)',
                 background: 'hsl(223 57% 25% / 0.5)',
                 color: 'hsl(var(--crypto-white))',
                 fontSize: '1rem',
                 fontFamily: 'Inter, sans-serif',
-                transition: 'var(--transition-smooth)'
+                transition: 'var(--transition-smooth)',
               }}
               value={formData.adminEmail || ''}
               onChange={(e) => handleChange('adminEmail', e.target.value)}
@@ -192,24 +293,45 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
         {/* Admin Phone */}
         <div className="form-group" style={{ marginBottom: '2rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: '0.875rem', fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>
+          <label
+            style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Admin Phone *
           </label>
           <div style={{ position: 'relative' }}>
-            <Phone style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#a0a0a0' }} />
-            <input 
+            <Phone
+              style={{
+                position: 'absolute',
+                left: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                color: '#a0a0a0',
+              }}
+            />
+            <input
               className="form-input"
               type="tel"
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem 0.75rem 0.75rem 40px', 
-                border: validationErrors.adminPhone ? '1px solid hsl(var(--destructive))' : '1px solid hsl(var(--crypto-blue) / 0.4)',
+              style={{
+                width: '100%',
+                padding: '0.75rem 0.75rem 0.75rem 40px',
+                border: validationErrors.adminPhone
+                  ? '1px solid hsl(var(--destructive))'
+                  : '1px solid hsl(var(--crypto-blue) / 0.4)',
                 borderRadius: 'var(--radius)',
                 background: 'hsl(223 57% 25% / 0.5)',
                 color: 'hsl(var(--crypto-white))',
                 fontSize: '1rem',
                 fontFamily: 'Inter, sans-serif',
-                transition: 'var(--transition-smooth)'
+                transition: 'var(--transition-smooth)',
               }}
               value={formData.adminPhone || ''}
               onChange={(e) => handleChange('adminPhone', e.target.value)}
@@ -223,9 +345,12 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
           )}
         </div>
 
-        <div className="form-actions" style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
-          <button 
-            className="btn btn-secondary" 
+        <div
+          className="form-actions"
+          style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}
+        >
+          <button
+            className="btn btn-secondary"
             onClick={onPrev}
             style={{
               padding: '0.75rem 2rem',
@@ -239,13 +364,13 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               cursor: 'pointer',
               transition: 'var(--transition-smooth)',
               textTransform: 'uppercase',
-              letterSpacing: '0.025em'
+              letterSpacing: '0.025em',
             }}
           >
             Back
           </button>
-          <button 
-            className="btn btn-primary" 
+          <button
+            className="btn btn-primary"
             onClick={validateAndProceed}
             style={{
               padding: '0.75rem 2rem',
@@ -259,7 +384,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
               cursor: 'pointer',
               transition: 'var(--transition-smooth)',
               textTransform: 'uppercase',
-              letterSpacing: '0.025em'
+              letterSpacing: '0.025em',
             }}
           >
             Next

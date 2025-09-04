@@ -1,6 +1,7 @@
 # MVP Data Flow Documentation
 
 ## Overview
+
 This document describes the complete data flow for the Crypto Campaign MVP, demonstrating how all components work together to create a functioning donation platform.
 
 ## System Architecture
@@ -26,12 +27,14 @@ This document describes the complete data flow for the Crypto Campaign MVP, demo
 ## Data Flow Steps
 
 ### 1. Smart Contract Initialization
+
 - **Contract Address**: `0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` (local)
 - **Network**: Hardhat Local (Chain ID: 31337)
 - **Treasury Address**: Configured at deployment
 - **Max Contribution**: $3,300 USD (converted to ETH)
 
 ### 2. User Registration Flow
+
 ```
 User → Frontend → Supabase Auth → Database
                      ↓
@@ -41,6 +44,7 @@ User → Frontend → Supabase Auth → Database
 ```
 
 **Data Stored**:
+
 - Email address
 - Password (hashed)
 - User ID (UUID)
@@ -48,6 +52,7 @@ User → Frontend → Supabase Auth → Database
 - Email verification status
 
 ### 3. KYC Verification (Mock for MVP)
+
 ```
 Admin → Admin Dashboard → Smart Contract
             ↓
@@ -57,6 +62,7 @@ Admin → Admin Dashboard → Smart Contract
 ```
 
 **Current Implementation**:
+
 - Admin manually verifies addresses
 - No external KYC API integration (future enhancement)
 - Verification stored on-chain
@@ -64,6 +70,7 @@ Admin → Admin Dashboard → Smart Contract
 ### 4. Contribution Flow
 
 #### 4.1 Pre-Contribution Checks
+
 ```javascript
 // Frontend checks
 1. User authenticated? → Check Supabase session
@@ -74,6 +81,7 @@ Admin → Admin Dashboard → Smart Contract
 ```
 
 #### 4.2 Contribution Transaction
+
 ```javascript
 // Transaction flow
 1. User enters amount in USD
@@ -93,6 +101,7 @@ Admin → Admin Dashboard → Smart Contract
 ```
 
 #### 4.3 Post-Contribution
+
 ```javascript
 // Data recording
 1. Transaction hash recorded
@@ -105,6 +114,7 @@ Admin → Admin Dashboard → Smart Contract
 ### 5. Data Storage Locations
 
 #### On-Chain (Smart Contract)
+
 - KYC verification status
 - Contribution amounts
 - Cumulative totals per address
@@ -113,6 +123,7 @@ Admin → Admin Dashboard → Smart Contract
 - ETH price for conversions
 
 #### Off-Chain (Supabase)
+
 - User profiles
 - Email addresses
 - Authentication tokens
@@ -120,6 +131,7 @@ Admin → Admin Dashboard → Smart Contract
 - UI preferences
 
 #### Local Storage (Browser)
+
 - Wallet connection state
 - Selected network
 - User preferences
@@ -136,34 +148,37 @@ const dashboardData = {
   totalRaised: contract.totalContributionsReceived(),
   uniqueDonors: contract.totalUniqueContributors(),
   ethPrice: contract.ethPriceUSD(),
-  
+
   // From Supabase
   totalUsers: supabase.from('users').count(),
   verifiedUsers: supabase.from('users').where('kyc_status', 'verified'),
-  
+
   // Calculated
   conversionRate: (verifiedUsers / totalUsers) * 100,
-  averageContribution: totalRaised / uniqueDonors
-}
+  averageContribution: totalRaised / uniqueDonors,
+};
 ```
 
 ## Testing the Complete Flow
 
 ### Prerequisites
+
 1. Hardhat node running: `npx hardhat node`
 2. Contract deployed: `npm run deploy:local`
 3. Frontend running: `npm run dev:frontend` (port 3100)
 4. Admin credentials available
 
 ### Test Sequence
+
 1. **Start Services**
+
    ```bash
    # Terminal 1: Blockchain
    npx hardhat node
-   
+
    # Terminal 2: Deploy Contract
    npm run deploy:local
-   
+
    # Terminal 3: Frontend
    cd frontend && npm run dev
    ```
@@ -219,18 +234,21 @@ GET  /api/admin/contributions
 ## Security Considerations
 
 ### Smart Contract Security
+
 - Reentrancy protection via OpenZeppelin
 - Pausable in case of emergency
 - Owner-only admin functions
 - Input validation on all functions
 
 ### Frontend Security
+
 - Content Security Policy headers
 - XSS protection via React
 - CORS configuration
 - Environment variable protection
 
 ### Data Security
+
 - Passwords hashed with bcrypt
 - JWT tokens for authentication
 - SSL/TLS for all connections
@@ -239,6 +257,7 @@ GET  /api/admin/contributions
 ## MVP Limitations & Future Enhancements
 
 ### Current MVP Limitations
+
 1. Mock KYC data (no real verification API)
 2. No fiat payment processing (crypto only)
 3. Basic email verification (no 2FA)
@@ -246,6 +265,7 @@ GET  /api/admin/contributions
 5. Single campaign support
 
 ### Planned Enhancements (Post-MVP)
+
 1. **Real KYC Integration**
    - Jumio or Onfido API
    - Automated verification
@@ -274,6 +294,7 @@ GET  /api/admin/contributions
 ## Deployment Checklist
 
 ### Local Development
+
 - [x] Hardhat node running
 - [x] Contract deployed
 - [x] Frontend connected to local node
@@ -281,6 +302,7 @@ GET  /api/admin/contributions
 - [x] Test accounts funded
 
 ### Testnet Deployment
+
 - [ ] Deploy to Base Sepolia
 - [ ] Update contract address in frontend
 - [ ] Configure Alchemy/Infura RPC
@@ -288,6 +310,7 @@ GET  /api/admin/contributions
 - [ ] Verify contract on Etherscan
 
 ### Production Deployment
+
 - [ ] Security audit completed
 - [ ] KYC API integrated
 - [ ] Payment gateway configured
@@ -330,6 +353,7 @@ GET  /api/admin/contributions
 ## Conclusion
 
 The MVP demonstrates a complete, functional crypto donation platform with:
+
 - ✅ Smart contract for contribution management
 - ✅ User authentication and authorization
 - ✅ Mock KYC verification system

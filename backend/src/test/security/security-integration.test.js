@@ -5,14 +5,14 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import jwt from 'jsonwebtoken';
-import { 
-  authenticate, 
-  authorize, 
-  xssProtection, 
+import {
+  authenticate,
+  authorize,
+  xssProtection,
   csrfProtection,
   validateInput,
   securityHeaders,
-  rateLimiters
+  rateLimiters,
 } from '../../middleware/security.js';
 import { TestHelpers } from '../utils/testHelpers.js';
 
@@ -26,37 +26,41 @@ describe('Security Integration Tests', () => {
 
   beforeEach(() => {
     app = express();
-    
-    // Apply comprehensive security middleware stack
-    app.use(helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'"],
-          styleSrc: ["'self'", "'unsafe-inline'"],
-          imgSrc: ["'self'", "data:", "https:"],
-          connectSrc: ["'self'", "https:"],
-          fontSrc: ["'self'"],
-          objectSrc: ["'none'"],
-          mediaSrc: ["'self'"],
-          frameSrc: ["'none'"],
-        },
-      },
-      crossOriginEmbedderPolicy: false
-    }));
 
-    app.use(cors({
-      origin: ['http://localhost:3000', 'https://trusted-domain.com'],
-      credentials: true,
-      optionsSuccessStatus: 200
-    }));
+    // Apply comprehensive security middleware stack
+    app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+            connectSrc: ["'self'", 'https:'],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+          },
+        },
+        crossOriginEmbedderPolicy: false,
+      })
+    );
+
+    app.use(
+      cors({
+        origin: ['http://localhost:3000', 'https://trusted-domain.com'],
+        credentials: true,
+        optionsSuccessStatus: 200,
+      })
+    );
 
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ extended: true }));
-    
+
     app.use(securityHeaders);
     app.use(xssProtection);
-    
+
     // Mock session for CSRF
     app.use((req, res, next) => {
       req.session = { csrfToken: 'test-csrf-token' };
@@ -70,14 +74,15 @@ describe('Security Integration Tests', () => {
 
     // Public endpoint - basic security only
     app.get('/api/public', (req, res) => {
-      res.json({ 
+      res.json({
         message: 'Public endpoint',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     });
 
     // Authentication endpoint - rate limited + input validation
-    app.post('/api/auth/login', 
+    app.post(
+      '/api/auth/login',
       rateLimiters.auth,
       validateInput,
       (req, res, next) => {
@@ -85,36 +90,32 @@ describe('Security Integration Tests', () => {
         if (!errors.isEmpty()) {
           return res.status(400).json({
             error: 'Validation failed',
-            details: errors.array()
+            details: errors.array(),
           });
         }
         next();
       },
       (req, res) => {
         const { username, password } = req.body;
-        
+
         // Mock authentication
         if (username === 'testuser' && password === 'password123') {
-          const token = jwt.sign(
-            { id: '1', username: 'testuser', role: 'user' },
-            jwtSecret,
-            { expiresIn: '1h' }
-          );
-          res.json({ 
-            success: true, 
+          const token = jwt.sign({ id: '1', username: 'testuser', role: 'user' }, jwtSecret, {
+            expiresIn: '1h',
+          });
+          res.json({
+            success: true,
             token,
-            user: { id: '1', username: 'testuser', role: 'user' }
+            user: { id: '1', username: 'testuser', role: 'user' },
           });
         } else if (username === 'admin' && password === 'adminpass') {
-          const token = jwt.sign(
-            { id: '2', username: 'admin', role: 'admin' },
-            jwtSecret,
-            { expiresIn: '1h' }
-          );
-          res.json({ 
-            success: true, 
+          const token = jwt.sign({ id: '2', username: 'admin', role: 'admin' }, jwtSecret, {
+            expiresIn: '1h',
+          });
+          res.json({
+            success: true,
             token,
-            user: { id: '2', username: 'admin', role: 'admin' }
+            user: { id: '2', username: 'admin', role: 'admin' },
           });
         } else {
           res.status(401).json({ error: 'Invalid credentials' });
@@ -123,36 +124,30 @@ describe('Security Integration Tests', () => {
     );
 
     // Protected user endpoint - authentication required
-    app.get('/api/profile',
-      authenticate(jwtSecret),
-      (req, res) => {
-        res.json({
-          profile: {
-            id: req.user.id,
-            username: req.user.username,
-            role: req.user.role
-          }
-        });
-      }
-    );
+    app.get('/api/profile', authenticate(jwtSecret), (req, res) => {
+      res.json({
+        profile: {
+          id: req.user.id,
+          username: req.user.username,
+          role: req.user.role,
+        },
+      });
+    });
 
     // Admin-only endpoint - authentication + authorization
-    app.get('/api/admin/settings',
-      authenticate(jwtSecret),
-      authorize('admin'),
-      (req, res) => {
-        res.json({
-          settings: {
-            debug: false,
-            maintenance: false,
-            version: '1.0.0'
-          }
-        });
-      }
-    );
+    app.get('/api/admin/settings', authenticate(jwtSecret), authorize('admin'), (req, res) => {
+      res.json({
+        settings: {
+          debug: false,
+          maintenance: false,
+          version: '1.0.0',
+        },
+      });
+    });
 
     // Data modification endpoint - full security stack
-    app.post('/api/campaigns',
+    app.post(
+      '/api/campaigns',
       csrfProtection,
       authenticate(jwtSecret),
       rateLimiters.contributions,
@@ -162,7 +157,7 @@ describe('Security Integration Tests', () => {
         if (!errors.isEmpty()) {
           return res.status(400).json({
             error: 'Validation failed',
-            details: errors.array()
+            details: errors.array(),
           });
         }
         next();
@@ -171,111 +166,107 @@ describe('Security Integration Tests', () => {
         res.status(201).json({
           message: 'Campaign created',
           id: 'campaign-' + Date.now(),
-          data: req.body
+          data: req.body,
         });
       }
     );
 
     // Sensitive operation endpoint - maximum security
-    app.delete('/api/admin/users/:id',
+    app.delete(
+      '/api/admin/users/:id',
       csrfProtection,
       authenticate(jwtSecret),
       authorize('admin'),
       rateLimiters.auth,
       (req, res) => {
         // Log security event
-        console.log(`SECURITY: User deletion attempted by ${req.user.username} for user ${req.params.id}`);
-        
+        console.log(
+          `SECURITY: User deletion attempted by ${req.user.username} for user ${req.params.id}`
+        );
+
         res.json({
           message: 'User deletion initiated',
           targetUser: req.params.id,
           initiatedBy: req.user.username,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
     );
 
     // File upload endpoint - comprehensive validation
-    app.post('/api/upload',
-      authenticate(jwtSecret),
-      rateLimiters.kyc,
-      (req, res) => {
-        const file = req.body.file;
-        
-        if (!file) {
-          return res.status(400).json({ error: 'No file provided' });
-        }
+    app.post('/api/upload', authenticate(jwtSecret), rateLimiters.kyc, (req, res) => {
+      const file = req.body.file;
 
-        // Validate file type
-        if (!file.startsWith('data:image/')) {
-          return res.status(400).json({ error: 'Only images allowed' });
-        }
-
-        // Validate file size (approximate)
-        const sizeInBytes = file.length * 0.75;
-        if (sizeInBytes > 5 * 1024 * 1024) {
-          return res.status(400).json({ error: 'File too large' });
-        }
-
-        res.json({
-          message: 'File uploaded successfully',
-          fileId: 'file-' + Date.now(),
-          size: Math.floor(sizeInBytes)
-        });
+      if (!file) {
+        return res.status(400).json({ error: 'No file provided' });
       }
-    );
+
+      // Validate file type
+      if (!file.startsWith('data:image/')) {
+        return res.status(400).json({ error: 'Only images allowed' });
+      }
+
+      // Validate file size (approximate)
+      const sizeInBytes = file.length * 0.75;
+      if (sizeInBytes > 5 * 1024 * 1024) {
+        return res.status(400).json({ error: 'File too large' });
+      }
+
+      res.json({
+        message: 'File uploaded successfully',
+        fileId: 'file-' + Date.now(),
+        size: Math.floor(sizeInBytes),
+      });
+    });
 
     // Search endpoint with comprehensive input handling
-    app.get('/api/search',
-      authenticate(jwtSecret),
-      (req, res) => {
-        const { q, category, limit = 10, offset = 0 } = req.query;
-        
-        // Input validation
-        if (q && q.length > 100) {
-          return res.status(400).json({ error: 'Search query too long' });
-        }
+    app.get('/api/search', authenticate(jwtSecret), (req, res) => {
+      const { q, category, limit = 10, offset = 0 } = req.query;
 
-        if (limit > 50) {
-          return res.status(400).json({ error: 'Limit too high' });
-        }
-
-        if (offset < 0) {
-          return res.status(400).json({ error: 'Invalid offset' });
-        }
-
-        res.json({
-          results: [],
-          query: q,
-          category: category,
-          pagination: {
-            limit: parseInt(limit),
-            offset: parseInt(offset),
-            total: 0
-          }
-        });
+      // Input validation
+      if (q && q.length > 100) {
+        return res.status(400).json({ error: 'Search query too long' });
       }
-    );
+
+      if (limit > 50) {
+        return res.status(400).json({ error: 'Limit too high' });
+      }
+
+      if (offset < 0) {
+        return res.status(400).json({ error: 'Invalid offset' });
+      }
+
+      res.json({
+        results: [],
+        query: q,
+        category: category,
+        pagination: {
+          limit: parseInt(limit),
+          offset: parseInt(offset),
+          total: 0,
+        },
+      });
+    });
 
     // Health check endpoint (minimal security)
     app.get('/health', (req, res) => {
       res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime()
+        uptime: process.uptime(),
       });
     });
 
     // Error handling middleware
     app.use((err, req, res, next) => {
       console.error('Security Integration Error:', err);
-      
+
       // Don't expose stack traces in production
       const isDev = process.env.NODE_ENV === 'development';
-      
+
       res.status(err.status || 500).json({
         error: isDev ? err.message : 'Internal server error',
-        ...(isDev && { stack: err.stack })
+        ...(isDev && { stack: err.stack }),
       });
     });
 
@@ -284,16 +275,14 @@ describe('Security Integration Tests', () => {
 
   describe('Security Middleware Stack Integration', () => {
     it('should apply security headers to all responses', async () => {
-      const response = await request(app)
-        .get('/api/public')
-        .expect(200);
+      const response = await request(app).get('/api/public').expect(200);
 
       // Check Helmet headers
       expect(response.headers['x-content-type-options']).toBe('nosniff');
       expect(response.headers['x-frame-options']).toBe('DENY');
       expect(response.headers['x-xss-protection']).toBe('1; mode=block');
       expect(response.headers['content-security-policy']).toContain("default-src 'self'");
-      
+
       // Check custom security headers
       expect(response.headers['strict-transport-security']).toBeDefined();
       expect(response.headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
@@ -319,15 +308,13 @@ describe('Security Integration Tests', () => {
     });
 
     it('should apply XSS protection to request body', async () => {
-      const userToken = jwt.sign(
-        { id: '1', username: 'testuser', role: 'user' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const userToken = jwt.sign({ id: '1', username: 'testuser', role: 'user' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const maliciousData = {
         name: 'Test Campaign<script>alert("xss")</script>',
-        description: 'Safe description'
+        description: 'Safe description',
       };
 
       const response = await request(app)
@@ -381,9 +368,7 @@ describe('Security Integration Tests', () => {
 
     it('should enforce authentication before authorization', async () => {
       // No token
-      await request(app)
-        .get('/api/admin/settings')
-        .expect(401);
+      await request(app).get('/api/admin/settings').expect(401);
 
       // Invalid token
       await request(app)
@@ -428,7 +413,7 @@ describe('Security Integration Tests', () => {
     it('should validate input after authentication and CSRF', async () => {
       const maliciousInput = {
         name: "'; DROP TABLE campaigns; --",
-        description: '<script>alert("xss")</script>'
+        description: '<script>alert("xss")</script>',
       };
 
       const response = await request(app)
@@ -477,7 +462,7 @@ describe('Security Integration Tests', () => {
     it('should handle combined XSS and SQL injection attempts', async () => {
       const combinedAttack = {
         name: "'; DROP TABLE users; --<script>alert('xss')</script>",
-        email: "test@example.com'; DELETE FROM campaigns; --"
+        email: "test@example.com'; DELETE FROM campaigns; --",
       };
 
       const response = await request(app)
@@ -519,7 +504,7 @@ describe('Security Integration Tests', () => {
 
     it('should handle timing attacks on authentication', async () => {
       const startTime = Date.now();
-      
+
       // Valid username, wrong password
       await request(app)
         .post('/api/auth/login')
@@ -529,7 +514,7 @@ describe('Security Integration Tests', () => {
       const validUserTime = Date.now() - startTime;
 
       const startTime2 = Date.now();
-      
+
       // Invalid username
       await request(app)
         .post('/api/auth/login')
@@ -581,7 +566,8 @@ describe('Security Integration Tests', () => {
     });
 
     it('should accept valid image files', async () => {
-      const validImage = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2ODApLCBxdWFsaXR5ID0gODUK/9sAQwAFAwQEBAMFBAQEBQUFBgcMCAcHBwcPCwsJDBEPEhIRDxERExYcFxMUGhURERghGBodHR8fHxMXIiQiHiQcHh8e/9sAQwEFBQUHBgcOCAgOHhQRFB4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e/8AAEQgAAQABAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBkQjBobHwFCNCUuHxMzNyFmKCksEGkyPDUZSWZOLy8vMmFzdJU2+P1td39p+X9xdfX3/H7QrAAAAAElFTkSuQmCC';
+      const validImage =
+        'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA7Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2ODApLCBxdWFsaXR5ID0gODUK/9sAQwAFAwQEBAMFBAQEBQUFBgcMCAcHBwcPCwsJDBEPEhIRDxERExYcFxMUGhURERghGBodHR8fHxMXIiQiHiQcHh8e/9sAQwEFBQUHBgcOCAgOHhQRFB4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4e/8AAEQgAAQABAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBkQjBobHwFCNCUuHxMzNyFmKCksEGkyPDUZSWZOLy8vMmFzdJU2+P1td39p+X9xdfX3/H7QrAAAAAElFTkSuQmCC';
 
       const response = await request(app)
         .post('/api/upload')
@@ -594,7 +580,8 @@ describe('Security Integration Tests', () => {
     });
 
     it('should rate limit file uploads', async () => {
-      const validImage = 'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+      const validImage =
+        'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 
       // Make 3 uploads (at limit for KYC rate limiter)
       for (let i = 0; i < 3; i++) {
@@ -634,23 +621,23 @@ describe('Security Integration Tests', () => {
           .query({ q: 'a'.repeat(101) })
           .set('Authorization', `Bearer ${userToken}`)
           .expect(400),
-        
+
         // Limit too high
         request(app)
           .get('/api/search')
           .query({ limit: 100 })
           .set('Authorization', `Bearer ${userToken}`)
           .expect(400),
-        
+
         // Negative offset
         request(app)
           .get('/api/search')
           .query({ offset: -1 })
           .set('Authorization', `Bearer ${userToken}`)
-          .expect(400)
+          .expect(400),
       ]);
 
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.body.error).toBeDefined();
       });
     });
@@ -658,11 +645,11 @@ describe('Security Integration Tests', () => {
     it('should handle valid search requests', async () => {
       const response = await request(app)
         .get('/api/search')
-        .query({ 
+        .query({
           q: 'test query',
           category: 'campaigns',
           limit: 10,
-          offset: 0
+          offset: 0,
         })
         .set('Authorization', `Bearer ${userToken}`)
         .expect(200);
@@ -674,7 +661,7 @@ describe('Security Integration Tests', () => {
 
     it('should sanitize search queries', async () => {
       const maliciousQuery = '<script>alert("xss")</script>search';
-      
+
       const response = await request(app)
         .get('/api/search')
         .query({ q: maliciousQuery })
@@ -689,11 +676,9 @@ describe('Security Integration Tests', () => {
   describe('Error Handling Security', () => {
     it('should not expose sensitive information in errors', async () => {
       // Trigger various errors and ensure no sensitive data is leaked
-      
+
       // Database connection error simulation
-      const response1 = await request(app)
-        .get('/api/nonexistent-endpoint')
-        .expect(404);
+      const response1 = await request(app).get('/api/nonexistent-endpoint').expect(404);
 
       // Should not expose internal paths or stack traces
       expect(response1.text).not.toContain('node_modules');
@@ -714,11 +699,7 @@ describe('Security Integration Tests', () => {
     it('should handle malformed requests gracefully', async () => {
       const malformedRequests = [
         // Malformed JSON
-        request(app)
-          .post('/api/auth/login')
-          .type('json')
-          .send('{"invalid": json}')
-          .expect(400),
+        request(app).post('/api/auth/login').type('json').send('{"invalid": json}').expect(400),
 
         // Very large request
         request(app)
@@ -731,13 +712,13 @@ describe('Security Integration Tests', () => {
           .post('/api/auth/login')
           .set('Content-Type', 'application/xml')
           .send('<xml>invalid</xml>')
-          .expect(400)
+          .expect(400),
       ];
 
       const responses = await Promise.allSettled(malformedRequests);
-      
+
       // All should complete without crashing
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(['fulfilled', 'rejected'].includes(response.status)).toBe(true);
       });
     });
@@ -745,9 +726,7 @@ describe('Security Integration Tests', () => {
 
   describe('Health and Monitoring', () => {
     it('should provide health check without authentication', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect(200);
+      const response = await request(app).get('/health').expect(200);
 
       expect(response.body.status).toBe('healthy');
       expect(response.body.timestamp).toBeDefined();
@@ -755,9 +734,7 @@ describe('Security Integration Tests', () => {
     });
 
     it('should not expose sensitive health information', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect(200);
+      const response = await request(app).get('/health').expect(200);
 
       // Should not contain sensitive information
       expect(response.body.database_connection_string).toBeUndefined();
@@ -766,14 +743,12 @@ describe('Security Integration Tests', () => {
     });
 
     it('should handle health check under load', async () => {
-      const promises = Array.from({ length: 20 }, () =>
-        request(app).get('/health')
-      );
+      const promises = Array.from({ length: 20 }, () => request(app).get('/health'));
 
       const responses = await Promise.all(promises);
-      
+
       // All should succeed
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body.status).toBe('healthy');
       });
@@ -796,11 +771,7 @@ describe('Security Integration Tests', () => {
 
       // Make multiple concurrent requests through full security stack
       for (let i = 0; i < 10; i++) {
-        requests.push(
-          request(app)
-            .get('/api/profile')
-            .set('Authorization', `Bearer ${userToken}`)
-        );
+        requests.push(request(app).get('/api/profile').set('Authorization', `Bearer ${userToken}`));
       }
 
       const responses = await Promise.all(requests);
@@ -811,7 +782,7 @@ describe('Security Integration Tests', () => {
       expect(totalTime).toBeLessThan(2000); // 2 seconds
 
       // All should succeed
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body.profile.username).toBe('testuser');
       });
@@ -822,8 +793,11 @@ describe('Security Integration Tests', () => {
         request(app).get('/api/public'),
         request(app).get('/health'),
         request(app).get('/api/profile').set('Authorization', `Bearer ${userToken}`),
-        request(app).get('/api/search').query({ q: 'test' }).set('Authorization', `Bearer ${userToken}`),
-        request(app).post('/api/auth/login').send({ username: 'wrong', password: 'wrong' })
+        request(app)
+          .get('/api/search')
+          .query({ q: 'test' })
+          .set('Authorization', `Bearer ${userToken}`),
+        request(app).post('/api/auth/login').send({ username: 'wrong', password: 'wrong' }),
       ];
 
       const startTime = Date.now();
@@ -843,25 +817,23 @@ describe('Security Integration Tests', () => {
 
     it('should maintain security under sustained load', async () => {
       const sustainedLoad = [];
-      
+
       // Create 50 requests over time
       for (let i = 0; i < 50; i++) {
         sustainedLoad.push(
-          request(app)
-            .get('/api/profile')
-            .set('Authorization', `Bearer ${userToken}`)
+          request(app).get('/api/profile').set('Authorization', `Bearer ${userToken}`)
         );
       }
 
       const responses = await Promise.allSettled(sustainedLoad);
-      
+
       // Check success rate
-      const successful = responses.filter(r => 
-        r.status === 'fulfilled' && r.value.status === 200
+      const successful = responses.filter(
+        (r) => r.status === 'fulfilled' && r.value.status === 200
       ).length;
-      
-      const rateLimited = responses.filter(r =>
-        r.status === 'fulfilled' && r.value.status === 429
+
+      const rateLimited = responses.filter(
+        (r) => r.status === 'fulfilled' && r.value.status === 429
       ).length;
 
       // Should handle requests appropriately based on rate limits

@@ -1,6 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Button } from "../components/ui/button";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Button } from '../components/ui/button';
 
 const NotFound = () => {
   const location = useLocation();
@@ -17,20 +17,15 @@ const NotFound = () => {
         <div className="space-y-2">
           <h1 className="text-9xl font-bold text-muted-foreground">404</h1>
           <p className="text-2xl font-semibold">Page Not Found</p>
-          <p className="text-muted-foreground">The page you&apos;re looking for doesn&apos;t exist.</p>
+          <p className="text-muted-foreground">
+            The page you&apos;re looking for doesn&apos;t exist.
+          </p>
         </div>
         <div className="flex gap-4 justify-center">
-          <Button 
-            onClick={() => navigate(-1)}
-            variant="outline"
-          >
+          <Button onClick={() => navigate(-1)} variant="outline">
             Go Back
           </Button>
-          <Button 
-            onClick={() => navigate('/')}
-          >
-            Return to Home
-          </Button>
+          <Button onClick={() => navigate('/')}>Return to Home</Button>
         </div>
       </div>
     </div>

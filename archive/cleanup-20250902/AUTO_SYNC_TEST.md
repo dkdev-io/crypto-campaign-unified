@@ -3,7 +3,7 @@
 This file tests the complete automatic sync chain:
 
 1. **File Creation**: This file was created automatically
-2. **Auto-Commit**: Daemon will auto-commit this change within 5 minutes  
+2. **Auto-Commit**: Daemon will auto-commit this change within 5 minutes
 3. **Auto-Push**: Post-commit hook will auto-push to GitHub
 4. **Auto-Deploy**: Netlify will auto-deploy from GitHub
 

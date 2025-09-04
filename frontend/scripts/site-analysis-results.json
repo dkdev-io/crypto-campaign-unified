@@ -73,10 +73,7 @@
         "total": 23
       },
       "screenshot": "/Users/Danallovertheplace/crypto-campaign-unified/frontend/scripts/screenshots/campaign_auth_live.png",
-      "expectedChanges": [
-        "Navy background",
-        "Navigation styling updates"
-      ]
+      "expectedChanges": ["Navy background", "Navigation styling updates"]
     },
     {
       "page": "Setup Page",

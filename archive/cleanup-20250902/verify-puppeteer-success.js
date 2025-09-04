@@ -4,7 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // Supabase client
 const SUPABASE_URL = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 const supabase = createClient(SUPABASE_URL, ANON_KEY);
 
 console.log('🎯 VERIFYING PUPPETEER TEST SUCCESS');
@@ -31,9 +32,9 @@ async function verifyUserExists() {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: testUserEmail,
-      password: 'TestDonor123!'
+      password: 'TestDonor123!',
     });
-    
+
     if (error) {
       if (error.message.includes('Email not confirmed')) {
         console.log('✅ User exists but email not confirmed (expected)');
@@ -62,7 +63,7 @@ async function verifyUserExists() {
 verifyUserExists().then((verified) => {
   console.log('');
   console.log('='.repeat(60));
-  
+
   if (verified) {
     console.log('🎉 PUPPETEER TEST: COMPLETE SUCCESS!');
     console.log('');
@@ -79,7 +80,7 @@ verifyUserExists().then((verified) => {
     console.log('');
     console.log('🚀 USER EXPERIENCE:');
     console.log('  • User fills out registration form');
-    console.log('  • Submits form (no more "nothing happens")');  
+    console.log('  • Submits form (no more "nothing happens")');
     console.log('  • Gets redirected to email verification page');
     console.log('  • Receives email verification link');
     console.log('  • After verifying, can sign in to dashboard');
@@ -97,6 +98,6 @@ verifyUserExists().then((verified) => {
     console.log('This likely means the system is working but there might');
     console.log('be a timing issue or the user needs email verification first.');
   }
-  
+
   console.log('='.repeat(60));
 });

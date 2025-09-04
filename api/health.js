@@ -3,6 +3,6 @@ export default function handler(req, res) {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'production',
-    version: '1.0.0'
+    version: '1.0.0',
   });
 }

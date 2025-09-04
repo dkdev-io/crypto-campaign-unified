@@ -5,10 +5,11 @@ import fetch from 'node-fetch';
 
 async function createTableProductionDirect() {
   console.log('🔧 Creating users table directly in production database...');
-  
+
   const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-  const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
-  
+  const anonKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+
   // SQL to create the users table
   const createTableSQL = `
     -- Create users table if it doesn't exist
@@ -48,18 +49,18 @@ async function createTableProductionDirect() {
   try {
     // Method 1: Try using a direct SQL execution endpoint
     console.log('1️⃣ Attempting direct SQL execution...');
-    
+
     // Use PostgREST's RPC endpoint to try executing SQL
     const response = await fetch(`${supabaseUrl}/rest/v1/rpc/sql`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${anonKey}`,
+        Authorization: `Bearer ${anonKey}`,
         'Content-Type': 'application/json',
-        'apikey': anonKey
+        apikey: anonKey,
       },
       body: JSON.stringify({
-        query: createTableSQL
-      })
+        query: createTableSQL,
+      }),
     });
 
     if (response.ok) {
@@ -67,11 +68,10 @@ async function createTableProductionDirect() {
     } else {
       const error = await response.text();
       console.log('⚠️ Direct SQL failed:', error);
-      
+
       // Method 2: Create through auth user creation
       await createThroughAuthTrigger();
     }
-
   } catch (error) {
     console.log('⚠️ Error:', error.message);
     await createThroughAuthTrigger();
@@ -80,54 +80,55 @@ async function createTableProductionDirect() {
 
 async function createThroughAuthTrigger() {
   console.log('2️⃣ Creating table through auth user creation...');
-  
+
   const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-  const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
-  
+  const anonKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+
   // Create an actual user to trigger table creation
   const signupResponse = await fetch(`${supabaseUrl}/auth/v1/signup`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${anonKey}`,
+      Authorization: `Bearer ${anonKey}`,
       'Content-Type': 'application/json',
-      'apikey': anonKey
+      apikey: anonKey,
     },
     body: JSON.stringify({
       email: `tablesetup${Date.now()}@example.com`,
       password: 'TableSetup123!',
       data: {
-        full_name: 'Table Setup User'
-      }
-    })
+        full_name: 'Table Setup User',
+      },
+    }),
   });
 
   if (signupResponse.ok) {
     const signupData = await signupResponse.json();
     console.log('✅ User created:', signupData.user?.email);
-    
+
     // Now manually create the user profile in the users table
     console.log('3️⃣ Creating user profile in users table...');
-    
+
     const insertResponse = await fetch(`${supabaseUrl}/rest/v1/users`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${anonKey}`,
+        Authorization: `Bearer ${anonKey}`,
         'Content-Type': 'application/json',
-        'apikey': anonKey,
-        'Prefer': 'return=minimal'
+        apikey: anonKey,
+        Prefer: 'return=minimal',
       },
       body: JSON.stringify({
         id: signupData.user?.id,
         email: signupData.user?.email,
         full_name: 'Table Setup User',
-        email_confirmed: false
-      })
+        email_confirmed: false,
+      }),
     });
 
     if (insertResponse.ok) {
       console.log('✅ User profile created in users table!');
       console.log('🎉 Users table is now working!');
-      
+
       // Test access
       await testTableAccess();
     } else {
@@ -142,15 +143,16 @@ async function createThroughAuthTrigger() {
 
 async function testTableAccess() {
   console.log('🧪 Testing users table access...');
-  
+
   const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-  const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
-  
+  const anonKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+
   const testResponse = await fetch(`${supabaseUrl}/rest/v1/users?select=*&limit=1`, {
     headers: {
-      'Authorization': `Bearer ${anonKey}`,
-      'apikey': anonKey
-    }
+      Authorization: `Bearer ${anonKey}`,
+      apikey: anonKey,
+    },
   });
 
   if (testResponse.ok) {

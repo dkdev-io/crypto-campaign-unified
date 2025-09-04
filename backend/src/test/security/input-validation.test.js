@@ -19,14 +19,15 @@ describe('Input Validation Security Tests', () => {
         return res.status(400).json({
           error: 'Validation failed',
           details: errors.array(),
-          code: 'VALIDATION_ERROR'
+          code: 'VALIDATION_ERROR',
         });
       }
       next();
     };
 
     // Campaign creation endpoint with comprehensive validation
-    app.post('/api/campaign',
+    app.post(
+      '/api/campaign',
       [
         body('campaign_name')
           .isLength({ min: 3, max: 100 })
@@ -34,10 +35,7 @@ describe('Input Validation Security Tests', () => {
           .matches(/^[a-zA-Z0-9\s\-_.,!?]+$/)
           .withMessage('Campaign name contains invalid characters')
           .escape(),
-        body('email')
-          .isEmail()
-          .withMessage('Invalid email format')
-          .normalizeEmail(),
+        body('email').isEmail().withMessage('Invalid email format').normalizeEmail(),
         body('website')
           .optional({ checkFalsy: true })
           .isURL({ protocols: ['http', 'https'], require_protocol: true })
@@ -67,7 +65,7 @@ describe('Input Validation Security Tests', () => {
         body('category')
           .optional()
           .isIn(['political', 'charity', 'business', 'personal', 'other'])
-          .withMessage('Invalid category')
+          .withMessage('Invalid category'),
       ],
       handleValidationErrors,
       (req, res) => {
@@ -76,7 +74,8 @@ describe('Input Validation Security Tests', () => {
     );
 
     // User registration endpoint
-    app.post('/api/users',
+    app.post(
+      '/api/users',
       [
         body('username')
           .isLength({ min: 3, max: 30 })
@@ -99,18 +98,18 @@ describe('Input Validation Security Tests', () => {
           .isLength({ min: 8, max: 128 })
           .withMessage('Password must be between 8 and 128 characters')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-          .withMessage('Password must contain at least one lowercase letter, uppercase letter, number, and special character'),
+          .withMessage(
+            'Password must contain at least one lowercase letter, uppercase letter, number, and special character'
+          ),
         body('age')
           .optional()
           .isInt({ min: 13, max: 120 })
           .withMessage('Age must be between 13 and 120'),
-        body('terms_accepted')
-          .equals('true')
-          .withMessage('Terms must be accepted'),
+        body('terms_accepted').equals('true').withMessage('Terms must be accepted'),
         body('newsletter')
           .optional()
           .isBoolean()
-          .withMessage('Newsletter preference must be boolean')
+          .withMessage('Newsletter preference must be boolean'),
       ],
       handleValidationErrors,
       (req, res) => {
@@ -119,7 +118,8 @@ describe('Input Validation Security Tests', () => {
     );
 
     // KYC submission endpoint
-    app.post('/api/kyc',
+    app.post(
+      '/api/kyc',
       [
         body('wallet_address')
           .matches(/^0x[a-fA-F0-9]{40}$/)
@@ -150,9 +150,7 @@ describe('Input Validation Security Tests', () => {
             }
             return true;
           }),
-        body('country')
-          .isISO31661Alpha2()
-          .withMessage('Invalid country code'),
+        body('country').isISO31661Alpha2().withMessage('Invalid country code'),
         body('ssn')
           .optional()
           .matches(/^\d{3}-\d{2}-\d{4}$/)
@@ -167,12 +165,13 @@ describe('Input Validation Security Tests', () => {
               }
               // Check base64 size (approximate file size)
               const base64Size = image.length * 0.75;
-              if (base64Size > 5 * 1024 * 1024) { // 5MB limit
+              if (base64Size > 5 * 1024 * 1024) {
+                // 5MB limit
                 throw new Error('Image too large (max 5MB)');
               }
             }
             return true;
-          })
+          }),
       ],
       handleValidationErrors,
       (req, res) => {
@@ -181,7 +180,8 @@ describe('Input Validation Security Tests', () => {
     );
 
     // Search endpoint with query validation
-    app.get('/api/search',
+    app.get(
+      '/api/search',
       [
         query('q')
           .optional()
@@ -208,10 +208,7 @@ describe('Input Validation Security Tests', () => {
           .optional()
           .isIn(['date', 'name', 'amount', 'relevance'])
           .withMessage('Invalid sort option'),
-        query('order')
-          .optional()
-          .isIn(['asc', 'desc'])
-          .withMessage('Invalid sort order')
+        query('order').optional().isIn(['asc', 'desc']).withMessage('Invalid sort order'),
       ],
       handleValidationErrors,
       (req, res) => {
@@ -220,12 +217,9 @@ describe('Input Validation Security Tests', () => {
     );
 
     // Parameter validation endpoint
-    app.get('/api/campaigns/:id',
-      [
-        param('id')
-          .isUUID()
-          .withMessage('Invalid campaign ID format')
-      ],
+    app.get(
+      '/api/campaigns/:id',
+      [param('id').isUUID().withMessage('Invalid campaign ID format')],
       handleValidationErrors,
       (req, res) => {
         res.json({ message: 'Campaign retrieved', id: req.params.id });
@@ -233,7 +227,8 @@ describe('Input Validation Security Tests', () => {
     );
 
     // Contribution endpoint
-    app.post('/api/contributions',
+    app.post(
+      '/api/contributions',
       [
         body('wallet_address')
           .matches(/^0x[a-fA-F0-9]{40}$/)
@@ -249,10 +244,7 @@ describe('Input Validation Security Tests', () => {
           .isLength({ max: 500 })
           .withMessage('Message too long (max 500 characters)')
           .escape(),
-        body('anonymous')
-          .optional()
-          .isBoolean()
-          .withMessage('Anonymous flag must be boolean')
+        body('anonymous').optional().isBoolean().withMessage('Anonymous flag must be boolean'),
       ],
       handleValidationErrors,
       (req, res) => {
@@ -268,13 +260,10 @@ describe('Input Validation Security Tests', () => {
         email: 'test@example.com',
         website: 'https://example.com',
         description: 'A valid campaign description',
-        target_amount: 1000
+        target_amount: 1000,
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(validData)
-        .expect(201);
+      const response = await request(app).post('/api/campaign').send(validData).expect(201);
 
       expect(response.body.message).toBe('Campaign created');
       expect(response.body.data.campaign_name).toBe('Test Campaign');
@@ -283,13 +272,10 @@ describe('Input Validation Security Tests', () => {
     it('should reject campaign with invalid name', async () => {
       const invalidData = {
         campaign_name: 'Te', // Too short
-        email: 'test@example.com'
+        email: 'test@example.com',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(invalidData)
-        .expect(400);
+      const response = await request(app).post('/api/campaign').send(invalidData).expect(400);
 
       expect(response.body.error).toBe('Validation failed');
       expect(response.body.details[0].msg).toContain('between 3 and 100 characters');
@@ -298,13 +284,10 @@ describe('Input Validation Security Tests', () => {
     it('should reject campaign with malicious characters in name', async () => {
       const maliciousData = {
         campaign_name: 'Test <script>alert("xss")</script>',
-        email: 'test@example.com'
+        email: 'test@example.com',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(maliciousData)
-        .expect(400);
+      const response = await request(app).post('/api/campaign').send(maliciousData).expect(400);
 
       expect(response.body.error).toBe('Validation failed');
       expect(response.body.details[0].msg).toContain('invalid characters');
@@ -313,13 +296,10 @@ describe('Input Validation Security Tests', () => {
     it('should reject campaign with invalid email', async () => {
       const invalidData = {
         campaign_name: 'Test Campaign',
-        email: 'invalid-email'
+        email: 'invalid-email',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(invalidData)
-        .expect(400);
+      const response = await request(app).post('/api/campaign').send(invalidData).expect(400);
 
       expect(response.body.error).toBe('Validation failed');
       expect(response.body.details[0].msg).toBe('Invalid email format');
@@ -329,13 +309,10 @@ describe('Input Validation Security Tests', () => {
       const suspiciousData = {
         campaign_name: 'Test Campaign',
         email: 'test@example.com',
-        website: 'https://evil.com'
+        website: 'https://evil.com',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(suspiciousData)
-        .expect(400);
+      const response = await request(app).post('/api/campaign').send(suspiciousData).expect(400);
 
       expect(response.body.error).toBe('Validation failed');
       expect(response.body.details[0].msg).toBe('Suspicious domain detected');
@@ -345,13 +322,10 @@ describe('Input Validation Security Tests', () => {
       const dataWithHTML = {
         campaign_name: 'Test Campaign',
         email: 'test@example.com',
-        description: '<p>Valid content</p><script>alert("xss")</script>'
+        description: '<p>Valid content</p><script>alert("xss")</script>',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(dataWithHTML)
-        .expect(201);
+      const response = await request(app).post('/api/campaign').send(dataWithHTML).expect(201);
 
       // Should escape HTML
       expect(response.body.data.description).not.toContain('<script>');
@@ -365,13 +339,10 @@ describe('Input Validation Security Tests', () => {
         username: 'testuser123',
         email: 'user@example.com',
         password: 'SecurePass123!',
-        terms_accepted: 'true'
+        terms_accepted: 'true',
       };
 
-      const response = await request(app)
-        .post('/api/users')
-        .send(validData)
-        .expect(201);
+      const response = await request(app).post('/api/users').send(validData).expect(201);
 
       expect(response.body.message).toBe('User registered');
     });
@@ -382,7 +353,7 @@ describe('Input Validation Security Tests', () => {
         'PASSWORD123', // No lowercase or special chars
         'Password!', // Too short
         '12345678', // No letters
-        'Passw0rd' // No special characters
+        'Passw0rd', // No special characters
       ];
 
       for (const password of weakPasswords) {
@@ -392,7 +363,7 @@ describe('Input Validation Security Tests', () => {
             username: 'testuser',
             email: 'test@example.com',
             password: password,
-            terms_accepted: 'true'
+            terms_accepted: 'true',
           })
           .expect(400);
 
@@ -407,7 +378,7 @@ describe('Input Validation Security Tests', () => {
         'user@name', // Invalid character
         'user name', // Space not allowed
         'a'.repeat(31), // Too long
-        '123-456' // Dash not allowed
+        '123-456', // Dash not allowed
       ];
 
       for (const username of invalidUsernames) {
@@ -417,7 +388,7 @@ describe('Input Validation Security Tests', () => {
             username: username,
             email: 'test@example.com',
             password: 'SecurePass123!',
-            terms_accepted: 'true'
+            terms_accepted: 'true',
           })
           .expect(400);
 
@@ -432,7 +403,7 @@ describe('Input Validation Security Tests', () => {
           username: 'testuser',
           email: 'test@example.com',
           password: 'SecurePass123!',
-          terms_accepted: 'false'
+          terms_accepted: 'false',
         })
         .expect(400);
 
@@ -447,7 +418,7 @@ describe('Input Validation Security Tests', () => {
           username: 'testuser',
           email: 'taken@example.com', // This email is marked as taken in our mock
           password: 'SecurePass123!',
-          terms_accepted: 'true'
+          terms_accepted: 'true',
         })
         .expect(400);
 
@@ -466,14 +437,11 @@ describe('Input Validation Security Tests', () => {
         date_of_birth: '1990-01-01',
         country: 'US',
         document_images: [
-          'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k='
-        ]
+          'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+        ],
       };
 
-      const response = await request(app)
-        .post('/api/kyc')
-        .send(validData)
-        .expect(201);
+      const response = await request(app).post('/api/kyc').send(validData).expect(201);
 
       expect(response.body.message).toBe('KYC submitted');
     });
@@ -483,7 +451,7 @@ describe('Input Validation Security Tests', () => {
         '0x123', // Too short
         '742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39d4', // Missing 0x prefix
         '0x742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39G4', // Invalid character 'G'
-        '0x742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39d44' // Too long
+        '0x742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39d44', // Too long
       ];
 
       for (const address of invalidAddresses) {
@@ -496,7 +464,7 @@ describe('Input Validation Security Tests', () => {
             document_number: 'AB123456789',
             date_of_birth: '1990-01-01',
             country: 'US',
-            document_images: ['data:image/jpeg;base64,validdata']
+            document_images: ['data:image/jpeg;base64,validdata'],
           })
           .expect(400);
 
@@ -507,7 +475,7 @@ describe('Input Validation Security Tests', () => {
     it('should reject underage users', async () => {
       const today = new Date();
       const underageDate = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
-      
+
       const response = await request(app)
         .post('/api/kyc')
         .send({
@@ -517,7 +485,7 @@ describe('Input Validation Security Tests', () => {
           document_number: 'AB123456789',
           date_of_birth: underageDate.toISOString().split('T')[0],
           country: 'US',
-          document_images: ['data:image/jpeg;base64,validdata']
+          document_images: ['data:image/jpeg;base64,validdata'],
         })
         .expect(400);
 
@@ -535,7 +503,7 @@ describe('Input Validation Security Tests', () => {
           document_number: 'AB123456789',
           date_of_birth: '1990-01-01',
           country: 'US',
-          document_images: ['data:image/jpeg;base64,validdata']
+          document_images: ['data:image/jpeg;base64,validdata'],
         })
         .expect(400);
 
@@ -556,7 +524,7 @@ describe('Input Validation Security Tests', () => {
           document_number: 'AB123456789',
           date_of_birth: '1990-01-01',
           country: 'US',
-          document_images: [largeImageData]
+          document_images: [largeImageData],
         })
         .expect(400);
 
@@ -575,7 +543,7 @@ describe('Input Validation Security Tests', () => {
           limit: 20,
           offset: 0,
           sort: 'date',
-          order: 'desc'
+          order: 'desc',
         })
         .expect(200);
 
@@ -590,7 +558,7 @@ describe('Input Validation Security Tests', () => {
           limit: 200, // Exceeds maximum
           offset: -1, // Negative offset
           sort: 'invalid_sort',
-          order: 'invalid_order'
+          order: 'invalid_order',
         })
         .expect(400);
 
@@ -615,13 +583,10 @@ describe('Input Validation Security Tests', () => {
         amount: 1.5,
         transaction_hash: '0x1234567890123456789012345678901234567890123456789012345678901234',
         message: 'Great campaign!',
-        anonymous: false
+        anonymous: false,
       };
 
-      const response = await request(app)
-        .post('/api/contributions')
-        .send(validData)
-        .expect(201);
+      const response = await request(app).post('/api/contributions').send(validData).expect(201);
 
       expect(response.body.message).toBe('Contribution recorded');
     });
@@ -632,7 +597,7 @@ describe('Input Validation Security Tests', () => {
         0.0005, // Below minimum
         15.0, // Above maximum
         -1.0, // Negative
-        'invalid' // Non-numeric
+        'invalid', // Non-numeric
       ];
 
       for (const amount of invalidAmounts) {
@@ -641,7 +606,7 @@ describe('Input Validation Security Tests', () => {
           .send({
             wallet_address: '0x742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39d4',
             amount: amount,
-            transaction_hash: '0x1234567890123456789012345678901234567890123456789012345678901234'
+            transaction_hash: '0x1234567890123456789012345678901234567890123456789012345678901234',
           })
           .expect(400);
 
@@ -654,7 +619,7 @@ describe('Input Validation Security Tests', () => {
         '0x123', // Too short
         '1234567890123456789012345678901234567890123456789012345678901234', // Missing 0x
         '0x123456789012345678901234567890123456789012345678901234567890123G', // Invalid character
-        '0x12345678901234567890123456789012345678901234567890123456789012345' // Too long
+        '0x12345678901234567890123456789012345678901234567890123456789012345', // Too long
       ];
 
       for (const hash of invalidHashes) {
@@ -663,7 +628,7 @@ describe('Input Validation Security Tests', () => {
           .send({
             wallet_address: '0x742c4F8c2FC9c809Ea6C0d53b43d8f2b5a3E39d4',
             amount: 1.0,
-            transaction_hash: hash
+            transaction_hash: hash,
           })
           .expect(400);
 
@@ -675,10 +640,8 @@ describe('Input Validation Security Tests', () => {
   describe('Parameter Validation Tests', () => {
     it('should accept valid UUID parameters', async () => {
       const validUUID = '123e4567-e89b-12d3-a456-426614174000';
-      
-      const response = await request(app)
-        .get(`/api/campaigns/${validUUID}`)
-        .expect(200);
+
+      const response = await request(app).get(`/api/campaigns/${validUUID}`).expect(200);
 
       expect(response.body.message).toBe('Campaign retrieved');
       expect(response.body.id).toBe(validUUID);
@@ -689,13 +652,11 @@ describe('Input Validation Security Tests', () => {
         'invalid-uuid',
         '123',
         '123e4567-e89b-12d3-a456', // Too short
-        '123e4567-e89b-12d3-a456-426614174000-extra' // Too long
+        '123e4567-e89b-12d3-a456-426614174000-extra', // Too long
       ];
 
       for (const uuid of invalidUUIDs) {
-        const response = await request(app)
-          .get(`/api/campaigns/${uuid}`)
-          .expect(400);
+        const response = await request(app).get(`/api/campaigns/${uuid}`).expect(400);
 
         expect(response.body.error).toBe('Validation failed');
         expect(response.body.details[0].msg).toBe('Invalid campaign ID format');
@@ -707,13 +668,10 @@ describe('Input Validation Security Tests', () => {
     it('should handle extremely large payloads', async () => {
       const largePayload = {
         campaign_name: 'A'.repeat(10000), // Exceeds limit
-        email: 'test@example.com'
+        email: 'test@example.com',
       };
 
-      const response = await request(app)
-        .post('/api/campaign')
-        .send(largePayload)
-        .expect(400);
+      const response = await request(app).post('/api/campaign').send(largePayload).expect(400);
 
       expect(response.body.error).toBe('Validation failed');
     });
@@ -723,7 +681,7 @@ describe('Input Validation Security Tests', () => {
         .post('/api/campaign')
         .send({
           campaign_name: null,
-          email: undefined
+          email: undefined,
         })
         .expect(400);
 
@@ -739,9 +697,9 @@ describe('Input Validation Security Tests', () => {
           nested: {
             malicious: '<script>alert("xss")</script>',
             prototype: {
-              pollution: 'attempt'
-            }
-          }
+              pollution: 'attempt',
+            },
+          },
         })
         .expect(201); // Should pass but nested objects should be ignored
 
@@ -753,7 +711,7 @@ describe('Input Validation Security Tests', () => {
         .post('/api/campaign')
         .send({
           campaign_name: ['Test', '<script>alert("xss")</script>'],
-          email: 'test@example.com'
+          email: 'test@example.com',
         })
         .expect(400);
 
@@ -764,14 +722,14 @@ describe('Input Validation Security Tests', () => {
       const response = await request(app)
         .post('/api/campaign')
         .send({
-          '__proto__': { 'polluted': true },
-          'campaign_name': 'Test',
-          'email': 'test@example.com'
+          __proto__: { polluted: true },
+          campaign_name: 'Test',
+          email: 'test@example.com',
         })
         .expect(201);
 
       // Should not pollute the prototype
-      expect(({}).polluted).toBeUndefined();
+      expect({}.polluted).toBeUndefined();
     });
   });
 
@@ -795,7 +753,7 @@ describe('Input Validation Security Tests', () => {
         .send({
           campaign_name: 'Test',
           email: 'test@example.com',
-          large_field: largeData
+          large_field: largeData,
         })
         .expect(413); // Payload Too Large
 

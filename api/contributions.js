@@ -22,23 +22,23 @@ function checkRateLimit(ip) {
   const now = Date.now();
   const windowMs = 5 * 60 * 1000; // 5 minutes
   const maxRequests = 10;
-  
+
   if (!rateLimitStore.has(ip)) {
     rateLimitStore.set(ip, { count: 1, resetTime: now + windowMs });
     return true;
   }
-  
+
   const limit = rateLimitStore.get(ip);
   if (now > limit.resetTime) {
     limit.count = 1;
     limit.resetTime = now + windowMs;
     return true;
   }
-  
+
   if (limit.count >= maxRequests) {
     return false;
   }
-  
+
   limit.count++;
   return true;
 }
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     if (!checkRateLimit(clientIp)) {
       return res.status(429).json({
         error: 'Too many contribution attempts, please try again later.',
-        retryAfter: '5 minutes'
+        retryAfter: '5 minutes',
       });
     }
   }
@@ -71,9 +71,7 @@ export default async function handler(req, res) {
       const { campaign_id, page = 1, limit = 10, status } = req.query;
       const offset = (page - 1) * limit;
 
-      let query = supabase
-        .from('contributions')
-        .select('*', { count: 'exact' });
+      let query = supabase.from('contributions').select('*', { count: 'exact' });
 
       if (campaign_id) {
         query = query.eq('campaign_id', campaign_id);
@@ -91,7 +89,7 @@ export default async function handler(req, res) {
         console.error('Error fetching contributions:', error);
         return res.status(400).json({
           error: 'Failed to fetch contributions',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -102,14 +100,14 @@ export default async function handler(req, res) {
           page: parseInt(page),
           limit: parseInt(limit),
           total: count,
-          totalPages: Math.ceil(count / limit)
-        }
+          totalPages: Math.ceil(count / limit),
+        },
       });
     } catch (error) {
       console.error('Contributions list error:', error);
       return res.status(500).json({
         error: 'Failed to fetch contributions',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -117,14 +115,8 @@ export default async function handler(req, res) {
   // POST /api/contributions - Create new contribution
   if (req.method === 'POST') {
     try {
-      const {
-        campaign_id,
-        amount,
-        currency,
-        transaction_hash,
-        wallet_address,
-        donor_info
-      } = req.body;
+      const { campaign_id, amount, currency, transaction_hash, wallet_address, donor_info } =
+        req.body;
 
       // Validate required fields
       const errors = {};
@@ -136,21 +128,21 @@ export default async function handler(req, res) {
       if (Object.keys(errors).length > 0) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors
+          details: errors,
         });
       }
 
       // Validate wallet address format
       if (!ethers.isAddress(wallet_address)) {
         return res.status(400).json({
-          error: 'Invalid wallet address format'
+          error: 'Invalid wallet address format',
         });
       }
 
       // Validate transaction hash if provided
       if (transaction_hash && !/^0x[a-fA-F0-9]{64}$/.test(transaction_hash)) {
         return res.status(400).json({
-          error: 'Invalid transaction hash format'
+          error: 'Invalid transaction hash format',
         });
       }
 
@@ -163,7 +155,7 @@ export default async function handler(req, res) {
 
       if (campaignError || !campaign) {
         return res.status(404).json({
-          error: 'Campaign not found'
+          error: 'Campaign not found',
         });
       }
 
@@ -176,7 +168,7 @@ export default async function handler(req, res) {
         wallet_address: wallet_address.toLowerCase(),
         status: 'pending',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       // Add donor info if provided
@@ -194,25 +186,25 @@ export default async function handler(req, res) {
         console.error('Error creating contribution:', error);
         return res.status(400).json({
           error: 'Failed to create contribution',
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(201).json({
         success: true,
-        contribution: data
+        contribution: data,
       });
     } catch (error) {
       console.error('Contribution creation error:', error);
       return res.status(500).json({
         error: 'Failed to create contribution',
-        message: error.message
+        message: error.message,
       });
     }
   }
 
   // Method not allowed
   return res.status(405).json({
-    error: `Method ${req.method} not allowed`
+    error: `Method ${req.method} not allowed`,
   });
 }

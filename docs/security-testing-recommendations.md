@@ -9,6 +9,7 @@ This document provides comprehensive security testing recommendations for the cr
 ### 1. Smart Contract Security Testing
 
 #### A. Reentrancy Attack Prevention
+
 ```solidity
 // Test file: tests/security/reentrancy-attacks.test.js
 
@@ -17,11 +18,11 @@ describe("Reentrancy Attack Tests", function() {
     // Deploy malicious contract that attempts reentrancy
     const MaliciousContract = await ethers.getContractFactory("MaliciousReentrancy");
     const malicious = await MaliciousContract.deploy(campaignContract.address);
-    
+
     // Verify KYC for malicious contract
     await campaignContract.addKYCVerifier(owner.address);
     await campaignContract.verifyKYC(malicious.address);
-    
+
     // Attempt reentrancy attack
     await expect(
       malicious.attack({ value: ethers.parseEther("0.1") })
@@ -31,13 +32,14 @@ describe("Reentrancy Attack Tests", function() {
 ```
 
 #### B. Flash Loan Attack Simulation
+
 ```solidity
 // Test large-scale contribution attacks using flash loans
 describe("Flash Loan Attack Tests", function() {
   it("should prevent flash loan contribution attacks", async function() {
     // Mock flash loan scenario with massive ETH amount
     const flashLoanAmount = ethers.parseEther("1000");
-    
+
     // Attempt to contribute with flash-loaned funds
     await expect(
       campaignContract.contribute({ value: flashLoanAmount })
@@ -47,22 +49,23 @@ describe("Flash Loan Attack Tests", function() {
 ```
 
 #### C. Gas Limit Manipulation Tests
+
 ```solidity
 describe("Gas Manipulation Tests", function() {
   it("should handle gas limit edge cases gracefully", async function() {
     // Test with minimal gas
     await expect(
-      campaignContract.contribute({ 
+      campaignContract.contribute({
         value: ethers.parseEther("0.1"),
         gasLimit: 21000 // Minimal gas
       })
     ).to.not.be.reverted; // Should fail gracefully, not brick contract
   });
-  
+
   it("should prevent gas griefing attacks", async function() {
     // Test batch operations with gas griefing
     const addresses = Array(100).fill(contributor1.address);
-    
+
     await expect(
       campaignContract.batchVerifyKYC(addresses, { gasLimit: 8000000 })
     ).to.be.revertedWith("CampaignContributions: batch size too large");
@@ -71,20 +74,21 @@ describe("Gas Manipulation Tests", function() {
 ```
 
 #### D. Integer Overflow/Underflow Protection
+
 ```solidity
 describe("Integer Safety Tests", function() {
   it("should handle maximum contribution values", async function() {
     const maxUint256 = ethers.MaxUint256;
-    
+
     await expect(
       campaignContract.setEthPrice(maxUint256)
     ).to.not.be.reverted; // Should handle gracefully
   });
-  
+
   it("should prevent underflow in contribution calculations", async function() {
     // Test edge case where calculation could underflow
     await campaignContract.setEthPrice(1); // Very low ETH price
-    
+
     const result = await campaignContract.getMaxContributionWei();
     expect(result).to.be.greaterThan(0);
   });
@@ -94,6 +98,7 @@ describe("Integer Safety Tests", function() {
 ### 2. Web3 Integration Security Testing
 
 #### A. Wallet Connection Security
+
 ```javascript
 // Test file: tests/security/wallet-security.spec.js
 
@@ -101,7 +106,7 @@ test('should detect and prevent wallet injection attacks', async ({ page }) => {
   // Mock malicious wallet injection
   await page.addInitScript(() => {
     const originalEthereum = window.ethereum;
-    
+
     // Malicious wallet that steals private keys
     window.ethereum = {
       ...originalEthereum,
@@ -112,14 +117,14 @@ test('should detect and prevent wallet injection attacks', async ({ page }) => {
           return ['0xmaliciousaddress123'];
         }
         return originalEthereum.request(request);
-      }
+      },
     };
   });
 
   // Test wallet connection security validation
   const connectButton = page.locator('button').filter({ hasText: /connect.*wallet/i });
   await connectButton.click();
-  
+
   // Verify security checks
   const securityWarning = page.locator('.security-warning, [data-testid="security-alert"]');
   await expect(securityWarning).toBeVisible();
@@ -127,6 +132,7 @@ test('should detect and prevent wallet injection attacks', async ({ page }) => {
 ```
 
 #### B. Transaction Integrity Testing
+
 ```javascript
 test('should prevent transaction parameter manipulation', async ({ page }) => {
   await page.addInitScript(() => {
@@ -136,26 +142,26 @@ test('should prevent transaction parameter manipulation', async ({ page }) => {
       request: async (request) => {
         if (request.method === 'eth_sendTransaction') {
           const originalTx = request.params[0];
-          
+
           // Attempt parameter manipulation
           const manipulatedTx = {
             ...originalTx,
             value: '0x' + (parseInt(originalTx.value, 16) * 10).toString(16), // 10x amount
-            to: '0xmaliciousaddress123456789012345678901234' // Wrong recipient
+            to: '0xmaliciousaddress123456789012345678901234', // Wrong recipient
           };
-          
+
           console.log('Transaction manipulation attempted');
           return manipulatedTx;
         }
         return null;
-      }
+      },
     };
   });
 
   // Verify transaction validation
   await page.fill('input[name="amount"]', '0.1');
   await page.click('button[type="submit"]');
-  
+
   // Should detect manipulation and show error
   const errorMessage = page.locator('.error, [data-testid="error"]');
   await expect(errorMessage).toContainText(/transaction.*invalid|security.*error/i);
@@ -165,17 +171,18 @@ test('should prevent transaction parameter manipulation', async ({ page }) => {
 ### 3. API Security Testing
 
 #### A. SQL Injection Prevention
+
 ```javascript
 // Test file: tests/security/sql-injection.test.js
 
 describe('SQL Injection Prevention', () => {
   test('should sanitize campaign search parameters', async ({ request }) => {
     const maliciousInput = "'; DROP TABLE campaigns; --";
-    
+
     const response = await request.get('/api/campaigns', {
-      params: { search: maliciousInput }
+      params: { search: maliciousInput },
     });
-    
+
     expect(response.status()).toBe(200);
     // Verify database integrity by checking campaigns still exist
     const campaignsCheck = await request.get('/api/campaigns');
@@ -184,11 +191,11 @@ describe('SQL Injection Prevention', () => {
 
   test('should prevent NoSQL injection in MongoDB queries', async ({ request }) => {
     const noSQLInjection = { $ne: null };
-    
+
     const response = await request.post('/api/contributions/search', {
-      data: { userId: noSQLInjection }
+      data: { userId: noSQLInjection },
     });
-    
+
     expect(response.status()).not.toBe(500);
     // Should return empty or error, not all contributions
   });
@@ -196,29 +203,30 @@ describe('SQL Injection Prevention', () => {
 ```
 
 #### B. Authentication & Authorization Testing
+
 ```javascript
 describe('Auth Security Tests', () => {
   test('should prevent privilege escalation', async ({ request }) => {
     // Test with regular user token
     const userToken = 'user_token_123';
-    
+
     // Attempt admin action
     const response = await request.post('/api/campaigns', {
       headers: { Authorization: `Bearer ${userToken}` },
-      data: { title: 'Unauthorized Campaign' }
+      data: { title: 'Unauthorized Campaign' },
     });
-    
+
     expect(response.status()).toBe(403);
   });
 
   test('should validate JWT token integrity', async ({ request }) => {
     // Manipulated JWT token
     const maliciousToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.MALICIOUS_PAYLOAD';
-    
+
     const response = await request.get('/api/profile', {
-      headers: { Authorization: `Bearer ${maliciousToken}` }
+      headers: { Authorization: `Bearer ${maliciousToken}` },
     });
-    
+
     expect(response.status()).toBe(401);
   });
 });
@@ -227,18 +235,19 @@ describe('Auth Security Tests', () => {
 ### 4. Data Protection & Privacy Testing
 
 #### A. PII Protection Tests
+
 ```javascript
 describe('PII Protection Tests', () => {
   test('should encrypt sensitive donor information', async ({ page }) => {
     // Mock network interception to check data transmission
     await page.route('/api/contributions', (route) => {
       const postData = route.request().postDataJSON();
-      
+
       // Verify sensitive data is encrypted
       expect(postData.name).toMatch(/^[a-f0-9]+$/); // Encrypted format
       expect(postData.email).toMatch(/^[a-f0-9]+$/); // Encrypted format
       expect(postData.ssn).toBeUndefined(); // Should never be sent
-      
+
       route.continue();
     });
 
@@ -251,11 +260,11 @@ describe('PII Protection Tests', () => {
   test('should implement proper data retention policies', async ({ request }) => {
     // Create test contribution
     const contribution = await request.post('/api/contributions', {
-      data: { amount: 100, donor: 'test@example.com' }
+      data: { amount: 100, donor: 'test@example.com' },
     });
 
     // Fast-forward time simulation (or use test with actual delay)
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Verify data retention compliance
     const retentionCheck = await request.get('/api/admin/data-retention-check');
@@ -267,6 +276,7 @@ describe('PII Protection Tests', () => {
 ### 5. FEC Compliance Security Testing
 
 #### A. Contribution Limit Bypass Prevention
+
 ```javascript
 describe('FEC Compliance Security', () => {
   test('should prevent contribution limit circumvention', async ({ page }) => {
@@ -274,7 +284,7 @@ describe('FEC Compliance Security', () => {
     const wallets = [
       '0x1234567890123456789012345678901234567890',
       '0x0987654321098765432109876543210987654321',
-      '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd'
+      '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
     ];
 
     for (const wallet of wallets) {
@@ -299,7 +309,7 @@ describe('FEC Compliance Security', () => {
       window.ethereum = {
         isMetaMask: true,
         selectedAddress: '0xunverified123456789012345678901234567890',
-        request: async () => ['0xunverified123456789012345678901234567890']
+        request: async () => ['0xunverified123456789012345678901234567890'],
       };
     });
 
@@ -317,6 +327,7 @@ describe('FEC Compliance Security', () => {
 ## Automated Security Testing Pipeline
 
 ### 1. Static Analysis Integration
+
 ```bash
 # Add to CI/CD pipeline
 npm run security:contracts  # Slither, Mythril analysis
@@ -325,6 +336,7 @@ npm run security:backend    # Bandit, semgrep analysis
 ```
 
 ### 2. Dynamic Security Testing
+
 ```yaml
 # .github/workflows/security-tests.yml
 name: Security Testing
@@ -335,23 +347,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Smart Contract Security Analysis
         run: |
           npm install -g @crytic/slither
           slither contracts/src/
-          
+
       - name: Web3 Security Tests
         run: npm run test:security:web3
-        
+
       - name: API Security Tests
         run: npm run test:security:api
-        
+
       - name: Dependency Vulnerability Scan
         run: npm audit --audit-level moderate
 ```
 
 ### 3. Penetration Testing Framework
+
 ```javascript
 // tests/security/penetration-testing.spec.js
 
@@ -363,19 +376,19 @@ test.describe('Penetration Testing Suite', () => {
       'clickjacking',
       'session-hijacking',
       'parameter-pollution',
-      'directory-traversal'
+      'directory-traversal',
     ];
 
     for (const attack of attacks) {
       await page.goto(`/test-security/${attack}`);
-      
+
       // Verify application handles attack gracefully
       const errorPage = page.locator('[data-testid="security-error"]');
       await expect(errorPage).toBeVisible();
-      
+
       // Take screenshot for security report
-      await page.screenshot({ 
-        path: `security-reports/${attack}-test.png` 
+      await page.screenshot({
+        path: `security-reports/${attack}-test.png`,
       });
     }
   });
@@ -385,6 +398,7 @@ test.describe('Penetration Testing Suite', () => {
 ## Security Monitoring & Alerting
 
 ### 1. Real-time Security Monitoring
+
 ```javascript
 // security-monitor.js - Deploy with application
 
@@ -394,13 +408,12 @@ class SecurityMonitor {
     /UNION\s+SELECT/i,
     /<script.*>/i,
     /\.\.\/\.\.\//,
-    /0x[a-f0-9]{40}/i // Potential address manipulation
+    /0x[a-f0-9]{40}/i, // Potential address manipulation
   ];
 
   static monitor(request, response, next) {
-    const suspicious = this.suspicious_patterns.some(pattern => 
-      pattern.test(JSON.stringify(request.body)) ||
-      pattern.test(request.url)
+    const suspicious = this.suspicious_patterns.some(
+      (pattern) => pattern.test(JSON.stringify(request.body)) || pattern.test(request.url)
     );
 
     if (suspicious) {
@@ -409,7 +422,7 @@ class SecurityMonitor {
         ip: request.ip,
         userAgent: request.get('User-Agent'),
         payload: request.body,
-        url: request.url
+        url: request.url,
       });
 
       // Send alert to security team
@@ -426,6 +439,7 @@ class SecurityMonitor {
 ```
 
 ### 2. Security Metrics Dashboard
+
 ```javascript
 // security-metrics.js
 
@@ -434,13 +448,13 @@ const securityMetrics = {
   suspiciousTransactions: 0,
   walletInjectionAttempts: 0,
   malformedRequests: 0,
-  
+
   track(event, details) {
     this[event]++;
-    
+
     // Log to security monitoring system
     console.log(`Security Event: ${event}`, details);
-    
+
     // Alert if threshold exceeded
     if (this[event] > this.getThreshold(event)) {
       this.triggerAlert(event, this[event]);
@@ -452,28 +466,31 @@ const securityMetrics = {
       failedLogins: 5,
       suspiciousTransactions: 3,
       walletInjectionAttempts: 1,
-      malformedRequests: 10
+      malformedRequests: 10,
     };
     return thresholds[event] || 10;
-  }
+  },
 };
 ```
 
 ## Security Test Execution Schedule
 
 ### Daily Tests
+
 - [ ] Smart contract unit tests with security focus
 - [ ] API injection vulnerability scans
 - [ ] Wallet integration security checks
 - [ ] FEC compliance validation
 
 ### Weekly Tests
+
 - [ ] Complete penetration testing suite
 - [ ] Third-party dependency vulnerability scan
 - [ ] Cross-browser security testing
 - [ ] Mobile security testing
 
 ### Monthly Tests
+
 - [ ] Professional security audit simulation
 - [ ] Disaster recovery testing
 - [ ] Security awareness training validation
@@ -482,6 +499,7 @@ const securityMetrics = {
 ## Security Testing Tools & Libraries
 
 ### Smart Contract Security
+
 ```json
 {
   "tools": {
@@ -500,6 +518,7 @@ const securityMetrics = {
 ```
 
 ### Web Application Security
+
 ```json
 {
   "tools": {
@@ -519,6 +538,7 @@ const securityMetrics = {
 ## Critical Security Checklist
 
 ### Before Production Deployment
+
 - [ ] All smart contracts audited by external security firm
 - [ ] Penetration testing completed with no critical issues
 - [ ] All API endpoints protected against common attacks
@@ -530,6 +550,7 @@ const securityMetrics = {
 - [ ] Bug bounty program established
 
 ### Ongoing Security Maintenance
+
 - [ ] Regular security test suite execution
 - [ ] Continuous dependency vulnerability monitoring
 - [ ] Security patch deployment procedures
@@ -542,6 +563,7 @@ const securityMetrics = {
 Security testing for a financial application handling political campaign donations requires comprehensive, multi-layered testing approach. The recommendations in this document provide a framework for ensuring robust security across smart contracts, Web3 integrations, APIs, and compliance mechanisms.
 
 **Key Priority Areas:**
+
 1. **Smart Contract Security** (Critical)
 2. **FEC Compliance Enforcement** (Critical)
 3. **Web3 Integration Security** (High)

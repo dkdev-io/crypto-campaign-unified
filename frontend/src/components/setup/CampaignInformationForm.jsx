@@ -17,22 +17,22 @@ const CampaignInformationForm = () => {
     adminFirstName: '',
     adminLastName: '',
     adminEmail: '',
-    adminPhone: ''
+    adminPhone: '',
   });
   const [validationErrors, setValidationErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear validation error for this field
     if (validationErrors[name]) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: '',
       }));
     }
   };
@@ -77,7 +77,7 @@ const CampaignInformationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -104,8 +104,8 @@ const CampaignInformationForm = () => {
             user_id: user.id,
             status: 'setup',
             goal_amount: 0,
-            current_amount: 0
-          }
+            current_amount: 0,
+          },
         ])
         .select()
         .single();
@@ -115,25 +115,27 @@ const CampaignInformationForm = () => {
       }
 
       // Store form data in localStorage for next steps
-      localStorage.setItem('campaignSetupData', JSON.stringify({
-        campaignId: campaign.id,
-        campaignName: formData.campaignName,
-        adminFirstName: formData.adminFirstName,
-        adminLastName: formData.adminLastName,
-        adminEmail: formData.adminEmail,
-        adminPhone: formData.adminPhone,
-        currentStep: 2
-      }));
+      localStorage.setItem(
+        'campaignSetupData',
+        JSON.stringify({
+          campaignId: campaign.id,
+          campaignName: formData.campaignName,
+          adminFirstName: formData.adminFirstName,
+          adminLastName: formData.adminLastName,
+          adminEmail: formData.adminEmail,
+          adminPhone: formData.adminPhone,
+          currentStep: 2,
+        })
+      );
 
       console.log('Campaign created successfully:', campaign);
-      
+
       // Navigate to Step 2 (Committee Search)
       navigate('/CommitteeSearch');
-
     } catch (error) {
       console.error('Failed to create campaign:', error);
       setValidationErrors({
-        submit: error.message || 'Failed to create campaign. Please try again.'
+        submit: error.message || 'Failed to create campaign. Please try again.',
       });
     } finally {
       setLoading(false);
@@ -141,7 +143,7 @@ const CampaignInformationForm = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-lg w-full">
@@ -149,21 +151,20 @@ const CampaignInformationForm = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="mb-4"></div>
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)'}}>
+              <h2
+                className="font-bold text-foreground mb-2"
+                style={{ fontSize: 'var(--text-heading-xl)' }}
+              >
                 Campaign Information
               </h2>
-              <p className="text-muted-foreground">
-                Step 1: Let's set up your campaign details
-              </p>
+              <p className="text-muted-foreground">Step 1: Let's set up your campaign details</p>
             </div>
 
             {/* Error Display */}
             {validationErrors.submit && (
               <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-destructive" />
-                <span className="text-sm text-destructive">
-                  {validationErrors.submit}
-                </span>
+                <span className="text-sm text-destructive">{validationErrors.submit}</span>
               </div>
             )}
 
@@ -171,7 +172,10 @@ const CampaignInformationForm = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Campaign Name */}
               <div>
-                <label htmlFor="campaignName" className="block text-sm font-medium text-foreground mb-2">
+                <label
+                  htmlFor="campaignName"
+                  className="block text-base font-medium text-foreground mb-2"
+                >
                   Campaign Name *
                 </label>
                 <div className="relative">
@@ -194,7 +198,10 @@ const CampaignInformationForm = () => {
 
               {/* Admin First Name */}
               <div>
-                <label htmlFor="adminFirstName" className="block text-sm font-medium text-foreground mb-2">
+                <label
+                  htmlFor="adminFirstName"
+                  className="block text-base font-medium text-foreground mb-2"
+                >
                   Admin First Name *
                 </label>
                 <div className="relative">
@@ -217,7 +224,10 @@ const CampaignInformationForm = () => {
 
               {/* Admin Last Name */}
               <div>
-                <label htmlFor="adminLastName" className="block text-sm font-medium text-foreground mb-2">
+                <label
+                  htmlFor="adminLastName"
+                  className="block text-base font-medium text-foreground mb-2"
+                >
                   Admin Last Name *
                 </label>
                 <div className="relative">
@@ -240,7 +250,10 @@ const CampaignInformationForm = () => {
 
               {/* Admin Email */}
               <div>
-                <label htmlFor="adminEmail" className="block text-sm font-medium text-foreground mb-2">
+                <label
+                  htmlFor="adminEmail"
+                  className="block text-base font-medium text-foreground mb-2"
+                >
                   Admin Email *
                 </label>
                 <div className="relative">
@@ -263,7 +276,10 @@ const CampaignInformationForm = () => {
 
               {/* Admin Phone */}
               <div>
-                <label htmlFor="adminPhone" className="block text-sm font-medium text-foreground mb-2">
+                <label
+                  htmlFor="adminPhone"
+                  className="block text-base font-medium text-foreground mb-2"
+                >
                   Admin Phone *
                 </label>
                 <div className="relative">
@@ -285,11 +301,7 @@ const CampaignInformationForm = () => {
               </div>
 
               {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full"
-              >
+              <Button type="submit" disabled={loading} className="w-full">
                 {loading ? (
                   <>
                     <Spinner size="sm" className="mr-2" />
@@ -303,9 +315,7 @@ const CampaignInformationForm = () => {
 
             {/* Help Text */}
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-              <h4 className="text-sm font-medium text-foreground mb-2">
-What happens next?
-              </h4>
+              <h4 className="text-base font-medium text-foreground mb-2">What happens next?</h4>
               <ul className="text-xs text-muted-foreground space-y-1">
                 <li>We'll search for your FEC committee information</li>
                 <li>Connect your bank account securely via Plaid</li>

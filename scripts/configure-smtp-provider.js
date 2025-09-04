@@ -23,7 +23,7 @@ const SMTP_PROVIDERS = {
     user: 'apikey',
     description: 'SendGrid - Reliable email delivery',
     setup_url: 'https://sendgrid.com/pricing/',
-    env_vars: ['SENDGRID_API_KEY']
+    env_vars: ['SENDGRID_API_KEY'],
   },
   mailgun: {
     host: 'smtp.mailgun.org',
@@ -31,7 +31,7 @@ const SMTP_PROVIDERS = {
     user: 'postmaster@your-domain.mailgun.org',
     description: 'Mailgun - Developer-friendly',
     setup_url: 'https://www.mailgun.com/pricing/',
-    env_vars: ['MAILGUN_API_KEY', 'MAILGUN_DOMAIN']
+    env_vars: ['MAILGUN_API_KEY', 'MAILGUN_DOMAIN'],
   },
   postmark: {
     host: 'smtp.postmarkapp.com',
@@ -39,7 +39,7 @@ const SMTP_PROVIDERS = {
     user: 'your-server-token',
     description: 'Postmark - High deliverability',
     setup_url: 'https://postmarkapp.com/pricing',
-    env_vars: ['POSTMARK_SERVER_TOKEN']
+    env_vars: ['POSTMARK_SERVER_TOKEN'],
   },
   ses: {
     host: 'email-smtp.us-east-1.amazonaws.com',
@@ -47,23 +47,23 @@ const SMTP_PROVIDERS = {
     user: 'your-ses-access-key',
     description: 'Amazon SES - Cost-effective',
     setup_url: 'https://aws.amazon.com/ses/pricing/',
-    env_vars: ['AWS_SES_ACCESS_KEY', 'AWS_SES_SECRET_KEY']
-  }
+    env_vars: ['AWS_SES_ACCESS_KEY', 'AWS_SES_SECRET_KEY'],
+  },
 };
 
 async function checkCurrentEmailSettings() {
   console.log('🔍 Checking current email configuration...\n');
-  
+
   try {
     // Test with a safe email to check if sending works
     const testEmail = 'admin@dkdev.io';
-    
+
     const { data, error } = await supabase.auth.signUp({
       email: testEmail,
       password: 'test-password-123',
       options: {
-        emailRedirectTo: `${supabaseUrl}/auth/callback`
-      }
+        emailRedirectTo: `${supabaseUrl}/auth/callback`,
+      },
     });
 
     if (error) {
@@ -81,7 +81,7 @@ async function checkCurrentEmailSettings() {
 
 function displaySMTPOptions() {
   console.log('📮 Available SMTP Provider Options:\n');
-  
+
   Object.entries(SMTP_PROVIDERS).forEach(([key, config]) => {
     console.log(`${key.toUpperCase()}:`);
     console.log(`  Description: ${config.description}`);
@@ -113,8 +113,10 @@ function generateEnvTemplate(provider) {
   const config = SMTP_PROVIDERS[provider];
   if (!config) return null;
 
-  const envVars = config.env_vars.map(varName => `${varName}=your_${varName.toLowerCase()}_here`).join('\n');
-  
+  const envVars = config.env_vars
+    .map((varName) => `${varName}=your_${varName.toLowerCase()}_here`)
+    .join('\n');
+
   return `
 # Add these to your .env file
 ${envVars}
@@ -126,11 +128,11 @@ SMTP_USER=${config.user}
 
 async function main() {
   console.log('🔧 SMTP Provider Configuration Tool\n');
-  
+
   await checkCurrentEmailSettings();
-  
+
   displaySMTPOptions();
-  
+
   console.log('📋 Next Steps:');
   console.log('1. Choose an SMTP provider and sign up');
   console.log('2. Get your API credentials');
@@ -148,7 +150,7 @@ async function main() {
   console.log('- Monitor bounce rates in provider dashboard');
   console.log('- Use email validation before sending');
   console.log('- Never use @example.com or @test.com domains');
-  
+
   console.log('\n✅ Once configured, your email bounce issues should be resolved!');
 }
 

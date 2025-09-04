@@ -7,18 +7,20 @@
 ### Fix Implementation:
 
 **Step 1**: Update environment variables
+
 ```bash
 # Add to frontend/.env
 VITE_FEC_API_KEY=F7QA9sKDcXZOjuqz2nk7DzZXLenyzf3GEYaZqpFD
 ```
 
 **Step 2**: Update FEC config to use environment variable
+
 ```javascript
 // frontend/src/lib/fec-config.js
 const FEC_CONFIG = {
   // Use environment variable instead of hardcoded key
   API_KEY: import.meta.env.VITE_FEC_API_KEY || '',
-  
+
   BASE_URL: 'https://api.open.fec.gov/v1',
   // ... rest of config
 };
@@ -34,6 +36,7 @@ if (!FEC_CONFIG.API_KEY && import.meta.env.MODE === 'production') {
 **Issue**: Unresolved merge conflicts in package.json
 
 ### Commands to fix:
+
 ```bash
 cd /Users/Danallovertheplace/crypto-campaign-unified
 git checkout HEAD -- package.json
@@ -52,41 +55,44 @@ git commit -m "Resolve merge conflicts in package.json"
 const getNetworkConfig = (networkId) => {
   const configs = {
     // Local development
-    '31337': {
+    31337: {
       CONTRACT_ADDRESS: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
       NETWORK_NAME: 'Hardhat Local',
-      RPC_URL: 'http://localhost:8545'
+      RPC_URL: 'http://localhost:8545',
     },
     // Sepolia testnet
-    '11155111': {
+    11155111: {
       CONTRACT_ADDRESS: import.meta.env.VITE_SEPOLIA_CONTRACT_ADDRESS,
       NETWORK_NAME: 'Sepolia Testnet',
-      RPC_URL: import.meta.env.VITE_SEPOLIA_RPC_URL
+      RPC_URL: import.meta.env.VITE_SEPOLIA_RPC_URL,
     },
     // Base Sepolia
-    '84532': {
+    84532: {
       CONTRACT_ADDRESS: import.meta.env.VITE_BASE_SEPOLIA_CONTRACT_ADDRESS,
       NETWORK_NAME: 'Base Sepolia',
-      RPC_URL: 'https://sepolia.base.org'
+      RPC_URL: 'https://sepolia.base.org',
     },
     // Base Mainnet
-    '8453': {
+    8453: {
       CONTRACT_ADDRESS: import.meta.env.VITE_BASE_CONTRACT_ADDRESS,
       NETWORK_NAME: 'Base Mainnet',
-      RPC_URL: 'https://mainnet.base.org'
-    }
+      RPC_URL: 'https://mainnet.base.org',
+    },
   };
 
   const config = configs[networkId];
   if (!config) {
     throw new Error(`Unsupported network: ${networkId}`);
   }
-  
+
   // Validate contract address exists
-  if (!config.CONTRACT_ADDRESS || config.CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000') {
+  if (
+    !config.CONTRACT_ADDRESS ||
+    config.CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000'
+  ) {
     throw new Error(`Contract address not configured for network ${networkId}`);
   }
-  
+
   return config;
 };
 
@@ -115,7 +121,7 @@ export const WEB3_ERROR_CODES = {
   TRANSACTION_REJECTED: 'TRANSACTION_REJECTED',
   INSUFFICIENT_FUNDS: 'INSUFFICIENT_FUNDS',
   CONTRACT_ERROR: 'CONTRACT_ERROR',
-  NETWORK_ERROR: 'NETWORK_ERROR'
+  NETWORK_ERROR: 'NETWORK_ERROR',
 };
 
 export const getUserFriendlyError = (error) => {
@@ -123,32 +129,32 @@ export const getUserFriendlyError = (error) => {
     return {
       title: 'Transaction Rejected',
       message: 'You rejected the transaction in your wallet.',
-      action: 'Please approve the transaction to continue.'
+      action: 'Please approve the transaction to continue.',
     };
   }
-  
+
   if (error.code === -32002) {
     return {
       title: 'Wallet Busy',
       message: 'Your wallet already has a pending request.',
-      action: 'Please check your wallet and approve or reject pending requests.'
+      action: 'Please check your wallet and approve or reject pending requests.',
     };
   }
-  
+
   if (error.message?.includes('insufficient funds')) {
     return {
       title: 'Insufficient Balance',
-      message: 'You don\'t have enough ETH for this transaction.',
-      action: 'Please add more ETH to your wallet and try again.'
+      message: "You don't have enough ETH for this transaction.",
+      action: 'Please add more ETH to your wallet and try again.',
     };
   }
-  
+
   // Default error
   return {
     title: 'Transaction Failed',
     message: 'An unexpected error occurred.',
     action: 'Please try again or contact support if the issue persists.',
-    details: error.message
+    details: error.message,
   };
 };
 ```
@@ -170,7 +176,7 @@ async contribute(amountInETH) {
     }
 
     const amountInWei = ethers.parseEther(amountInETH.toString());
-    
+
     // Check balance
     const balance = await this.provider.getBalance(this.account);
     if (balance < amountInWei) {
@@ -199,7 +205,7 @@ async contribute(amountInETH) {
         value: amountInWei,
         gasLimit: gasEstimate * 120n / 100n
       }),
-      new Promise((_, reject) => 
+      new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Transaction timeout')), 60000)
       )
     ]);
@@ -207,7 +213,7 @@ async contribute(amountInETH) {
     // Wait for confirmation with timeout
     const receipt = await Promise.race([
       tx.wait(),
-      new Promise((_, reject) => 
+      new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Confirmation timeout')), 300000)
       )
     ]);
@@ -226,7 +232,7 @@ async contribute(amountInETH) {
 
   } catch (error) {
     const friendlyError = getUserFriendlyError(error);
-    
+
     return {
       success: false,
       error: friendlyError.message,
@@ -257,12 +263,12 @@ setupEventListeners(onAccountChange, onNetworkChange) {
 
     window.ethereum.on('chainChanged', async (chainId) => {
       console.log('🔄 Network changed:', chainId);
-      
+
       try {
         // Don't reload page, handle gracefully
         const networkId = parseInt(chainId, 16).toString();
         const networkConfig = getNetworkConfig(networkId);
-        
+
         // Update provider and contract
         this.provider = new ethers.BrowserProvider(window.ethereum);
         if (this.account) {
@@ -273,7 +279,7 @@ setupEventListeners(onAccountChange, onNetworkChange) {
             this.signer
           );
         }
-        
+
         if (onNetworkChange) {
           onNetworkChange({
             chainId: networkId,
@@ -281,7 +287,7 @@ setupEventListeners(onAccountChange, onNetworkChange) {
             supported: true
           });
         }
-        
+
       } catch (error) {
         console.error('❌ Unsupported network:', error);
         if (onNetworkChange) {
@@ -322,7 +328,7 @@ async initializeContractWithNewAccount(account) {
 export const WALLET_TYPES = {
   METAMASK: 'metamask',
   WALLETCONNECT: 'walletconnect',
-  COINBASE: 'coinbase'
+  COINBASE: 'coinbase',
 };
 
 export class WalletManager {
@@ -333,35 +339,35 @@ export class WalletManager {
 
   async detectWallets() {
     const wallets = [];
-    
+
     // MetaMask
     if (window.ethereum?.isMetaMask) {
       wallets.push({
         type: WALLET_TYPES.METAMASK,
         name: 'MetaMask',
         icon: '/icons/metamask.svg',
-        available: true
+        available: true,
       });
     }
-    
+
     // Coinbase Wallet
     if (window.ethereum?.isCoinbaseWallet) {
       wallets.push({
         type: WALLET_TYPES.COINBASE,
         name: 'Coinbase Wallet',
         icon: '/icons/coinbase.svg',
-        available: true
+        available: true,
       });
     }
-    
+
     // WalletConnect - always available
     wallets.push({
       type: WALLET_TYPES.WALLETCONNECT,
       name: 'WalletConnect',
       icon: '/icons/walletconnect.svg',
-      available: true
+      available: true,
     });
-    
+
     return wallets;
   }
 
@@ -382,17 +388,17 @@ export class WalletManager {
     if (!window.ethereum?.isMetaMask) {
       throw new Error('MetaMask not found');
     }
-    
+
     const accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts'
+      method: 'eth_requestAccounts',
     });
-    
+
     this.provider = new ethers.BrowserProvider(window.ethereum);
     this.currentWallet = WALLET_TYPES.METAMASK;
-    
+
     return accounts[0];
   }
-  
+
   // Add WalletConnect and Coinbase implementations
 }
 ```

@@ -10,7 +10,7 @@ class FECAPIService {
     this.config = FEC_CONFIG;
     this.headers = {
       'Content-Type': 'application/json',
-      ...(apiKey ? { 'X-Api-Key': apiKey } : {})
+      ...(apiKey ? { 'X-Api-Key': apiKey } : {}),
     };
   }
 
@@ -21,13 +21,13 @@ class FECAPIService {
     try {
       // First search local database
       const localResults = await this.searchLocalCommittees(searchTerm, limit);
-      
+
       if (localResults.length > 0) {
         console.log(`Found ${localResults.length} committees in local database`);
         return {
           source: 'local',
           committees: localResults,
-          total: localResults.length
+          total: localResults.length,
         };
       }
 
@@ -38,7 +38,7 @@ class FECAPIService {
         return {
           source: 'fec',
           committees: fecResults.committees,
-          total: fecResults.total
+          total: fecResults.total,
         };
       }
 
@@ -46,9 +46,8 @@ class FECAPIService {
         source: 'local',
         committees: [],
         total: 0,
-        message: 'No committees found locally. FEC API search available with configured key.'
+        message: 'No committees found locally. FEC API search available with configured key.',
       };
-
     } catch (error) {
       console.error('Committee search error:', error);
       throw new Error('Failed to search committees. Please try again.');
@@ -69,7 +68,7 @@ class FECAPIService {
 
       if (error) throw error;
 
-      return data.map(campaign => ({
+      return data.map((campaign) => ({
         id: `CAMPAIGN_${campaign.id}`,
         name: campaign.campaign_name,
         candidateName: null, // Not available in campaigns table
@@ -79,9 +78,8 @@ class FECAPIService {
         state: null,
         isActive: true,
         source: 'test',
-        testPurpose: 'Created via campaigns table for testing'
+        testPurpose: 'Created via campaigns table for testing',
       }));
-
     } catch (error) {
       console.error('Local committee search error:', error);
       return [];
@@ -96,14 +94,14 @@ class FECAPIService {
       const params = new URLSearchParams({
         q: searchTerm,
         per_page: limit.toString(),
-        ...this.config.DEFAULT_PARAMS
+        ...this.config.DEFAULT_PARAMS,
       });
 
       const url = `${this.config.BASE_URL}${this.config.ENDPOINTS.COMMITTEES}?${params}`;
       console.log('FEC API Request:', url);
 
       const response = await fetch(url, {
-        headers: this.headers
+        headers: this.headers,
       });
 
       if (!response.ok) {
@@ -111,9 +109,9 @@ class FECAPIService {
       }
 
       const data = await response.json();
-      
+
       return {
-        committees: data.results.map(committee => ({
+        committees: data.results.map((committee) => ({
           id: committee.committee_id,
           name: committee.name,
           candidateName: committee.candidate_ids?.[0] || null,
@@ -123,11 +121,10 @@ class FECAPIService {
           state: committee.state,
           treasurerName: committee.treasurer_name,
           isActive: true,
-          source: 'fec'
+          source: 'fec',
         })),
-        total: data.pagination.count
+        total: data.pagination.count,
       };
-
     } catch (error) {
       console.error('FEC API search error:', error);
       throw error;
@@ -154,9 +151,9 @@ class FECAPIService {
       if (this.apiKey) {
         const url = `${this.config.BASE_URL}${this.config.ENDPOINTS.COMMITTEE_DETAILS}${committeeId}/`;
         console.log('FEC API Committee Details Request:', url);
-        
+
         const response = await fetch(url, {
-          headers: this.headers
+          headers: this.headers,
         });
 
         if (!response.ok) {
@@ -169,7 +166,6 @@ class FECAPIService {
       }
 
       throw new Error('Committee details not available');
-
     } catch (error) {
       console.error('Get committee details error:', error);
       throw error;
@@ -188,7 +184,7 @@ class FECAPIService {
       // Get detailed info from FEC
       const url = `${this.config.BASE_URL}${this.config.ENDPOINTS.COMMITTEE_DETAILS}${committeeId}/`;
       const response = await fetch(url, {
-        headers: this.headers
+        headers: this.headers,
       });
 
       if (!response.ok) {
@@ -218,7 +214,7 @@ class FECAPIService {
           treasurer_name: committee.treasurer_name,
           custodian_name: committee.custodian_name,
           is_active: true,
-          last_fec_update: new Date().toISOString().split('T')[0]
+          last_fec_update: new Date().toISOString().split('T')[0],
         })
         .select()
         .single();
@@ -227,7 +223,6 @@ class FECAPIService {
 
       console.log('Committee synced to local database:', data);
       return data;
-
     } catch (error) {
       console.error('Committee sync error:', error);
       throw error;
@@ -255,17 +250,17 @@ class FECAPIService {
         street2: committee.street_2,
         city: committee.city,
         state: committee.state,
-        zipCode: committee.zip_code || committee.zip
+        zipCode: committee.zip_code || committee.zip,
       },
       contacts: {
         treasurerName: committee.treasurer_name,
-        custodianName: committee.custodian_name
+        custodianName: committee.custodian_name,
       },
       filingFrequency: committee.filing_frequency,
       connectedOrganization: committee.connected_organization_name,
       isActive: committee.is_active !== false,
       lastUpdate: committee.last_fec_update || committee.updated_at,
-      source
+      source,
     };
   }
 
@@ -323,12 +318,14 @@ class FECAPIService {
         committeeName: !!committeeDetails.name,
         committeeId: !!committeeDetails.id,
         treasurerName: !!committeeDetails.treasurerName,
-        address: !!(committeeDetails.address?.street1 && 
-                   committeeDetails.address?.city && 
-                   committeeDetails.address?.state && 
-                   committeeDetails.address?.zipCode),
-        isActive: !!committeeDetails.isActive
-      }
+        address: !!(
+          committeeDetails.address?.street1 &&
+          committeeDetails.address?.city &&
+          committeeDetails.address?.state &&
+          committeeDetails.address?.zipCode
+        ),
+        isActive: !!committeeDetails.isActive,
+      },
     };
   }
 
@@ -345,16 +342,15 @@ class FECAPIService {
 
       if (error) throw error;
 
-      return data.map(committee => ({
+      return data.map((committee) => ({
         id: `TEST_${committee.id}`,
         name: committee.committee_name,
         type: 'TEST',
         source: 'test',
         testPurpose: committee.test_purpose,
         addedBy: committee.added_by_email,
-        createdAt: committee.created_at
+        createdAt: committee.created_at,
       }));
-
     } catch (error) {
       console.error('Get test committees error:', error);
       return [];
@@ -371,7 +367,7 @@ class FECAPIService {
         .insert({
           committee_name: committeeName,
           test_purpose: testPurpose,
-          added_by_email: adminEmail
+          added_by_email: adminEmail,
         })
         .select()
         .single();
@@ -387,10 +383,9 @@ class FECAPIService {
           source: 'test',
           testPurpose: data.test_purpose,
           addedBy: data.added_by_email,
-          createdAt: data.created_at
-        }
+          createdAt: data.created_at,
+        },
       };
-
     } catch (error) {
       console.error('Add test committee error:', error);
       throw error;

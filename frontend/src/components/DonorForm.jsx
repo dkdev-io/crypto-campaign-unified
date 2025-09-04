@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Web3Wallet from './Web3Wallet';
 import web3Service from '../lib/web3';
-import { extractCampaignStyles, getCampaignButtonStyles, debugCampaignStyles } from '../utils/styleGuide';
+import {
+  extractCampaignStyles,
+  getCampaignButtonStyles,
+  debugCampaignStyles,
+} from '../utils/styleGuide';
 
 const DonorForm = ({ campaignId }) => {
   const [formData, setFormData] = useState({});
@@ -45,7 +49,7 @@ const DonorForm = ({ campaignId }) => {
         console.log('Available fields:', Object.keys(data));
         console.log('Suggested amounts from DB:', data.suggested_amounts);
         console.log('Candidate name:', data.candidate_name);
-        
+
         // Debug style guide data
         debugCampaignStyles(data);
       }
@@ -94,13 +98,12 @@ const DonorForm = ({ campaignId }) => {
       if (result.success) {
         setCryptoTransaction(result);
         console.log('✅ Crypto contribution successful:', result);
-        
+
         // Now save to Supabase with crypto transaction details
         await saveToDatabaseWithCrypto(result, ethAmount);
       } else {
         throw new Error(result.error || 'Crypto transaction failed');
       }
-
     } catch (error) {
       console.error('❌ Crypto payment failed:', error);
       setErrorMessage(error.message);
@@ -111,9 +114,8 @@ const DonorForm = ({ campaignId }) => {
 
   const saveToDatabaseWithCrypto = async (cryptoResult, ethAmount) => {
     try {
-      const { data, error } = await supabase
-        .from('form_submissions')
-        .insert([{
+      const { data, error } = await supabase.from('form_submissions').insert([
+        {
           campaign_id: campaignId,
           donor_full_name: formData.fullName,
           donor_email: formData.email,
@@ -133,14 +135,15 @@ const DonorForm = ({ campaignId }) => {
           own_funds_confirmed: true,
           not_corporate_confirmed: true,
           not_contractor_confirmed: true,
-          age_confirmed: true
-        }]);
+          age_confirmed: true,
+        },
+      ]);
 
       if (error) {
         console.error('Supabase error:', error);
         throw new Error(error.message || 'Failed to save contribution record');
       }
-      
+
       setSubmitted(true);
       console.log('✅ Contribution record saved to database');
     } catch (error) {
@@ -152,25 +155,24 @@ const DonorForm = ({ campaignId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsSubmitting(true);
     setErrorMessage('');
-    
+
     try {
       // Validate campaign ID
       if (!campaignId) {
         throw new Error('No campaign ID found. Please check the campaign URL.');
       }
-      
+
       // Validate amount
       if (!formData.amount || parseFloat(formData.amount) <= 0) {
         throw new Error('Please enter a valid contribution amount');
       }
-      
+
       // Save donor submission to database
-      const { data, error } = await supabase
-        .from('form_submissions')
-        .insert([{
+      const { data, error } = await supabase.from('form_submissions').insert([
+        {
           campaign_id: campaignId,
           donor_full_name: formData.fullName,
           donor_email: formData.email,
@@ -189,18 +191,21 @@ const DonorForm = ({ campaignId }) => {
           own_funds_confirmed: true,
           not_corporate_confirmed: true,
           not_contractor_confirmed: true,
-          age_confirmed: true
-        }]);
+          age_confirmed: true,
+        },
+      ]);
 
       if (error) {
         console.error('Supabase error:', error);
         throw new Error(error.message || 'Failed to save contribution');
       }
-      
+
       setSubmitted(true);
     } catch (err) {
       console.error('Form submission error:', err);
-      setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');
+      setErrorMessage(
+        err.message || 'An error occurred while processing your contribution. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -216,16 +221,21 @@ const DonorForm = ({ campaignId }) => {
 
   if (submitted) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', background: '#d4edda', borderRadius: '8px' }}>
+      <div
+        style={{ padding: '2rem', textAlign: 'center', background: '#d4edda', borderRadius: '8px' }}
+      >
         <h2>🎉 Thank You!</h2>
         <p>Your contribution has been submitted successfully.</p>
         {cryptoTransaction && (
           <div style={{ marginTop: '1rem', fontSize: '14px' }}>
-            <p><strong>Payment Method:</strong> Crypto (ETH)</p>
-            <p><strong>Transaction Hash:</strong> 
-              <a 
-                href={`https://etherscan.io/tx/${cryptoTransaction.txHash}`} 
-                target="_blank" 
+            <p>
+              <strong>Payment Method:</strong> Crypto (ETH)
+            </p>
+            <p>
+              <strong>Transaction Hash:</strong>
+              <a
+                href={`https://etherscan.io/tx/${cryptoTransaction.txHash}`}
+                target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#007bff', marginLeft: '0.5rem' }}
               >
@@ -244,19 +254,21 @@ const DonorForm = ({ campaignId }) => {
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
   const candidateName = campaignData?.candidate_name;
-  
+
   // Generate button styles based on campaign theme
   const primaryButtonStyle = getCampaignButtonStyles(campaignData, 'primary');
   const secondaryButtonStyle = getCampaignButtonStyles(campaignData, 'secondary');
 
   return (
     <div className="donor-form container-responsive crypto-card" style={{ maxWidth: '500px' }}>
-      <h1 style={{ 
-        color: campaignStyles.colors.primary, 
-        marginBottom: campaignStyles.layout.spacing,
-        fontFamily: campaignStyles.fonts.heading.family,
-        fontWeight: campaignStyles.fonts.heading.weight
-      }}>
+      <h1
+        style={{
+          color: campaignStyles.colors.primary,
+          marginBottom: campaignStyles.layout.spacing,
+          fontFamily: campaignStyles.fonts.heading.family,
+          fontWeight: campaignStyles.fonts.heading.weight,
+        }}
+      >
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
       {candidateName && (
@@ -264,106 +276,121 @@ const DonorForm = ({ campaignId }) => {
           Candidate: <strong>{candidateName}</strong>
         </p>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
           <label className="form-label">Full Name *</label>
-          <input 
+          <input
             className="form-input"
             required
             value={formData.fullName || ''}
-            onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
           />
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
           <label className="form-label">Email *</label>
-          <input 
+          <input
             type="email"
             className="form-input"
             required
             value={formData.email || ''}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
           <label className="form-label">Address *</label>
-          <input 
+          <input
             placeholder="Street Address"
             className="form-input"
             style={{ marginBottom: '0.5rem' }}
             required
             value={formData.street || ''}
-            onChange={(e) => setFormData({...formData, street: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, street: e.target.value })}
           />
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.5rem' }}>
-            <input 
+            <input
               placeholder="City"
               className="form-input"
               required
               value={formData.city || ''}
-              onChange={(e) => setFormData({...formData, city: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, city: e.target.value })}
             />
-            <input 
+            <input
               placeholder="State"
               className="form-input"
               required
               value={formData.state || ''}
-              onChange={(e) => setFormData({...formData, state: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, state: e.target.value })}
             />
-            <input 
+            <input
               placeholder="ZIP"
               className="form-input"
               required
               value={formData.zip || ''}
-              onChange={(e) => setFormData({...formData, zip: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
             />
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '1rem',
+            marginBottom: '1rem',
+          }}
+        >
           <div>
             <label className="form-label">Employer *</label>
-            <input 
+            <input
               className="form-input"
               required
               value={formData.employer || ''}
-              onChange={(e) => setFormData({...formData, employer: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, employer: e.target.value })}
             />
           </div>
           <div>
             <label className="form-label">Occupation *</label>
-            <input 
+            <input
               className="form-input"
               required
               value={formData.occupation || ''}
-              onChange={(e) => setFormData({...formData, occupation: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
             />
           </div>
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label className="form-label">Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}</label>
+          <label className="form-label">
+            Contribution Amount * {maxDonation && `(Max: $${maxDonation})`}
+          </label>
           <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-            {suggestedAmounts.map(amount => (
-              <button 
+            {suggestedAmounts.map((amount) => (
+              <button
                 key={amount}
                 type="button"
-                onClick={() => setFormData({...formData, amount})}
-                style={{ 
+                onClick={() => setFormData({ ...formData, amount })}
+                style={{
                   ...secondaryButtonStyle,
-                  border: `2px solid ${campaignStyles.colors.primary}`, 
-                  background: formData.amount === amount ? campaignStyles.colors.primary : campaignStyles.colors.background,
-                  color: formData.amount === amount ? campaignStyles.colors.background : campaignStyles.colors.primary,
-                  fontFamily: campaignStyles.fonts.button.family
+                  border: `2px solid ${campaignStyles.colors.primary}`,
+                  background:
+                    formData.amount === amount
+                      ? campaignStyles.colors.primary
+                      : campaignStyles.colors.background,
+                  color:
+                    formData.amount === amount
+                      ? campaignStyles.colors.background
+                      : campaignStyles.colors.primary,
+                  fontFamily: campaignStyles.fonts.button.family,
                 }}
               >
                 ${amount}
               </button>
             ))}
           </div>
-          <input 
+          <input
             type="number"
             placeholder="Custom amount"
             min="1"
@@ -376,7 +403,7 @@ const DonorForm = ({ campaignId }) => {
                 setErrorMessage(`Maximum contribution is $${maxDonation}`);
               } else {
                 setErrorMessage('');
-                setFormData({...formData, amount: e.target.value});
+                setFormData({ ...formData, amount: e.target.value });
               }
             }}
           />
@@ -388,7 +415,9 @@ const DonorForm = ({ campaignId }) => {
             Payment Method *
           </label>
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <label
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+            >
               <input
                 type="radio"
                 name="paymentMethod"
@@ -398,7 +427,9 @@ const DonorForm = ({ campaignId }) => {
               />
               <span>💳 Traditional Payment</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <label
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+            >
               <input
                 type="radio"
                 name="paymentMethod"
@@ -412,24 +443,27 @@ const DonorForm = ({ campaignId }) => {
 
           {/* Crypto Payment Section */}
           {paymentMethod === 'crypto' && (
-            <div style={{ 
-              background: '#f8f9fa', 
-              padding: '1rem', 
-              borderRadius: '8px', 
-              border: '1px solid #dee2e6',
-              marginBottom: '1rem'
-            }}>
+            <div
+              style={{
+                background: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '8px',
+                border: '1px solid #dee2e6',
+                marginBottom: '1rem',
+              }}
+            >
               <h4 style={{ margin: '0 0 1rem 0', color: '#495057' }}>
                 🔗 Crypto Payment via Smart Contract
               </h4>
-              
+
               <div style={{ marginBottom: '1rem', fontSize: '14px', color: '#6c757d' }}>
                 <p>✅ FEC-compliant smart contract</p>
                 <p>✅ Automatic contribution limit enforcement</p>
                 <p>✅ Transparent on-chain record</p>
                 {formData.amount && (
                   <p style={{ fontWeight: 'bold', color: '#495057' }}>
-                    💰 ${formData.amount} USD (≈{(parseFloat(formData.amount) / 3000).toFixed(4)} ETH)
+                    💰 ${formData.amount} USD (≈{(parseFloat(formData.amount) / 3000).toFixed(4)}{' '}
+                    ETH)
                   </p>
                 )}
               </div>
@@ -439,69 +473,79 @@ const DonorForm = ({ campaignId }) => {
               {walletInfo?.isConnected && (
                 <div style={{ marginTop: '1rem' }}>
                   {walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified && (
-                    <div style={{ 
-                      background: '#fff3cd', 
-                      padding: '1rem', 
-                      borderRadius: '4px', 
-                      marginBottom: '1rem',
-                      border: '1px solid #ffeaa7'
-                    }}>
+                    <div
+                      style={{
+                        background: '#fff3cd',
+                        padding: '1rem',
+                        borderRadius: '4px',
+                        marginBottom: '1rem',
+                        border: '1px solid #ffeaa7',
+                      }}
+                    >
                       <strong>⚠️ KYC Required</strong>
                       <p style={{ margin: '0.5rem 0 0 0', fontSize: '14px' }}>
-                        Your wallet needs KYC verification before making crypto contributions. 
+                        Your wallet needs KYC verification before making crypto contributions.
                         Please contact the campaign administrator.
                       </p>
                     </div>
                   )}
-                  
+
                   <button
                     type="button"
                     onClick={handleCryptoPayment}
                     disabled={
-                      isProcessingCrypto || 
-                      !formData.amount || 
+                      isProcessingCrypto ||
+                      !formData.amount ||
                       parseFloat(formData.amount) <= 0 ||
                       (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
                     }
                     style={{
                       ...primaryButtonStyle,
                       width: '100%',
-                      opacity: (isProcessingCrypto || 
-                        !formData.amount || 
-                        (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)) ? 0.5 : 1,
-                      cursor: 
-                        isProcessingCrypto || 
-                        !formData.amount || 
+                      opacity:
+                        isProcessingCrypto ||
+                        !formData.amount ||
                         (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
-                          ? 'not-allowed' : 'pointer'
+                          ? 0.5
+                          : 1,
+                      cursor:
+                        isProcessingCrypto ||
+                        !formData.amount ||
+                        (walletInfo.contributorInfo && !walletInfo.contributorInfo.isKYCVerified)
+                          ? 'not-allowed'
+                          : 'pointer',
                     }}
                   >
-                    {isProcessingCrypto 
-                      ? '⏳ Processing Crypto Payment...' 
-                      : `🔗 Pay ${formData.amount ? `$${formData.amount}` : '$0'} via Smart Contract`
-                    }
+                    {isProcessingCrypto
+                      ? '⏳ Processing Crypto Payment...'
+                      : `🔗 Pay ${formData.amount ? `$${formData.amount}` : '$0'} via Smart Contract`}
                   </button>
                 </div>
               )}
 
               {cryptoTransaction && (
-                <div style={{ 
-                  background: '#d4edda', 
-                  padding: '1rem', 
-                  borderRadius: '4px', 
-                  marginTop: '1rem',
-                  border: '1px solid #c3e6cb'
-                }}>
+                <div
+                  style={{
+                    background: '#d4edda',
+                    padding: '1rem',
+                    borderRadius: '4px',
+                    marginTop: '1rem',
+                    border: '1px solid #c3e6cb',
+                  }}
+                >
                   <strong>✅ Crypto Payment Successful!</strong>
                   <div style={{ fontSize: '14px', marginTop: '0.5rem' }}>
-                    <p>Transaction: <a 
-                      href={`https://etherscan.io/tx/${cryptoTransaction.txHash}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      style={{ color: '#007bff' }}
-                    >
-                      {cryptoTransaction.txHash}
-                    </a></p>
+                    <p>
+                      Transaction:{' '}
+                      <a
+                        href={`https://etherscan.io/tx/${cryptoTransaction.txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#007bff' }}
+                      >
+                        {cryptoTransaction.txHash}
+                      </a>
+                    </p>
                     <p>Block: {cryptoTransaction.blockNumber}</p>
                   </div>
                 </div>
@@ -510,59 +554,69 @@ const DonorForm = ({ campaignId }) => {
           )}
         </div>
 
-        <div style={{ background: '#f0f8ff', padding: '1rem', borderRadius: '4px', marginBottom: '1rem', fontSize: '0.9rem' }}>
+        <div
+          style={{
+            background: '#f0f8ff',
+            padding: '1rem',
+            borderRadius: '4px',
+            marginBottom: '1rem',
+            fontSize: '0.9rem',
+          }}
+        >
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-            <input 
-              type="checkbox"
-              required
-              style={{ marginTop: '0.25rem' }}
-            />
+            <input type="checkbox" required style={{ marginTop: '0.25rem' }} />
             <span>
-              I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
-              this contribution is made from my own funds, I am not a federal contractor, 
-              and I am at least 18 years old.
+              I certify that I am a U.S. citizen or lawfully admitted permanent resident, this
+              contribution is made from my own funds, I am not a federal contractor, and I am at
+              least 18 years old.
             </span>
           </label>
         </div>
 
         {errorMessage && (
-          <div style={{ 
-            background: '#f8d7da', 
-            color: '#721c24', 
-            padding: '0.75rem', 
-            borderRadius: '4px', 
-            marginBottom: '1rem',
-            border: '1px solid #f5c6cb'
-          }}>
+          <div
+            style={{
+              background: '#f8d7da',
+              color: '#721c24',
+              padding: '0.75rem',
+              borderRadius: '4px',
+              marginBottom: '1rem',
+              border: '1px solid #f5c6cb',
+            }}
+          >
             ⚠️ {errorMessage}
           </div>
         )}
-        
+
         {/* Traditional Payment Button - Only show for traditional payment */}
         {paymentMethod === 'traditional' && (
-          <button 
+          <button
             type="submit"
             disabled={isSubmitting}
-            style={{ 
+            style={{
               ...primaryButtonStyle,
               width: '100%',
               opacity: isSubmitting ? 0.5 : 1,
-              cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
             }}
           >
-            {isSubmitting ? '⏳ Processing Traditional Payment...' : '💳 Submit Traditional Contribution'}
+            {isSubmitting
+              ? '⏳ Processing Traditional Payment...'
+              : '💳 Submit Traditional Contribution'}
           </button>
         )}
 
         {/* Information for crypto payments */}
         {paymentMethod === 'crypto' && !walletInfo?.isConnected && (
-          <div style={{ 
-            padding: '1rem', 
-            background: '#e7f3ff', 
-            borderRadius: '4px', 
-            textAlign: 'center',
-            border: '1px solid #b8daff'
-          }}>
+          <div
+            style={{
+              padding: '1rem',
+              background: '#e7f3ff',
+              borderRadius: '4px',
+              textAlign: 'center',
+              border: '1px solid #b8daff',
+            }}
+          >
             <p style={{ margin: 0, color: '#004085' }}>
               🔗 Please connect your wallet above to proceed with crypto payment
             </p>

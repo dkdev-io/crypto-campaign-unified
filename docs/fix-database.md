@@ -10,12 +10,14 @@
 6. Add these columns:
 
 **Column: candidate_name**
+
 - Name: `candidate_name`
 - Type: `text`
 - Default value: (leave empty)
 - Allow nullable: ✅ Yes
 
 **Optional: Other useful columns**
+
 - `user_id` (text, nullable)
 - `status` (text, default: 'draft')
 

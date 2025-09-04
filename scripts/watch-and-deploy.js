@@ -24,25 +24,24 @@ const colors = {
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
   bold: '\x1b[1m',
-  dim: '\x1b[2m'
+  dim: '\x1b[2m',
 };
 
-const log = {
-};
+const log = {};
 
 class DeploymentWatcher {
   constructor(options = {}) {
     this.options = {
-      debounceMs: 5000,    // Wait 5 seconds after last change
-      cooldownMs: 60000,   // Minimum 1 minute between deployments
+      debounceMs: 5000, // Wait 5 seconds after last change
+      cooldownMs: 60000, // Minimum 1 minute between deployments
       skipBuild: false,
       skipLint: false,
       autoCommit: true,
       watchPaths: ['frontend/src', 'frontend/public', 'backend/src'],
       ignorePaths: ['node_modules', '.git', 'dist', 'build', '.next'],
-      ...options
+      ...options,
     };
-    
+
     this.watchers = [];
     this.deploymentQueue = null;
     this.lastDeployment = 0;
@@ -52,38 +51,47 @@ class DeploymentWatcher {
 
   // Check if path should be ignored
   shouldIgnore(filePath) {
-    return this.options.ignorePaths.some(ignore => 
-      filePath.includes(ignore) || 
-      filePath.includes(`/${ignore}/`) ||
-      filePath.includes(`\\${ignore}\\`)
+    return this.options.ignorePaths.some(
+      (ignore) =>
+        filePath.includes(ignore) ||
+        filePath.includes(`/${ignore}/`) ||
+        filePath.includes(`\\${ignore}\\`)
     );
   }
 
   // Check if file type should trigger deployment
   shouldTriggerDeployment(filePath) {
     const deployTriggers = [
-      '.jsx', '.js', '.ts', '.tsx',     // React/JS files
-      '.css', '.scss', '.sass',         // Styles
-      '.html', '.json',                 // Config/HTML
-      '.md',                            // Documentation
-      '.sol',                           // Smart contracts
-      '.env.example'                    // Environment examples
+      '.jsx',
+      '.js',
+      '.ts',
+      '.tsx', // React/JS files
+      '.css',
+      '.scss',
+      '.sass', // Styles
+      '.html',
+      '.json', // Config/HTML
+      '.md', // Documentation
+      '.sol', // Smart contracts
+      '.env.example', // Environment examples
     ];
 
     const ignoreTriggers = [
-      '.test.', '.spec.',               // Test files
-      '.log', '.cache',                 // Temporary files
-      'package-lock.json',              // Lock files
-      '.DS_Store'                       // System files
+      '.test.',
+      '.spec.', // Test files
+      '.log',
+      '.cache', // Temporary files
+      'package-lock.json', // Lock files
+      '.DS_Store', // System files
     ];
 
     // Check if should ignore
-    if (ignoreTriggers.some(ignore => filePath.includes(ignore))) {
+    if (ignoreTriggers.some((ignore) => filePath.includes(ignore))) {
       return false;
     }
 
     // Check if has trigger extension
-    return deployTriggers.some(ext => filePath.endsWith(ext));
+    return deployTriggers.some((ext) => filePath.endsWith(ext));
   }
 
   // Handle file change event
@@ -91,7 +99,7 @@ class DeploymentWatcher {
     if (!filename) return;
 
     const fullPath = join(watchPath, filename);
-    
+
     // Skip ignored paths
     if (this.shouldIgnore(fullPath)) {
       return;
@@ -107,7 +115,7 @@ class DeploymentWatcher {
     const changeId = this.changeCounter;
 
     log.watch(`Change detected: ${filename} (${eventType})`);
-    
+
     // Clear existing deployment timer
     if (this.deploymentQueue) {
       clearTimeout(this.deploymentQueue);
@@ -118,7 +126,7 @@ class DeploymentWatcher {
       this.triggerDeployment(changeId);
     }, this.options.debounceMs);
 
-    log.dim(`Deployment queued (${this.options.debounceMs/1000}s delay)...`);
+    log.dim(`Deployment queued (${this.options.debounceMs / 1000}s delay)...`);
   }
 
   // Trigger deployment after debounce
@@ -126,9 +134,11 @@ class DeploymentWatcher {
     // Check cooldown period
     const timeSinceLastDeployment = Date.now() - this.lastDeployment;
     if (timeSinceLastDeployment < this.options.cooldownMs) {
-      const remainingCooldown = Math.ceil((this.options.cooldownMs - timeSinceLastDeployment) / 1000);
+      const remainingCooldown = Math.ceil(
+        (this.options.cooldownMs - timeSinceLastDeployment) / 1000
+      );
       log.warning(`Deployment in cooldown. Waiting ${remainingCooldown}s...`);
-      
+
       // Reschedule after cooldown
       this.deploymentQueue = setTimeout(() => {
         this.triggerDeployment(changeId);
@@ -143,7 +153,7 @@ class DeploymentWatcher {
     }
 
     log.deploy(`🚀 Starting auto-deployment #${changeId}...`);
-    
+
     try {
       this.isDeploying = true;
       this.lastDeployment = Date.now();
@@ -159,16 +169,15 @@ Changes detected in source files
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
-Co-Authored-By: Claude <noreply@anthropic.com>`
+Co-Authored-By: Claude <noreply@anthropic.com>`,
       });
 
       await deployer.deploy();
-      
+
       log.success(`Auto-deployment #${changeId} completed!`);
-      
     } catch (error) {
       log.error(`Auto-deployment #${changeId} failed: ${error.message}`);
-      
+
       // Don't stop watching on deployment failure
       log.warning('Continuing to watch for changes...');
     } finally {
@@ -181,17 +190,19 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
   showWatchStatus() {
     log.watch('👀 Watching for changes...');
     log.dim(`   Paths: ${this.options.watchPaths.join(', ')}`);
-    log.dim(`   Debounce: ${this.options.debounceMs/1000}s | Cooldown: ${this.options.cooldownMs/1000}s`);
+    log.dim(
+      `   Debounce: ${this.options.debounceMs / 1000}s | Cooldown: ${this.options.cooldownMs / 1000}s`
+    );
     log.dim('   Press Ctrl+C to stop watching');
   }
 
   // Start watching
   start() {
     log.deploy('🔍 Starting deployment watcher...');
-    
+
     // Validate watch paths exist
     const fs = require('fs');
-    const validPaths = this.options.watchPaths.filter(watchPath => {
+    const validPaths = this.options.watchPaths.filter((watchPath) => {
       const fullPath = join(PROJECT_ROOT, watchPath);
       const exists = fs.existsSync(fullPath);
       if (!exists) {
@@ -206,21 +217,16 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
     }
 
     // Start watchers for each path
-    validPaths.forEach(watchPath => {
+    validPaths.forEach((watchPath) => {
       const fullPath = join(PROJECT_ROOT, watchPath);
-      
+
       try {
-        const watcher = watch(
-          fullPath,
-          { recursive: true },
-          (eventType, filename) => {
-            this.handleChange(eventType, filename, fullPath);
-          }
-        );
-        
+        const watcher = watch(fullPath, { recursive: true }, (eventType, filename) => {
+          this.handleChange(eventType, filename, fullPath);
+        });
+
         this.watchers.push(watcher);
         log.success(`Watching: ${watchPath}`);
-        
       } catch (error) {
         log.error(`Failed to watch ${watchPath}: ${error.message}`);
       }
@@ -241,14 +247,14 @@ Co-Authored-By: Claude <noreply@anthropic.com>`
   // Stop watching
   stop() {
     log.watch('🛑 Stopping deployment watcher...');
-    
+
     // Clear any pending deployment
     if (this.deploymentQueue) {
       clearTimeout(this.deploymentQueue);
     }
 
     // Close all watchers
-    this.watchers.forEach(watcher => {
+    this.watchers.forEach((watcher) => {
       try {
         watcher.close();
       } catch (error) {
@@ -270,7 +276,7 @@ function parseArgs() {
     skipBuild: false,
     skipLint: false,
     help: false,
-    watchPaths: null
+    watchPaths: null,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -342,7 +348,7 @@ ${colors.yellow}Press Ctrl+C to stop watching${colors.reset}
 // Main execution
 if (import.meta.url === `file://${process.argv[1]}`) {
   const options = parseArgs();
-  
+
   if (options.help) {
     showHelp();
     process.exit(0);

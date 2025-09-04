@@ -12,7 +12,7 @@ class CSVDataImporter {
     this.importedCounts = {
       donors: 0,
       prospects: 0,
-      kyc_verifications: 0
+      kyc_verifications: 0,
     };
   }
 
@@ -21,8 +21,8 @@ class CSVDataImporter {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.trim().split('\n');
     const headers = lines[0].split(',');
-    
-    return lines.slice(1).map(line => {
+
+    return lines.slice(1).map((line) => {
       const values = line.split(',');
       const record = {};
       headers.forEach((header, index) => {
@@ -35,7 +35,7 @@ class CSVDataImporter {
   // Get or create test campaign
   async getTestCampaign() {
     console.log('🔍 Getting test@dkdev.io campaign...');
-    
+
     const { data: campaigns, error } = await supabase
       .from('campaigns')
       .select('id, campaign_name')
@@ -69,8 +69,8 @@ class CSVDataImporter {
     const batchSize = 50;
     for (let i = 0; i < donors.length; i += batchSize) {
       const batch = donors.slice(i, i + batchSize);
-      
-      const processedBatch = batch.map(donor => ({
+
+      const processedBatch = batch.map((donor) => ({
         campaign_id: this.testCampaignId,
         unique_id: donor.unique_id,
         first_name: donor.first_name,
@@ -87,12 +87,10 @@ class CSVDataImporter {
         wallet_address: donor.wallet,
         contribution_amount: parseFloat(donor.contribution_amount) || 0,
         contribution_date: donor.contribution_date,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }));
 
-      const { data, error } = await supabase
-        .from('donors')
-        .insert(processedBatch);
+      const { data, error } = await supabase.from('donors').insert(processedBatch);
 
       if (error) {
         console.error('Error inserting donor batch:', error);
@@ -115,8 +113,8 @@ class CSVDataImporter {
     const batchSize = 50;
     for (let i = 0; i < prospects.length; i += batchSize) {
       const batch = prospects.slice(i, i + batchSize);
-      
-      const processedBatch = batch.map(prospect => ({
+
+      const processedBatch = batch.map((prospect) => ({
         campaign_id: this.testCampaignId,
         unique_id: prospect.unique_id,
         first_name: prospect.first_name,
@@ -131,12 +129,10 @@ class CSVDataImporter {
         employer: prospect.employer,
         occupation: prospect.occupation,
         wallet_address: prospect.wallet,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }));
 
-      const { data, error } = await supabase
-        .from('prospects')
-        .insert(processedBatch);
+      const { data, error } = await supabase.from('prospects').insert(processedBatch);
 
       if (error) {
         console.error('Error inserting prospect batch:', error);
@@ -159,20 +155,18 @@ class CSVDataImporter {
     const batchSize = 50;
     for (let i = 0; i < kycData.length; i += batchSize) {
       const batch = kycData.slice(i, i + batchSize);
-      
-      const processedBatch = batch.map(kyc => ({
+
+      const processedBatch = batch.map((kyc) => ({
         campaign_id: this.testCampaignId,
         unique_id: kyc.unique_id,
         first_name: kyc.first_name,
         last_name: kyc.last_name,
         kyc_passed: kyc.kyc_passed === '1' || kyc.kyc_passed === 'true',
         verified_at: new Date().toISOString(),
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }));
 
-      const { data, error } = await supabase
-        .from('kyc_verifications')
-        .insert(processedBatch);
+      const { data, error } = await supabase.from('kyc_verifications').insert(processedBatch);
 
       if (error) {
         console.error('Error inserting KYC batch:', error);
@@ -200,7 +194,7 @@ class CSVDataImporter {
       }
 
       console.log(`📊 ${table}: ${count} records (expected: ${expectedCount})`);
-      
+
       if (count === expectedCount) {
         console.log(`✅ ${table} import successful`);
       } else {
@@ -220,7 +214,7 @@ class CSVDataImporter {
 
       // Import all data
       await this.importDonors();
-      await this.importProspects(); 
+      await this.importProspects();
       await this.importKYC();
 
       // Verify import
@@ -231,15 +225,16 @@ class CSVDataImporter {
       console.log(`   - Donors: ${this.importedCounts.donors} records`);
       console.log(`   - Prospects: ${this.importedCounts.prospects} records`);
       console.log(`   - KYC Verifications: ${this.importedCounts.kyc_verifications} records`);
-      console.log(`   - Total: ${Object.values(this.importedCounts).reduce((a, b) => a + b, 0)} records`);
+      console.log(
+        `   - Total: ${Object.values(this.importedCounts).reduce((a, b) => a + b, 0)} records`
+      );
       console.log(`   - Linked to Campaign: ${this.testCampaignId}`);
       console.log('   - Account: test@dkdev.io');
-      
+
       console.log('\n🎯 Next Steps:');
       console.log('   - Data is now visible in admin panel');
       console.log('   - Data is linked to test@dkdev.io account');
       console.log('   - Access via frontend application');
-
     } catch (error) {
       console.error('❌ Import failed:', error);
       throw error;

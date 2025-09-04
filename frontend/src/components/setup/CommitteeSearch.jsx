@@ -3,6 +3,7 @@ import { fecAPI } from '../../lib/fec-api.js';
 import { supabase } from '../../lib/supabase';
 
 const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId }) => {
+  console.log('📋 CommitteeSearch received campaignId:', campaignId);
   const [searchTerm, setSearchTerm] = useState(formData.committeeNameSearch || '');
   const [committees, setCommittees] = useState([]);
   const [selectedCommittee, setSelectedCommittee] = useState(null);
@@ -263,11 +264,28 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
     try {
       setLoading(true);
+      setError(''); // Clear previous errors
 
-      // Save complete committee information to the current campaign in Supabase
+      // Validate campaignId
+      console.log('Campaign ID received:', campaignId);
       if (!campaignId) {
         throw new Error('Campaign ID not found. Please refresh and try again.');
       }
+
+      // Check if campaign exists in database first
+      console.log('Verifying campaign exists in database...');
+      const { data: existingCampaign, error: fetchError } = await supabase
+        .from('campaigns')
+        .select('id, title')
+        .eq('id', campaignId)
+        .single();
+
+      if (fetchError) {
+        console.error('Campaign fetch error:', fetchError);
+        throw new Error(`Campaign not found in database: ${fetchError.message}`);
+      }
+
+      console.log('Campaign verified:', existingCampaign);
 
       const committeeData = {
         committee_name: manualCommittee.name.trim(),
@@ -287,7 +305,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         },
       };
 
-      console.log('Saving committee data to Supabase:', { campaignId, committeeData });
+      console.log('Updating campaign with committee data:', { campaignId, committeeData });
 
       // Save to database - this must work
       const { data: updatedCampaign, error: updateError } = await supabase
@@ -297,44 +315,17 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         .select();
 
       if (updateError) {
-        console.error('Database save error:', updateError);
-        throw new Error(`Failed to save to database: ${updateError.message}`);
+        console.error('Database update error details:', updateError);
+        throw new Error(`Failed to save committee info to database: ${updateError.message}. Details: ${JSON.stringify(updateError)}`);
+      }
+
+      if (!updatedCampaign || updatedCampaign.length === 0) {
+        throw new Error('No campaign was updated. Campaign may not exist.');
       }
 
       console.log('Committee saved to database successfully:', updatedCampaign);
 
-      // Update form data and proceed
-      updateFormData({
-        selectedCommittee: {
-          id: 'MANUAL-' + Date.now(),
-          name: manualCommittee.name.trim(),
-          source: 'manual',
-          address: manualCommittee.address.trim(),
-          city: manualCommittee.city.trim(),
-          state: manualCommittee.state.trim(),
-          zip: manualCommittee.zip.trim(),
-        },
-        committeeDetails: {
-          id: 'MANUAL-' + Date.now(),
-          name: manualCommittee.name.trim(),
-          source: 'manual',
-          address: {
-            street1: manualCommittee.address.trim(),
-            city: manualCommittee.city.trim(),
-            state: manualCommittee.state.trim(),
-            zipCode: manualCommittee.zip.trim(),
-          },
-          isActive: true,
-        },
-        committeeName: manualCommittee.name.trim(),
-        fecCommitteeId: 'MANUAL-' + Date.now(),
-        committeeAddress: manualCommittee.address.trim(),
-        committeeCity: manualCommittee.city.trim(),
-        committeeState: manualCommittee.state.trim(),
-        committeeZip: manualCommittee.zip.trim(),
-      });
-
-      // Set the selected committee so the Next button becomes enabled
+      // Create the committee object first
       const savedCommittee = {
         id: 'MANUAL-' + Date.now(),
         name: manualCommittee.name.trim(),
@@ -344,9 +335,34 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         state: manualCommittee.state.trim(),
         zip: manualCommittee.zip.trim(),
       };
+
+      // Set the selected committee FIRST so the Next button becomes enabled immediately
       setSelectedCommittee(savedCommittee);
 
-      setSuccess('Committee information saved to database successfully!');
+      // Update form data
+      updateFormData({
+        selectedCommittee: savedCommittee,
+        committeeDetails: {
+          id: savedCommittee.id,
+          name: savedCommittee.name,
+          source: 'manual',
+          address: {
+            street1: savedCommittee.address,
+            city: savedCommittee.city,
+            state: savedCommittee.state,
+            zipCode: savedCommittee.zip,
+          },
+          isActive: true,
+        },
+        committeeName: savedCommittee.name,
+        fecCommitteeId: savedCommittee.id,
+        committeeAddress: savedCommittee.address,
+        committeeCity: savedCommittee.city,
+        committeeState: savedCommittee.state,
+        committeeZip: savedCommittee.zip,
+      });
+
+      setSuccess('Committee information saved successfully!');
 
       // Clear the manual form after successful save
       setManualCommittee({
@@ -975,14 +991,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       )}
 
-      {/* Success Message with Continue Button */}
+      {/* Success Message (without duplicate button) */}
       {success && (
         <div
           style={{
             background: 'hsl(120 60% 95%)',
             border: '1px solid hsl(120 60% 80%)',
             borderRadius: '6px',
-            padding: '2rem',
+            padding: '1.5rem',
             marginBottom: '2rem',
             textAlign: 'center',
           }}
@@ -990,31 +1006,15 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           <h4
             style={{
               color: 'hsl(var(--crypto-navy))',
-              margin: '0 0 1rem 0',
+              margin: '0 0 0.5rem 0',
               fontSize: 'var(--text-heading-md)',
             }}
           >
-            Committee Information Saved!
+            ✅ Committee Information Saved!
           </h4>
-          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0 0 2rem 0', fontSize: '16px' }}>
-            {success}
+          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0', fontSize: '16px' }}>
+            {success} You can now continue to the next step.
           </p>
-          <button
-            onClick={onNext}
-            style={{
-              background: 'hsl(var(--crypto-navy))',
-              color: 'white',
-              border: 'none',
-              padding: '1rem 2rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: '600',
-              transition: 'all 0.2s',
-            }}
-          >
-            Continue to Next Step
-          </button>
         </div>
       )}
 
@@ -1048,34 +1048,32 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </button>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
-          {/* Only show standard next button if no committee saved yet */}
-          {!success && (
-            <button
-              className="btn btn-primary"
-              onClick={handleConfirmCommittee}
-              disabled={!selectedCommittee || (validation && !validation.isValid)}
-              style={{
-                background:
-                  !selectedCommittee || (validation && !validation.isValid)
-                    ? 'hsl(var(--crypto-medium-gray))'
-                    : 'hsl(var(--crypto-navy))',
-                color: 'hsl(var(--crypto-white))',
-                border: 'none',
-                padding: 'var(--space-sm) var(--space-lg)',
-                borderRadius: 'var(--radius)',
-                cursor:
-                  !selectedCommittee || (validation && !validation.isValid)
-                    ? 'not-allowed'
-                    : 'pointer',
-                fontSize: 'var(--text-body)',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '600',
-                opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1,
-              }}
-            >
-              Next
-            </button>
-          )}
+          {/* Always show Next button when committee is selected */}
+          <button
+            className="btn btn-primary"
+            onClick={handleConfirmCommittee}
+            disabled={!selectedCommittee || (validation && !validation.isValid)}
+            style={{
+              background:
+                !selectedCommittee || (validation && !validation.isValid)
+                  ? 'hsl(var(--crypto-medium-gray))'
+                  : 'hsl(var(--crypto-navy))',
+              color: 'hsl(var(--crypto-white))',
+              border: 'none',
+              padding: 'var(--space-sm) var(--space-lg)',
+              borderRadius: 'var(--radius)',
+              cursor:
+                !selectedCommittee || (validation && !validation.isValid)
+                  ? 'not-allowed'
+                  : 'pointer',
+              fontSize: 'var(--text-body)',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: '600',
+              opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1,
+            }}
+          >
+            {success ? 'Continue to Next Step' : 'Next'}
+          </button>
         </div>
       </div>
     </div>

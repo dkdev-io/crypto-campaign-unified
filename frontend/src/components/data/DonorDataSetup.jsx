@@ -1,45 +1,45 @@
-import React, { useState } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
-import { supabase } from '../../lib/supabase'
-import CSVUpload from './CSVUpload'
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
+import CSVUpload from './CSVUpload';
 
 const DonorDataSetup = ({ onComplete, onSkip }) => {
-  const [selectedOption, setSelectedOption] = useState('')
-  const [showUpload, setShowUpload] = useState(false)
-  const [showAPIConnect, setShowAPIConnect] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [selectedOption, setSelectedOption] = useState('');
+  const [showUpload, setShowUpload] = useState(false);
+  const [showAPIConnect, setShowAPIConnect] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const { userProfile } = useAuth()
+  const { userProfile } = useAuth();
 
   const handleOptionSelect = (option) => {
-    setSelectedOption(option)
-    
+    setSelectedOption(option);
+
     if (option === 'upload') {
-      setShowUpload(true)
-      setShowAPIConnect(false)
+      setShowUpload(true);
+      setShowAPIConnect(false);
     } else if (option === 'api') {
-      setShowAPIConnect(true)
-      setShowUpload(false)
+      setShowAPIConnect(true);
+      setShowUpload(false);
     } else {
-      setShowUpload(false)
-      setShowAPIConnect(false)
+      setShowUpload(false);
+      setShowAPIConnect(false);
     }
-  }
+  };
 
   const handleUploadComplete = (data) => {
-    console.log('Upload completed:', data)
+    console.log('Upload completed:', data);
     if (onComplete) {
       onComplete({
         type: 'upload',
-        data: data
-      })
+        data: data,
+      });
     }
-  }
+  };
 
   const handleAPISetup = () => {
     // Placeholder for future API connection functionality
-    alert('API connection will be available in a future update. Please use CSV upload for now.')
-  }
+    alert('API connection will be available in a future update. Please use CSV upload for now.');
+  };
 
   return (
     <div className="donor-data-setup">
@@ -51,10 +51,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
       {!selectedOption && (
         <div className="data-options">
           <div className="option-cards">
-            <div 
-              className="option-card"
-              onClick={() => handleOptionSelect('upload')}
-            >
+            <div className="option-card" onClick={() => handleOptionSelect('upload')}>
               <div className="option-icon">📁</div>
               <h3>Upload Spreadsheet</h3>
               <p>Upload a CSV file with your donor information</p>
@@ -66,15 +63,10 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
                   <li>✅ Secure storage in your account</li>
                 </ul>
               </div>
-              <button className="btn btn-outline btn-full">
-                Choose This Option
-              </button>
+              <button className="btn btn-outline btn-full">Choose This Option</button>
             </div>
 
-            <div 
-              className="option-card"
-              onClick={() => handleOptionSelect('api')}
-            >
+            <div className="option-card" onClick={() => handleOptionSelect('api')}>
               <div className="option-icon">🔌</div>
               <h3>Connect Database/API</h3>
               <p>Connect your existing donor database or CRM system</p>
@@ -92,10 +84,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
               </button>
             </div>
 
-            <div 
-              className="option-card skip-card"
-              onClick={() => onSkip && onSkip()}
-            >
+            <div className="option-card skip-card" onClick={() => onSkip && onSkip()}>
               <div className="option-icon">⏭️</div>
               <h3>Skip for Now</h3>
               <p>Set up donor data later from your dashboard</p>
@@ -107,9 +96,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
                   <li>🔄 Import data anytime</li>
                 </ul>
               </div>
-              <button className="btn btn-secondary btn-full">
-                Skip This Step
-              </button>
+              <button className="btn btn-secondary btn-full">Skip This Step</button>
             </div>
           </div>
         </div>
@@ -118,20 +105,17 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
       {showUpload && (
         <div className="upload-section">
           <div className="section-header">
-            <button 
-              className="btn btn-outline btn-sm"
-              onClick={() => setSelectedOption('')}
-            >
+            <button className="btn btn-outline btn-sm" onClick={() => setSelectedOption('')}>
               ← Back to Options
             </button>
             <h3>📁 Upload Donor Spreadsheet</h3>
           </div>
-          
-          <CSVUpload 
+
+          <CSVUpload
             onUploadComplete={handleUploadComplete}
             expectedColumns={[
               'full_name',
-              'email', 
+              'email',
               'phone',
               'address',
               'city',
@@ -140,7 +124,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
               'employer',
               'occupation',
               'contribution_amount',
-              'contribution_date'
+              'contribution_date',
             ]}
           />
         </div>
@@ -149,19 +133,18 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
       {showAPIConnect && (
         <div className="api-section">
           <div className="section-header">
-            <button 
-              className="btn btn-outline btn-sm"
-              onClick={() => setSelectedOption('')}
-            >
+            <button className="btn btn-outline btn-sm" onClick={() => setSelectedOption('')}>
               ← Back to Options
             </button>
             <h3>🔌 Connect Your Database</h3>
           </div>
-          
+
           <div className="api-placeholder">
             <div className="coming-soon-notice">
               <h4>🚧 Database Connections Coming Soon</h4>
-              <p>We're working on secure integrations with popular CRM and donor management systems:</p>
+              <p>
+                We're working on secure integrations with popular CRM and donor management systems:
+              </p>
               <ul>
                 <li>📊 ActBlue integration</li>
                 <li>💾 NationBuilder sync</li>
@@ -169,7 +152,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
                 <li>🔗 CRM API integrations</li>
                 <li>📈 Real-time data synchronization</li>
               </ul>
-              
+
               <div className="notify-section">
                 <p>Want to be notified when this feature is ready?</p>
                 <div className="form-group">
@@ -192,10 +175,12 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
         <h4>📋 What happens with your data?</h4>
         <div className="info-grid">
           <div className="info-item">
-            <strong>🔒 Security:</strong> All data is encrypted and stored securely in your dedicated database space
+            <strong>🔒 Security:</strong> All data is encrypted and stored securely in your
+            dedicated database space
           </div>
           <div className="info-item">
-            <strong>👥 Privacy:</strong> Only you and authorized team members can access your donor data
+            <strong>👥 Privacy:</strong> Only you and authorized team members can access your donor
+            data
           </div>
           <div className="info-item">
             <strong>📊 Processing:</strong> Data is validated and formatted for FEC compliance
@@ -206,7 +191,7 @@ const DonorDataSetup = ({ onComplete, onSkip }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DonorDataSetup
+export default DonorDataSetup;

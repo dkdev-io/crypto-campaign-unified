@@ -38,20 +38,19 @@ const EmbeddedDonorForm = ({ campaignId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsSubmitting(true);
     setErrorMessage('');
-    
+
     try {
       const effectiveCampaignId = campaignId || 'demo-campaign';
-      
+
       if (!formData.amount || parseFloat(formData.amount) <= 0) {
         throw new Error('Please enter a valid contribution amount');
       }
-      
-      const { data, error } = await supabase
-        .from('form_submissions')
-        .insert([{
+
+      const { data, error } = await supabase.from('form_submissions').insert([
+        {
           campaign_id: effectiveCampaignId,
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -69,16 +68,19 @@ const EmbeddedDonorForm = ({ campaignId }) => {
           payment_method: 'pending',
           is_us_citizen: true,
           is_prohibited_source: false,
-          acknowledgment_signed: true
-        }]);
+          acknowledgment_signed: true,
+        },
+      ]);
 
       if (error) {
         throw new Error(error.message || 'Failed to save contribution');
       }
-      
+
       setSubmitted(true);
     } catch (err) {
-      setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');
+      setErrorMessage(
+        err.message || 'An error occurred while processing your contribution. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +106,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
     if (!appliedStyles) return styles;
 
     const { colors, fonts } = appliedStyles;
-    
+
     return {
       ...styles,
       container: {
@@ -148,7 +150,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
         fontWeight: fonts?.button?.weight || styles.submitButton.fontWeight,
         backgroundColor: colors?.primary || styles.submitButton.backgroundColor,
         color: colors?.background || styles.submitButton.color,
-      }
+      },
     };
   };
 
@@ -158,70 +160,70 @@ const EmbeddedDonorForm = ({ campaignId }) => {
     <div style={dynamicStyles.container}>
       <div style={dynamicStyles.formCard}>
         <h1 style={dynamicStyles.title}>{campaignName}</h1>
-        
+
         <form onSubmit={handleSubmit} style={dynamicStyles.form}>
           <div style={dynamicStyles.row}>
             <div style={dynamicStyles.halfField}>
               <label style={dynamicStyles.label}>First Name *</label>
-              <input 
+              <input
                 style={dynamicStyles.input}
                 required
                 value={formData.firstName || ''}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
               />
             </div>
             <div style={dynamicStyles.halfField}>
               <label style={dynamicStyles.label}>Last Name *</label>
-              <input 
+              <input
                 style={dynamicStyles.input}
                 required
                 value={formData.lastName || ''}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
               />
             </div>
           </div>
 
           <div style={dynamicStyles.field}>
             <label style={styles.label}>Email *</label>
-            <input 
+            <input
               type="email"
               style={dynamicStyles.input}
               required
               value={formData.email || ''}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
           <div style={dynamicStyles.field}>
             <label style={styles.label}>Address *</label>
-            <input 
+            <input
               placeholder="Street Address"
               style={dynamicStyles.input}
               required
               value={formData.street || ''}
-              onChange={(e) => setFormData({...formData, street: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, street: e.target.value })}
             />
             <div style={dynamicStyles.addressRow}>
-              <input 
+              <input
                 placeholder="City"
-                style={{...dynamicStyles.input, ...dynamicStyles.cityInput}}
+                style={{ ...dynamicStyles.input, ...dynamicStyles.cityInput }}
                 required
                 value={formData.city || ''}
-                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
               />
-              <input 
+              <input
                 placeholder="State"
-                style={{...dynamicStyles.input, ...dynamicStyles.stateInput}}
+                style={{ ...dynamicStyles.input, ...dynamicStyles.stateInput }}
                 required
                 value={formData.state || ''}
-                onChange={(e) => setFormData({...formData, state: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
               />
-              <input 
+              <input
                 placeholder="ZIP"
-                style={{...dynamicStyles.input, ...dynamicStyles.zipInput}}
+                style={{ ...dynamicStyles.input, ...dynamicStyles.zipInput }}
                 required
                 value={formData.zip || ''}
-                onChange={(e) => setFormData({...formData, zip: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
               />
             </div>
           </div>
@@ -229,20 +231,20 @@ const EmbeddedDonorForm = ({ campaignId }) => {
           <div style={dynamicStyles.row}>
             <div style={dynamicStyles.halfField}>
               <label style={dynamicStyles.label}>Employer *</label>
-              <input 
+              <input
                 style={dynamicStyles.input}
                 required
                 value={formData.employer || ''}
-                onChange={(e) => setFormData({...formData, employer: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, employer: e.target.value })}
               />
             </div>
             <div style={dynamicStyles.halfField}>
               <label style={dynamicStyles.label}>Occupation *</label>
-              <input 
+              <input
                 style={dynamicStyles.input}
                 required
                 value={formData.occupation || ''}
-                onChange={(e) => setFormData({...formData, occupation: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
               />
             </div>
           </div>
@@ -250,21 +252,21 @@ const EmbeddedDonorForm = ({ campaignId }) => {
           <div style={dynamicStyles.field}>
             <label style={dynamicStyles.label}>Contribution Amount * (Max: ${maxDonation})</label>
             <div style={dynamicStyles.amountButtons}>
-              {suggestedAmounts.map(amount => (
-                <button 
+              {suggestedAmounts.map((amount) => (
+                <button
                   key={amount}
                   type="button"
-                  onClick={() => setFormData({...formData, amount})}
+                  onClick={() => setFormData({ ...formData, amount })}
                   style={{
                     ...dynamicStyles.amountButton,
-                    ...(formData.amount === amount ? dynamicStyles.amountButtonActive : {})
+                    ...(formData.amount === amount ? dynamicStyles.amountButtonActive : {}),
                   }}
                 >
                   ${amount}
                 </button>
               ))}
             </div>
-            <input 
+            <input
               type="number"
               placeholder="Custom amount"
               min="1"
@@ -277,7 +279,7 @@ const EmbeddedDonorForm = ({ campaignId }) => {
                   setErrorMessage(`Maximum contribution is $${maxDonation}`);
                 } else {
                   setErrorMessage('');
-                  setFormData({...formData, amount: e.target.value});
+                  setFormData({ ...formData, amount: e.target.value });
                 }
               }}
             />
@@ -285,31 +287,23 @@ const EmbeddedDonorForm = ({ campaignId }) => {
 
           <div style={dynamicStyles.disclaimerBox}>
             <label style={dynamicStyles.checkboxLabel}>
-              <input 
-                type="checkbox"
-                required
-                style={dynamicStyles.checkbox}
-              />
+              <input type="checkbox" required style={dynamicStyles.checkbox} />
               <span style={dynamicStyles.disclaimerText}>
-                I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
-                this contribution is made from my own funds, I am not a federal contractor, 
-                and I am at least 18 years old.
+                I certify that I am a U.S. citizen or lawfully admitted permanent resident, this
+                contribution is made from my own funds, I am not a federal contractor, and I am at
+                least 18 years old.
               </span>
             </label>
           </div>
 
-          {errorMessage && (
-            <div style={dynamicStyles.errorBox}>
-              ⚠️ {errorMessage}
-            </div>
-          )}
-          
-          <button 
+          {errorMessage && <div style={dynamicStyles.errorBox}>⚠️ {errorMessage}</div>}
+
+          <button
             type="submit"
             disabled={isSubmitting}
             style={{
               ...dynamicStyles.submitButton,
-              ...(isSubmitting ? dynamicStyles.submitButtonDisabled : {})
+              ...(isSubmitting ? dynamicStyles.submitButtonDisabled : {}),
             }}
           >
             {isSubmitting ? '⏳ Processing...' : '💝 Contribute Now'}
@@ -331,7 +325,7 @@ const styles = {
     lineHeight: '1.5',
     fontSize: '16px',
   },
-  
+
   formCard: {
     backgroundColor: 'hsl(var(--crypto-white))',
     border: '1px solid hsl(var(--border))',
@@ -339,7 +333,7 @@ const styles = {
     padding: '32px',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
   },
-  
+
   successCard: {
     backgroundColor: 'hsl(var(--crypto-gold) / 0.1),',
     border: '1px solid hsl(var(--crypto-gold)),',
@@ -347,7 +341,7 @@ const styles = {
     padding: '32px',
     textAlign: 'center',
   },
-  
+
   title: {
     fontSize: '28px',
     fontWeight: 'bold',
@@ -356,7 +350,7 @@ const styles = {
     textAlign: 'center',
     margin: '0 0 24px 0',
   },
-  
+
   successTitle: {
     fontSize: '24px',
     fontWeight: 'bold',
@@ -364,59 +358,59 @@ const styles = {
     marginBottom: '16px',
     margin: '0 0 16px 0',
   },
-  
+
   successText: {
     fontSize: '16px',
     color: '#4caf50',
     margin: '0',
   },
-  
+
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
   },
-  
+
   field: {
     display: 'flex',
     flexDirection: 'column',
   },
-  
+
   row: {
     display: 'flex',
     gap: '16px',
     flexWrap: 'wrap',
   },
-  
+
   halfField: {
     flex: '1',
     minWidth: '200px',
     display: 'flex',
     flexDirection: 'column',
   },
-  
+
   addressRow: {
     display: 'flex',
     gap: '12px',
     marginTop: '8px',
     flexWrap: 'wrap',
   },
-  
+
   cityInput: {
     flex: '2',
     minWidth: '120px',
   },
-  
+
   stateInput: {
     flex: '1',
     minWidth: '60px',
   },
-  
+
   zipInput: {
     flex: '1',
     minWidth: '80px',
   },
-  
+
   label: {
     fontSize: '14px',
     fontWeight: '600',
@@ -424,7 +418,7 @@ const styles = {
     marginBottom: '6px',
     display: 'block',
   },
-  
+
   input: {
     padding: '12px 16px',
     border: '2px solid #e0e0e0',
@@ -438,14 +432,14 @@ const styles = {
     boxSizing: 'border-box',
     fontFamily: 'inherit',
   },
-  
+
   amountButtons: {
     display: 'flex',
     gap: '8px',
     marginBottom: '12px',
     flexWrap: 'wrap',
   },
-  
+
   amountButton: {
     padding: '10px 20px',
     border: '2px solid #1a237e',
@@ -458,39 +452,39 @@ const styles = {
     transition: 'all 0.2s ease',
     fontFamily: 'inherit',
   },
-  
+
   amountButtonActive: {
     backgroundColor: '#1a237e',
     color: '#ffffff',
   },
-  
+
   disclaimerBox: {
     backgroundColor: '#f8f9fa',
     border: '1px solid #e9ecef',
     borderRadius: '8px',
     padding: '16px',
   },
-  
+
   checkboxLabel: {
     display: 'flex',
     alignItems: 'flex-start',
     gap: '12px',
     cursor: 'pointer',
   },
-  
+
   checkbox: {
     marginTop: '2px',
     width: '16px',
     height: '16px',
     accentColor: '#1a237e',
   },
-  
+
   disclaimerText: {
     fontSize: '14px',
     color: '#555555',
     lineHeight: '1.4',
   },
-  
+
   errorBox: {
     backgroundColor: '#ffebee',
     border: '1px solid #f44336',
@@ -500,7 +494,7 @@ const styles = {
     fontSize: '14px',
     fontWeight: '500',
   },
-  
+
   submitButton: {
     backgroundColor: '#1a237e',
     color: '#ffffff',
@@ -514,7 +508,7 @@ const styles = {
     fontFamily: 'inherit',
     textAlign: 'center',
   },
-  
+
   submitButtonDisabled: {
     backgroundColor: '#9e9e9e',
     cursor: 'not-allowed',

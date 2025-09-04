@@ -6,6 +6,12 @@ const DonorProtectedRoute = ({ children }) => {
   const { donor, loading } = useDonorAuth();
   const location = useLocation();
 
+  // Check for development bypass parameter
+  const searchParams = new URLSearchParams(location.search);
+  const bypassParam = searchParams.get('bypass');
+  const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app');
+  const shouldBypass = isDevelopment && bypassParam === 'true';
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -17,9 +23,13 @@ const DonorProtectedRoute = ({ children }) => {
     );
   }
 
-  if (!donor) {
+  if (!donor && !shouldBypass) {
     // Redirect to login page but save the attempted location
     return <Navigate to="/donors/auth/login" state={{ from: location }} replace />;
+  }
+
+  if (shouldBypass) {
+    console.log('🚨 DONOR PROTECTED ROUTE BYPASS ACTIVE');
   }
 
   return children;

@@ -16,13 +16,13 @@ if (!SUPABASE_SERVICE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function createDonorTables() {
   console.log('🚀 Creating donor tables directly in Supabase...\n');
-  
+
   // First, let's create a simple SQL execution function if it doesn't exist
   const createExecFunction = `
     CREATE OR REPLACE FUNCTION exec_sql(sql text)
@@ -167,18 +167,20 @@ async function createDonorTables() {
   try {
     // Try Method 1: Direct RPC call
     console.log('Method 1: Trying RPC exec_sql...');
-    
+
     // First create the function
-    const { error: funcError } = await supabase.rpc('exec_sql', {
-      sql: createExecFunction
-    }).catch(err => ({ error: err }));
-    
+    const { error: funcError } = await supabase
+      .rpc('exec_sql', {
+        sql: createExecFunction,
+      })
+      .catch((err) => ({ error: err }));
+
     if (!funcError) {
       // Now execute the table creation
       const { error: tableError } = await supabase.rpc('exec_sql', {
-        sql: createTablesSQL
+        sql: createTablesSQL,
       });
-      
+
       if (!tableError) {
         console.log('✅ Tables created successfully via RPC!');
       } else {
@@ -187,31 +189,31 @@ async function createDonorTables() {
     } else {
       console.log('❌ RPC not available:', funcError.message);
     }
-    
+
     // Method 2: Try using REST API directly with service role
     console.log('\nMethod 2: Using direct REST API calls...');
-    
+
     const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/query`, {
       method: 'POST',
       headers: {
-        'apikey': SUPABASE_SERVICE_KEY,
-        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        apikey: SUPABASE_SERVICE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
+        Prefer: 'return=representation',
       },
       body: JSON.stringify({
-        query: createTablesSQL
-      })
+        query: createTablesSQL,
+      }),
     });
-    
+
     if (response.ok) {
       console.log('✅ Tables created via REST API!');
     } else {
       console.log('❌ REST API method not available');
-      
+
       // Method 3: Since we can't execute raw SQL directly, let's at least insert the test donor
       console.log('\nMethod 3: Creating donor record for test@dkdev.io...');
-      
+
       // Insert donor record for our test user
       const { data: donorData, error: donorError } = await supabase
         .from('donors')
@@ -221,30 +223,30 @@ async function createDonorTables() {
           full_name: 'Test Donor Account',
           phone: '555-0123',
           donor_type: 'individual',
-          email_verified: false
+          email_verified: false,
         })
         .select()
         .single();
-      
+
       if (donorError) {
         if (donorError.message.includes('does not exist')) {
           console.log('❌ Donors table does not exist');
           console.log('\n🔧 Using Supabase CLI as fallback...');
-          
+
           // Method 4: Try using npx supabase
           const { exec } = require('child_process');
           const util = require('util');
           const execPromise = util.promisify(exec);
-          
+
           // Save SQL to file
           const fs = require('fs');
           fs.writeFileSync('/tmp/create-donor-tables.sql', createTablesSQL);
-          
+
           try {
             const { stdout, stderr } = await execPromise(
               `SUPABASE_ACCESS_TOKEN="${SUPABASE_SERVICE_KEY}" npx supabase db execute --db-url "postgresql://postgres:${SUPABASE_SERVICE_KEY}@db.kmepcdsklnnxokoimvzo.supabase.co:5432/postgres" --file /tmp/create-donor-tables.sql`
             );
-            
+
             if (stderr) {
               console.log('⚠️ CLI stderr:', stderr);
             }
@@ -265,15 +267,13 @@ async function createDonorTables() {
         console.log('   ID:', donorData.id);
         console.log('   Email:', donorData.email);
       }
-      
+
       // Try to create profile
-      const { error: profileError } = await supabase
-        .from('donor_profiles')
-        .insert({
-          donor_id: 'a6dd2983-3dd4-4e0d-b3f6-17d38772ff32',
-          bio: 'Test donor account'
-        });
-      
+      const { error: profileError } = await supabase.from('donor_profiles').insert({
+        donor_id: 'a6dd2983-3dd4-4e0d-b3f6-17d38772ff32',
+        bio: 'Test donor account',
+      });
+
       if (profileError) {
         if (profileError.message.includes('does not exist')) {
           console.log('❌ Donor_profiles table does not exist');
@@ -284,11 +284,17 @@ async function createDonorTables() {
         console.log('✅ Profile created!');
       }
     }
-    
+
     // Final verification
     console.log('\n📊 Final Table Status Check:');
-    const tables = ['donors', 'donor_profiles', 'donations', 'donor_saved_campaigns', 'donor_tax_receipts'];
-    
+    const tables = [
+      'donors',
+      'donor_profiles',
+      'donations',
+      'donor_saved_campaigns',
+      'donor_tax_receipts',
+    ];
+
     for (const table of tables) {
       const { error } = await supabase.from(table).select('count').limit(1);
       if (!error) {
@@ -297,7 +303,6 @@ async function createDonorTables() {
         console.log(`❌ ${table} - NOT FOUND`);
       }
     }
-    
   } catch (error) {
     console.error('❌ Error:', error.message);
   }
@@ -308,7 +313,7 @@ createDonorTables()
     console.log('\n✨ Process complete');
     process.exit(0);
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('❌ Fatal error:', err);
     process.exit(1);
   });

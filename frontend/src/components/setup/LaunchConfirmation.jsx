@@ -12,7 +12,9 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev, campaignId }) =>
     // Simple embed URL with just campaign ID
     console.log('🚀 Launch screen - Campaign ID:', campaignId);
     console.log('🚀 Launch screen - Form data:', formData);
-    const embedUrl = campaignId ? `http://localhost:5173/?campaign=${campaignId}` : 'http://localhost:5173/';
+    const embedUrl = campaignId
+      ? `http://localhost:5173/?campaign=${campaignId}`
+      : 'http://localhost:5173/';
     const embedCode = `<iframe src="${embedUrl}" width="400" height="600" frameborder="0" style="border-radius: 8px;"></iframe>`;
 
     return (
@@ -20,35 +22,49 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev, campaignId }) =>
         <h2 style={{ color: '#28a745' }}>🎉 Campaign Successfully Launched!</h2>
         <p>Your donation form is now live and ready to accept contributions.</p>
         {campaignId && (
-          <p style={{ background: '#e7f3ff', padding: '0.5rem', borderRadius: '4px', marginTop: '1rem' }}>
+          <p
+            style={{
+              background: '#e7f3ff',
+              padding: '0.5rem',
+              borderRadius: '4px',
+              marginTop: '1rem',
+            }}
+          >
             <strong>Campaign ID:</strong> {campaignId}
           </p>
         )}
-        
-        <div style={{ background: '#fff3cd', padding: '1.5rem', borderRadius: '8px', margin: '2rem 0' }}>
+
+        <div
+          style={{
+            background: '#fff3cd',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            margin: '2rem 0',
+          }}
+        >
           <h3 style={{ marginBottom: '1rem' }}>📋 Your Embed Code</h3>
-          <textarea 
+          <textarea
             value={embedCode}
             readOnly
-            style={{ 
-              width: '100%', 
-              height: '80px', 
-              fontFamily: 'monospace', 
+            style={{
+              width: '100%',
+              height: '80px',
+              fontFamily: 'monospace',
               fontSize: '12px',
               padding: '0.5rem',
               border: '1px solid #ccc',
-              borderRadius: '4px'
+              borderRadius: '4px',
             }}
           />
           <div style={{ marginTop: '1rem' }}>
-            <a 
-              href={embedUrl} 
-              target="_blank" 
+            <a
+              href={embedUrl}
+              target="_blank"
               rel="noopener noreferrer"
-              style={{ 
-                color: '#007bff', 
+              style={{
+                color: '#007bff',
                 textDecoration: 'underline',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               🔗 Preview your contribution form in a new tab
@@ -64,7 +80,7 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev, campaignId }) =>
       <h2>Launch Confirmation</h2>
       <div className="form-group">
         <label>
-          <input 
+          <input
             type="checkbox"
             checked={formData.finalConfirmation || false}
             onChange={(e) => updateFormData({ finalConfirmation: e.target.checked })}
@@ -74,9 +90,11 @@ const LaunchConfirmation = ({ formData, updateFormData, onPrev, campaignId }) =>
       </div>
 
       <div className="form-actions">
-        <button className="btn btn-secondary" onClick={onPrev}>Back</button>
-        <button 
-          className="btn btn-primary" 
+        <button className="btn btn-secondary" onClick={onPrev}>
+          Back
+        </button>
+        <button
+          className="btn btn-primary"
           onClick={handleLaunch}
           disabled={!formData.finalConfirmation}
         >

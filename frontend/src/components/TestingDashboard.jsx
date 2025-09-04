@@ -10,42 +10,47 @@ const TestingDashboard = () => {
     firstName: '',
     lastName: '',
     email: '',
-    acknowledgmentSigned: false
+    acknowledgmentSigned: false,
   });
 
   const runTest = async () => {
-    if (!testForm.amount || !testForm.walletAddress || !testForm.firstName || !testForm.lastName || !testForm.email) {
+    if (
+      !testForm.amount ||
+      !testForm.walletAddress ||
+      !testForm.firstName ||
+      !testForm.lastName ||
+      !testForm.email
+    ) {
       alert('Please fill in all required fields');
       return;
     }
 
     setIsRunning(true);
     console.log('🔬 Running smart contract test with your data...');
-    
+
     try {
       const result = await processContribution(testForm, 'test-campaign-123');
-      
+
       const testResult = {
         input: { ...testForm },
         output: result,
-        timestamp: new Date().toLocaleTimeString()
+        timestamp: new Date().toLocaleTimeString(),
       };
-      
+
       console.log(result.success ? '✅' : '❌', 'Test result:', result);
-      setTestResults(prev => [testResult, ...prev]);
-      
+      setTestResults((prev) => [testResult, ...prev]);
     } catch (error) {
       console.log('❌', 'Test ERROR:', error.message);
-      
+
       const testResult = {
         input: { ...testForm },
         output: { success: false, error: error.message },
-        timestamp: new Date().toLocaleTimeString()
+        timestamp: new Date().toLocaleTimeString(),
       };
-      
-      setTestResults(prev => [testResult, ...prev]);
+
+      setTestResults((prev) => [testResult, ...prev]);
     }
-    
+
     setIsRunning(false);
   };
 
@@ -56,14 +61,17 @@ const TestingDashboard = () => {
         <p style={{ color: '#666', fontSize: '1.1rem' }}>
           Test contribution limits without triggering wallet extensions
         </p>
-        <div style={{
-          background: '#e3f2fd',
-          padding: '1rem',
-          borderRadius: '8px',
-          margin: '1rem 0',
-          border: '1px solid #bbdefb'
-        }}>
-          <strong>Testing Mode Active:</strong> No wallet extensions will be triggered. All transactions are simulated.
+        <div
+          style={{
+            background: '#e3f2fd',
+            padding: '1rem',
+            borderRadius: '8px',
+            margin: '1rem 0',
+            border: '1px solid #bbdefb',
+          }}
+        >
+          <strong>Testing Mode Active:</strong> No wallet extensions will be triggered. All
+          transactions are simulated.
         </div>
       </div>
 
@@ -71,22 +79,34 @@ const TestingDashboard = () => {
         {/* Test Input Form */}
         <div>
           <h2 style={{ marginBottom: '1rem' }}>Smart Contract Test</h2>
-          <div style={{
-            background: '#f8f9fa',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem'
-          }}>
+          <div
+            style={{
+              background: '#f8f9fa',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+            }}
+          >
             <h3>Smart Contract Requirements:</h3>
             <ul>
-              <li><strong>FEC Individual Limit:</strong> $3,300 per election (cumulative)</li>
-              <li><strong>Minimum:</strong> $1</li>
-              <li><strong>Complete Info:</strong> All fields required</li>
-              <li><strong>Compliance:</strong> FEC acknowledgment checkbox must be signed</li>
-              <li><strong>KYC:</strong> Requirements (to be added later)</li>
+              <li>
+                <strong>FEC Individual Limit:</strong> $3,300 per election (cumulative)
+              </li>
+              <li>
+                <strong>Minimum:</strong> $1
+              </li>
+              <li>
+                <strong>Complete Info:</strong> All fields required
+              </li>
+              <li>
+                <strong>Compliance:</strong> FEC acknowledgment checkbox must be signed
+              </li>
+              <li>
+                <strong>KYC:</strong> Requirements (to be added later)
+              </li>
             </ul>
           </div>
-          
+
           <div style={{ display: 'grid', gap: '1rem', marginBottom: '1rem' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
@@ -97,17 +117,17 @@ const TestingDashboard = () => {
                 min="0"
                 step="0.01"
                 value={testForm.amount}
-                onChange={(e) => setTestForm({...testForm, amount: e.target.value})}
+                onChange={(e) => setTestForm({ ...testForm, amount: e.target.value })}
                 placeholder="Enter amount to test"
                 style={{
                   width: '100%',
                   padding: '0.75rem',
                   border: '1px solid #ccc',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
             </div>
-            
+
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
                 Wallet Address *
@@ -115,17 +135,17 @@ const TestingDashboard = () => {
               <input
                 type="text"
                 value={testForm.walletAddress}
-                onChange={(e) => setTestForm({...testForm, walletAddress: e.target.value})}
+                onChange={(e) => setTestForm({ ...testForm, walletAddress: e.target.value })}
                 placeholder="Enter wallet address"
                 style={{
                   width: '100%',
                   padding: '0.75rem',
                   border: '1px solid #ccc',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
             </div>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
@@ -134,13 +154,13 @@ const TestingDashboard = () => {
                 <input
                   type="text"
                   value={testForm.firstName}
-                  onChange={(e) => setTestForm({...testForm, firstName: e.target.value})}
+                  onChange={(e) => setTestForm({ ...testForm, firstName: e.target.value })}
                   placeholder="First name"
                   style={{
                     width: '100%',
                     padding: '0.75rem',
                     border: '1px solid #ccc',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
                   }}
                 />
               </div>
@@ -151,18 +171,18 @@ const TestingDashboard = () => {
                 <input
                   type="text"
                   value={testForm.lastName}
-                  onChange={(e) => setTestForm({...testForm, lastName: e.target.value})}
+                  onChange={(e) => setTestForm({ ...testForm, lastName: e.target.value })}
                   placeholder="Last name"
                   style={{
                     width: '100%',
                     padding: '0.75rem',
                     border: '1px solid #ccc',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
                   }}
                 />
               </div>
             </div>
-            
+
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
                 Email *
@@ -170,40 +190,44 @@ const TestingDashboard = () => {
               <input
                 type="email"
                 value={testForm.email}
-                onChange={(e) => setTestForm({...testForm, email: e.target.value})}
+                onChange={(e) => setTestForm({ ...testForm, email: e.target.value })}
                 placeholder="Email address"
                 style={{
                   width: '100%',
                   padding: '0.75rem',
                   border: '1px solid #ccc',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
                 }}
               />
             </div>
           </div>
-          
-          <div style={{
-            background: '#f0f8ff',
-            padding: '1rem',
-            borderRadius: '4px',
-            marginBottom: '1rem',
-            fontSize: '0.9rem'
-          }}>
+
+          <div
+            style={{
+              background: '#f0f8ff',
+              padding: '1rem',
+              borderRadius: '4px',
+              marginBottom: '1rem',
+              fontSize: '0.9rem',
+            }}
+          >
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
               <input
                 type="checkbox"
                 checked={testForm.acknowledgmentSigned}
-                onChange={(e) => setTestForm({...testForm, acknowledgmentSigned: e.target.checked})}
+                onChange={(e) =>
+                  setTestForm({ ...testForm, acknowledgmentSigned: e.target.checked })
+                }
                 style={{ marginTop: '0.25rem' }}
               />
               <span>
-                I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
-                this contribution is made from my own funds, I am not a federal contractor, 
-                and I am at least 18 years old.
+                I certify that I am a U.S. citizen or lawfully admitted permanent resident, this
+                contribution is made from my own funds, I am not a federal contractor, and I am at
+                least 18 years old.
               </span>
             </label>
           </div>
-          
+
           <button
             onClick={runTest}
             disabled={isRunning}
@@ -215,7 +239,7 @@ const TestingDashboard = () => {
               border: 'none',
               borderRadius: '8px',
               fontSize: '1.1rem',
-              cursor: isRunning ? 'not-allowed' : 'pointer'
+              cursor: isRunning ? 'not-allowed' : 'pointer',
             }}
           >
             {isRunning ? '⏳ Testing Smart Contract...' : '🧪 Test Smart Contract Limits'}
@@ -227,14 +251,17 @@ const TestingDashboard = () => {
           <h2 style={{ marginBottom: '1rem' }}>Test Results</h2>
           <div style={{ display: 'grid', gap: '1rem', maxHeight: '600px', overflowY: 'auto' }}>
             {testResults.length === 0 ? (
-              <div style={{
-                background: '#f8f9fa',
-                padding: '2rem',
-                textAlign: 'center',
-                borderRadius: '8px',
-                color: '#666'
-              }}>
-                No tests run yet. Fill in the form and click "Test Smart Contract Limits" to test your data.
+              <div
+                style={{
+                  background: '#f8f9fa',
+                  padding: '2rem',
+                  textAlign: 'center',
+                  borderRadius: '8px',
+                  color: '#666',
+                }}
+              >
+                No tests run yet. Fill in the form and click "Test Smart Contract Limits" to test
+                your data.
               </div>
             ) : (
               testResults.map((result, index) => (
@@ -244,26 +271,38 @@ const TestingDashboard = () => {
                     background: result.output.success ? '#d4edda' : '#f8d7da',
                     border: `1px solid ${result.output.success ? '#c3e6cb' : '#f5c6cb'}`,
                     padding: '1rem',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '0.5rem'
-                  }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
                     <strong>{result.output.success ? '✅ SUCCESS' : '❌ FAILED'}</strong>
                     <small>{result.timestamp}</small>
                   </div>
                   <div style={{ fontSize: '0.9rem' }}>
-                    <div><strong>Amount Tested:</strong> ${result.input.amount}</div>
-                    <div><strong>Name:</strong> {result.input.firstName} {result.input.lastName}</div>
-                    <div><strong>Email:</strong> {result.input.email}</div>
-                    <div><strong>Wallet:</strong> {result.input.walletAddress?.substring(0, 20)}...</div>
+                    <div>
+                      <strong>Amount Tested:</strong> ${result.input.amount}
+                    </div>
+                    <div>
+                      <strong>Name:</strong> {result.input.firstName} {result.input.lastName}
+                    </div>
+                    <div>
+                      <strong>Email:</strong> {result.input.email}
+                    </div>
+                    <div>
+                      <strong>Wallet:</strong> {result.input.walletAddress?.substring(0, 20)}...
+                    </div>
                     {result.output.success ? (
                       <div style={{ color: '#155724', marginTop: '0.5rem' }}>
-                        <div>✅ Transaction Hash: {result.output.transactionHash?.substring(0, 20)}...</div>
+                        <div>
+                          ✅ Transaction Hash: {result.output.transactionHash?.substring(0, 20)}...
+                        </div>
                         <div>Block: {result.output.blockNumber}</div>
                         <div>Gas Used: {result.output.gasUsed}</div>
                       </div>

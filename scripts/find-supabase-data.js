@@ -8,7 +8,9 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const SUPABASE_ANON_KEY =
+  process.env.SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 
 class SupabaseDataFinder {
   constructor() {
@@ -17,11 +19,10 @@ class SupabaseDataFinder {
   }
 
   async searchAllTables() {
-    
     // List of possible table names to check
     const tableNames = [
       'prospects',
-      'donors', 
+      'donors',
       'kyc',
       'campaign_prospects',
       'campaign_donors',
@@ -33,7 +34,7 @@ class SupabaseDataFinder {
       'user_data',
       'people',
       'contacts',
-      'campaign_data'
+      'campaign_data',
     ];
 
     for (const tableName of tableNames) {
@@ -45,12 +46,11 @@ class SupabaseDataFinder {
 
   async checkTable(tableName) {
     try {
-      
       // Try to get schema info first
       const { data, error, count } = await this.supabase
         .from(tableName)
         .select('*', { count: 'exact', head: true });
-      
+
       if (error) {
         if (error.message.includes('does not exist')) {
         } else {
@@ -58,7 +58,6 @@ class SupabaseDataFinder {
         }
         return;
       }
-
 
       if (count > 0) {
         // Get sample data to analyze structure
@@ -70,7 +69,7 @@ class SupabaseDataFinder {
         if (sampleData && sampleData.length > 0) {
           const sample = sampleData[0];
           const fields = Object.keys(sample);
-          
+
           // Check if this looks like our campaign data
           const isProspectLike = this.hasProspectFields(fields);
           const isDonorLike = this.hasDonorFields(fields);
@@ -83,52 +82,59 @@ class SupabaseDataFinder {
             sampleData: sampleData.slice(0, 2), // First 2 records
             analysis: {
               isProspectLike,
-              isDonorLike, 
+              isDonorLike,
               isKycLike,
               hasUniqueIds: fields.includes('unique_id'),
               hasWalletAddress: fields.includes('wallet_address'),
               hasNames: fields.includes('first_name') && fields.includes('last_name'),
               hasEmployment: fields.includes('employer') && fields.includes('occupation'),
-              hasContributionAmount: fields.includes('contribution_amount') || fields.includes('amount'),
-              hasKycStatus: fields.includes('kyc_status')
-            }
+              hasContributionAmount:
+                fields.includes('contribution_amount') || fields.includes('amount'),
+              hasKycStatus: fields.includes('kyc_status'),
+            },
           };
 
           this.findings.push(finding);
-
-          
         }
       }
-
     } catch (error) {
       console.log(`   💥 Error checking '${tableName}': ${error.message}`);
     }
   }
 
   hasProspectFields(fields) {
-    const requiredFields = ['first_name', 'last_name', 'phone_number', 'employer', 'occupation', 'city', 'state'];
-    return requiredFields.every(field => fields.includes(field));
+    const requiredFields = [
+      'first_name',
+      'last_name',
+      'phone_number',
+      'employer',
+      'occupation',
+      'city',
+      'state',
+    ];
+    return requiredFields.every((field) => fields.includes(field));
   }
 
   hasDonorFields(fields) {
     const requiredFields = ['first_name', 'last_name', 'contribution_amount'];
     const optionalFields = ['wallet_address', 'transaction_hash', 'amount'];
-    
-    const hasRequired = requiredFields.every(field => fields.includes(field));
-    const hasOptional = optionalFields.some(field => fields.includes(field));
-    
+
+    const hasRequired = requiredFields.every((field) => fields.includes(field));
+    const hasOptional = optionalFields.some((field) => fields.includes(field));
+
     return hasRequired || hasOptional;
   }
 
   hasKycFields(fields) {
-    return fields.includes('kyc_status') || 
-           fields.includes('first_name') && fields.includes('last_name') && fields.length <= 5;
+    return (
+      fields.includes('kyc_status') ||
+      (fields.includes('first_name') && fields.includes('last_name') && fields.length <= 5)
+    );
   }
 
   async countDonorProspects() {
-
-    const prospectTables = this.findings.filter(f => f.analysis.isProspectLike);
-    const donorTables = this.findings.filter(f => f.analysis.isDonorLike);
+    const prospectTables = this.findings.filter((f) => f.analysis.isProspectLike);
+    const donorTables = this.findings.filter((f) => f.analysis.isDonorLike);
 
     if (prospectTables.length === 0 || donorTables.length === 0) {
       console.log('❌ Cannot find both prospect and donor tables to calculate overlap');
@@ -144,7 +150,6 @@ class SupabaseDataFinder {
 
   async calculateOverlap(prospectTableName, donorTableName) {
     try {
-
       // Get all unique IDs from prospects
       const { data: prospects, error: pError } = await this.supabase
         .from(prospectTableName)
@@ -166,20 +171,16 @@ class SupabaseDataFinder {
       }
 
       // Calculate overlap
-      const prospectIds = new Set(prospects.map(p => p.unique_id));
-      const donorIds = new Set(donors.map(d => d.unique_id));
-      
-      const overlappingIds = [...donorIds].filter(id => prospectIds.has(id));
-      
+      const prospectIds = new Set(prospects.map((p) => p.unique_id));
+      const donorIds = new Set(donors.map((d) => d.unique_id));
+
+      const overlappingIds = [...donorIds].filter((id) => prospectIds.has(id));
 
       if (overlappingIds.length > 0) {
-        
         // Show names of overlapping people
-        const overlappingPeople = prospects.filter(p => overlappingIds.includes(p.unique_id));
-        overlappingPeople.slice(0, 3).forEach(person => {
-        });
+        const overlappingPeople = prospects.filter((p) => overlappingIds.includes(p.unique_id));
+        overlappingPeople.slice(0, 3).forEach((person) => {});
       }
-
     } catch (error) {
       console.log(`   💥 Error calculating overlap: ${error.message}`);
     }
@@ -187,7 +188,6 @@ class SupabaseDataFinder {
 
   async analyzeContributions(donorTableName) {
     try {
-
       const { data: donors, error } = await this.supabase
         .from(donorTableName)
         .select('unique_id, contribution_amount, amount');
@@ -198,7 +198,7 @@ class SupabaseDataFinder {
       }
 
       const amountField = donors[0].contribution_amount ? 'contribution_amount' : 'amount';
-      const amounts = donors.map(d => parseFloat(d[amountField])).filter(a => !isNaN(a));
+      const amounts = donors.map((d) => parseFloat(d[amountField])).filter((a) => !isNaN(a));
 
       if (amounts.length === 0) {
         return;
@@ -210,28 +210,22 @@ class SupabaseDataFinder {
       const avg = total / amounts.length;
 
       // Count special categories
-      const exactly3300 = amounts.filter(a => a === 3300).length;
-      const under50 = amounts.filter(a => a < 50).length;
-      const over3299 = amounts.filter(a => a > 3299).length;
-
-
+      const exactly3300 = amounts.filter((a) => a === 3300).length;
+      const under50 = amounts.filter((a) => a < 50).length;
+      const over3299 = amounts.filter((a) => a > 3299).length;
     } catch (error) {
       console.log(`   💥 Error analyzing contributions: ${error.message}`);
     }
   }
 
   generateReport() {
-
     if (this.findings.length === 0) {
       console.log('❌ No relevant campaign data tables found');
       return;
     }
 
-
     for (const finding of this.findings) {
-      
       const analysis = finding.analysis;
-      
     }
 
     // Run additional analysis
@@ -240,9 +234,9 @@ class SupabaseDataFinder {
 
   async runAdditionalAnalysis() {
     await this.countDonorProspects();
-    
+
     // Analyze contributions for donor-like tables
-    const donorTables = this.findings.filter(f => f.analysis.isDonorLike);
+    const donorTables = this.findings.filter((f) => f.analysis.isDonorLike);
     for (const table of donorTables) {
       await this.analyzeContributions(table.tableName);
     }
@@ -252,7 +246,7 @@ class SupabaseDataFinder {
 // CLI execution
 async function main() {
   const finder = new SupabaseDataFinder();
-  
+
   try {
     await finder.searchAllTables();
   } catch (error) {

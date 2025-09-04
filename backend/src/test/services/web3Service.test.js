@@ -7,7 +7,7 @@ const mockProvider = {
   getBlockNumber: jest.fn(),
   getBalance: jest.fn(),
   waitForTransaction: jest.fn(),
-  getGasPrice: jest.fn()
+  getGasPrice: jest.fn(),
 };
 
 const mockContract = {
@@ -19,9 +19,9 @@ const mockContract = {
   maxContributionWei: jest.fn(),
   isKYCVerified: jest.fn(),
   filters: {
-    ContributionMade: jest.fn()
+    ContributionMade: jest.fn(),
   },
-  queryFilter: jest.fn()
+  queryFilter: jest.fn(),
 };
 
 jest.mock('ethers', () => ({
@@ -30,9 +30,11 @@ jest.mock('ethers', () => ({
     Contract: jest.fn(() => mockContract),
     formatEther: jest.fn((wei) => (parseFloat(wei) / 1e18).toString()),
     parseEther: jest.fn((eth) => (parseFloat(eth) * 1e18).toString()),
-    formatUnits: jest.fn((value, units) => (parseFloat(value) / Math.pow(10, units || 18)).toString()),
-    isAddress: jest.fn((address) => /^0x[a-fA-F0-9]{40}$/.test(address))
-  }
+    formatUnits: jest.fn((value, units) =>
+      (parseFloat(value) / Math.pow(10, units || 18)).toString()
+    ),
+    isAddress: jest.fn((address) => /^0x[a-fA-F0-9]{40}$/.test(address)),
+  },
 }));
 
 // Mock Web3Service class for testing
@@ -49,13 +51,13 @@ class MockWeb3Service {
       this.network = network;
       this.provider = mockProvider;
       this.contract = mockContract;
-      
+
       // Mock network validation
       mockProvider.getNetwork.mockResolvedValue({
         name: network,
-        chainId: network === 'localhost' ? 31337 : 1
+        chainId: network === 'localhost' ? 31337 : 1,
       });
-      
+
       this.initialized = true;
       return true;
     } catch (error) {
@@ -76,7 +78,7 @@ class MockWeb3Service {
       return {
         totalContributions: parseInt(totalContributions),
         totalAmount: totalAmount.toString(),
-        contributorCount: parseInt(contributorCount)
+        contributorCount: parseInt(contributorCount),
       };
     } catch (error) {
       throw new Error(`Failed to get campaign stats: ${error.message}`);
@@ -98,7 +100,7 @@ class MockWeb3Service {
         totalContributed: contributorData.totalContributed?.toString() || '0',
         contributionCount: parseInt(contributorData.contributionCount || 0),
         isKYCVerified: contributorData.isKYCVerified || false,
-        firstContribution: contributorData.firstContribution || 0
+        firstContribution: contributorData.firstContribution || 0,
       };
     } catch (error) {
       throw new Error(`Failed to get contributor info: ${error.message}`);
@@ -122,7 +124,7 @@ class MockWeb3Service {
       const result = await mockContract.canContribute(address, amount.toString());
       return {
         canContribute: result.canContribute || false,
-        reason: result.reason || 'Unknown'
+        reason: result.reason || 'Unknown',
       };
     } catch (error) {
       throw new Error(`Failed to check contribution eligibility: ${error.message}`);
@@ -138,7 +140,7 @@ class MockWeb3Service {
       const maxWei = await mockContract.maxContributionWei();
       return {
         maxWei: maxWei.toString(),
-        maxEth: (parseFloat(maxWei) / 1e18).toString()
+        maxEth: (parseFloat(maxWei) / 1e18).toString(),
       };
     } catch (error) {
       throw new Error(`Failed to get max contribution: ${error.message}`);
@@ -177,7 +179,7 @@ class MockWeb3Service {
         transactionHash: receipt.transactionHash,
         blockNumber: receipt.blockNumber,
         gasUsed: receipt.gasUsed,
-        effectiveGasPrice: receipt.effectiveGasPrice
+        effectiveGasPrice: receipt.effectiveGasPrice,
       };
     } catch (error) {
       throw new Error(`Failed to wait for transaction: ${error.message}`);
@@ -198,7 +200,7 @@ class MockWeb3Service {
         network: network.name,
         chainId: network.chainId,
         blockNumber,
-        gasPrice: gasPrice.toString()
+        gasPrice: gasPrice.toString(),
       };
     } catch (error) {
       throw new Error(`Failed to get network info: ${error.message}`);
@@ -218,7 +220,7 @@ describe('Web3Service Tests', () => {
     it('should initialize successfully with localhost network', async () => {
       mockProvider.getNetwork.mockResolvedValue({
         name: 'localhost',
-        chainId: 31337
+        chainId: 31337,
       });
 
       const result = await web3Service.initialize('localhost');
@@ -231,7 +233,7 @@ describe('Web3Service Tests', () => {
     it('should initialize successfully with mainnet network', async () => {
       mockProvider.getNetwork.mockResolvedValue({
         name: 'mainnet',
-        chainId: 1
+        chainId: 1,
       });
 
       const result = await web3Service.initialize('mainnet');
@@ -243,15 +245,15 @@ describe('Web3Service Tests', () => {
 
     it('should handle initialization failures', async () => {
       // Override the initialize method to actually throw errors properly
-      web3Service.initialize = async function(network = 'localhost') {
+      web3Service.initialize = async function (network = 'localhost') {
         try {
           this.network = network;
           this.provider = mockProvider;
           this.contract = mockContract;
-          
+
           // This will throw the mocked error
           await mockProvider.getNetwork();
-          
+
           this.initialized = true;
           return true;
         } catch (error) {
@@ -271,7 +273,7 @@ describe('Web3Service Tests', () => {
     it('should default to localhost network', async () => {
       mockProvider.getNetwork.mockResolvedValue({
         name: 'localhost',
-        chainId: 31337
+        chainId: 31337,
       });
 
       await web3Service.initialize();
@@ -295,7 +297,7 @@ describe('Web3Service Tests', () => {
       expect(stats).toEqual({
         totalContributions: 10,
         totalAmount: '5000000000000000000',
-        contributorCount: 8
+        contributorCount: 8,
       });
     });
 
@@ -310,9 +312,7 @@ describe('Web3Service Tests', () => {
     it('should require initialization', async () => {
       web3Service.initialized = false;
 
-      await expect(web3Service.getCampaignStats()).rejects.toThrow(
-        'Web3 service not initialized'
-      );
+      await expect(web3Service.getCampaignStats()).rejects.toThrow('Web3 service not initialized');
     });
   });
 
@@ -328,7 +328,7 @@ describe('Web3Service Tests', () => {
         totalContributed: '2000000000000000000', // 2 ETH
         contributionCount: 3,
         isKYCVerified: true,
-        firstContribution: 1640995200 // Timestamp
+        firstContribution: 1640995200, // Timestamp
       };
 
       mockContract.contributors.mockResolvedValue(mockContributorData);
@@ -339,7 +339,7 @@ describe('Web3Service Tests', () => {
         totalContributed: '2000000000000000000',
         contributionCount: 3,
         isKYCVerified: true,
-        firstContribution: 1640995200
+        firstContribution: 1640995200,
       });
     });
 
@@ -348,7 +348,7 @@ describe('Web3Service Tests', () => {
         totalContributed: null,
         contributionCount: null,
         isKYCVerified: null,
-        firstContribution: null
+        firstContribution: null,
       });
 
       const info = await web3Service.getContributorInfo(validAddress);
@@ -357,7 +357,7 @@ describe('Web3Service Tests', () => {
         totalContributed: '0',
         contributionCount: 0,
         isKYCVerified: false,
-        firstContribution: 0
+        firstContribution: 0,
       });
     });
 
@@ -368,9 +368,7 @@ describe('Web3Service Tests', () => {
     });
 
     it('should handle null or empty address', async () => {
-      await expect(web3Service.getContributorInfo('')).rejects.toThrow(
-        'Invalid Ethereum address'
-      );
+      await expect(web3Service.getContributorInfo('')).rejects.toThrow('Invalid Ethereum address');
 
       await expect(web3Service.getContributorInfo(null)).rejects.toThrow(
         'Invalid Ethereum address'
@@ -396,28 +394,28 @@ describe('Web3Service Tests', () => {
     it('should check contribution eligibility successfully', async () => {
       mockContract.canContribute.mockResolvedValue({
         canContribute: true,
-        reason: 'Eligible for contribution'
+        reason: 'Eligible for contribution',
       });
 
       const result = await web3Service.canContribute(validAddress, '1.0');
 
       expect(result).toEqual({
         canContribute: true,
-        reason: 'Eligible for contribution'
+        reason: 'Eligible for contribution',
       });
     });
 
     it('should handle ineligible contributions', async () => {
       mockContract.canContribute.mockResolvedValue({
         canContribute: false,
-        reason: 'Contribution limit exceeded'
+        reason: 'Contribution limit exceeded',
       });
 
       const result = await web3Service.canContribute(validAddress, '5.0');
 
       expect(result).toEqual({
         canContribute: false,
-        reason: 'Contribution limit exceeded'
+        reason: 'Contribution limit exceeded',
       });
     });
 
@@ -454,7 +452,7 @@ describe('Web3Service Tests', () => {
 
       expect(result).toEqual({
         maxWei: '3300000000000000000000',
-        maxEth: '3300'
+        maxEth: '3300',
       });
     });
 
@@ -518,7 +516,7 @@ describe('Web3Service Tests', () => {
         blockNumber: 12345,
         gasUsed: 21000,
         effectiveGasPrice: '20000000000',
-        status: 1
+        status: 1,
       };
 
       mockProvider.waitForTransaction.mockResolvedValue(mockReceipt);
@@ -530,7 +528,7 @@ describe('Web3Service Tests', () => {
         transactionHash: validTxHash,
         blockNumber: 12345,
         gasUsed: 21000,
-        effectiveGasPrice: '20000000000'
+        effectiveGasPrice: '20000000000',
       });
     });
 
@@ -540,7 +538,7 @@ describe('Web3Service Tests', () => {
         blockNumber: 12345,
         gasUsed: 50000,
         effectiveGasPrice: '25000000000',
-        status: 0 // Failed transaction
+        status: 0, // Failed transaction
       };
 
       mockProvider.waitForTransaction.mockResolvedValue(mockReceipt);
@@ -552,7 +550,7 @@ describe('Web3Service Tests', () => {
         transactionHash: validTxHash,
         blockNumber: 12345,
         gasUsed: 50000,
-        effectiveGasPrice: '25000000000'
+        effectiveGasPrice: '25000000000',
       });
     });
 
@@ -579,7 +577,7 @@ describe('Web3Service Tests', () => {
     it('should get network information successfully', async () => {
       mockProvider.getNetwork.mockResolvedValue({
         name: 'localhost',
-        chainId: 31337
+        chainId: 31337,
       });
       mockProvider.getBlockNumber.mockResolvedValue(12345);
       mockProvider.getGasPrice.mockResolvedValue('20000000000');
@@ -590,7 +588,7 @@ describe('Web3Service Tests', () => {
         network: 'localhost',
         chainId: 31337,
         blockNumber: 12345,
-        gasPrice: '20000000000'
+        gasPrice: '20000000000',
       });
     });
 
@@ -605,7 +603,7 @@ describe('Web3Service Tests', () => {
     it('should handle partial network information failures', async () => {
       mockProvider.getNetwork.mockResolvedValue({
         name: 'localhost',
-        chainId: 31337
+        chainId: 31337,
       });
       mockProvider.getBlockNumber.mockRejectedValue(new Error('Block number error'));
 
@@ -624,7 +622,7 @@ describe('Web3Service Tests', () => {
         () => web3Service.getMaxContributionWei(),
         () => web3Service.isKYCVerified(TestHelpers.generateMockAddress()),
         () => web3Service.waitForTransaction(TestHelpers.generateMockTransactionHash()),
-        () => web3Service.getNetworkInfo()
+        () => web3Service.getNetworkInfo(),
       ];
 
       for (const method of methods) {

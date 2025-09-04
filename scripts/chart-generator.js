@@ -30,28 +30,32 @@ class ChartGenerator {
       return;
     }
 
-    const successful = this.results.filter(r => r.success);
-    const failed = this.results.filter(r => !r.success);
+    const successful = this.results.filter((r) => r.success);
+    const failed = this.results.filter((r) => !r.success);
     const successRate = ((successful.length / this.results.length) * 100).toFixed(1);
 
     console.log('\n📊 FORM TESTING RESULTS CHART');
-    
+
     // ASCII Bar Chart
     const maxWidth = 50;
     const successWidth = Math.round((successful.length / this.results.length) * maxWidth);
     const failWidth = maxWidth - successWidth;
 
     console.log('\nSuccess Rate Visualization:');
-    console.log(`✅ Success [${successWidth > 0 ? '█'.repeat(successWidth) : ''}${' '.repeat(Math.max(0, 25 - successWidth))}] ${successful.length}/${this.results.length} (${successRate}%)`);
-    console.log(`❌ Failed  [${failWidth > 0 ? '█'.repeat(failWidth) : ''}${' '.repeat(Math.max(0, 25 - failWidth))}] ${failed.length}/${this.results.length} (${(100 - successRate).toFixed(1)}%)`);
+    console.log(
+      `✅ Success [${successWidth > 0 ? '█'.repeat(successWidth) : ''}${' '.repeat(Math.max(0, 25 - successWidth))}] ${successful.length}/${this.results.length} (${successRate}%)`
+    );
+    console.log(
+      `❌ Failed  [${failWidth > 0 ? '█'.repeat(failWidth) : ''}${' '.repeat(Math.max(0, 25 - failWidth))}] ${failed.length}/${this.results.length} (${(100 - successRate).toFixed(1)}%)`
+    );
 
     // Field Success Analysis
     console.log('\n📝 FIELD FILLING SUCCESS RATES:');
-    
+
     const fieldStats = {};
-    this.results.forEach(result => {
+    this.results.forEach((result) => {
       if (result.steps && result.steps.formFilling && result.steps.formFilling.fieldMap) {
-        Object.keys(result.steps.formFilling.fieldMap).forEach(field => {
+        Object.keys(result.steps.formFilling.fieldMap).forEach((field) => {
           if (!fieldStats[field]) fieldStats[field] = 0;
           fieldStats[field]++;
         });
@@ -68,21 +72,22 @@ class ChartGenerator {
       });
 
     // Performance Analysis
-    
-    const durations = this.results.map(r => r.duration).filter(d => d);
+
+    const durations = this.results.map((r) => r.duration).filter((d) => d);
     if (durations.length > 0) {
-      const avgDuration = (durations.reduce((a, b) => a + b, 0) / durations.length / 1000).toFixed(2);
+      const avgDuration = (durations.reduce((a, b) => a + b, 0) / durations.length / 1000).toFixed(
+        2
+      );
       const minDuration = (Math.min(...durations) / 1000).toFixed(2);
       const maxDuration = (Math.max(...durations) / 1000).toFixed(2);
-      
     }
 
     // Error Analysis
     if (failed.length > 0) {
       console.log('\n💥 ERROR ANALYSIS:');
-      
+
       const errorStats = {};
-      failed.forEach(result => {
+      failed.forEach((result) => {
         const error = result.error || result.steps?.submission?.error || 'Unknown error';
         const errorType = this.categorizeError(error);
         if (!errorStats[errorType]) errorStats[errorType] = 0;
@@ -98,18 +103,21 @@ class ChartGenerator {
     }
 
     // Test Progress Timeline
-    
+
     if (this.results.length >= 10) {
       const batchSize = Math.ceil(this.results.length / 10);
       for (let i = 0; i < 10; i++) {
         const start = i * batchSize;
         const end = Math.min(start + batchSize, this.results.length);
         const batch = this.results.slice(start, end);
-        const batchSuccess = batch.filter(r => r.success).length;
+        const batchSuccess = batch.filter((r) => r.success).length;
         const batchRate = ((batchSuccess / batch.length) * 100).toFixed(0);
-        
-        const indicator = batchRate >= 80 ? '🟢' : batchRate >= 60 ? '🟡' : batchRate >= 40 ? '🟠' : '🔴';
-        console.log(`Batch ${(i + 1).toString().padStart(2)}: ${indicator} ${batchSuccess}/${batch.length} (${batchRate}%)`);
+
+        const indicator =
+          batchRate >= 80 ? '🟢' : batchRate >= 60 ? '🟡' : batchRate >= 40 ? '🟠' : '🔴';
+        console.log(
+          `Batch ${(i + 1).toString().padStart(2)}: ${indicator} ${batchSuccess}/${batch.length} (${batchRate}%)`
+        );
       }
     }
 
@@ -120,22 +128,25 @@ class ChartGenerator {
       successRate: parseFloat(successRate),
       fieldStats,
       errorStats: failed.length > 0 ? this.getErrorStats(failed) : {},
-      avgDuration: durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0
+      avgDuration:
+        durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0,
     };
   }
 
   categorizeError(error) {
     const errorLower = error.toLowerCase();
-    if (errorLower.includes('timeout') || errorLower.includes('navigation')) return 'Navigation/Timeout';
+    if (errorLower.includes('timeout') || errorLower.includes('navigation'))
+      return 'Navigation/Timeout';
     if (errorLower.includes('form') || errorLower.includes('input')) return 'Form Issues';
     if (errorLower.includes('submit') || errorLower.includes('button')) return 'Submission Issues';
-    if (errorLower.includes('selector') || errorLower.includes('element')) return 'Element Not Found';
+    if (errorLower.includes('selector') || errorLower.includes('element'))
+      return 'Element Not Found';
     return 'Other';
   }
 
   getErrorStats(failed) {
     const errorStats = {};
-    failed.forEach(result => {
+    failed.forEach((result) => {
       const error = result.error || result.steps?.submission?.error || 'Unknown error';
       const errorType = this.categorizeError(error);
       if (!errorStats[errorType]) errorStats[errorType] = 0;
@@ -150,15 +161,15 @@ class ChartGenerator {
     const report = {
       timestamp: new Date().toISOString(),
       summary: this.generateBasicChart(),
-      testDetails: this.results.map(result => ({
+      testDetails: this.results.map((result) => ({
         persona: result.persona,
         success: result.success,
         duration: result.duration,
         fieldsAttempted: result.steps?.formFilling?.attempted || 0,
         fieldsSuccessful: result.steps?.formFilling?.successful || 0,
-        error: result.error || null
+        error: result.error || null,
       })),
-      insights: this.generateInsights()
+      insights: this.generateInsights(),
     };
 
     // Save detailed report
@@ -169,8 +180,8 @@ class ChartGenerator {
   }
 
   generateInsights() {
-    const successful = this.results.filter(r => r.success);
-    const failed = this.results.filter(r => !r.success);
+    const successful = this.results.filter((r) => r.success);
+    const failed = this.results.filter((r) => !r.success);
 
     const insights = [];
 
@@ -187,15 +198,19 @@ class ChartGenerator {
     }
 
     // Field filling insights
-    const avgFieldsAttempted = this.results.reduce((sum, r) => sum + (r.steps?.formFilling?.attempted || 0), 0) / this.results.length;
-    const avgFieldsSuccessful = this.results.reduce((sum, r) => sum + (r.steps?.formFilling?.successful || 0), 0) / this.results.length;
-    
+    const avgFieldsAttempted =
+      this.results.reduce((sum, r) => sum + (r.steps?.formFilling?.attempted || 0), 0) /
+      this.results.length;
+    const avgFieldsSuccessful =
+      this.results.reduce((sum, r) => sum + (r.steps?.formFilling?.successful || 0), 0) /
+      this.results.length;
+
     if (avgFieldsSuccessful < avgFieldsAttempted * 0.5) {
       insights.push('📝 Form field detection needs improvement - many fields not being filled');
     }
 
     // Performance insights
-    const durations = this.results.map(r => r.duration).filter(d => d);
+    const durations = this.results.map((r) => r.duration).filter((d) => d);
     if (durations.length > 0) {
       const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length;
       if (avgDuration > 30000) {
@@ -210,7 +225,7 @@ class ChartGenerator {
 // CLI usage
 async function main() {
   const generator = new ChartGenerator();
-  
+
   // Find the most recent test results file
   const testResultsDir = 'test-results';
   if (!fs.existsSync(testResultsDir)) {
@@ -218,8 +233,9 @@ async function main() {
     return;
   }
 
-  const files = fs.readdirSync(testResultsDir)
-    .filter(f => f.startsWith('ultimate-form-test-') && f.endsWith('.json'))
+  const files = fs
+    .readdirSync(testResultsDir)
+    .filter((f) => f.startsWith('ultimate-form-test-') && f.endsWith('.json'))
     .sort()
     .reverse();
 
@@ -234,7 +250,6 @@ async function main() {
   if (generator.loadResults(latestFile)) {
     const summary = generator.generateBasicChart();
     const detailedReport = generator.generateDetailedReport();
-    
   }
 }
 

@@ -73,12 +73,10 @@ function copyToClipboard(text) {
 }
 
 async function main() {
-  
   try {
     await copyToClipboard(cleanSQL);
     console.log('✅ SQL copied to clipboard!');
     console.log('📊 Expected result: "Database fixes applied successfully!"');
-    
   } catch (error) {
     console.error('❌ Failed to copy to clipboard:', error.message);
   }

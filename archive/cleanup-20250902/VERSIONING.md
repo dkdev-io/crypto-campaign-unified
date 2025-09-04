@@ -5,11 +5,12 @@ This project uses a flexible automated versioning system that supports both sema
 ## 🚀 Quick Start
 
 ### Automatic Semantic Versioning
+
 ```bash
 # Bug fixes (1.0.0 → 1.0.1)
 npm run version:patch
 
-# New features (1.0.0 → 1.1.0)  
+# New features (1.0.0 → 1.1.0)
 npm run version:minor
 
 # Breaking changes (1.0.0 → 2.0.0)
@@ -17,6 +18,7 @@ npm run version:major
 ```
 
 ### Custom Feature Releases
+
 ```bash
 # Interactive custom versioning
 npm run version:custom
@@ -28,6 +30,7 @@ npm run version:custom
 ```
 
 ### Complete Release Workflow
+
 ```bash
 # Full automated release process
 npm run release
@@ -41,39 +44,44 @@ npm run release
 ## 📋 Available Scripts
 
 ### Version Management (`./scripts/version.sh`)
-| Command | Description | Example |
-|---------|-------------|---------|
-| `./scripts/version.sh patch` | Bug fixes | 1.0.0 → 1.0.1 |
-| `./scripts/version.sh minor` | New features | 1.0.0 → 1.1.0 |
-| `./scripts/version.sh major` | Breaking changes | 1.0.0 → 2.0.0 |
+
+| Command                       | Description        | Example             |
+| ----------------------------- | ------------------ | ------------------- |
+| `./scripts/version.sh patch`  | Bug fixes          | 1.0.0 → 1.0.1       |
+| `./scripts/version.sh minor`  | New features       | 1.0.0 → 1.1.0       |
+| `./scripts/version.sh major`  | Breaking changes   | 1.0.0 → 2.0.0       |
 | `./scripts/version.sh custom` | Interactive custom | v2.0.0-crypto-ready |
 
 ### Changelog Generation (`./scripts/changelog.sh`)
-| Command | Description |
-|---------|-------------|
-| `./scripts/changelog.sh auto` | Generate changelog for unreleased changes |
-| `./scripts/changelog.sh full` | Regenerate complete changelog from all tags |
-| `./scripts/changelog.sh custom` | Interactive custom changelog |
+
+| Command                         | Description                                 |
+| ------------------------------- | ------------------------------------------- |
+| `./scripts/changelog.sh auto`   | Generate changelog for unreleased changes   |
+| `./scripts/changelog.sh full`   | Regenerate complete changelog from all tags |
+| `./scripts/changelog.sh custom` | Interactive custom changelog                |
 
 ### Release Management (`./scripts/release.sh`)
-| Command | Description |
-|---------|-------------|
-| `./scripts/release.sh patch` | Automated patch release |
-| `./scripts/release.sh minor` | Automated minor release |
-| `./scripts/release.sh major` | Automated major release |
-| `./scripts/release.sh feature` | Custom feature release |
-| `./scripts/release.sh hotfix` | Emergency hotfix release |
-| `./scripts/release.sh` | Interactive mode |
+
+| Command                        | Description              |
+| ------------------------------ | ------------------------ |
+| `./scripts/release.sh patch`   | Automated patch release  |
+| `./scripts/release.sh minor`   | Automated minor release  |
+| `./scripts/release.sh major`   | Automated major release  |
+| `./scripts/release.sh feature` | Custom feature release   |
+| `./scripts/release.sh hotfix`  | Emergency hotfix release |
+| `./scripts/release.sh`         | Interactive mode         |
 
 ## 🏷️ Tag Examples
 
 ### Standard Semantic Tags
+
 - `v1.0.0` - Initial release
 - `v1.0.1` - Patch release
 - `v1.1.0` - Minor release
 - `v2.0.0` - Major release
 
 ### Feature-Based Tags
+
 - `v2.0.0-crypto-ready` - Crypto functionality complete
 - `v1.5.0-mobile-support` - Mobile responsive features
 - `v3.0.0-beta` - Beta release for testing
@@ -85,8 +93,9 @@ npm run release
 The system automatically generates changelogs with:
 
 ### Commit Categorization
+
 - ✨ **New Features** - `feat:` commits
-- 🐛 **Bug Fixes** - `fix:` commits  
+- 🐛 **Bug Fixes** - `fix:` commits
 - 📚 **Documentation** - `docs:` commits
 - 🎨 **Styling** - `style:` commits
 - ♻️ **Refactoring** - `refactor:` commits
@@ -97,6 +106,7 @@ The system automatically generates changelogs with:
 - 💥 **Breaking Changes** - `BREAKING:` or `breaking:` commits
 
 ### Features
+
 - **GitHub Links** - Direct links to commits
 - **Conventional Commits** - Supports conventional commit format
 - **Keyword Detection** - Automatically categorizes commits by keywords
@@ -106,12 +116,14 @@ The system automatically generates changelogs with:
 ## 🔄 Complete Release Workflow
 
 ### 1. Automated Release Process
+
 ```bash
 # Run the complete release workflow
 ./scripts/release.sh minor
 ```
 
 This will:
+
 1. ✅ Run pre-release checks (git status, tests, build)
 2. 📈 Bump version in package.json
 3. 📝 Generate/update changelog
@@ -120,12 +132,14 @@ This will:
 6. 🎉 Create GitHub release
 
 ### 2. Feature Release Process
+
 ```bash
 # Interactive feature release
 ./scripts/release.sh feature
 ```
 
 Example flow:
+
 ```
 Enter version (x.y.z): 2.0.0
 Enter feature name: crypto-ready
@@ -134,6 +148,7 @@ Result: v2.0.0-crypto-ready
 ```
 
 ### 3. Hotfix Release Process
+
 ```bash
 # Emergency hotfix
 ./scripts/release.sh hotfix
@@ -144,17 +159,19 @@ Automatically bumps patch version and marks as critical fix.
 ## 🛠️ Advanced Usage
 
 ### Custom Version Examples
+
 ```bash
 # Set specific version
 ./scripts/version.sh custom
 # Choose option 1, enter: 2.1.0
 
 # Create feature version
-./scripts/version.sh custom  
+./scripts/version.sh custom
 # Choose option 2, enter version: 2.0.0, feature: crypto-ready
 ```
 
 ### Manual Changelog Generation
+
 ```bash
 # Generate changelog for current unreleased changes
 ./scripts/changelog.sh auto
@@ -193,7 +210,9 @@ The versioning system integrates with your existing sync workflow:
 ## 📋 Best Practices
 
 ### Commit Message Format
+
 Use conventional commits for best categorization:
+
 ```bash
 feat: add crypto payment integration
 fix: resolve donation form validation
@@ -207,11 +226,13 @@ chore: update dependencies
 ```
 
 ### Feature Naming Conventions
+
 - Use kebab-case: `crypto-ready`, `mobile-support`
 - Be descriptive: `security-updates`, `performance-boost`
 - Include stage for prereleases: `beta`, `alpha`, `rc1`
 
 ### Version Strategy
+
 - **Patch (x.y.Z)** - Bug fixes, security patches
 - **Minor (x.Y.z)** - New features, backward compatible
 - **Major (X.y.z)** - Breaking changes, API changes
@@ -220,6 +241,7 @@ chore: update dependencies
 ## 🔗 GitHub Integration
 
 Requires GitHub CLI for automatic release creation:
+
 ```bash
 # Install GitHub CLI
 brew install gh
@@ -248,12 +270,13 @@ git commit -m "feat: add crypto wallet integration"
 ```
 
 This creates:
+
 - ✅ Updated package.json (v2.0.0)
-- ✅ Git tag (v2.0.0-crypto-ready) 
+- ✅ Git tag (v2.0.0-crypto-ready)
 - ✅ Updated CHANGELOG.md
 - ✅ GitHub release
 - ✅ Multi-platform sync
 
 ---
 
-*Generated by the Crypto Campaign Setup versioning system* 🚀
+_Generated by the Crypto Campaign Setup versioning system_ 🚀

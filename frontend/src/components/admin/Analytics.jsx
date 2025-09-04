@@ -6,7 +6,7 @@ const Analytics = () => {
     pageViews: [],
     sessions: [],
     users: [],
-    events: []
+    events: [],
   });
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('30d');
@@ -20,7 +20,7 @@ const Analytics = () => {
   const loadRealWebsiteAnalytics = async () => {
     try {
       setLoading(true);
-      
+
       if (!supabase.from || typeof supabase.from !== 'function') {
         setAnalytics({ pageViews: [], sessions: [], users: [], events: [] });
         return;
@@ -29,7 +29,7 @@ const Analytics = () => {
       // Calculate date range
       const endDate = new Date();
       const startDate = new Date();
-      
+
       switch (dateRange) {
         case '7d':
           startDate.setDate(startDate.getDate() - 7);
@@ -52,13 +52,15 @@ const Analytics = () => {
         .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: false });
 
-      const realSubmissions = (formSubmissions || []).filter(sub => {
+      const realSubmissions = (formSubmissions || []).filter((sub) => {
         // Filter out test data
-        return sub.email && 
-               !sub.email.includes('@test') && 
-               !sub.email.includes('.test') &&
-               sub.email.includes('@') &&
-               sub.email.includes('.');
+        return (
+          sub.email &&
+          !sub.email.includes('@test') &&
+          !sub.email.includes('.test') &&
+          sub.email.includes('@') &&
+          sub.email.includes('.')
+        );
       });
 
       // Generate page view data from real interactions
@@ -74,7 +76,7 @@ const Analytics = () => {
         device: index % 3 === 0 ? 'Desktop' : index % 3 === 1 ? 'Mobile' : 'Tablet',
         location: `${sub.city || 'Unknown'}, ${sub.state || 'US'}`,
         converted: true, // They submitted the form
-        amount: parseFloat(sub.amount) || 0
+        amount: parseFloat(sub.amount) || 0,
       }));
 
       // Generate session data
@@ -87,7 +89,7 @@ const Analytics = () => {
         total_duration: Math.floor(Math.random() * 600) + 120, // 2-10 minutes
         bounce_rate: index % 4 === 0 ? true : false, // 25% bounce rate
         conversion: true,
-        traffic_source: index % 3 === 0 ? 'organic' : index % 3 === 1 ? 'direct' : 'social'
+        traffic_source: index % 3 === 0 ? 'organic' : index % 3 === 1 ? 'direct' : 'social',
       }));
 
       // Generate user behavior events
@@ -98,7 +100,7 @@ const Analytics = () => {
           user_email: sub.email,
           event_type: 'page_load',
           page: '/donor-form',
-          details: 'Form page loaded'
+          details: 'Form page loaded',
         },
         {
           id: `event_${sub.id}_interact`,
@@ -106,7 +108,7 @@ const Analytics = () => {
           user_email: sub.email,
           event_type: 'form_interaction',
           page: '/donor-form',
-          details: 'User started filling form'
+          details: 'User started filling form',
         },
         {
           id: `event_${sub.id}_submit`,
@@ -115,17 +117,16 @@ const Analytics = () => {
           event_type: 'form_submission',
           page: '/donor-form',
           details: `Submitted $${sub.amount} donation`,
-          value: parseFloat(sub.amount) || 0
-        }
+          value: parseFloat(sub.amount) || 0,
+        },
       ]);
 
       setAnalytics({
         pageViews,
         sessions,
         users: realSubmissions,
-        events
+        events,
       });
-
     } catch (error) {
       console.error('Error loading analytics:', error);
       setAnalytics({ pageViews: [], sessions: [], users: [], events: [] });
@@ -135,7 +136,7 @@ const Analytics = () => {
   };
 
   // Filter analytics data
-  const filteredPageViews = analytics.pageViews.filter(pv => {
+  const filteredPageViews = analytics.pageViews.filter((pv) => {
     if (userFilter && !pv.user_email.toLowerCase().includes(userFilter.toLowerCase())) {
       return false;
     }
@@ -145,7 +146,7 @@ const Analytics = () => {
     return true;
   });
 
-  const filteredEvents = analytics.events.filter(event => {
+  const filteredEvents = analytics.events.filter((event) => {
     if (userFilter && !event.user_email.toLowerCase().includes(userFilter.toLowerCase())) {
       return false;
     }
@@ -160,7 +161,7 @@ const Analytics = () => {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -195,7 +196,7 @@ const Analytics = () => {
               <option value="90d">Last 90 Days</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">Filter by User</label>
             <input
@@ -206,7 +207,7 @@ const Analytics = () => {
               className="form-input"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">Filter by Page</label>
             <input
@@ -228,25 +229,34 @@ const Analytics = () => {
             <div className="text-sm text-muted-foreground">Page Views</div>
           </div>
         </div>
-        
+
         <div className="crypto-card">
           <div className="text-center">
             <div className="text-2xl font-bold text-foreground">{analytics.sessions.length}</div>
             <div className="text-sm text-muted-foreground">Sessions</div>
           </div>
         </div>
-        
-        <div className="crypto-card">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-foreground">{new Set(filteredPageViews.map(pv => pv.user_email)).size}</div>
-            <div className="text-sm text-muted-foreground">Unique Users</div>
-          </div>
-        </div>
-        
+
         <div className="crypto-card">
           <div className="text-center">
             <div className="text-2xl font-bold text-foreground">
-              {analytics.sessions.length > 0 ? Math.round((filteredPageViews.filter(pv => pv.converted).length / analytics.sessions.length) * 100) : 0}%
+              {new Set(filteredPageViews.map((pv) => pv.user_email)).size}
+            </div>
+            <div className="text-sm text-muted-foreground">Unique Users</div>
+          </div>
+        </div>
+
+        <div className="crypto-card">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-foreground">
+              {analytics.sessions.length > 0
+                ? Math.round(
+                    (filteredPageViews.filter((pv) => pv.converted).length /
+                      analytics.sessions.length) *
+                      100
+                  )
+                : 0}
+              %
             </div>
             <div className="text-sm text-muted-foreground">Conversion Rate</div>
           </div>
@@ -321,7 +331,9 @@ const Analytics = () => {
           </table>
           {filteredPageViews.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-muted-foreground">No page views found for the selected filters</div>
+              <div className="text-muted-foreground">
+                No page views found for the selected filters
+              </div>
             </div>
           )}
         </div>
@@ -364,11 +376,15 @@ const Analytics = () => {
                     {event.user_email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      event.event_type === 'form_submission' ? 'bg-green-100 text-green-800' :
-                      event.event_type === 'form_interaction' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        event.event_type === 'form_submission'
+                          ? 'bg-green-100 text-green-800'
+                          : event.event_type === 'form_interaction'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
                       {event.event_type.replace('_', ' ')}
                     </span>
                   </td>
@@ -400,7 +416,8 @@ const Analytics = () => {
             Showing {filteredPageViews.length} page views and {filteredEvents.length} events
           </div>
           <div className="text-sm font-medium text-foreground">
-            Total Revenue: ${analytics.pageViews.reduce((sum, pv) => sum + (pv.amount || 0), 0).toFixed(2)}
+            Total Revenue: $
+            {analytics.pageViews.reduce((sum, pv) => sum + (pv.amount || 0), 0).toFixed(2)}
           </div>
         </div>
       </div>

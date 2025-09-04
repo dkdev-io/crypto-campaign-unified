@@ -2,7 +2,7 @@
 
 /**
  * Fix Email Bounce Issues for Supabase Project
- * 
+ *
  * This script addresses the high email bounce rate by:
  * 1. Replacing invalid test emails with valid development emails
  * 2. Implementing proper email validation
@@ -13,19 +13,10 @@ const fs = require('fs');
 const path = require('path');
 
 // Valid development email domains that won't bounce
-const VALID_DEV_DOMAINS = [
-  'gmail.com',
-  'dkdev.io',
-  'localhost.local',
-  'dev.local'
-];
+const VALID_DEV_DOMAINS = ['gmail.com', 'dkdev.io', 'localhost.local', 'dev.local'];
 
 // Problematic domains causing bounces
-const PROBLEMATIC_DOMAINS = [
-  'example.com',
-  'test.com', 
-  'livetest.com'
-];
+const PROBLEMATIC_DOMAINS = ['example.com', 'test.com', 'livetest.com'];
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,8 +66,9 @@ function fixEmailsInFile(filePath) {
  * Create email validation utility
  */
 function createEmailValidator() {
-  const validatorPath = '/Users/Danallovertheplace/crypto-campaign-unified/src/utils/emailValidator.js';
-  
+  const validatorPath =
+    '/Users/Danallovertheplace/crypto-campaign-unified/src/utils/emailValidator.js';
+
   const validatorContent = `/**
  * Email Validation Utility
  * Prevents invalid emails from being sent to Supabase
@@ -156,7 +148,7 @@ export function isLikelyToBounce(email) {
  */
 function main() {
   console.log('🔧 Fixing email bounce issues...\n');
-  
+
   // Files that need email fixes
   const filesToFix = [
     '/Users/Danallovertheplace/crypto-campaign-unified/src/utils/logger.example.js',
@@ -164,11 +156,11 @@ function main() {
     '/Users/Danallovertheplace/crypto-campaign-unified/tests/e2e/fixtures/test-data.js',
     '/Users/Danallovertheplace/crypto-campaign-unified/tests/e2e/fixtures/test-helpers.js',
     '/Users/Danallovertheplace/crypto-campaign-unified/backend/src/test/utils/testHelpers.js',
-    '/Users/Danallovertheplace/crypto-campaign-unified/scripts/configure-supabase-email.js'
+    '/Users/Danallovertheplace/crypto-campaign-unified/scripts/configure-supabase-email.js',
   ];
 
   let fixedCount = 0;
-  filesToFix.forEach(file => {
+  filesToFix.forEach((file) => {
     if (fs.existsSync(file) && fixEmailsInFile(file)) {
       fixedCount++;
     }
@@ -181,7 +173,7 @@ function main() {
   console.log(`   Fixed emails in ${fixedCount} files`);
   console.log(`   Created email validation utility`);
   console.log(`   Replaced bouncing domains with development-safe alternatives`);
-  
+
   console.log(`\n✅ Email bounce issues should be resolved!`);
   console.log(`\n🚧 Next steps:`);
   console.log(`   1. Update tests to use the new email validator`);

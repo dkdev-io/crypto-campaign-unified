@@ -1,106 +1,106 @@
-import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext'
-import { getAuthRoute } from '../../utils/authRouting'
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { getAuthRoute } from '../../utils/authRouting';
 
 const PasswordReset = ({ onBackToLogin }) => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const isResetMode = location.pathname.includes('reset-password')
-  
-  const [email, setEmail] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [emailSent, setEmailSent] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isResetMode = location.pathname.includes('reset-password');
 
-  const { resetPassword, updatePassword } = useAuth()
+  const [email, setEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const { resetPassword, updatePassword } = useAuth();
 
   const handleRequestReset = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!email.trim()) {
-      setError('Please enter your email address')
-      return
-    }
-    
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Please enter a valid email address')
-      return
+      setError('Please enter your email address');
+      return;
     }
 
-    setLoading(true)
-    setError('')
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
 
     try {
-      const { error } = await resetPassword(email)
-      
+      const { error } = await resetPassword(email);
+
       if (error) {
         if (error.message.includes('not found')) {
-          setError('No account found with this email address')
+          setError('No account found with this email address');
         } else if (error.message.includes('rate limit')) {
-          setError('Too many reset attempts. Please wait a moment and try again.')
+          setError('Too many reset attempts. Please wait a moment and try again.');
         } else {
-          setError('Failed to send reset email. Please try again.')
+          setError('Failed to send reset email. Please try again.');
         }
-        return
+        return;
       }
 
-      setEmailSent(true)
-      setSuccess('Password reset link sent! Check your email.')
+      setEmailSent(true);
+      setSuccess('Password reset link sent! Check your email.');
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleUpdatePassword = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!newPassword) {
-      setError('Please enter a new password')
-      return
-    }
-    
-    if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters long')
-      return
-    }
-    
-    if (newPassword !== confirmPassword) {
-      setError('Passwords do not match')
-      return
+      setError('Please enter a new password');
+      return;
     }
 
-    setLoading(true)
-    setError('')
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
 
     try {
-      const { error } = await updatePassword(newPassword)
-      
+      const { error } = await updatePassword(newPassword);
+
       if (error) {
         if (error.message.includes('expired')) {
-          setError('Reset link has expired. Please request a new one.')
+          setError('Reset link has expired. Please request a new one.');
         } else {
-          setError('Failed to update password. Please try again.')
+          setError('Failed to update password. Please try again.');
         }
-        return
+        return;
       }
 
-      setSuccess('Password updated successfully! Redirecting to login...')
+      setSuccess('Password updated successfully! Redirecting to login...');
       setTimeout(() => {
-        const authRoute = getAuthRoute(location.pathname)
-        navigate(authRoute.pathname, { state: authRoute.state })
-      }, 2000)
+        const authRoute = getAuthRoute(location.pathname);
+        navigate(authRoute.pathname, { state: authRoute.state });
+      }, 2000);
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // If user accessed the reset password page from email link
   if (isResetMode) {
@@ -142,25 +142,17 @@ const PasswordReset = ({ onBackToLogin }) => {
               />
             </div>
 
-            {error && (
-              <div className="error-banner">{error}</div>
-            )}
+            {error && <div className="error-banner">{error}</div>}
 
-            {success && (
-              <div className="success-banner">{success}</div>
-            )}
+            {success && <div className="success-banner">{success}</div>}
 
-            <button 
-              type="submit" 
-              className="btn btn-primary btn-full"
-              disabled={loading}
-            >
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
               {loading ? 'Updating Password...' : 'Update Password'}
             </button>
           </form>
         </div>
       </div>
-    )
+    );
   }
 
   // Password reset request form
@@ -170,9 +162,11 @@ const PasswordReset = ({ onBackToLogin }) => {
         <div className="auth-card">
           <div className="auth-header">
             <h2>📧 Check Your Email</h2>
-            <p>We've sent a password reset link to <strong>{email}</strong></p>
+            <p>
+              We've sent a password reset link to <strong>{email}</strong>
+            </p>
           </div>
-          
+
           <div className="email-verification-notice">
             <div className="verification-steps">
               <h3>Next Steps:</h3>
@@ -185,12 +179,12 @@ const PasswordReset = ({ onBackToLogin }) => {
 
             <div className="resend-section">
               <p>Didn't receive the email?</p>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={() => {
-                  setEmailSent(false)
-                  setEmail('')
-                  setSuccess('')
+                  setEmailSent(false);
+                  setEmail('');
+                  setSuccess('');
                 }}
               >
                 Try Again
@@ -199,16 +193,13 @@ const PasswordReset = ({ onBackToLogin }) => {
           </div>
 
           <div className="auth-footer">
-            <button 
-              className="btn-link" 
-              onClick={onBackToLogin}
-            >
+            <button className="btn-link" onClick={onBackToLogin}>
               Back to Sign In
             </button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -227,8 +218,8 @@ const PasswordReset = ({ onBackToLogin }) => {
               type="email"
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value)
-                setError('')
+                setEmail(e.target.value);
+                setError('');
               }}
               className={`form-input ${error && !loading ? 'error' : ''}`}
               placeholder="Enter your email address"
@@ -237,34 +228,23 @@ const PasswordReset = ({ onBackToLogin }) => {
             />
           </div>
 
-          {error && (
-            <div className="error-banner">{error}</div>
-          )}
+          {error && <div className="error-banner">{error}</div>}
 
-          {success && (
-            <div className="success-banner">{success}</div>
-          )}
+          {success && <div className="success-banner">{success}</div>}
 
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-full"
-            disabled={loading}
-          >
+          <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
             {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <button 
-            className="btn-link" 
-            onClick={onBackToLogin}
-          >
+          <button className="btn-link" onClick={onBackToLogin}>
             Back to Sign In
           </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PasswordReset
+export default PasswordReset;

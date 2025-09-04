@@ -7,10 +7,12 @@ The new campaign setup flow has been redesigned to simplify the process and coll
 ## Flow Screens
 
 ### Screen 1: User Information
+
 **Route:** `/` (Step 1/5)
 **File:** `frontend/src/components/setup/Signup.jsx`
 
 **Collects:**
+
 - User's full name (person setting up the campaign)
 - User's email address
 - Campaign name
@@ -21,42 +23,50 @@ The new campaign setup flow has been redesigned to simplify the process and coll
 **Next:** Proceeds to committee search
 
 ### Screen 2: Committee Search & Verification
+
 **Route:** `/` (Step 2/5)
 **File:** `frontend/src/components/setup/CommitteeSearch.jsx`
 
 **Features:**
+
 - Search FEC committees using the FEC API integration
 - Display both real FEC committees and test committees
 - Show committee validation against ActBlue requirements
 - Committee selection with detailed information display
 
 **Requirements:**
+
 - Must select a valid committee
 - Committee must pass ActBlue validation checks
 
 **Next:** Proceeds to bank account connection
 
 ### Screen 3: Bank Account Connection
+
 **Route:** `/` (Step 3/5)
 **File:** `frontend/src/components/setup/BankConnection.jsx`
 
 **Features:**
+
 - Secure bank connection via Plaid API
 - Account verification and information display
 - Development mode skip option
 - Security information and flow explanation
 
 **Requirements:**
+
 - Bank account connection (can be skipped in development)
 - Account verification through Plaid
 
 **Next:** Proceeds to terms agreement
 
 ### Screen 4: Terms & Conditions Agreement
+
 **Route:** `/` (Step 4/5)
 **File:** `frontend/src/components/setup/TermsAgreement.jsx`
 
 **Features:**
+
 - Terms of Service agreement (with Lorem Ipsum placeholder)
 - Privacy Policy agreement
 - FEC Compliance agreement
@@ -64,16 +74,19 @@ The new campaign setup flow has been redesigned to simplify the process and coll
 - Launch button (only enabled when all terms accepted)
 
 **Requirements:**
+
 - Must accept all three agreements
 - Terms acceptance is recorded with timestamp
 
 **Next:** Proceeds to embed code generation
 
 ### Screen 5: Embed Code & Launch
+
 **Route:** `/` (Step 5/5)
 **File:** `frontend/src/components/setup/EmbedCode.jsx`
 
 **Features:**
+
 - Automatic embed code generation
 - Copy-to-clipboard functionality
 - Test form link
@@ -82,6 +95,7 @@ The new campaign setup flow has been redesigned to simplify the process and coll
 - Next steps guidance
 
 **Completion:**
+
 - Campaign marked as setup complete
 - Embed code generated and stored
 - Ready for contribution collection
@@ -97,6 +111,7 @@ The new campaign setup flow has been redesigned to simplify the process and coll
 ### Updated Campaigns Table
 
 New fields added:
+
 - `user_full_name` - Person setting up the campaign
 - `fec_committee_id` - Reference to FEC committee
 - `committee_confirmed` - Committee verification status
@@ -117,18 +132,22 @@ New fields added:
 ## API Integration
 
 ### FEC API Service
+
 **File:** `frontend/src/lib/fec-api.js`
 
 **Features:**
+
 - Committee search (local database first, then FEC API)
 - Committee details retrieval
 - ActBlue validation
 - Test committee management
 
 ### Plaid Service
+
 **File:** `frontend/src/lib/plaid-service.js`
 
 **Features:**
+
 - Plaid Link initialization
 - Bank account connection
 - Token exchange and storage
@@ -137,10 +156,12 @@ New fields added:
 ## Admin Interface
 
 ### Committee Manager
+
 **Route:** `/committees`
 **File:** `frontend/src/components/admin/CommitteeManager.jsx`
 
 **Features:**
+
 - Add test committees for development
 - View existing test committees
 - Committee management for testing
@@ -152,6 +173,7 @@ New fields added:
 ### Database Setup
 
 1. **Run the FEC committees schema:**
+
    ```bash
    # Execute the SQL file in Supabase
    cat docs/fec-committees-schema.sql
@@ -159,7 +181,7 @@ New fields added:
 
 2. **Verify tables are created:**
    - `fec_committees`
-   - `committee_test_data` 
+   - `committee_test_data`
    - `plaid_tokens`
    - Updated `campaigns` table
 
@@ -180,7 +202,8 @@ New fields added:
 ### Test Committees
 
 Sample test committees are automatically created:
-- "Test Campaign Committee" 
+
+- "Test Campaign Committee"
 - "Sample PAC Committee"
 - "Demo Candidate Committee"
 
@@ -229,6 +252,7 @@ For full functionality, implement these backend endpoints:
 ### Component Mapping
 
 Old → New:
+
 - `Signup.jsx` → Enhanced with committee search term
 - `CampaignInfo.jsx` → Replaced by `CommitteeSearch.jsx`
 - `Compliance.jsx` → Replaced by `BankConnection.jsx`
@@ -239,6 +263,7 @@ Old → New:
 ### Data Migration
 
 Existing campaigns will need:
+
 1. Database schema updates applied
 2. New required fields populated
 3. Setup steps recalculated

@@ -38,25 +38,25 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     const users = [
       { id: '1', username: 'admin', role: 'admin', active: true },
       { id: '2', username: 'user', role: 'user', active: true },
-      { id: '3', username: 'guest', role: 'guest', active: false }
+      { id: '3', username: 'guest', role: 'guest', active: false },
     ];
 
     // Test endpoints for various OWASP categories
-    
+
     // A01: Broken Access Control
     app.get('/api/admin/users', authenticate, (req, res) => {
       if (req.user.role !== 'admin') {
         return res.status(403).json({ error: 'Admin access required' });
       }
-      res.json({ users: users.map(u => ({ id: u.id, username: u.username })) });
+      res.json({ users: users.map((u) => ({ id: u.id, username: u.username })) });
     });
 
     app.get('/api/users/:userId', authenticate, (req, res) => {
       const { userId } = req.params;
-      
+
       // Vulnerable: No check if user can access other users' data
       if (req.query.vulnerable === 'true') {
-        const user = users.find(u => u.id === userId);
+        const user = users.find((u) => u.id === userId);
         return res.json({ user });
       }
 
@@ -65,26 +65,26 @@ describe('OWASP Top 10 2021 Security Tests', () => {
         return res.status(403).json({ error: 'Access denied' });
       }
 
-      const user = users.find(u => u.id === userId);
+      const user = users.find((u) => u.id === userId);
       res.json({ user });
     });
 
     // A02: Cryptographic Failures
     app.post('/api/crypto-test', (req, res) => {
       const { data, mode } = req.body;
-      
+
       if (mode === 'insecure') {
         // Simulate insecure storage/transmission
         res.json({
           stored: data, // Plain text storage
           hash: Buffer.from(data).toString('base64'), // Not a real hash
-          transmitted: data // Plain text transmission
+          transmitted: data, // Plain text transmission
         });
       } else {
         // Secure implementation would use proper encryption/hashing
         res.json({
           message: 'Data processed securely',
-          hash: 'sha256-hash-would-go-here'
+          hash: 'sha256-hash-would-go-here',
         });
       }
     });
@@ -92,26 +92,26 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     // A03: Injection (SQL, NoSQL, Command)
     app.post('/api/search', (req, res) => {
       const { query, type } = req.body;
-      
+
       if (type === 'vulnerable') {
         // Simulate SQL injection vulnerability
         const sqlQuery = `SELECT * FROM campaigns WHERE name LIKE '%${query}%'`;
-        
+
         // Check for common injection patterns
         if (query.includes("'; DROP") || query.includes("' OR '1'='1")) {
-          return res.status(400).json({ 
+          return res.status(400).json({
             error: 'SQL injection detected',
-            query: sqlQuery
+            query: sqlQuery,
           });
         }
-        
+
         res.json({ query: sqlQuery, results: [] });
       } else {
         // Parameterized query simulation
-        res.json({ 
+        res.json({
           message: 'Search completed safely',
           query: 'SELECT * FROM campaigns WHERE name LIKE ?',
-          params: [query]
+          params: [query],
         });
       }
     });
@@ -119,14 +119,14 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     // A04: Insecure Design
     app.post('/api/password-reset', (req, res) => {
       const { email, mode } = req.body;
-      
+
       if (mode === 'insecure') {
         // Insecure: No rate limiting, predictable tokens
         const resetToken = Math.floor(Math.random() * 1000000).toString();
         res.json({
           message: 'Reset link sent',
           token: resetToken, // Exposing token is insecure
-          expires: Date.now() + 24 * 60 * 60 * 1000 // 24 hours - too long
+          expires: Date.now() + 24 * 60 * 60 * 1000, // 24 hours - too long
         });
       } else {
         // Secure design: Rate limited, secure tokens, short expiry
@@ -148,16 +148,16 @@ describe('OWASP Top 10 2021 Security Tests', () => {
           database: 'PostgreSQL 14.2',
           secrets: {
             jwt: jwtSecret, // Never expose secrets!
-            api_key: 'secret-api-key'
+            api_key: 'secret-api-key',
           },
           debug: true,
-          stack_trace: new Error().stack
+          stack_trace: new Error().stack,
         });
       } else {
         // Secure: Minimal information disclosure
         res.json({
           status: 'healthy',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
     });
@@ -170,8 +170,8 @@ describe('OWASP Top 10 2021 Security Tests', () => {
             { name: 'express', version: '4.18.3', vulnerabilities: 0 },
             { name: 'jsonwebtoken', version: '9.0.2', vulnerabilities: 0 },
             { name: 'lodash', version: '4.17.11', vulnerabilities: 2 }, // Simulated vulnerable version
-            { name: 'axios', version: '0.18.0', vulnerabilities: 1 } // Simulated vulnerable version
-          ]
+            { name: 'axios', version: '0.18.0', vulnerabilities: 1 }, // Simulated vulnerable version
+          ],
         });
       } else {
         res.json({ message: 'Dependency information not exposed' });
@@ -181,7 +181,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     // A07: Identification and Authentication Failures
     app.post('/api/login', (req, res) => {
       const { username, password, mode } = req.body;
-      
+
       if (mode === 'vulnerable') {
         // Vulnerable: No rate limiting, predictable session IDs, weak authentication
         if (username === 'admin' && password === 'admin') {
@@ -190,30 +190,28 @@ describe('OWASP Top 10 2021 Security Tests', () => {
             success: true,
             sessionId: sessionId,
             message: 'Login successful',
-            user: { username, role: 'admin' }
+            user: { username, role: 'admin' },
           });
         } else {
-          res.status(401).json({ 
+          res.status(401).json({
             error: 'Invalid credentials',
             username: username, // Username enumeration
-            attempts: Math.floor(Math.random() * 5)
+            attempts: Math.floor(Math.random() * 5),
           });
         }
       } else {
         // Secure authentication
         if (username === 'admin' && password === 'secure-password-123!') {
-          const token = jwt.sign(
-            { id: '1', username: 'admin', role: 'admin' },
-            jwtSecret,
-            { expiresIn: '15m' }
-          );
-          res.json({ 
-            success: true, 
+          const token = jwt.sign({ id: '1', username: 'admin', role: 'admin' }, jwtSecret, {
+            expiresIn: '15m',
+          });
+          res.json({
+            success: true,
             token,
-            message: 'Authentication successful'
+            message: 'Authentication successful',
           });
         } else {
-          res.status(401).json({ 
+          res.status(401).json({
             error: 'Authentication failed',
             // No user enumeration, consistent response
           });
@@ -224,14 +222,14 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     // A08: Software and Data Integrity Failures
     app.post('/api/update', (req, res) => {
       const { package_url, mode } = req.body;
-      
+
       if (mode === 'vulnerable') {
         // Vulnerable: No integrity checks
         res.json({
           message: 'Package update initiated',
           package_url: package_url,
           integrity_check: false,
-          signature_verified: false
+          signature_verified: false,
         });
       } else {
         // Secure: Integrity and signature verification
@@ -239,7 +237,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
           message: 'Package verified and updated',
           integrity_check: 'sha256-abc123def456...',
           signature_verified: true,
-          source_trusted: true
+          source_trusted: true,
         });
       }
     });
@@ -247,64 +245,66 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     // A09: Security Logging and Monitoring Failures
     app.post('/api/sensitive-action', authenticate, (req, res) => {
       const { action, data, log_security } = req.body;
-      
+
       if (log_security) {
         // Proper security logging
-        console.log(`Security Event: ${action} by user ${req.user.id} at ${new Date().toISOString()}`);
+        console.log(
+          `Security Event: ${action} by user ${req.user.id} at ${new Date().toISOString()}`
+        );
         console.log(`IP: ${req.ip}, User-Agent: ${req.get('User-Agent')}`);
         console.log(`Data: ${JSON.stringify(data).substring(0, 100)}...`);
       }
-      
+
       // Simulate sensitive action
       if (action === 'delete_all_data') {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: 'Action blocked',
-          reason: 'Potentially destructive action detected'
+          reason: 'Potentially destructive action detected',
         });
       }
-      
-      res.json({ 
+
+      res.json({
         message: 'Action completed',
         action: action,
-        logged: log_security || false
+        logged: log_security || false,
       });
     });
 
     // A10: Server-Side Request Forgery (SSRF)
     app.post('/api/fetch-url', (req, res) => {
       const { url, mode } = req.body;
-      
+
       if (mode === 'vulnerable') {
         // Vulnerable: No URL validation
         if (url.includes('localhost') || url.includes('127.0.0.1') || url.includes('internal')) {
           return res.status(400).json({
             error: 'SSRF attempt detected',
             url: url,
-            risk: 'high'
+            risk: 'high',
           });
         }
-        
+
         res.json({
           message: 'URL would be fetched',
           url: url,
-          validated: false
+          validated: false,
         });
       } else {
         // Secure: URL validation and allowlist
         const allowedDomains = ['api.example.com', 'trusted-source.org'];
         const urlObj = new URL(url);
-        
+
         if (!allowedDomains.includes(urlObj.hostname)) {
           return res.status(400).json({
             error: 'Domain not in allowlist',
-            allowed_domains: allowedDomains
+            allowed_domains: allowedDomains,
           });
         }
-        
+
         res.json({
           message: 'URL validated and fetched',
           url: url,
-          validated: true
+          validated: true,
         });
       }
     });
@@ -320,21 +320,19 @@ describe('OWASP Top 10 2021 Security Tests', () => {
           'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
           'Content-Security-Policy': "default-src 'self'",
           'Referrer-Policy': 'strict-origin-when-cross-origin',
-          'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+          'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
         });
       }
-      
+
       res.json({ message: 'Headers test endpoint' });
     });
   });
 
   describe('A01: Broken Access Control', () => {
     it('should prevent unauthorized access to admin endpoints', async () => {
-      const userToken = jwt.sign(
-        { id: '2', username: 'user', role: 'user' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const userToken = jwt.sign({ id: '2', username: 'user', role: 'user' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const response = await request(app)
         .get('/api/admin/users')
@@ -345,11 +343,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should allow admin access to admin endpoints', async () => {
-      const adminToken = jwt.sign(
-        { id: '1', username: 'admin', role: 'admin' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const adminToken = jwt.sign({ id: '1', username: 'admin', role: 'admin' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const response = await request(app)
         .get('/api/admin/users')
@@ -360,11 +356,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should prevent horizontal privilege escalation', async () => {
-      const userToken = jwt.sign(
-        { id: '2', username: 'user', role: 'user' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const userToken = jwt.sign({ id: '2', username: 'user', role: 'user' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       // Try to access another user's data
       const response = await request(app)
@@ -376,11 +370,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should allow users to access their own data', async () => {
-      const userToken = jwt.sign(
-        { id: '2', username: 'user', role: 'user' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const userToken = jwt.sign({ id: '2', username: 'user', role: 'user' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const response = await request(app)
         .get('/api/users/2') // Accessing own data
@@ -391,11 +383,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should demonstrate vulnerable access control', async () => {
-      const userToken = jwt.sign(
-        { id: '2', username: 'user', role: 'user' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const userToken = jwt.sign({ id: '2', username: 'user', role: 'user' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       // With vulnerable flag, access control is bypassed
       const response = await request(app)
@@ -537,9 +527,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
 
   describe('A05: Security Misconfiguration', () => {
     it('should identify information disclosure vulnerabilities', async () => {
-      const response = await request(app)
-        .get('/api/server-info?expose=true')
-        .expect(200);
+      const response = await request(app).get('/api/server-info?expose=true').expect(200);
 
       expect(response.body.server).toContain('Express');
       expect(response.body.node).toBeDefined();
@@ -548,9 +536,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should demonstrate secure information disclosure', async () => {
-      const response = await request(app)
-        .get('/api/server-info')
-        .expect(200);
+      const response = await request(app).get('/api/server-info').expect(200);
 
       expect(response.body.status).toBe('healthy');
       expect(response.body.server).toBeUndefined();
@@ -559,9 +545,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should check for security headers', async () => {
-      const response = await request(app)
-        .get('/api/headers-test?secure=true')
-        .expect(200);
+      const response = await request(app).get('/api/headers-test?secure=true').expect(200);
 
       expect(response.headers['x-content-type-options']).toBe('nosniff');
       expect(response.headers['x-frame-options']).toBe('DENY');
@@ -571,9 +555,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should identify missing security headers', async () => {
-      const response = await request(app)
-        .get('/api/headers-test')
-        .expect(200);
+      const response = await request(app).get('/api/headers-test').expect(200);
 
       expect(response.headers['x-content-type-options']).toBeUndefined();
       expect(response.headers['x-frame-options']).toBeUndefined();
@@ -583,32 +565,26 @@ describe('OWASP Top 10 2021 Security Tests', () => {
 
   describe('A06: Vulnerable and Outdated Components', () => {
     it('should identify vulnerable dependencies', async () => {
-      const response = await request(app)
-        .get('/api/dependencies?show_vulnerable=true')
-        .expect(200);
+      const response = await request(app).get('/api/dependencies?show_vulnerable=true').expect(200);
 
-      const vulnerableDeps = response.body.dependencies.filter(dep => dep.vulnerabilities > 0);
+      const vulnerableDeps = response.body.dependencies.filter((dep) => dep.vulnerabilities > 0);
       expect(vulnerableDeps.length).toBeGreaterThan(0);
-      
-      const lodashVuln = vulnerableDeps.find(dep => dep.name === 'lodash');
+
+      const lodashVuln = vulnerableDeps.find((dep) => dep.name === 'lodash');
       expect(lodashVuln.vulnerabilities).toBe(2);
     });
 
     it('should not expose dependency information by default', async () => {
-      const response = await request(app)
-        .get('/api/dependencies')
-        .expect(200);
+      const response = await request(app).get('/api/dependencies').expect(200);
 
       expect(response.body.message).toBe('Dependency information not exposed');
       expect(response.body.dependencies).toBeUndefined();
     });
 
     it('should check for outdated versions', async () => {
-      const response = await request(app)
-        .get('/api/dependencies?show_vulnerable=true')
-        .expect(200);
+      const response = await request(app).get('/api/dependencies?show_vulnerable=true').expect(200);
 
-      const axisDep = response.body.dependencies.find(dep => dep.name === 'axios');
+      const axisDep = response.body.dependencies.find((dep) => dep.name === 'axios');
       expect(axisDep.version).toBe('0.18.0'); // Old version
       expect(axisDep.vulnerabilities).toBeGreaterThan(0);
     });
@@ -662,14 +638,12 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should enforce token expiration', async () => {
-      const expiredToken = jwt.sign(
-        { id: '1', username: 'admin', role: 'admin' },
-        jwtSecret,
-        { expiresIn: '0s' }
-      );
+      const expiredToken = jwt.sign({ id: '1', username: 'admin', role: 'admin' }, jwtSecret, {
+        expiresIn: '0s',
+      });
 
       // Wait a moment to ensure expiration
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       const response = await request(app)
         .get('/api/admin/users')
@@ -684,9 +658,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     it('should identify lack of integrity verification', async () => {
       const response = await request(app)
         .post('/api/update')
-        .send({ 
+        .send({
           package_url: 'https://malicious-site.com/package.tar.gz',
-          mode: 'vulnerable'
+          mode: 'vulnerable',
         })
         .expect(200);
 
@@ -698,9 +672,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     it('should demonstrate proper integrity verification', async () => {
       const response = await request(app)
         .post('/api/update')
-        .send({ 
+        .send({
           package_url: 'https://trusted-registry.com/package.tar.gz',
-          mode: 'secure'
+          mode: 'secure',
         })
         .expect(200);
 
@@ -712,9 +686,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     it('should verify package source authenticity', async () => {
       const response = await request(app)
         .post('/api/update')
-        .send({ 
+        .send({
           package_url: 'https://npmjs.com/package/express',
-          mode: 'secure'
+          mode: 'secure',
         })
         .expect(200);
 
@@ -725,21 +699,19 @@ describe('OWASP Top 10 2021 Security Tests', () => {
 
   describe('A09: Security Logging and Monitoring Failures', () => {
     it('should log security-relevant events', async () => {
-      const adminToken = jwt.sign(
-        { id: '1', username: 'admin', role: 'admin' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const adminToken = jwt.sign({ id: '1', username: 'admin', role: 'admin' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
       const response = await request(app)
         .post('/api/sensitive-action')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ 
+        .send({
           action: 'update_user_permissions',
           data: { userId: '2', newRole: 'admin' },
-          log_security: true
+          log_security: true,
         })
         .expect(200);
 
@@ -752,18 +724,16 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     });
 
     it('should detect and block suspicious actions', async () => {
-      const adminToken = jwt.sign(
-        { id: '1', username: 'admin', role: 'admin' },
-        jwtSecret,
-        { expiresIn: '1h' }
-      );
+      const adminToken = jwt.sign({ id: '1', username: 'admin', role: 'admin' }, jwtSecret, {
+        expiresIn: '1h',
+      });
 
       const response = await request(app)
         .post('/api/sensitive-action')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ 
+        .send({
           action: 'delete_all_data',
-          log_security: true
+          log_security: true,
         })
         .expect(400);
 
@@ -786,7 +756,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
       const ssrfUrls = [
         'http://localhost:8080/admin',
         'http://127.0.0.1:3000/config',
-        'http://internal.company.com/secrets'
+        'http://internal.company.com/secrets',
       ];
 
       for (const url of ssrfUrls) {
@@ -803,9 +773,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     it('should validate URLs against allowlist', async () => {
       const response = await request(app)
         .post('/api/fetch-url')
-        .send({ 
+        .send({
           url: 'https://malicious-site.com/steal-data',
-          mode: 'secure'
+          mode: 'secure',
         })
         .expect(400);
 
@@ -816,9 +786,9 @@ describe('OWASP Top 10 2021 Security Tests', () => {
     it('should allow requests to trusted domains', async () => {
       const response = await request(app)
         .post('/api/fetch-url')
-        .send({ 
+        .send({
           url: 'https://api.example.com/data',
-          mode: 'secure'
+          mode: 'secure',
         })
         .expect(200);
 
@@ -831,7 +801,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
         'not-a-url',
         'ftp://invalid-protocol.com',
         'javascript:alert("xss")',
-        'data:text/html,<script>alert(1)</script>'
+        'data:text/html,<script>alert(1)</script>',
       ];
 
       for (const url of malformedUrls) {
@@ -853,13 +823,10 @@ describe('OWASP Top 10 2021 Security Tests', () => {
         username: "'; DROP TABLE users; --", // SQL injection
         password: '<script>alert("xss")</script>', // XSS
         redirect: 'http://localhost:8080/admin', // SSRF
-        mode: 'vulnerable'
+        mode: 'vulnerable',
       };
 
-      const response = await request(app)
-        .post('/api/login')
-        .send(maliciousRequest)
-        .expect(401);
+      const response = await request(app).post('/api/login').send(maliciousRequest).expect(401);
 
       // Should handle gracefully
       expect(response.body.error).toBeDefined();
@@ -867,7 +834,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
 
     it('should maintain security under load', async () => {
       const promises = [];
-      
+
       // Send 20 concurrent requests with mixed content
       for (let i = 0; i < 20; i++) {
         promises.push(
@@ -875,15 +842,15 @@ describe('OWASP Top 10 2021 Security Tests', () => {
             .post('/api/search')
             .send({
               query: i % 2 === 0 ? "'; DROP TABLE users; --" : 'legitimate query',
-              type: 'secure'
+              type: 'secure',
             })
         );
       }
 
       const responses = await Promise.allSettled(promises);
-      
+
       // All should complete successfully
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe('fulfilled');
         expect([200, 400].includes(response.value.status)).toBe(true);
       });
@@ -891,7 +858,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
 
     it('should maintain security across different content types', async () => {
       const maliciousScript = '<script>alert("xss")</script>';
-      
+
       // Test different content types
       const jsonResponse = await request(app)
         .post('/api/search')
@@ -913,7 +880,7 @@ describe('OWASP Top 10 2021 Security Tests', () => {
       // Verify all OWASP Top 10 categories are addressed
       const securityCategories = [
         'Broken Access Control',
-        'Cryptographic Failures', 
+        'Cryptographic Failures',
         'Injection',
         'Insecure Design',
         'Security Misconfiguration',
@@ -921,18 +888,16 @@ describe('OWASP Top 10 2021 Security Tests', () => {
         'Identification and Authentication Failures',
         'Software and Data Integrity Failures',
         'Security Logging and Monitoring Failures',
-        'Server-Side Request Forgery'
+        'Server-Side Request Forgery',
       ];
 
       // This test verifies that all categories have been addressed
       // by checking that corresponding test endpoints exist and function
       expect(securityCategories.length).toBe(10);
-      
+
       // Additional verification could include checking that security
       // controls are properly implemented across the application
-      const healthResponse = await request(app)
-        .get('/api/server-info')
-        .expect(200);
+      const healthResponse = await request(app).get('/api/server-info').expect(200);
 
       expect(healthResponse.body.status).toBe('healthy');
     });

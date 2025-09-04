@@ -82,25 +82,25 @@ The system validates contributions through multiple checks:
 
 ### Categories
 
-| Reason Code | Description | Retry Allowed |
-|------------|-------------|---------------|
-| `KYC_NOT_VERIFIED` | KYC verification required | Yes |
-| `EXCEEDS_CONTRIBUTION_LIMIT` | Exceeds cumulative FEC limit | Yes |
-| `EXCEEDS_TRANSACTION_LIMIT` | Single transaction exceeds limit | Yes |
-| `INVALID_WALLET_ADDRESS` | Invalid Ethereum address format | Yes |
-| `INSUFFICIENT_FUNDS` | Wallet has insufficient balance | Yes |
-| `TRANSACTION_FAILED` | Blockchain transaction failed | Yes |
-| `SMART_CONTRACT_ERROR` | Smart contract execution error | Yes |
-| `NETWORK_ERROR` | Network connectivity issue | Yes |
-| `DUPLICATE_TRANSACTION` | Transaction already processed | No |
-| `BLACKLISTED_ADDRESS` | Wallet address is blacklisted | No |
-| `SUSPICIOUS_ACTIVITY` | High risk score detected | Yes |
-| `COMPLIANCE_VIOLATION` | FEC compliance violation | No |
-| `INVALID_AMOUNT` | Amount below minimum or invalid | Yes |
-| `CAMPAIGN_INACTIVE` | Campaign is paused or inactive | Yes |
-| `CAMPAIGN_ENDED` | Campaign has ended | No |
-| `SYSTEM_ERROR` | Internal system error | Yes |
-| `OTHER` | Other unspecified reason | Yes |
+| Reason Code                  | Description                      | Retry Allowed |
+| ---------------------------- | -------------------------------- | ------------- |
+| `KYC_NOT_VERIFIED`           | KYC verification required        | Yes           |
+| `EXCEEDS_CONTRIBUTION_LIMIT` | Exceeds cumulative FEC limit     | Yes           |
+| `EXCEEDS_TRANSACTION_LIMIT`  | Single transaction exceeds limit | Yes           |
+| `INVALID_WALLET_ADDRESS`     | Invalid Ethereum address format  | Yes           |
+| `INSUFFICIENT_FUNDS`         | Wallet has insufficient balance  | Yes           |
+| `TRANSACTION_FAILED`         | Blockchain transaction failed    | Yes           |
+| `SMART_CONTRACT_ERROR`       | Smart contract execution error   | Yes           |
+| `NETWORK_ERROR`              | Network connectivity issue       | Yes           |
+| `DUPLICATE_TRANSACTION`      | Transaction already processed    | No            |
+| `BLACKLISTED_ADDRESS`        | Wallet address is blacklisted    | No            |
+| `SUSPICIOUS_ACTIVITY`        | High risk score detected         | Yes           |
+| `COMPLIANCE_VIOLATION`       | FEC compliance violation         | No            |
+| `INVALID_AMOUNT`             | Amount below minimum or invalid  | Yes           |
+| `CAMPAIGN_INACTIVE`          | Campaign is paused or inactive   | Yes           |
+| `CAMPAIGN_ENDED`             | Campaign has ended               | No            |
+| `SYSTEM_ERROR`               | Internal system error            | Yes           |
+| `OTHER`                      | Other unspecified reason         | Yes           |
 
 ## Blockchain Event Handling
 
@@ -115,11 +115,11 @@ The system validates contributions through multiple checks:
 ```javascript
 // Example blockchain event processing
 contract.on('ContributionAccepted', async (contributor, amountWei, amountUsd, txHash, event) => {
-    // 1. Prevent duplicate processing
-    // 2. Get transaction details
-    // 3. Get contributor details
-    // 4. Record contribution
-    // 5. Monitor confirmations
+  // 1. Prevent duplicate processing
+  // 2. Get transaction details
+  // 3. Get contributor details
+  // 4. Record contribution
+  // 5. Monitor confirmations
 });
 ```
 
@@ -155,11 +155,11 @@ contract.on('ContributionAccepted', async (contributor, amountWei, amountUsd, tx
 ```javascript
 // Retry handler runs every minute
 setInterval(() => {
-    // 1. Get eligible retries
-    // 2. Check retry conditions
-    // 3. Attempt contribution recording
-    // 4. Update retry status
-    // 5. Clean up expired retries
+  // 1. Get eligible retries
+  // 2. Check retry conditions
+  // 3. Attempt contribution recording
+  // 4. Update retry status
+  // 5. Clean up expired retries
 }, 60000);
 ```
 
@@ -178,22 +178,25 @@ setInterval(() => {
 
 ### Alert Priorities
 
-| Priority | Response Time | Notification Method |
-|----------|--------------|-------------------|
-| Critical | Immediate | Email, Webhook, Console |
-| High | < 5 minutes | Email, Console |
-| Normal | < 30 minutes | Console |
+| Priority | Response Time | Notification Method     |
+| -------- | ------------- | ----------------------- |
+| Critical | Immediate     | Email, Webhook, Console |
+| High     | < 5 minutes   | Email, Console          |
+| Normal   | < 30 minutes  | Console                 |
 
 ### Real-time Monitoring
 
 ```javascript
 // Real-time high-risk detection
-supabase.channel('high-risk-rejections')
-    .on('postgres_changes', {
-        event: 'INSERT',
-        table: 'rejected_contributions',
-        filter: 'risk_score=gte.75'
-    }, handleHighRisk);
+supabase.channel('high-risk-rejections').on(
+  'postgres_changes',
+  {
+    event: 'INSERT',
+    table: 'rejected_contributions',
+    filter: 'risk_score=gte.75',
+  },
+  handleHighRisk
+);
 ```
 
 ## API Endpoints
@@ -201,11 +204,13 @@ supabase.channel('high-risk-rejections')
 ### Contribution Status Queries
 
 #### Get Contribution Status
+
 ```http
 GET /api/contributions/status/:transactionHash
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -221,27 +226,32 @@ GET /api/contributions/status/:transactionHash
 ```
 
 #### Get Wallet Contributions
+
 ```http
 GET /api/contributions/wallet/:walletAddress?status=confirmed&page=1&limit=20
 ```
 
 #### Get Rejected Contributions
+
 ```http
 GET /api/contributions/rejected?reason=KYC_NOT_VERIFIED&retryAllowed=true
 ```
 
 #### Get Contribution Statistics
+
 ```http
 GET /api/contributions/statistics?campaignId=xxx&startDate=2024-01-01
 ```
 
 #### Retry Contribution
+
 ```http
 POST /api/contributions/retry
 Body: { "rejectionId": "rejection-123" }
 ```
 
 #### Get Monitoring Dashboard
+
 ```http
 GET /api/contributions/monitoring/dashboard
 ```
@@ -249,12 +259,14 @@ GET /api/contributions/monitoring/dashboard
 ## Security Considerations
 
 ### Input Validation
+
 - All wallet addresses validated using ethers.js
 - Transaction hashes validated for format
 - Amounts validated for range and precision
 - SQL injection prevention through parameterized queries
 
 ### Risk Assessment Factors
+
 - Wallet age (new wallets flagged)
 - Contribution frequency (rapid contributions flagged)
 - Amount patterns (round numbers, exact limits)
@@ -262,6 +274,7 @@ GET /api/contributions/monitoring/dashboard
 - Historical behavior patterns
 
 ### Data Protection
+
 - Sensitive data encrypted at rest
 - PII handled according to privacy regulations
 - Audit logging for all operations
@@ -409,13 +422,13 @@ npm run test:load
 
 ### Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| High rejection rate | Check KYC service, review validation rules |
-| Stuck transactions | Verify gas prices, check RPC endpoint |
-| Retry queue growing | Review retry conditions, check resolvable issues |
-| Missing contributions | Check event listeners, verify blockchain sync |
-| Performance issues | Optimize database queries, add indexes |
+| Issue                 | Solution                                         |
+| --------------------- | ------------------------------------------------ |
+| High rejection rate   | Check KYC service, review validation rules       |
+| Stuck transactions    | Verify gas prices, check RPC endpoint            |
+| Retry queue growing   | Review retry conditions, check resolvable issues |
+| Missing contributions | Check event listeners, verify blockchain sync    |
+| Performance issues    | Optimize database queries, add indexes           |
 
 ## Compliance
 

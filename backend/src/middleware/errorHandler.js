@@ -6,7 +6,7 @@ export const errorHandler = (err, req, res, next) => {
     stack: err.stack,
     path: req.path,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
   });
 
   // Development error response
@@ -15,16 +15,14 @@ export const errorHandler = (err, req, res, next) => {
       error: err.message,
       stack: err.stack,
       path: req.path,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
   // Production error response
   res.status(err.status || 500).json({
-    error: err.status >= 400 && err.status < 500 
-      ? err.message 
-      : 'Internal server error',
-    timestamp: new Date().toISOString()
+    error: err.status >= 400 && err.status < 500 ? err.message : 'Internal server error',
+    timestamp: new Date().toISOString(),
   });
 };
 

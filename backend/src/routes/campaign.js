@@ -10,20 +10,11 @@ const validateCampaignCreate = [
   body('campaign_name')
     .isLength({ min: 2, max: 100 })
     .withMessage('Campaign name must be between 2 and 100 characters'),
-  body('email')
-    .isEmail()
-    .withMessage('Valid email is required'),
-  body('website')
-    .optional()
-    .isURL()
-    .withMessage('Valid website URL required')
+  body('email').isEmail().withMessage('Valid email is required'),
+  body('website').optional().isURL().withMessage('Valid website URL required'),
 ];
 
-const validateCampaignId = [
-  param('id')
-    .isUUID()
-    .withMessage('Invalid campaign ID format')
-];
+const validateCampaignId = [param('id').isUUID().withMessage('Invalid campaign ID format')];
 
 // Error handler for validation
 const handleValidationErrors = (req, res, next) => {
@@ -31,7 +22,7 @@ const handleValidationErrors = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       error: 'Validation failed',
-      details: errors.array()
+      details: errors.array(),
     });
   }
   next();
@@ -41,7 +32,7 @@ const handleValidationErrors = (req, res, next) => {
 router.get('/:id', validateCampaignId, handleValidationErrors, async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const { data: campaign, error } = await supabase
       .from('campaigns')
       .select('*')
@@ -51,7 +42,7 @@ router.get('/:id', validateCampaignId, handleValidationErrors, async (req, res) 
     if (error) {
       if (error.code === 'PGRST116') {
         return res.status(404).json({
-          error: 'Campaign not found'
+          error: 'Campaign not found',
         });
       }
       throw error;
@@ -68,13 +59,13 @@ router.get('/:id', validateCampaignId, handleValidationErrors, async (req, res) 
     } = campaign;
 
     res.json({
-      campaign: publicCampaign
+      campaign: publicCampaign,
     });
   } catch (error) {
     logger.error('Failed to get campaign:', error);
     res.status(500).json({
       error: 'Failed to retrieve campaign',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -87,7 +78,7 @@ router.post('/', validateCampaignCreate, handleValidationErrors, async (req, res
       setup_step: 1,
       setup_completed: false,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     const { data: campaign, error } = await supabase
@@ -104,13 +95,13 @@ router.post('/', validateCampaignCreate, handleValidationErrors, async (req, res
 
     res.status(201).json({
       campaign,
-      message: 'Campaign created successfully'
+      message: 'Campaign created successfully',
     });
   } catch (error) {
     logger.error('Failed to create campaign:', error);
     res.status(500).json({
       error: 'Failed to create campaign',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -121,7 +112,7 @@ router.put('/:id', validateCampaignId, handleValidationErrors, async (req, res) 
     const { id } = req.params;
     const updateData = {
       ...req.body,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     const { data: campaign, error } = await supabase
@@ -134,7 +125,7 @@ router.put('/:id', validateCampaignId, handleValidationErrors, async (req, res) 
     if (error) {
       if (error.code === 'PGRST116') {
         return res.status(404).json({
-          error: 'Campaign not found'
+          error: 'Campaign not found',
         });
       }
       throw error;
@@ -144,13 +135,13 @@ router.put('/:id', validateCampaignId, handleValidationErrors, async (req, res) 
 
     res.json({
       campaign,
-      message: 'Campaign updated successfully'
+      message: 'Campaign updated successfully',
     });
   } catch (error) {
     logger.error('Failed to update campaign:', error);
     res.status(500).json({
       error: 'Failed to update campaign',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -170,7 +161,7 @@ router.get('/:id/stats', validateCampaignId, handleValidationErrors, async (req,
     if (campaignError) {
       if (campaignError.code === 'PGRST116') {
         return res.status(404).json({
-          error: 'Campaign not found'
+          error: 'Campaign not found',
         });
       }
       throw campaignError;
@@ -191,10 +182,11 @@ router.get('/:id/stats', validateCampaignId, handleValidationErrors, async (req,
       campaignName: campaign.campaign_name,
       totalContributions: contributions?.length || 0,
       totalAmount: contributions?.reduce((sum, c) => sum + (c.amount_usd || 0), 0) || 0,
-      lastContribution: contributions?.length > 0 
-        ? Math.max(...contributions.map(c => new Date(c.created_at).getTime()))
-        : null,
-      createdAt: campaign.created_at
+      lastContribution:
+        contributions?.length > 0
+          ? Math.max(...contributions.map((c) => new Date(c.created_at).getTime()))
+          : null,
+      createdAt: campaign.created_at,
     };
 
     res.json(stats);
@@ -202,7 +194,7 @@ router.get('/:id/stats', validateCampaignId, handleValidationErrors, async (req,
     logger.error('Failed to get campaign stats:', error);
     res.status(500).json({
       error: 'Failed to retrieve campaign statistics',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -216,7 +208,7 @@ router.get('/:id/contributions', validateCampaignId, handleValidationErrors, asy
 
     if (limit > 100) {
       return res.status(400).json({
-        error: 'Limit cannot exceed 100'
+        error: 'Limit cannot exceed 100',
       });
     }
 
@@ -235,13 +227,13 @@ router.get('/:id/contributions', validateCampaignId, handleValidationErrors, asy
       contributions: contributions || [],
       count: contributions?.length || 0,
       limit,
-      offset
+      offset,
     });
   } catch (error) {
     logger.error('Failed to get campaign contributions:', error);
     res.status(500).json({
       error: 'Failed to retrieve campaign contributions',
-      details: error.message
+      details: error.message,
     });
   }
 });

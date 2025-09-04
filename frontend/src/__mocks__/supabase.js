@@ -11,7 +11,7 @@ const mockCampaignData = {
   max_donation_limit: 3300,
   website: 'https://test.com',
   wallet_address: '0x123...',
-  created_at: '2024-01-01T00:00:00.000Z'
+  created_at: '2024-01-01T00:00:00.000Z',
 };
 
 // Mock form submission data
@@ -22,7 +22,7 @@ const mockFormSubmission = {
   donor_email: 'jane@example.com',
   amount_usd: 100,
   transaction_hash: '0xabc123...',
-  created_at: '2024-01-01T12:00:00.000Z'
+  created_at: '2024-01-01T12:00:00.000Z',
 };
 
 // Mock Supabase client
@@ -37,60 +37,62 @@ export const supabase = {
       single: vi.fn(() => mockQuery),
       order: vi.fn(() => mockQuery),
       limit: vi.fn(() => mockQuery),
-      range: vi.fn(() => mockQuery)
+      range: vi.fn(() => mockQuery),
     };
 
     // Configure different responses based on table
     if (table === 'campaigns') {
       mockQuery.single.mockResolvedValue({
         data: mockCampaignData,
-        error: null
+        error: null,
       });
-      
+
       mockQuery.select.mockImplementation(() => {
         mockQuery.single.mockResolvedValue({
           data: mockCampaignData,
-          error: null
+          error: null,
         });
-        
+
         // For list queries without single()
         return {
           ...mockQuery,
-          then: (resolve) => resolve({
-            data: [mockCampaignData],
-            error: null
-          })
+          then: (resolve) =>
+            resolve({
+              data: [mockCampaignData],
+              error: null,
+            }),
         };
       });
 
       mockQuery.insert.mockResolvedValue({
         data: [mockCampaignData],
-        error: null
+        error: null,
       });
 
       mockQuery.update.mockResolvedValue({
         data: [mockCampaignData],
-        error: null
+        error: null,
       });
 
       mockQuery.delete.mockResolvedValue({
         data: null,
-        error: null
+        error: null,
       });
     }
 
     if (table === 'form_submissions') {
       mockQuery.insert.mockResolvedValue({
         data: [mockFormSubmission],
-        error: null
+        error: null,
       });
 
       mockQuery.select.mockImplementation(() => ({
         ...mockQuery,
-        then: (resolve) => resolve({
-          data: [mockFormSubmission],
-          error: null
-        })
+        then: (resolve) =>
+          resolve({
+            data: [mockFormSubmission],
+            error: null,
+          }),
       }));
     }
 
@@ -103,8 +105,8 @@ export const supabase = {
     signOut: vi.fn(),
     getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
     onAuthStateChange: vi.fn(() => ({
-      data: { subscription: { unsubscribe: vi.fn() } }
-    }))
+      data: { subscription: { unsubscribe: vi.fn() } },
+    })),
   },
 
   // Mock storage methods
@@ -113,8 +115,8 @@ export const supabase = {
       upload: vi.fn(),
       download: vi.fn(),
       remove: vi.fn(),
-      list: vi.fn()
-    }))
+      list: vi.fn(),
+    })),
   },
 
   // Mock realtime
@@ -122,14 +124,14 @@ export const supabase = {
     on: vi.fn(),
     off: vi.fn(),
     subscribe: vi.fn(),
-    unsubscribe: vi.fn()
-  }))
+    unsubscribe: vi.fn(),
+  })),
 };
 
 // Export mock data for use in tests
 export const mockData = {
   campaign: mockCampaignData,
-  formSubmission: mockFormSubmission
+  formSubmission: mockFormSubmission,
 };
 
 // Helper to configure mock responses
@@ -141,11 +143,14 @@ export const configureSupabaseMock = {
 
   // Configure form submission success/failure
   setSubmissionResponse: (data, error = null) => {
-    supabase.from('form_submissions').insert().mockResolvedValue({ data: data ? [data] : null, error });
+    supabase
+      .from('form_submissions')
+      .insert()
+      .mockResolvedValue({ data: data ? [data] : null, error });
   },
 
   // Reset all mocks
   reset: () => {
     vi.clearAllMocks();
-  }
+  },
 };

@@ -13,12 +13,14 @@ Automated testing agent that uses your CSV test data to simulate real donor form
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 cd scripts
 npm install
 ```
 
 2. Set environment variables:
+
 ```bash
 export SUPABASE_URL="your-supabase-url"
 export SUPABASE_ANON_KEY="your-anon-key"
@@ -28,6 +30,7 @@ export BASE_URL="http://localhost:3000"  # Your frontend URL
 ## Usage
 
 ### Basic Testing
+
 ```bash
 # Test 5 random personas
 npm run test-forms
@@ -43,6 +46,7 @@ npm run test-mixed
 ```
 
 ### Advanced Options
+
 ```bash
 # Custom test count
 node form-testing-agent.js --count=20
@@ -57,16 +61,19 @@ node form-testing-agent.js --payment=traditional --count=3
 ## Test Modes
 
 ### `--type=donors`
+
 - Tests existing donors from CSV data
 - Uses their actual contribution amounts
 - Validates repeat donor workflows
 
 ### `--type=prospects`
+
 - Tests prospects who haven't donated yet
 - Simulates new donor acquisition
 - Tests first-time donor flows
 
 ### `--type=mixed`
+
 - Random mix of donors and prospects
 - Comprehensive end-to-end testing
 - Realistic usage patterns
@@ -74,6 +81,7 @@ node form-testing-agent.js --payment=traditional --count=3
 ## What the Agent Tests
 
 ### Form Fields
+
 - ✅ Personal information (name, email, phone)
 - ✅ Address information (street, city, state, zip)
 - ✅ Employment information (employer, occupation)
@@ -82,12 +90,14 @@ node form-testing-agent.js --payment=traditional --count=3
 - ✅ FEC compliance checkboxes
 
 ### Validation
+
 - ✅ Form field validation rules
 - ✅ FEC contribution limits
 - ✅ Required field enforcement
 - ✅ Payment method switching
 
 ### Database Integration
+
 - ✅ Supabase form submission storage
 - ✅ Data field mapping accuracy
 - ✅ Transaction recording
@@ -143,6 +153,7 @@ The agent automatically selects from your 150 test personas:
 ## Integration with Existing Tests
 
 This agent complements your existing test suite:
+
 - E2E tests validate user workflows
 - Unit tests verify component logic
 - Integration tests check API endpoints
@@ -151,12 +162,14 @@ This agent complements your existing test suite:
 ## Troubleshooting
 
 ### Common Issues
+
 1. **Form selectors not found**: Update CSS selectors in agent code
 2. **Database connection**: Check Supabase credentials
 3. **Timeout errors**: Increase wait times for slow forms
 4. **Validation failures**: Check form validation rules match expectations
 
 ### Debug Mode
+
 ```bash
 # Run with debug logging
 DEBUG=1 node form-testing-agent.js --count=1

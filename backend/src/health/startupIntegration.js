@@ -22,11 +22,11 @@ export class StartupIntegration {
     }
 
     logger.info('🚀 Running startup health checks...');
-    
+
     try {
       const healthResults = await Promise.race([
         databaseHealthCheck.runHealthCheck(),
-        this.createTimeoutPromise()
+        this.createTimeoutPromise(),
       ]);
 
       // Log results
@@ -44,12 +44,12 @@ export class StartupIntegration {
       return healthResults;
     } catch (error) {
       logger.error('🔥 Startup health check failed:', error);
-      
+
       if (this.failOnHealthCheckError) {
         logger.error('💥 Startup failed due to health check timeout/error');
         process.exit(1);
       }
-      
+
       return { status: 'failed', error: error.message };
     }
   }
@@ -72,38 +72,38 @@ export class StartupIntegration {
     app.get('/health/database', async (req, res) => {
       try {
         const healthResults = await databaseHealthCheck.runHealthCheck();
-        
+
         const statusCode = healthResults.status === 'healthy' ? 200 : 503;
-        
+
         res.status(statusCode).json({
           status: healthResults.status,
           timestamp: healthResults.timestamp,
           checks: {
             connectivity: healthResults.connectivity?.status === 'connected',
             tables: healthResults.tables?.status === 'success',
-            functions: healthResults.functions?.status === 'success'
+            functions: healthResults.functions?.status === 'success',
           },
           details: {
             connectivity: healthResults.connectivity,
             tables: {
               validated: Object.keys(healthResults.tables?.tables || {}).length,
               missing: healthResults.tables?.missingTables || [],
-              errors: healthResults.tables?.errors || []
+              errors: healthResults.tables?.errors || [],
             },
             functions: {
               validated: Object.keys(healthResults.functions?.functions || {}).length,
               missing: healthResults.functions?.missingFunctions || [],
-              errors: healthResults.functions?.errors || []
-            }
+              errors: healthResults.functions?.errors || [],
+            },
           },
           suggestions: healthResults.suggestions,
-          duration: `${healthResults.duration}ms`
+          duration: `${healthResults.duration}ms`,
         });
       } catch (error) {
         res.status(500).json({
           status: 'error',
           timestamp: new Date().toISOString(),
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -118,9 +118,9 @@ export class StartupIntegration {
     app.get('/health/database/detailed', async (req, res) => {
       try {
         const healthResults = await databaseHealthCheck.runHealthCheck();
-        
+
         const statusCode = healthResults.status === 'healthy' ? 200 : 503;
-        
+
         res.status(statusCode).json({
           ...healthResults,
           environment: {
@@ -128,8 +128,8 @@ export class StartupIntegration {
             supabaseConfigured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY),
             healthCheckEnabled: this.healthCheckEnabled,
             failOnError: this.failOnHealthCheckError,
-            timeout: this.healthCheckTimeout
-          }
+            timeout: this.healthCheckTimeout,
+          },
         });
       } catch (error) {
         res.status(500).json({
@@ -140,8 +140,8 @@ export class StartupIntegration {
             nodeEnv: process.env.NODE_ENV,
             supabaseConfigured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY),
             healthCheckEnabled: this.healthCheckEnabled,
-            failOnError: this.failOnHealthCheckError
-          }
+            failOnError: this.failOnHealthCheckError,
+          },
         });
       }
     });
@@ -155,8 +155,8 @@ export class StartupIntegration {
   setupHealthMonitoring(app) {
     // Add middleware to check database health on critical routes
     const criticalRoutes = ['/api/contributions', '/api/campaign'];
-    
-    criticalRoutes.forEach(route => {
+
+    criticalRoutes.forEach((route) => {
       app.use(route, async (req, res, next) => {
         // Skip health check for GET requests to reduce overhead
         if (req.method === 'GET') {
@@ -165,17 +165,17 @@ export class StartupIntegration {
 
         try {
           const connectivity = await databaseHealthCheck.checkConnectivity();
-          
+
           if (connectivity.status === 'failed') {
             logger.warn(`Database connectivity issue on ${req.method} ${req.path}`);
-            
+
             return res.status(503).json({
               error: 'Database temporarily unavailable',
               code: 'DATABASE_UNAVAILABLE',
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
           }
-          
+
           next();
         } catch (error) {
           logger.error(`Health check middleware error on ${req.method} ${req.path}:`, error);

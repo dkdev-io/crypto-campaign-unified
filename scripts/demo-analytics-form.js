@@ -752,13 +752,13 @@ async function createDemoHTML() {
 
 async function launchDemoForm() {
   console.log('🚀 Creating demo analytics form...');
-  
+
   // Create the demo HTML file
   const demoPath = await createDemoHTML();
   console.log('✅ Demo form created at:', demoPath);
 
   // Launch Puppeteer
-  
+
   const browser = await puppeteer.launch({
     headless: false, // Show the browser
     defaultViewport: null, // Use full viewport
@@ -768,14 +768,14 @@ async function launchDemoForm() {
       '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
       '--disable-web-security',
-      '--allow-running-insecure-content'
-    ]
+      '--allow-running-insecure-content',
+    ],
   });
 
   const page = await browser.newPage();
-  
+
   // Set up console logging
-  page.on('console', msg => {
+  page.on('console', (msg) => {
     const type = msg.type();
     if (type === 'log' || type === 'info') {
     } else if (type === 'error') {
@@ -785,18 +785,22 @@ async function launchDemoForm() {
 
   // Navigate to the demo form
   const fileUrl = 'file://' + demoPath;
-  
+
   await page.goto(fileUrl, { waitUntil: 'networkidle0' });
 
   // Set up some UTM parameters to test traffic source detection
   await page.evaluate(() => {
     // Simulate coming from Google Ads
-    history.replaceState({}, '', '?utm_source=google&utm_medium=cpc&utm_campaign=crypto_campaign_2025');
-    
+    history.replaceState(
+      {},
+      '',
+      '?utm_source=google&utm_medium=cpc&utm_campaign=crypto_campaign_2025'
+    );
+
     // Update referrer for testing
     Object.defineProperty(document, 'referrer', {
       value: 'https://google.com/search?q=crypto+campaigns',
-      configurable: true
+      configurable: true,
     });
   });
 
@@ -805,46 +809,44 @@ async function launchDemoForm() {
 
   // Add some automated interactions for demo purposes
   setTimeout(async () => {
-    
     // Scroll down automatically
     await page.evaluate(() => {
       window.scrollTo({ top: 200, behavior: 'smooth' });
     });
-    
+
     setTimeout(async () => {
       await page.evaluate(() => {
         window.scrollTo({ top: 400, behavior: 'smooth' });
       });
     }, 2000);
-    
+
     setTimeout(async () => {
       await page.evaluate(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }, 4000);
-    
+
     console.log('✅ Automated scroll interactions completed');
-    
   }, 3000);
 
   // Keep the browser open
-  
+
   // Handle cleanup on exit
   process.on('SIGINT', async () => {
     await browser.close();
-    
+
     // Clean up demo file
     if (fs.existsSync(demoPath)) {
       fs.unlinkSync(demoPath);
     }
-    
+
     process.exit(0);
   });
 }
 
 // Run the demo
 if (require.main === module) {
-  launchDemoForm().catch(error => {
+  launchDemoForm().catch((error) => {
     console.error('❌ Error launching demo:', error);
     process.exit(1);
   });

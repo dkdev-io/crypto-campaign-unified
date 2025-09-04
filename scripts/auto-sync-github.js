@@ -24,29 +24,28 @@ class AutoSyncGitHub {
 
   async start() {
     console.log('🚀 Starting Auto-Sync GitHub Service...');
-    
+
     if (this.isRunning) {
       console.log('⚠️ Auto-sync already running');
       return;
     }
 
     this.isRunning = true;
-    
+
     try {
       // Check git status
       await this.checkGitStatus();
-      
+
       // Start file watcher
       this.startFileWatcher();
-      
+
       // Start periodic sync check
       this.startPeriodicSync();
-      
+
       console.log('✅ Auto-Sync GitHub Service started successfully');
       console.log('📁 Watching: /Users/Danallovertheplace/crypto-campaign-unified');
       console.log('⏱️ Debounce delay: 10 seconds');
       console.log('🔄 Max commit delay: 5 minutes');
-      
     } catch (error) {
       console.error('❌ Failed to start auto-sync:', error.message);
       this.isRunning = false;
@@ -69,24 +68,39 @@ class AutoSyncGitHub {
 
   startFileWatcher() {
     console.log('👀 Starting file watcher...');
-    
+
     // Use fs.watch for better performance
     const watcher = fs.watch('.', { recursive: true }, (eventType, filename) => {
       if (!filename) return;
-      
+
       // Skip node_modules, .git, and other irrelevant files
-      if (filename.includes('node_modules') || 
-          filename.includes('.git') || 
-          filename.includes('dist/') ||
-          filename.includes('.DS_Store') ||
-          filename.includes('.log')) {
+      if (
+        filename.includes('node_modules') ||
+        filename.includes('.git') ||
+        filename.includes('dist/') ||
+        filename.includes('.DS_Store') ||
+        filename.includes('.log')
+      ) {
         return;
       }
 
       // Only watch important file types
-      const importantExtensions = ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json', '.md', '.css', '.html', '.toml', '.yml', '.yaml'];
-      const hasImportantExtension = importantExtensions.some(ext => filename.endsWith(ext));
-      
+      const importantExtensions = [
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx',
+        '.vue',
+        '.json',
+        '.md',
+        '.css',
+        '.html',
+        '.toml',
+        '.yml',
+        '.yaml',
+      ];
+      const hasImportantExtension = importantExtensions.some((ext) => filename.endsWith(ext));
+
       if (hasImportantExtension || filename.includes('package.json') || filename.includes('.env')) {
         console.log(`📝 File changed: ${filename}`);
         this.pendingChanges.add(filename);
@@ -131,7 +145,7 @@ class AutoSyncGitHub {
     }
 
     console.log('🔄 Starting GitHub sync...');
-    
+
     try {
       // Check if there are actually changes to commit
       const { stdout: statusOutput } = await execAsync('git status --porcelain');
@@ -148,7 +162,7 @@ class AutoSyncGitHub {
       // Create commit message
       const changedFiles = Array.from(this.pendingChanges).slice(0, 5);
       const commitMessage = this.generateCommitMessage(changedFiles);
-      
+
       // Commit changes
       await execAsync(`git commit -m "${commitMessage}"`);
       console.log(`📝 Committed: ${commitMessage}`);
@@ -160,12 +174,11 @@ class AutoSyncGitHub {
       // Reset tracking
       this.pendingChanges.clear();
       this.lastCommitTime = Date.now();
-      
+
       console.log('✅ Auto-sync completed successfully');
-      
     } catch (error) {
       console.error('❌ Auto-sync failed:', error.message);
-      
+
       // Don't clear pending changes on failure, retry later
       if (error.message.includes('nothing to commit')) {
         this.pendingChanges.clear();
@@ -175,7 +188,7 @@ class AutoSyncGitHub {
 
   generateCommitMessage(changedFiles) {
     const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    
+
     if (changedFiles.length === 1) {
       const file = changedFiles[0];
       return `Auto-sync: Update ${file} | ${timestamp}`;
@@ -189,17 +202,17 @@ class AutoSyncGitHub {
   stop() {
     console.log('🛑 Stopping Auto-Sync GitHub Service...');
     this.isRunning = false;
-    
+
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
-    
+
     // Final sync before stopping
     if (this.pendingChanges.size > 0) {
       console.log('🔄 Final sync before stopping...');
       this.syncToGitHub();
     }
-    
+
     console.log('✅ Auto-Sync GitHub Service stopped');
   }
 }
@@ -211,24 +224,24 @@ const autoSync = new AutoSyncGitHub();
 switch (command) {
   case 'start':
     autoSync.start();
-    
+
     // Keep process alive
     process.on('SIGINT', () => {
       autoSync.stop();
       process.exit(0);
     });
-    
+
     process.on('SIGTERM', () => {
       autoSync.stop();
       process.exit(0);
     });
     break;
-    
+
   case 'stop':
     console.log('🛑 Auto-sync stop command received');
     process.exit(0);
     break;
-    
+
   default:
     console.log(`
 🤖 Auto-Sync GitHub Service

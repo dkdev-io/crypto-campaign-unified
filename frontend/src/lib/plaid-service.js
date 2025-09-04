@@ -33,12 +33,11 @@ class PlaidService {
         },
         onEvent: (eventName, metadata) => {
           this.handleLinkEvent(eventName, metadata);
-        }
+        },
       };
 
       this.linkHandler = window.Plaid.create(config);
       return this.linkHandler;
-
     } catch (error) {
       console.error('Plaid Link initialization error:', error);
       throw error;
@@ -52,14 +51,14 @@ class PlaidService {
     try {
       // In a real implementation, you'd call your backend API
       // For now, return a placeholder that shows the structure needed
-      
+
       // This would be your backend endpoint:
       // const response = await fetch('/api/plaid/create-link-token', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify({ campaignId, userEmail })
       // });
-      
+
       // For development, throw an error with instructions
       throw new Error(`
         Plaid backend integration required. 
@@ -72,7 +71,6 @@ class PlaidService {
         Campaign ID: ${campaignId}
         User Email: ${userEmail}
       `);
-
     } catch (error) {
       console.error('Get link token error:', error);
       throw error;
@@ -87,10 +85,7 @@ class PlaidService {
       console.log('Plaid Link success:', { publicToken, metadata });
 
       // Exchange public token for access token (backend call needed)
-      const { accessToken, accountId } = await this.exchangePublicToken(
-        publicToken, 
-        campaignId
-      );
+      const { accessToken, accountId } = await this.exchangePublicToken(publicToken, campaignId);
 
       // Store encrypted access token in database
       await this.storeAccessToken(campaignId, accessToken, accountId, metadata);
@@ -100,27 +95,28 @@ class PlaidService {
         bank_account_verified: true,
         bank_account_name: metadata.account.name,
         bank_last_four: metadata.account.mask,
-        plaid_account_id: accountId
+        plaid_account_id: accountId,
       });
 
       // Dispatch custom event for UI updates
-      window.dispatchEvent(new CustomEvent('plaidLinkSuccess', {
-        detail: {
-          campaignId,
-          accountId,
-          accountName: metadata.account.name,
-          institutionName: metadata.institution.name,
-          lastFour: metadata.account.mask
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('plaidLinkSuccess', {
+          detail: {
+            campaignId,
+            accountId,
+            accountName: metadata.account.name,
+            institutionName: metadata.institution.name,
+            lastFour: metadata.account.mask,
+          },
+        })
+      );
 
       return {
         success: true,
         accountId,
         accountName: metadata.account.name,
-        institutionName: metadata.institution.name
+        institutionName: metadata.institution.name,
       };
-
     } catch (error) {
       console.error('Handle link success error:', error);
       throw error;
@@ -138,15 +134,14 @@ class PlaidService {
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify({ publicToken, campaignId })
       // });
-      
+
       // For development, return mock data
       console.log('Would exchange public token:', publicToken);
-      
+
       return {
         accessToken: 'access-sandbox-mock-token',
-        accountId: 'account-mock-id-' + Date.now()
+        accountId: 'account-mock-id-' + Date.now(),
       };
-
     } catch (error) {
       console.error('Exchange public token error:', error);
       throw error;
@@ -170,7 +165,7 @@ class PlaidService {
           account_type: metadata.account?.type,
           account_subtype: metadata.account?.subtype,
           last_four: metadata.account?.mask,
-          is_active: true
+          is_active: true,
         })
         .select()
         .single();
@@ -179,7 +174,6 @@ class PlaidService {
 
       console.log('Plaid token stored successfully:', data.id);
       return data;
-
     } catch (error) {
       console.error('Store access token error:', error);
       throw error;
@@ -202,7 +196,6 @@ class PlaidService {
 
       console.log('Campaign bank status updated:', data);
       return data;
-
     } catch (error) {
       console.error('Update campaign bank status error:', error);
       throw error;
@@ -214,15 +207,17 @@ class PlaidService {
    */
   handleLinkExit(err, metadata) {
     console.log('Plaid Link exit:', { err, metadata });
-    
+
     if (err != null) {
       console.error('Plaid Link exit error:', err);
     }
 
     // Dispatch custom event for UI updates
-    window.dispatchEvent(new CustomEvent('plaidLinkExit', {
-      detail: { error: err, metadata }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('plaidLinkExit', {
+        detail: { error: err, metadata },
+      })
+    );
   }
 
   /**
@@ -230,11 +225,13 @@ class PlaidService {
    */
   handleLinkEvent(eventName, metadata) {
     console.log('Plaid Link event:', eventName, metadata);
-    
+
     // Dispatch custom event for UI updates
-    window.dispatchEvent(new CustomEvent('plaidLinkEvent', {
-      detail: { eventName, metadata }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('plaidLinkEvent', {
+        detail: { eventName, metadata },
+      })
+    );
   }
 
   /**
@@ -255,7 +252,8 @@ class PlaidService {
     try {
       const { data, error } = await supabase
         .from('campaigns')
-        .select(`
+        .select(
+          `
           bank_account_verified,
           bank_account_name,
           bank_last_four,
@@ -268,7 +266,8 @@ class PlaidService {
             last_four,
             created_at
           )
-        `)
+        `
+        )
         .eq('id', campaignId)
         .single();
 
@@ -279,9 +278,8 @@ class PlaidService {
         accountName: data.bank_account_name,
         lastFour: data.bank_last_four,
         accountId: data.plaid_account_id,
-        details: data.plaid_tokens?.[0] || null
+        details: data.plaid_tokens?.[0] || null,
       };
-
     } catch (error) {
       console.error('Get bank account info error:', error);
       throw error;
@@ -309,7 +307,7 @@ class PlaidService {
           bank_account_name: null,
           bank_last_four: null,
           plaid_account_id: null,
-          plaid_access_token: null
+          plaid_access_token: null,
         })
         .eq('id', campaignId)
         .select()
@@ -321,7 +319,6 @@ class PlaidService {
       // await this.revokeAccessToken(campaignId);
 
       return { success: true, campaign: data };
-
     } catch (error) {
       console.error('Remove bank account error:', error);
       throw error;
@@ -366,12 +363,12 @@ class PlaidService {
       const script = document.createElement('script');
       script.src = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
       script.async = true;
-      
+
       script.onload = () => {
         console.log('Plaid script loaded successfully');
         resolve();
       };
-      
+
       script.onerror = () => {
         reject(new Error('Failed to load Plaid script'));
       };

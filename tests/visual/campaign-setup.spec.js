@@ -4,13 +4,16 @@ test.describe('Campaign Setup Form Visual Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to campaign setup
     await page.goto('/');
-    
+
     // Look for setup wizard or admin interface
-    const setupButton = page.locator('button, a').filter({ hasText: /setup|admin|create|campaign/i }).first();
+    const setupButton = page
+      .locator('button, a')
+      .filter({ hasText: /setup|admin|create|campaign/i })
+      .first();
     if (await setupButton.isVisible()) {
       await setupButton.click();
     }
-    
+
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
   });
@@ -23,17 +26,25 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('campaign info form', async ({ page }) => {
     // Fill campaign information
-    const titleInput = page.locator('input[name*="title"], input[name*="name"], [data-testid*="title"]').first();
+    const titleInput = page
+      .locator('input[name*="title"], input[name*="name"], [data-testid*="title"]')
+      .first();
     if (await titleInput.isVisible()) {
       await titleInput.fill('Save the Ocean Campaign');
     }
 
-    const descriptionInput = page.locator('textarea[name*="description"], textarea, [data-testid*="description"]').first();
+    const descriptionInput = page
+      .locator('textarea[name*="description"], textarea, [data-testid*="description"]')
+      .first();
     if (await descriptionInput.isVisible()) {
-      await descriptionInput.fill('A campaign dedicated to ocean conservation and marine life protection.');
+      await descriptionInput.fill(
+        'A campaign dedicated to ocean conservation and marine life protection.'
+      );
     }
 
-    const goalInput = page.locator('input[name*="goal"], input[name*="target"], [data-testid*="goal"]').first();
+    const goalInput = page
+      .locator('input[name*="goal"], input[name*="target"], [data-testid*="goal"]')
+      .first();
     if (await goalInput.isVisible()) {
       await goalInput.fill('50000');
     }
@@ -45,7 +56,10 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('compliance and legal settings', async ({ page }) => {
     // Navigate to compliance step
-    const nextButton = page.locator('button').filter({ hasText: /next|continue/i }).first();
+    const nextButton = page
+      .locator('button')
+      .filter({ hasText: /next|continue/i })
+      .first();
     if (await nextButton.isVisible()) {
       await nextButton.click();
       await page.waitForTimeout(1000);
@@ -54,7 +68,7 @@ test.describe('Campaign Setup Form Visual Tests', () => {
     // Look for compliance checkboxes
     const complianceCheckboxes = page.locator('input[type="checkbox"]');
     const count = await complianceCheckboxes.count();
-    
+
     for (let i = 0; i < Math.min(count, 3); i++) {
       await complianceCheckboxes.nth(i).check();
       await page.waitForTimeout(300);
@@ -67,7 +81,10 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('form customization options', async ({ page }) => {
     // Look for customization panel
-    const customizationTab = page.locator('button, a').filter({ hasText: /custom|design|theme/i }).first();
+    const customizationTab = page
+      .locator('button, a')
+      .filter({ hasText: /custom|design|theme/i })
+      .first();
     if (await customizationTab.isVisible()) {
       await customizationTab.click();
       await page.waitForTimeout(1000);
@@ -87,7 +104,10 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('embed options configuration', async ({ page }) => {
     // Navigate to embed options
-    const embedTab = page.locator('button, a').filter({ hasText: /embed|share|widget/i }).first();
+    const embedTab = page
+      .locator('button, a')
+      .filter({ hasText: /embed|share|widget/i })
+      .first();
     if (await embedTab.isVisible()) {
       await embedTab.click();
       await page.waitForTimeout(1000);
@@ -96,7 +116,7 @@ test.describe('Campaign Setup Form Visual Tests', () => {
     // Toggle embed options
     const embedCheckboxes = page.locator('input[type="checkbox"]');
     const count = await embedCheckboxes.count();
-    
+
     for (let i = 0; i < Math.min(count, 2); i++) {
       await embedCheckboxes.nth(i).check();
       await page.waitForTimeout(300);
@@ -111,7 +131,7 @@ test.describe('Campaign Setup Form Visual Tests', () => {
     // Navigate through wizard to final step
     const buttons = page.locator('button').filter({ hasText: /next|continue|finish|launch/i });
     const buttonCount = await buttons.count();
-    
+
     for (let i = 0; i < Math.min(buttonCount, 4); i++) {
       const button = buttons.nth(i);
       if (await button.isVisible()) {
@@ -127,7 +147,9 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('setup wizard step indicator', async ({ page }) => {
     // Focus on the step indicator/progress bar
-    const stepIndicator = page.locator('[data-testid*="step"], .step-indicator, .progress-bar').first();
+    const stepIndicator = page
+      .locator('[data-testid*="step"], .step-indicator, .progress-bar')
+      .first();
     if (await stepIndicator.isVisible()) {
       await expect(stepIndicator).toHaveScreenshot('campaign-setup-step-indicator.png');
     }
@@ -155,7 +177,10 @@ test.describe('Campaign Setup Form Visual Tests', () => {
 
   test('campaign setup form validation states', async ({ page }) => {
     // Try to proceed without filling required fields
-    const submitButton = page.locator('button').filter({ hasText: /submit|save|next/i }).first();
+    const submitButton = page
+      .locator('button')
+      .filter({ hasText: /submit|save|next/i })
+      .first();
     if (await submitButton.isVisible()) {
       await submitButton.click();
       await page.waitForTimeout(1000);

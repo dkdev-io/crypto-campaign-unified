@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
-import { supabase } from '../../lib/supabase'
-import InviteMembers from './InviteMembers'
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
+import InviteMembers from './InviteMembers';
 
 const TeamManagement = ({ campaignId }) => {
-  const [teamMembers, setTeamMembers] = useState([])
-  const [pendingInvitations, setPendingInvitations] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [showInviteForm, setShowInviteForm] = useState(false)
-  const [userPermissions, setUserPermissions] = useState([])
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [pendingInvitations, setPendingInvitations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showInviteForm, setShowInviteForm] = useState(false);
+  const [userPermissions, setUserPermissions] = useState([]);
 
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   useEffect(() => {
     if (campaignId) {
-      fetchTeamData()
-      checkUserPermissions()
+      fetchTeamData();
+      checkUserPermissions();
     }
-  }, [campaignId])
+  }, [campaignId]);
 
   const checkUserPermissions = async () => {
     try {
@@ -26,24 +26,25 @@ const TeamManagement = ({ campaignId }) => {
         .select('permissions')
         .eq('user_id', user.id)
         .eq('campaign_id', campaignId)
-        .single()
+        .single();
 
       if (!error && data) {
-        setUserPermissions(data.permissions)
+        setUserPermissions(data.permissions);
       }
     } catch (error) {
-      console.error('Error checking permissions:', error)
+      console.error('Error checking permissions:', error);
     }
-  }
+  };
 
   const fetchTeamData = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       // Fetch team members
       const { data: members, error: membersError } = await supabase
         .from('campaign_members')
-        .select(`
+        .select(
+          `
           *,
           users (
             id,
@@ -54,40 +55,42 @@ const TeamManagement = ({ campaignId }) => {
             job_title,
             last_login_at
           )
-        `)
+        `
+        )
         .eq('campaign_id', campaignId)
-        .order('joined_at', { ascending: false })
+        .order('joined_at', { ascending: false });
 
-      if (membersError) throw membersError
+      if (membersError) throw membersError;
 
-      setTeamMembers(members || [])
+      setTeamMembers(members || []);
 
       // Fetch pending invitations (only if user has admin permissions)
       if (userPermissions.includes('admin')) {
         const { data: invitations, error: invitationsError } = await supabase
           .from('invitations')
-          .select(`
+          .select(
+            `
             *,
             users!invitations_invited_by_fkey (
               full_name,
               email
             )
-          `)
+          `
+          )
           .eq('campaign_id', campaignId)
           .eq('status', 'pending')
-          .order('created_at', { ascending: false })
+          .order('created_at', { ascending: false });
 
         if (!invitationsError) {
-          setPendingInvitations(invitations || [])
+          setPendingInvitations(invitations || []);
         }
       }
-
     } catch (error) {
-      console.error('Error fetching team data:', error)
+      console.error('Error fetching team data:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleUpdateMemberPermissions = async (memberId, newPermissions) => {
     try {
@@ -95,38 +98,35 @@ const TeamManagement = ({ campaignId }) => {
         .from('campaign_members')
         .update({
           permissions: newPermissions,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', memberId)
+        .eq('id', memberId);
 
-      if (error) throw error
+      if (error) throw error;
 
       // Refresh team data
-      fetchTeamData()
+      fetchTeamData();
     } catch (error) {
-      alert('Error updating permissions: ' + error.message)
+      alert('Error updating permissions: ' + error.message);
     }
-  }
+  };
 
   const handleRemoveMember = async (memberId) => {
     if (!confirm('Are you sure you want to remove this team member?')) {
-      return
+      return;
     }
 
     try {
-      const { error } = await supabase
-        .from('campaign_members')
-        .delete()
-        .eq('id', memberId)
+      const { error } = await supabase.from('campaign_members').delete().eq('id', memberId);
 
-      if (error) throw error
+      if (error) throw error;
 
       // Refresh team data
-      fetchTeamData()
+      fetchTeamData();
     } catch (error) {
-      alert('Error removing member: ' + error.message)
+      alert('Error removing member: ' + error.message);
     }
-  }
+  };
 
   const handleRevokeInvitation = async (invitationId) => {
     try {
@@ -134,38 +134,46 @@ const TeamManagement = ({ campaignId }) => {
         .from('invitations')
         .update({
           status: 'revoked',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', invitationId)
+        .eq('id', invitationId);
 
-      if (error) throw error
+      if (error) throw error;
 
       // Refresh team data
-      fetchTeamData()
+      fetchTeamData();
     } catch (error) {
-      alert('Error revoking invitation: ' + error.message)
+      alert('Error revoking invitation: ' + error.message);
     }
-  }
+  };
 
   const getPermissionBadgeColor = (permission) => {
     switch (permission) {
-      case 'admin': return 'badge-admin'
-      case 'export': return 'badge-export'
-      case 'view': return 'badge-view'
-      default: return 'badge-default'
+      case 'admin':
+        return 'badge-admin';
+      case 'export':
+        return 'badge-export';
+      case 'view':
+        return 'badge-view';
+      default:
+        return 'badge-default';
     }
-  }
+  };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case 'active': return 'badge-success'
-      case 'pending': return 'badge-warning'
-      case 'inactive': return 'badge-secondary'
-      default: return 'badge-default'
+      case 'active':
+        return 'badge-success';
+      case 'pending':
+        return 'badge-warning';
+      case 'inactive':
+        return 'badge-secondary';
+      default:
+        return 'badge-default';
     }
-  }
+  };
 
-  const isAdmin = userPermissions.includes('admin')
+  const isAdmin = userPermissions.includes('admin');
 
   if (loading) {
     return (
@@ -175,7 +183,7 @@ const TeamManagement = ({ campaignId }) => {
           <p>Loading team data...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -183,13 +191,10 @@ const TeamManagement = ({ campaignId }) => {
       <div className="team-header">
         <h2>👥 Team Management</h2>
         <p>Manage your campaign team members and permissions</p>
-        
+
         {isAdmin && (
           <div className="team-actions">
-            <button 
-              className="btn btn-primary"
-              onClick={() => setShowInviteForm(!showInviteForm)}
-            >
+            <button className="btn btn-primary" onClick={() => setShowInviteForm(!showInviteForm)}>
               {showInviteForm ? 'Hide Invite Form' : '+ Invite Member'}
             </button>
           </div>
@@ -198,11 +203,11 @@ const TeamManagement = ({ campaignId }) => {
 
       {showInviteForm && isAdmin && (
         <div className="invite-section">
-          <InviteMembers 
+          <InviteMembers
             campaignId={campaignId}
             onInviteSent={() => {
-              setShowInviteForm(false)
-              fetchTeamData()
+              setShowInviteForm(false);
+              fetchTeamData();
             }}
           />
         </div>
@@ -218,7 +223,7 @@ const TeamManagement = ({ campaignId }) => {
           <p>Pending Invitations</p>
         </div>
         <div className="stat-card">
-          <h3>{teamMembers.filter(m => m.permissions.includes('admin')).length}</h3>
+          <h3>{teamMembers.filter((m) => m.permissions.includes('admin')).length}</h3>
           <p>Administrators</p>
         </div>
       </div>
@@ -226,14 +231,14 @@ const TeamManagement = ({ campaignId }) => {
       {/* Team Members */}
       <div className="team-section">
         <h3>Current Team Members</h3>
-        
+
         {teamMembers.length === 0 ? (
           <div className="empty-state">
             <p>No team members yet. Invite someone to get started!</p>
           </div>
         ) : (
           <div className="members-list">
-            {teamMembers.map(member => (
+            {teamMembers.map((member) => (
               <div key={member.id} className="member-card">
                 <div className="member-info">
                   <div className="member-identity">
@@ -246,20 +251,18 @@ const TeamManagement = ({ campaignId }) => {
                       <p className="member-company">{member.users.company}</p>
                     )}
                   </div>
-                  
+
                   <div className="member-metadata">
                     <div className="member-status">
                       <span className={`badge ${getStatusBadgeColor(member.status)}`}>
                         {member.status}
                       </span>
-                      <span className="role-badge">
-                        {member.campaign_role}
-                      </span>
+                      <span className="role-badge">{member.campaign_role}</span>
                     </div>
-                    
+
                     <div className="member-permissions">
-                      {member.permissions.map(permission => (
-                        <span 
+                      {member.permissions.map((permission) => (
+                        <span
                           key={permission}
                           className={`badge ${getPermissionBadgeColor(permission)}`}
                         >
@@ -267,11 +270,9 @@ const TeamManagement = ({ campaignId }) => {
                         </span>
                       ))}
                     </div>
-                    
+
                     <div className="member-dates">
-                      <small>
-                        Joined: {new Date(member.joined_at).toLocaleDateString()}
-                      </small>
+                      <small>Joined: {new Date(member.joined_at).toLocaleDateString()}</small>
                       {member.users.last_login_at && (
                         <small>
                           Last login: {new Date(member.users.last_login_at).toLocaleDateString()}
@@ -289,10 +290,10 @@ const TeamManagement = ({ campaignId }) => {
                           type="checkbox"
                           checked={member.permissions.includes('view')}
                           onChange={(e) => {
-                            const newPermissions = e.target.checked 
+                            const newPermissions = e.target.checked
                               ? [...new Set([...member.permissions, 'view'])]
-                              : member.permissions.filter(p => p !== 'view')
-                            handleUpdateMemberPermissions(member.id, newPermissions)
+                              : member.permissions.filter((p) => p !== 'view');
+                            handleUpdateMemberPermissions(member.id, newPermissions);
                           }}
                         />
                         View
@@ -302,10 +303,10 @@ const TeamManagement = ({ campaignId }) => {
                           type="checkbox"
                           checked={member.permissions.includes('export')}
                           onChange={(e) => {
-                            const newPermissions = e.target.checked 
+                            const newPermissions = e.target.checked
                               ? [...new Set([...member.permissions, 'export'])]
-                              : member.permissions.filter(p => p !== 'export')
-                            handleUpdateMemberPermissions(member.id, newPermissions)
+                              : member.permissions.filter((p) => p !== 'export');
+                            handleUpdateMemberPermissions(member.id, newPermissions);
                           }}
                         />
                         Export
@@ -315,16 +316,16 @@ const TeamManagement = ({ campaignId }) => {
                           type="checkbox"
                           checked={member.permissions.includes('admin')}
                           onChange={(e) => {
-                            const newPermissions = e.target.checked 
+                            const newPermissions = e.target.checked
                               ? [...new Set([...member.permissions, 'admin'])]
-                              : member.permissions.filter(p => p !== 'admin')
-                            handleUpdateMemberPermissions(member.id, newPermissions)
+                              : member.permissions.filter((p) => p !== 'admin');
+                            handleUpdateMemberPermissions(member.id, newPermissions);
                           }}
                         />
                         Admin
                       </label>
                     </div>
-                    
+
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleRemoveMember(member.id)}
@@ -343,16 +344,16 @@ const TeamManagement = ({ campaignId }) => {
       {isAdmin && pendingInvitations.length > 0 && (
         <div className="team-section">
           <h3>Pending Invitations</h3>
-          
+
           <div className="invitations-list">
-            {pendingInvitations.map(invitation => (
+            {pendingInvitations.map((invitation) => (
               <div key={invitation.id} className="invitation-card">
                 <div className="invitation-info">
                   <h4>{invitation.email}</h4>
                   <div className="invitation-details">
                     <div className="invitation-permissions">
-                      {invitation.permissions.map(permission => (
-                        <span 
+                      {invitation.permissions.map((permission) => (
+                        <span
                           key={permission}
                           className={`badge ${getPermissionBadgeColor(permission)}`}
                         >
@@ -360,25 +361,24 @@ const TeamManagement = ({ campaignId }) => {
                         </span>
                       ))}
                     </div>
-                    <p className="invitation-role">
-                      Role: {invitation.campaign_role}
-                    </p>
+                    <p className="invitation-role">Role: {invitation.campaign_role}</p>
                     <p className="invitation-dates">
-                      Invited: {new Date(invitation.created_at).toLocaleDateString()} by {invitation.users?.full_name}
+                      Invited: {new Date(invitation.created_at).toLocaleDateString()} by{' '}
+                      {invitation.users?.full_name}
                     </p>
                     <p className="invitation-expires">
                       Expires: {new Date(invitation.expires_at).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="invitation-actions">
                   <button
                     className="btn btn-outline btn-sm"
                     onClick={() => {
-                      const invitationUrl = `${window.location.origin}/accept-invitation/${invitation.token}`
-                      navigator.clipboard.writeText(invitationUrl)
-                      alert('Invitation link copied to clipboard!')
+                      const invitationUrl = `${window.location.origin}/accept-invitation/${invitation.token}`;
+                      navigator.clipboard.writeText(invitationUrl);
+                      alert('Invitation link copied to clipboard!');
                     }}
                   >
                     Copy Link
@@ -396,7 +396,7 @@ const TeamManagement = ({ campaignId }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TeamManagement
+export default TeamManagement;

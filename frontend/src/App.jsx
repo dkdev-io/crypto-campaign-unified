@@ -10,6 +10,7 @@ import EmbedDonorForm from './components/EmbedDonorForm';
 import CampaignDebug from './components/debug/CampaignDebug';
 import TestingDashboard from './components/TestingDashboard';
 import CampaignAuth from './components/campaigns/CampaignAuth';
+import CampaignDashboard from './pages/CampaignDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import SimpleTeamInvites from './components/team/SimpleTeamInvites';
 import WorkingTeamInvites from './components/team/WorkingTeamInvites';
@@ -41,85 +42,116 @@ import DonorProtectedRoute from './components/donor/DonorProtectedRoute';
 import DonorVerifyEmail from './components/donor/DonorVerifyEmail';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import TestBypass from './pages/TestBypass';
 
 function App() {
   return (
     <AuthProvider>
       <AdminProvider>
         <DonorAuthProvider>
-          <AnalyticsProvider config={{ 
-            debug: process.env.NODE_ENV === 'development',
-            cookieConsent: 'optional',
-            respectDNT: true,
-            enableGeolocation: true,
-            enableScrollTracking: true,
-            enableClickTracking: true 
-          }}>
+          <AnalyticsProvider
+            config={{
+              debug: process.env.NODE_ENV === 'development',
+              cookieConsent: 'optional',
+              respectDNT: true,
+              enableGeolocation: true,
+              enableScrollTracking: true,
+              enableClickTracking: true,
+            }}
+          >
             <Router>
-            <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/campaigns/auth" element={<CampaignAuth />} />
-            <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
-            <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
-            <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
-            <Route path="/debug" element={<CampaignDebug />} />
-            <Route path="/testing" element={<TestingDashboard />} />
-            {/* <Route path="/donation-test" element={<DonationTest />} /> */}
-            
-            {/* Admin Routes - MUST be before /:campaignName to prevent conflicts */}
-            <Route path="/minda" element={<AdminLogin />} />
-            <Route path="/minda/*" element={<AdminLayout />}>
-              <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="users" element={<UserManagement />} />
-              <Route path="campaigns" element={<CampaignManagement />} />
-              <Route path="transactions" element={<TransactionMonitoring />} />
-              <Route path="analytics" element={<Analytics />} />
-              <Route path="settings" element={<SystemSettings />} />
-            </Route>
-            
-            {/* Donor Routes */}
-            <Route path="/donors/auth" element={<DonorAuth />} />
-            <Route path="/donors/auth/register" element={<DonorAuth />} />
-            <Route path="/donors/auth/login" element={<DonorAuth />} />
-            <Route path="/donors/auth/terms" element={<TermsOfService />} />
-            <Route path="/donors/auth/privacy" element={<PrivacyPolicy />} />
-            <Route path="/donors/auth/verify-email" element={<DonorVerifyEmail />} />
-            <Route path="/donors/dashboard" element={
-              <DonorProtectedRoute>
-                <DonorDashboard />
-              </DonorProtectedRoute>
-            } />
-            <Route path="/donors/profile" element={
-              <DonorProtectedRoute>
-                <DonorProfile />
-              </DonorProtectedRoute>
-            } />
-            <Route path="/donors/donations" element={
-              <DonorProtectedRoute>
-                <DonorDashboard />
-              </DonorProtectedRoute>
-            } />
-            <Route path="/donors/campaigns" element={
-              <DonorProtectedRoute>
-                <DonorDashboard />
-              </DonorProtectedRoute>
-            } />
-            
-            {/* Embed Form Route - for iframe embeds */}
-            <Route path="/embed-form.html" element={
-              <EmbedDonorForm campaignId={new URLSearchParams(window.location.search).get('campaign')} />
-            } />
-            
-            {/* Dynamic Campaign Pages - must be last before 404 */}
-            <Route path="/:campaignName" element={<CampaignPage />} />
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <PrivacyBanner />
-        </Router>
-      </AnalyticsProvider>
-    </DonorAuthProvider>
-    </AdminProvider>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/campaigns/auth" element={<CampaignAuth />} />
+                <Route path="/campaigns/auth/setup" element={<CampaignSetup />} />
+                <Route path="/campaigns/auth/terms" element={<TermsOfService />} />
+                <Route path="/campaigns/auth/privacy" element={<PrivacyPolicy />} />
+                <Route path="/debug" element={<CampaignDebug />} />
+                <Route path="/testing" element={<TestingDashboard />} />
+                {/* <Route path="/donation-test" element={<DonationTest />} /> */}
+
+                {/* Admin Routes - MUST be before /:campaignName to prevent conflicts */}
+                <Route path="/minda" element={<AdminLogin />} />
+                <Route path="/minda/*" element={<AdminLayout />}>
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="users" element={<UserManagement />} />
+                  <Route path="campaigns" element={<CampaignManagement />} />
+                  <Route path="transactions" element={<TransactionMonitoring />} />
+                  <Route path="analytics" element={<Analytics />} />
+                  <Route path="settings" element={<SystemSettings />} />
+                </Route>
+
+                {/* Donor Routes */}
+                <Route path="/donors/auth" element={<DonorAuth />} />
+                <Route path="/donors/auth/register" element={<DonorAuth />} />
+                <Route path="/donors/auth/login" element={<DonorAuth />} />
+                <Route path="/donors/auth/terms" element={<TermsOfService />} />
+                <Route path="/donors/auth/privacy" element={<PrivacyPolicy />} />
+                <Route path="/donors/auth/verify-email" element={<DonorVerifyEmail />} />
+                <Route path="/test-bypass" element={<TestBypass />} />
+                <Route
+                  path="/donors/dashboard"
+                  element={
+                    <DonorProtectedRoute>
+                      <DonorDashboard />
+                    </DonorProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/donors/profile"
+                  element={
+                    <DonorProtectedRoute>
+                      <DonorProfile />
+                    </DonorProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/donors/donations"
+                  element={
+                    <DonorProtectedRoute>
+                      <DonorDashboard />
+                    </DonorProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/donors/campaigns"
+                  element={
+                    <DonorProtectedRoute>
+                      <DonorDashboard />
+                    </DonorProtectedRoute>
+                  }
+                />
+
+                {/* Campaign Dashboard Route */}
+                <Route 
+                  path="/campaigns/dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <CampaignDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Embed Form Route - for iframe embeds */}
+                <Route
+                  path="/embed-form.html"
+                  element={
+                    <EmbedDonorForm
+                      campaignId={new URLSearchParams(window.location.search).get('campaign')}
+                    />
+                  }
+                />
+
+                {/* Dynamic Campaign Pages - must be last before 404 */}
+                <Route path="/:campaignName" element={<CampaignPage />} />
+
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <PrivacyBanner />
+            </Router>
+          </AnalyticsProvider>
+        </DonorAuthProvider>
+      </AdminProvider>
     </AuthProvider>
   );
 }

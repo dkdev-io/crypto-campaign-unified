@@ -13,7 +13,8 @@ const __dirname = path.dirname(__filename);
 
 // Supabase configuration
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.DhxIRbHc_a3wlYjHtOG-fXcvEoY_YkRSS2Ag_eNJYbE'; // Service role key needed for schema changes
+const supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.DhxIRbHc_a3wlYjHtOG-fXcvEoY_YkRSS2Ag_eNJYbE'; // Service role key needed for schema changes
 
 console.log('🚀 Starting FEC Committee Schema Migration...');
 
@@ -22,44 +23,41 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function executeMigration() {
   try {
-    
     // Read the SQL migration file
     const sqlFilePath = path.join(__dirname, '../docs/fec-committees-schema.sql');
     const sqlContent = fs.readFileSync(sqlFilePath, 'utf8');
-    
+
     console.log('📊 Migration file loaded, executing SQL...');
-    
+
     // Split SQL into individual statements (basic approach)
     const statements = sqlContent
       .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
-    
-    
+      .map((stmt) => stmt.trim())
+      .filter((stmt) => stmt.length > 0 && !stmt.startsWith('--'));
+
     let successCount = 0;
     let errorCount = 0;
-    
+
     // Execute each statement
     for (let i = 0; i < statements.length; i++) {
       const statement = statements[i];
-      
+
       if (statement.length < 10) continue; // Skip very short statements
-      
-      
+
       try {
-        const { data, error } = await supabase.rpc('exec_sql', { 
-          sql_query: statement + ';' 
+        const { data, error } = await supabase.rpc('exec_sql', {
+          sql_query: statement + ';',
         });
-        
+
         if (error) {
           console.error(`❌ Error in statement ${i + 1}:`, error);
-          
+
           // Try direct query if RPC fails
           const { data: directData, error: directError } = await supabase
             .from('_supabase_migrations')
             .select('*')
             .limit(1);
-          
+
           if (directError) {
             console.error(`❌ Direct query also failed:`, directError);
             errorCount++;
@@ -76,18 +74,17 @@ async function executeMigration() {
         console.error(`💥 Exception in statement ${i + 1}:`, err.message);
         errorCount++;
       }
-      
+
       // Small delay between statements
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    
+
     console.log(`\n📊 Migration Results:`);
     console.log(`   ✅ Successful: ${successCount}`);
     console.log(`   ❌ Errors: ${errorCount}`);
-    
+
     // Verify the "Testy Test for Chancellor" committee was created
     await verifyTestCommittee();
-    
   } catch (error) {
     console.error('💥 Migration failed:', error);
     process.exit(1);
@@ -102,16 +99,19 @@ async function verifyTestCommittee() {
       .select('*')
       .eq('committee_name', 'TESTY TEST FOR CHANCELLOR')
       .single();
-    
+
     if (error) {
-      console.log('⚠️  Could not verify test committee (table might not exist yet):', error.message);
-      
+      console.log(
+        '⚠️  Could not verify test committee (table might not exist yet):',
+        error.message
+      );
+
       // Try to check if table exists at all
       const { data: tableCheck, error: tableError } = await supabase
         .from('fec_committees')
         .select('count')
         .limit(1);
-      
+
       if (tableError) {
         console.log('❌ FEC committees table does not exist yet');
       } else {
@@ -129,7 +129,6 @@ async function verifyTestCommittee() {
 
 // Alternative approach: Insert test committee directly
 async function insertTestCommitteeDirectly() {
-  
   try {
     const testCommittee = {
       fec_committee_id: 'C00999999',
@@ -143,15 +142,15 @@ async function insertTestCommitteeDirectly() {
       city: 'SAN FRANCISCO',
       state: 'CA',
       treasurer_name: 'TEST, TREASURER',
-      is_active: true
+      is_active: true,
     };
-    
+
     const { data, error } = await supabase
       .from('fec_committees')
       .insert([testCommittee])
       .select()
       .single();
-    
+
     if (error) {
       console.error('❌ Direct insert failed:', error);
     } else {

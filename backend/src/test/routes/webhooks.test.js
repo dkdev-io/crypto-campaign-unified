@@ -12,12 +12,12 @@ beforeEach(() => {
   mockWeb3Service = {
     initialized: true,
     initialize: jest.fn(),
-    waitForTransaction: jest.fn()
+    waitForTransaction: jest.fn(),
   };
-  
+
   // Mock Web3Service module
   jest.unstable_mockModule('../../services/web3Service.js', () => ({
-    default: jest.fn(() => mockWeb3Service)
+    default: jest.fn(() => mockWeb3Service),
   }));
 });
 
@@ -39,7 +39,7 @@ describe('Webhooks Routes', () => {
       value: '1000000000000000000', // 1 ETH in wei
       gasUsed: '21000',
       effectiveGasPrice: '20000000000',
-      status: 'success'
+      status: 'success',
     };
 
     it('should process blockchain contribution webhook successfully', async () => {
@@ -47,22 +47,33 @@ describe('Webhooks Routes', () => {
       const mockLogRecord = MockFactories.contributionLog();
 
       // Mock no existing transaction
-      mockSupabaseClient.from().select().eq().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
-      );
-      
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .single.mockResolvedValueOnce(
+          TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
+        );
+
       // Mock successful transaction monitoring
       mockWeb3Service.waitForTransaction.mockResolvedValue(mockReceipt);
-      
+
       // Mock successful logging
-      mockSupabaseClient.from().insert().select().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockLogRecord)
-      );
-      
+      mockSupabaseClient
+        .from()
+        .insert()
+        .select()
+        .single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockLogRecord));
+
       // Mock form submission search
-      mockSupabaseClient.from().select().eq().eq().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .eq()
+        .single.mockResolvedValueOnce(
+          TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
+        );
 
       const response = await request(app)
         .post('/api/webhooks/blockchain/contribution')
@@ -73,7 +84,7 @@ describe('Webhooks Routes', () => {
         message: 'Contribution webhook processed successfully',
         logId: mockLogRecord.id,
         transactionHash: validWebhookData.transactionHash,
-        matchedSubmission: false
+        matchedSubmission: false,
       });
     });
 
@@ -146,9 +157,11 @@ describe('Webhooks Routes', () => {
 
     it('should handle already processed transactions', async () => {
       const existingLog = MockFactories.contributionLog();
-      mockSupabaseClient.from().select().eq().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(existingLog)
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(existingLog));
 
       const response = await request(app)
         .post('/api/webhooks/blockchain/contribution')
@@ -164,19 +177,28 @@ describe('Webhooks Routes', () => {
       const mockLogRecord = MockFactories.contributionLog();
       const mockFormSubmission = MockFactories.formSubmission({
         wallet_address: validWebhookData.from.toLowerCase(),
-        transaction_hash: validWebhookData.transactionHash
+        transaction_hash: validWebhookData.transactionHash,
       });
 
-      mockSupabaseClient.from().select().eq().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .single.mockResolvedValueOnce(
+          TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
+        );
       mockWeb3Service.waitForTransaction.mockResolvedValue(mockReceipt);
-      mockSupabaseClient.from().insert().select().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockLogRecord)
-      );
-      mockSupabaseClient.from().select().eq().eq().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(mockFormSubmission)
-      );
+      mockSupabaseClient
+        .from()
+        .insert()
+        .select()
+        .single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockLogRecord));
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .eq()
+        .single.mockResolvedValueOnce(TestHelpers.createMockSupabaseResponse(mockFormSubmission));
 
       const response = await request(app)
         .post('/api/webhooks/blockchain/contribution')
@@ -188,13 +210,19 @@ describe('Webhooks Routes', () => {
 
     it('should continue on logging failure', async () => {
       const mockReceipt = TestHelpers.createMockWeb3Receipt(true);
-      mockSupabaseClient.from().select().eq().single.mockResolvedValueOnce(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .single.mockResolvedValueOnce(
+          TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
+        );
       mockWeb3Service.waitForTransaction.mockResolvedValue(mockReceipt);
-      mockSupabaseClient.from().insert().select().single.mockRejectedValueOnce(
-        new Error('Database error')
-      );
+      mockSupabaseClient
+        .from()
+        .insert()
+        .select()
+        .single.mockRejectedValueOnce(new Error('Database error'));
 
       const response = await request(app)
         .post('/api/webhooks/blockchain/contribution')
@@ -216,9 +244,7 @@ describe('Webhooks Routes', () => {
     });
 
     it('should handle database check errors', async () => {
-      mockSupabaseClient.from().select().eq().single.mockRejectedValue(
-        new Error('Database error')
-      );
+      mockSupabaseClient.from().select().eq().single.mockRejectedValue(new Error('Database error'));
 
       const response = await request(app)
         .post('/api/webhooks/blockchain/contribution')
@@ -236,19 +262,23 @@ describe('Webhooks Routes', () => {
       kycId: 'kyc-123456',
       reason: 'Documents verified',
       documents: ['passport', 'utility_bill'],
-      metadata: { verifier: 'external_service', confidence: 0.95 }
+      metadata: { verifier: 'external_service', confidence: 0.95 },
     };
 
     it('should process KYC approval webhook successfully', async () => {
       const mockUpdatedKYC = MockFactories.kycRecord({
         wallet_address: validKYCWebhookData.address.toLowerCase(),
-        status: 'approved'
+        status: 'approved',
       });
 
       mockWeb3Service.initialize.mockResolvedValue();
-      mockSupabaseClient.from().update().eq().eq().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockUpdatedKYC)
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockUpdatedKYC));
 
       const response = await request(app)
         .post('/api/webhooks/kyc/status')
@@ -259,7 +289,7 @@ describe('Webhooks Routes', () => {
         message: 'KYC webhook processed successfully',
         kycId: mockUpdatedKYC.id,
         address: validKYCWebhookData.address,
-        status: 'approved'
+        status: 'approved',
       });
     });
 
@@ -267,17 +297,21 @@ describe('Webhooks Routes', () => {
       const rejectionData = {
         ...validKYCWebhookData,
         status: 'rejected',
-        reason: 'Invalid documents'
+        reason: 'Invalid documents',
       };
 
       const mockUpdatedKYC = MockFactories.kycRecord({
         wallet_address: rejectionData.address.toLowerCase(),
-        status: 'rejected'
+        status: 'rejected',
       });
 
-      mockSupabaseClient.from().update().eq().eq().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockUpdatedKYC)
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockUpdatedKYC));
 
       const response = await request(app)
         .post('/api/webhooks/kyc/status')
@@ -322,9 +356,15 @@ describe('Webhooks Routes', () => {
     });
 
     it('should return 404 for non-existent KYC record', async () => {
-      mockSupabaseClient.from().update().eq().eq().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockResolvedValue(
+          TestHelpers.createMockSupabaseResponse(null, { code: 'PGRST116' })
+        );
 
       const response = await request(app)
         .post('/api/webhooks/kyc/status')
@@ -335,9 +375,13 @@ describe('Webhooks Routes', () => {
     });
 
     it('should handle database update errors', async () => {
-      mockSupabaseClient.from().update().eq().eq().select().single.mockRejectedValue(
-        new Error('Database error')
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockRejectedValue(new Error('Database error'));
 
       const response = await request(app)
         .post('/api/webhooks/kyc/status')
@@ -349,9 +393,13 @@ describe('Webhooks Routes', () => {
 
     it('should handle web3 initialization errors for approved KYC', async () => {
       const mockUpdatedKYC = MockFactories.kycRecord({ status: 'approved' });
-      mockSupabaseClient.from().update().eq().eq().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockUpdatedKYC)
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockUpdatedKYC));
       mockWeb3Service.initialize.mockRejectedValue(new Error('Web3 error'));
 
       const response = await request(app)
@@ -365,13 +413,17 @@ describe('Webhooks Routes', () => {
     it('should handle pending status updates', async () => {
       const pendingData = {
         ...validKYCWebhookData,
-        status: 'pending'
+        status: 'pending',
       };
 
       const mockUpdatedKYC = MockFactories.kycRecord({ status: 'pending' });
-      mockSupabaseClient.from().update().eq().eq().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockUpdatedKYC)
-      );
+      mockSupabaseClient
+        .from()
+        .update()
+        .eq()
+        .eq()
+        .select()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockUpdatedKYC));
 
       const response = await request(app)
         .post('/api/webhooks/kyc/status')
@@ -387,7 +439,7 @@ describe('Webhooks Routes', () => {
       item_id: 'item-123456',
       webhook_type: 'ITEM',
       webhook_code: 'WEBHOOK_UPDATE_ACKNOWLEDGED',
-      new_webhook_url: 'https://example.com/webhook'
+      new_webhook_url: 'https://example.com/webhook',
     };
 
     it('should process Plaid webhook update acknowledgment successfully', async () => {
@@ -406,8 +458,8 @@ describe('Webhooks Routes', () => {
         error: {
           error_type: 'ITEM_ERROR',
           error_code: 'INVALID_CREDENTIALS',
-          display_message: 'The credentials provided were invalid'
-        }
+          display_message: 'The credentials provided were invalid',
+        },
       };
 
       const response = await request(app)
@@ -421,7 +473,7 @@ describe('Webhooks Routes', () => {
     it('should handle Plaid item pending expiration', async () => {
       const expirationData = {
         ...validPlaidWebhookData,
-        webhook_code: 'PENDING_EXPIRATION'
+        webhook_code: 'PENDING_EXPIRATION',
       };
 
       const response = await request(app)
@@ -436,7 +488,7 @@ describe('Webhooks Routes', () => {
       const authData = {
         ...validPlaidWebhookData,
         webhook_type: 'AUTH',
-        webhook_code: 'AUTOMATICALLY_VERIFIED'
+        webhook_code: 'AUTOMATICALLY_VERIFIED',
       };
 
       const response = await request(app)
@@ -451,7 +503,7 @@ describe('Webhooks Routes', () => {
       const expiredData = {
         ...validPlaidWebhookData,
         webhook_type: 'AUTH',
-        webhook_code: 'VERIFICATION_EXPIRED'
+        webhook_code: 'VERIFICATION_EXPIRED',
       };
 
       const response = await request(app)
@@ -466,7 +518,7 @@ describe('Webhooks Routes', () => {
       const unknownData = {
         ...validPlaidWebhookData,
         webhook_type: 'UNKNOWN_TYPE',
-        webhook_code: 'UNKNOWN_CODE'
+        webhook_code: 'UNKNOWN_CODE',
       };
 
       const response = await request(app)
@@ -497,17 +549,11 @@ describe('Webhooks Routes', () => {
 
   describe('GET /api/webhooks/health', () => {
     it('should return webhook health status', async () => {
-      const response = await request(app)
-        .get('/api/webhooks/health')
-        .expect(200);
+      const response = await request(app).get('/api/webhooks/health').expect(200);
 
       expect(response.body).toMatchObject({
         status: 'healthy',
-        webhookTypes: [
-          'blockchain/contribution',
-          'kyc/status',
-          'plaid/bank-verification'
-        ]
+        webhookTypes: ['blockchain/contribution', 'kyc/status', 'plaid/bank-verification'],
       });
       expect(response.body.timestamp).toBeDefined();
     });

@@ -1,13 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const serviceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
+const serviceRoleKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
 
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
 async function runMigration() {
   console.log('🔧 Applying campaigns table migration...');
-  
+
   try {
     // Direct SQL execution via REST API
     const sql = `
@@ -40,12 +41,12 @@ async function runMigration() {
     const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec`, {
       method: 'POST',
       headers: {
-        'apikey': serviceRoleKey,
-        'Authorization': `Bearer ${serviceRoleKey}`,
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
+        Prefer: 'return=minimal',
       },
-      body: JSON.stringify({ query: sql })
+      body: JSON.stringify({ query: sql }),
     });
 
     if (response.ok) {
@@ -53,22 +54,22 @@ async function runMigration() {
     } else {
       const error = await response.text();
       console.log('⚠️ REST API approach failed:', error);
-      
+
       // Try individual column additions
       console.log('🔄 Trying individual column additions...');
-      
+
       const columns = [
         'user_id UUID',
-        'setup_step INTEGER DEFAULT 1', 
-        'setup_completed BOOLEAN DEFAULT false'
+        'setup_step INTEGER DEFAULT 1',
+        'setup_completed BOOLEAN DEFAULT false',
       ];
-      
+
       for (const column of columns) {
         try {
           const { error } = await supabase.rpc('exec', {
-            query: `ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS ${column}`
+            query: `ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS ${column}`,
           });
-          
+
           if (error) {
             console.log(`⚠️ ${column.split(' ')[0]}: ${error.message}`);
           } else {
@@ -79,14 +80,14 @@ async function runMigration() {
         }
       }
     }
-    
+
     // Verify the fix worked
     console.log('\n🔍 Testing new schema...');
     const { data, error } = await supabase
       .from('campaigns')
       .select('user_id, setup_step, setup_completed')
       .limit(1);
-      
+
     if (error) {
       console.log('❌ Schema test failed:', error.message);
       return false;
@@ -94,19 +95,20 @@ async function runMigration() {
       console.log('✅ Schema test passed:', data);
       return true;
     }
-    
   } catch (error) {
     console.error('💥 Migration failed:', error);
     return false;
   }
 }
 
-runMigration().then(success => {
-  if (success) {
-    console.log('\n🎉 DATABASE MIGRATION COMPLETED!');
-    console.log('📝 Campaign workflow now has full database persistence');
-    console.log('🚀 Test at: http://localhost:5173/setup');
-  } else {
-    console.log('\n❌ Migration failed - see errors above');
-  }
-}).catch(console.error);
+runMigration()
+  .then((success) => {
+    if (success) {
+      console.log('\n🎉 DATABASE MIGRATION COMPLETED!');
+      console.log('📝 Campaign workflow now has full database persistence');
+      console.log('🚀 Test at: http://localhost:5173/setup');
+    } else {
+      console.log('\n❌ Migration failed - see errors above');
+    }
+  })
+  .catch(console.error);

@@ -11,7 +11,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     { name: 'desktop-small', width: 1024, height: 800 },
     { name: 'desktop', width: 1280, height: 1024 },
     { name: 'desktop-large', width: 1440, height: 900 },
-    { name: 'wide-screen', width: 1920, height: 1080 }
+    { name: 'wide-screen', width: 1920, height: 1080 },
   ];
 
   test.beforeEach(async ({ page }) => {
@@ -27,7 +27,9 @@ test.describe('Form Responsiveness Visual Tests', () => {
       await waitForStableState(page);
 
       // Wait for form elements to be visible
-      await page.waitForSelector('form, [data-testid="donor-form"], .contribution-form', { timeout: 10000 });
+      await page.waitForSelector('form, [data-testid="donor-form"], .contribution-form', {
+        timeout: 10000,
+      });
 
       await expect(page).toHaveScreenshot(`contribution-form-${breakpoint.name}.png`, {
         fullPage: true,
@@ -41,17 +43,23 @@ test.describe('Form Responsiveness Visual Tests', () => {
     await waitForStableState(page);
 
     // Fill form to test field spacing
-    const nameInput = page.locator('input[name="name"], input[name="donorName"], [data-testid="name-input"]').first();
+    const nameInput = page
+      .locator('input[name="name"], input[name="donorName"], [data-testid="name-input"]')
+      .first();
     if (await nameInput.isVisible()) {
       await nameInput.fill('John Doe');
     }
 
-    const emailInput = page.locator('input[name="email"], input[type="email"], [data-testid="email-input"]').first();
+    const emailInput = page
+      .locator('input[name="email"], input[type="email"], [data-testid="email-input"]')
+      .first();
     if (await emailInput.isVisible()) {
       await emailInput.fill('john.doe@example.com');
     }
 
-    const amountInput = page.locator('input[name="amount"], input[type="number"], [data-testid="amount-input"]').first();
+    const amountInput = page
+      .locator('input[name="amount"], input[type="number"], [data-testid="amount-input"]')
+      .first();
     if (await amountInput.isVisible()) {
       await amountInput.fill('250');
     }
@@ -65,7 +73,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     const mobileViewports = [
       { name: 'iphone-se', width: 375, height: 667 },
       { name: 'iphone-12', width: 390, height: 844 },
-      { name: 'android-small', width: 360, height: 640 }
+      { name: 'android-small', width: 360, height: 640 },
     ];
 
     for (const viewport of mobileViewports) {
@@ -92,7 +100,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     const testViewports = [
       { name: 'mobile', width: 375, height: 667 },
       { name: 'tablet', width: 768, height: 1024 },
-      { name: 'desktop', width: 1280, height: 1024 }
+      { name: 'desktop', width: 1280, height: 1024 },
     ];
 
     for (const viewport of testViewports) {
@@ -101,11 +109,13 @@ test.describe('Form Responsiveness Visual Tests', () => {
       await waitForStableState(page);
 
       // Trigger validation by submitting empty form
-      const submitButton = page.locator('button[type="submit"], .submit-btn, [data-testid="submit-button"]').first();
+      const submitButton = page
+        .locator('button[type="submit"], .submit-btn, [data-testid="submit-button"]')
+        .first();
       if (await submitButton.isVisible()) {
         await submitButton.click();
         await page.waitForTimeout(1500); // Wait for validation messages
-        
+
         await expect(page).toHaveScreenshot(`validation-messages-${viewport.name}.png`, {
           fullPage: true,
         });
@@ -121,7 +131,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     // Check if page content fits without horizontal scroll
     const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
     const viewportWidth = await page.evaluate(() => window.innerWidth);
-    
+
     // Take screenshot to verify no horizontal overflow
     await expect(page).toHaveScreenshot('no-horizontal-scroll-mobile.png', {
       fullPage: true,
@@ -137,7 +147,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
       { name: 'portrait', width: 375, height: 812 },
       { name: 'landscape', width: 812, height: 375 },
       { name: 'tablet-portrait', width: 768, height: 1024 },
-      { name: 'tablet-landscape', width: 1024, height: 768 }
+      { name: 'tablet-landscape', width: 1024, height: 768 },
     ];
 
     for (const orientation of orientations) {
@@ -155,7 +165,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     const devices = [
       { name: 'mobile', width: 375, height: 667 },
       { name: 'tablet', width: 768, height: 1024 },
-      { name: 'desktop', width: 1280, height: 1024 }
+      { name: 'desktop', width: 1280, height: 1024 },
     ];
 
     for (const device of devices) {
@@ -164,7 +174,9 @@ test.describe('Form Responsiveness Visual Tests', () => {
       await waitForStableState(page);
 
       // Test input focus states
-      const inputs = page.locator('input[type="text"], input[type="email"], input[type="number"], textarea');
+      const inputs = page.locator(
+        'input[type="text"], input[type="email"], input[type="number"], textarea'
+      );
       const inputCount = await inputs.count();
 
       if (inputCount > 0) {
@@ -191,8 +203,10 @@ test.describe('Form Responsiveness Visual Tests', () => {
     // Test scroll behavior with content
     const messageField = page.locator('textarea').first();
     if (await messageField.isVisible()) {
-      await messageField.fill('This is a very long message that should test the form scrolling behavior and how it handles overflow content in a small viewport. The form should remain usable and accessible even with limited screen real estate.');
-      
+      await messageField.fill(
+        'This is a very long message that should test the form scrolling behavior and how it handles overflow content in a small viewport. The form should remain usable and accessible even with limited screen real estate.'
+      );
+
       await expect(page).toHaveScreenshot('form-overflow-with-content.png', {
         fullPage: true,
       });
@@ -203,7 +217,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     const textSizeViewports = [
       { name: 'small-text', width: 320, height: 568 },
       { name: 'medium-text', width: 768, height: 1024 },
-      { name: 'large-text', width: 1440, height: 900 }
+      { name: 'large-text', width: 1440, height: 900 },
     ];
 
     for (const viewport of textSizeViewports) {
@@ -228,7 +242,7 @@ test.describe('Form Responsiveness Visual Tests', () => {
     const layoutBreakpoints = [
       { name: 'stack-mobile', width: 320, height: 568 },
       { name: 'two-column-tablet', width: 768, height: 1024 },
-      { name: 'multi-column-desktop', width: 1200, height: 800 }
+      { name: 'multi-column-desktop', width: 1200, height: 800 },
     ];
 
     for (const breakpoint of layoutBreakpoints) {
@@ -252,12 +266,12 @@ test.describe('Form Responsiveness Visual Tests', () => {
 
   test('accessibility zoom levels', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1024 });
-    
+
     // Test different zoom levels (simulated by changing viewport)
     const zoomLevels = [
       { name: '150-percent', width: 853, height: 683 }, // 1280/1.5, 1024/1.5
       { name: '200-percent', width: 640, height: 512 }, // 1280/2, 1024/2
-      { name: '300-percent', width: 427, height: 341 }  // 1280/3, 1024/3
+      { name: '300-percent', width: 427, height: 341 }, // 1280/3, 1024/3
     ];
 
     for (const zoom of zoomLevels) {

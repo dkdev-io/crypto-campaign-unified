@@ -5,7 +5,7 @@ import { TestHelpers } from '../utils/testHelpers.js';
 // Mock JWT module
 jest.mock('jsonwebtoken', () => ({
   verify: jest.fn(),
-  sign: jest.fn()
+  sign: jest.fn(),
 }));
 
 // Simple auth middleware for testing
@@ -13,7 +13,7 @@ const createAuthMiddleware = (secretKey = 'test-secret') => {
   return (req, res, next) => {
     try {
       const authHeader = req.headers.authorization;
-      
+
       if (!authHeader) {
         return res.status(401).json({ error: 'No authorization header provided' });
       }
@@ -23,7 +23,7 @@ const createAuthMiddleware = (secretKey = 'test-secret') => {
       }
 
       const token = authHeader.substring(7);
-      
+
       if (!token) {
         return res.status(401).json({ error: 'No token provided' });
       }
@@ -230,7 +230,7 @@ describe('Authentication Middleware Tests', () => {
       combinedMiddleware = (req, res, next, requiredRole = 'user') => {
         authMiddleware(req, res, (authError) => {
           if (authError) return;
-          
+
           const roleMiddleware = createRoleMiddleware(requiredRole);
           roleMiddleware(req, res, next);
         });
@@ -337,7 +337,7 @@ describe('Authentication Middleware Tests', () => {
       expect(res.json).not.toHaveBeenCalledWith(
         expect.objectContaining({
           token: expect.any(String),
-          expiredAt: expect.any(Date)
+          expiredAt: expect.any(Date),
         })
       );
     });

@@ -11,18 +11,14 @@ const validateBlockchainWebhook = [
   body('transactionHash')
     .matches(/^0x[a-fA-F0-9]{64}$/)
     .withMessage('Invalid transaction hash format'),
-  body('blockNumber')
-    .isInt({ min: 0 })
-    .withMessage('Block number must be a positive integer'),
+  body('blockNumber').isInt({ min: 0 }).withMessage('Block number must be a positive integer'),
   body('from')
     .matches(/^0x[a-fA-F0-9]{40}$/)
     .withMessage('Invalid from address format'),
   body('to')
     .matches(/^0x[a-fA-F0-9]{40}$/)
     .withMessage('Invalid to address format'),
-  body('value')
-    .isString()
-    .withMessage('Value must be a string (wei amount)')
+  body('value').isString().withMessage('Value must be a string (wei amount)'),
 ];
 
 const validateKYCWebhook = [
@@ -32,9 +28,7 @@ const validateKYCWebhook = [
   body('status')
     .isIn(['approved', 'rejected', 'pending'])
     .withMessage('Status must be approved, rejected, or pending'),
-  body('kycId')
-    .isString()
-    .withMessage('KYC ID is required')
+  body('kycId').isString().withMessage('KYC ID is required'),
 ];
 
 // Error handler for validation
@@ -43,7 +37,7 @@ const handleValidationErrors = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       error: 'Validation failed',
-      details: errors.array()
+      details: errors.array(),
     });
   }
   next();
@@ -58,132 +52,122 @@ const initWeb3 = async () => {
 };
 
 // POST /api/webhooks/blockchain/contribution - Handle blockchain contribution events
-router.post('/blockchain/contribution', validateBlockchainWebhook, handleValidationErrors, async (req, res) => {
-  try {
-    const {
-      transactionHash,
-      blockNumber,
-      from,
-      to,
-      value,
-      gasUsed,
-      effectiveGasPrice,
-      status
-    } = req.body;
+router.post(
+  '/blockchain/contribution',
+  validateBlockchainWebhook,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { transactionHash, blockNumber, from, to, value, gasUsed, effectiveGasPrice, status } =
+        req.body;
 
-    logger.info('Blockchain contribution webhook received:', {
-      txHash: transactionHash,
-      from,
-      value
-    });
+      logger.info('Blockchain contribution webhook received:', {
+        txHash: transactionHash,
+        from,
+        value,
+      });
 
-    // Verify transaction on blockchain
-    await initWeb3();
-    const receipt = await web3Service.waitForTransaction(transactionHash);
+      // Verify transaction on blockchain
+      await initWeb3();
+      const receipt = await web3Service.waitForTransaction(transactionHash);
 
-    if (!receipt.success) {
-      logger.warn('Transaction failed on blockchain:', transactionHash);
-      return res.status(400).json({
-        error: 'Transaction failed on blockchain'
+      if (!receipt.success) {
+        logger.warn('Transaction failed on blockchain:', transactionHash);
+        return res.status(400).json({
+          error: 'Transaction failed on blockchain',
+        });
+      }
+
+      // Check if we already processed this transaction
+      const { data: existingLog, error: checkError } = await supabase
+        .from('contribution_logs')
+        .select('id')
+        .eq('transaction_hash', transactionHash)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        throw checkError;
+      }
+
+      if (existingLog) {
+        logger.info('Transaction already processed:', transactionHash);
+        return res.json({
+          message: 'Transaction already processed',
+          transactionHash,
+        });
+      }
+
+      // Convert wei to ETH for storage
+      const ethAmount = parseFloat(value) / 1e18;
+
+      // Log the contribution
+      const logData = {
+        transaction_hash: transactionHash,
+        contributor_address: from.toLowerCase(),
+        contract_address: to.toLowerCase(),
+        amount_wei: value,
+        amount_eth: ethAmount.toString(),
+        block_number: blockNumber,
+        gas_used: gasUsed?.toString(),
+        gas_price: effectiveGasPrice?.toString(),
+        status: receipt.success ? 'completed' : 'failed',
+        webhook_received_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      };
+
+      const { data: logRecord, error: logError } = await supabase
+        .from('contribution_logs')
+        .insert([logData])
+        .select()
+        .single();
+
+      if (logError) {
+        throw logError;
+      }
+
+      // Try to match with existing form submission
+      const { data: formSubmission, error: formError } = await supabase
+        .from('form_submissions')
+        .select('*')
+        .eq('wallet_address', from.toLowerCase())
+        .eq('transaction_hash', transactionHash)
+        .single();
+
+      if (formError && formError.code !== 'PGRST116') {
+        logger.warn('Could not find matching form submission:', formError);
+      }
+
+      if (formSubmission) {
+        logger.info('Matched contribution with form submission:', formSubmission.id);
+      }
+
+      logger.info('Contribution logged successfully:', logRecord.id);
+
+      res.json({
+        message: 'Contribution webhook processed successfully',
+        logId: logRecord.id,
+        transactionHash,
+        matchedSubmission: !!formSubmission,
+      });
+    } catch (error) {
+      logger.error('Failed to process blockchain webhook:', error);
+      res.status(500).json({
+        error: 'Failed to process blockchain contribution webhook',
+        details: error.message,
       });
     }
-
-    // Check if we already processed this transaction
-    const { data: existingLog, error: checkError } = await supabase
-      .from('contribution_logs')
-      .select('id')
-      .eq('transaction_hash', transactionHash)
-      .single();
-
-    if (checkError && checkError.code !== 'PGRST116') {
-      throw checkError;
-    }
-
-    if (existingLog) {
-      logger.info('Transaction already processed:', transactionHash);
-      return res.json({
-        message: 'Transaction already processed',
-        transactionHash
-      });
-    }
-
-    // Convert wei to ETH for storage
-    const ethAmount = parseFloat(value) / 1e18;
-
-    // Log the contribution
-    const logData = {
-      transaction_hash: transactionHash,
-      contributor_address: from.toLowerCase(),
-      contract_address: to.toLowerCase(),
-      amount_wei: value,
-      amount_eth: ethAmount.toString(),
-      block_number: blockNumber,
-      gas_used: gasUsed?.toString(),
-      gas_price: effectiveGasPrice?.toString(),
-      status: receipt.success ? 'completed' : 'failed',
-      webhook_received_at: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    };
-
-    const { data: logRecord, error: logError } = await supabase
-      .from('contribution_logs')
-      .insert([logData])
-      .select()
-      .single();
-
-    if (logError) {
-      throw logError;
-    }
-
-    // Try to match with existing form submission
-    const { data: formSubmission, error: formError } = await supabase
-      .from('form_submissions')
-      .select('*')
-      .eq('wallet_address', from.toLowerCase())
-      .eq('transaction_hash', transactionHash)
-      .single();
-
-    if (formError && formError.code !== 'PGRST116') {
-      logger.warn('Could not find matching form submission:', formError);
-    }
-
-    if (formSubmission) {
-      logger.info('Matched contribution with form submission:', formSubmission.id);
-    }
-
-    logger.info('Contribution logged successfully:', logRecord.id);
-
-    res.json({
-      message: 'Contribution webhook processed successfully',
-      logId: logRecord.id,
-      transactionHash,
-      matchedSubmission: !!formSubmission
-    });
-  } catch (error) {
-    logger.error('Failed to process blockchain webhook:', error);
-    res.status(500).json({
-      error: 'Failed to process blockchain contribution webhook',
-      details: error.message
-    });
   }
-});
+);
 
 // POST /api/webhooks/kyc/status - Handle KYC status updates from external service
 router.post('/kyc/status', validateKYCWebhook, handleValidationErrors, async (req, res) => {
   try {
-    const {
-      address,
-      status,
-      kycId,
-      reason,
-      documents,
-      metadata
-    } = req.body;
+    const { address, status, kycId, reason, documents, metadata } = req.body;
 
     logger.info('KYC webhook received:', {
       address,
       status,
-      kycId
+      kycId,
     });
 
     const addressLower = address.toLowerCase();
@@ -192,7 +176,7 @@ router.post('/kyc/status', validateKYCWebhook, handleValidationErrors, async (re
     const updateData = {
       status,
       updated_at: new Date().toISOString(),
-      webhook_received_at: new Date().toISOString()
+      webhook_received_at: new Date().toISOString(),
     };
 
     if (status === 'approved') {
@@ -224,7 +208,7 @@ router.post('/kyc/status', validateKYCWebhook, handleValidationErrors, async (re
       if (updateError.code === 'PGRST116') {
         logger.warn('KYC record not found for webhook:', { address, kycId });
         return res.status(404).json({
-          error: 'KYC record not found'
+          error: 'KYC record not found',
         });
       }
       throw updateError;
@@ -247,13 +231,13 @@ router.post('/kyc/status', validateKYCWebhook, handleValidationErrors, async (re
       message: 'KYC webhook processed successfully',
       kycId: updatedKYC.id,
       address,
-      status
+      status,
     });
   } catch (error) {
     logger.error('Failed to process KYC webhook:', error);
     res.status(500).json({
       error: 'Failed to process KYC status webhook',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -261,18 +245,12 @@ router.post('/kyc/status', validateKYCWebhook, handleValidationErrors, async (re
 // POST /api/webhooks/plaid/bank-verification - Handle Plaid bank verification webhooks
 router.post('/plaid/bank-verification', async (req, res) => {
   try {
-    const {
-      item_id,
-      webhook_type,
-      webhook_code,
-      error,
-      new_webhook_url
-    } = req.body;
+    const { item_id, webhook_type, webhook_code, error, new_webhook_url } = req.body;
 
     logger.info('Plaid webhook received:', {
       webhook_type,
       webhook_code,
-      item_id
+      item_id,
     });
 
     // Handle different Plaid webhook types
@@ -308,13 +286,13 @@ router.post('/plaid/bank-verification', async (req, res) => {
     }
 
     res.json({
-      message: 'Plaid webhook processed successfully'
+      message: 'Plaid webhook processed successfully',
     });
   } catch (error) {
     logger.error('Failed to process Plaid webhook:', error);
     res.status(500).json({
       error: 'Failed to process Plaid webhook',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -324,11 +302,7 @@ router.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    webhookTypes: [
-      'blockchain/contribution',
-      'kyc/status',
-      'plaid/bank-verification'
-    ]
+    webhookTypes: ['blockchain/contribution', 'kyc/status', 'plaid/bank-verification'],
   });
 });
 

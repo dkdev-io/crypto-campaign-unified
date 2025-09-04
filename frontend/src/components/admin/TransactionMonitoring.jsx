@@ -14,7 +14,7 @@ const TransactionMonitoring = () => {
     averageAmount: 0,
     todayAmount: 0,
     pendingCount: 0,
-    completedCount: 0
+    completedCount: 0,
   });
 
   useEffect(() => {
@@ -24,10 +24,11 @@ const TransactionMonitoring = () => {
   const loadTransactions = async () => {
     try {
       setLoading(true);
-      
+
       const { data, error } = await supabase
         .from('form_submissions')
-        .select(`
+        .select(
+          `
           id,
           first_name,
           last_name,
@@ -39,11 +40,12 @@ const TransactionMonitoring = () => {
           submitted_at,
           campaign_id,
           campaigns:campaign_id(name)
-        `)
+        `
+        )
         .order('submitted_at', { ascending: false });
 
       if (error) throw error;
-      
+
       const transactionData = data || [];
       setTransactions(transactionData);
       calculateSummaryStats(transactionData);
@@ -58,13 +60,13 @@ const TransactionMonitoring = () => {
     const totalAmount = transactions.reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
     const totalCount = transactions.length;
     const averageAmount = totalCount > 0 ? totalAmount / totalCount : 0;
-    
+
     const today = new Date().toDateString();
-    const todayTransactions = transactions.filter(tx => 
-      new Date(tx.submitted_at).toDateString() === today
+    const todayTransactions = transactions.filter(
+      (tx) => new Date(tx.submitted_at).toDateString() === today
     );
     const todayAmount = todayTransactions.reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0);
-    
+
     // Mock status counts - you might want to add status field to your table
     const completedCount = transactions.length; // Assuming all are completed for now
     const pendingCount = 0;
@@ -75,37 +77,42 @@ const TransactionMonitoring = () => {
       averageAmount,
       todayAmount,
       pendingCount,
-      completedCount
+      completedCount,
     });
   };
 
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesSearch = 
+  const filteredTransactions = transactions.filter((transaction) => {
+    const matchesSearch =
       transaction.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.last_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.transaction_hash?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesAmount = amountFilter === 'all' ||
+
+    const matchesAmount =
+      amountFilter === 'all' ||
       (amountFilter === 'small' && parseFloat(transaction.amount) < 100) ||
-      (amountFilter === 'medium' && parseFloat(transaction.amount) >= 100 && parseFloat(transaction.amount) < 1000) ||
+      (amountFilter === 'medium' &&
+        parseFloat(transaction.amount) >= 100 &&
+        parseFloat(transaction.amount) < 1000) ||
       (amountFilter === 'large' && parseFloat(transaction.amount) >= 1000);
-    
+
     return matchesSearch && matchesAmount;
   });
 
   const exportTransactions = () => {
     const csv = [
       ['ID', 'Name', 'Email', 'Amount', 'Payment Method', 'Transaction Hash', 'Date'].join(','),
-      ...filteredTransactions.map(tx => [
-        tx.id,
-        `"${tx.first_name} ${tx.last_name}"`,
-        tx.email,
-        tx.amount,
-        tx.payment_method,
-        tx.transaction_hash || '',
-        new Date(tx.submitted_at).toLocaleDateString()
-      ].join(','))
+      ...filteredTransactions.map((tx) =>
+        [
+          tx.id,
+          `"${tx.first_name} ${tx.last_name}"`,
+          tx.email,
+          tx.amount,
+          tx.payment_method,
+          tx.transaction_hash || '',
+          new Date(tx.submitted_at).toLocaleDateString(),
+        ].join(',')
+      ),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -120,7 +127,7 @@ const TransactionMonitoring = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(amount || 0);
   };
 
@@ -130,7 +137,7 @@ const TransactionMonitoring = () => {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -141,14 +148,16 @@ const TransactionMonitoring = () => {
           <p className="text-base font-medium text-muted-foreground">{title}</p>
           <p className="text-2xl font-bold text-foreground mt-1">{value}</p>
           {change && (
-            <div className={`flex items-center mt-2 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              <span className="text-base font-medium">{change >= 0 ? '↗' : '↘'} {Math.abs(change)}%</span>
+            <div
+              className={`flex items-center mt-2 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}
+            >
+              <span className="text-base font-medium">
+                {change >= 0 ? '↗' : '↘'} {Math.abs(change)}%
+              </span>
             </div>
           )}
         </div>
-        <div className="bg-primary text-primary-foreground p-3 rounded-lg">
-          {icon}
-        </div>
+        <div className="bg-primary text-primary-foreground p-3 rounded-lg">{icon}</div>
       </div>
     </div>
   );
@@ -168,12 +177,11 @@ const TransactionMonitoring = () => {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-foreground">Transaction Monitoring</h2>
-            <p className="text-muted-foreground mt-1">Monitor and analyze all financial transactions</p>
+            <p className="text-muted-foreground mt-1">
+              Monitor and analyze all financial transactions
+            </p>
           </div>
-          <button
-            onClick={exportTransactions}
-            className="btn-secondary flex items-center"
-          >
+          <button onClick={exportTransactions} className="btn-secondary flex items-center">
             Export CSV
           </button>
         </div>
@@ -185,28 +193,28 @@ const TransactionMonitoring = () => {
           title="Total Revenue"
           value={formatCurrency(summaryStats.totalAmount)}
           change={15}
-          icon={"💰"}
+          icon={'💰'}
         />
-        
+
         <StatCard
           title="Total Transactions"
           value={summaryStats.totalCount.toLocaleString()}
           change={8}
-          icon={"📊"}
+          icon={'📊'}
         />
-        
+
         <StatCard
           title="Average Amount"
           value={formatCurrency(summaryStats.averageAmount)}
           change={-3}
-          icon={"📈"}
+          icon={'📈'}
         />
-        
+
         <StatCard
           title="Today's Revenue"
           value={formatCurrency(summaryStats.todayAmount)}
           change={25}
-          icon={"⏰"}
+          icon={'⏰'}
         />
       </div>
 
@@ -222,7 +230,7 @@ const TransactionMonitoring = () => {
               className="form-input"
             />
           </div>
-          
+
           <div>
             <select
               value={amountFilter}
@@ -257,10 +265,13 @@ const TransactionMonitoring = () => {
                 <th className="px-6 py-3 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedTransactions.length === filteredTransactions.length && filteredTransactions.length > 0}
+                    checked={
+                      selectedTransactions.length === filteredTransactions.length &&
+                      filteredTransactions.length > 0
+                    }
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setSelectedTransactions(filteredTransactions.map(t => t.id));
+                        setSelectedTransactions(filteredTransactions.map((t) => t.id));
                       } else {
                         setSelectedTransactions([]);
                       }
@@ -268,13 +279,27 @@ const TransactionMonitoring = () => {
                     className="rounded border-border text-primary focus:ring-primary"
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Transaction</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Contributor</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Payment</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Transaction
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Contributor
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Payment
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-card divide-y divide-border">
@@ -288,7 +313,9 @@ const TransactionMonitoring = () => {
                         if (e.target.checked) {
                           setSelectedTransactions([...selectedTransactions, transaction.id]);
                         } else {
-                          setSelectedTransactions(selectedTransactions.filter(id => id !== transaction.id));
+                          setSelectedTransactions(
+                            selectedTransactions.filter((id) => id !== transaction.id)
+                          );
                         }
                       }}
                       className="rounded border-border text-primary focus:ring-primary"
@@ -318,11 +345,15 @@ const TransactionMonitoring = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      transaction.payment_method === 'crypto' ? 'bg-purple-100 text-purple-800' :
-                      transaction.payment_method === 'card' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        transaction.payment_method === 'crypto'
+                          ? 'bg-purple-100 text-purple-800'
+                          : transaction.payment_method === 'card'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
                       {transaction.payment_method || 'crypto'}
                     </span>
                   </td>
@@ -336,12 +367,8 @@ const TransactionMonitoring = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-base font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-primary hover:text-primary/90">
-                        View
-                      </button>
-                      <button className="text-accent hover:text-accent/90">
-                        Verify
-                      </button>
+                      <button className="text-primary hover:text-primary/90">View</button>
+                      <button className="text-accent hover:text-accent/90">Verify</button>
                       {transaction.transaction_hash && (
                         <a
                           href={`https://etherscan.io/tx/${transaction.transaction_hash}`}
@@ -368,7 +395,10 @@ const TransactionMonitoring = () => {
             Showing {filteredTransactions.length} of {transactions.length} transactions
           </div>
           <div className="text-base font-medium text-foreground">
-            Total: {formatCurrency(filteredTransactions.reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0))}
+            Total:{' '}
+            {formatCurrency(
+              filteredTransactions.reduce((sum, tx) => sum + parseFloat(tx.amount || 0), 0)
+            )}
           </div>
         </div>
       </div>

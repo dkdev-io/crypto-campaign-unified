@@ -2,16 +2,16 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 
 async function verifyFixes() {
   const results = {
     statusColumn: false,
     contributionsTable: false,
     kycTable: false,
-    dashboardFunction: false
+    dashboardFunction: false,
   };
 
   // Test 1: Status column
@@ -31,10 +31,7 @@ async function verifyFixes() {
 
   // Test 2: Contributions table
   try {
-    const { data, error } = await supabase
-      .from('contributions')
-      .select('*')
-      .limit(1);
+    const { data, error } = await supabase.from('contributions').select('*').limit(1);
 
     if (!error) {
       results.contributionsTable = true;
@@ -46,10 +43,7 @@ async function verifyFixes() {
 
   // Test 3: KYC table
   try {
-    const { data, error } = await supabase
-      .from('kyc_data')
-      .select('*')
-      .limit(1);
+    const { data, error } = await supabase.from('kyc_data').select('*').limit(1);
 
     if (!error) {
       results.kycTable = true;
@@ -74,7 +68,7 @@ async function verifyFixes() {
   // Summary
   const fixCount = Object.values(results).filter(Boolean).length;
   console.log('📊 VERIFICATION RESULTS');
-  
+
   if (fixCount === 4) {
     console.log('🎉 ALL DATABASE FIXES SUCCESSFUL!');
     console.log('🚀 Database is now fully functional for CRUD operations');

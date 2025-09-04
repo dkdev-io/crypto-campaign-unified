@@ -1,186 +1,192 @@
-import React, { useState, useRef } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
-import { useDataUpload } from '../../hooks/useDataUpload'
+import React, { useState, useRef } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useDataUpload } from '../../hooks/useDataUpload';
 
 const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
-  const [file, setFile] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [errors, setErrors] = useState([])
-  const [success, setSuccess] = useState('')
-  const [validationResults, setValidationResults] = useState(null)
-  
-  const fileInputRef = useRef(null)
-  const { user, userProfile } = useAuth()
-  const { uploading, progress, processCSVUpload } = useDataUpload()
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [errors, setErrors] = useState([]);
+  const [success, setSuccess] = useState('');
+  const [validationResults, setValidationResults] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const { user, userProfile } = useAuth();
+  const { uploading, progress, processCSVUpload } = useDataUpload();
 
   const handleFileSelect = async (event) => {
-    const selectedFile = event.target.files[0]
-    if (!selectedFile) return
+    const selectedFile = event.target.files[0];
+    if (!selectedFile) return;
 
-    setFile(selectedFile)
-    setErrors([])
-    setSuccess('')
-    setValidationResults(null)
+    setFile(selectedFile);
+    setErrors([]);
+    setSuccess('');
+    setValidationResults(null);
 
     // Validate file type
     if (!selectedFile.name.match(/\.(csv|xlsx|xls)$/i)) {
-      setErrors(['Please select a CSV or Excel file'])
-      return
+      setErrors(['Please select a CSV or Excel file']);
+      return;
     }
 
     // Validate file size (10MB limit)
     if (selectedFile.size > 10 * 1024 * 1024) {
-      setErrors(['File size must be less than 10MB'])
-      return
+      setErrors(['File size must be less than 10MB']);
+      return;
     }
 
     // Read and preview file
-    await previewFile(selectedFile)
-  }
+    await previewFile(selectedFile);
+  };
 
   const previewFile = async (file) => {
     return new Promise((resolve) => {
-      const reader = new FileReader()
-      
+      const reader = new FileReader();
+
       reader.onload = async (e) => {
         try {
-          const text = e.target.result
-          const lines = text.split('\n')
-          
+          const text = e.target.result;
+          const lines = text.split('\n');
+
           if (lines.length < 2) {
-            setErrors(['File must contain at least a header row and one data row'])
-            resolve()
-            return
+            setErrors(['File must contain at least a header row and one data row']);
+            resolve();
+            return;
           }
 
           // Parse CSV (simple parsing - for production use a proper CSV library)
-          const headers = parseCSVLine(lines[0])
-          const sampleRows = lines.slice(1, 6).map(line => parseCSVLine(line))
-          
+          const headers = parseCSVLine(lines[0]);
+          const sampleRows = lines.slice(1, 6).map((line) => parseCSVLine(line));
+
           const previewData = {
             headers,
-            sampleRows: sampleRows.filter(row => row.some(cell => cell && cell.trim())),
-            totalRows: lines.length - 1
-          }
+            sampleRows: sampleRows.filter((row) => row.some((cell) => cell && cell.trim())),
+            totalRows: lines.length - 1,
+          };
 
-          setPreview(previewData)
-          validateData(previewData)
+          setPreview(previewData);
+          validateData(previewData);
         } catch (error) {
-          setErrors(['Error reading file: ' + error.message])
+          setErrors(['Error reading file: ' + error.message]);
         }
-        resolve()
-      }
+        resolve();
+      };
 
       reader.onerror = () => {
-        setErrors(['Error reading file'])
-        resolve()
-      }
+        setErrors(['Error reading file']);
+        resolve();
+      };
 
-      reader.readAsText(file)
-    })
-  }
+      reader.readAsText(file);
+    });
+  };
 
   const parseCSVLine = (line) => {
-    const result = []
-    let current = ''
-    let inQuotes = false
-    
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
     for (let i = 0; i < line.length; i++) {
-      const char = line[i]
-      
+      const char = line[i];
+
       if (char === '"') {
-        inQuotes = !inQuotes
+        inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
-        result.push(current.trim())
-        current = ''
+        result.push(current.trim());
+        current = '';
       } else {
-        current += char
+        current += char;
       }
     }
-    
-    result.push(current.trim())
-    return result
-  }
+
+    result.push(current.trim());
+    return result;
+  };
 
   const validateData = (previewData) => {
     const validation = {
       hasRequiredColumns: false,
       columnMapping: {},
       issues: [],
-      recommendations: []
-    }
+      recommendations: [],
+    };
 
     // Check for common donor data columns
-    const commonColumns = ['name', 'email', 'phone', 'address', 'amount', 'date']
-    const headers = previewData.headers.map(h => h.toLowerCase())
-    
+    const commonColumns = ['name', 'email', 'phone', 'address', 'amount', 'date'];
+    const headers = previewData.headers.map((h) => h.toLowerCase());
+
     // Map columns to expected fields
     const fieldMappings = {
-      'full_name': ['name', 'full_name', 'donor_name', 'first_name', 'last_name'],
-      'email': ['email', 'email_address', 'donor_email'],
-      'phone': ['phone', 'phone_number', 'mobile', 'telephone'],
-      'address': ['address', 'street', 'street_address', 'addr'],
-      'city': ['city', 'town'],
-      'state': ['state', 'province', 'region'],
-      'zip': ['zip', 'zipcode', 'postal_code', 'postcode'],
-      'employer': ['employer', 'company', 'organization'],
-      'occupation': ['occupation', 'job', 'job_title', 'profession'],
-      'contribution_amount': ['amount', 'contribution_amount', 'donation_amount', 'total'],
-      'contribution_date': ['date', 'contribution_date', 'donation_date', 'transaction_date']
-    }
+      full_name: ['name', 'full_name', 'donor_name', 'first_name', 'last_name'],
+      email: ['email', 'email_address', 'donor_email'],
+      phone: ['phone', 'phone_number', 'mobile', 'telephone'],
+      address: ['address', 'street', 'street_address', 'addr'],
+      city: ['city', 'town'],
+      state: ['state', 'province', 'region'],
+      zip: ['zip', 'zipcode', 'postal_code', 'postcode'],
+      employer: ['employer', 'company', 'organization'],
+      occupation: ['occupation', 'job', 'job_title', 'profession'],
+      contribution_amount: ['amount', 'contribution_amount', 'donation_amount', 'total'],
+      contribution_date: ['date', 'contribution_date', 'donation_date', 'transaction_date'],
+    };
 
-    let mappedFields = 0
-    Object.keys(fieldMappings).forEach(field => {
-      const possibleHeaders = fieldMappings[field]
-      const foundHeader = headers.find(h => possibleHeaders.includes(h))
-      
+    let mappedFields = 0;
+    Object.keys(fieldMappings).forEach((field) => {
+      const possibleHeaders = fieldMappings[field];
+      const foundHeader = headers.find((h) => possibleHeaders.includes(h));
+
       if (foundHeader) {
-        validation.columnMapping[field] = foundHeader
-        mappedFields++
+        validation.columnMapping[field] = foundHeader;
+        mappedFields++;
       }
-    })
+    });
 
     if (mappedFields >= 3) {
-      validation.hasRequiredColumns = true
+      validation.hasRequiredColumns = true;
     } else {
-      validation.issues.push('Could not identify enough required columns (need at least: name, email, amount)')
+      validation.issues.push(
+        'Could not identify enough required columns (need at least: name, email, amount)'
+      );
     }
 
     // Check data quality in sample rows
     if (previewData.sampleRows.length > 0) {
-      const firstRow = previewData.sampleRows[0]
-      
+      const firstRow = previewData.sampleRows[0];
+
       // Check for email format
       if (validation.columnMapping.email) {
-        const emailIndex = headers.indexOf(validation.columnMapping.email)
-        const sampleEmail = firstRow[emailIndex]
+        const emailIndex = headers.indexOf(validation.columnMapping.email);
+        const sampleEmail = firstRow[emailIndex];
         if (sampleEmail && !sampleEmail.match(/\S+@\S+\.\S+/)) {
-          validation.issues.push('Email format may not be valid')
+          validation.issues.push('Email format may not be valid');
         }
       }
 
       // Check for amount format
       if (validation.columnMapping.contribution_amount) {
-        const amountIndex = headers.indexOf(validation.columnMapping.contribution_amount)
-        const sampleAmount = firstRow[amountIndex]
+        const amountIndex = headers.indexOf(validation.columnMapping.contribution_amount);
+        const sampleAmount = firstRow[amountIndex];
         if (sampleAmount && !sampleAmount.match(/^\$?[\d,]+\.?\d*$/)) {
-          validation.recommendations.push('Amount values should be numeric (e.g., 100.00 or $100.00)')
+          validation.recommendations.push(
+            'Amount values should be numeric (e.g., 100.00 or $100.00)'
+          );
         }
       }
     }
 
     if (previewData.totalRows > 1000) {
-      validation.recommendations.push(`Large file detected (${previewData.totalRows} rows). Processing may take a few minutes.`)
+      validation.recommendations.push(
+        `Large file detected (${previewData.totalRows} rows). Processing may take a few minutes.`
+      );
     }
 
-    setValidationResults(validation)
-  }
+    setValidationResults(validation);
+  };
 
   const handleUpload = async () => {
-    if (!file || !user || !preview) return
+    if (!file || !user || !preview) return;
 
-    setErrors([])
-    setSuccess('')
+    setErrors([]);
+    setSuccess('');
 
     try {
       // Use the hook to process the upload
@@ -191,52 +197,54 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
           // Get all remaining rows from file
           await getAllDataRows()
         )
-      )
+      );
 
       if (result.success) {
-        setSuccess(`Successfully uploaded ${result.recordsInserted} records to your secure database table: ${result.tableName}`)
-        
+        setSuccess(
+          `Successfully uploaded ${result.recordsInserted} records to your secure database table: ${result.tableName}`
+        );
+
         if (onUploadComplete) {
           onUploadComplete({
             tableName: result.tableName,
             recordCount: result.recordsInserted,
             headers: preview.headers,
             file: file.name,
-            sourceId: result.sourceId
-          })
+            sourceId: result.sourceId,
+          });
         }
       } else {
-        setErrors([result.error])
+        setErrors([result.error]);
       }
-
     } catch (error) {
-      setErrors([`Upload failed: ${error.message}`])
+      setErrors([`Upload failed: ${error.message}`]);
     }
-  }
+  };
 
   const getAllDataRows = async () => {
     return new Promise((resolve) => {
-      const reader = new FileReader()
-      
+      const reader = new FileReader();
+
       reader.onload = (e) => {
         try {
-          const text = e.target.result
-          const lines = text.split('\n')
-          const dataRows = lines.slice(1) // Skip header
-            .map(line => parseCSVLine(line))
-            .filter(row => row.some(cell => cell && cell.trim()))
-          
-          resolve(dataRows)
-        } catch (error) {
-          console.error('Error reading all data:', error)
-          resolve([])
-        }
-      }
+          const text = e.target.result;
+          const lines = text.split('\n');
+          const dataRows = lines
+            .slice(1) // Skip header
+            .map((line) => parseCSVLine(line))
+            .filter((row) => row.some((cell) => cell && cell.trim()));
 
-      reader.onerror = () => resolve([])
-      reader.readAsText(file)
-    })
-  }
+          resolve(dataRows);
+        } catch (error) {
+          console.error('Error reading all data:', error);
+          resolve([]);
+        }
+      };
+
+      reader.onerror = () => resolve([]);
+      reader.readAsText(file);
+    });
+  };
 
   // Removed old upload functions - now using useDataUpload hook
 
@@ -252,7 +260,7 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
             className="file-input-hidden"
             id="csv-file-input"
           />
-          
+
           <label htmlFor="csv-file-input" className="file-input-label">
             <div className="file-input-content">
               <div className="file-icon">📁</div>
@@ -272,10 +280,10 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
               <button
                 className="btn btn-outline btn-sm"
                 onClick={() => {
-                  setFile(null)
-                  setPreview(null)
-                  setValidationResults(null)
-                  fileInputRef.current.value = ''
+                  setFile(null);
+                  setPreview(null);
+                  setValidationResults(null);
+                  fileInputRef.current.value = '';
                 }}
               >
                 Remove
@@ -292,11 +300,7 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
           </div>
         )}
 
-        {success && (
-          <div className="success-banner">
-            {success}
-          </div>
-        )}
+        {success && <div className="success-banner">{success}</div>}
       </div>
 
       {preview && (
@@ -333,7 +337,7 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
       {validationResults && (
         <div className="validation-section">
           <h4>✅ Validation Results</h4>
-          
+
           {validationResults.hasRequiredColumns ? (
             <div className="validation-success">
               <p>✅ Data looks good! Ready to upload.</p>
@@ -387,15 +391,12 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
           {uploading && progress > 0 && (
             <div className="upload-progress">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${progress}%` }}
-                ></div>
+                <div className="progress-fill" style={{ width: `${progress}%` }}></div>
               </div>
               <span className="progress-text">{progress}% uploaded</span>
             </div>
           )}
-          
+
           <button
             className="btn btn-primary"
             onClick={handleUpload}
@@ -409,8 +410,12 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
       <div className="upload-info">
         <h4>📋 Supported Formats</h4>
         <ul>
-          <li><strong>CSV:</strong> Comma-separated values file</li>
-          <li><strong>Excel:</strong> .xlsx or .xls files</li>
+          <li>
+            <strong>CSV:</strong> Comma-separated values file
+          </li>
+          <li>
+            <strong>Excel:</strong> .xlsx or .xls files
+          </li>
         </ul>
 
         <h4>💡 Tips for Best Results</h4>
@@ -430,7 +435,7 @@ const CSVUpload = ({ onUploadComplete, expectedColumns = [] }) => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CSVUpload
+export default CSVUpload;

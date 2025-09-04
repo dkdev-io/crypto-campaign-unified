@@ -19,24 +19,28 @@ This document describes the complete user authentication and authorization syste
 ## ✨ Features
 
 ### Core Authentication
+
 - ✅ Email/password user registration with verification
 - ✅ Secure login with Supabase Auth
 - ✅ Profile completion flow with contact information
 - ✅ Password reset functionality (built into Supabase)
 
 ### Team Management
+
 - ✅ Campaign member invitation system
 - ✅ Role-based permissions (admin, export, view)
 - ✅ Email-based invitations with expiration
 - ✅ Team member management interface
 
 ### Admin Features
+
 - ✅ Admin-only user management dashboard
 - ✅ Role assignment and permission control
 - ✅ User activity monitoring
 - ✅ Campaign oversight capabilities
 
 ### Security
+
 - ✅ Row-level security (RLS) policies
 - ✅ Proper data isolation between campaigns
 - ✅ Secure invitation token system
@@ -64,6 +68,7 @@ This document describes the complete user authentication and authorization syste
 ## 🗄️ Database Schema
 
 ### Users Table
+
 ```sql
 users (
   id UUID PRIMARY KEY,
@@ -87,6 +92,7 @@ users (
 ```
 
 ### Campaign Members Table
+
 ```sql
 campaign_members (
   id UUID PRIMARY KEY,
@@ -102,6 +108,7 @@ campaign_members (
 ```
 
 ### Invitations Table
+
 ```sql
 invitations (
   id UUID PRIMARY KEY,
@@ -123,45 +130,49 @@ invitations (
 ### Core Components
 
 #### AuthContext
+
 ```jsx
-import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Provides authentication state globally
-const { user, userProfile, signUp, signIn, signOut } = useAuth()
+const { user, userProfile, signUp, signIn, signOut } = useAuth();
 ```
 
 #### AuthFlow
+
 ```jsx
-import AuthFlow from './components/auth/AuthFlow'
+import AuthFlow from './components/auth/AuthFlow';
 
 // Complete authentication flow with signup/login
-<AuthFlow 
+<AuthFlow
   onAuthComplete={(data) => handleAuthComplete(data)}
   initialMode="signup"
   requireProfileCompletion={true}
-/>
+/>;
 ```
 
 #### Team Management
+
 ```jsx
-import TeamManagement from './components/team/TeamManagement'
+import TeamManagement from './components/team/TeamManagement';
 
 // Complete team management interface
-<TeamManagement campaignId={campaignId} />
+<TeamManagement campaignId={campaignId} />;
 ```
 
 #### User Management (Admin Only)
+
 ```jsx
-import UserManagement from './components/admin/UserManagement'
+import UserManagement from './components/admin/UserManagement';
 
 // Admin dashboard for managing all users
-<UserManagement />
+<UserManagement />;
 ```
 
 ### Individual Components
 
 - **AuthSignUp**: User registration form
-- **AuthLogin**: User login form  
+- **AuthLogin**: User login form
 - **ProfileCompletion**: Contact information form
 - **InviteMembers**: Send team invitations
 - **AcceptInvitation**: Accept invitation interface
@@ -183,8 +194,8 @@ Ensure your Supabase configuration is set up in your React app:
 
 ```javascript
 // frontend/src/lib/supabase.js
-const supabaseUrl = 'your-supabase-url'
-const supabaseAnonKey = 'your-supabase-anon-key'
+const supabaseUrl = 'your-supabase-url';
+const supabaseAnonKey = 'your-supabase-anon-key';
 ```
 
 ### 3. Install Dependencies
@@ -198,16 +209,16 @@ npm install @supabase/supabase-js
 
 ```jsx
 // Import in your main component or App.jsx
-import './styles/auth.css'
-import './styles/admin.css'
+import './styles/auth.css';
+import './styles/admin.css';
 ```
 
 ### 5. Wrap Your App
 
 ```jsx
 // App.jsx
-import { AuthProvider } from './contexts/AuthContext'
-import AuthFlow from './components/auth/AuthFlow'
+import { AuthProvider } from './contexts/AuthContext';
+import AuthFlow from './components/auth/AuthFlow';
 
 function App() {
   return (
@@ -219,7 +230,7 @@ function App() {
         requireDataSetup={false}
       />
     </AuthProvider>
-  )
+  );
 }
 ```
 
@@ -228,9 +239,10 @@ function App() {
 ### Basic Authentication Flow
 
 1. **User Registration**
+
    ```jsx
-   const { signUp } = useAuth()
-   const result = await signUp(email, password, fullName)
+   const { signUp } = useAuth();
+   const result = await signUp(email, password, fullName);
    ```
 
 2. **Email Verification**
@@ -238,9 +250,10 @@ function App() {
    - Must click link before logging in
 
 3. **Login**
+
    ```jsx
-   const { signIn } = useAuth()
-   const result = await signIn(email, password)
+   const { signIn } = useAuth();
+   const result = await signIn(email, password);
    ```
 
 4. **Profile Completion**
@@ -251,22 +264,22 @@ function App() {
 ### Team Management
 
 1. **Invite Team Members**
+
    ```jsx
    // Admin creates invitation
-   const invitation = await supabase
-     .from('invitations')
-     .insert({
-       email: 'teammate@example.com',
-       campaign_id: campaignId,
-       permissions: ['view', 'export'],
-       campaign_role: 'member'
-     })
+   const invitation = await supabase.from('invitations').insert({
+     email: 'teammate@example.com',
+     campaign_id: campaignId,
+     permissions: ['view', 'export'],
+     campaign_role: 'member',
+   });
    ```
 
 2. **Accept Invitations**
+
    ```jsx
-   const { acceptInvitation } = useAuth()
-   const result = await acceptInvitation(token)
+   const { acceptInvitation } = useAuth();
+   const result = await acceptInvitation(token);
    ```
 
 3. **Manage Permissions**
@@ -285,10 +298,7 @@ function App() {
 2. **Role Assignment**
    ```jsx
    // Update user role
-   await supabase
-     .from('users')
-     .update({ role: 'admin' })
-     .eq('id', userId)
+   await supabase.from('users').update({ role: 'admin' }).eq('id', userId);
    ```
 
 ## 🧪 Testing
@@ -376,21 +386,21 @@ CREATE POLICY "Campaign members can view campaigns" ON campaigns
 ```javascript
 const {
   // State
-  user,                    // Current Supabase user
-  session,                 // Current session
-  userProfile,            // User profile from users table
-  loading,                // Loading state
+  user, // Current Supabase user
+  session, // Current session
+  userProfile, // User profile from users table
+  loading, // Loading state
 
   // Methods
-  signUp,                 // (email, password, fullName) => Promise
-  signIn,                 // (email, password) => Promise
-  signOut,                // () => Promise
-  updateProfile,          // (updates) => Promise
-  getUserCampaigns,       // () => Promise
-  hasPermission,          // (campaignId, permission) => Promise<boolean>
-  acceptInvitation,       // (token) => Promise
-  fetchUserProfile        // (userId) => Promise
-} = useAuth()
+  signUp, // (email, password, fullName) => Promise
+  signIn, // (email, password) => Promise
+  signOut, // () => Promise
+  updateProfile, // (updates) => Promise
+  getUserCampaigns, // () => Promise
+  hasPermission, // (campaignId, permission) => Promise<boolean>
+  acceptInvitation, // (token) => Promise
+  fetchUserProfile, // (userId) => Promise
+} = useAuth();
 ```
 
 ### Database Functions
@@ -414,24 +424,24 @@ SELECT * FROM calculate_recurring_projection(
 
 ```typescript
 interface AuthFlowProps {
-  onAuthComplete?: (data: AuthData) => void
-  initialMode?: 'login' | 'signup'
-  requireProfileCompletion?: boolean
+  onAuthComplete?: (data: AuthData) => void;
+  initialMode?: 'login' | 'signup';
+  requireProfileCompletion?: boolean;
 }
 
 interface TeamManagementProps {
-  campaignId: string
+  campaignId: string;
 }
 
 interface InviteMembersProps {
-  campaignId: string
-  onInviteSent?: (invitation: Invitation) => void
+  campaignId: string;
+  onInviteSent?: (invitation: Invitation) => void;
 }
 
 interface AcceptInvitationProps {
-  token: string
-  onAccepted?: (data: AcceptanceData) => void
-  onError?: (error: string) => void
+  token: string;
+  onAccepted?: (data: AcceptanceData) => void;
+  onError?: (error: string) => void;
 }
 ```
 
@@ -466,7 +476,7 @@ Enable debug logging:
 ```javascript
 // In your app initialization
 if (process.env.NODE_ENV === 'development') {
-  window.supabaseDebug = true
+  window.supabaseDebug = true;
 }
 ```
 
@@ -476,7 +486,7 @@ if (process.env.NODE_ENV === 'development') {
 # Check database schema
 npm run db:check
 
-# Reset test data  
+# Reset test data
 npm run db:reset-test
 
 # View current user permissions
@@ -519,4 +529,4 @@ This auth system is part of the campaign platform and follows the same license t
 
 ---
 
-*Last updated: August 26, 2025*
+_Last updated: August 26, 2025_

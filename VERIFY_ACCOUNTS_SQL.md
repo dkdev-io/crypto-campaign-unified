@@ -16,7 +16,7 @@ The frontend AuthContext has been updated to bypass email verification checks. T
 
 ```sql
 -- STEP 1: Check all existing users
-SELECT 
+SELECT
     id,
     email,
     created_at,
@@ -27,17 +27,17 @@ ORDER BY created_at DESC;
 
 -- STEP 2: Manually verify ALL accounts (mark them as email confirmed)
 UPDATE auth.users
-SET 
+SET
     email_confirmed_at = NOW(),
     updated_at = NOW()
 WHERE email_confirmed_at IS NULL;
 
 -- STEP 3: Verify the update worked
-SELECT 
+SELECT
     id,
     email,
     email_confirmed_at,
-    CASE 
+    CASE
         WHEN email_confirmed_at IS NOT NULL THEN '✅ Verified'
         ELSE '❌ Not Verified'
     END as status
@@ -69,11 +69,11 @@ When Supabase email verification is fixed, remove the bypass by:
 2. In the `isEmailVerified()` function (around line 304-310)
 3. Change from:
    ```javascript
-   return true // Always return true for now
+   return true; // Always return true for now
    ```
 4. Back to:
    ```javascript
-   return user?.email_confirmed_at !== null
+   return user?.email_confirmed_at !== null;
    ```
 
 ## Current Status:

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAnalytics } from './AnalyticsProvider';
 
-const PrivacyBanner = ({ 
+const PrivacyBanner = ({
   position = 'bottom',
   theme = 'dark',
   showLearnMore = true,
   autoHide = true,
   customMessage,
-  onConsentChange
+  onConsentChange,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -21,7 +21,7 @@ const PrivacyBanner = ({
     const status = getStatus();
     const consent = localStorage.getItem('analytics_consent');
     const consentTime = localStorage.getItem('analytics_consent_time');
-    
+
     // Show banner if no consent decision has been made
     if (!consent) {
       setIsVisible(true);
@@ -61,21 +61,21 @@ const PrivacyBanner = ({
     dark: 'bg-gray-800 text-white',
     light: 'bg-white text-gray-900 border border-gray-200',
     blue: 'bg-blue-900 text-white',
-    transparent: 'bg-black bg-opacity-80 text-white backdrop-blur-sm'
+    transparent: 'bg-black bg-opacity-80 text-white backdrop-blur-sm',
   };
 
   const positionClasses = {
     top: 'top-4',
     bottom: 'bottom-4',
     'bottom-left': 'bottom-4 left-4 right-auto max-w-md',
-    'bottom-right': 'bottom-4 right-4 left-auto max-w-md'
+    'bottom-right': 'bottom-4 right-4 left-auto max-w-md',
   };
 
   if (!isVisible) return null;
 
   return (
     <>
-      <div 
+      <div
         className={`
           fixed z-50 px-4 sm:px-6 lg:px-8 
           ${positionClasses[position] || 'bottom-4'} 
@@ -85,12 +85,13 @@ const PrivacyBanner = ({
         aria-labelledby="privacy-banner-title"
         aria-describedby="privacy-banner-description"
       >
-        <div className={`
+        <div
+          className={`
           ${themeClasses[theme]} 
           rounded-lg shadow-xl p-4 sm:p-6 max-w-4xl mx-auto
           animate-slide-up
-        `}>
-          
+        `}
+        >
           {/* Main Banner Content */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="flex-1 mb-4 sm:mb-0 sm:mr-6">
@@ -100,9 +101,9 @@ const PrivacyBanner = ({
               <p id="privacy-banner-description" className="text-sm opacity-90 leading-relaxed">
                 {customMessage || (
                   <>
-                    We use privacy-friendly analytics to understand how our contribution 
-                    forms are used and improve your experience. We never collect personal 
-                    information or track you across other websites.
+                    We use privacy-friendly analytics to understand how our contribution forms are
+                    used and improve your experience. We never collect personal information or track
+                    you across other websites.
                   </>
                 )}
               </p>
@@ -120,7 +121,7 @@ const PrivacyBanner = ({
               >
                 Accept
               </button>
-              
+
               <button
                 onClick={handleDecline}
                 className="
@@ -132,7 +133,7 @@ const PrivacyBanner = ({
               >
                 Decline
               </button>
-              
+
               {showLearnMore && (
                 <button
                   onClick={handleLearnMore}
@@ -154,9 +155,7 @@ const PrivacyBanner = ({
             <div className="mt-6 pt-4 border-t border-gray-600 animate-fade-in">
               <div className="grid md:grid-cols-2 gap-6 text-sm">
                 <div>
-                  <h4 className="font-semibold mb-3 text-green-400">
-                    ✅ What We Collect
-                  </h4>
+                  <h4 className="font-semibold mb-3 text-green-400">✅ What We Collect</h4>
                   <ul className="space-y-1 opacity-90">
                     <li>• Anonymous visitor ID (no personal info)</li>
                     <li>• Page views and time spent</li>
@@ -168,9 +167,7 @@ const PrivacyBanner = ({
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-3 text-red-400">
-                    ❌ What We Don't Collect
-                  </h4>
+                  <h4 className="font-semibold mb-3 text-red-400">❌ What We Don't Collect</h4>
                   <ul className="space-y-1 opacity-90">
                     <li>• Names, emails, or personal information</li>
                     <li>• Contribution amounts or wallet addresses</li>
@@ -182,15 +179,14 @@ const PrivacyBanner = ({
                 </div>
 
                 <div className="md:col-span-2">
-                  <h4 className="font-semibold mb-3 text-blue-400">
-                    🛡️ Your Privacy Rights
-                  </h4>
+                  <h4 className="font-semibold mb-3 text-blue-400">🛡️ Your Privacy Rights</h4>
                   <div className="grid sm:grid-cols-3 gap-4 opacity-90">
                     <div>
                       <strong>Opt-out anytime:</strong> Change your mind by clicking "Decline"
                     </div>
                     <div>
-                      <strong>Data expiration:</strong> All data automatically deleted after 365 days
+                      <strong>Data expiration:</strong> All data automatically deleted after 365
+                      days
                     </div>
                     <div>
                       <strong>No tracking:</strong> Respects Do Not Track browser settings
@@ -201,10 +197,8 @@ const PrivacyBanner = ({
 
               <div className="mt-4 pt-4 border-t border-gray-600">
                 <div className="flex flex-wrap items-center justify-between text-xs opacity-75">
-                  <span>
-                    GDPR & CCPA Compliant • No Cross-Site Tracking • Privacy by Design
-                  </span>
-                  <button 
+                  <span>GDPR & CCPA Compliant • No Cross-Site Tracking • Privacy by Design</span>
+                  <button
                     onClick={() => setShowDetails(false)}
                     className="underline hover:no-underline mt-2 sm:mt-0"
                     aria-label="Hide privacy details"
@@ -272,7 +266,9 @@ export const PrivacySettings = ({ isOpen, onClose }) => {
   };
 
   const handleClearData = () => {
-    if (window.confirm('Are you sure you want to clear all analytics data? This cannot be undone.')) {
+    if (
+      window.confirm('Are you sure you want to clear all analytics data? This cannot be undone.')
+    ) {
       clearData();
       alert('All analytics data has been cleared.');
     }
@@ -292,7 +288,12 @@ export const PrivacySettings = ({ isOpen, onClose }) => {
               aria-label="Close privacy settings"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -310,7 +311,8 @@ export const PrivacySettings = ({ isOpen, onClose }) => {
                     className="mr-3"
                   />
                   <span>
-                    <strong>Enable Analytics</strong> - Help us improve by sharing anonymous usage data
+                    <strong>Enable Analytics</strong> - Help us improve by sharing anonymous usage
+                    data
                   </span>
                 </label>
                 <label className="flex items-center">
@@ -342,10 +344,7 @@ export const PrivacySettings = ({ isOpen, onClose }) => {
             </div>
 
             <div className="flex justify-end gap-3 pt-6 border-t">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
-              >
+              <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
                 Cancel
               </button>
               <button

@@ -13,6 +13,7 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Frontend Architecture
+
 The platform uses a dual-frontend approach with vanilla JavaScript and Web3.js integration:
 
 - **Contributor Interface**: Built with Bootstrap 5 and vanilla JS, handles wallet connections via MetaMask/WalletConnect, form validation for required contributor information (name, address, employer, occupation), and real-time ETH price updates
@@ -20,6 +21,7 @@ The platform uses a dual-frontend approach with vanilla JavaScript and Web3.js i
 - **Web3 Integration**: Direct smart contract interaction using Web3.js library for contribution processing and wallet management
 
 ### Backend Architecture
+
 Express.js server providing REST API endpoints with the following components:
 
 - **Compliance Engine**: Validates contribution limits, performs KYC checks, and integrates with external CRM systems to track multi-channel donations
@@ -28,6 +30,7 @@ Express.js server providing REST API endpoints with the following components:
 - **Campaign Statistics**: Real-time tracking of total funds raised, contributor counts, and transaction history
 
 ### Smart Contract Design
+
 Ethereum-based smart contract using OpenZeppelin standards:
 
 - **Contribution Limits**: Enforces $3,300 per-transaction and cumulative per-wallet limits at the contract level
@@ -36,6 +39,7 @@ Ethereum-based smart contract using OpenZeppelin standards:
 - **Hard Rejection**: Automatic rejection of non-compliant contributions to ensure regulatory compliance
 
 ### Security and Compliance Framework
+
 Multi-layered compliance system addressing FEC requirements:
 
 - **Pre-Transaction Validation**: Off-chain checks against CRM data and KYC status before blockchain interaction
@@ -46,17 +50,20 @@ Multi-layered compliance system addressing FEC requirements:
 ## External Dependencies
 
 ### Blockchain Infrastructure
+
 - **Web3.js**: Ethereum blockchain interaction and wallet management
 - **OpenZeppelin Contracts**: Secure smart contract standards and utilities
 - **MetaMask/WalletConnect**: Wallet connection and transaction signing
 
 ### Development Framework
+
 - **Express.js**: Backend API server and middleware
 - **Bootstrap 5**: Frontend UI framework and responsive design
 - **Chart.js**: Data visualization for admin dashboard analytics
 - **Font Awesome**: Icon library for user interface elements
 
 ### Compliance and Integration Services
+
 - **KYC Provider APIs**: Third-party identity verification services (currently mocked)
 - **CRM Integration**: External customer relationship management systems for multi-channel contribution tracking
 - **Price Feeds**: Real-time cryptocurrency price data for USD conversion

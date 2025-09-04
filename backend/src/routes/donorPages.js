@@ -18,13 +18,13 @@ const router = express.Router();
 router.get('/:campaignSlug', async (req, res) => {
   try {
     const { campaignSlug } = req.params;
-    
+
     console.log('📄 Serving donor page:', campaignSlug);
 
     // Validate campaign slug
     if (!campaignSlug || campaignSlug.length < 2) {
       return res.status(400).json({
-        error: 'Invalid campaign identifier'
+        error: 'Invalid campaign identifier',
       });
     }
 
@@ -36,31 +36,30 @@ router.get('/:campaignSlug', async (req, res) => {
     try {
       // Check if page file exists
       await fs.access(pagePath);
-      
+
       // Read and serve the page
       const pageContent = await fs.readFile(pagePath, 'utf8');
-      
+
       // Set appropriate headers
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'public, max-age=300'); // 5 minute cache
       res.setHeader('X-Robots-Tag', 'index, follow');
-      
+
       // Log page view
       await logPageView(campaignSlug, req);
-      
-      res.send(pageContent);
 
+      res.send(pageContent);
     } catch (fileError) {
       if (fileError.code === 'ENOENT') {
         // Page file doesn't exist - try to find and generate it
         console.log('🔍 Page file not found, attempting to locate campaign:', campaignSlug);
-        
+
         const campaignId = await findCampaignBySlug(campaignSlug);
-        
+
         if (campaignId) {
           // Try to generate the page on-demand
           const result = await generatePageOnDemand(campaignId, campaignSlug);
-          
+
           if (result) {
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.setHeader('Cache-Control', 'public, max-age=300');
@@ -69,14 +68,13 @@ router.get('/:campaignSlug', async (req, res) => {
             return;
           }
         }
-        
+
         // Page not found
         res.status(404).send(generateNotFoundPage(campaignSlug));
       } else {
         throw fileError;
       }
     }
-
   } catch (error) {
     console.error('❌ Error serving donor page:', error);
     res.status(500).send(generateErrorPage(error.message));
@@ -93,17 +91,16 @@ router.get('/', async (req, res) => {
 
     // Get all generated pages
     const pages = await donorPageAutomation.getAllGeneratedPages();
-    
+
     // Filter active pages only
-    const activePages = pages.filter(page => page.status === 'active');
+    const activePages = pages.filter((page) => page.status === 'active');
 
     // Generate index page
     const indexHtml = generateIndexPage(activePages);
-    
+
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=600'); // 10 minute cache
     res.send(indexHtml);
-
   } catch (error) {
     console.error('❌ Error serving donor pages index:', error);
     res.status(500).send(generateErrorPage(error.message));
@@ -118,7 +115,7 @@ router.get('/system/health', async (req, res) => {
   try {
     const pages = await donorPageAutomation.getAllGeneratedPages();
     const pagesDirectory = path.join(__dirname, '../../public/donors');
-    
+
     let directoryExists = false;
     try {
       await fs.access(pagesDirectory);
@@ -131,16 +128,15 @@ router.get('/system/health', async (req, res) => {
       timestamp: new Date().toISOString(),
       stats: {
         totalPages: pages.length,
-        activePages: pages.filter(p => p.status === 'active').length,
+        activePages: pages.filter((p) => p.status === 'active').length,
         directoryExists,
-        directoryPath: pagesDirectory
-      }
+        directoryPath: pagesDirectory,
+      },
     });
-
   } catch (error) {
     res.status(500).json({
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -151,7 +147,7 @@ router.get('/system/health', async (req, res) => {
 async function findCampaignBySlug(slug) {
   try {
     const { supabase } = require('../lib/supabase');
-    
+
     // Try to find campaign by matching the slug to sanitized campaign name
     const { data: campaigns, error } = await supabase
       .from('campaigns')
@@ -185,7 +181,7 @@ async function generatePageOnDemand(campaignId, slug) {
     console.log('🚀 Generating page on-demand:', campaignId);
 
     const { supabase } = require('../lib/supabase');
-    
+
     // Get campaign data
     const { data: campaignData, error } = await supabase
       .from('campaigns')
@@ -199,15 +195,14 @@ async function generatePageOnDemand(campaignId, slug) {
 
     // Generate the page
     const result = await donorPageAutomation.triggerPageCreation(campaignData);
-    
+
     // Read the generated content
     const content = await fs.readFile(result.filePath, 'utf8');
-    
+
     return {
       content,
-      result
+      result,
     };
-
   } catch (error) {
     console.error('Error generating page on-demand:', error);
     return null;
@@ -220,28 +215,25 @@ async function generatePageOnDemand(campaignId, slug) {
 async function logPageView(campaignSlug, req) {
   try {
     const { supabase } = require('../lib/supabase');
-    
+
     // Log the page view (non-blocking)
     setTimeout(async () => {
       try {
-        await supabase
-          .from('donor_page_logs')
-          .insert({
-            campaign_id: null, // We might not have campaign ID here
-            event_type: 'page_view',
-            data: JSON.stringify({
-              slug: campaignSlug,
-              ip: req.ip,
-              userAgent: req.get('User-Agent'),
-              referer: req.get('Referer'),
-              timestamp: new Date().toISOString()
-            })
-          });
+        await supabase.from('donor_page_logs').insert({
+          campaign_id: null, // We might not have campaign ID here
+          event_type: 'page_view',
+          data: JSON.stringify({
+            slug: campaignSlug,
+            ip: req.ip,
+            userAgent: req.get('User-Agent'),
+            referer: req.get('Referer'),
+            timestamp: new Date().toISOString(),
+          }),
+        });
       } catch (logError) {
         console.error('Failed to log page view:', logError);
       }
     }, 0);
-
   } catch (error) {
     // Don't throw - logging is non-critical
     console.error('Page view logging error:', error);
@@ -416,7 +408,9 @@ function generateErrorPage(errorMessage) {
  * Generate index page listing all available donor pages
  */
 function generateIndexPage(pages) {
-  const pagesList = pages.map(page => `
+  const pagesList = pages
+    .map(
+      (page) => `
     <div class="campaign-card">
       <h3>${page.campaignName}</h3>
       <p class="committee">${page.committeeName}</p>
@@ -426,7 +420,9 @@ function generateIndexPage(pages) {
         <span class="date">Created ${new Date(page.createdAt).toLocaleDateString()}</span>
       </div>
     </div>
-  `).join('');
+  `
+    )
+    .join('');
 
   return `
 <!DOCTYPE html>
@@ -537,17 +533,21 @@ function generateIndexPage(pages) {
             <p>Support political campaigns with secure cryptocurrency donations</p>
         </div>
         
-        ${pages.length > 0 ? `
+        ${
+          pages.length > 0
+            ? `
           <div class="campaigns-grid">
             ${pagesList}
           </div>
-        ` : `
+        `
+            : `
           <div class="empty">
             <div class="icon">📄</div>
             <h2>No Active Campaigns</h2>
             <p>Campaign donor pages will appear here once campaigns complete their setup.</p>
           </div>
-        `}
+        `
+        }
     </div>
 </body>
 </html>`;

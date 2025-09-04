@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from 'react'
-import { useAdmin } from '../../contexts/AdminContext'
-import { supabase } from '../../lib/supabase'
+import React, { useState, useEffect } from 'react';
+import { useAdmin } from '../../contexts/AdminContext';
+import { supabase } from '../../lib/supabase';
 
 const UserManagement = () => {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterRole, setFilterRole] = useState('all')
-  const [sortBy, setSortBy] = useState('created_at')
-  const [sortOrder, setSortOrder] = useState('desc')
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
+  const [sortBy, setSortBy] = useState('created_at');
+  const [sortOrder, setSortOrder] = useState('desc');
 
-  const { admin, isAdmin, isSuperAdmin } = useAdmin()
+  const { admin, isAdmin, isSuperAdmin } = useAdmin();
 
   useEffect(() => {
     if (isAdmin()) {
-      fetchUsers()
+      fetchUsers();
     }
-  }, [admin])
+  }, [admin]);
 
   const fetchUsers = async () => {
     try {
-      setLoading(true)
-      setError('')
+      setLoading(true);
+      setError('');
 
       // Check if Supabase is configured
       if (!supabase.from) {
-        setError('Database not configured. Please set up Supabase to manage users.')
-        setUsers([])
-        return
+        setError('Database not configured. Please set up Supabase to manage users.');
+        setUsers([]);
+        return;
       }
 
       // Try users table first, then fall back to form_submissions
       let { data: usersData, error: usersError } = await supabase
         .from('users')
         .select('*')
-        .order(sortBy, { ascending: sortOrder === 'asc' })
+        .order(sortBy, { ascending: sortOrder === 'asc' });
 
       if (usersError && usersError.code === 'PGRST205') {
         // users table doesn't exist, get data from form_submissions instead
-        console.log('Users table not found, checking form_submissions...')
-        
+        console.log('Users table not found, checking form_submissions...');
+
         const { data: submissionsData, error: submissionsError } = await supabase
           .from('form_submissions')
           .select('*')
-          .order('created_at', { ascending: false })
+          .order('created_at', { ascending: false });
 
         if (submissionsError) {
-          throw submissionsError
+          throw submissionsError;
         }
 
         // Transform form submissions into user format
-        const transformedUsers = submissionsData.map(submission => ({
+        const transformedUsers = submissionsData.map((submission) => ({
           id: submission.id,
           full_name: `${submission.first_name} ${submission.last_name}`,
           email: submission.email,
@@ -64,57 +64,56 @@ const UserManagement = () => {
           last_login_at: null,
           total_donated: submission.amount,
           contribution_type: submission.contribution_type,
-          is_us_citizen: submission.is_us_citizen
-        }))
+          is_us_citizen: submission.is_us_citizen,
+        }));
 
-        setUsers(transformedUsers)
-        setError('Showing form submission data. User profiles table not yet configured.')
+        setUsers(transformedUsers);
+        setError('Showing form submission data. User profiles table not yet configured.');
       } else if (usersError) {
-        throw usersError
+        throw usersError;
       } else {
-        setUsers(usersData || [])
+        setUsers(usersData || []);
       }
-
     } catch (error) {
       if (error.message.includes('Supabase not configured')) {
-        setError('Database not configured. Please set up Supabase to manage users.')
+        setError('Database not configured. Please set up Supabase to manage users.');
       } else {
-        setError('Error loading users: ' + error.message)
+        setError('Error loading users: ' + error.message);
       }
-      setUsers([])
+      setUsers([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const updateUserRole = async (userId, newRole) => {
     try {
       const { error } = await supabase
         .from('users')
-        .update({ 
+        .update({
           role: newRole,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', userId)
+        .eq('id', userId);
 
-      if (error) throw error
+      if (error) throw error;
 
-      fetchUsers()
+      fetchUsers();
     } catch (error) {
-      alert('Error updating user role: ' + error.message)
+      alert('Error updating user role: ' + error.message);
     }
-  }
+  };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = 
+  const filteredUsers = users.filter((user) => {
+    const matchesSearch =
       user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.company?.toLowerCase().includes(searchTerm.toLowerCase())
+      user.company?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesRole = filterRole === 'all' || user.role === filterRole
+    const matchesRole = filterRole === 'all' || user.role === filterRole;
 
-    return matchesSearch && matchesRole
-  })
+    return matchesSearch && matchesRole;
+  });
 
   if (!admin || (admin.role !== 'admin' && admin.role !== 'super_admin')) {
     return (
@@ -123,7 +122,7 @@ const UserManagement = () => {
         <p className="text-muted-foreground">You don't have permission to view user management.</p>
         <p className="text-sm text-muted-foreground mt-2">Admin role: {admin?.role || 'None'}</p>
       </div>
-    )
+    );
   }
 
   if (loading) {
@@ -131,7 +130,7 @@ const UserManagement = () => {
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -143,7 +142,7 @@ const UserManagement = () => {
           Retry
         </button>
       </div>
-    )
+    );
   }
 
   return (
@@ -187,10 +186,10 @@ const UserManagement = () => {
             <select
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
-                const [field, order] = e.target.value.split('-')
-                setSortBy(field)
-                setSortOrder(order)
-                fetchUsers()
+                const [field, order] = e.target.value.split('-');
+                setSortBy(field);
+                setSortOrder(order);
+                fetchUsers();
               }}
               className="form-input"
             >
@@ -212,15 +211,27 @@ const UserManagement = () => {
           <p className="text-muted-foreground">Total Users</p>
         </div>
         <div className="crypto-card text-center">
-          <h3 className="text-2xl font-bold text-foreground">{users.filter(u => u.email_confirmed).length}</h3>
+          <h3 className="text-2xl font-bold text-foreground">
+            {users.filter((u) => u.email_confirmed).length}
+          </h3>
           <p className="text-muted-foreground">Verified Users</p>
         </div>
         <div className="crypto-card text-center">
-          <h3 className="text-2xl font-bold text-foreground">{users.filter(u => u.role === 'admin' || u.role === 'super_admin').length}</h3>
+          <h3 className="text-2xl font-bold text-foreground">
+            {users.filter((u) => u.role === 'admin' || u.role === 'super_admin').length}
+          </h3>
           <p className="text-muted-foreground">Administrators</p>
         </div>
         <div className="crypto-card text-center">
-          <h3 className="text-2xl font-bold text-foreground">{users.filter(u => u.last_login_at && new Date(u.last_login_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length}</h3>
+          <h3 className="text-2xl font-bold text-foreground">
+            {
+              users.filter(
+                (u) =>
+                  u.last_login_at &&
+                  new Date(u.last_login_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+              ).length
+            }
+          </h3>
           <p className="text-muted-foreground">Active This Week</p>
         </div>
       </div>
@@ -231,37 +242,59 @@ const UserManagement = () => {
           <table className="min-w-full divide-y divide-border">
             <thead className="bg-secondary">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Campaigns</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Activity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Contact
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Campaigns
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Activity
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-card divide-y divide-border">
-              {filteredUsers.map(user => (
+              {filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-foreground">{user.full_name}</div>
-                      {user.job_title && <div className="text-sm text-muted-foreground">{user.job_title}</div>}
-                      {user.company && <div className="text-sm text-muted-foreground">{user.company}</div>}
+                      {user.job_title && (
+                        <div className="text-sm text-muted-foreground">{user.job_title}</div>
+                      )}
+                      {user.company && (
+                        <div className="text-sm text-muted-foreground">{user.company}</div>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-foreground">{user.email}</div>
-                    {user.phone && <div className="text-sm text-muted-foreground">{user.phone}</div>}
+                    {user.phone && (
+                      <div className="text-sm text-muted-foreground">{user.phone}</div>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
                       value={user.role}
                       onChange={(e) => updateUserRole(user.id, e.target.value)}
                       className={`text-xs px-2 py-1 rounded form-input ${
-                        user.role === 'super_admin' ? 'text-primary' : 
-                        user.role === 'admin' ? 'text-accent-foreground' : 
-                        'text-muted-foreground'
+                        user.role === 'super_admin'
+                          ? 'text-primary'
+                          : user.role === 'admin'
+                            ? 'text-accent-foreground'
+                            : 'text-muted-foreground'
                       }`}
                     >
                       <option value="user">User</option>
@@ -272,11 +305,13 @@ const UserManagement = () => {
                     </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      user.email_confirmed 
-                        ? 'bg-accent/20 text-accent-foreground' 
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        user.email_confirmed
+                          ? 'bg-accent/20 text-accent-foreground'
+                          : 'bg-muted text-muted-foreground'
+                      }`}
+                    >
                       {user.email_confirmed ? '✅ Verified' : '⏳ Unverified'}
                     </span>
                   </td>
@@ -285,7 +320,10 @@ const UserManagement = () => {
                       {user.campaign_members && user.campaign_members.length > 0 ? (
                         <div className="space-y-1">
                           {user.campaign_members.map((membership, index) => (
-                            <div key={index} className="text-xs text-foreground bg-secondary/50 px-2 py-1 rounded">
+                            <div
+                              key={index}
+                              className="text-xs text-foreground bg-secondary/50 px-2 py-1 rounded"
+                            >
                               {membership.campaigns?.campaign_name || 'Unknown Campaign'}
                             </div>
                           ))}
@@ -329,8 +367,8 @@ Last Login: ${user.last_login_at ? new Date(user.last_login_at).toLocaleString()
 Login Count: ${user.login_count || 0}
 Email Confirmed: ${user.email_confirmed ? 'Yes' : 'No'}
 Timezone: ${user.timezone || 'N/A'}
-                          `
-                          alert('User Details:\n' + userDetails)
+                          `;
+                          alert('User Details:\n' + userDetails);
                         }}
                       >
                         View Details
@@ -360,14 +398,18 @@ Timezone: ${user.timezone || 'N/A'}
           <li>✅ See email verification status</li>
           <li>🏢 View campaign memberships</li>
         </ul>
-        
+
         <div className="mt-4 p-4 bg-muted/20 rounded-lg">
           <strong className="text-foreground">Privacy Notice:</strong>
-          <span className="text-muted-foreground"> This information is only visible to administrators and is used for system management and support purposes. User privacy is protected according to our privacy policy.</span>
+          <span className="text-muted-foreground">
+            {' '}
+            This information is only visible to administrators and is used for system management and
+            support purposes. User privacy is protected according to our privacy policy.
+          </span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserManagement
+export default UserManagement;

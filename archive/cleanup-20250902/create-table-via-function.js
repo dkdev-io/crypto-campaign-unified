@@ -7,7 +7,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function createTableViaFunction() {
   console.log('🔧 Attempting to create form_submissions table...\n');
-  
+
   // Step 1: Create a function that creates the table
   // This function needs to be created first in Supabase
   const createFunctionSQL = `
@@ -88,23 +88,23 @@ async function createTableViaFunction() {
 
   if (process.argv.includes('--execute')) {
     console.log('🚀 Attempting to execute the function...\n');
-    
+
     try {
       // Try to call the function
       const { data, error } = await supabase.rpc('create_form_submissions_table');
-      
+
       if (error) {
         console.error('❌ Error calling function:', error.message);
         console.log('\nMake sure you created the function in Step 1 first!');
       } else {
         console.log('✅ Function executed successfully!');
-        
+
         // Test if table exists
         const { data: testData, error: testError } = await supabase
           .from('form_submissions')
           .select('count')
           .limit(1);
-        
+
         if (!testError) {
           console.log('✅ Table form_submissions created and accessible!');
         } else {

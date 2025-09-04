@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ProfileCompletion = ({ onComplete }) => {
   const [formData, setFormData] = useState({
@@ -9,18 +9,18 @@ const ProfileCompletion = ({ onComplete }) => {
     timezone: 'America/New_York',
     notificationPreferences: {
       email: true,
-      sms: false
-    }
-  })
-  const [errors, setErrors] = useState({})
-  const [loading, setLoading] = useState(false)
+      sms: false,
+    },
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const { userProfile, updateProfile } = useAuth()
+  const { userProfile, updateProfile } = useAuth();
 
   useEffect(() => {
     // Pre-fill form if profile data exists
     if (userProfile) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         phone: userProfile.phone || '',
         company: userProfile.company || '',
@@ -28,31 +28,31 @@ const ProfileCompletion = ({ onComplete }) => {
         timezone: userProfile.timezone || 'America/New_York',
         notificationPreferences: userProfile.notification_preferences || {
           email: true,
-          sms: false
-        }
-      }))
+          sms: false,
+        },
+      }));
     }
-  }, [userProfile])
+  }, [userProfile]);
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     // Phone validation (optional but if provided should be valid)
     if (formData.phone && !/^\+?[\d\s\-\(\)]+$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number'
+      newErrors.phone = 'Please enter a valid phone number';
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) return
+    e.preventDefault();
 
-    setLoading(true)
-    setErrors({})
+    if (!validateForm()) return;
+
+    setLoading(true);
+    setErrors({});
 
     try {
       const updates = {
@@ -61,47 +61,47 @@ const ProfileCompletion = ({ onComplete }) => {
         job_title: formData.jobTitle || null,
         timezone: formData.timezone,
         notification_preferences: formData.notificationPreferences,
-        updated_at: new Date().toISOString()
-      }
+        updated_at: new Date().toISOString(),
+      };
 
-      const { data, error } = await updateProfile(updates)
+      const { data, error } = await updateProfile(updates);
 
       if (error) {
-        setErrors({ submit: error.message })
-        return
+        setErrors({ submit: error.message });
+        return;
       }
 
       // Success
       if (onComplete) {
-        onComplete(data)
+        onComplete(data);
       }
     } catch (error) {
-      setErrors({ submit: 'An unexpected error occurred. Please try again.' })
+      setErrors({ submit: 'An unexpected error occurred. Please try again.' });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleInputChange = (field, value) => {
     if (field.includes('.')) {
       // Handle nested object fields like notificationPreferences.email
-      const [parent, child] = field.split('.')
-      setFormData(prev => ({
+      const [parent, child] = field.split('.');
+      setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: value
-        }
-      }))
+          [child]: value,
+        },
+      }));
     } else {
-      setFormData(prev => ({ ...prev, [field]: value }))
+      setFormData((prev) => ({ ...prev, [field]: value }));
     }
-    
+
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }))
+      setErrors((prev) => ({ ...prev, [field]: '' }));
     }
-  }
+  };
 
   const timezones = [
     { value: 'America/New_York', label: 'Eastern Time (ET)' },
@@ -110,8 +110,8 @@ const ProfileCompletion = ({ onComplete }) => {
     { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
     { value: 'America/Phoenix', label: 'Arizona Time (MST)' },
     { value: 'America/Anchorage', label: 'Alaska Time (AKT)' },
-    { value: 'Pacific/Honolulu', label: 'Hawaii Time (HST)' }
-  ]
+    { value: 'Pacific/Honolulu', label: 'Hawaii Time (HST)' },
+  ];
 
   return (
     <div className="profile-completion-container">
@@ -119,15 +119,13 @@ const ProfileCompletion = ({ onComplete }) => {
         <div className="profile-header">
           <h2>📝 Complete Your Profile</h2>
           <p>Help us personalize your experience by completing your profile</p>
-          <div className="welcome-user">
-            Welcome, {userProfile?.full_name}! 👋
-          </div>
+          <div className="welcome-user">Welcome, {userProfile?.full_name}! 👋</div>
         </div>
 
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-section">
             <h3>Contact Information</h3>
-            
+
             <div className="form-group">
               <label htmlFor="phone">Phone Number (Optional)</label>
               <input
@@ -138,9 +136,7 @@ const ProfileCompletion = ({ onComplete }) => {
                 className={`form-input ${errors.phone ? 'error' : ''}`}
                 placeholder="+1 (555) 123-4567"
               />
-              {errors.phone && (
-                <span className="error-message">{errors.phone}</span>
-              )}
+              {errors.phone && <span className="error-message">{errors.phone}</span>}
               <small className="field-help">
                 Used for SMS notifications and campaign communication
               </small>
@@ -149,7 +145,7 @@ const ProfileCompletion = ({ onComplete }) => {
 
           <div className="form-section">
             <h3>Professional Information</h3>
-            
+
             <div className="form-group">
               <label htmlFor="company">Organization/Company (Optional)</label>
               <input
@@ -160,9 +156,7 @@ const ProfileCompletion = ({ onComplete }) => {
                 className="form-input"
                 placeholder="Your organization name"
               />
-              <small className="field-help">
-                Campaign organization or employer
-              </small>
+              <small className="field-help">Campaign organization or employer</small>
             </div>
 
             <div className="form-group">
@@ -175,15 +169,13 @@ const ProfileCompletion = ({ onComplete }) => {
                 className="form-input"
                 placeholder="Campaign Manager, Political Director, etc."
               />
-              <small className="field-help">
-                Your role in the campaign or organization
-              </small>
+              <small className="field-help">Your role in the campaign or organization</small>
             </div>
           </div>
 
           <div className="form-section">
             <h3>Preferences</h3>
-            
+
             <div className="form-group">
               <label htmlFor="timezone">Time Zone</label>
               <select
@@ -192,7 +184,7 @@ const ProfileCompletion = ({ onComplete }) => {
                 onChange={(e) => handleInputChange('timezone', e.target.value)}
                 className="form-input"
               >
-                {timezones.map(tz => (
+                {timezones.map((tz) => (
                   <option key={tz.value} value={tz.value}>
                     {tz.label}
                   </option>
@@ -211,7 +203,9 @@ const ProfileCompletion = ({ onComplete }) => {
                     id="emailNotifications"
                     type="checkbox"
                     checked={formData.notificationPreferences.email}
-                    onChange={(e) => handleInputChange('notificationPreferences.email', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange('notificationPreferences.email', e.target.checked)
+                    }
                   />
                   <label htmlFor="emailNotifications">Email notifications</label>
                 </div>
@@ -220,7 +214,9 @@ const ProfileCompletion = ({ onComplete }) => {
                     id="smsNotifications"
                     type="checkbox"
                     checked={formData.notificationPreferences.sms}
-                    onChange={(e) => handleInputChange('notificationPreferences.sms', e.target.checked)}
+                    onChange={(e) =>
+                      handleInputChange('notificationPreferences.sms', e.target.checked)
+                    }
                     disabled={!formData.phone}
                   />
                   <label htmlFor="smsNotifications">
@@ -234,25 +230,17 @@ const ProfileCompletion = ({ onComplete }) => {
             </div>
           </div>
 
-          {errors.submit && (
-            <div className="error-banner">
-              {errors.submit}
-            </div>
-          )}
+          {errors.submit && <div className="error-banner">{errors.submit}</div>}
 
           <div className="form-actions">
-            <button 
+            <button
               type="button"
               className="btn btn-outline"
               onClick={() => onComplete && onComplete()}
             >
               Skip for Now
             </button>
-            <button 
-              type="submit" 
-              className="btn btn-primary"
-              disabled={loading}
-            >
+            <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? 'Saving...' : 'Complete Profile'}
             </button>
           </div>
@@ -266,11 +254,13 @@ const ProfileCompletion = ({ onComplete }) => {
             <li>👥 Help team members identify your role</li>
             <li>📊 Receive personalized campaign insights</li>
           </ul>
-          <p><em>You can update this information anytime in your settings.</em></p>
+          <p>
+            <em>You can update this information anytime in your settings.</em>
+          </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileCompletion
+export default ProfileCompletion;

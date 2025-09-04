@@ -1,32 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
-import { supabase } from '../../lib/supabase'
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 const AcceptInvitation = ({ token, onAccepted, onError }) => {
-  const [invitation, setInvitation] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [accepting, setAccepting] = useState(false)
-  const [error, setError] = useState('')
-  const [campaign, setCampaign] = useState(null)
-  const [inviter, setInviter] = useState(null)
+  const [invitation, setInvitation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [accepting, setAccepting] = useState(false);
+  const [error, setError] = useState('');
+  const [campaign, setCampaign] = useState(null);
+  const [inviter, setInviter] = useState(null);
 
-  const { user, acceptInvitation } = useAuth()
+  const { user, acceptInvitation } = useAuth();
 
   useEffect(() => {
     if (token) {
-      fetchInvitation()
+      fetchInvitation();
     }
-  }, [token])
+  }, [token]);
 
   const fetchInvitation = async () => {
     try {
-      setLoading(true)
-      setError('')
+      setLoading(true);
+      setError('');
 
       // Get invitation details
       const { data: invitationData, error: invitationError } = await supabase
         .from('invitations')
-        .select(`
+        .select(
+          `
           *,
           campaigns (
             id,
@@ -37,55 +38,55 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
             full_name,
             email
           )
-        `)
+        `
+        )
         .eq('token', token)
         .eq('status', 'pending')
-        .single()
+        .single();
 
       if (invitationError) {
         if (invitationError.code === 'PGRST116') {
-          setError('Invitation not found or has expired')
+          setError('Invitation not found or has expired');
         } else {
-          setError('Error loading invitation: ' + invitationError.message)
+          setError('Error loading invitation: ' + invitationError.message);
         }
-        return
+        return;
       }
 
       // Check if invitation is expired
-      const now = new Date()
-      const expiresAt = new Date(invitationData.expires_at)
-      
+      const now = new Date();
+      const expiresAt = new Date(invitationData.expires_at);
+
       if (now > expiresAt) {
-        setError('This invitation has expired')
-        return
+        setError('This invitation has expired');
+        return;
       }
 
-      setInvitation(invitationData)
-      setCampaign(invitationData.campaigns)
-      setInviter(invitationData.users)
-
+      setInvitation(invitationData);
+      setCampaign(invitationData.campaigns);
+      setInviter(invitationData.users);
     } catch (error) {
-      setError('An unexpected error occurred')
+      setError('An unexpected error occurred');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleAccept = async () => {
     if (!user) {
-      setError('You must be logged in to accept invitations')
-      return
+      setError('You must be logged in to accept invitations');
+      return;
     }
 
-    setAccepting(true)
-    setError('')
+    setAccepting(true);
+    setError('');
 
     try {
-      const { data, error } = await acceptInvitation(token)
+      const { data, error } = await acceptInvitation(token);
 
       if (error) {
-        setError(error.message)
-        return
+        setError(error.message);
+        return;
       }
 
       // Success
@@ -93,16 +94,15 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
         onAccepted({
           invitation,
           campaign,
-          membershipData: data
-        })
+          membershipData: data,
+        });
       }
-
     } catch (error) {
-      setError('An unexpected error occurred while accepting the invitation')
+      setError('An unexpected error occurred while accepting the invitation');
     } finally {
-      setAccepting(false)
+      setAccepting(false);
     }
-  }
+  };
 
   const handleDecline = async () => {
     try {
@@ -111,23 +111,22 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
         .from('invitations')
         .update({
           status: 'revoked',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('token', token)
+        .eq('token', token);
 
       if (error) {
-        setError('Error declining invitation: ' + error.message)
-        return
+        setError('Error declining invitation: ' + error.message);
+        return;
       }
 
       if (onError) {
-        onError('Invitation declined')
+        onError('Invitation declined');
       }
-
     } catch (error) {
-      setError('Error declining invitation')
+      setError('Error declining invitation');
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -139,7 +138,7 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -150,18 +149,15 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
             <h2>❌ Unable to Load Invitation</h2>
             <p>{error}</p>
           </div>
-          
+
           <div className="error-actions">
-            <button 
-              className="btn btn-outline"
-              onClick={() => window.location.href = '/'}
-            >
+            <button className="btn btn-outline" onClick={() => (window.location.href = '/')}>
               Return to Home
             </button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!invitation || !campaign) {
@@ -174,7 +170,7 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -203,12 +199,13 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
             <h4>Your Role & Permissions:</h4>
             <div className="role-details">
               <div className="role-badge">
-                {invitation.campaign_role.charAt(0).toUpperCase() + invitation.campaign_role.slice(1)}
+                {invitation.campaign_role.charAt(0).toUpperCase() +
+                  invitation.campaign_role.slice(1)}
               </div>
               <div className="permissions-list">
                 <strong>Permissions:</strong>
                 <ul>
-                  {invitation.permissions.map(permission => (
+                  {invitation.permissions.map((permission) => (
                     <li key={permission}>
                       {permission === 'view' && '👁️ View campaign data and reports'}
                       {permission === 'export' && '📊 Export data and generate reports'}
@@ -223,9 +220,7 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           {invitation.personal_message && (
             <div className="personal-message">
               <h4>Personal Message:</h4>
-              <div className="message-content">
-                "{invitation.personal_message}"
-              </div>
+              <div className="message-content">"{invitation.personal_message}"</div>
             </div>
           )}
 
@@ -240,15 +235,19 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           <div className="auth-required">
             <p>You need to be logged in to accept this invitation.</p>
             <div className="auth-actions">
-              <button 
+              <button
                 className="btn btn-primary"
-                onClick={() => window.location.href = `/login?redirect=/accept-invitation/${token}`}
+                onClick={() =>
+                  (window.location.href = `/login?redirect=/accept-invitation/${token}`)
+                }
               >
                 Sign In
               </button>
-              <button 
+              <button
                 className="btn btn-outline"
-                onClick={() => window.location.href = `/signup?redirect=/accept-invitation/${token}`}
+                onClick={() =>
+                  (window.location.href = `/signup?redirect=/accept-invitation/${token}`)
+                }
               >
                 Create Account
               </button>
@@ -256,14 +255,10 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           </div>
         ) : (
           <div className="invitation-actions">
-            <button 
-              className="btn btn-primary"
-              onClick={handleAccept}
-              disabled={accepting}
-            >
+            <button className="btn btn-primary" onClick={handleAccept} disabled={accepting}>
               {accepting ? 'Accepting...' : 'Accept Invitation'}
             </button>
-            <button 
+            <button
               className="btn btn-outline btn-danger"
               onClick={handleDecline}
               disabled={accepting}
@@ -273,11 +268,7 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
           </div>
         )}
 
-        {error && (
-          <div className="error-banner">
-            {error}
-          </div>
-        )}
+        {error && <div className="error-banner">{error}</div>}
 
         <div className="invitation-info">
           <h4>What happens when you accept?</h4>
@@ -290,7 +281,7 @@ const AcceptInvitation = ({ token, onAccepted, onError }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AcceptInvitation
+export default AcceptInvitation;

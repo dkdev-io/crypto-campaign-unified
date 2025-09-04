@@ -14,7 +14,7 @@ jest.mock('winston', () => ({
     error: jest.fn(),
     debug: jest.fn(),
     add: jest.fn(),
-    silent: false
+    silent: false,
   })),
   format: {
     combine: jest.fn(),
@@ -22,12 +22,12 @@ jest.mock('winston', () => ({
     errors: jest.fn(),
     json: jest.fn(),
     colorize: jest.fn(),
-    simple: jest.fn()
+    simple: jest.fn(),
   },
   transports: {
     File: jest.fn(),
-    Console: jest.fn()
-  }
+    Console: jest.fn(),
+  },
 }));
 
 // Mock Supabase with proper chain methods
@@ -36,19 +36,19 @@ let mockChainData = {};
 const createMockChain = () => {
   const chain = {
     select: jest.fn(() => chain),
-    insert: jest.fn(() => chain), 
+    insert: jest.fn(() => chain),
     update: jest.fn(() => chain),
     eq: jest.fn(() => chain),
     single: jest.fn(() => mockChainData),
     order: jest.fn(() => chain),
     range: jest.fn(() => mockChainData),
-    limit: jest.fn(() => mockChainData)
+    limit: jest.fn(() => mockChainData),
   };
   return chain;
 };
 
 const mockSupabaseClient = {
-  from: jest.fn(() => createMockChain())
+  from: jest.fn(() => createMockChain()),
 };
 
 // Helper to set mock chain response
@@ -57,7 +57,7 @@ global.setMockChainResponse = (response) => {
 };
 
 jest.mock('@supabase/supabase-js', () => ({
-  createClient: jest.fn(() => mockSupabaseClient)
+  createClient: jest.fn(() => mockSupabaseClient),
 }));
 
 // Mock Web3/Ethers
@@ -68,8 +68,8 @@ jest.mock('ethers', () => ({
     formatEther: jest.fn((wei) => '1.0'),
     parseEther: jest.fn((eth) => '1000000000000000000'),
     formatUnits: jest.fn((value, units) => '1.0'),
-    isAddress: jest.fn((address) => /^0x[a-fA-F0-9]{40}$/.test(address))
-  }
+    isAddress: jest.fn((address) => /^0x[a-fA-F0-9]{40}$/.test(address)),
+  },
 }));
 
 // Global mocks

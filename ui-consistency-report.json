@@ -3,9 +3,7 @@
     {
       "name": "Home",
       "url": "/",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -26,9 +24,7 @@
     {
       "name": "Campaign Auth",
       "url": "/campaigns/auth",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -49,9 +45,7 @@
     {
       "name": "Donor Auth",
       "url": "/donors/auth",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -72,9 +66,7 @@
     {
       "name": "Campaign Setup",
       "url": "/campaigns/auth/setup",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -95,9 +87,7 @@
     {
       "name": "Campaign Info Form",
       "url": "/YourInfo",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -118,9 +108,7 @@
     {
       "name": "Committee Search",
       "url": "/CommitteeSearch",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -141,9 +129,7 @@
     {
       "name": "Bank Connection",
       "url": "/BankConnection",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",
@@ -164,9 +150,7 @@
     {
       "name": "Website Style",
       "url": "/WebsiteStyle",
-      "emojis": [
-        "🔧"
-      ],
+      "emojis": ["🔧"],
       "fontSizes": [
         {
           "tag": "H1",

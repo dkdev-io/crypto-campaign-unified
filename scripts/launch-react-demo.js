@@ -14,19 +14,19 @@ async function setupReactDemo() {
   // Check if we're in the frontend directory
   const frontendPath = path.join(process.cwd(), 'frontend');
   const packageJsonPath = path.join(frontendPath, 'package.json');
-  
+
   if (!fs.existsSync(packageJsonPath)) {
     console.error('❌ Frontend package.json not found. Please run this from the project root.');
     return false;
   }
 
   // Install additional dependencies if needed
-  
+
   try {
     // Check if @supabase/supabase-js is installed
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-    
+
     if (!deps['@supabase/supabase-js']) {
       await runCommand('npm install @supabase/supabase-js', frontendPath);
     }
@@ -34,7 +34,6 @@ async function setupReactDemo() {
     if (!deps['react-router-dom']) {
       await runCommand('npm install react-router-dom', frontendPath);
     }
-
   } catch (error) {
     console.error('❌ Error checking dependencies:', error.message);
     return false;
@@ -45,24 +44,22 @@ async function setupReactDemo() {
 
 async function createEnvFile() {
   const envPath = path.join(process.cwd(), 'frontend', '.env.local');
-  
+
   if (!fs.existsSync(envPath)) {
-    
     const envContent = `# Demo Environment Variables
 REACT_APP_SUPABASE_URL=https://your-project.supabase.co
 REACT_APP_SUPABASE_ANON_KEY=your-anon-key
 REACT_APP_DEMO_MODE=true
 `;
-    
+
     fs.writeFileSync(envPath, envContent);
     console.log('✅ Created .env.local file - please update with your Supabase credentials');
   }
 }
 
 async function updateAppForDemo() {
-  
   const appPath = path.join(process.cwd(), 'frontend', 'src', 'App.js');
-  
+
   if (!fs.existsSync(appPath)) {
     console.log('⚠️ App.js not found, using existing version');
     return;
@@ -336,7 +333,7 @@ async function runCommand(command, cwd) {
   return new Promise((resolve, reject) => {
     const child = spawn(command.split(' ')[0], command.split(' ').slice(1), {
       cwd,
-      stdio: 'pipe'
+      stdio: 'pipe',
     });
 
     let output = '';
@@ -360,18 +357,18 @@ async function runCommand(command, cwd) {
 
 async function startReactServer() {
   const frontendPath = path.join(process.cwd(), 'frontend');
-  
+
   console.log('🚀 Starting React development server...');
-  
+
   return new Promise((resolve) => {
     const child = spawn('npm', ['start'], {
       cwd: frontendPath,
-      stdio: 'pipe'
+      stdio: 'pipe',
     });
 
     child.stdout.on('data', (data) => {
       const output = data.toString();
-      
+
       if (output.includes('Local:') || output.includes('localhost:3000')) {
         setTimeout(() => resolve('http://localhost:3000'), 2000);
       }
@@ -386,21 +383,20 @@ async function startReactServer() {
 }
 
 async function launchBrowserDemo() {
-  
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
     args: [
       '--start-maximized',
       '--disable-web-security',
-      '--disable-features=VizDisplayCompositor'
-    ]
+      '--disable-features=VizDisplayCompositor',
+    ],
   });
 
   const page = await browser.newPage();
-  
+
   // Console logging
-  page.on('console', msg => {
+  page.on('console', (msg) => {
     const type = msg.type();
     if (type === 'log') {
     } else if (type === 'error') {
@@ -409,24 +405,23 @@ async function launchBrowserDemo() {
   });
 
   // Navigate with UTM parameters for testing
-  const url = 'http://localhost:3000?utm_source=demo&utm_medium=puppeteer&utm_campaign=analytics_test';
-  
+  const url =
+    'http://localhost:3000?utm_source=demo&utm_medium=puppeteer&utm_campaign=analytics_test';
+
   await page.goto(url, { waitUntil: 'networkidle0' });
 
   // Inject some demo interactions
   setTimeout(async () => {
-    
     // Scroll to trigger scroll events
     await page.evaluate(() => {
       window.scrollTo({ top: 300, behavior: 'smooth' });
     });
-    
+
     setTimeout(async () => {
       await page.evaluate(() => {
         window.scrollTo({ top: 600, behavior: 'smooth' });
       });
     }, 2000);
-    
   }, 5000);
 
   console.log('✅ React demo is running!');
@@ -442,20 +437,18 @@ async function main() {
 
     await createEnvFile();
     await updateAppForDemo();
-    
+
     // Start React server
     const serverUrl = await startReactServer();
     console.log('✅ React server started at:', serverUrl);
-    
+
     // Launch browser
     await launchBrowserDemo();
-    
-    
+
     // Keep running
     process.on('SIGINT', () => {
       process.exit(0);
     });
-    
   } catch (error) {
     console.error('❌ Demo failed:', error);
   }

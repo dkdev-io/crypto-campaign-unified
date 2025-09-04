@@ -29,10 +29,10 @@ async function verifyAccountsDirectly() {
 
     if (!profiles || profiles.length === 0) {
       console.log('No profiles found. Let me check if there are any auth users...');
-      
+
       // Try to sign in with a test account to see if auth is working
       const testEmails = ['test@example.com', 'campaign@test.com', 'donor@test.com'];
-      
+
       console.log('\n🔍 Checking for existing accounts that might need verification:\n');
       console.log('Copy and run this SQL in your Supabase dashboard SQL editor:\n');
       console.log('----------------------------------------');
@@ -69,12 +69,12 @@ LEFT JOIN public.profiles p ON u.id = p.id
 ORDER BY u.created_at DESC;
       `);
       console.log('----------------------------------------\n');
-      
+
       return;
     }
 
     console.log(`Found ${profiles.length} profile(s):\n`);
-    
+
     // Display all profiles
     profiles.forEach((profile, index) => {
       console.log(`${index + 1}. Profile:`);
@@ -87,9 +87,7 @@ ORDER BY u.created_at DESC;
 
     // Step 2: Check campaigns
     console.log('📊 Checking campaigns...\n');
-    const { data: campaigns, error: campaignError } = await supabase
-      .from('campaigns')
-      .select('*');
+    const { data: campaigns, error: campaignError } = await supabase.from('campaigns').select('*');
 
     if (campaigns && campaigns.length > 0) {
       campaigns.forEach((campaign, index) => {
@@ -107,7 +105,6 @@ ORDER BY u.created_at DESC;
     console.log('Since Supabase email verification is not working,');
     console.log('I will now update the frontend auth contexts to bypass email verification.\n');
     console.log('This will allow you to test the app while the email issue is being fixed.\n');
-    
   } catch (error) {
     console.error('Unexpected error:', error);
   }

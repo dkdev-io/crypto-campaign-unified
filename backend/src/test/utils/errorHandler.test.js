@@ -6,19 +6,16 @@ const mockLogger = {
   error: jest.fn(),
   warn: jest.fn(),
   info: jest.fn(),
-  debug: jest.fn()
+  debug: jest.fn(),
 };
 
 jest.mock('../../utils/logger.js', () => ({
-  logger: mockLogger
+  logger: mockLogger,
 }));
 
 // Error handler middleware function for testing
 const createErrorHandler = (options = {}) => {
-  const {
-    includeStack = process.env.NODE_ENV === 'development',
-    logErrors = true
-  } = options;
+  const { includeStack = process.env.NODE_ENV === 'development', logErrors = true } = options;
 
   return (error, req, res, next) => {
     // Log the error
@@ -29,7 +26,7 @@ const createErrorHandler = (options = {}) => {
         url: req.originalUrl,
         method: req.method,
         ip: req.ip,
-        userAgent: req.get('User-Agent')
+        userAgent: req.get('User-Agent'),
       });
     }
 
@@ -47,7 +44,7 @@ const createErrorHandler = (options = {}) => {
     // Build error response
     const errorResponse = {
       error: error.message || 'Internal Server Error',
-      statusCode
+      statusCode,
     };
 
     // Add stack trace in development
@@ -128,7 +125,7 @@ describe('Error Handler Tests', () => {
       originalUrl: '/api/test',
       method: 'GET',
       ip: '127.0.0.1',
-      get: jest.fn().mockReturnValue('test-user-agent')
+      get: jest.fn().mockReturnValue('test-user-agent'),
     });
     res = TestHelpers.createMockResponse();
     next = TestHelpers.createMockNext();
@@ -144,7 +141,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Test error',
-        statusCode: 500
+        statusCode: 500,
       });
       expect(mockLogger.error).toHaveBeenCalled();
     });
@@ -158,7 +155,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Bad request',
-        statusCode: 400
+        statusCode: 400,
       });
     });
 
@@ -171,7 +168,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Not found',
-        statusCode: 404
+        statusCode: 404,
       });
     });
 
@@ -183,7 +180,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Internal Server Error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -201,7 +198,7 @@ describe('Error Handler Tests', () => {
     it('should handle ValidationError', () => {
       const validationErrors = [
         { field: 'email', message: 'Invalid email format' },
-        { field: 'password', message: 'Password too short' }
+        { field: 'password', message: 'Password too short' },
       ];
       const error = new ValidationError('Validation failed', validationErrors);
 
@@ -211,7 +208,7 @@ describe('Error Handler Tests', () => {
       expect(res.json).toHaveBeenCalledWith({
         error: 'Validation failed',
         statusCode: 400,
-        validation: validationErrors
+        validation: validationErrors,
       });
     });
 
@@ -223,7 +220,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(404);
       expect(res.json).toHaveBeenCalledWith({
         error: 'User not found',
-        statusCode: 404
+        statusCode: 404,
       });
     });
 
@@ -235,7 +232,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Invalid credentials',
-        statusCode: 401
+        statusCode: 401,
       });
     });
 
@@ -247,7 +244,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Access denied',
-        statusCode: 403
+        statusCode: 403,
       });
     });
 
@@ -259,7 +256,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(409);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Email already exists',
-        statusCode: 409
+        statusCode: 409,
       });
     });
 
@@ -271,7 +268,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(429);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Too many requests',
-        statusCode: 429
+        statusCode: 429,
       });
     });
   });
@@ -289,7 +286,7 @@ describe('Error Handler Tests', () => {
         url: '/api/test',
         method: 'GET',
         ip: '127.0.0.1',
-        userAgent: 'test-user-agent'
+        userAgent: 'test-user-agent',
       });
     });
 
@@ -326,7 +323,7 @@ describe('Error Handler Tests', () => {
       expect(res.json).toHaveBeenCalledWith({
         error: 'Test error',
         statusCode: 500,
-        stack: 'Error: Test error\n    at test.js:1:1'
+        stack: 'Error: Test error\n    at test.js:1:1',
       });
     });
 
@@ -339,7 +336,7 @@ describe('Error Handler Tests', () => {
 
       expect(res.json).toHaveBeenCalledWith({
         error: 'Test error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -352,7 +349,7 @@ describe('Error Handler Tests', () => {
 
       expect(res.json).toHaveBeenCalledWith({
         error: 'Test error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
   });
@@ -368,7 +365,7 @@ describe('Error Handler Tests', () => {
       expect(res.json).toHaveBeenCalledWith({
         error: 'Database error',
         statusCode: 500,
-        details: { connection: 'timeout', retries: 3 }
+        details: { connection: 'timeout', retries: 3 },
       });
     });
 
@@ -379,7 +376,7 @@ describe('Error Handler Tests', () => {
 
       expect(res.json).toHaveBeenCalledWith({
         error: 'Simple error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
   });
@@ -417,7 +414,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Internal Server Error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -430,13 +427,15 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Circular error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
     it('should sanitize sensitive information from error messages', () => {
-      const error = new Error('Database connection failed: password=secret123 host=db.internal.com');
-      
+      const error = new Error(
+        'Database connection failed: password=secret123 host=db.internal.com'
+      );
+
       // In a real implementation, you might want to sanitize sensitive info
       // For this test, we just verify the error is handled
       errorHandler(error, req, res, next);
@@ -444,7 +443,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Database connection failed: password=secret123 host=db.internal.com',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -457,7 +456,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: longMessage,
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -469,7 +468,7 @@ describe('Error Handler Tests', () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         error: 'Error with special chars: <script>alert("xss")</script>',
-        statusCode: 500
+        statusCode: 500,
       });
     });
 
@@ -477,7 +476,7 @@ describe('Error Handler Tests', () => {
       const validationErrors = [
         { field: 'email', message: 'Required field' },
         { field: 'password', message: 'Too short' },
-        { field: 'age', message: 'Must be a number' }
+        { field: 'age', message: 'Must be a number' },
       ];
       const error = new ValidationError('Multiple validation errors', validationErrors);
 
@@ -486,7 +485,7 @@ describe('Error Handler Tests', () => {
       expect(res.json).toHaveBeenCalledWith({
         error: 'Multiple validation errors',
         statusCode: 400,
-        validation: validationErrors
+        validation: validationErrors,
       });
     });
   });

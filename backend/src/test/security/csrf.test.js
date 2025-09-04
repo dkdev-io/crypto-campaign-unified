@@ -12,14 +12,16 @@ describe('CSRF Protection Tests', () => {
     app = express();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    
+
     // Setup session middleware for CSRF token storage
-    app.use(session({
-      secret: 'test-secret',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: false } // For testing
-    }));
+    app.use(
+      session({
+        secret: 'test-secret',
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false }, // For testing
+      })
+    );
 
     // Endpoint to generate CSRF token
     app.get('/csrf-token', (req, res) => {
@@ -29,7 +31,7 @@ describe('CSRF Protection Tests', () => {
 
     // Protected endpoints
     app.use('/api', csrfProtection);
-    
+
     app.post('/api/test', (req, res) => {
       res.json({ message: 'Success', data: req.body });
     });
@@ -50,49 +52,35 @@ describe('CSRF Protection Tests', () => {
 
   describe('CSRF Token Validation', () => {
     it('should allow GET requests without CSRF token', async () => {
-      const response = await request(app)
-        .get('/api/test')
-        .expect(200);
+      const response = await request(app).get('/api/test').expect(200);
 
       expect(response.body.message).toBe('GET requests are allowed');
     });
 
     it('should allow HEAD requests without CSRF token', async () => {
-      await request(app)
-        .head('/api/test')
-        .expect(200);
+      await request(app).head('/api/test').expect(200);
     });
 
     it('should allow OPTIONS requests without CSRF token', async () => {
-      await request(app)
-        .options('/api/test')
-        .expect(200);
+      await request(app).options('/api/test').expect(200);
     });
 
     it('should reject POST request without CSRF token', async () => {
-      const response = await request(app)
-        .post('/api/test')
-        .send({ data: 'test' })
-        .expect(403);
+      const response = await request(app).post('/api/test').send({ data: 'test' }).expect(403);
 
       expect(response.body.error).toBe('Invalid CSRF token');
       expect(response.body.code).toBe('CSRF_INVALID');
     });
 
     it('should reject PUT request without CSRF token', async () => {
-      const response = await request(app)
-        .put('/api/test/1')
-        .send({ data: 'test' })
-        .expect(403);
+      const response = await request(app).put('/api/test/1').send({ data: 'test' }).expect(403);
 
       expect(response.body.error).toBe('Invalid CSRF token');
       expect(response.body.code).toBe('CSRF_INVALID');
     });
 
     it('should reject DELETE request without CSRF token', async () => {
-      const response = await request(app)
-        .delete('/api/test/1')
-        .expect(403);
+      const response = await request(app).delete('/api/test/1').expect(403);
 
       expect(response.body.error).toBe('Invalid CSRF token');
       expect(response.body.code).toBe('CSRF_INVALID');
@@ -105,12 +93,10 @@ describe('CSRF Protection Tests', () => {
 
     beforeEach(async () => {
       agent = request.agent(app);
-      
+
       // Get CSRF token
-      const tokenResponse = await agent
-        .get('/csrf-token')
-        .expect(200);
-      
+      const tokenResponse = await agent.get('/csrf-token').expect(200);
+
       csrfToken = tokenResponse.body.csrfToken;
     });
 
@@ -128,9 +114,9 @@ describe('CSRF Protection Tests', () => {
     it('should allow POST request with valid CSRF token in body', async () => {
       const response = await agent
         .post('/api/test')
-        .send({ 
+        .send({
           data: 'test data',
-          _csrf: csrfToken
+          _csrf: csrfToken,
         })
         .expect(200);
 
@@ -166,7 +152,7 @@ describe('CSRF Protection Tests', () => {
 
     beforeEach(async () => {
       agent = request.agent(app);
-      
+
       // Get CSRF token but don't use it
       await agent.get('/csrf-token').expect(200);
     });
@@ -194,14 +180,7 @@ describe('CSRF Protection Tests', () => {
     });
 
     it('should reject request with malformed CSRF token', async () => {
-      const malformedTokens = [
-        'malformed-token',
-        null,
-        undefined,
-        123,
-        {},
-        []
-      ];
+      const malformedTokens = ['malformed-token', null, undefined, 123, {}, []];
 
       for (const token of malformedTokens) {
         const response = await agent
@@ -218,7 +197,7 @@ describe('CSRF Protection Tests', () => {
   describe('Session-based CSRF Tests', () => {
     it('should reject request when session has no CSRF token', async () => {
       const agent = request.agent(app);
-      
+
       // Don't get CSRF token, send request directly
       const response = await agent
         .post('/api/test')
@@ -231,12 +210,10 @@ describe('CSRF Protection Tests', () => {
 
     it('should handle session destruction gracefully', async () => {
       const agent = request.agent(app);
-      
+
       // Get CSRF token
-      const tokenResponse = await agent
-        .get('/csrf-token')
-        .expect(200);
-      
+      const tokenResponse = await agent.get('/csrf-token').expect(200);
+
       const csrfToken = tokenResponse.body.csrfToken;
 
       // Destroy session endpoint
@@ -273,7 +250,7 @@ describe('CSRF Protection Tests', () => {
         if (!tokenFromHeader || !tokenFromCookie || tokenFromHeader !== tokenFromCookie) {
           return res.status(403).json({
             error: 'Invalid CSRF token',
-            code: 'CSRF_INVALID'
+            code: 'CSRF_INVALID',
           });
         }
 
@@ -324,10 +301,10 @@ describe('CSRF Protection Tests', () => {
       const response = await request(app)
         .post('/api/test')
         .set('Content-Type', 'application/json')
-        .send({ 
+        .send({
           action: 'transfer',
           amount: 1000000,
-          destination: 'attacker-account'
+          destination: 'attacker-account',
         })
         .expect(403);
 
@@ -366,22 +343,19 @@ describe('CSRF Protection Tests', () => {
 
     it('should handle concurrent requests with same token', async () => {
       const agent = request.agent(app);
-      
+
       const tokenResponse = await agent.get('/csrf-token').expect(200);
       const csrfToken = tokenResponse.body.csrfToken;
 
       // Send multiple concurrent requests with same token
       const promises = Array.from({ length: 5 }, () =>
-        agent
-          .post('/api/test')
-          .set('X-CSRF-Token', csrfToken)
-          .send({ data: 'concurrent test' })
+        agent.post('/api/test').set('X-CSRF-Token', csrfToken).send({ data: 'concurrent test' })
       );
 
       const responses = await Promise.all(promises);
-      
+
       // All should succeed
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Success');
       });

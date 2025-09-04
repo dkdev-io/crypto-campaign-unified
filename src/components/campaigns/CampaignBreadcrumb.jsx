@@ -19,7 +19,7 @@ const CampaignBreadcrumb = () => {
     '/setup/6': 'Terms & Agreement',
     '/setup/7': 'Embed Code',
     '/campaigns': 'Campaigns',
-    '/campaigns/auth': 'Campaign Auth'
+    '/campaigns/auth': 'Campaign Auth',
   };
 
   // Generate breadcrumb items based on current path
@@ -29,19 +29,19 @@ const CampaignBreadcrumb = () => {
       {
         name: 'Home',
         path: '/',
-        current: location.pathname === '/'
-      }
+        current: location.pathname === '/',
+      },
     ];
 
     let currentPath = '';
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
       const isLast = index === pathSegments.length - 1;
-      
+
       breadcrumbs.push({
         name: pathMap[currentPath] || segment.charAt(0).toUpperCase() + segment.slice(1),
         path: currentPath,
-        current: isLast
+        current: isLast,
       });
     });
 
@@ -65,14 +65,11 @@ const CampaignBreadcrumb = () => {
               {index === 0 && (
                 <HomeIcon className="h-4 w-4 text-gray-400 mr-2" aria-hidden="true" />
               )}
-              
+
               {index > 0 && (
-                <ChevronRightIcon 
-                  className="h-4 w-4 text-gray-400 mx-2" 
-                  aria-hidden="true" 
-                />
+                <ChevronRightIcon className="h-4 w-4 text-gray-400 mx-2" aria-hidden="true" />
               )}
-              
+
               <button
                 onClick={() => handleNavigation(breadcrumb.path)}
                 className={`text-sm font-medium transition-colors duration-200 ${
@@ -88,7 +85,7 @@ const CampaignBreadcrumb = () => {
             </li>
           ))}
         </ol>
-        
+
         {/* Optional: Show current page description */}
         {location.pathname.includes('/setup') && (
           <p className="text-xs text-gray-500 mt-1">

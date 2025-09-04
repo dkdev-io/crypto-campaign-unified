@@ -13,18 +13,18 @@ describe('XSS Prevention Tests', () => {
     app = express();
     app.use(express.json());
     app.use(xssProtection);
-    
+
     // Test endpoint
     app.post('/test', (req, res) => {
-      res.json({ 
-        body: req.body, 
-        query: req.query 
+      res.json({
+        body: req.body,
+        query: req.query,
       });
     });
 
     app.get('/test', (req, res) => {
-      res.json({ 
-        query: req.query 
+      res.json({
+        query: req.query,
       });
     });
   });
@@ -33,13 +33,10 @@ describe('XSS Prevention Tests', () => {
     it('should remove script tags from request body', async () => {
       const maliciousPayload = {
         name: 'John<script>alert("XSS")</script>Doe',
-        description: 'Safe content'
+        description: 'Safe content',
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(maliciousPayload)
-        .expect(200);
+      const response = await request(app).post('/test').send(maliciousPayload).expect(200);
 
       expect(response.body.body.name).toBe('JohnDoe');
       expect(response.body.body.description).toBe('Safe content');
@@ -48,13 +45,10 @@ describe('XSS Prevention Tests', () => {
     it('should remove javascript: protocols', async () => {
       const maliciousPayload = {
         website: 'javascript:alert("XSS")',
-        email: 'user@example.com'
+        email: 'user@example.com',
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(maliciousPayload)
-        .expect(200);
+      const response = await request(app).post('/test').send(maliciousPayload).expect(200);
 
       expect(response.body.body.website).toBe('alert("XSS")');
       expect(response.body.body.email).toBe('user@example.com');
@@ -63,13 +57,10 @@ describe('XSS Prevention Tests', () => {
     it('should remove inline event handlers', async () => {
       const maliciousPayload = {
         content: '<div onclick="alert(\'XSS\')">Click me</div>',
-        title: 'Safe Title'
+        title: 'Safe Title',
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(maliciousPayload)
-        .expect(200);
+      const response = await request(app).post('/test').send(maliciousPayload).expect(200);
 
       expect(response.body.body.content).toBe('<div>Click me</div>');
       expect(response.body.body.title).toBe('Safe Title');
@@ -80,15 +71,12 @@ describe('XSS Prevention Tests', () => {
         user: {
           name: 'John<script>alert("XSS")</script>',
           profile: {
-            bio: '<img src=x onerror=alert("XSS")>Bio content'
-          }
-        }
+            bio: '<img src=x onerror=alert("XSS")>Bio content',
+          },
+        },
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(maliciousPayload)
-        .expect(200);
+      const response = await request(app).post('/test').send(maliciousPayload).expect(200);
 
       expect(response.body.body.user.name).toBe('John');
       expect(response.body.body.user.profile.bio).toBe('<img src=x>Bio content');
@@ -96,23 +84,12 @@ describe('XSS Prevention Tests', () => {
 
     it('should handle arrays with malicious content', async () => {
       const maliciousPayload = {
-        tags: [
-          'safe-tag',
-          '<script>alert("XSS")</script>malicious',
-          'another-safe-tag'
-        ]
+        tags: ['safe-tag', '<script>alert("XSS")</script>malicious', 'another-safe-tag'],
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(maliciousPayload)
-        .expect(200);
+      const response = await request(app).post('/test').send(maliciousPayload).expect(200);
 
-      expect(response.body.body.tags).toEqual([
-        'safe-tag',
-        'malicious',
-        'another-safe-tag'
-      ]);
+      expect(response.body.body.tags).toEqual(['safe-tag', 'malicious', 'another-safe-tag']);
     });
 
     it('should preserve non-string values', async () => {
@@ -121,13 +98,10 @@ describe('XSS Prevention Tests', () => {
         age: 25,
         active: true,
         score: 95.5,
-        metadata: null
+        metadata: null,
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(payload)
-        .expect(200);
+      const response = await request(app).post('/test').send(payload).expect(200);
 
       expect(response.body.body.name).toBe('John');
       expect(response.body.body.age).toBe(25);
@@ -141,9 +115,9 @@ describe('XSS Prevention Tests', () => {
     it('should sanitize query parameters', async () => {
       const response = await request(app)
         .get('/test')
-        .query({ 
+        .query({
           search: '<script>alert("XSS")</script>test',
-          filter: 'safe-filter'
+          filter: 'safe-filter',
         })
         .expect(200);
 
@@ -157,7 +131,7 @@ describe('XSS Prevention Tests', () => {
         .query({
           q: 'javascript:alert("XSS")',
           callback: '<img src=x onerror=alert(1)>',
-          redirect: 'http://safe-site.com'
+          redirect: 'http://safe-site.com',
         })
         .expect(200);
 
@@ -175,14 +149,11 @@ describe('XSS Prevention Tests', () => {
         '<object data=javascript:alert("XSS")>',
         '<embed src=javascript:alert("XSS")>',
         '<video src=x onerror=alert("XSS")>',
-        '<audio src=x onerror=alert("XSS")>'
+        '<audio src=x onerror=alert("XSS")>',
       ];
 
       for (const payload of maliciousPayloads) {
-        const response = await request(app)
-          .post('/test')
-          .send({ content: payload })
-          .expect(200);
+        const response = await request(app).post('/test').send({ content: payload }).expect(200);
 
         // Should not contain the original malicious payload
         expect(response.body.body.content).not.toContain('alert("XSS")');
@@ -194,14 +165,11 @@ describe('XSS Prevention Tests', () => {
       const encodedPayloads = [
         '&#x3C;script&#x3E;alert("XSS")&#x3C;/script&#x3E;',
         '%3Cscript%3Ealert(%22XSS%22)%3C/script%3E',
-        '&lt;script&gt;alert("XSS")&lt;/script&gt;'
+        '&lt;script&gt;alert("XSS")&lt;/script&gt;',
       ];
 
       for (const payload of encodedPayloads) {
-        const response = await request(app)
-          .post('/test')
-          .send({ content: payload })
-          .expect(200);
+        const response = await request(app).post('/test').send({ content: payload }).expect(200);
 
         // The sanitized content should not execute JavaScript
         expect(response.body.body.content).toBeDefined();
@@ -212,14 +180,11 @@ describe('XSS Prevention Tests', () => {
       const cssPayloads = [
         '<style>body{background:url("javascript:alert(\'XSS\')")}</style>',
         '<div style="background:url(javascript:alert(\'XSS\'))">Test</div>',
-        '<link rel="stylesheet" href="javascript:alert(\'XSS\')">'
+        '<link rel="stylesheet" href="javascript:alert(\'XSS\')">',
       ];
 
       for (const payload of cssPayloads) {
-        const response = await request(app)
-          .post('/test')
-          .send({ content: payload })
-          .expect(200);
+        const response = await request(app).post('/test').send({ content: payload }).expect(200);
 
         expect(response.body.body.content).not.toContain('javascript:');
       }
@@ -232,13 +197,10 @@ describe('XSS Prevention Tests', () => {
         empty: '',
         nullValue: null,
         undefined: undefined,
-        whitespace: '   '
+        whitespace: '   ',
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(payload)
-        .expect(200);
+      const response = await request(app).post('/test').send(payload).expect(200);
 
       expect(response.body.body.empty).toBe('');
       expect(response.body.body.nullValue).toBeNull();
@@ -247,7 +209,7 @@ describe('XSS Prevention Tests', () => {
 
     it('should handle very long malicious strings', async () => {
       const longMaliciousString = '<script>alert("XSS")</script>'.repeat(1000);
-      
+
       const response = await request(app)
         .post('/test')
         .send({ content: longMaliciousString })
@@ -261,13 +223,10 @@ describe('XSS Prevention Tests', () => {
       const payload = {
         title: 'This is a safe title',
         content: 'Safe content with <script>alert("XSS")</script> malicious code',
-        footer: 'Another safe footer'
+        footer: 'Another safe footer',
       };
 
-      const response = await request(app)
-        .post('/test')
-        .send(payload)
-        .expect(200);
+      const response = await request(app).post('/test').send(payload).expect(200);
 
       expect(response.body.body.title).toBe('This is a safe title');
       expect(response.body.body.content).toBe('Safe content with  malicious code');
@@ -282,25 +241,22 @@ describe('XSS Prevention Tests', () => {
           id: i,
           name: `User ${i}`,
           content: `Safe content for user ${i}`,
-          malicious: i % 10 === 0 ? '<script>alert("XSS")</script>' : 'safe'
-        }))
+          malicious: i % 10 === 0 ? '<script>alert("XSS")</script>' : 'safe',
+        })),
       };
 
       const startTime = Date.now();
-      
-      const response = await request(app)
-        .post('/test')
-        .send(largePayload)
-        .expect(200);
+
+      const response = await request(app).post('/test').send(largePayload).expect(200);
 
       const endTime = Date.now();
       const processingTime = endTime - startTime;
 
       // Should complete in reasonable time (less than 1 second)
       expect(processingTime).toBeLessThan(1000);
-      
+
       // Verify sanitization worked
-      response.body.body.data.forEach(item => {
+      response.body.body.data.forEach((item) => {
         expect(item.malicious).not.toContain('<script>');
       });
     });
@@ -328,14 +284,11 @@ describe('XSS Prevention Tests', () => {
         '<<SCRIPT>alert("XSS");//<</SCRIPT>',
         '<script>alert(String.fromCharCode(88,83,83))</script>',
         '<svg/onload=alert("XSS")>',
-        'javascript:/*--></title></style></textarea></script></xmp><svg/onload=\'+/"/+/onmouseover=1/+/[*/[]/+alert(1)//\'>'
+        "javascript:/*--></title></style></textarea></script></xmp><svg/onload='+/\"/+/onmouseover=1/+/[*/[]/+alert(1)//'>",
       ];
 
       for (const attempt of bypassAttempts) {
-        const response = await request(app)
-          .post('/test')
-          .send({ payload: attempt })
-          .expect(200);
+        const response = await request(app).post('/test').send({ payload: attempt }).expect(200);
 
         expect(response.body.body.payload).not.toContain('alert(');
         expect(response.body.body.payload).not.toContain('<script');

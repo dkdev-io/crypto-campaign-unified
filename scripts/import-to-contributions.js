@@ -29,14 +29,14 @@ async function importCSVToContributions() {
 
     // Parse CSV files
     console.log('\n📄 Parsing CSV files...');
-    
+
     // Parse donors CSV
     const donorsPath = path.join(__dirname, 'exported-data', 'campaign_donors.csv');
     const donorsContent = fs.readFileSync(donorsPath, 'utf8');
     const donorLines = donorsContent.trim().split('\n');
     const donorHeaders = donorLines[0].split(',');
-    
-    const donors = donorLines.slice(1).map(line => {
+
+    const donors = donorLines.slice(1).map((line) => {
       const values = line.split(',');
       const record = {};
       donorHeaders.forEach((header, index) => {
@@ -67,10 +67,10 @@ async function importCSVToContributions() {
 
     for (let i = 0; i < donors.length; i += batchSize) {
       const batch = donors.slice(i, i + batchSize);
-      
-      const contributions = batch.map(donor => ({
+
+      const contributions = batch.map((donor) => ({
         campaign_id: testCampaignId,
-        amount: parseFloat(donor.contribution_amount) || (Math.random() * 500 + 25),
+        amount: parseFloat(donor.contribution_amount) || Math.random() * 500 + 25,
         donor_name: `${donor.first_name} ${donor.last_name}`,
         donor_email: `${donor.unique_id}@donor.test`,
         donor_wallet: donor.wallet,
@@ -80,22 +80,20 @@ async function importCSVToContributions() {
         donor_occupation: donor.occupation,
         transaction_id: `tx_${donor.unique_id}_${Date.now()}`,
         status: 'completed',
-        created_at: new Date(donor.contribution_date || Date.now()).toISOString()
+        created_at: new Date(donor.contribution_date || Date.now()).toISOString(),
       }));
 
-      const { data, error } = await supabase
-        .from('contributions')
-        .insert(contributions);
+      const { data, error } = await supabase.from('contributions').insert(contributions);
 
       if (error) {
         console.error(`❌ Error inserting batch ${Math.floor(i / batchSize) + 1}:`, error.message);
         // Try with minimal fields
-        const minimalContributions = batch.map(donor => ({
+        const minimalContributions = batch.map((donor) => ({
           campaign_id: testCampaignId,
-          amount: parseFloat(donor.contribution_amount) || (Math.random() * 500 + 25),
+          amount: parseFloat(donor.contribution_amount) || Math.random() * 500 + 25,
           donor_name: `${donor.first_name} ${donor.last_name}`,
           donor_email: `${donor.unique_id}@donor.test`,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         }));
 
         const { error: retryError } = await supabase
@@ -106,7 +104,9 @@ async function importCSVToContributions() {
           console.error('❌ Retry failed:', retryError.message);
         } else {
           imported += batch.length;
-          console.log(`✅ Imported batch ${Math.floor(i / batchSize) + 1} (minimal): ${batch.length} records`);
+          console.log(
+            `✅ Imported batch ${Math.floor(i / batchSize) + 1} (minimal): ${batch.length} records`
+          );
         }
       } else {
         imported += batch.length;
@@ -137,7 +137,9 @@ async function importCSVToContributions() {
     if (sampleData && sampleData.length > 0) {
       console.log('\n📋 Sample imported data:');
       sampleData.forEach((contrib, index) => {
-        console.log(`${index + 1}. ${contrib.donor_name} - $${contrib.amount} (${contrib.donor_email})`);
+        console.log(
+          `${index + 1}. ${contrib.donor_name} - $${contrib.amount} (${contrib.donor_email})`
+        );
       });
     }
 
@@ -148,9 +150,8 @@ async function importCSVToContributions() {
     console.log('   - Account: test@dkdev.io');
     console.log('\n🎯 Data is now accessible via:');
     console.log('   - Admin panel (contributions table)');
-    console.log('   - test@dkdev.io account dashboard'); 
+    console.log('   - test@dkdev.io account dashboard');
     console.log('   - Frontend application');
-
   } catch (error) {
     console.error('❌ Import failed:', error);
   }

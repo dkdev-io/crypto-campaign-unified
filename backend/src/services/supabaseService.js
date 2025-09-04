@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.SUPABASE_URL || 'http://localhost:54321';
-const supabaseKey = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+const supabaseKey =
+  process.env.SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -16,7 +18,7 @@ export class SupabaseService {
         .from('campaigns')
         .select('count', { count: 'exact' })
         .limit(1);
-      
+
       return { success: !error, error: error?.message };
     } catch (error) {
       return { success: false, error: error.message };
@@ -35,11 +37,7 @@ export class SupabaseService {
   }
 
   async getCampaign(id) {
-    const { data, error } = await this.client
-      .from('campaigns')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const { data, error } = await this.client.from('campaigns').select('*').eq('id', id).single();
 
     if (error) throw error;
     return data;

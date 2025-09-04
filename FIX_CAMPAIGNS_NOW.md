@@ -13,7 +13,7 @@ The campaigns table is missing critical columns needed for the setup wizard to w
 
 ```sql
 -- Fix campaigns table for setup wizard
-ALTER TABLE campaigns 
+ALTER TABLE campaigns
 ADD COLUMN IF NOT EXISTS user_id UUID,
 ADD COLUMN IF NOT EXISTS user_full_name TEXT,
 ADD COLUMN IF NOT EXISTS fec_committee_id TEXT,
@@ -38,8 +38,8 @@ ADD COLUMN IF NOT EXISTS embed_generated_at TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS description TEXT;
 
 -- Update existing campaigns
-UPDATE campaigns 
-SET 
+UPDATE campaigns
+SET
     setup_step = 7,
     setup_completed = true,
     setup_completed_at = created_at,
@@ -75,8 +75,9 @@ npx supabase db push
 ## After Running
 
 The campaign setup at `/setup` will now work properly with all 7 steps:
+
 1. Campaign Information
-2. Committee Search  
+2. Committee Search
 3. Bank Connection
 4. Website Style Matching
 5. Style Confirmation

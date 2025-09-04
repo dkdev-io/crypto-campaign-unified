@@ -6,9 +6,9 @@ const mockWalletData = {
   balance: '1.5678',
   network: {
     name: 'Ethereum Mainnet',
-    chainId: '0x1'
+    chainId: '0x1',
   },
-  isConnected: false
+  isConnected: false,
 };
 
 // Mock transaction result
@@ -17,7 +17,7 @@ const mockTransactionResult = {
   txHash: '0xabc123def456ghi789jkl012mno345pqr678stu901vwx234yz',
   blockNumber: 18500000,
   gasUsed: '21000',
-  ethAmount: 0.0333
+  ethAmount: 0.0333,
 };
 
 // Mock contributor info
@@ -25,63 +25,67 @@ const mockContributorInfo = {
   isKYCVerified: true,
   cumulativeAmount: 0.5,
   remainingCapacity: 1.0,
-  contributionCount: 2
+  contributionCount: 2,
 };
 
 // Mock web3Service
 const web3Service = {
   // Initialization
   init: vi.fn(() => Promise.resolve(true)),
-  
+
   // Wallet connection
-  connectWallet: vi.fn(() => Promise.resolve({
-    success: true,
-    account: mockWalletData.account,
-    network: mockWalletData.network
-  })),
-  
+  connectWallet: vi.fn(() =>
+    Promise.resolve({
+      success: true,
+      account: mockWalletData.account,
+      network: mockWalletData.network,
+    })
+  ),
+
   disconnectWallet: vi.fn(() => Promise.resolve()),
-  
+
   // Account info
   getBalance: vi.fn(() => Promise.resolve(mockWalletData.balance)),
   getNetworkInfo: vi.fn(() => Promise.resolve(mockWalletData.network)),
-  
+
   // Contributions
-  canContribute: vi.fn(() => Promise.resolve({
-    canContribute: true,
-    reason: null,
-    remainingCapacity: 1.0
-  })),
-  
+  canContribute: vi.fn(() =>
+    Promise.resolve({
+      canContribute: true,
+      reason: null,
+      remainingCapacity: 1.0,
+    })
+  ),
+
   contribute: vi.fn(() => Promise.resolve(mockTransactionResult)),
-  
+
   getContributorInfo: vi.fn(() => Promise.resolve(mockContributorInfo)),
-  
+
   // Utilities
   convertUSDToETH: vi.fn((usdAmount) => Promise.resolve(usdAmount / 3000)), // $3000 per ETH
   convertETHToUSD: vi.fn((ethAmount) => Promise.resolve(ethAmount * 3000)),
-  
+
   // Event listeners
   setupEventListeners: vi.fn((onAccountChange, onNetworkChange) => {
     // Store callbacks for manual triggering in tests
     web3Service._onAccountChange = onAccountChange;
     web3Service._onNetworkChange = onNetworkChange;
   }),
-  
+
   removeEventListeners: vi.fn(),
-  
+
   // Test helpers (not part of actual service)
   _triggerAccountChange: (newAccount) => {
     if (web3Service._onAccountChange) {
       web3Service._onAccountChange(newAccount);
     }
   },
-  
+
   _triggerNetworkChange: (chainId) => {
     if (web3Service._onNetworkChange) {
       web3Service._onNetworkChange(chainId);
     }
-  }
+  },
 };
 
 // Configuration helpers for tests
@@ -93,12 +97,12 @@ export const configureWeb3Mock = {
       web3Service.connectWallet.mockResolvedValue({
         success: true,
         account: mockWalletData.account,
-        network: mockWalletData.network
+        network: mockWalletData.network,
       });
     } else {
       web3Service.connectWallet.mockResolvedValue({
         success: false,
-        error: 'User rejected connection'
+        error: 'User rejected connection',
       });
     }
   },
@@ -108,7 +112,7 @@ export const configureWeb3Mock = {
     web3Service.canContribute.mockResolvedValue({
       canContribute,
       reason,
-      remainingCapacity: canContribute ? 1.0 : 0
+      remainingCapacity: canContribute ? 1.0 : 0,
     });
   },
 
@@ -125,7 +129,7 @@ export const configureWeb3Mock = {
   setKYCStatus: (isVerified = true) => {
     web3Service.getContributorInfo.mockResolvedValue({
       ...mockContributorInfo,
-      isKYCVerified: isVerified
+      isKYCVerified: isVerified,
     });
   },
 
@@ -144,9 +148,9 @@ export const configureWeb3Mock = {
     web3Service.connectWallet.mockResolvedValue({
       success: true,
       account: mockWalletData.account,
-      network: mockWalletData.network
+      network: mockWalletData.network,
     });
-  }
+  },
 };
 
 export default web3Service;

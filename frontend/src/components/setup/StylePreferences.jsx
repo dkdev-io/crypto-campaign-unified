@@ -6,13 +6,22 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
     secondary: 'hsl(var(--crypto-blue))',
     accent: 'hsl(var(--crypto-gold))',
     background: 'hsl(var(--crypto-white))',
-    text: 'hsl(var(--crypto-dark-gray))'
+    text: 'hsl(var(--crypto-dark-gray))',
   });
-  
+
   const [selectedFonts, setSelectedFonts] = useState({
-    heading: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '600' },
-    body: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '400' },
-    button: { family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif', weight: '500' }
+    heading: {
+      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+      weight: '600',
+    },
+    body: {
+      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+      weight: '400',
+    },
+    button: {
+      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
+      weight: '500',
+    },
   });
 
   const [applying, setApplying] = useState(false);
@@ -20,7 +29,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   // Font options
   const fontOptions = [
     'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-    'Helvetica, sans-serif', 
+    'Helvetica, sans-serif',
     'Georgia, serif',
     'Times New Roman, serif',
     'Verdana, sans-serif',
@@ -32,7 +41,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
     'Lato, sans-serif',
     'Montserrat, sans-serif',
     'Poppins, sans-serif',
-    'Source Sans Pro, sans-serif'
+    'Source Sans Pro, sans-serif',
   ];
 
   // Initialize from existing applied styles if available
@@ -46,20 +55,20 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   }, [formData]);
 
   const handleColorChange = (category, color) => {
-    setSelectedColors(prev => ({
+    setSelectedColors((prev) => ({
       ...prev,
-      [category]: color
+      [category]: color,
     }));
   };
 
   const handleFontChange = (category, family) => {
-    setSelectedFonts(prev => ({
+    setSelectedFonts((prev) => ({
       ...prev,
       [category]: {
         ...prev[category],
         family: family,
-        suggested: family
-      }
+        suggested: family,
+      },
     }));
   };
 
@@ -71,7 +80,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
         colors: selectedColors,
         fonts: selectedFonts,
         appliedAt: new Date().toISOString(),
-        method: 'manual_input'
+        method: 'manual_input',
       };
 
       // Update form data with selected styles
@@ -81,12 +90,11 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
         themeColor: selectedColors.primary,
         customColors: selectedColors,
         customFonts: selectedFonts,
-        styleMethod: 'manual'
+        styleMethod: 'manual',
       });
 
       // Continue to next step
       onNext();
-
     } catch (error) {
       console.error('Failed to apply styles:', error);
       alert('Failed to apply styles. Please try again.');
@@ -98,7 +106,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   const skipStyles = () => {
     updateFormData({
       stylesApplied: false,
-      styleApplicationSkipped: true
+      styleApplicationSkipped: true,
     });
     onNext();
   };
@@ -111,7 +119,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       fontFamily: selectedFonts.body.family,
       padding: '2rem',
       borderRadius: '8px',
-      border: '1px solid #e9ecef'
+      border: '1px solid #e9ecef',
     };
 
     const buttonStyles = {
@@ -123,7 +131,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       fontFamily: selectedFonts.button.family,
       fontWeight: selectedFonts.button.weight,
       fontSize: '1rem',
-      cursor: 'pointer'
+      cursor: 'pointer',
     };
 
     const headingStyles = {
@@ -131,52 +139,50 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       fontWeight: selectedFonts.heading.weight,
       fontSize: '1.5rem',
       color: selectedColors.primary,
-      marginBottom: '1rem'
+      marginBottom: '1rem',
     };
 
     return (
-      <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          Preview Your Donation Form
-        </h4>
-        
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>Preview Your Donation Form</h4>
+
         <div style={previewStyles}>
-          <h3 style={headingStyles}>
-            {formData.campaignName || 'Support Our Campaign'}
-          </h3>
+          <h3 style={headingStyles}>{formData.campaignName || 'Support Our Campaign'}</h3>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '0.5rem', 
-              fontWeight: '500',
-              fontFamily: selectedFonts.body.family,
-              color: selectedColors.text
-            }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+                fontFamily: selectedFonts.body.family,
+                color: selectedColors.text,
+              }}
+            >
               Donation Amount
             </label>
-            <input 
-              type="text" 
-              placeholder="$100" 
+            <input
+              type="text"
+              placeholder="$100"
               style={{
                 width: '100%',
                 padding: '0.75rem',
                 border: `1px solid ${selectedColors.secondary}`,
                 borderRadius: '4px',
                 fontFamily: selectedFonts.body.family,
-                fontSize: '1rem'
+                fontSize: '1rem',
               }}
               readOnly
             />
           </div>
-          <button style={buttonStyles}>
-            Donate Now
-          </button>
+          <button style={buttonStyles}>Donate Now</button>
         </div>
       </div>
     );
@@ -192,38 +198,48 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       </p>
 
       {/* Color Palette Section */}
-      <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          Color Palette
-        </h4>
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>Color Palette</h4>
 
         <div style={{ marginBottom: '2rem' }}>
           {[
-            { key: 'primary', label: 'Primary Brand Color', description: 'Main color for buttons and highlights' },
-            { key: 'secondary', label: 'Secondary Color', description: 'Supporting color for borders and accents' },
+            {
+              key: 'primary',
+              label: 'Primary Brand Color',
+              description: 'Main color for buttons and highlights',
+            },
+            {
+              key: 'secondary',
+              label: 'Secondary Color',
+              description: 'Supporting color for borders and accents',
+            },
             { key: 'accent', label: 'Accent Color', description: 'Call-to-action highlights' },
             { key: 'background', label: 'Background Color', description: 'Form background color' },
-            { key: 'text', label: 'Text Color', description: 'Main text color' }
+            { key: 'text', label: 'Text Color', description: 'Main text color' },
           ].map(({ key, label, description }) => (
             <div key={key} style={{ marginBottom: '1.5rem' }}>
-              <label style={{ 
-                display: 'block', 
-                fontWeight: '500', 
-                marginBottom: '0.5rem',
-                color: '#495057'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem',
+                  color: '#495057',
+                }}
+              >
                 {label}
               </label>
               <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
                 {description}
               </p>
-              
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <input
                   type="color"
@@ -234,7 +250,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
                     height: '40px',
                     border: '1px solid #ddd',
                     borderRadius: '4px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 />
                 <input
@@ -246,16 +262,18 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
                     border: '1px solid #ddd',
                     borderRadius: '4px',
                     fontFamily: 'monospace',
-                    width: '100px'
+                    width: '100px',
                   }}
                 />
-                <div style={{
-                  width: '30px',
-                  height: '30px',
-                  backgroundColor: selectedColors[key],
-                  border: '1px solid #ddd',
-                  borderRadius: '4px'
-                }}></div>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    backgroundColor: selectedColors[key],
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                  }}
+                ></div>
               </div>
             </div>
           ))}
@@ -263,30 +281,47 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       </div>
 
       {/* Typography Section */}
-      <div style={{
-        background: 'white',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          🔤 Typography
-        </h4>
+      <div
+        style={{
+          background: 'white',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '1.5rem',
+          marginBottom: '2rem',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>🔤 Typography</h4>
 
         <div style={{ marginBottom: '1rem' }}>
           {[
-            { key: 'heading', label: 'Headings', description: 'For titles and section headers', sample: 'Campaign Title' },
-            { key: 'body', label: 'Body Text', description: 'For form labels and descriptions', sample: 'Enter your information below' },
-            { key: 'button', label: 'Buttons', description: 'For button text and CTAs', sample: 'DONATE NOW' }
+            {
+              key: 'heading',
+              label: 'Headings',
+              description: 'For titles and section headers',
+              sample: 'Campaign Title',
+            },
+            {
+              key: 'body',
+              label: 'Body Text',
+              description: 'For form labels and descriptions',
+              sample: 'Enter your information below',
+            },
+            {
+              key: 'button',
+              label: 'Buttons',
+              description: 'For button text and CTAs',
+              sample: 'DONATE NOW',
+            },
           ].map(({ key, label, description, sample }) => (
             <div key={key} style={{ marginBottom: '2rem' }}>
-              <label style={{ 
-                display: 'block', 
-                fontWeight: '500', 
-                marginBottom: '0.5rem',
-                color: '#495057'
-              }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem',
+                  color: '#495057',
+                }}
+              >
                 {label}
               </label>
               <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
@@ -303,10 +338,10 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
                   borderRadius: '4px',
                   fontSize: '1rem',
                   fontFamily: selectedFonts[key].family,
-                  marginBottom: '0.75rem'
+                  marginBottom: '0.75rem',
                 }}
               >
-                {fontOptions.map(font => (
+                {fontOptions.map((font) => (
                   <option key={font} value={font} style={{ fontFamily: font }}>
                     {font}
                   </option>
@@ -314,18 +349,20 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               </select>
 
               {/* Font preview */}
-              <div style={{
-                background: '#f8f9fa',
-                border: '1px solid #e9ecef',
-                borderRadius: '4px',
-                padding: '1rem'
-              }}>
+              <div
+                style={{
+                  background: '#f8f9fa',
+                  border: '1px solid #e9ecef',
+                  borderRadius: '4px',
+                  padding: '1rem',
+                }}
+              >
                 <div
                   style={{
                     fontFamily: selectedFonts[key].family,
                     fontSize: key === 'heading' ? '1.5rem' : '1rem',
                     fontWeight: selectedFonts[key].weight,
-                    color: selectedColors.text
+                    color: selectedColors.text,
                   }}
                 >
                   {sample}
@@ -340,16 +377,16 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
       {renderFormPreview()}
 
       {/* Action Buttons */}
-      <div style={{
-        background: '#f8f9fa',
-        border: '1px solid #e9ecef',
-        borderRadius: '8px',
-        padding: '2rem',
-        textAlign: 'center'
-      }}>
-        <h4 style={{ color: '#495057', marginTop: 0 }}>
-          Ready to Apply These Styles?
-        </h4>
+      <div
+        style={{
+          background: '#f8f9fa',
+          border: '1px solid #e9ecef',
+          borderRadius: '8px',
+          padding: '2rem',
+          textAlign: 'center',
+        }}
+      >
+        <h4 style={{ color: '#495057', marginTop: 0 }}>Ready to Apply These Styles?</h4>
         <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
           Your form will be updated with the selected colors and fonts
         </p>
@@ -367,7 +404,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               cursor: applying ? 'not-allowed' : 'pointer',
               fontSize: '1.1rem',
               fontWeight: '500',
-              opacity: applying ? 0.7 : 1
+              opacity: applying ? 0.7 : 1,
             }}
           >
             {applying ? '⏳ Applying Styles...' : '✨ Apply These Styles'}
@@ -384,7 +421,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               borderRadius: '6px',
               cursor: applying ? 'not-allowed' : 'pointer',
               fontSize: '1.1rem',
-              opacity: applying ? 0.7 : 1
+              opacity: applying ? 0.7 : 1,
             }}
           >
             Skip Styling
@@ -394,11 +431,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
 
       {/* Navigation */}
       <div className="form-actions" style={{ marginTop: '2rem' }}>
-        <button 
-          className="btn btn-secondary" 
-          onClick={onPrev}
-          disabled={applying}
-        >
+        <button className="btn btn-secondary" onClick={onPrev} disabled={applying}>
           ← Back
         </button>
       </div>

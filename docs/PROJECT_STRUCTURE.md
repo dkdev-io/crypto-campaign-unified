@@ -124,6 +124,7 @@ crypto-campaign-unified/
 ## 🔑 Key File Locations
 
 ### Frontend Files
+
 - **Entry Point**: `frontend/src/main.jsx`
 - **App Component**: `frontend/src/App.jsx`
 - **Auth Context**: `frontend/src/contexts/AuthContext.jsx`
@@ -131,16 +132,19 @@ crypto-campaign-unified/
 - **Supabase Client**: `frontend/src/services/supabase.js`
 
 ### Backend Files
+
 - **Server Entry**: `backend/src/server.js`
 - **Campaign Routes**: `backend/src/routes/api/campaigns.js`
 - **Auth Middleware**: `backend/src/middleware/auth.js`
 - **Campaign Service**: `backend/src/services/campaignService.js`
 
 ### Database Files
+
 - **Main Migration**: `supabase/migrations/20250903_create_all_tables.sql`
 - **User Tables**: `supabase/migrations/20250903023905_create_users_table.sql`
 
 ### Configuration Files
+
 - **Frontend Config**: `frontend/vite.config.js`
 - **Backend Config**: `backend/.env`
 - **Supabase Config**: `supabase/config.toml`
@@ -148,21 +152,23 @@ crypto-campaign-unified/
 
 ## 🚀 Port Allocations
 
-| Service | Port | Status |
-|---------|------|--------|
-| Frontend (Vite) | 5173 | Development |
-| Backend API | 3001 | Development |
-| Supabase Studio | 54323 | Local |
-| Supabase API | 54321 | Local |
+| Service         | Port  | Status      |
+| --------------- | ----- | ----------- |
+| Frontend (Vite) | 5173  | Development |
+| Backend API     | 3001  | Development |
+| Supabase Studio | 54323 | Local       |
+| Supabase API    | 54321 | Local       |
 
 ## 📦 Package Structure
 
 ### Root Package
+
 - Main orchestration
 - Script commands
 - Dev dependencies
 
 ### Frontend Package (`frontend/package.json`)
+
 - React 18
 - Vite
 - React Router
@@ -170,6 +176,7 @@ crypto-campaign-unified/
 - Tailwind CSS
 
 ### Backend Package (`backend/package.json`)
+
 - Express
 - Supabase Admin
 - CORS
@@ -177,6 +184,7 @@ crypto-campaign-unified/
 - Body Parser
 
 ### Contracts Package (`contracts/package.json`)
+
 - Hardhat
 - Ethers
 - OpenZeppelin
@@ -207,6 +215,7 @@ crypto-campaign-unified/
 ## 🎯 Agent Quick Reference
 
 When working on:
+
 - **Frontend UI** → Look in `frontend/src/components/`
 - **API Endpoints** → Check `backend/src/routes/api/`
 - **Database Schema** → Review `supabase/migrations/`

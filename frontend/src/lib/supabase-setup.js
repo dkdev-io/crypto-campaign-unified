@@ -3,45 +3,42 @@ import { supabase } from './supabase.js';
 // This script checks and sets up Supabase tables
 export async function checkSupabaseSetup() {
   console.log('🔍 Checking Supabase connection and tables...');
-  
+
   try {
     // Test connection
-    const { data: test, error: connError } = await supabase
-      .from('campaigns')
-      .select('id')
-      .limit(1);
-    
+    const { data: test, error: connError } = await supabase.from('campaigns').select('id').limit(1);
+
     if (connError) {
       console.error('❌ Supabase connection error:', connError);
       console.log('📝 Tables might not exist. Creating tables...');
       return false;
     }
-    
+
     console.log('✅ Supabase connected successfully');
-    
+
     // Check campaigns table structure
     const { data: campaigns, error: campaignsError } = await supabase
       .from('campaigns')
       .select('*')
       .limit(1);
-    
+
     if (campaigns && campaigns.length > 0) {
       console.log('📊 Sample campaign structure:', Object.keys(campaigns[0]));
       console.log('📊 Sample campaign data:', campaigns[0]);
     }
-    
+
     // Check form_submissions table
     const { data: submissions, error: submissionsError } = await supabase
       .from('form_submissions')
       .select('*')
       .limit(1);
-    
+
     if (submissionsError) {
       console.log('⚠️ form_submissions table might not exist');
     } else {
       console.log('✅ form_submissions table exists');
     }
-    
+
     return true;
   } catch (error) {
     console.error('❌ Setup check failed:', error);
@@ -135,7 +132,7 @@ CREATE POLICY "Admin can do everything" ON users
 
 export async function testCampaignCreation() {
   console.log('🧪 Testing campaign creation...');
-  
+
   const testData = {
     email: 'test@example.com',
     campaign_name: 'Test Campaign ' + Date.now(),
@@ -145,40 +142,36 @@ export async function testCampaignCreation() {
     suggested_amounts: [10, 25, 75, 150],
     max_donation_limit: 2500,
     theme_color: '#FF0000',
-    button_color: '#00FF00'
+    button_color: '#00FF00',
   };
-  
+
   console.log('📤 Creating test campaign with data:', testData);
-  
-  const { data, error } = await supabase
-    .from('campaigns')
-    .insert([testData])
-    .select()
-    .single();
-  
+
+  const { data, error } = await supabase.from('campaigns').insert([testData]).select().single();
+
   if (error) {
     console.error('❌ Failed to create test campaign:', error);
     console.log('🔍 Error details:', error.message, error.details, error.hint);
     return null;
   }
-  
+
   console.log('✅ Test campaign created successfully:', data);
   console.log('🔑 Campaign ID:', data.id);
   console.log('💰 Suggested amounts saved:', data.suggested_amounts);
-  
+
   // Try to read it back
   const { data: readBack, error: readError } = await supabase
     .from('campaigns')
     .select('*')
     .eq('id', data.id)
     .single();
-  
+
   if (readError) {
     console.error('❌ Failed to read back campaign:', readError);
   } else {
     console.log('✅ Campaign read back successfully:', readBack);
     console.log('💰 Amounts from database:', readBack.suggested_amounts);
   }
-  
+
   return data;
 }

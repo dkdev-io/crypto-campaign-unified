@@ -16,8 +16,8 @@ if (!serviceRoleKey) {
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function createDonorTables() {
@@ -198,39 +198,41 @@ async function createDonorTables() {
     `;
 
     // Split SQL into individual statements and execute
-    const statements = sql.split(';').filter(stmt => stmt.trim());
-    
+    const statements = sql.split(';').filter((stmt) => stmt.trim());
+
     for (const statement of statements) {
       if (statement.trim()) {
         console.log(`Executing: ${statement.substring(0, 50)}...`);
-        
+
         // Use the Supabase admin client to execute raw SQL
-        const { data, error } = await supabase.rpc('execute_sql', {
-          sql_query: statement + ';'
-        }).catch(async (err) => {
-          // If RPC doesn't exist, we'll use the REST API directly
-          const response = await fetch(`${supabaseUrl}/rest/v1/rpc/execute_sql`, {
-            method: 'POST',
-            headers: {
-              'apikey': serviceRoleKey,
-              'Authorization': `Bearer ${serviceRoleKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ sql_query: statement + ';' })
+        const { data, error } = await supabase
+          .rpc('execute_sql', {
+            sql_query: statement + ';',
+          })
+          .catch(async (err) => {
+            // If RPC doesn't exist, we'll use the REST API directly
+            const response = await fetch(`${supabaseUrl}/rest/v1/rpc/execute_sql`, {
+              method: 'POST',
+              headers: {
+                apikey: serviceRoleKey,
+                Authorization: `Bearer ${serviceRoleKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ sql_query: statement + ';' }),
+            });
+
+            if (!response.ok) {
+              // Try direct execution via pg protocol if available
+              return { error: { message: 'RPC not available' } };
+            }
+            return response.json();
           });
-          
-          if (!response.ok) {
-            // Try direct execution via pg protocol if available
-            return { error: { message: 'RPC not available' } };
-          }
-          return response.json();
-        });
-        
+
         if (error && error.message.includes('RPC')) {
           console.log('RPC method not available, trying alternative method...');
           break;
         }
-        
+
         if (error) {
           console.error(`Error: ${error.message}`);
         } else {
@@ -241,33 +243,36 @@ async function createDonorTables() {
 
     // Alternative approach: Use the Supabase management API
     console.log('\nTrying alternative method using Supabase Management API...');
-    
+
     const response = await fetch(`${supabaseUrl}/rest/v1/`, {
       method: 'POST',
       headers: {
-        'apikey': serviceRoleKey,
-        'Authorization': `Bearer ${serviceRoleKey}`,
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
         'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
+        Prefer: 'return=representation',
       },
       body: JSON.stringify({
-        query: sql
-      })
+        query: sql,
+      }),
     });
 
     if (!response.ok) {
       console.log('\n⚠️  Direct SQL execution not available through REST API.');
       console.log('Creating tables using Supabase SDK methods...\n');
-      
+
       // Test if tables exist by querying them
-      const tables = ['donors', 'donor_profiles', 'donations', 'donor_saved_campaigns', 'donor_tax_receipts'];
-      
+      const tables = [
+        'donors',
+        'donor_profiles',
+        'donations',
+        'donor_saved_campaigns',
+        'donor_tax_receipts',
+      ];
+
       for (const table of tables) {
-        const { data, error } = await supabase
-          .from(table)
-          .select('*')
-          .limit(1);
-        
+        const { data, error } = await supabase.from(table).select('*').limit(1);
+
         if (error && error.message.includes('does not exist')) {
           console.log(`❌ Table '${table}' does not exist`);
         } else if (error) {
@@ -276,14 +281,15 @@ async function createDonorTables() {
           console.log(`✅ Table '${table}' exists!`);
         }
       }
-      
-      console.log('\n📋 Since direct SQL execution is not available, please run the migration manually:');
+
+      console.log(
+        '\n📋 Since direct SQL execution is not available, please run the migration manually:'
+      );
       console.log('1. Copy the contents of scripts/apply-donor-migrations.sql');
       console.log('2. Go to your Supabase SQL Editor');
       console.log(`3. URL: https://app.supabase.com/project/owjvgdzmmlrdtpjdxgka/sql/new`);
       console.log('4. Paste and run the SQL');
     }
-
   } catch (error) {
     console.error('❌ Error creating tables:', error);
     console.log('\n📋 Please create the tables manually in Supabase SQL Editor');
@@ -291,10 +297,12 @@ async function createDonorTables() {
 }
 
 // Run the function
-createDonorTables().then(() => {
-  console.log('\n✨ Done');
-  process.exit(0);
-}).catch(err => {
-  console.error('\n❌ Fatal error:', err);
-  process.exit(1);
-});
+createDonorTables()
+  .then(() => {
+    console.log('\n✨ Done');
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error('\n❌ Fatal error:', err);
+    process.exit(1);
+  });

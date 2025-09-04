@@ -1,7 +1,7 @@
 /**
  * Campaign Analytics Tracking System
  * Lightweight, privacy-compliant analytics for contribution campaigns
- * 
+ *
  * Features:
  * - Anonymous visitor ID generation and management
  * - Session tracking with page interactions
@@ -18,25 +18,25 @@ class CampaignAnalytics {
       supabaseUrl: config.supabaseUrl || 'https://demo.supabase.co',
       supabaseKey: config.supabaseKey || 'demo-key',
       apiEndpoint: config.apiEndpoint || '/api/analytics',
-      
+
       // Tracking Configuration
       sessionTimeout: config.sessionTimeout || 30, // minutes
       heartbeatInterval: config.heartbeatInterval || 30000, // 30 seconds
       batchSize: config.batchSize || 10,
       batchTimeout: config.batchTimeout || 5000, // 5 seconds
-      
+
       // Privacy Configuration
       respectDNT: config.respectDNT !== false, // Default to true
       cookieConsent: config.cookieConsent || 'optional', // required, optional, disabled
       dataRetention: config.dataRetention || 365, // days
-      
+
       // Feature flags
       enableGeolocation: config.enableGeolocation !== false,
       enableScrollTracking: config.enableScrollTracking !== false,
       enableClickTracking: config.enableClickTracking !== false,
-      
+
       // Debug mode
-      debug: config.debug || false
+      debug: config.debug || false,
     };
 
     // Internal state
@@ -48,14 +48,14 @@ class CampaignAnalytics {
     this.events = [];
     this.location = null;
     this.consentGiven = null;
-    
+
     // Tracking state
     this.maxScrollDepth = 0;
     this.clickCount = 0;
     this.formInteractions = new Set();
     this.heartbeatTimer = null;
     this.batchTimer = null;
-    
+
     // Initialize if consent allows
     this.init();
   }
@@ -82,12 +82,12 @@ class CampaignAnalytics {
       await this.initializeVisitor();
       await this.initializeSession();
       await this.detectLocation();
-      
+
       // Set up tracking
       this.setupEventListeners();
       this.startHeartbeat();
       this.trackPageView();
-      
+
       this.log('Analytics initialized successfully');
     } catch (error) {
       this.log('Analytics initialization failed:', error);
@@ -100,7 +100,7 @@ class CampaignAnalytics {
   async checkConsent() {
     const storedConsent = localStorage.getItem('analytics_consent');
     const consentTime = localStorage.getItem('analytics_consent_time');
-    
+
     // Check if consent is still valid (1 year)
     if (storedConsent && consentTime) {
       const consentAge = Date.now() - parseInt(consentTime);
@@ -282,7 +282,7 @@ class CampaignAnalytics {
     this.visitorId = this.generateId('visitor');
     localStorage.setItem('visitor_id', this.visitorId);
     localStorage.setItem('visitor_id_time', Date.now().toString());
-    
+
     this.log('New visitor ID generated:', this.visitorId);
   }
 
@@ -293,7 +293,7 @@ class CampaignAnalytics {
     // Check for existing session (within timeout period)
     const storedSessionId = sessionStorage.getItem('session_id');
     const sessionTime = sessionStorage.getItem('session_time');
-    
+
     if (storedSessionId && sessionTime) {
       const sessionAge = Date.now() - parseInt(sessionTime);
       if (sessionAge < this.config.sessionTimeout * 60 * 1000) {
@@ -311,7 +311,7 @@ class CampaignAnalytics {
 
     sessionStorage.setItem('session_id', this.sessionId);
     sessionStorage.setItem('session_time', this.sessionStart.getTime().toString());
-    
+
     this.log('New session started:', this.sessionId);
   }
 
@@ -326,28 +326,28 @@ class CampaignAnalytics {
       const services = [
         'https://api.ipapi.com/api/check?access_key=YOUR_KEY&format=1',
         'https://ipapi.co/json/',
-        'https://api.ipify.org?format=json' // IP only fallback
+        'https://api.ipify.org?format=json', // IP only fallback
       ];
 
       for (const service of services) {
         try {
-          const response = await fetch(service, { 
+          const response = await fetch(service, {
             method: 'GET',
-            headers: { 'Accept': 'application/json' }
+            headers: { Accept: 'application/json' },
           });
-          
+
           if (response.ok) {
             const data = await response.json();
-            
+
             // Standardize location data
             this.location = {
               country: data.country_code || data.country || null,
               region: data.region || data.region_name || null,
               city: data.city || null,
               timezone: data.timezone || null,
-              ip: data.ip || null
+              ip: data.ip || null,
             };
-            
+
             this.log('Location detected:', this.location);
             break;
           }
@@ -398,7 +398,7 @@ class CampaignAnalytics {
       this.trackEvent('javascript_error', {
         message: event.message,
         filename: event.filename,
-        lineno: event.lineno
+        lineno: event.lineno,
       });
     });
   }
@@ -408,18 +408,18 @@ class CampaignAnalytics {
    */
   setupScrollTracking() {
     let throttleTimer = null;
-    
+
     const trackScroll = () => {
       if (throttleTimer) return;
-      
+
       throttleTimer = setTimeout(() => {
         const scrollTop = window.pageYOffset;
         const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
         const scrollPercent = Math.round((scrollTop / documentHeight) * 100);
-        
+
         if (scrollPercent > this.maxScrollDepth) {
           this.maxScrollDepth = scrollPercent;
-          
+
           // Track milestone percentages
           if (scrollPercent >= 25 && this.maxScrollDepth < 25) {
             this.trackEvent('scroll_25');
@@ -431,7 +431,7 @@ class CampaignAnalytics {
             this.trackEvent('scroll_90');
           }
         }
-        
+
         throttleTimer = null;
       }, 250);
     };
@@ -443,24 +443,28 @@ class CampaignAnalytics {
    * Set up click tracking
    */
   setupClickTracking() {
-    document.addEventListener('click', (event) => {
-      this.clickCount++;
-      this.updateLastActivity();
+    document.addEventListener(
+      'click',
+      (event) => {
+        this.clickCount++;
+        this.updateLastActivity();
 
-      const element = event.target;
-      const tagName = element.tagName.toLowerCase();
-      
-      // Track important clicks
-      if (tagName === 'button' || tagName === 'a' || element.onclick) {
-        this.trackEvent('click', {
-          element: tagName,
-          text: element.textContent?.substring(0, 100) || '',
-          href: element.href || null,
-          id: element.id || null,
-          className: element.className || null
-        });
-      }
-    }, { passive: true });
+        const element = event.target;
+        const tagName = element.tagName.toLowerCase();
+
+        // Track important clicks
+        if (tagName === 'button' || tagName === 'a' || element.onclick) {
+          this.trackEvent('click', {
+            element: tagName,
+            text: element.textContent?.substring(0, 100) || '',
+            href: element.href || null,
+            id: element.id || null,
+            className: element.className || null,
+          });
+        }
+      },
+      { passive: true }
+    );
   }
 
   /**
@@ -468,29 +472,38 @@ class CampaignAnalytics {
    */
   setupFormTracking() {
     // Track form field interactions
-    document.addEventListener('focus', (event) => {
-      if (event.target.tagName.toLowerCase() === 'input' || 
+    document.addEventListener(
+      'focus',
+      (event) => {
+        if (
+          event.target.tagName.toLowerCase() === 'input' ||
           event.target.tagName.toLowerCase() === 'textarea' ||
-          event.target.tagName.toLowerCase() === 'select') {
-        
-        const fieldId = event.target.id || event.target.name || 'unknown';
-        this.formInteractions.add(fieldId);
-        
-        this.trackEvent('form_field_focus', {
-          field: fieldId,
-          type: event.target.type || 'text'
-        });
-      }
-    }, true);
+          event.target.tagName.toLowerCase() === 'select'
+        ) {
+          const fieldId = event.target.id || event.target.name || 'unknown';
+          this.formInteractions.add(fieldId);
+
+          this.trackEvent('form_field_focus', {
+            field: fieldId,
+            type: event.target.type || 'text',
+          });
+        }
+      },
+      true
+    );
 
     // Track form submissions
-    document.addEventListener('submit', (event) => {
-      const form = event.target;
-      this.trackEvent('form_submit', {
-        formId: form.id || 'unknown',
-        fields: Array.from(this.formInteractions)
-      });
-    }, true);
+    document.addEventListener(
+      'submit',
+      (event) => {
+        const form = event.target;
+        this.trackEvent('form_submit', {
+          formId: form.id || 'unknown',
+          fields: Array.from(this.formInteractions),
+        });
+      },
+      true
+    );
 
     // Track contribution form specific events
     this.setupContributionFormTracking();
@@ -503,18 +516,16 @@ class CampaignAnalytics {
     // Track wallet connection attempts
     document.addEventListener('click', (event) => {
       const element = event.target;
-      if (element.textContent?.includes('Connect') && 
-          element.textContent?.includes('Wallet')) {
+      if (element.textContent?.includes('Connect') && element.textContent?.includes('Wallet')) {
         this.trackEvent('wallet_connect_attempt');
       }
     });
 
     // Track contribution amount changes
     const trackAmountChange = (event) => {
-      if (event.target.id?.includes('amount') || 
-          event.target.name?.includes('amount')) {
+      if (event.target.id?.includes('amount') || event.target.name?.includes('amount')) {
         this.trackEvent('contribution_amount_change', {
-          hasValue: !!event.target.value
+          hasValue: !!event.target.value,
         });
       }
     };
@@ -533,7 +544,7 @@ class CampaignAnalytics {
       referrer: document.referrer,
       campaign_id: this.extractCampaignId(),
       ...this.getTrafficSource(),
-      load_time: Date.now() - this.pageLoadTime
+      load_time: Date.now() - this.pageLoadTime,
     };
 
     this.trackEvent('page_view', pageData);
@@ -557,7 +568,7 @@ class CampaignAnalytics {
       user_agent: navigator.userAgent,
       screen_resolution: `${screen.width}x${screen.height}`,
       viewport_size: `${window.innerWidth}x${window.innerHeight}`,
-      location: this.location
+      location: this.location,
     };
 
     this.events.push(event);
@@ -582,10 +593,10 @@ class CampaignAnalytics {
     this.trackEvent('conversion', {
       ...conversionData,
       session_duration: Date.now() - this.sessionStart.getTime(),
-      page_views: this.events.filter(e => e.event_type === 'page_view').length,
+      page_views: this.events.filter((e) => e.event_type === 'page_view').length,
       form_interactions: Array.from(this.formInteractions),
       max_scroll_depth: this.maxScrollDepth,
-      click_count: this.clickCount
+      click_count: this.clickCount,
     });
 
     // Immediately flush conversion events
@@ -597,10 +608,12 @@ class CampaignAnalytics {
    */
   extractCampaignId() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('campaign') || 
-           urlParams.get('campaign_id') || 
-           window.location.pathname.match(/\/campaign\/([^\/]+)/)?.[1] || 
-           null;
+    return (
+      urlParams.get('campaign') ||
+      urlParams.get('campaign_id') ||
+      window.location.pathname.match(/\/campaign\/([^\/]+)/)?.[1] ||
+      null
+    );
   }
 
   /**
@@ -617,7 +630,7 @@ class CampaignAnalytics {
         traffic_medium: urlParams.get('utm_medium') || 'unknown',
         traffic_campaign: urlParams.get('utm_campaign'),
         traffic_content: urlParams.get('utm_content'),
-        traffic_term: urlParams.get('utm_term')
+        traffic_term: urlParams.get('utm_term'),
       };
     }
 
@@ -625,12 +638,12 @@ class CampaignAnalytics {
     if (!referrer) {
       return {
         traffic_source: 'direct',
-        traffic_medium: 'direct'
+        traffic_medium: 'direct',
       };
     }
 
     const referrerDomain = new URL(referrer).hostname.toLowerCase();
-    
+
     // Social media sources
     const socialSources = {
       'facebook.com': { source: 'facebook', medium: 'social' },
@@ -639,7 +652,7 @@ class CampaignAnalytics {
       'instagram.com': { source: 'instagram', medium: 'social' },
       'youtube.com': { source: 'youtube', medium: 'social' },
       'tiktok.com': { source: 'tiktok', medium: 'social' },
-      'reddit.com': { source: 'reddit', medium: 'social' }
+      'reddit.com': { source: 'reddit', medium: 'social' },
     };
 
     // Search engines
@@ -648,7 +661,7 @@ class CampaignAnalytics {
       'bing.com': { source: 'bing', medium: 'organic' },
       'yahoo.com': { source: 'yahoo', medium: 'organic' },
       'duckduckgo.com': { source: 'duckduckgo', medium: 'organic' },
-      'baidu.com': { source: 'baidu', medium: 'organic' }
+      'baidu.com': { source: 'baidu', medium: 'organic' },
     };
 
     // Check social media
@@ -656,7 +669,7 @@ class CampaignAnalytics {
       if (referrerDomain.includes(domain)) {
         return {
           traffic_source: source.source,
-          traffic_medium: source.medium
+          traffic_medium: source.medium,
         };
       }
     }
@@ -666,7 +679,7 @@ class CampaignAnalytics {
       if (referrerDomain.includes(domain)) {
         return {
           traffic_source: source.source,
-          traffic_medium: source.medium
+          traffic_medium: source.medium,
         };
       }
     }
@@ -674,7 +687,7 @@ class CampaignAnalytics {
     // Default to referral
     return {
       traffic_source: referrerDomain,
-      traffic_medium: 'referral'
+      traffic_medium: 'referral',
     };
   }
 
@@ -700,11 +713,11 @@ class CampaignAnalytics {
           session_id: this.sessionId,
           session_start: this.sessionStart?.toISOString(),
           session_duration: this.sessionStart ? Date.now() - this.sessionStart.getTime() : 0,
-          page_count: eventsToSend.filter(e => e.event_type === 'page_view').length,
+          page_count: eventsToSend.filter((e) => e.event_type === 'page_view').length,
           max_scroll_depth: this.maxScrollDepth,
           click_count: this.clickCount,
-          form_interactions: Array.from(this.formInteractions)
-        }
+          form_interactions: Array.from(this.formInteractions),
+        },
       };
 
       const requestOptions = {
@@ -712,7 +725,7 @@ class CampaignAnalytics {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       };
 
       if (synchronous && navigator.sendBeacon) {
@@ -758,7 +771,7 @@ class CampaignAnalytics {
       // Send heartbeat
       this.trackEvent('heartbeat', {
         session_duration: Date.now() - this.sessionStart.getTime(),
-        inactive_time: inactiveTime
+        inactive_time: inactiveTime,
       });
     }, this.config.heartbeatInterval);
   }
@@ -817,7 +830,7 @@ class CampaignAnalytics {
       sessionId: this.sessionId,
       sessionStart: this.sessionStart,
       location: this.location,
-      pendingEvents: this.events.length
+      pendingEvents: this.events.length,
     };
   }
 
@@ -864,7 +877,7 @@ if (typeof document !== 'undefined') {
   const initAnalytics = () => {
     if (!analytics) {
       analytics = new CampaignAnalytics({
-        debug: false
+        debug: false,
       });
     }
   };
@@ -885,15 +898,15 @@ if (typeof window !== 'undefined') {
   window.trackEvent = (eventType, eventData) => {
     analytics?.trackEvent(eventType, eventData);
   };
-  
+
   window.trackConversion = (conversionData) => {
     analytics?.trackConversion(conversionData);
   };
-  
+
   window.setAnalyticsConsent = (enabled) => {
     analytics?.setTrackingEnabled(enabled);
   };
-  
+
   window.getAnalyticsStatus = () => {
     return analytics?.getTrackingStatus();
   };

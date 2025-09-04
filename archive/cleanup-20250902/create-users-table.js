@@ -4,13 +4,14 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function createUsersTable() {
   console.log('🔧 Creating users table...');
-  
+
   // Basic users table SQL
   const createTableSQL = `
     -- Create users table if it doesn't exist
@@ -65,25 +66,23 @@ async function createUsersTable() {
 
   try {
     // Execute the SQL
-    const { data, error } = await supabase.rpc('exec_sql', { 
-      sql_query: createTableSQL 
+    const { data, error } = await supabase.rpc('exec_sql', {
+      sql_query: createTableSQL,
     });
 
     if (error) {
       console.error('❌ Error creating table:', error);
-      
+
       // Try alternative approach - create a test record directly
       console.log('🔄 Trying alternative approach...');
-      const { data: insertData, error: insertError } = await supabase
-        .from('users')
-        .insert([
-          {
-            email: 'test@example.com',
-            full_name: 'Test User',
-            role: 'user'
-          }
-        ]);
-        
+      const { data: insertData, error: insertError } = await supabase.from('users').insert([
+        {
+          email: 'test@example.com',
+          full_name: 'Test User',
+          role: 'user',
+        },
+      ]);
+
       if (insertError) {
         console.error('❌ Insert test failed:', insertError);
       } else {
@@ -92,7 +91,6 @@ async function createUsersTable() {
     } else {
       console.log('✅ Table creation successful');
     }
-
   } catch (error) {
     console.error('💥 Failed to create table:', error);
   }

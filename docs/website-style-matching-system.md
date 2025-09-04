@@ -7,11 +7,13 @@ The Website Style Matching System automatically analyzes user websites to extrac
 ## 🔄 Complete Workflow
 
 ### Step 1: URL Input (WebsiteStyleMatcher Component)
+
 - User enters their website URL
 - Real-time URL validation with helpful error messages
 - Option to skip style matching entirely
 
 ### Step 2: Website Analysis (Backend Service)
+
 - Comprehensive website scraping using Puppeteer
 - Color palette extraction from CSS and visual elements
 - Typography analysis (font families, weights, sizes)
@@ -19,6 +21,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 - Screenshot capture for visual reference
 
 ### Step 3: Style Confirmation (StyleConfirmation Component)
+
 - Visual display of extracted colors with hex codes
 - Font samples showing how text will look
 - Side-by-side form preview (before/after)
@@ -26,6 +29,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 - Real-time preview updates
 
 ### Step 4: Style Application
+
 - Approved styles integrated with existing form system
 - Database persistence for future use
 - Form styling updates automatically applied
@@ -33,6 +37,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 ## 🎨 Features Delivered
 
 ### Visual Style Extraction
+
 - ✅ Color palette analysis with usage percentages
 - ✅ Primary, secondary, and accent color identification
 - ✅ Typography extraction (heading, body, button fonts)
@@ -40,6 +45,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 - ✅ Screenshot capture for reference
 
 ### User Experience
+
 - ✅ Clear step-by-step workflow
 - ✅ Real-time URL validation with suggestions
 - ✅ Visual confirmation screen with previews
@@ -48,6 +54,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 - ✅ Skip option for users who prefer manual styling
 
 ### Error Handling
+
 - ✅ Comprehensive error handling for problematic websites
 - ✅ User-friendly error messages with suggestions
 - ✅ Fallback styles when analysis fails
@@ -55,6 +62,7 @@ The Website Style Matching System automatically analyzes user websites to extrac
 - ✅ Retry logic for transient errors
 
 ### Integration
+
 - ✅ Seamless integration with existing form workflow
 - ✅ Database persistence with proper schema
 - ✅ Style application to existing form system
@@ -90,12 +98,14 @@ supabase/
 ## 🚀 API Endpoints
 
 ### Analysis
+
 ```
 POST /api/analyze-website-styles
 Body: { "url": "https://example.com" }
 ```
 
 ### Style Application
+
 ```
 POST /api/apply-website-styles
 Body: {
@@ -106,6 +116,7 @@ Body: {
 ```
 
 ### History & Management
+
 ```
 GET /api/website-analysis-history     # Admin view of analyses
 GET /api/website-analysis/health      # Service health check
@@ -115,6 +126,7 @@ DELETE /api/website-analysis/cleanup  # Clean old data
 ## 🎨 Style Extraction Capabilities
 
 ### Colors
+
 - Primary brand color identification
 - Secondary and accent colors
 - Background and text colors
@@ -122,6 +134,7 @@ DELETE /api/website-analysis/cleanup  # Clean old data
 - Hex code extraction with names
 
 ### Typography
+
 - Heading font families and weights
 - Body text fonts and sizes
 - Button text styling
@@ -129,6 +142,7 @@ DELETE /api/website-analysis/cleanup  # Clean old data
 - Font family fallbacks
 
 ### Layout
+
 - Common margin and padding values
 - Border radius patterns
 - Button styling patterns
@@ -137,6 +151,7 @@ DELETE /api/website-analysis/cleanup  # Clean old data
 ## 🛡️ Error Handling
 
 ### Error Categories
+
 - **Network Errors**: Connection issues, timeouts
 - **Access Errors**: 403, 404, blocked sites
 - **Content Errors**: Empty pages, parsing issues
@@ -144,12 +159,15 @@ DELETE /api/website-analysis/cleanup  # Clean old data
 - **Rate Limiting**: Too many requests
 
 ### User-Friendly Messages
+
 Each error provides:
+
 - Clear explanation of what went wrong
 - Actionable suggestions for resolution
 - Alternative approaches (skip, try different URL)
 
 ### Fallback Behavior
+
 - Graceful degradation to default styles
 - Partial analysis when some data unavailable
 - Option to continue without style matching
@@ -157,16 +175,19 @@ Each error provides:
 ## 📊 Database Schema
 
 ### website_analyses
+
 - Stores analysis results for caching and analytics
 - Includes success/failure tracking
 - Client IP for rate limiting
 
 ### campaign_style_logs
+
 - Tracks style application events
 - Links campaigns to source websites
 - Audit trail for style changes
 
 ### campaigns (extensions)
+
 - `website_analyzed`: Source URL
 - `style_analysis`: Full analysis data
 - `applied_styles`: User-selected styles
@@ -176,6 +197,7 @@ Each error provides:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 NODE_ENV=development
 PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser  # Optional
@@ -185,6 +207,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ```
 
 ### Rate Limiting
+
 - 5 analyses per 15-minute window per IP
 - Configurable limits in production
 - Error messages guide users on limits
@@ -192,6 +215,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ## 🚀 Performance
 
 ### Optimizations
+
 - Browser instance reuse
 - Analysis result caching
 - Background cleanup of old data
@@ -199,6 +223,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 - Memory management for large sites
 
 ### Monitoring
+
 - Analysis success/failure rates
 - Processing time tracking
 - Error categorization and reporting
@@ -207,6 +232,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ## 🧪 Testing Scenarios
 
 ### Happy Path
+
 1. User enters valid website URL
 2. Analysis extracts colors and fonts successfully
 3. User reviews and approves styles
@@ -214,6 +240,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 5. Form shows updated styling
 
 ### Error Cases
+
 1. Invalid URL → Clear validation message
 2. Website blocks access → User-friendly explanation
 3. Analysis timeout → Retry with fallback
@@ -221,6 +248,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 5. Network error → Helpful suggestions
 
 ### Edge Cases
+
 1. Very slow websites → Timeout handling
 2. JavaScript-heavy sites → Content extraction
 3. Minimal styling → Fallback behavior
@@ -230,17 +258,20 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ## 🔒 Security Considerations
 
 ### Data Protection
+
 - No sensitive data stored from analyzed websites
 - Client IP masking in logs
 - Secure URL validation
 - XSS prevention in analysis display
 
 ### Rate Limiting
+
 - IP-based rate limiting
 - Progressive penalties for abuse
 - Whitelist for trusted sources
 
 ### Access Control
+
 - Public analysis API (rate limited)
 - Authenticated style application
 - Admin-only history access
@@ -248,12 +279,14 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ## 📈 Analytics & Insights
 
 ### Usage Metrics
+
 - Most analyzed domains
 - Style application rates
 - User skip rates
 - Error patterns
 
 ### Style Trends
+
 - Popular color schemes
 - Common font choices
 - Layout patterns
@@ -262,18 +295,21 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ## 🚀 Future Enhancements
 
 ### Advanced Analysis
+
 - Machine learning style recommendations
 - Brand guideline compliance checking
 - Accessibility color contrast analysis
 - Mobile-specific style extraction
 
 ### User Experience
+
 - Style preview animations
 - Bulk style operations
 - Custom style adjustments
 - Style history and favorites
 
 ### Integration
+
 - Popular website platform detection
 - CMS-specific optimizations
 - Design system integration
@@ -284,16 +320,19 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ### Common Issues
 
 **Analysis Fails**
+
 - Check URL validity and accessibility
 - Verify website loads in regular browser
 - Try different page from same site
 
 **No Styles Extracted**
+
 - Site may have minimal styling
 - Try homepage instead of specific page
 - Check if site uses external stylesheets
 
 **Slow Performance**
+
 - Some sites take longer to analyze
 - Complex JavaScript sites need more time
 - Consider skipping for very slow sites
@@ -301,6 +340,7 @@ MAX_CACHE_SIZE=1000                                # Analysis cache size
 ### Debug Information
 
 Development mode provides:
+
 - Detailed error messages
 - Analysis timing data
 - Browser console logs
@@ -309,6 +349,7 @@ Development mode provides:
 ## 📞 Support
 
 For issues with the style matching system:
+
 1. Check error messages for guidance
 2. Try analyzing a different URL
 3. Use the skip option to continue setup

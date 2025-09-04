@@ -5,12 +5,14 @@ This project enforces strict boundaries between different development platforms 
 ## 📁 Folder Structure & Ownership
 
 ### 🎯 Claude Code (Full Access)
+
 **Primary Platform for Frontend Development & Configuration**
 
 **Allowed:**
+
 ```
 frontend/          # React app, components, main logic
-shared/            # Cross-platform shared resources  
+shared/            # Cross-platform shared resources
 scripts/           # Automation and build scripts
 *.md               # Documentation
 *.json             # Configuration files
@@ -22,6 +24,7 @@ VERSIONING.md      # Version documentation
 ```
 
 **Responsibilities:**
+
 - Main React application development
 - Build system and automation
 - Release management and versioning
@@ -31,9 +34,11 @@ VERSIONING.md      # Version documentation
 ---
 
 ### 🎨 Lovable (Design-Focused)
+
 **UI/UX Design Platform**
 
 **Allowed:**
+
 ```
 lovable/                # Lovable-specific design files
 shared/components/      # Reusable React components
@@ -41,6 +46,7 @@ shared/styles/          # CSS, styling, themes
 ```
 
 **Restricted:**
+
 ```
 ❌ frontend/           # Main app logic (coordinate with Claude Code)
 ❌ contracts/          # Smart contracts (use Replit)
@@ -48,6 +54,7 @@ shared/styles/          # CSS, styling, themes
 ```
 
 **Responsibilities:**
+
 - UI/UX design and prototyping
 - Reusable component design
 - Styling and theming
@@ -56,9 +63,11 @@ shared/styles/          # CSS, styling, themes
 ---
 
 ### ⚡ Replit (Smart Contracts)
+
 **Smart Contract Development Platform**
 
 **Allowed:**
+
 ```
 contracts/              # Smart contract source and deployment
 shared/types/           # TypeScript contract interfaces
@@ -66,6 +75,7 @@ shared/interfaces/      # Cross-platform type definitions
 ```
 
 **Restricted:**
+
 ```
 ❌ frontend/           # React app (coordinate with Claude Code)
 ❌ lovable/            # Design files (use Lovable)
@@ -73,6 +83,7 @@ shared/interfaces/      # Cross-platform type definitions
 ```
 
 **Responsibilities:**
+
 - Smart contract development
 - Contract testing and deployment
 - Blockchain integration
@@ -81,6 +92,7 @@ shared/interfaces/      # Cross-platform type definitions
 ---
 
 ### 🤝 Shared Resources (All Platforms)
+
 **Accessible by All Platforms (Coordinate Changes)**
 
 ```
@@ -93,6 +105,7 @@ shared/
 ```
 
 **Rules:**
+
 - Any platform can read shared files
 - Changes should be coordinated between platforms
 - Use clear commit messages for shared changes
@@ -102,11 +115,13 @@ shared/
 ## 🚨 Automated Enforcement
 
 ### Git Hooks Protection
+
 - **Pre-commit Hook**: Prevents commits that violate platform boundaries
 - **Post-commit Hook**: Monitors and reports platform activity
 - **Automatic Warnings**: Alerts when boundaries are crossed
 
 ### Boundary Checking
+
 ```bash
 # Check current platform boundaries
 npm run check-boundaries
@@ -122,20 +137,22 @@ npm run platform-status
 
 The system automatically detects your current platform:
 
-| Platform | Detection Method |
-|----------|------------------|
-| **Lovable** | `LOVABLE_ENV` or `LOVABLE` environment variables |
-| **Replit** | `REPLIT` or `REPL_ID` environment variables |
-| **Claude Code** | Local development (default) |
+| Platform        | Detection Method                                 |
+| --------------- | ------------------------------------------------ |
+| **Lovable**     | `LOVABLE_ENV` or `LOVABLE` environment variables |
+| **Replit**      | `REPLIT` or `REPL_ID` environment variables      |
+| **Claude Code** | Local development (default)                      |
 
 ## ⚠️ Boundary Violations
 
 ### What Triggers Warnings:
+
 - Lovable modifying `frontend/` or `contracts/`
 - Replit modifying `frontend/` or `lovable/`
 - Any platform modifying protected config files
 
 ### Override Emergency Access:
+
 ```bash
 # Only use in emergencies - bypasses boundary checks
 git commit --no-verify -m "Emergency fix: description"
@@ -144,6 +161,7 @@ git commit --no-verify -m "Emergency fix: description"
 ## 🔄 Recommended Workflows
 
 ### Starting Work (Any Platform)
+
 ```bash
 # Always pull latest changes first
 ./sync-start.sh
@@ -153,6 +171,7 @@ npm run platform-status
 ```
 
 ### Making Changes
+
 ```bash
 # Work in your designated folders
 # Commit changes
@@ -165,6 +184,7 @@ git commit -m "feat: your changes"
 ```
 
 ### Cross-Platform Coordination
+
 ```bash
 # Before major changes affecting multiple platforms
 ./scripts/check-boundaries.sh activity
@@ -176,6 +196,7 @@ git commit -m "feat: your changes"
 ## 🛠️ Platform-Specific Commands
 
 ### Claude Code
+
 ```bash
 npm run dev                    # Start development server
 npm run build                  # Build for production
@@ -184,6 +205,7 @@ npm run release                # Create new release
 ```
 
 ### Lovable
+
 ```bash
 # Work in lovable/ folder
 # Focus on shared/components/ and shared/styles/
@@ -192,6 +214,7 @@ npm run release                # Create new release
 ```
 
 ### Replit
+
 ```bash
 # Work in contracts/ folder
 # Use shared/types/ for interfaces
@@ -203,11 +226,13 @@ npm run release                # Create new release
 ## 📊 Monitoring & Reports
 
 ### Activity Tracking
+
 - All commits are logged with platform information
 - Platform activity is tracked in `.git/platform-activity.log`
 - Boundary violations are logged and reported
 
 ### Regular Health Checks
+
 ```bash
 # Daily boundary check
 ./scripts/check-boundaries.sh
@@ -222,15 +247,19 @@ npm run release                # Create new release
 ## 🚫 Common Violations & Solutions
 
 ### ❌ Lovable modifying frontend/ files
+
 **Solution:** Move UI components to `lovable/` or `shared/components/`
 
-### ❌ Replit modifying frontend/ files  
+### ❌ Replit modifying frontend/ files
+
 **Solution:** Use `shared/types/` for contract interfaces, coordinate with Claude Code for frontend integration
 
 ### ❌ Any platform modifying scripts/
+
 **Solution:** Request changes through Claude Code platform
 
 ### ❌ Direct config file modifications
+
 **Solution:** Use Claude Code for configuration changes, or coordinate through issues/PRs
 
 ## 💡 Best Practices
@@ -246,15 +275,17 @@ npm run release                # Create new release
 ## 🔗 Integration with Existing Tools
 
 ### Versioning System
+
 - Platform boundaries integrate with automated versioning
 - Release process respects platform ownership
 - Changelog generation includes platform attribution
 
 ### Multi-Platform Sync
+
 - Boundary checks run with sync scripts
 - Platform detection works with sync automation
 - Conflict resolution respects platform ownership
 
 ---
 
-*This system ensures clean separation of concerns while maintaining seamless collaboration across all development platforms.* 🚀
+_This system ensures clean separation of concerns while maintaining seamless collaboration across all development platforms._ 🚀

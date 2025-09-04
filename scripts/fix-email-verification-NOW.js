@@ -5,25 +5,26 @@
  * This script bypasses email verification requirements and manually confirms users
  */
 
-const SUPABASE_URL = "https://kmepcdsklnnxokoimvzo.supabase.co";
-const SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE";
+const SUPABASE_URL = 'https://kmepcdsklnnxokoimvzo.supabase.co';
+const SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE';
 
 async function executeSQL(sql) {
   try {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc`, {
       method: 'POST',
       headers: {
-        'apikey': SERVICE_KEY,
-        'Authorization': `Bearer ${SERVICE_KEY}`,
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query: sql })
+      body: JSON.stringify({ query: sql }),
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error('SQL Error:', error);
@@ -48,7 +49,7 @@ async function fixEmailVerification() {
     END; 
     $$;
   `;
-  
+
   await executeSQL(createFuncSQL);
   console.log('   ✅ SQL execution function created');
 
@@ -71,7 +72,7 @@ async function fixEmailVerification() {
     VALUES ('DISABLE_SIGNUP', 'false') 
     ON CONFLICT (name) DO UPDATE SET value = 'false';
   `;
-  
+
   const result1 = await executeSQL(disableEmailConfirmation);
   console.log('   ✅ Email confirmation disabled');
 
@@ -91,7 +92,7 @@ async function fixEmailVerification() {
       email_confirmed_at = NOW()
     WHERE email_confirmed = false OR email_confirmed IS NULL;
   `;
-  
+
   const result2 = await executeSQL(confirmUsers);
   console.log('   ✅ All users manually confirmed');
 
@@ -146,26 +147,26 @@ async function fixEmailVerification() {
       email_confirmed_at = NOW(),
       updated_at = NOW();
   `;
-  
+
   const result3 = await executeSQL(createTestUser);
   console.log('   ✅ Test account created/confirmed');
 
   // Step 5: Verify the fix
   console.log('5. Verifying the fix...');
-  
+
   try {
     const verifyResponse = await fetch(`${SUPABASE_URL}/rest/v1/users?select=*&limit=5`, {
       headers: {
-        'apikey': SERVICE_KEY,
-        'Authorization': `Bearer ${SERVICE_KEY}`,
-      }
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+      },
     });
-    
+
     if (verifyResponse.ok) {
       const users = await verifyResponse.json();
       console.log(`   ✅ Found ${users.length} users in system`);
-      
-      const confirmedUsers = users.filter(u => u.email_confirmed);
+
+      const confirmedUsers = users.filter((u) => u.email_confirmed);
       console.log(`   ✅ ${confirmedUsers.length} users are email confirmed`);
     }
   } catch (error) {

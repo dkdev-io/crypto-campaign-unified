@@ -7,12 +7,14 @@ const CampaignBreadcrumb = () => {
   const pathname = location.pathname;
 
   const getBreadcrumbs = () => {
-    const breadcrumbs = [
-      { label: 'Home', path: '/', icon: Home }
-    ];
+    const breadcrumbs = [{ label: 'Home', path: '/', icon: Home }];
 
     // Add Campaign-specific breadcrumbs
-    if (pathname.startsWith('/setup') || pathname.startsWith('/campaigns') || pathname === '/auth') {
+    if (
+      pathname.startsWith('/setup') ||
+      pathname.startsWith('/campaigns') ||
+      pathname === '/auth'
+    ) {
       breadcrumbs.push({ label: 'Campaigns', path: '/' });
     }
 
@@ -54,10 +56,8 @@ const CampaignBreadcrumb = () => {
           <ol className="flex items-center space-x-2">
             {breadcrumbs.map((breadcrumb, index) => (
               <li key={breadcrumb.path} className="flex items-center">
-                {index > 0 && (
-                  <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
-                )}
-                
+                {index > 0 && <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />}
+
                 {breadcrumb.current ? (
                   <span className="flex items-center gap-2 text-primary font-medium">
                     {breadcrumb.icon && <breadcrumb.icon className="w-4 h-4" />}

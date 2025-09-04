@@ -14,58 +14,58 @@ export const getAuthRoute = (currentPath, state = {}) => {
   if (currentPath?.startsWith('/campaigns') || currentPath?.startsWith('/setup')) {
     return {
       pathname: '/campaigns/auth',
-      state: { 
+      state: {
         from: currentPath,
-        ...state 
-      }
-    }
+        ...state,
+      },
+    };
   }
 
   // If we're in a donor context, use donor auth
   if (currentPath?.startsWith('/donors')) {
     return {
       pathname: '/donors/auth',
-      state: { 
+      state: {
         from: currentPath,
-        ...state 
-      }
-    }
+        ...state,
+      },
+    };
   }
 
   // If we're in an admin context, use admin auth
   if (currentPath?.startsWith('/admin')) {
     return {
       pathname: '/admin/login',
-      state: { 
+      state: {
         from: currentPath,
-        ...state 
-      }
-    }
+        ...state,
+      },
+    };
   }
 
   // For the home page or unknown contexts, check referrer or default to campaigns
   // This handles cases where users land on the root page and need auth
-  const referrer = document.referrer
+  const referrer = document.referrer;
   if (referrer?.includes('/donors')) {
     return {
       pathname: '/donors/auth',
-      state: { 
+      state: {
         from: currentPath,
-        ...state 
-      }
-    }
+        ...state,
+      },
+    };
   }
 
   // Default to campaign auth for root, about, or other general pages
   // since campaigns are the primary use case
   return {
     pathname: '/campaigns/auth',
-    state: { 
+    state: {
       from: currentPath,
-      ...state 
-    }
-  }
-}
+      ...state,
+    },
+  };
+};
 
 /**
  * Determines auth context from various indicators
@@ -76,29 +76,29 @@ export const getAuthRoute = (currentPath, state = {}) => {
 export const getAuthContext = (currentPath, user = null) => {
   // Check URL path first
   if (currentPath?.startsWith('/campaigns') || currentPath?.startsWith('/setup')) {
-    return 'campaign'
+    return 'campaign';
   }
-  
+
   if (currentPath?.startsWith('/donors')) {
-    return 'donor'
+    return 'donor';
   }
-  
+
   if (currentPath?.startsWith('/admin')) {
-    return 'admin'
+    return 'admin';
   }
 
   // Check user type if available
   if (user) {
     if (user.user_metadata?.role === 'admin') {
-      return 'admin'
+      return 'admin';
     }
     if (user.app_metadata?.isDonor) {
-      return 'donor'
+      return 'donor';
     }
     // Default user type is campaign
-    return 'campaign'
+    return 'campaign';
   }
 
   // Default context for unauthenticated users
-  return 'campaign'
-}
+  return 'campaign';
+};

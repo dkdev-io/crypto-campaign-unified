@@ -9,6 +9,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 ## ✅ What I Understand So Far
 
 ### Technical Architecture
+
 - **Smart Contract**: FEC-compliant campaign contributions ($3,300 limit)
 - **Frontend**: React app with Web3 wallet integration
 - **Backend**: Express API with Supabase database
@@ -16,6 +17,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 - **Testing**: Comprehensive test suite with Playwright + Hardhat
 
 ### Core Features Identified
+
 - Campaign setup wizard (existing)
 - Donation contribution flow (partially existing)
 - KYC verification system (smart contract ready)
@@ -31,6 +33,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: I see a campaign setup wizard but need clarity on the complete flow.
 
 **Questions:**
+
 - What's the complete user journey from landing page to successful donation?
 - Are there different user types? (Campaign manager, donor, admin, compliance officer)
 - Should donors register/create accounts, or is it wallet-only authentication?
@@ -45,6 +48,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: Smart contract has KYC verification built-in, but no UI implementation.
 
 **Questions:**
+
 - What's your KYC verification process? (Manual approval, third-party service, document upload?)
 - Who performs KYC verification? (Campaign staff, automated service, third-party)
 - What information needs to be collected for FEC compliance beyond wallet address?
@@ -60,6 +64,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: Campaign setup wizard exists, but unclear on ongoing management.
 
 **Questions:**
+
 - Who manages campaigns? (Individual candidates, campaign staff, admins?)
 - Can one organization run multiple campaigns simultaneously?
 - Do campaigns have start/end dates or are they perpetual?
@@ -75,6 +80,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: No donor interface exists yet - this is the critical missing piece.
 
 **Questions:**
+
 - What donation amounts do you want to suggest? (Preset buttons like $25, $50, $100, $500, custom amount)
 - Should donors see campaign progress/goals/thermometer?
 - Do you want recurring donations or one-time only?
@@ -90,6 +96,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: Smart contract handles basic FEC compliance, but reporting unclear.
 
 **Questions:**
+
 - What FEC reports need to be generated? (Automated export formats?)
 - Do you need integration with existing campaign finance software?
 - What audit trails beyond blockchain transactions are required?
@@ -105,6 +112,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: Smart contract sends funds to a treasury address.
 
 **Questions:**
+
 - How should campaign funds be managed? (Multi-sig wallet, single address, escrow?)
 - Do you want automatic conversion to USD stablecoins, or keep as ETH/crypto?
 - Should there be spending controls/approvals for fund usage?
@@ -120,6 +128,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 **Current State**: No notification system exists.
 
 **Questions:**
+
 - What notifications do you want? (Donation confirmations, KYC status, compliance alerts)
 - Should notifications go to donors, campaign managers, or both?
 - Preferred channels? (Email, SMS, in-app, push notifications)
@@ -133,6 +142,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 ### 8. **Security & Privacy**
 
 **Questions:**
+
 - What PII (Personally Identifiable Information) needs to be stored vs. kept off-chain?
 - Do you have specific security compliance requirements? (SOC2, GDPR, etc.)
 - Should donor information be anonymous/pseudonymous or fully identified?
@@ -146,6 +156,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 ### 9. **Integration Requirements**
 
 **Questions:**
+
 - Do you need integration with existing campaign tools? (CRM systems, email marketing, accounting software)
 - Should this connect to traditional payment processors for fiat donations too?
 - Do you want social sharing features for campaigns?
@@ -159,6 +170,7 @@ Based on the consolidation analysis, I understand the core technical architectur
 ### 10. **Deployment & Operations**
 
 **Questions:**
+
 - What's your preferred deployment environment? (AWS, Vercel, self-hosted)
 - Do you need staging/testing environments for campaigns to test before going live?
 - What level of operational monitoring do you need?
@@ -174,9 +186,10 @@ Based on the consolidation analysis, I understand the core technical architectur
 **To build the most valuable product quickly, which of these areas should I focus on first?**
 
 ### Suggested Priority Order:
+
 1. **Donation Experience** - Core missing functionality
 2. **KYC Process** - Required for compliance
-3. **Campaign Management** - Needed for campaign operators  
+3. **Campaign Management** - Needed for campaign operators
 4. **Compliance Reporting** - Essential for legal operation
 5. **Advanced Features** - Notifications, integrations, etc.
 

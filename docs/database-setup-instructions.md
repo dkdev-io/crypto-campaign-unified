@@ -27,11 +27,13 @@ psql "$SUPABASE_DB_URL" -f docs/supabase-contributions-schema.sql
 ## What Gets Created
 
 ### New Tables:
+
 - `contributions` - Main contribution tracking with FEC compliance fields
-- `recurring_payments` - Individual payments for recurring donations  
+- `recurring_payments` - Individual payments for recurring donations
 - `contribution_limits` - Per-donor cumulative limit tracking
 
 ### New Features:
+
 - Transaction code generation (`TXN-XXXXXXXX-XXXX` format)
 - Automatic recurring payment projection calculations
 - FEC $3,300 limit enforcement
@@ -39,6 +41,7 @@ psql "$SUPABASE_DB_URL" -f docs/supabase-contributions-schema.sql
 - Row Level Security policies
 
 ### New Functions:
+
 - `generate_transaction_code()` - Creates unique transaction codes
 - `calculate_recurring_projection()` - Projects recurring donation totals
 - `update_updated_at_column()` - Auto-updates timestamps
@@ -59,6 +62,7 @@ After applying the schema:
 ## Verification
 
 After applying the schema, you should see:
+
 - All new tables in your Supabase Database tab
 - Functions listed in Database > Functions
 - Policies listed in Authentication > Policies

@@ -38,11 +38,8 @@ async function testConnection() {
   try {
     // Test basic connection
     console.log('1. Testing basic connection...');
-    const { data, error } = await supabase
-      .from('campaigns')
-      .select('count(*)')
-      .single();
-      
+    const { data, error } = await supabase.from('campaigns').select('count(*)').single();
+
     if (error) {
       console.log('⚠️  Campaign table may not exist yet (this is normal for new projects)');
       console.log('   Error:', error.message);
@@ -53,7 +50,7 @@ async function testConnection() {
     // Test auth service
     console.log('\n2. Testing auth service...');
     const { data: authData, error: authError } = await supabase.auth.getUser();
-    
+
     if (authError && authError.message !== 'Invalid JWT') {
       console.error('❌ Auth service error:', authError.message);
     } else {
@@ -66,7 +63,7 @@ async function testConnection() {
       // This should fail with a proper error message, not "Supabase not configured"
       await supabase.auth.signUp({
         email: 'test@test.com',
-        password: 'testpassword123'
+        password: 'testpassword123',
       });
     } catch (error) {
       if (error.message.includes('Supabase not configured')) {
@@ -81,7 +78,6 @@ async function testConnection() {
     console.log('1. Set up your database tables using the SQL from SUPABASE_SETUP_FIX.md');
     console.log('2. Configure email authentication in your Supabase dashboard');
     console.log('3. Test signup with a real email address');
-
   } catch (error) {
     console.error('❌ Connection test failed:', error.message);
     console.log('\n🔧 Troubleshooting:');

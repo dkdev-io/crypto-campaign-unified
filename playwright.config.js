@@ -17,25 +17,25 @@ export default defineConfig({
   reporter: [
     ['html', { outputFolder: 'test-results/html-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }]
+    ['junit', { outputFile: 'test-results/junit.xml' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.BASE_URL || 'http://localhost:5173',
-    
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    
+
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
-    
+
     /* Record video on failure */
     video: 'retain-on-failure',
-    
+
     /* Timeout for each action */
     actionTimeout: 30000,
-    
+
     /* Timeout for navigation */
     navigationTimeout: 30000,
   },
@@ -78,12 +78,12 @@ export default defineConfig({
       port: 3001,
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
-    }
+    },
   ],
 
   /* Global test timeout */
   timeout: 60000,
-  
+
   /* Expect timeout */
   expect: {
     timeout: 10000,
@@ -94,9 +94,9 @@ export default defineConfig({
     },
     toMatchSnapshot: {
       threshold: 0.2,
-    }
+    },
   },
 
   /* Output directory */
-  outputDir: 'test-results/'
+  outputDir: 'test-results/',
 });

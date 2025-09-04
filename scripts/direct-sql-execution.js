@@ -1,10 +1,11 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE';
+const SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.ILZgJNM0h6KuChk7zBFMOUZe_VftQjVOWk_BFYT7VqE';
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-  auth: { autoRefreshToken: false, persistSession: false }
+  auth: { autoRefreshToken: false, persistSession: false },
 });
 
 async function createTables() {
@@ -63,13 +64,13 @@ async function createTables() {
 
   try {
     // Execute via rpc
-    const { data, error } = await supabase.rpc('exec', { 
-      sql: sql 
+    const { data, error } = await supabase.rpc('exec', {
+      sql: sql,
     });
 
     if (error) {
       console.log('RPC failed, trying alternative...');
-      
+
       // Alternative: Create function and execute
       const createFunctionSql = `
         CREATE OR REPLACE FUNCTION create_donor_system()
@@ -145,13 +146,13 @@ async function createTables() {
 
       console.log('Creating function...');
       const { error: funcError } = await supabase.rpc('exec', {
-        sql: createFunctionSql
+        sql: createFunctionSql,
       });
 
       if (!funcError) {
         console.log('Calling function...');
         const { data: result, error: callError } = await supabase.rpc('create_donor_system');
-        
+
         if (callError) {
           console.log('Function call error:', callError.message);
         } else {
@@ -187,16 +188,17 @@ async function createTables() {
     } else {
       console.log('❌ Donor_profiles table error:', profileError.message);
     }
-
   } catch (err) {
     console.error('Error:', err.message);
   }
 }
 
-createTables().then(() => {
-  console.log('\n✨ Done');
-  process.exit(0);
-}).catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+createTables()
+  .then(() => {
+    console.log('\n✨ Done');
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error('Fatal error:', err);
+    process.exit(1);
+  });

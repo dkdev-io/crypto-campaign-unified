@@ -3,46 +3,47 @@ import fs from 'fs';
 
 async function fixCampaignsTableDirectly() {
   console.log('🚀 Fixing campaigns table via Puppeteer automation...\n');
-  
-  const browser = await puppeteer.launch({ 
+
+  const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
-  
+
   const page = await browser.newPage();
-  
+
   try {
     // Navigate to Supabase SQL editor
     console.log('1️⃣ Opening Supabase SQL Editor...');
     await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql', {
       waitUntil: 'networkidle2',
-      timeout: 30000
+      timeout: 30000,
     });
-    
+
     // Wait for page to load
-    await new Promise(r => setTimeout(r, 3000));
-    
+    await new Promise((r) => setTimeout(r, 3000));
+
     // Check if we need to login
-    const needsLogin = await page.$('input[type="email"]') !== null;
-    
+    const needsLogin = (await page.$('input[type="email"]')) !== null;
+
     if (needsLogin) {
       console.log('📧 Login required - Please login manually in the browser window');
       console.log('⏳ Waiting for you to complete login...');
       console.log('   (This will timeout in 2 minutes)');
-      
+
       // Wait for navigation away from login page
       try {
         await page.waitForFunction(
-          () => !window.location.href.includes('sign-in') && !window.location.href.includes('login'),
+          () =>
+            !window.location.href.includes('sign-in') && !window.location.href.includes('login'),
           { timeout: 120000 }
         );
-        
+
         console.log('✅ Login detected, continuing...');
-        
+
         // Navigate to SQL editor again
         await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql', {
-          waitUntil: 'networkidle2'
+          waitUntil: 'networkidle2',
         });
       } catch (e) {
         console.log('⏱️ Login timeout - proceeding anyway in case already logged in');
@@ -50,23 +51,23 @@ async function fixCampaignsTableDirectly() {
     } else {
       console.log('✅ Already logged in or no login required');
     }
-    
+
     // Wait for SQL editor to load
     console.log('2️⃣ Waiting for SQL editor to load...');
     await page.waitForSelector('[data-state="closed"]', { timeout: 30000 }).catch(() => {});
-    await new Promise(r => setTimeout(r, 2000));
-    
+    await new Promise((r) => setTimeout(r, 2000));
+
     // Look for CodeMirror or Monaco editor
-    const hasCodeMirror = await page.$('.CodeMirror') !== null;
-    const hasMonaco = await page.$('.monaco-editor') !== null;
-    const hasTextarea = await page.$('textarea') !== null;
-    const hasAceEditor = await page.$('.ace_editor') !== null;
-    
+    const hasCodeMirror = (await page.$('.CodeMirror')) !== null;
+    const hasMonaco = (await page.$('.monaco-editor')) !== null;
+    const hasTextarea = (await page.$('textarea')) !== null;
+    const hasAceEditor = (await page.$('.ace_editor')) !== null;
+
     console.log('3️⃣ Found editor:', { hasCodeMirror, hasMonaco, hasTextarea, hasAceEditor });
-    
+
     // Read the SQL
     const sql = fs.readFileSync('FIX_CAMPAIGNS_TABLE.sql', 'utf8');
-    
+
     // Try different methods to input SQL
     if (hasCodeMirror) {
       console.log('4️⃣ Inserting SQL into CodeMirror editor...');
@@ -102,10 +103,10 @@ async function fixCampaignsTableDirectly() {
       await page.keyboard.up('Meta');
       await page.keyboard.type(sql);
     }
-    
+
     console.log('5️⃣ SQL inserted, looking for Run button...');
-    await new Promise(r => setTimeout(r, 1000));
-    
+    await new Promise((r) => setTimeout(r, 1000));
+
     // Find and click Run button - try multiple selectors
     const runButtonSelectors = [
       'button:has-text("Run")',
@@ -116,18 +117,19 @@ async function fixCampaignsTableDirectly() {
       'button.bg-brand',
       'button.bg-green-500',
       'button[aria-label*="run"]',
-      'button[aria-label*="Run"]'
+      'button[aria-label*="Run"]',
     ];
-    
+
     let runClicked = false;
-    
+
     // First try evaluating in page context to find run button
     try {
       runClicked = await page.evaluate(() => {
         const buttons = Array.from(document.querySelectorAll('button'));
-        const runButton = buttons.find(btn => 
-          btn.textContent.toLowerCase().includes('run') ||
-          btn.textContent.toLowerCase().includes('execute')
+        const runButton = buttons.find(
+          (btn) =>
+            btn.textContent.toLowerCase().includes('run') ||
+            btn.textContent.toLowerCase().includes('execute')
         );
         if (runButton) {
           runButton.click();
@@ -135,14 +137,14 @@ async function fixCampaignsTableDirectly() {
         }
         return false;
       });
-      
+
       if (runClicked) {
         console.log('✅ Clicked Run button via page.evaluate');
       }
     } catch (e) {
       console.log('Could not click via evaluate, trying selectors...');
     }
-    
+
     if (!runClicked) {
       for (const selector of runButtonSelectors) {
         try {
@@ -158,7 +160,7 @@ async function fixCampaignsTableDirectly() {
         }
       }
     }
-    
+
     if (!runClicked) {
       // Try XPath
       const [runButton] = await page.$x("//button[contains(., 'Run')]");
@@ -168,20 +170,21 @@ async function fixCampaignsTableDirectly() {
         console.log('✅ Clicked Run button via XPath');
       }
     }
-    
+
     if (!runClicked) {
       console.log('⚠️ Could not find Run button automatically');
       console.log('📋 Please click the Run button manually in the browser');
-      await new Promise(r => setTimeout(r, 10000)); // Give user time to click
+      await new Promise((r) => setTimeout(r, 10000)); // Give user time to click
     } else {
       // Wait for execution
       console.log('6️⃣ Waiting for SQL execution...');
-      await new Promise(r => setTimeout(r, 5000));
-      
+      await new Promise((r) => setTimeout(r, 5000));
+
       // Check for success
-      const hasSuccess = await page.$('.text-green-500, .bg-green-100, [data-state="success"]') !== null;
-      const hasError = await page.$('.text-red-500, .bg-red-100, [data-state="error"]') !== null;
-      
+      const hasSuccess =
+        (await page.$('.text-green-500, .bg-green-100, [data-state="success"]')) !== null;
+      const hasError = (await page.$('.text-red-500, .bg-red-100, [data-state="error"]')) !== null;
+
       if (hasSuccess) {
         console.log('🎉 SUCCESS! Campaigns table has been fixed!');
       } else if (hasError) {
@@ -190,13 +193,12 @@ async function fixCampaignsTableDirectly() {
         console.log('✅ SQL executed - check browser for results');
       }
     }
-    
+
     console.log('\n✅ COMPLETE - Your campaigns table should now have all required columns');
     console.log('📋 You can close the browser window when ready');
-    
+
     // Keep browser open for user to see results
-    await new Promise(r => setTimeout(r, 60000));
-    
+    await new Promise((r) => setTimeout(r, 60000));
   } catch (error) {
     console.error('Error:', error.message);
     console.log('\n📋 MANUAL STEPS:');

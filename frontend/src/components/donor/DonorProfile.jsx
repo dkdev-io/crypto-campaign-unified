@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDonorAuth } from '../../contexts/DonorAuthContext';
 import DonorBreadcrumb from './DonorBreadcrumb';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Bell, 
-  Shield, 
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Bell,
+  Shield,
   CreditCard,
   Save,
   ArrowLeft,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
 } from 'lucide-react';
 
 const DonorProfile = () => {
@@ -23,7 +23,7 @@ const DonorProfile = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [activeTab, setActiveTab] = useState('profile');
-  
+
   const [profileData, setProfileData] = useState({
     full_name: '',
     email: '',
@@ -35,8 +35,8 @@ const DonorProfile = () => {
       city: '',
       state: '',
       zip: '',
-      country: ''
-    }
+      country: '',
+    },
   });
 
   const [notificationPrefs, setNotificationPrefs] = useState({
@@ -45,13 +45,13 @@ const DonorProfile = () => {
     push: false,
     newsletter: true,
     donation_updates: true,
-    campaign_updates: true
+    campaign_updates: true,
   });
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   useEffect(() => {
@@ -67,14 +67,14 @@ const DonorProfile = () => {
           city: '',
           state: '',
           zip: '',
-          country: ''
-        }
+          country: '',
+        },
       });
 
       if (donor.profile.donor_profiles?.notification_preferences) {
         setNotificationPrefs({
           ...notificationPrefs,
-          ...donor.profile.donor_profiles.notification_preferences
+          ...donor.profile.donor_profiles.notification_preferences,
         });
       }
     }
@@ -84,42 +84,42 @@ const DonorProfile = () => {
     const { name, value } = e.target;
     if (name.startsWith('address.')) {
       const addressField = name.split('.')[1];
-      setProfileData(prev => ({
+      setProfileData((prev) => ({
         ...prev,
         address: {
           ...prev.address,
-          [addressField]: value
-        }
+          [addressField]: value,
+        },
       }));
     } else {
-      setProfileData(prev => ({
+      setProfileData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
   const handleNotificationChange = (key) => {
-    setNotificationPrefs(prev => ({
+    setNotificationPrefs((prev) => ({
       ...prev,
-      [key]: !prev[key]
+      [key]: !prev[key],
     }));
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({
+    setPasswordData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleInterestToggle = (interest) => {
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
       interests: prev.interests.includes(interest)
-        ? prev.interests.filter(i => i !== interest)
-        : [...prev.interests, interest]
+        ? prev.interests.filter((i) => i !== interest)
+        : [...prev.interests, interest],
     }));
   };
 
@@ -132,7 +132,7 @@ const DonorProfile = () => {
     try {
       const { error } = await updateProfile({
         ...profileData,
-        notification_preferences: notificationPrefs
+        notification_preferences: notificationPrefs,
       });
 
       if (error) throw error;
@@ -148,7 +148,7 @@ const DonorProfile = () => {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       setErrorMessage('New passwords do not match');
       return;
@@ -165,14 +165,14 @@ const DonorProfile = () => {
 
     try {
       const { error } = await updatePassword(passwordData.newPassword);
-      
+
       if (error) throw error;
 
       setSuccessMessage('Password updated successfully!');
       setPasswordData({
         currentPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
       });
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
@@ -183,17 +183,25 @@ const DonorProfile = () => {
   };
 
   const availableInterests = [
-    'Education', 'Healthcare', 'Environment', 'Animal Welfare',
-    'Human Rights', 'Poverty Alleviation', 'Arts & Culture',
-    'Science & Technology', 'Community Development', 'Disaster Relief'
+    'Education',
+    'Healthcare',
+    'Environment',
+    'Animal Welfare',
+    'Human Rights',
+    'Poverty Alleviation',
+    'Arts & Culture',
+    'Science & Technology',
+    'Community Development',
+    'Disaster Relief',
   ];
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="min-h-screen" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
       {/* Breadcrumb Navigation */}
       <DonorBreadcrumb />
       {/* Header */}
-      <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>'
+      <div className="text-white" style={{ backgroundColor: 'hsl(var(--crypto-navy))' }}>
+        '
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <button
             onClick={() => navigate('/donors/dashboard')}
@@ -202,7 +210,9 @@ const DonorProfile = () => {
             <ArrowLeft className="w-5 h-5" />
             Back to Dashboard
           </button>
-          <h1 className="font-bold" style={{fontSize: 'var(--text-heading-xl)'}}>Profile Settings</h1>
+          <h1 className="font-bold" style={{ fontSize: 'var(--text-heading-xl)' }}>
+            Profile Settings
+          </h1>
           <p className="text-blue-200 mt-2">Manage your account information and preferences</p>
         </div>
       </div>
@@ -215,7 +225,7 @@ const DonorProfile = () => {
             <span>{successMessage}</span>
           </div>
         )}
-        
+
         {errorMessage && (
           <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
             <AlertCircle className="w-5 h-5" />
@@ -270,9 +280,7 @@ const DonorProfile = () => {
             <form onSubmit={handleProfileSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
-                  </label>
+                  <label className="block text-base font-medium text-gray-700 mb-2">Full Name</label>
                   <input
                     type="text"
                     name="full_name"
@@ -283,7 +291,7 @@ const DonorProfile = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Email Address
                   </label>
                   <div className="relative">
@@ -300,7 +308,7 @@ const DonorProfile = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-medium text-gray-700 mb-2">
                     Phone Number
                   </label>
                   <div className="relative">
@@ -318,9 +326,7 @@ const DonorProfile = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
-                </label>
+                <label className="block text-base font-medium text-gray-700 mb-2">Bio</label>
                 <textarea
                   name="bio"
                   value={profileData.bio}
@@ -332,14 +338,12 @@ const DonorProfile = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Interests
-                </label>
-                <p className="text-sm text-gray-600 mb-3">
+                <label className="block text-base font-medium text-gray-700 mb-2">Interests</label>
+                <p className="text-base text-gray-600 mb-3">
                   Select causes you're interested in supporting
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {availableInterests.map(interest => (
+                  {availableInterests.map((interest) => (
                     <button
                       key={interest}
                       type="button"
@@ -357,7 +361,7 @@ const DonorProfile = () => {
               </div>
 
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                <h3 className="text-base font-medium text-gray-700 mb-3 flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
                   Billing Address
                 </h3>
@@ -418,11 +422,11 @@ const DonorProfile = () => {
             <form onSubmit={handleProfileSubmit} className="space-y-6">
               <div className="space-y-4">
                 <h3 className="font-medium text-gray-900">Communication Preferences</h3>
-                
+
                 <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Email notifications</p>
-                    <p className="text-sm text-gray-600">Receive updates via email</p>
+                    <p className="text-base text-gray-600">Receive updates via email</p>
                   </div>
                   <input
                     type="checkbox"
@@ -435,7 +439,9 @@ const DonorProfile = () => {
                 <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">SMS notifications</p>
-                    <p className="text-sm text-gray-600">Receive text messages for important updates</p>
+                    <p className="text-base text-gray-600">
+                      Receive text messages for important updates
+                    </p>
                   </div>
                   <input
                     type="checkbox"
@@ -448,7 +454,9 @@ const DonorProfile = () => {
                 <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Newsletter</p>
-                    <p className="text-sm text-gray-600">Monthly updates about campaigns and impact</p>
+                    <p className="text-base text-gray-600">
+                      Monthly updates about campaigns and impact
+                    </p>
                   </div>
                   <input
                     type="checkbox"
@@ -461,7 +469,9 @@ const DonorProfile = () => {
                 <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Donation updates</p>
-                    <p className="text-sm text-gray-600">Updates about your donations and their impact</p>
+                    <p className="text-base text-gray-600">
+                      Updates about your donations and their impact
+                    </p>
                   </div>
                   <input
                     type="checkbox"
@@ -474,7 +484,7 @@ const DonorProfile = () => {
                 <label className="flex items-center justify-between p-4 bg-muted rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">Campaign updates</p>
-                    <p className="text-sm text-gray-600">Updates from campaigns you've supported</p>
+                    <p className="text-base text-gray-600">Updates from campaigns you've supported</p>
                   </div>
                   <input
                     type="checkbox"
@@ -502,10 +512,10 @@ const DonorProfile = () => {
             <form onSubmit={handlePasswordSubmit} className="space-y-6 max-w-md">
               <div>
                 <h3 className="font-medium text-gray-900 mb-4">Change Password</h3>
-                
+
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Current Password
                     </label>
                     <input
@@ -519,7 +529,7 @@ const DonorProfile = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       New Password
                     </label>
                     <input
@@ -533,7 +543,7 @@ const DonorProfile = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-base font-medium text-gray-700 mb-2">
                       Confirm New Password
                     </label>
                     <input

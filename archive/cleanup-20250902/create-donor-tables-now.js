@@ -4,18 +4,19 @@ import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration (using the CORRECT project that frontend uses)
 const SUPABASE_URL = 'https://owjvgdzmmlrdtpjdxgka.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjg1MjgxOSwiZXhwIjoyMDQyNDI4ODE5fQ.BOiXWmQIYwkMSGCIstE5s_LyOF5d7pPFVHc2B0TqVyc'; // I need the service role key for this project
+const SERVICE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjg1MjgxOSwiZXhwIjoyMDQyNDI4ODE5fQ.BOiXWmQIYwkMSGCIstE5s_LyOF5d7pPFVHc2B0TqVyc'; // I need the service role key for this project
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 });
 
 async function createDonorTables() {
   console.log('🚀 Creating donor tables...');
-  
+
   // Create the main function to set up the donor system
   const createFunctionSQL = `
     CREATE OR REPLACE FUNCTION setup_donor_system()
@@ -177,30 +178,30 @@ async function createDonorTables() {
     // First, create the function using direct SQL execution
     console.log('1. Creating setup function...');
     const { error: createError } = await supabase.rpc('exec', {
-      query: createFunctionSQL
+      query: createFunctionSQL,
     });
-    
+
     if (createError) {
       console.log('Creating function via RPC failed, trying direct query...');
-      
+
       // Try using a different approach - direct query
       const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SERVICE_KEY}`,
-          'apikey': SERVICE_KEY
+          Authorization: `Bearer ${SERVICE_KEY}`,
+          apikey: SERVICE_KEY,
         },
-        body: JSON.stringify({ query: createFunctionSQL })
+        body: JSON.stringify({ query: createFunctionSQL }),
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.log('Direct query also failed:', errorText);
-        
+
         // Final attempt - use minimal SQL via REST API
         console.log('2. Trying minimal table creation...');
-        
+
         // Create tables one by one using REST API
         const tables = [
           {
@@ -213,7 +214,7 @@ async function createDonorTables() {
               donor_type TEXT DEFAULT 'individual',
               email_verified BOOLEAN DEFAULT FALSE,
               created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            )`
+            )`,
           },
           {
             name: 'donor_profiles',
@@ -223,22 +224,22 @@ async function createDonorTables() {
               bio TEXT,
               created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
               UNIQUE(donor_id)
-            )`
-          }
+            )`,
+          },
         ];
-        
+
         for (const table of tables) {
           console.log(`Creating ${table.name} table...`);
           const tableResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${SERVICE_KEY}`,
-              'apikey': SERVICE_KEY
+              Authorization: `Bearer ${SERVICE_KEY}`,
+              apikey: SERVICE_KEY,
             },
-            body: JSON.stringify({ query: table.sql })
+            body: JSON.stringify({ query: table.sql }),
           });
-          
+
           if (tableResponse.ok) {
             console.log(`✅ ${table.name} table created successfully`);
           } else {
@@ -246,7 +247,7 @@ async function createDonorTables() {
             console.log(`❌ Failed to create ${table.name}:`, errorText);
           }
         }
-        
+
         // Try to enable RLS
         console.log('3. Setting up permissions...');
         const rlsSQL = `
@@ -263,92 +264,93 @@ async function createDonorTables() {
           GRANT ALL ON donors TO anon, authenticated;
           GRANT ALL ON donor_profiles TO anon, authenticated;
         `;
-        
+
         const rlsResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SERVICE_KEY}`,
-            'apikey': SERVICE_KEY
+            Authorization: `Bearer ${SERVICE_KEY}`,
+            apikey: SERVICE_KEY,
           },
-          body: JSON.stringify({ query: rlsSQL })
+          body: JSON.stringify({ query: rlsSQL }),
         });
-        
+
         if (rlsResponse.ok) {
           console.log('✅ RLS policies set up successfully');
         } else {
           const errorText = await rlsResponse.text();
           console.log('⚠️ RLS setup had issues:', errorText);
         }
-        
+
         return false;
       }
     }
-    
+
     // Now execute the setup function
     console.log('2. Executing donor system setup...');
     const { data, error } = await supabase.rpc('setup_donor_system');
-    
+
     if (error) {
       console.log('❌ Setup function execution failed:', error.message);
       return false;
     }
-    
+
     console.log('✅ Setup result:', data);
-    
+
     // Verify tables were created
     console.log('3. Verifying table creation...');
-    
+
     const { data: donorTest, error: donorError } = await supabase
       .from('donors')
       .select('count')
       .limit(1);
-      
+
     if (!donorError) {
       console.log('✅ Donors table is accessible');
     } else {
       console.log('❌ Donors table verification failed:', donorError.message);
     }
-    
+
     const { data: profileTest, error: profileError } = await supabase
       .from('donor_profiles')
       .select('count')
       .limit(1);
-      
+
     if (!profileError) {
       console.log('✅ Donor_profiles table is accessible');
     } else {
       console.log('❌ Donor_profiles table verification failed:', profileError.message);
     }
-    
+
     return true;
-    
   } catch (err) {
     console.error('❌ Fatal error:', err.message);
     return false;
   }
 }
 
-createDonorTables().then((success) => {
-  if (success) {
-    console.log('\n🎉 DONOR SYSTEM SETUP COMPLETE!');
-    console.log('');
-    console.log('✅ Tables created successfully');
-    console.log('✅ RLS policies configured');
-    console.log('✅ Test data inserted');
-    console.log('');
-    console.log('🚀 Next Steps:');
-    console.log('1. Go to: http://localhost:5173/donors/auth/register');
-    console.log('2. Test registration with any email');
-    console.log('3. Or sign in with test@dkdev.io / TestDonor123!');
-    console.log('');
-  } else {
-    console.log('\n❌ Setup completed with issues');
-    console.log('Check the messages above for details');
-  }
-  
-  process.exit(success ? 0 : 1);
-}).catch(err => {
-  console.error('\n💥 Script crashed:', err);
-  process.exit(1);
-});
+createDonorTables()
+  .then((success) => {
+    if (success) {
+      console.log('\n🎉 DONOR SYSTEM SETUP COMPLETE!');
+      console.log('');
+      console.log('✅ Tables created successfully');
+      console.log('✅ RLS policies configured');
+      console.log('✅ Test data inserted');
+      console.log('');
+      console.log('🚀 Next Steps:');
+      console.log('1. Go to: http://localhost:5173/donors/auth/register');
+      console.log('2. Test registration with any email');
+      console.log('3. Or sign in with test@dkdev.io / TestDonor123!');
+      console.log('');
+    } else {
+      console.log('\n❌ Setup completed with issues');
+      console.log('Check the messages above for details');
+    }
+
+    process.exit(success ? 0 : 1);
+  })
+  .catch((err) => {
+    console.error('\n💥 Script crashed:', err);
+    process.exit(1);
+  });

@@ -9,7 +9,7 @@ import { TestHelpers } from '../utils/testHelpers.js';
 // Mock bcrypt for password testing
 jest.mock('bcryptjs', () => ({
   hash: jest.fn((password, rounds) => Promise.resolve(`hashed_${password}`)),
-  compare: jest.fn((password, hash) => Promise.resolve(password === hash.replace('hashed_', '')))
+  compare: jest.fn((password, hash) => Promise.resolve(password === hash.replace('hashed_', ''))),
 }));
 
 describe('JWT and Session Management Security Tests', () => {
@@ -29,7 +29,7 @@ describe('JWT and Session Management Security Tests', () => {
         email: 'test@example.com',
         password: 'hashed_password123',
         role: 'user',
-        active: true
+        active: true,
       },
       {
         id: '2',
@@ -37,7 +37,7 @@ describe('JWT and Session Management Security Tests', () => {
         email: 'admin@example.com',
         password: 'hashed_adminpass',
         role: 'admin',
-        active: true
+        active: true,
       },
       {
         id: '3',
@@ -45,19 +45,19 @@ describe('JWT and Session Management Security Tests', () => {
         email: 'inactive@example.com',
         password: 'hashed_password',
         role: 'user',
-        active: false
-      }
+        active: false,
+      },
     ];
 
     // Login endpoint
     app.post('/auth/login', async (req, res) => {
       const { username, password } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ error: 'Username and password required' });
       }
 
-      const user = users.find(u => u.username === username);
+      const user = users.find((u) => u.username === username);
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
@@ -72,12 +72,12 @@ describe('JWT and Session Management Security Tests', () => {
       }
 
       const token = jwt.sign(
-        { 
-          id: user.id, 
-          username: user.username, 
+        {
+          id: user.id,
+          username: user.username,
           role: user.role,
           iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000) + (60 * 60) // 1 hour
+          exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
         },
         jwtSecret
       );
@@ -88,25 +88,25 @@ describe('JWT and Session Management Security Tests', () => {
         user: {
           id: user.id,
           username: user.username,
-          role: user.role
-        }
+          role: user.role,
+        },
       });
     });
 
     // Token refresh endpoint
     app.post('/auth/refresh', authenticate(jwtSecret), (req, res) => {
-      const user = users.find(u => u.id === req.user.id);
+      const user = users.find((u) => u.id === req.user.id);
       if (!user || !user.active) {
         return res.status(401).json({ error: 'User not found or inactive' });
       }
 
       const newToken = jwt.sign(
-        { 
-          id: user.id, 
-          username: user.username, 
+        {
+          id: user.id,
+          username: user.username,
           role: user.role,
           iat: Math.floor(Date.now() / 1000),
-          exp: Math.floor(Date.now() / 1000) + (60 * 60)
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
         },
         jwtSecret
       );
@@ -117,14 +117,14 @@ describe('JWT and Session Management Security Tests', () => {
     // Password change endpoint
     app.post('/auth/change-password', authenticate(jwtSecret), async (req, res) => {
       const { currentPassword, newPassword } = req.body;
-      
+
       if (!currentPassword || !newPassword) {
         return res.status(400).json({ error: 'Current and new password required' });
       }
 
-      const user = users.find(u => u.id === req.user.id);
+      const user = users.find((u) => u.id === req.user.id);
       const isValidPassword = await bcrypt.compare(currentPassword, user.password);
-      
+
       if (!isValidPassword) {
         return res.status(401).json({ error: 'Current password incorrect' });
       }
@@ -140,42 +140,47 @@ describe('JWT and Session Management Security Tests', () => {
 
     // Protected user endpoint
     app.get('/api/profile', authenticate(jwtSecret), (req, res) => {
-      const user = users.find(u => u.id === req.user.id);
+      const user = users.find((u) => u.id === req.user.id);
       res.json({
         id: user.id,
         username: user.username,
         email: user.email,
-        role: user.role
+        role: user.role,
       });
     });
 
     // Admin-only endpoint
     app.get('/api/admin/users', authenticate(jwtSecret), authorize('admin'), (req, res) => {
       res.json({
-        users: users.map(u => ({
+        users: users.map((u) => ({
           id: u.id,
           username: u.username,
           email: u.email,
           role: u.role,
-          active: u.active
-        }))
+          active: u.active,
+        })),
       });
     });
 
     // Multi-role endpoint
-    app.get('/api/reports', authenticate(jwtSecret), (req, res, next) => {
-      if (!['admin', 'manager'].includes(req.user.role)) {
-        return res.status(403).json({ error: 'Insufficient permissions' });
+    app.get(
+      '/api/reports',
+      authenticate(jwtSecret),
+      (req, res, next) => {
+        if (!['admin', 'manager'].includes(req.user.role)) {
+          return res.status(403).json({ error: 'Insufficient permissions' });
+        }
+        next();
+      },
+      (req, res) => {
+        res.json({ reports: ['report1', 'report2'] });
       }
-      next();
-    }, (req, res) => {
-      res.json({ reports: ['report1', 'report2'] });
-    });
+    );
 
     // Endpoint with token in different locations
     app.get('/api/token-locations', (req, res) => {
       let token = null;
-      
+
       // Check Authorization header
       if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         token = req.headers.authorization.substring(7);
@@ -210,7 +215,7 @@ describe('JWT and Session Management Security Tests', () => {
         .post('/auth/login')
         .send({
           username: 'testuser',
-          password: 'password123'
+          password: 'password123',
         })
         .expect(200);
 
@@ -231,7 +236,7 @@ describe('JWT and Session Management Security Tests', () => {
         .post('/auth/login')
         .send({
           username: 'testuser',
-          password: 'wrongpassword'
+          password: 'wrongpassword',
         })
         .expect(401);
 
@@ -244,7 +249,7 @@ describe('JWT and Session Management Security Tests', () => {
         .post('/auth/login')
         .send({
           username: 'nonexistent',
-          password: 'password123'
+          password: 'password123',
         })
         .expect(401);
 
@@ -256,7 +261,7 @@ describe('JWT and Session Management Security Tests', () => {
         .post('/auth/login')
         .send({
           username: 'inactive',
-          password: 'password'
+          password: 'password',
         })
         .expect(401);
 
@@ -284,13 +289,11 @@ describe('JWT and Session Management Security Tests', () => {
     let validToken;
 
     beforeEach(async () => {
-      const loginResponse = await request(app)
-        .post('/auth/login')
-        .send({
-          username: 'testuser',
-          password: 'password123'
-        });
-      
+      const loginResponse = await request(app).post('/auth/login').send({
+        username: 'testuser',
+        password: 'password123',
+      });
+
       validToken = loginResponse.body.token;
     });
 
@@ -305,9 +308,7 @@ describe('JWT and Session Management Security Tests', () => {
     });
 
     it('should reject access without token', async () => {
-      const response = await request(app)
-        .get('/api/profile')
-        .expect(401);
+      const response = await request(app).get('/api/profile').expect(401);
 
       expect(response.body.error).toBe('No authorization header provided');
       expect(response.body.code).toBe('AUTH_HEADER_MISSING');
@@ -319,7 +320,7 @@ describe('JWT and Session Management Security Tests', () => {
         'Bearer',
         'Bearer ',
         'Basic dGVzdDp0ZXN0', // Basic auth instead of Bearer
-        validToken // Token without Bearer prefix
+        validToken, // Token without Bearer prefix
       ];
 
       for (const header of malformedHeaders) {
@@ -328,7 +329,13 @@ describe('JWT and Session Management Security Tests', () => {
           .set('Authorization', header)
           .expect(401);
 
-        expect(['No authorization header provided', 'Invalid authorization header format', 'No token provided'].includes(response.body.error)).toBe(true);
+        expect(
+          [
+            'No authorization header provided',
+            'Invalid authorization header format',
+            'No token provided',
+          ].includes(response.body.error)
+        ).toBe(true);
       }
     });
 
@@ -337,7 +344,7 @@ describe('JWT and Session Management Security Tests', () => {
         'invalid.token.here',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.signature',
         validToken + 'tampered',
-        validToken.substring(0, validToken.length - 10) // Truncated token
+        validToken.substring(0, validToken.length - 10), // Truncated token
       ];
 
       for (const token of invalidTokens) {
@@ -357,7 +364,7 @@ describe('JWT and Session Management Security Tests', () => {
           id: '1',
           username: 'testuser',
           role: 'user',
-          exp: Math.floor(Date.now() / 1000) - 3600 // Expired 1 hour ago
+          exp: Math.floor(Date.now() / 1000) - 3600, // Expired 1 hour ago
         },
         jwtSecret
       );
@@ -377,7 +384,7 @@ describe('JWT and Session Management Security Tests', () => {
           id: '1',
           username: 'testuser',
           role: 'user',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         'wrong-secret-key'
       );
@@ -435,7 +442,7 @@ describe('JWT and Session Management Security Tests', () => {
           id: '4',
           username: 'manager',
           role: 'manager',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         jwtSecret
       );
@@ -467,7 +474,7 @@ describe('JWT and Session Management Security Tests', () => {
         id: '1',
         username: 'testuser',
         role: 'admin', // Escalated role
-        exp: Math.floor(Date.now() / 1000) + 3600
+        exp: Math.floor(Date.now() / 1000) + 3600,
       };
 
       const tamperedToken = jwt.sign(tamperedPayload, 'wrong-secret');
@@ -516,7 +523,7 @@ describe('JWT and Session Management Security Tests', () => {
           id: '3',
           username: 'inactive',
           role: 'user',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         jwtSecret
       );
@@ -555,7 +562,7 @@ describe('JWT and Session Management Security Tests', () => {
         .set('Authorization', `Bearer ${validToken}`)
         .send({
           currentPassword: 'password123',
-          newPassword: 'newSecurePassword123!'
+          newPassword: 'newSecurePassword123!',
         })
         .expect(200);
 
@@ -568,7 +575,7 @@ describe('JWT and Session Management Security Tests', () => {
         .set('Authorization', `Bearer ${validToken}`)
         .send({
           currentPassword: 'wrongpassword',
-          newPassword: 'newSecurePassword123!'
+          newPassword: 'newSecurePassword123!',
         })
         .expect(401);
 
@@ -576,11 +583,7 @@ describe('JWT and Session Management Security Tests', () => {
     });
 
     it('should enforce password strength requirements', async () => {
-      const weakPasswords = [
-        'short',
-        '1234567',
-        'weakpass'
-      ];
+      const weakPasswords = ['short', '1234567', 'weakpass'];
 
       for (const password of weakPasswords) {
         const response = await request(app)
@@ -588,7 +591,7 @@ describe('JWT and Session Management Security Tests', () => {
           .set('Authorization', `Bearer ${validToken}`)
           .send({
             currentPassword: 'password123',
-            newPassword: password
+            newPassword: password,
           })
           .expect(400);
 
@@ -619,7 +622,7 @@ describe('JWT and Session Management Security Tests', () => {
         .post('/auth/change-password')
         .send({
           currentPassword: 'password123',
-          newPassword: 'newPassword123!'
+          newPassword: 'newPassword123!',
         })
         .expect(401);
 
@@ -657,7 +660,7 @@ describe('JWT and Session Management Security Tests', () => {
 
     it('should prioritize Authorization header over query parameter', async () => {
       const invalidToken = 'invalid-token';
-      
+
       const response = await request(app)
         .get('/api/token-locations')
         .set('Authorization', `Bearer ${validToken}`)
@@ -668,9 +671,7 @@ describe('JWT and Session Management Security Tests', () => {
     });
 
     it('should reject requests without any token', async () => {
-      const response = await request(app)
-        .get('/api/token-locations')
-        .expect(401);
+      const response = await request(app).get('/api/token-locations').expect(401);
 
       expect(response.body.error).toBe('Token required');
     });
@@ -688,11 +689,9 @@ describe('JWT and Session Management Security Tests', () => {
 
     it('should prevent JWT algorithm confusion attacks', async () => {
       // Create token with 'none' algorithm
-      const noneAlgToken = jwt.sign(
-        { id: '1', username: 'testuser', role: 'admin' },
-        '',
-        { algorithm: 'none' }
-      );
+      const noneAlgToken = jwt.sign({ id: '1', username: 'testuser', role: 'admin' }, '', {
+        algorithm: 'none',
+      });
 
       const response = await request(app)
         .get('/api/profile')
@@ -711,7 +710,7 @@ describe('JWT and Session Management Security Tests', () => {
           id: '3', // inactive user
           username: 'inactive',
           role: 'user',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         jwtSecret
       );
@@ -727,21 +726,19 @@ describe('JWT and Session Management Security Tests', () => {
 
     it('should handle concurrent login attempts', async () => {
       const loginRequests = Array.from({ length: 5 }, () =>
-        request(app)
-          .post('/auth/login')
-          .send({ username: 'testuser', password: 'password123' })
+        request(app).post('/auth/login').send({ username: 'testuser', password: 'password123' })
       );
 
       const responses = await Promise.all(loginRequests);
-      
+
       // All should succeed (no rate limiting implemented yet)
-      responses.forEach(response => {
+      responses.forEach((response) => {
         expect(response.status).toBe(200);
         expect(response.body.token).toBeDefined();
       });
 
       // Each token should be unique
-      const tokens = responses.map(r => r.body.token);
+      const tokens = responses.map((r) => r.body.token);
       const uniqueTokens = [...new Set(tokens)];
       expect(uniqueTokens.length).toBe(tokens.length);
     });
@@ -752,7 +749,7 @@ describe('JWT and Session Management Security Tests', () => {
         username: 'testuser',
         role: 'user',
         longField: 'a'.repeat(10000), // Very long field
-        exp: Math.floor(Date.now() / 1000) + 3600
+        exp: Math.floor(Date.now() / 1000) + 3600,
       };
 
       const longToken = jwt.sign(longPayload, jwtSecret);
@@ -773,7 +770,7 @@ describe('JWT and Session Management Security Tests', () => {
           role: 'user',
           permissions: ['read', 'write'],
           department: 'engineering',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         jwtSecret
       );
@@ -796,7 +793,7 @@ describe('JWT and Session Management Security Tests', () => {
         'four.parts.are.invalid',
         '',
         null,
-        undefined
+        undefined,
       ];
 
       for (const token of malformedTokens) {
@@ -829,7 +826,7 @@ describe('JWT and Session Management Security Tests', () => {
         {
           username: 'testuser',
           role: 'user',
-          exp: Math.floor(Date.now() / 1000) + 3600
+          exp: Math.floor(Date.now() / 1000) + 3600,
         },
         jwtSecret
       );
@@ -850,7 +847,7 @@ describe('JWT and Session Management Security Tests', () => {
           username: 'testuser',
           role: 'user',
           iat: Math.floor(Date.now() / 1000) + 3600, // Issued 1 hour in the future
-          exp: Math.floor(Date.now() / 1000) + 7200  // Expires 2 hours in the future
+          exp: Math.floor(Date.now() / 1000) + 7200, // Expires 2 hours in the future
         },
         jwtSecret
       );

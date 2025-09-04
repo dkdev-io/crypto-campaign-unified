@@ -16,18 +16,18 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         eq: jest.fn().mockReturnThis(),
         single: jest.fn(),
         order: jest.fn().mockReturnThis(),
-        range: jest.fn()
+        range: jest.fn(),
       })),
       rpc: jest.fn(() => ({
-        single: jest.fn()
-      }))
+        single: jest.fn(),
+      })),
     };
 
     mockWeb3Service = {
       initialized: true,
       getContributorInfo: jest.fn(),
       isKYCVerified: jest.fn(),
-      waitForTransaction: jest.fn()
+      waitForTransaction: jest.fn(),
     };
   });
 
@@ -37,7 +37,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         campaign_id: 'non-existent-campaign-id',
         contributor_address: TestHelpers.generateMockAddress(),
         amount_eth: '1.0',
-        transaction_hash: TestHelpers.generateMockTransactionHash()
+        transaction_hash: TestHelpers.generateMockTransactionHash(),
       };
 
       const dbChain = mockSupabaseClient.from('form_submissions');
@@ -48,8 +48,9 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         error: {
           code: '23503',
           message: 'insert or update on table "form_submissions" violates foreign key constraint',
-          details: 'Key (campaign_id)=(non-existent-campaign-id) is not present in table "campaigns"'
-        }
+          details:
+            'Key (campaign_id)=(non-existent-campaign-id) is not present in table "campaigns"',
+        },
       });
 
       const result = await attemptContributionSubmission(invalidContribution, mockSupabaseClient);
@@ -64,7 +65,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       const duplicateTransaction = {
         transaction_hash: TestHelpers.generateMockTransactionHash(),
         contributor_address: TestHelpers.generateMockAddress(),
-        amount_eth: '2.0'
+        amount_eth: '2.0',
       };
 
       // First insertion succeeds
@@ -73,7 +74,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       dbChain1.select.mockReturnThis();
       dbChain1.single.mockResolvedValueOnce({
         data: MockFactories.contributionLog(duplicateTransaction),
-        error: null
+        error: null,
       });
 
       // Second insertion fails with duplicate key
@@ -84,8 +85,9 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         data: null,
         error: {
           code: '23505',
-          message: 'duplicate key value violates unique constraint "contribution_logs_transaction_hash_key"'
-        }
+          message:
+            'duplicate key value violates unique constraint "contribution_logs_transaction_hash_key"',
+        },
       });
 
       // First submission should succeed
@@ -104,7 +106,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         contributor_address: TestHelpers.generateMockAddress(),
         amount_eth: '-1.0', // Negative amount should violate check constraint
         amount_wei: '-1000000000000000000',
-        transaction_hash: TestHelpers.generateMockTransactionHash()
+        transaction_hash: TestHelpers.generateMockTransactionHash(),
       };
 
       const dbChain = mockSupabaseClient.from('contribution_logs');
@@ -114,8 +116,9 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         data: null,
         error: {
           code: '23514',
-          message: 'new row for relation "contribution_logs" violates check constraint "positive_amount_check"'
-        }
+          message:
+            'new row for relation "contribution_logs" violates check constraint "positive_amount_check"',
+        },
       });
 
       const result = await attemptContributionLog(invalidAmount, mockSupabaseClient);
@@ -139,7 +142,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       dbChain1.select.mockReturnThis();
       dbChain1.single.mockResolvedValueOnce({
         data: MockFactories.campaign({ ...updateData1, id: campaignId }),
-        error: null
+        error: null,
       });
 
       const dbChain2 = mockSupabaseClient.from('campaigns');
@@ -150,8 +153,8 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         data: null,
         error: {
           code: 'PGRST116',
-          message: 'The result contains 0 rows'
-        }
+          message: 'The result contains 0 rows',
+        },
       });
 
       // First update succeeds
@@ -169,13 +172,13 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       const transaction1Data = {
         campaign_id: 'campaign-1',
         contributor_id: 'contributor-1',
-        amount: '1.0'
+        amount: '1.0',
       };
-      
+
       const transaction2Data = {
-        campaign_id: 'campaign-2', 
+        campaign_id: 'campaign-2',
         contributor_id: 'contributor-2',
-        amount: '2.0'
+        amount: '2.0',
       };
 
       // Simulate deadlock error
@@ -184,10 +187,13 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       dbChain.select.mockReturnThis();
       dbChain.single.mockRejectedValue({
         code: '40P01',
-        message: 'deadlock detected'
+        message: 'deadlock detected',
       });
 
-      const result = await attemptConcurrentContributions([transaction1Data, transaction2Data], mockSupabaseClient);
+      const result = await attemptConcurrentContributions(
+        [transaction1Data, transaction2Data],
+        mockSupabaseClient
+      );
 
       expect(result.success).toBe(false);
       expect(result.error.type).toBe('deadlock');
@@ -201,7 +207,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       const contributionData = {
         transaction_hash: TestHelpers.generateMockTransactionHash(),
         contributor_address: TestHelpers.generateMockAddress(),
-        amount_eth: '1.5'
+        amount_eth: '1.5',
       };
 
       const dbChain = mockSupabaseClient.from('contribution_logs');
@@ -229,7 +235,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         .mockRejectedValueOnce(new Error('ENOTFOUND'))
         .mockResolvedValue({
           data: MockFactories.campaign(campaignData),
-          error: null
+          error: null,
         });
 
       const result = await attemptCampaignCreationWithRetry(campaignData, mockSupabaseClient);
@@ -247,8 +253,8 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         kyc: TestHelpers.generateMockKYCData(),
         contribution: {
           transaction_hash: TestHelpers.generateMockTransactionHash(),
-          amount_eth: '2.5'
-        }
+          amount_eth: '2.5',
+        },
       };
 
       // Mock partial success scenario
@@ -257,7 +263,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       campaignChain.select.mockReturnThis();
       campaignChain.single.mockResolvedValue({
         data: MockFactories.campaign(complexTransaction.campaign),
-        error: null
+        error: null,
       });
 
       const kycChain = mockSupabaseClient.from('kyc_verifications');
@@ -265,7 +271,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       kycChain.select.mockReturnThis();
       kycChain.single.mockResolvedValue({
         data: MockFactories.kycRecord(complexTransaction.kyc),
-        error: null
+        error: null,
       });
 
       const contributionChain = mockSupabaseClient.from('contribution_logs');
@@ -273,7 +279,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       contributionChain.select.mockReturnThis();
       contributionChain.single.mockRejectedValue({
         code: '23503',
-        message: 'Foreign key constraint failed'
+        message: 'Foreign key constraint failed',
       });
 
       // Rollback operations
@@ -291,14 +297,14 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
 
     it('should handle cascade deletion scenarios', async () => {
       const campaignId = 'test-campaign-id';
-      
+
       // Mock campaign with existing dependencies
       const dbChain = mockSupabaseClient.from('campaigns');
       dbChain.delete.mockReturnThis();
       dbChain.eq.mockRejectedValue({
         code: '23503',
         message: 'update or delete on table "campaigns" violates foreign key constraint',
-        details: 'Key (id)=(test-campaign-id) is still referenced from table "form_submissions"'
+        details: 'Key (id)=(test-campaign-id) is still referenced from table "form_submissions"',
       });
 
       const result = await attemptCampaignDeletion(campaignId, mockSupabaseClient);
@@ -314,10 +320,14 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       const contributionData = {
         transaction_hash: TestHelpers.generateMockTransactionHash(),
         amount_eth: '1.0',
-        amount_wei: '999999999999999999' // Inconsistent with amount_eth
+        amount_wei: '999999999999999999', // Inconsistent with amount_eth
       };
 
-      const result = await validateContributionConsistency(contributionData, mockSupabaseClient, mockWeb3Service);
+      const result = await validateContributionConsistency(
+        contributionData,
+        mockSupabaseClient,
+        mockWeb3Service
+      );
 
       expect(result.consistent).toBe(false);
       expect(result.inconsistencies).toContain('amount_mismatch');
@@ -331,7 +341,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       // Mock Web3 data
       mockWeb3Service.getContributorInfo.mockResolvedValue({
         totalContributed: '3000000000000000000', // 3 ETH
-        contributionCount: 2
+        contributionCount: 2,
       });
 
       // Mock database data showing different totals
@@ -340,12 +350,16 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       dbChain.eq.mockResolvedValue({
         data: [
           MockFactories.contributionLog({ amount_wei: '1000000000000000000' }),
-          MockFactories.contributionLog({ amount_wei: '500000000000000000' })
+          MockFactories.contributionLog({ amount_wei: '500000000000000000' }),
         ], // Total: 1.5 ETH (mismatch!)
-        error: null
+        error: null,
       });
 
-      const result = await validateBlockchainDatabaseConsistency(address, mockWeb3Service, mockSupabaseClient);
+      const result = await validateBlockchainDatabaseConsistency(
+        address,
+        mockWeb3Service,
+        mockSupabaseClient
+      );
 
       expect(result.consistent).toBe(false);
       expect(result.blockchain_total).toBe('3000000000000000000');
@@ -363,9 +377,9 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       orphanedChain.eq.mockResolvedValue({
         data: [
           MockFactories.contributionLog({ status: 'pending' }),
-          MockFactories.contributionLog({ status: 'pending' })
+          MockFactories.contributionLog({ status: 'pending' }),
         ],
-        error: null
+        error: null,
       });
 
       // Mock cleanup operation
@@ -373,7 +387,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
       cleanupChain.update.mockReturnThis();
       cleanupChain.eq.mockResolvedValue({
         data: [],
-        error: null
+        error: null,
       });
 
       const result = await cleanupOrphanedRecords(mockSupabaseClient, mockWeb3Service);
@@ -388,7 +402,7 @@ describe('Database Transaction Rollbacks and Error Scenarios', () => {
         type: 'data_corruption',
         affected_tables: ['campaigns', 'contribution_logs'],
         timestamp: new Date().toISOString(),
-        backup_point: 'before_critical_operation'
+        backup_point: 'before_critical_operation',
       };
 
       const result = await executeEmergencyRollback(criticalError, mockSupabaseClient);
@@ -406,19 +420,19 @@ async function attemptContributionSubmission(data, dbClient) {
   try {
     const chain = dbClient.from('form_submissions');
     const result = await chain.insert([data]).select().single();
-    
+
     if (result.error) {
       return {
         success: false,
         error: {
           type: result.error.code === '23503' ? 'constraint_violation' : 'unknown',
           constraint: result.error.code === '23503' ? 'foreign_key' : 'unknown',
-          message: result.error.message
+          message: result.error.message,
         },
-        rollback_completed: true
+        rollback_completed: true,
       };
     }
-    
+
     return { success: true, data: result.data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -429,15 +443,15 @@ async function attemptContributionLog(data, dbClient) {
   try {
     const chain = dbClient.from('contribution_logs');
     const result = await chain.insert([data]).select().single();
-    
+
     if (result.error?.code === '23505') {
       return {
         success: false,
         error: { type: 'duplicate_transaction' },
-        handled_gracefully: true
+        handled_gracefully: true,
       };
     }
-    
+
     return { success: true, data: result.data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -448,15 +462,15 @@ async function attemptCampaignUpdate(campaignId, updateData, dbClient) {
   try {
     const chain = dbClient.from('campaigns');
     const result = await chain.update(updateData).eq('id', campaignId).select().single();
-    
+
     if (result.error?.code === 'PGRST116') {
       return {
         success: false,
         error: { type: 'concurrent_modification' },
-        retry_suggested: true
+        retry_suggested: true,
       };
     }
-    
+
     return { success: true, data: result.data };
   } catch (error) {
     return { success: false, error: error.message };
@@ -470,7 +484,7 @@ async function attemptConcurrentContributions(transactions, dbClient) {
       const chain = dbClient.from('contributions');
       return await chain.insert([tx]).select().single();
     });
-    
+
     await Promise.all(promises);
     return { success: true };
   } catch (error) {
@@ -479,7 +493,7 @@ async function attemptConcurrentContributions(transactions, dbClient) {
         success: false,
         error: { type: 'deadlock' },
         retries_attempted: 3,
-        rollback_completed: true
+        rollback_completed: true,
       };
     }
     throw error;
@@ -488,7 +502,7 @@ async function attemptConcurrentContributions(transactions, dbClient) {
 
 async function attemptContributionLogWithRetry(data, dbClient, maxRetries = 3) {
   let attempts = 0;
-  
+
   while (attempts < maxRetries) {
     try {
       const chain = dbClient.from('contribution_logs');
@@ -497,15 +511,15 @@ async function attemptContributionLogWithRetry(data, dbClient, maxRetries = 3) {
     } catch (error) {
       attempts++;
       if (error.message === 'ETIMEDOUT' && attempts < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+        await new Promise((resolve) => setTimeout(resolve, 1000 * attempts));
         continue;
       }
-      
+
       return {
         success: false,
         error: { type: 'network_timeout' },
         retries_attempted: attempts,
-        final_state: 'unknown'
+        final_state: 'unknown',
       };
     }
   }
@@ -513,7 +527,7 @@ async function attemptContributionLogWithRetry(data, dbClient, maxRetries = 3) {
 
 async function attemptCampaignCreationWithRetry(data, dbClient, maxRetries = 3) {
   let attempts = 0;
-  
+
   while (attempts < maxRetries) {
     try {
       const chain = dbClient.from('campaigns');
@@ -521,8 +535,11 @@ async function attemptCampaignCreationWithRetry(data, dbClient, maxRetries = 3) 
       return { success: true, data: result.data, retries_attempted: attempts };
     } catch (error) {
       attempts++;
-      if ((error.message === 'ECONNRESET' || error.message === 'ENOTFOUND') && attempts < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+      if (
+        (error.message === 'ECONNRESET' || error.message === 'ENOTFOUND') &&
+        attempts < maxRetries
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 1000 * attempts));
         continue;
       }
       throw error;
@@ -532,22 +549,22 @@ async function attemptCampaignCreationWithRetry(data, dbClient, maxRetries = 3) 
 
 async function attemptComplexTransaction(transactionData, dbClient) {
   const operations = [];
-  
+
   try {
     // Step 1: Create campaign
     const campaignChain = dbClient.from('campaigns');
     const campaignResult = await campaignChain.insert([transactionData.campaign]).select().single();
     operations.push({ table: 'campaigns', id: campaignResult.data.id });
-    
+
     // Step 2: Create KYC record
     const kycChain = dbClient.from('kyc_verifications');
     const kycResult = await kycChain.insert([transactionData.kyc]).select().single();
     operations.push({ table: 'kyc_verifications', id: kycResult.data.id });
-    
+
     // Step 3: Create contribution (this will fail)
     const contributionChain = dbClient.from('contribution_logs');
     await contributionChain.insert([transactionData.contribution]).select().single();
-    
+
     return { success: true };
   } catch (error) {
     // Rollback operations in reverse order
@@ -556,12 +573,12 @@ async function attemptComplexTransaction(transactionData, dbClient) {
       const deleteChain = dbClient.from(op.table);
       await deleteChain.delete().eq('id', op.id);
     }
-    
+
     return {
       success: false,
       partial_completion: true,
       rollback_operations: operations.length,
-      final_state: 'rolled_back'
+      final_state: 'rolled_back',
     };
   }
 }
@@ -576,7 +593,7 @@ async function attemptCampaignDeletion(campaignId, dbClient) {
       return {
         success: false,
         error: { type: 'dependency_exists' },
-        suggested_action: 'cascade_delete_or_reassign'
+        suggested_action: 'cascade_delete_or_reassign',
       };
     }
     throw error;
@@ -585,17 +602,17 @@ async function attemptCampaignDeletion(campaignId, dbClient) {
 
 async function validateContributionConsistency(data, dbClient, web3Service) {
   const inconsistencies = [];
-  
+
   // Check ETH to Wei conversion
   const expectedWei = (parseFloat(data.amount_eth) * 1e18).toString();
   if (data.amount_wei !== expectedWei) {
     inconsistencies.push('amount_mismatch');
   }
-  
+
   return {
     consistent: inconsistencies.length === 0,
     inconsistencies,
-    corrective_action_taken: inconsistencies.length > 0
+    corrective_action_taken: inconsistencies.length > 0,
   };
 }
 
@@ -603,32 +620,35 @@ async function validateBlockchainDatabaseConsistency(address, web3Service, dbCli
   const web3Data = await web3Service.getContributorInfo(address);
   const chain = dbClient.from('contribution_logs');
   const { data: dbRecords } = await chain.select('*').eq('contributor_address', address);
-  
-  const dbTotal = dbRecords.reduce((sum, record) => 
-    sum + parseInt(record.amount_wei), 0).toString();
-  
+
+  const dbTotal = dbRecords
+    .reduce((sum, record) => sum + parseInt(record.amount_wei), 0)
+    .toString();
+
   const consistent = web3Data.totalContributed === dbTotal;
-  
+
   return {
     consistent,
     blockchain_total: web3Data.totalContributed,
     database_total: dbTotal,
-    discrepancy: consistent ? '0' : (parseInt(web3Data.totalContributed) - parseInt(dbTotal)).toString(),
-    sync_required: !consistent
+    discrepancy: consistent
+      ? '0'
+      : (parseInt(web3Data.totalContributed) - parseInt(dbTotal)).toString(),
+    sync_required: !consistent,
   };
 }
 
 async function cleanupOrphanedRecords(dbClient, web3Service) {
   const orphanedChain = dbClient.from('contribution_logs');
   const { data: orphanedRecords } = await orphanedChain.select('*').eq('status', 'pending');
-  
+
   const cleanupChain = dbClient.from('contribution_logs');
   await cleanupChain.update({ status: 'cleaned_up' }).eq('status', 'pending');
-  
+
   return {
     success: true,
     orphaned_records_found: orphanedRecords.length,
-    records_cleaned: orphanedRecords.length
+    records_cleaned: orphanedRecords.length,
   };
 }
 
@@ -638,6 +658,6 @@ async function executeEmergencyRollback(errorData, dbClient) {
     success: true,
     rollback_completed: true,
     backup_restored: true,
-    data_integrity_verified: true
+    data_integrity_verified: true,
   };
 }

@@ -5,19 +5,19 @@ import { useNavigate } from 'react-router-dom';
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: 'test@dkdev.io',
-    password: 'TestDonor123!'
+    password: 'TestDonor123!',
   });
   const [setupData, setSetupData] = useState({
     email: 'test@dkdev.io',
     password: '',
     confirmPassword: '',
-    fullName: 'Test Admin'
+    fullName: 'Test Admin',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
   const [setupSuccess, setSetupSuccess] = useState(false);
-  
+
   const { login, setupAdminAccount, admin, isAdmin } = useAdmin();
   const navigate = useNavigate();
 
@@ -38,18 +38,18 @@ const AdminLogin = () => {
       console.log('🔍 LOGIN DEBUG - Form submitted:', formData);
       const result = await login(formData.email, formData.password);
       console.log('🔍 LOGIN DEBUG - Result:', result);
-      
+
       if (result.success) {
         console.log('🔍 LOGIN DEBUG - Success, navigating to dashboard...');
         // Clear any existing admin state first
         localStorage.removeItem('admin_user');
-        
+
         // Force a small delay to ensure state is updated
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         // Navigate to dashboard
         navigate('/minda/dashboard', { replace: true });
-        
+
         // Backup navigation method
         setTimeout(() => {
           const currentPath = window.location.pathname;
@@ -67,32 +67,28 @@ const AdminLogin = () => {
       console.error('🔍 LOGIN ERROR:', error);
       setError('Login failed: ' + error.message);
     }
-    
+
     setLoading(false);
   };
 
   const handleSetup = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (setupData.password !== setupData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (setupData.password.length < 8) {
       setError('Password must be at least 8 characters long');
       return;
     }
 
     setLoading(true);
-    
-    const result = await setupAdminAccount(
-      setupData.email,
-      setupData.password,
-      setupData.fullName
-    );
-    
+
+    const result = await setupAdminAccount(setupData.email, setupData.password, setupData.fullName);
+
     if (result.success) {
       setSetupSuccess(true);
       setShowSetup(false);
@@ -100,16 +96,16 @@ const AdminLogin = () => {
     } else {
       setError(result.error || 'Setup failed');
     }
-    
+
     setLoading(false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (showSetup) {
-      setSetupData(prev => ({ ...prev, [name]: value }));
+      setSetupData((prev) => ({ ...prev, [name]: value }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -128,7 +124,11 @@ const AdminLogin = () => {
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
               <div className="ml-3">
@@ -145,7 +145,11 @@ const AdminLogin = () => {
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
               <div className="ml-3">
@@ -240,7 +244,11 @@ const AdminLogin = () => {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleLogin} className="space-y-6" onClick={() => console.log('🔍 FORM CLICKED')}>
+          <form
+            onSubmit={handleLogin}
+            className="space-y-6"
+            onClick={() => console.log('🔍 FORM CLICKED')}
+          >
             <div>
               <label htmlFor="email" className="form-label">
                 Email Address
@@ -281,14 +289,11 @@ const AdminLogin = () => {
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
-
           </form>
         )}
 
         <div className="mt-8 pt-6 border-t border-border text-center">
-          <p className="text-sm text-muted-foreground">
-            NEXTRAISE Admin Portal
-          </p>
+          <p className="text-sm text-muted-foreground">NEXTRAISE Admin Portal</p>
         </div>
       </div>
     </div>

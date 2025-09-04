@@ -1,7 +1,9 @@
 # Smart Contract Testing Plan - CampaignContributions
 
 ## Contract Overview
+
 The CampaignContributions.sol smart contract enforces FEC-compliant campaign contribution rules:
+
 - **$3,300 maximum** per wallet (both per-transaction and cumulative)
 - **KYC verification required** before contributions
 - **Treasury receives funds** automatically
@@ -10,6 +12,7 @@ The CampaignContributions.sol smart contract enforces FEC-compliant campaign con
 ## Testing Prerequisites
 
 ### 1. Deploy Contract (if not already deployed)
+
 ```bash
 # Via thirdweb CLI
 npx thirdweb deploy
@@ -19,6 +22,7 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
 ```
 
 ### 2. Required Test Wallets
+
 - **Owner wallet**: Contract deployer with admin rights
 - **KYC Verifier wallet**: Can verify contributor KYC
 - **Treasury wallet**: Receives all contributions
@@ -30,6 +34,7 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
 ## Test Scenarios
 
 ### Test 1: KYC Verification Flow
+
 **Objective**: Verify KYC system prevents unverified contributions
 
 1. **Setup**:
@@ -37,21 +42,22 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Have some test ETH ready
 
 2. **Test Steps**:
+
    ```javascript
    // Step 1: Attempt contribution without KYC (should fail)
-   await contract.contribute({ value: ethers.parseEther("0.1") })
+   await contract.contribute({ value: ethers.parseEther('0.1') });
    // Expected: Transaction reverts with "CampaignContributions: contributor must complete KYC verification"
 
    // Step 2: Verify KYC (as KYC verifier)
-   await contract.connect(kycVerifier).verifyKYC(contributorAddress)
+   await contract.connect(kycVerifier).verifyKYC(contributorAddress);
    // Expected: KYCStatusUpdated event emitted
 
    // Step 3: Check KYC status
-   const isVerified = await contract.kycVerified(contributorAddress)
+   const isVerified = await contract.kycVerified(contributorAddress);
    // Expected: Returns true
 
    // Step 4: Retry contribution (should succeed)
-   await contract.contribute({ value: ethers.parseEther("0.1") })
+   await contract.contribute({ value: ethers.parseEther('0.1') });
    // Expected: ContributionAccepted event emitted
    ```
 
@@ -61,6 +67,7 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Confirm contribution only works after KYC
 
 ### Test 2: Contribution Limits ($3,300 Max)
+
 **Objective**: Verify both per-transaction and cumulative limits
 
 1. **Setup**:
@@ -69,29 +76,30 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Max contribution = 1.1 ETH ($3,300 / $3,000)
 
 2. **Test Steps**:
+
    ```javascript
    // Step 1: Check current limits
-   const maxWei = await contract.getMaxContributionWei()
-   console.log("Max contribution:", ethers.formatEther(maxWei), "ETH")
+   const maxWei = await contract.getMaxContributionWei();
+   console.log('Max contribution:', ethers.formatEther(maxWei), 'ETH');
 
    // Step 2: Attempt over-limit contribution (should fail)
-   await contract.contribute({ value: ethers.parseEther("2.0") })
+   await contract.contribute({ value: ethers.parseEther('2.0') });
    // Expected: Reverts with "CampaignContributions: contribution exceeds per-transaction limit"
 
    // Step 3: Make valid contribution (half of max)
-   await contract.contribute({ value: ethers.parseEther("0.55") })
+   await contract.contribute({ value: ethers.parseEther('0.55') });
    // Expected: Success, ContributionAccepted event
 
    // Step 4: Check remaining capacity
-   const remaining = await contract.getRemainingContributionCapacity(contributorAddress)
-   console.log("Remaining capacity:", ethers.formatEther(remaining), "ETH")
+   const remaining = await contract.getRemainingContributionCapacity(contributorAddress);
+   console.log('Remaining capacity:', ethers.formatEther(remaining), 'ETH');
 
    // Step 5: Attempt another half (should succeed)
-   await contract.contribute({ value: ethers.parseEther("0.55") })
+   await contract.contribute({ value: ethers.parseEther('0.55') });
    // Expected: Success, total now at 1.1 ETH
 
    // Step 6: Attempt any additional amount (should fail)
-   await contract.contribute({ value: ethers.parseEther("0.01") })
+   await contract.contribute({ value: ethers.parseEther('0.01') });
    // Expected: Reverts with "CampaignContributions: contribution would exceed cumulative limit"
    ```
 
@@ -101,6 +109,7 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Confirm total contributions = max allowed
 
 ### Test 3: Cumulative Tracking
+
 **Objective**: Verify cumulative contributions tracked correctly
 
 1. **Setup**:
@@ -108,19 +117,20 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Multiple small contributions
 
 2. **Test Steps**:
+
    ```javascript
    // Make 5 contributions of 0.2 ETH each
    for (let i = 0; i < 5; i++) {
-     await contract.contribute({ value: ethers.parseEther("0.2") })
-     
-     const info = await contract.getContributorInfo(contributorAddress)
-     console.log(`After contribution ${i+1}:`)
-     console.log("  Cumulative:", ethers.formatEther(info.cumulativeAmount))
-     console.log("  Remaining:", ethers.formatEther(info.remainingCapacity))
+     await contract.contribute({ value: ethers.parseEther('0.2') });
+
+     const info = await contract.getContributorInfo(contributorAddress);
+     console.log(`After contribution ${i + 1}:`);
+     console.log('  Cumulative:', ethers.formatEther(info.cumulativeAmount));
+     console.log('  Remaining:', ethers.formatEther(info.remainingCapacity));
    }
 
    // 6th contribution should fail (would exceed 1.1 ETH limit)
-   await contract.contribute({ value: ethers.parseEther("0.2") })
+   await contract.contribute({ value: ethers.parseEther('0.2') });
    // Expected: Reverts
    ```
 
@@ -130,6 +140,7 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Cannot exceed $3,300 total
 
 ### Test 4: Treasury Fund Transfer
+
 **Objective**: Verify funds reach treasury address
 
 1. **Setup**:
@@ -137,19 +148,20 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - KYC-verified contributor
 
 2. **Test Steps**:
+
    ```javascript
    // Step 1: Check treasury balance
-   const balanceBefore = await ethers.provider.getBalance(treasuryAddress)
+   const balanceBefore = await ethers.provider.getBalance(treasuryAddress);
 
    // Step 2: Make contribution
-   const amount = ethers.parseEther("0.5")
-   await contract.contribute({ value: amount })
+   const amount = ethers.parseEther('0.5');
+   await contract.contribute({ value: amount });
 
    // Step 3: Check treasury received funds
-   const balanceAfter = await ethers.provider.getBalance(treasuryAddress)
-   const received = balanceAfter - balanceBefore
+   const balanceAfter = await ethers.provider.getBalance(treasuryAddress);
+   const received = balanceAfter - balanceBefore;
 
-   console.log("Treasury received:", ethers.formatEther(received), "ETH")
+   console.log('Treasury received:', ethers.formatEther(received), 'ETH');
    // Expected: Exactly 0.5 ETH increase
    ```
 
@@ -159,39 +171,43 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
    - Transfer happens immediately
 
 ### Test 5: Direct ETH Transfer (receive function)
+
 **Objective**: Test automatic contribution via direct transfer
 
 1. **Test Steps**:
+
    ```javascript
    // For KYC verified wallet with remaining capacity
    await signer.sendTransaction({
      to: contractAddress,
-     value: ethers.parseEther("0.1")
-   })
+     value: ethers.parseEther('0.1'),
+   });
    // Expected: Processed as contribution if all conditions met
 
    // For non-KYC wallet
    await nonKycSigner.sendTransaction({
      to: contractAddress,
-     value: ethers.parseEther("0.1")
-   })
+     value: ethers.parseEther('0.1'),
+   });
    // Expected: Reverts with rejection message
    ```
 
 ### Test 6: Admin Functions
+
 **Objective**: Test owner-only functions
 
 1. **Test Steps**:
+
    ```javascript
    // As owner
-   await contract.connect(owner).pause()
+   await contract.connect(owner).pause();
    // Expected: Contract paused, contributions blocked
 
-   await contract.connect(owner).setEthPrice(ethers.parseEther("4000"))
+   await contract.connect(owner).setEthPrice(ethers.parseEther('4000'));
    // Expected: Max contribution updated to 0.825 ETH
 
    // As non-owner (should fail)
-   await contract.connect(contributor).pause()
+   await contract.connect(contributor).pause();
    // Expected: Reverts with ownership error
    ```
 
@@ -222,25 +238,26 @@ npx hardhat run contracts/scripts/deploy.js --network sepolia
 
 ```javascript
 // Save as: test-deployed-contract.js
-const { ethers } = require("hardhat");
+const { ethers } = require('hardhat');
 
 async function main() {
-  const CONTRACT_ADDRESS = "YOUR_DEPLOYED_CONTRACT_ADDRESS";
-  const abi = require("./artifacts/contracts/src/CampaignContributions.sol/CampaignContributions.json").abi;
-  
+  const CONTRACT_ADDRESS = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+  const abi =
+    require('./artifacts/contracts/src/CampaignContributions.sol/CampaignContributions.json').abi;
+
   const contract = await ethers.getContractAt(abi, CONTRACT_ADDRESS);
-  
+
   // Run all test scenarios
-  console.log("Running contract tests...");
-  
+  console.log('Running contract tests...');
+
   // Test 1: Check deployment
   const treasury = await contract.campaignTreasury();
-  console.log("✓ Contract deployed, treasury:", treasury);
-  
+  console.log('✓ Contract deployed, treasury:', treasury);
+
   // Test 2: Check limits
   const maxWei = await contract.getMaxContributionWei();
-  console.log("✓ Max contribution:", ethers.formatEther(maxWei), "ETH");
-  
+  console.log('✓ Max contribution:', ethers.formatEther(maxWei), 'ETH');
+
   // Add more tests as needed
 }
 

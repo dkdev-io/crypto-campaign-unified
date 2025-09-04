@@ -3,7 +3,7 @@ const { createClient } = require('@supabase/supabase-js');
 // Test the admin login functionality
 async function testAdminLogin() {
   console.log('🔍 Testing Admin Login Flow...\n');
-  
+
   // Test 1: Supabase Connection
   console.log('1. Testing Supabase connection...');
   const supabase = createClient(
@@ -31,7 +31,9 @@ async function testAdminLogin() {
 
     console.log(`✅ Found ${submissions.length} form submissions`);
     submissions.forEach((sub, i) => {
-      console.log(`   ${i+1}. ${sub.first_name} ${sub.last_name} (${sub.email}) - $${sub.amount}`);
+      console.log(
+        `   ${i + 1}. ${sub.first_name} ${sub.last_name} (${sub.email}) - $${sub.amount}`
+      );
     });
   } catch (err) {
     console.log('❌ Form submissions test failed:', err.message);
@@ -41,14 +43,14 @@ async function testAdminLogin() {
   console.log('\n3. Testing hardcoded admin logic...');
   const testEmail = 'dan@dkdev.io';
   const testPassword = 'admin123';
-  
+
   if (testEmail === 'dan@dkdev.io' && testPassword === 'admin123') {
     const mockAdmin = {
       id: 'admin-user',
       email: 'dan@dkdev.io',
       full_name: 'Dan Kovacs',
       role: 'super_admin',
-      permissions: ['admin', 'export', 'view', 'manage', 'super_admin']
+      permissions: ['admin', 'export', 'view', 'manage', 'super_admin'],
     };
     console.log('✅ Hardcoded admin login would succeed');
     console.log('   Admin object:', mockAdmin);

@@ -12,7 +12,6 @@ if (!supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function createCriticalTables() {
-
   try {
     // Create users table
     const usersTableSQL = `
@@ -42,9 +41,11 @@ async function createCriticalTables() {
       CREATE INDEX IF NOT EXISTS idx_users_kyc_status ON users(kyc_status);
     `;
 
-    const { error: usersError } = await supabase.rpc('exec_sql', {
-      sql: usersTableSQL
-    }).single();
+    const { error: usersError } = await supabase
+      .rpc('exec_sql', {
+        sql: usersTableSQL,
+      })
+      .single();
 
     if (usersError) {
       console.log('⚠️  Users table might already exist or using alternative creation...');
@@ -80,9 +81,11 @@ async function createCriticalTables() {
       CREATE INDEX IF NOT EXISTS idx_donors_kyc_status ON donors(kyc_status);
     `;
 
-    const { error: donorsError } = await supabase.rpc('exec_sql', {
-      sql: donorsTableSQL
-    }).single();
+    const { error: donorsError } = await supabase
+      .rpc('exec_sql', {
+        sql: donorsTableSQL,
+      })
+      .single();
 
     if (donorsError) {
       console.log('⚠️  Donors table might already exist or using alternative creation...');
@@ -111,9 +114,11 @@ async function createCriticalTables() {
       CREATE INDEX IF NOT EXISTS idx_campaign_members_token ON campaign_members(invitation_token);
     `;
 
-    const { error: membersError } = await supabase.rpc('exec_sql', {
-      sql: campaignMembersSQL
-    }).single();
+    const { error: membersError } = await supabase
+      .rpc('exec_sql', {
+        sql: campaignMembersSQL,
+      })
+      .single();
 
     if (membersError) {
       console.log('⚠️  Campaign members table might already exist...');
@@ -147,9 +152,11 @@ async function createCriticalTables() {
       CREATE INDEX IF NOT EXISTS idx_donations_hash ON donations(transaction_hash);
     `;
 
-    const { error: donationsError } = await supabase.rpc('exec_sql', {
-      sql: donationsTableSQL
-    }).single();
+    const { error: donationsError } = await supabase
+      .rpc('exec_sql', {
+        sql: donationsTableSQL,
+      })
+      .single();
 
     if (donationsError) {
       console.log('⚠️  Donations table might already exist...');
@@ -160,10 +167,7 @@ async function createCriticalTables() {
     // Try alternative creation method if RPC doesn't work
 
     // Test users table
-    const { error: testUsersError } = await supabase
-      .from('users')
-      .select('count')
-      .limit(1);
+    const { error: testUsersError } = await supabase.from('users').select('count').limit(1);
 
     if (testUsersError) {
       console.log('❌ Users table not accessible:', testUsersError.message);
@@ -172,10 +176,7 @@ async function createCriticalTables() {
     }
 
     // Test donors table
-    const { error: testDonorsError } = await supabase
-      .from('donors')
-      .select('count')
-      .limit(1);
+    const { error: testDonorsError } = await supabase.from('donors').select('count').limit(1);
 
     if (testDonorsError) {
       console.log('❌ Donors table not accessible:', testDonorsError.message);
@@ -186,15 +187,18 @@ async function createCriticalTables() {
     // Create a test admin user
     const { data: adminUser, error: adminError } = await supabase
       .from('users')
-      .upsert([
-        {
-          email: 'admin@crypto-campaign.com',
-          full_name: 'Admin User',
-          role: 'admin',
-          email_confirmed: true,
-          email_confirmed_at: new Date().toISOString()
-        }
-      ], { onConflict: 'email' })
+      .upsert(
+        [
+          {
+            email: 'admin@crypto-campaign.com',
+            full_name: 'Admin User',
+            role: 'admin',
+            email_confirmed: true,
+            email_confirmed_at: new Date().toISOString(),
+          },
+        ],
+        { onConflict: 'email' }
+      )
       .select()
       .single();
 
@@ -207,15 +211,18 @@ async function createCriticalTables() {
     // Create a test regular user
     const { data: testUser, error: testError } = await supabase
       .from('users')
-      .upsert([
-        {
-          email: 'test@example.com',
-          full_name: 'Test User',
-          role: 'user',
-          email_confirmed: true,
-          email_confirmed_at: new Date().toISOString()
-        }
-      ], { onConflict: 'email' })
+      .upsert(
+        [
+          {
+            email: 'test@example.com',
+            full_name: 'Test User',
+            role: 'user',
+            email_confirmed: true,
+            email_confirmed_at: new Date().toISOString(),
+          },
+        ],
+        { onConflict: 'email' }
+      )
       .select()
       .single();
 
@@ -224,8 +231,6 @@ async function createCriticalTables() {
     } else {
       console.log('✅ Test user created/updated:', testUser.email);
     }
-
-
   } catch (error) {
     console.error('❌ Error creating tables:', error);
   }

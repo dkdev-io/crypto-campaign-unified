@@ -17,13 +17,14 @@ const CampaignAuth = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // If on setup flow, redirect back to setup after auth, otherwise go to homepage
-  const from = location.state?.from?.pathname || 
-               (location.pathname.includes('/campaigns/auth/setup') ? '/campaigns/auth/setup' : '/');
+  const from =
+    location.state?.from?.pathname ||
+    (location.pathname.includes('/campaigns/auth/setup') ? '/campaigns/auth/setup' : '/');
 
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   // Sign Up Form Data
@@ -32,34 +33,34 @@ const CampaignAuth = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    agreeToTerms: false
+    agreeToTerms: false,
   });
 
   const [validationErrors, setValidationErrors] = useState({});
 
   const handleSignInChange = (e) => {
     const { name, value } = e.target;
-    setSignInData(prev => ({
+    setSignInData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     clearFieldError(name);
   };
 
   const handleSignUpChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setSignUpData(prev => ({
+    setSignUpData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
     clearFieldError(name);
   };
 
   const clearFieldError = (fieldName) => {
     if (validationErrors[fieldName]) {
-      setValidationErrors(prev => ({
+      setValidationErrors((prev) => ({
         ...prev,
-        [fieldName]: ''
+        [fieldName]: '',
       }));
     }
     // Also clear global auth error when user starts typing
@@ -116,7 +117,7 @@ const CampaignAuth = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateSignIn();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -125,7 +126,7 @@ const CampaignAuth = () => {
 
     setLoading(true);
     setValidationErrors({});
-    
+
     try {
       const { error } = await signIn(signInData.email, signInData.password);
 
@@ -137,8 +138,8 @@ const CampaignAuth = () => {
       navigate('/campaigns/auth/setup', { replace: true });
     } catch (error) {
       console.error('Login error:', error);
-      setValidationErrors({ 
-        submit: error.message || 'Login failed. Please try again.' 
+      setValidationErrors({
+        submit: error.message || 'Login failed. Please try again.',
       });
     } finally {
       setLoading(false);
@@ -147,7 +148,7 @@ const CampaignAuth = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
+
     const errors = validateSignUp();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -160,28 +161,35 @@ const CampaignAuth = () => {
       if (error) {
         clearError();
       }
-      
-      const { error: signupError } = await signUp(signUpData.email, signUpData.password, signUpData.fullName);
+
+      const { error: signupError } = await signUp(
+        signUpData.email,
+        signUpData.password,
+        signUpData.fullName
+      );
 
       if (signupError) {
         throw signupError;
       }
 
       // Clear all previous errors and show success message
-      setValidationErrors({ 
-        submit: 'Account created! Please check your email and click the verification link to continue.' 
+      setValidationErrors({
+        submit:
+          'Account created! Please check your email and click the verification link to continue.',
       });
     } catch (error) {
       console.error('Registration error:', error);
-      
+
       // Provide helpful message for existing account
-      let errorMessage = error.message || 'An error occurred during registration. Please try again.';
+      let errorMessage =
+        error.message || 'An error occurred during registration. Please try again.';
       if (error.message && error.message.includes('already registered')) {
-        errorMessage = 'This email already has an account. Please try signing in instead, or use the "Forgot Password" link if you need to reset your password.';
+        errorMessage =
+          'This email already has an account. Please try signing in instead, or use the "Forgot Password" link if you need to reset your password.';
       }
-      
-      setValidationErrors({ 
-        submit: errorMessage
+
+      setValidationErrors({
+        submit: errorMessage,
       });
     } finally {
       setLoading(false);
@@ -197,19 +205,27 @@ const CampaignAuth = () => {
   };
 
   return (
-    <div className="campaign-auth min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+    <div className="campaign-auth min-h-screen" style={{ background: 'var(--gradient-hero)' }}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
-          <div className="auth-card rounded-2xl shadow-2xl p-8" style={{backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)'}}>
+          <div
+            className="auth-card rounded-2xl shadow-2xl p-8"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)' }}
+          >
             {/* Header */}
             <div className="text-center mb-8">
-              <h2 className="font-bold text-foreground mb-2" style={{fontSize: 'var(--text-heading-xl)', fontFamily: 'Inter, sans-serif', fontWeight: '800'}}>
+              <h2
+                className="font-bold text-foreground mb-2"
+                style={{
+                  fontSize: 'var(--text-heading-xl)',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: '800',
+                }}
+              >
                 Campaign Portal
               </h2>
-              <p className="text-muted-foreground">
-                Sign in to your account or create a new one
-              </p>
+              <p className="text-muted-foreground">Sign in to your account or create a new one</p>
             </div>
 
             {/* Tab Navigation */}
@@ -258,21 +274,27 @@ const CampaignAuth = () => {
 
             {/* Success/Validation Messages */}
             {validationErrors.submit && (
-              <div className={`mb-6 p-4 rounded-lg flex items-center gap-2 ${
-                validationErrors.submit.includes('Account created') 
-                  ? 'bg-green-50 border border-green-200' 
-                  : 'bg-destructive/10 border border-destructive/20'
-              }`}>
-                <AlertCircle className={`w-4 h-4 ${
-                  validationErrors.submit.includes('Account created') 
-                    ? 'text-green-600' 
-                    : 'text-destructive'
-                }`} />
-                <span className={`text-base ${
-                  validationErrors.submit.includes('Account created') 
-                    ? 'text-green-700' 
-                    : 'text-destructive'
-                }`}>
+              <div
+                className={`mb-6 p-4 rounded-lg flex items-center gap-2 ${
+                  validationErrors.submit.includes('Account created')
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-destructive/10 border border-destructive/20'
+                }`}
+              >
+                <AlertCircle
+                  className={`w-4 h-4 ${
+                    validationErrors.submit.includes('Account created')
+                      ? 'text-green-600'
+                      : 'text-destructive'
+                  }`}
+                />
+                <span
+                  className={`text-base ${
+                    validationErrors.submit.includes('Account created')
+                      ? 'text-green-700'
+                      : 'text-destructive'
+                  }`}
+                >
                   {validationErrors.submit}
                 </span>
               </div>
@@ -282,7 +304,10 @@ const CampaignAuth = () => {
             {activeTab === 'signin' && (
               <form onSubmit={handleSignIn} className="space-y-6">
                 <div>
-                  <label htmlFor="signin-email" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signin-email"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Email Address
                   </label>
                   <div className="relative">
@@ -303,7 +328,10 @@ const CampaignAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signin-password" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signin-password"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -330,11 +358,7 @@ const CampaignAuth = () => {
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full"
-                >
+                <Button type="submit" disabled={loading} className="w-full">
                   {loading ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -346,7 +370,9 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
+                {(import.meta.env.DEV ||
+                  window.location.hostname === 'localhost' ||
+                  window.location.hostname.includes('netlify.app')) && (
                   <Button
                     type="button"
                     onClick={() => {
@@ -371,7 +397,10 @@ const CampaignAuth = () => {
             {activeTab === 'signup' && (
               <form onSubmit={handleSignUp} className="space-y-6">
                 <div>
-                  <label htmlFor="signup-fullname" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-fullname"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Full Name
                   </label>
                   <div className="relative">
@@ -392,7 +421,10 @@ const CampaignAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-email" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-email"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Email Address
                   </label>
                   <div className="relative">
@@ -413,7 +445,10 @@ const CampaignAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-password" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-password"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Password
                   </label>
                   <div className="relative">
@@ -441,7 +476,10 @@ const CampaignAuth = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="signup-confirmpassword" className="block text-base font-medium text-foreground mb-2">
+                  <label
+                    htmlFor="signup-confirmpassword"
+                    className="block text-base font-medium text-foreground mb-2"
+                  >
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -460,11 +498,17 @@ const CampaignAuth = () => {
                       onClick={toggleConfirmPasswordVisibility}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   </div>
                   {validationErrors.confirmPassword && (
-                    <p className="mt-1 text-sm text-destructive">{validationErrors.confirmPassword}</p>
+                    <p className="mt-1 text-sm text-destructive">
+                      {validationErrors.confirmPassword}
+                    </p>
                   )}
                 </div>
 
@@ -481,8 +525,8 @@ const CampaignAuth = () => {
                       I agree to the{' '}
                       <Link to="/campaigns/auth/terms" className="text-primary hover:underline">
                         Terms of Service
-                      </Link>
-                      {' '}and{' '}
+                      </Link>{' '}
+                      and{' '}
                       <Link to="/campaigns/auth/privacy" className="text-primary hover:underline">
                         Privacy Policy
                       </Link>
@@ -493,11 +537,7 @@ const CampaignAuth = () => {
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full"
-                >
+                <Button type="submit" disabled={loading} className="w-full">
                   {loading ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -509,7 +549,9 @@ const CampaignAuth = () => {
                 </Button>
 
                 {/* Development Bypass Button */}
-                {(import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app')) && (
+                {(import.meta.env.DEV ||
+                  window.location.hostname === 'localhost' ||
+                  window.location.hostname.includes('netlify.app')) && (
                   <Button
                     type="button"
                     onClick={() => {
@@ -521,7 +563,6 @@ const CampaignAuth = () => {
                     DEV BYPASS → Setup
                   </Button>
                 )}
-
               </form>
             )}
           </div>

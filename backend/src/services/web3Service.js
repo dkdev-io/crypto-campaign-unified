@@ -18,11 +18,11 @@ class Web3Service {
       // Use environment variable for RPC URL or default to mainnet
       const rpcUrl = process.env.WEB3_RPC_URL || 'https://mainnet.infura.io/v3/your-project-id';
       this.provider = new ethers.JsonRpcProvider(rpcUrl);
-      
+
       // Test connection
       await this.provider.getBlockNumber();
       this.initialized = true;
-      
+
       logger.info('Web3Service initialized successfully');
     } catch (error) {
       logger.error('Failed to initialize Web3Service:', error);
@@ -95,7 +95,7 @@ class Web3Service {
    */
   async verifyContribution(hash, expectedAddress, expectedAmount) {
     const transaction = await this.getTransaction(hash);
-    
+
     if (!transaction) {
       throw new Error('Transaction not found');
     }
@@ -114,7 +114,7 @@ class Web3Service {
     return {
       valid: true,
       transaction,
-      amount: transactionAmount
+      amount: transactionAmount,
     };
   }
 

@@ -8,23 +8,25 @@ const puppeteer = require('puppeteer');
 
 async function quickDebug() {
   console.log('🚀 Quick Modal Debug - Finding the real issue');
-  
+
   const browser = await puppeteer.launch({ headless: false, slowMo: 1000 });
   const page = await browser.newPage();
-  
+
   try {
     await page.goto('https://testy-pink-chancellor.lovable.app');
     await page.waitForTimeout(2000);
-    
-    const donateButton = await page.$('button:contains("Donate")') || 
-                         await page.$('button[class*="donate"]') || 
-                         await page.$eval('button', el => el.textContent.includes('Donate') ? el : null);
-    
+
+    const donateButton =
+      (await page.$('button:contains("Donate")')) ||
+      (await page.$('button[class*="donate"]')) ||
+      (await page.$eval('button', (el) => (el.textContent.includes('Donate') ? el : null)));
+
     if (!donateButton) {
       // Alternative approach
       await page.evaluate(() => {
-        const btn = Array.from(document.querySelectorAll('button'))
-          .find(b => b.textContent.includes('Donate'));
+        const btn = Array.from(document.querySelectorAll('button')).find((b) =>
+          b.textContent.includes('Donate')
+        );
         if (btn) btn.click();
         return !!btn;
       });
@@ -33,51 +35,49 @@ async function quickDebug() {
       await donateButton.click();
       console.log('✅ Donate button clicked directly');
     }
-    
+
     await page.waitForTimeout(5000);
-    
+
     const analysis = await page.evaluate(() => {
       // Look for any modals or dialogs
       const modals = document.querySelectorAll('[role="dialog"], .modal, [data-modal], .dialog');
       const forms = document.querySelectorAll('form');
       const inputs = document.querySelectorAll('input, select, textarea');
-      
+
       return {
         modalCount: modals.length,
         formCount: forms.length,
         inputCount: inputs.length,
-        modalInfo: Array.from(modals).map(m => ({
+        modalInfo: Array.from(modals).map((m) => ({
           visible: m.offsetParent !== null,
           display: getComputedStyle(m).display,
-          innerHTML: m.innerHTML.substring(0, 200)
+          innerHTML: m.innerHTML.substring(0, 200),
         })),
-        inputInfo: Array.from(inputs).map(i => ({
+        inputInfo: Array.from(inputs).map((i) => ({
           type: i.type,
           name: i.name,
           visible: i.offsetParent !== null,
-          display: getComputedStyle(i).display
-        }))
+          display: getComputedStyle(i).display,
+        })),
       };
     });
-    
-    
+
     // Try different selectors
     const selectorTests = [
       'input',
       'form input',
       '[role="dialog"] input',
       'input[type="text"]',
-      'input[type="email"]'
+      'input[type="email"]',
     ];
-    
+
     for (const selector of selectorTests) {
-      const count = await page.$$eval(selector, els => els.length).catch(() => 0);
+      const count = await page.$$eval(selector, (els) => els.length).catch(() => 0);
       if (count > 0) {
       }
     }
-    
+
     await page.screenshot({ path: 'quick-debug-modal.png' });
-    
   } finally {
     await browser.close();
   }

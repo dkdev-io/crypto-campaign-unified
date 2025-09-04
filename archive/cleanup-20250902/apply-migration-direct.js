@@ -6,39 +6,42 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 
 async function applyMigrationDirect() {
   console.log('🔧 Applying users table migration directly...');
-  
+
   try {
     // Read the migration file
-    const migrationSQL = fs.readFileSync('./supabase/migrations/20250902160451_create_users_table.sql', 'utf8');
-    
+    const migrationSQL = fs.readFileSync(
+      './supabase/migrations/20250902160451_create_users_table.sql',
+      'utf8'
+    );
+
     // Execute using Supabase REST API
     const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${supabaseAnonKey}`,
+        Authorization: `Bearer ${supabaseAnonKey}`,
         'Content-Type': 'application/json',
-        'apikey': supabaseAnonKey
+        apikey: supabaseAnonKey,
       },
       body: JSON.stringify({
-        query: migrationSQL
-      })
+        query: migrationSQL,
+      }),
     });
-    
+
     if (response.ok) {
       console.log('✅ Migration applied successfully');
     } else {
       const error = await response.text();
       console.log('⚠️ REST API approach failed:', error);
-      
+
       // Try alternative: Execute SQL statements one by one
       console.log('🔄 Trying statement-by-statement execution...');
       await executeStatementsIndividually();
     }
-    
   } catch (error) {
     console.log('⚠️ Direct migration failed:', error.message);
     await executeStatementsIndividually();
@@ -47,9 +50,9 @@ async function applyMigrationDirect() {
 
 async function executeStatementsIndividually() {
   console.log('📝 Executing SQL statements individually...');
-  
+
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
-  
+
   const statements = [
     // Create table
     `CREATE TABLE IF NOT EXISTS public.users (
@@ -68,19 +71,19 @@ async function executeStatementsIndividually() {
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
     )`,
-    
+
     // Create indexes
     `CREATE INDEX IF NOT EXISTS idx_users_email ON public.users(email)`,
     `CREATE INDEX IF NOT EXISTS idx_users_role ON public.users(role)`,
-    
+
     // Enable RLS
     `ALTER TABLE public.users ENABLE ROW LEVEL SECURITY`,
   ];
-  
+
   for (let i = 0; i < statements.length; i++) {
     const sql = statements[i];
     console.log(`Executing statement ${i + 1}/${statements.length}...`);
-    
+
     try {
       const { data, error } = await supabase.rpc('exec_sql_statement', { sql });
       if (error) {
@@ -91,17 +94,17 @@ async function executeStatementsIndividually() {
     } catch (err) {
       console.log(`⚠️ Statement ${i + 1} error:`, err.message);
     }
-    
-    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay
+
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay
   }
-  
+
   // Test final result
   console.log('\n🧪 Testing users table access...');
   try {
     const { data, error } = await supabase
       .from('users')
       .select('*', { count: 'exact', head: true });
-      
+
     if (error) {
       console.log('❌ Users table test failed:', error.message);
       console.log('\n💡 Manual fallback needed - creating table via auth trigger...');
@@ -117,9 +120,9 @@ async function executeStatementsIndividually() {
 
 async function createTableViaAuth() {
   console.log('🔄 Creating table via auth user creation...');
-  
+
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
-  
+
   // Create a legitimate test user that will trigger table creation
   const testEmail = `setup.user.${Date.now()}@gmail.com`;
   const { data, error } = await supabase.auth.signUp({
@@ -127,22 +130,22 @@ async function createTableViaAuth() {
     password: 'SetupPassword123!',
     options: {
       data: {
-        full_name: 'Setup User'
-      }
-    }
+        full_name: 'Setup User',
+      },
+    },
   });
-  
+
   if (error) {
     console.log('⚠️ Auth user creation failed:', error.message);
   } else {
     console.log('✅ Test user created, checking table...');
-    
-    await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for triggers
-    
+
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait for triggers
+
     const { data: tableData, error: tableError } = await supabase
       .from('users')
       .select('*', { count: 'exact', head: true });
-      
+
     if (!tableError) {
       console.log('✅ Users table created successfully via auth trigger!');
     }

@@ -38,7 +38,7 @@ class AutoSyncDaemon {
     // Spawn the auto-sync process as a daemon
     const child = spawn('node', ['scripts/auto-sync-github.js', 'start'], {
       detached: true,
-      stdio: ['ignore', 'pipe', 'pipe']
+      stdio: ['ignore', 'pipe', 'pipe'],
     });
 
     // Save PID
@@ -46,7 +46,7 @@ class AutoSyncDaemon {
 
     // Set up logging
     const logStream = fs.createWriteStream(DAEMON_LOG_FILE, { flags: 'a' });
-    
+
     child.stdout.on('data', (data) => {
       const timestamp = new Date().toISOString();
       logStream.write(`[${timestamp}] [STDOUT] ${data}`);
@@ -84,10 +84,10 @@ class AutoSyncDaemon {
     try {
       // Try graceful shutdown first
       process.kill(pid, 'SIGTERM');
-      
+
       // Wait a moment for graceful shutdown
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Force kill if still running
       if (this.isRunning()) {
         console.log('⚡ Force killing daemon...');
@@ -96,7 +96,6 @@ class AutoSyncDaemon {
 
       this.cleanup();
       console.log('✅ Auto-sync daemon stopped successfully');
-      
     } catch (error) {
       console.error('❌ Failed to stop daemon:', error.message);
       this.cleanup(); // Clean up PID file anyway
@@ -106,7 +105,7 @@ class AutoSyncDaemon {
   async restart() {
     console.log('🔄 Restarting Auto-Sync Daemon...');
     await this.stop();
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     await this.start();
   }
 
@@ -114,7 +113,7 @@ class AutoSyncDaemon {
     if (this.isRunning()) {
       const pid = this.getPID();
       console.log(`✅ Auto-sync daemon is running (PID: ${pid})`);
-      
+
       // Show recent logs
       if (fs.existsSync(DAEMON_LOG_FILE)) {
         console.log('\n📝 Recent logs (last 10 lines):');
@@ -138,7 +137,7 @@ class AutoSyncDaemon {
 
     console.log(`📝 Showing logs from: ${DAEMON_LOG_FILE}`);
     console.log('=' * 50);
-    
+
     try {
       const logs = fs.readFileSync(DAEMON_LOG_FILE, 'utf8');
       console.log(logs);
@@ -153,7 +152,7 @@ class AutoSyncDaemon {
     }
 
     const pid = parseInt(fs.readFileSync(DAEMON_PID_FILE, 'utf8'));
-    
+
     try {
       // Check if process exists
       process.kill(pid, 0);
@@ -187,23 +186,23 @@ switch (command) {
   case 'start':
     daemon.start();
     break;
-    
+
   case 'stop':
     daemon.stop();
     break;
-    
+
   case 'restart':
     daemon.restart();
     break;
-    
+
   case 'status':
     daemon.status();
     break;
-    
+
   case 'logs':
     daemon.logs();
     break;
-    
+
   default:
     console.log(`
 🤖 Auto-Sync Daemon Manager

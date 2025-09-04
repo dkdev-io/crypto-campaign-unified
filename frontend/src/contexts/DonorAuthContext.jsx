@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase';
 const DonorAuthContext = createContext({});
 
 // Development auth bypass configuration (shared with main AuthContext)
-const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true'
-const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development'
+const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development';
 
 // Test donor user for bypass
 const TEST_DONOR = {
@@ -13,7 +13,7 @@ const TEST_DONOR = {
   email: 'test@dkdev.io',
   user_metadata: {
     user_type: 'donor',
-    full_name: 'Test Donor (Bypass)'
+    full_name: 'Test Donor (Bypass)',
   },
   profile: {
     id: 'test-donor-bypass-id',
@@ -26,8 +26,8 @@ const TEST_DONOR = {
     zip_code: '12345',
     employer: 'Test Company',
     occupation: 'Developer',
-    created_at: new Date().toISOString()
-  }
+    created_at: new Date().toISOString(),
+  },
 };
 
 export const useDonorAuth = () => {
@@ -45,28 +45,26 @@ export const DonorAuthProvider = ({ children }) => {
 
   useEffect(() => {
     let subscription = null;
-    
+
     // DEVELOPMENT AUTH BYPASS - Check if bypass is enabled
     if (SKIP_AUTH && IS_DEVELOPMENT) {
-      console.warn('🚨 DONOR AUTH BYPASS ACTIVE - Using test donor: test@dkdev.io')
-      setDonor(TEST_DONOR)
-      setLoading(false)
+      console.warn('🚨 DONOR AUTH BYPASS ACTIVE - Using test donor: test@dkdev.io');
+      setDonor(TEST_DONOR);
+      setLoading(false);
     } else {
       // Normal donor auth flow
       // Check if donor is logged in
       checkDonor();
 
       // Listen for auth changes
-      const { data: authListener } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          if (event === 'SIGNED_IN' && session?.user?.user_metadata?.user_type === 'donor') {
-            await checkDonor();
-          } else if (event === 'SIGNED_OUT') {
-            setDonor(null);
-          }
+      const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user?.user_metadata?.user_type === 'donor') {
+          await checkDonor();
+        } else if (event === 'SIGNED_OUT') {
+          setDonor(null);
         }
-      );
-      
+      });
+
       subscription = authListener.subscription;
     }
 
@@ -79,8 +77,10 @@ export const DonorAuthProvider = ({ children }) => {
   const checkDonor = async () => {
     try {
       setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (user && user.user_metadata?.user_type === 'donor') {
         // Use auth user data directly (no donors table needed for now)
         setDonor({
@@ -91,8 +91,8 @@ export const DonorAuthProvider = ({ children }) => {
             full_name: user.user_metadata?.full_name || 'Donor',
             phone: user.user_metadata?.phone,
             donor_type: user.user_metadata?.donor_type || 'individual',
-            created_at: user.created_at
-          }
+            created_at: user.created_at,
+          },
         });
       } else {
         setDonor(null);
@@ -108,7 +108,7 @@ export const DonorAuthProvider = ({ children }) => {
   const signUp = async ({ email, password, fullName, phone, donorType = 'individual' }) => {
     try {
       setError(null);
-      
+
       // First sign up the user
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -118,17 +118,17 @@ export const DonorAuthProvider = ({ children }) => {
             full_name: fullName,
             phone,
             user_type: 'donor',
-            donor_type: donorType
+            donor_type: donorType,
           },
-          emailRedirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/donors/dashboard`
-        }
+          emailRedirectTo: `${import.meta.env.VITE_APP_URL || window.location.origin}/donors/dashboard`,
+        },
       });
 
       if (error) throw error;
 
       // Note: The donor record will be created by the trigger when email is confirmed
       // For now, we just need to handle the successful signup
-      
+
       return { data, error: null };
     } catch (error) {
       console.error('Signup error:', error);
@@ -141,11 +141,11 @@ export const DonorAuthProvider = ({ children }) => {
     try {
       setError(null);
       console.log('🔐 DonorAuth signIn called with:', email);
-      
+
       // Attempt to sign in directly (no need to check donors table first)
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       });
 
       if (error) {
@@ -189,7 +189,7 @@ export const DonorAuthProvider = ({ children }) => {
     try {
       setError(null);
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/donors/auth/reset-password`
+        redirectTo: `${window.location.origin}/donors/auth/reset-password`,
       });
       if (error) throw error;
       return { error: null };
@@ -203,7 +203,7 @@ export const DonorAuthProvider = ({ children }) => {
     try {
       setError(null);
       const { error } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       });
       if (error) throw error;
       return { error: null };
@@ -216,7 +216,7 @@ export const DonorAuthProvider = ({ children }) => {
   const updateProfile = async (updates) => {
     try {
       setError(null);
-      
+
       // Update donor record
       if (updates.full_name || updates.phone || updates.address) {
         const { error: donorError } = await supabase
@@ -225,7 +225,7 @@ export const DonorAuthProvider = ({ children }) => {
             full_name: updates.full_name,
             phone: updates.phone,
             address: updates.address,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq('id', donor.id);
 
@@ -236,12 +236,14 @@ export const DonorAuthProvider = ({ children }) => {
       const profileUpdates = {};
       if (updates.bio !== undefined) profileUpdates.bio = updates.bio;
       if (updates.interests) profileUpdates.interests = updates.interests;
-      if (updates.donation_preferences) profileUpdates.donation_preferences = updates.donation_preferences;
-      if (updates.notification_preferences) profileUpdates.notification_preferences = updates.notification_preferences;
+      if (updates.donation_preferences)
+        profileUpdates.donation_preferences = updates.donation_preferences;
+      if (updates.notification_preferences)
+        profileUpdates.notification_preferences = updates.notification_preferences;
 
       if (Object.keys(profileUpdates).length > 0) {
         profileUpdates.updated_at = new Date().toISOString();
-        
+
         const { error: profileError } = await supabase
           .from('donor_profiles')
           .update(profileUpdates)
@@ -268,12 +270,8 @@ export const DonorAuthProvider = ({ children }) => {
     resetPassword,
     updatePassword,
     updateProfile,
-    checkDonor
+    checkDonor,
   };
 
-  return (
-    <DonorAuthContext.Provider value={value}>
-      {children}
-    </DonorAuthContext.Provider>
-  );
+  return <DonorAuthContext.Provider value={value}>{children}</DonorAuthContext.Provider>;
 };

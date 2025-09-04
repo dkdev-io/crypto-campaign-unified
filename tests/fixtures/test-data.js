@@ -2,10 +2,11 @@
 
 export const testCampaign = {
   title: 'Save the Ocean Campaign',
-  description: 'A comprehensive campaign dedicated to ocean conservation and marine life protection.',
+  description:
+    'A comprehensive campaign dedicated to ocean conservation and marine life protection.',
   goal: 50000,
   category: 'Environment',
-  tags: ['ocean', 'conservation', 'marine-life']
+  tags: ['ocean', 'conservation', 'marine-life'],
 };
 
 export const testContributor = {
@@ -13,13 +14,13 @@ export const testContributor = {
   email: 'john.doe@example.com',
   amount: 100,
   message: 'Supporting this great cause! Keep up the excellent work.',
-  anonymous: false
+  anonymous: false,
 };
 
 export const testWalletData = {
   address: '0x1234567890123456789012345678901234567890',
   network: 'ethereum',
-  balance: '1.5 ETH'
+  balance: '1.5 ETH',
 };
 
 export const viewports = {
@@ -28,7 +29,7 @@ export const viewports = {
   tablet: { width: 768, height: 1024 },
   laptop: { width: 1024, height: 768 },
   desktop: { width: 1280, height: 720 },
-  wide: { width: 1920, height: 1080 }
+  wide: { width: 1920, height: 1080 },
 };
 
 export const waitForStableState = async (page, timeout = 2000) => {

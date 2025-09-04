@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
+import { useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
 import { useAuth } from '../contexts/AuthContext';
 
 const CTA = () => {
@@ -7,8 +7,12 @@ const CTA = () => {
   const { user, loading, isEmailVerified } = useAuth();
 
   const handleGetStarted = () => {
-    console.log('CTA Get Started clicked - Auth state:', { user: !!user, loading, verified: user ? isEmailVerified() : false });
-    
+    console.log('CTA Get Started clicked - Auth state:', {
+      user: !!user,
+      loading,
+      verified: user ? isEmailVerified() : false,
+    });
+
     // Check if user is authenticated
     if (!loading && user) {
       // Check if email is verified
@@ -34,17 +38,15 @@ const CTA = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             Ready to Transform Your
-            <span className="block text-accent">
-              Campaign Fundraising?
-            </span>
+            <span className="block text-accent">Campaign Fundraising?</span>
           </h2>
-          
+
           <p className="text-xl leading-relaxed text-primary-foreground/90">
             Reach the growing crypto currency donor community and fundraise with lower fees.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button 
+            <Button
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg px-12 py-6 h-auto"
               onClick={handleGetStarted}

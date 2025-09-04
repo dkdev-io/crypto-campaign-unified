@@ -10,7 +10,7 @@ vi.mock('../lib/web3', () => ({ default: web3Service }));
 
 describe('DonorForm', () => {
   const defaultProps = {
-    campaignId: 'test-campaign-1'
+    campaignId: 'test-campaign-1',
   };
 
   beforeEach(() => {
@@ -27,11 +27,11 @@ describe('DonorForm', () => {
 
     it('loads campaign data on mount', async () => {
       render(<DonorForm {...defaultProps} />);
-      
+
       await waitFor(() => {
         expect(supabase.from).toHaveBeenCalledWith('campaigns');
       });
-      
+
       await waitFor(() => {
         expect(screen.getByText('Test Campaign')).toBeInTheDocument();
       });
@@ -39,15 +39,15 @@ describe('DonorForm', () => {
 
     it('shows default form when no campaign ID provided', () => {
       render(<DonorForm campaignId={null} />);
-      
+
       expect(screen.getByText('Support Our Campaign')).toBeInTheDocument();
     });
 
     it('displays error when campaign loading fails', async () => {
       configureSupabaseMock.setCampaignResponse(null, { message: 'Campaign not found' });
-      
+
       render(<DonorForm {...defaultProps} />);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Unable to load campaign/)).toBeInTheDocument();
       });
@@ -115,14 +115,14 @@ describe('DonorForm', () => {
     it('validates email format', async () => {
       const emailInput = screen.getByLabelText(/Email/);
       await user.type(emailInput, 'invalid-email');
-      
+
       expect(emailInput).toBeInvalid();
     });
 
     it('enforces maximum donation limit', async () => {
       const amountInput = screen.getByPlaceholderText('Custom amount');
       await user.type(amountInput, '5000'); // Over limit
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Maximum contribution is \$3300/)).toBeInTheDocument();
       });
@@ -131,7 +131,7 @@ describe('DonorForm', () => {
     it('validates amount is positive', async () => {
       const amountInput = screen.getByPlaceholderText('Custom amount');
       await user.type(amountInput, '-100');
-      
+
       expect(amountInput).toBeInvalid();
     });
 
@@ -153,7 +153,7 @@ describe('DonorForm', () => {
     it('selects suggested amount when clicked', async () => {
       const amount50Button = screen.getByText('$50');
       await user.click(amount50Button);
-      
+
       const amountInput = screen.getByPlaceholderText('Custom amount');
       expect(amountInput.value).toBe('50');
     });
@@ -161,14 +161,14 @@ describe('DonorForm', () => {
     it('highlights selected amount', async () => {
       const amount100Button = screen.getByText('$100');
       await user.click(amount100Button);
-      
+
       expect(amount100Button).toHaveStyle({ background: '#2a2a72', color: 'white' });
     });
 
     it('allows custom amount entry', async () => {
       const amountInput = screen.getByPlaceholderText('Custom amount');
       await user.type(amountInput, '75');
-      
+
       expect(amountInput.value).toBe('75');
     });
   });
@@ -190,7 +190,7 @@ describe('DonorForm', () => {
     it('switches to crypto payment when selected', async () => {
       const cryptoRadio = screen.getByDisplayValue('crypto');
       await user.click(cryptoRadio);
-      
+
       expect(cryptoRadio).toBeChecked();
       expect(screen.getByText('🔗 Crypto Payment via Smart Contract')).toBeInTheDocument();
     });
@@ -198,14 +198,14 @@ describe('DonorForm', () => {
     it('shows wallet connection when crypto selected', async () => {
       const cryptoRadio = screen.getByDisplayValue('crypto');
       await user.click(cryptoRadio);
-      
+
       expect(screen.getByText('🦊 Connect MetaMask Wallet')).toBeInTheDocument();
     });
 
     it('hides traditional submit button when crypto selected', async () => {
       const cryptoRadio = screen.getByDisplayValue('crypto');
       await user.click(cryptoRadio);
-      
+
       expect(screen.queryByText('💳 Submit Traditional Contribution')).not.toBeInTheDocument();
     });
   });
@@ -234,10 +234,10 @@ describe('DonorForm', () => {
 
     it('submits form with valid data', async () => {
       await fillRequiredFields();
-      
+
       const submitButton = screen.getByText('💳 Submit Traditional Contribution');
       await user.click(submitButton);
-      
+
       await waitFor(() => {
         expect(supabase.from).toHaveBeenCalledWith('form_submissions');
       });
@@ -245,10 +245,10 @@ describe('DonorForm', () => {
 
     it('shows success message after submission', async () => {
       await fillRequiredFields();
-      
+
       const submitButton = screen.getByText('💳 Submit Traditional Contribution');
       await user.click(submitButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText('🎉 Thank You!')).toBeInTheDocument();
       });
@@ -256,21 +256,21 @@ describe('DonorForm', () => {
 
     it('disables submit button during submission', async () => {
       await fillRequiredFields();
-      
+
       const submitButton = screen.getByText('💳 Submit Traditional Contribution');
       await user.click(submitButton);
-      
+
       expect(screen.getByText('⏳ Processing Traditional Payment...')).toBeInTheDocument();
     });
 
     it('handles submission errors gracefully', async () => {
       configureSupabaseMock.setSubmissionResponse(null, { message: 'Database error' });
-      
+
       await fillRequiredFields();
-      
+
       const submitButton = screen.getByText('💳 Submit Traditional Contribution');
       await user.click(submitButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Database error/)).toBeInTheDocument();
       });
@@ -278,12 +278,12 @@ describe('DonorForm', () => {
 
     it('validates campaign ID before submission', async () => {
       render(<DonorForm campaignId={null} />);
-      
+
       await fillRequiredFields();
-      
+
       const submitButton = screen.getByText('💳 Submit Traditional Contribution');
       await user.click(submitButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/No campaign ID found/)).toBeInTheDocument();
       });
@@ -298,7 +298,7 @@ describe('DonorForm', () => {
       configureWeb3Mock.setConnected(true);
       render(<DonorForm {...defaultProps} />);
       await waitFor(() => screen.getByText('Test Campaign'));
-      
+
       // Switch to crypto payment
       const cryptoRadio = screen.getByDisplayValue('crypto');
       await user.click(cryptoRadio);
@@ -311,7 +311,7 @@ describe('DonorForm', () => {
 
     it('shows USD to ETH conversion estimate', async () => {
       await user.type(screen.getByPlaceholderText('Custom amount'), '300');
-      
+
       await waitFor(() => {
         expect(screen.getByText(/≈0.1000 ETH/)).toBeInTheDocument(); // $300 / $3000 per ETH
       });
@@ -319,16 +319,16 @@ describe('DonorForm', () => {
 
     it('requires wallet connection for crypto payment', async () => {
       configureWeb3Mock.setConnected(false);
-      
+
       expect(screen.getByText('🔗 Please connect your wallet above')).toBeInTheDocument();
     });
 
     it('shows KYC warning for unverified wallets', async () => {
       configureWeb3Mock.setKYCStatus(false);
-      
+
       // Simulate wallet connection
       web3Service._triggerAccountChange('0x123...');
-      
+
       await waitFor(() => {
         expect(screen.getByText('⚠️ KYC Required')).toBeInTheDocument();
       });
@@ -337,9 +337,9 @@ describe('DonorForm', () => {
     it('processes crypto payment successfully', async () => {
       configureWeb3Mock.setConnected(true);
       configureWeb3Mock.setKYCStatus(true);
-      
+
       await user.type(screen.getByPlaceholderText('Custom amount'), '100');
-      
+
       // Fill required form fields
       await user.type(screen.getByLabelText(/Full Name/), 'Jane Smith');
       await user.type(screen.getByLabelText(/Email/), 'jane@example.com');
@@ -350,10 +350,10 @@ describe('DonorForm', () => {
       await user.type(screen.getByLabelText(/Employer/), 'Test Corp');
       await user.type(screen.getByLabelText(/Occupation/), 'Engineer');
       await user.click(screen.getByRole('checkbox'));
-      
+
       // Simulate wallet connection
       web3Service._triggerAccountChange('0x123...');
-      
+
       await waitFor(() => {
         const payButton = screen.getByText(/Pay \$100 via Smart Contract/);
         expect(payButton).toBeInTheDocument();
@@ -363,12 +363,12 @@ describe('DonorForm', () => {
     it('handles crypto payment failures', async () => {
       configureWeb3Mock.setTransactionResult(false, 'Insufficient funds');
       configureWeb3Mock.setConnected(true);
-      
+
       await user.type(screen.getByPlaceholderText('Custom amount'), '100');
-      
+
       // Simulate wallet connection
       web3Service._triggerAccountChange('0x123...');
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Insufficient funds/)).toBeInTheDocument();
       });
@@ -377,13 +377,13 @@ describe('DonorForm', () => {
     it('shows transaction hash after successful crypto payment', async () => {
       configureWeb3Mock.setConnected(true);
       configureWeb3Mock.setTransactionResult(true);
-      
+
       // Fill form and process payment
       await user.type(screen.getByPlaceholderText('Custom amount'), '100');
-      
+
       // Simulate successful crypto transaction
       const mockTx = { txHash: '0xabc123...', blockNumber: 18500000 };
-      
+
       await waitFor(() => {
         // Check if etherscan link is created
         const etherscanLink = screen.getByText(/0xabc123/);
@@ -402,9 +402,9 @@ describe('DonorForm', () => {
     it('displays network errors', async () => {
       // Mock network failure
       configureSupabaseMock.setCampaignResponse(null, { message: 'Network error' });
-      
+
       render(<DonorForm {...defaultProps} />);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Network error/)).toBeInTheDocument();
       });
@@ -412,9 +412,9 @@ describe('DonorForm', () => {
 
     it('handles missing campaign gracefully', async () => {
       configureSupabaseMock.setCampaignResponse(null, { message: 'Campaign not found' });
-      
+
       render(<DonorForm {...defaultProps} />);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Campaign not found/)).toBeInTheDocument();
       });
@@ -422,13 +422,13 @@ describe('DonorForm', () => {
 
     it('shows MetaMask not found error', async () => {
       configureWeb3Mock.setMetaMaskAvailable(false);
-      
+
       render(<DonorForm {...defaultProps} />);
       await waitFor(() => screen.getByText('Test Campaign'));
-      
+
       const cryptoRadio = screen.getByDisplayValue('crypto');
       await user.click(cryptoRadio);
-      
+
       expect(screen.getByText('🦊 MetaMask Required')).toBeInTheDocument();
       expect(screen.getByText('📥 Install MetaMask →')).toBeInTheDocument();
     });
@@ -461,10 +461,10 @@ describe('DonorForm', () => {
     it('maintains focus management during state changes', async () => {
       const user = userEvent.setup();
       const amountInput = screen.getByPlaceholderText('Custom amount');
-      
+
       amountInput.focus();
       await user.type(amountInput, '100');
-      
+
       expect(amountInput).toHaveFocus();
     });
   });

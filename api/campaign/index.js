@@ -30,9 +30,7 @@ export default async function handler(req, res) {
       const { page = 1, limit = 10, search = '' } = req.query;
       const offset = (page - 1) * limit;
 
-      let query = supabase
-        .from('campaigns')
-        .select('*', { count: 'exact' });
+      let query = supabase.from('campaigns').select('*', { count: 'exact' });
 
       if (search) {
         query = query.or(`campaign_name.ilike.%${search}%,email.ilike.%${search}%`);
@@ -46,7 +44,7 @@ export default async function handler(req, res) {
         console.error('Error fetching campaigns:', error);
         return res.status(400).json({
           error: 'Failed to fetch campaigns',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -57,14 +55,14 @@ export default async function handler(req, res) {
           page: parseInt(page),
           limit: parseInt(limit),
           total: count,
-          totalPages: Math.ceil(count / limit)
-        }
+          totalPages: Math.ceil(count / limit),
+        },
       });
     } catch (error) {
       console.error('Campaign list error:', error);
       return res.status(500).json({
         error: 'Failed to fetch campaigns',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -80,8 +78,8 @@ export default async function handler(req, res) {
           error: 'Missing required fields',
           details: {
             campaign_name: !campaign_name ? 'Campaign name is required' : null,
-            email: !email ? 'Email is required' : null
-          }
+            email: !email ? 'Email is required' : null,
+          },
         });
       }
 
@@ -89,7 +87,7 @@ export default async function handler(req, res) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({
-          error: 'Invalid email format'
+          error: 'Invalid email format',
         });
       }
 
@@ -99,21 +97,23 @@ export default async function handler(req, res) {
           new URL(website);
         } catch {
           return res.status(400).json({
-            error: 'Invalid website URL'
+            error: 'Invalid website URL',
           });
         }
       }
 
       const { data, error } = await supabase
         .from('campaigns')
-        .insert([{
-          campaign_name,
-          email,
-          website,
-          wallet_address,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }])
+        .insert([
+          {
+            campaign_name,
+            email,
+            website,
+            wallet_address,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ])
         .select()
         .single();
 
@@ -121,25 +121,25 @@ export default async function handler(req, res) {
         console.error('Error creating campaign:', error);
         return res.status(400).json({
           error: 'Failed to create campaign',
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(201).json({
         success: true,
-        campaign: data
+        campaign: data,
       });
     } catch (error) {
       console.error('Campaign creation error:', error);
       return res.status(500).json({
         error: 'Failed to create campaign',
-        message: error.message
+        message: error.message,
       });
     }
   }
 
   // Method not allowed
   return res.status(405).json({
-    error: `Method ${req.method} not allowed`
+    error: `Method ${req.method} not allowed`,
   });
 }

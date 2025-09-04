@@ -30,11 +30,12 @@ app.use(helmet());
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://yourdomain.com', 'https://www.yourdomain.com']
-    : ['http://localhost:5173'],
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? ['https://yourdomain.com', 'https://www.yourdomain.com']
+      : ['http://localhost:5173'],
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
@@ -44,10 +45,10 @@ const limiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per windowMs
   message: {
     error: 'Too many requests from this IP, please try again later.',
-    retryAfter: '15 minutes'
+    retryAfter: '15 minutes',
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 app.use(limiter);
 
@@ -57,8 +58,8 @@ const contributionLimiter = rateLimit({
   max: 10, // Limit to 10 contribution attempts per 5 minutes
   message: {
     error: 'Too many contribution attempts, please try again later.',
-    retryAfter: '5 minutes'
-  }
+    retryAfter: '5 minutes',
+  },
 });
 
 // Body parsing middleware
@@ -70,7 +71,7 @@ app.use(compression());
 
 // Logging middleware
 if (NODE_ENV !== 'test') {
-  app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
+  app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }));
 }
 
 // Health check endpoint
@@ -79,7 +80,7 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     environment: NODE_ENV,
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
   });
 });
 
@@ -96,7 +97,7 @@ app.get('/', (req, res) => {
     message: 'Crypto Campaign Donation API',
     version: '1.0.0',
     documentation: '/api/docs',
-    health: '/health'
+    health: '/health',
   });
 });
 
@@ -108,7 +109,7 @@ app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Endpoint not found',
     path: req.originalUrl,
-    method: req.method
+    method: req.method,
   });
 });
 

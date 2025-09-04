@@ -15,7 +15,7 @@ const SystemSettings = () => {
     fee_percentage: 0,
     contact_email: '',
     privacy_policy_url: '',
-    terms_of_service_url: ''
+    terms_of_service_url: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -23,7 +23,7 @@ const SystemSettings = () => {
   const [systemStats, setSystemStats] = useState({
     totalUsers: 0,
     totalCampaigns: 0,
-    totalTransactions: 0
+    totalTransactions: 0,
   });
 
   const { isSuperAdmin } = useAdmin();
@@ -36,13 +36,13 @@ const SystemSettings = () => {
   const loadSettings = async () => {
     try {
       setLoading(true);
-      
+
       // Load settings from database if settings table exists
       const { data: settingsData, error } = await supabase
         .from('system_settings')
         .select('*')
         .single();
-      
+
       if (settingsData && !error) {
         setSettings({
           site_name: settingsData.site_name || '',
@@ -56,10 +56,10 @@ const SystemSettings = () => {
           fee_percentage: settingsData.fee_percentage || 0,
           contact_email: settingsData.contact_email || '',
           privacy_policy_url: settingsData.privacy_policy_url || '',
-          terms_of_service_url: settingsData.terms_of_service_url || ''
+          terms_of_service_url: settingsData.terms_of_service_url || '',
         });
       }
-      
+
       setLoading(false);
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -73,14 +73,14 @@ const SystemSettings = () => {
       const [usersCount, campaignsCount, transactionsCount] = await Promise.all([
         supabase.from('users').select('id', { count: 'exact' }),
         supabase.from('campaigns').select('id', { count: 'exact' }),
-        supabase.from('form_submissions').select('id', { count: 'exact' })
+        supabase.from('form_submissions').select('id', { count: 'exact' }),
       ]);
 
-      setSystemStats(prev => ({
+      setSystemStats((prev) => ({
         ...prev,
         totalUsers: usersCount.count || 0,
         totalCampaigns: campaignsCount.count || 0,
-        totalTransactions: transactionsCount.count || 0
+        totalTransactions: transactionsCount.count || 0,
       }));
     } catch (error) {
       console.error('Error loading system stats:', error);
@@ -90,12 +90,11 @@ const SystemSettings = () => {
   const saveSettings = async (e) => {
     e.preventDefault();
     setSaving(true);
-    
+
     try {
       // Save settings to database
-      const { error } = await supabase
-        .from('system_settings')
-        .upsert({
+      const { error } = await supabase.from('system_settings').upsert(
+        {
           id: 1, // Single row for settings
           site_name: settings.site_name,
           site_description: settings.site_description,
@@ -109,11 +108,13 @@ const SystemSettings = () => {
           contact_email: settings.contact_email,
           privacy_policy_url: settings.privacy_policy_url,
           terms_of_service_url: settings.terms_of_service_url,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'id'
-        });
-      
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'id',
+        }
+      );
+
       if (error) {
         console.error('Database error:', error);
         alert('Error saving settings to database. Settings table may not exist yet.');
@@ -129,7 +130,7 @@ const SystemSettings = () => {
   };
 
   const handleInputChange = (key, value) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   const performSystemAction = async (action) => {
@@ -139,18 +140,16 @@ const SystemSettings = () => {
 
     try {
       // Log system actions to database
-      const { error } = await supabase
-        .from('admin_logs')
-        .insert({
-          action,
-          timestamp: new Date().toISOString(),
-          user_id: 'current-admin-id' // Replace with actual admin ID
-        });
-      
+      const { error } = await supabase.from('admin_logs').insert({
+        action,
+        timestamp: new Date().toISOString(),
+        user_id: 'current-admin-id', // Replace with actual admin ID
+      });
+
       if (error) {
         console.error('Error logging system action:', error);
       }
-      
+
       alert(`System action "${action}" logged successfully.`);
     } catch (error) {
       console.error(`Error performing ${action}:`, error);
@@ -163,7 +162,7 @@ const SystemSettings = () => {
     { id: 'security', name: 'Security', icon: '🔒' },
     { id: 'payments', name: 'Payments', icon: '💳' },
     { id: 'notifications', name: 'Notifications', icon: '📧' },
-    { id: 'system', name: 'System', icon: '🖥️' }
+    { id: 'system', name: 'System', icon: '🖥️' },
   ];
 
   const renderTabContent = () => {
@@ -180,7 +179,7 @@ const SystemSettings = () => {
                 className="form-input"
               />
             </div>
-            
+
             <div>
               <label className="form-label">Site Description</label>
               <textarea
@@ -190,7 +189,7 @@ const SystemSettings = () => {
                 rows="3"
               />
             </div>
-            
+
             <div>
               <label className="form-label">Contact Email</label>
               <input
@@ -278,19 +277,23 @@ const SystemSettings = () => {
                 <input
                   type="number"
                   value={settings.min_contribution_amount}
-                  onChange={(e) => handleInputChange('min_contribution_amount', parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleInputChange('min_contribution_amount', parseFloat(e.target.value))
+                  }
                   className="form-input"
                   min="0.01"
                   step="0.01"
                 />
               </div>
-              
+
               <div>
                 <label className="form-label">Maximum Contribution ($)</label>
                 <input
                   type="number"
                   value={settings.max_contribution_amount}
-                  onChange={(e) => handleInputChange('max_contribution_amount', parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleInputChange('max_contribution_amount', parseFloat(e.target.value))
+                  }
                   className="form-input"
                   min="1"
                   step="1"
@@ -314,7 +317,7 @@ const SystemSettings = () => {
             <div>
               <label className="form-label">Supported Cryptocurrencies</label>
               <div className="space-y-2">
-                {['ETH', 'BTC', 'USDC', 'USDT'].map(currency => (
+                {['ETH', 'BTC', 'USDC', 'USDT'].map((currency) => (
                   <div key={currency} className="flex items-center space-x-3">
                     <input
                       type="checkbox"
@@ -322,9 +325,15 @@ const SystemSettings = () => {
                       checked={settings.supported_currencies.includes(currency)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          handleInputChange('supported_currencies', [...settings.supported_currencies, currency]);
+                          handleInputChange('supported_currencies', [
+                            ...settings.supported_currencies,
+                            currency,
+                          ]);
                         } else {
-                          handleInputChange('supported_currencies', settings.supported_currencies.filter(c => c !== currency));
+                          handleInputChange(
+                            'supported_currencies',
+                            settings.supported_currencies.filter((c) => c !== currency)
+                          );
                         }
                       }}
                       className="rounded border-border text-primary focus:ring-primary"
@@ -354,21 +363,25 @@ const SystemSettings = () => {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h4 className="text-lg font-medium text-foreground mb-4">Notification Templates</h4>
               <div className="space-y-3">
                 <div className="p-4 border border-border rounded-lg">
                   <h5 className="font-medium text-foreground">Welcome Email</h5>
-                  <p className="text-sm text-muted-foreground mt-1">Sent to new users after registration</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Sent to new users after registration
+                  </p>
                   <button className="mt-2 text-primary hover:text-primary/90 text-sm font-medium">
                     Edit Template
                   </button>
                 </div>
-                
+
                 <div className="p-4 border border-border rounded-lg">
                   <h5 className="font-medium text-foreground">Contribution Confirmation</h5>
-                  <p className="text-sm text-muted-foreground mt-1">Sent after successful contribution</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Sent after successful contribution
+                  </p>
                   <button className="mt-2 text-primary hover:text-primary/90 text-sm font-medium">
                     Edit Template
                   </button>
@@ -387,15 +400,21 @@ const SystemSettings = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-secondary p-4 rounded-lg">
                   <div className="text-sm text-muted-foreground">Total Users</div>
-                  <div className="text-lg font-semibold text-foreground">{systemStats.totalUsers || 0}</div>
+                  <div className="text-lg font-semibold text-foreground">
+                    {systemStats.totalUsers || 0}
+                  </div>
                 </div>
                 <div className="bg-secondary p-4 rounded-lg">
                   <div className="text-sm text-muted-foreground">Total Campaigns</div>
-                  <div className="text-lg font-semibold text-foreground">{systemStats.totalCampaigns || 0}</div>
+                  <div className="text-lg font-semibold text-foreground">
+                    {systemStats.totalCampaigns || 0}
+                  </div>
                 </div>
                 <div className="bg-secondary p-4 rounded-lg">
                   <div className="text-sm text-muted-foreground">Total Transactions</div>
-                  <div className="text-lg font-semibold text-foreground">{systemStats.totalTransactions || 0}</div>
+                  <div className="text-lg font-semibold text-foreground">
+                    {systemStats.totalTransactions || 0}
+                  </div>
                 </div>
               </div>
             </div>
@@ -413,7 +432,9 @@ const SystemSettings = () => {
                       <span className="mr-3 text-primary">💾</span>
                       <div>
                         <div className="font-medium text-foreground">Create Backup</div>
-                        <div className="text-sm text-muted-foreground">Generate a full system backup</div>
+                        <div className="text-sm text-muted-foreground">
+                          Generate a full system backup
+                        </div>
                       </div>
                     </div>
                     <span className="text-muted-foreground">→</span>
@@ -441,7 +462,9 @@ const SystemSettings = () => {
                       <span className="mr-3 text-destructive">🔄</span>
                       <div>
                         <div className="font-medium">Restart System</div>
-                        <div className="text-sm text-destructive/70">Restart the application server</div>
+                        <div className="text-sm text-destructive/70">
+                          Restart the application server
+                        </div>
                       </div>
                     </div>
                     <span className="text-destructive/70">→</span>
@@ -472,7 +495,9 @@ const SystemSettings = () => {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-foreground">System Settings</h2>
-            <p className="text-muted-foreground mt-1">Configure platform settings and system preferences</p>
+            <p className="text-muted-foreground mt-1">
+              Configure platform settings and system preferences
+            </p>
           </div>
           <button
             onClick={saveSettings}
@@ -506,9 +531,7 @@ const SystemSettings = () => {
         </div>
 
         <div className="p-6">
-          <form onSubmit={saveSettings}>
-            {renderTabContent()}
-          </form>
+          <form onSubmit={saveSettings}>{renderTabContent()}</form>
         </div>
       </div>
     </div>

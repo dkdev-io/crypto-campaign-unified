@@ -1,14 +1,14 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.0'
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.0.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
@@ -16,7 +16,7 @@ serve(async (req) => {
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
     // SQL to fix campaigns table
     const fixCampaignsSQL = `
@@ -54,25 +54,25 @@ serve(async (req) => {
           terms_accepted = true,
           terms_accepted_at = created_at
       WHERE setup_completed IS NULL OR setup_completed = false;
-    `
+    `;
 
     // Execute the SQL with service role permissions
     const { data, error } = await supabaseServiceRole.rpc('exec', {
-      query: fixCampaignsSQL
-    })
+      query: fixCampaignsSQL,
+    });
 
     if (error) {
-      throw error
+      throw error;
     }
 
     // Test that the columns were added by doing a test query
     const { data: testData, error: testError } = await supabaseServiceRole
       .from('campaigns')
       .select('setup_completed, user_id, terms_accepted')
-      .limit(1)
+      .limit(1);
 
     if (testError) {
-      throw new Error(`Column addition failed: ${testError.message}`)
+      throw new Error(`Column addition failed: ${testError.message}`);
     }
 
     return new Response(
@@ -80,24 +80,23 @@ serve(async (req) => {
         success: true,
         message: 'Campaigns table schema fixed successfully!',
         columnsAdded: true,
-        testQuery: testData
+        testQuery: testData,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
-      },
-    )
-
+      }
+    );
   } catch (error) {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message
+        error: error.message,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
-      },
-    )
+      }
+    );
   }
-})
+});

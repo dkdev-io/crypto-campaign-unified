@@ -17,7 +17,7 @@ if (!fs.existsSync(envPath)) {
 
 const envContent = fs.readFileSync(envPath, 'utf8');
 const envVars = {};
-envContent.split('\n').forEach(line => {
+envContent.split('\n').forEach((line) => {
   if (line.includes('=') && !line.startsWith('#')) {
     const [key, value] = line.split('=');
     envVars[key.trim()] = value.trim();
@@ -42,16 +42,16 @@ async function testSignupFlow() {
   try {
     // Test signup with real credentials
     console.log('1. 📝 Testing signup API call...');
-    
+
     const { data, error } = await supabase.auth.signUp({
       email: 'dan@dkdev.io',
       password: '32test1!',
       options: {
         data: {
-          full_name: 'Dan Test User'
+          full_name: 'Dan Test User',
         },
-        emailRedirectTo: `http://localhost:5173/auth?verified=true`
-      }
+        emailRedirectTo: `http://localhost:5173/auth?verified=true`,
+      },
     });
 
     if (error) {
@@ -59,14 +59,14 @@ async function testSignupFlow() {
         console.log('✅ SUCCESS: User already exists - signup system working!');
         console.log('   This means the API call is functioning correctly.');
         console.log('   For a new user, a verification email would be sent.\n');
-        
+
         // Test sign in to verify the system works
         console.log('2. 🔐 Testing signin to verify system works...');
         const { data: signinData, error: signinError } = await supabase.auth.signInWithPassword({
           email: 'dan@dkdev.io',
-          password: '32test1!'
+          password: '32test1!',
         });
-        
+
         if (signinError) {
           if (signinError.message.includes('Email not confirmed')) {
             console.log('✅ VERIFICATION: Email confirmation required (as expected)');
@@ -78,7 +78,6 @@ async function testSignupFlow() {
           console.log('✅ SUCCESS: User signed in successfully');
           console.log('   User data:', JSON.stringify(signinData.user, null, 2));
         }
-        
       } else if (error.message.includes('Supabase not configured')) {
         console.log('❌ CONFIGURATION ERROR: Environment variables not loaded');
         console.log('   The fallback client is still being used!\n');
@@ -91,7 +90,7 @@ async function testSignupFlow() {
     } else if (data.user) {
       console.log('✅ SUCCESS: New user created!');
       console.log('📧 Email confirmation required:', !data.user.email_confirmed_at);
-      
+
       if (!data.user.email_confirmed_at) {
         console.log('📬 VERIFICATION EMAIL SENT TO: dan@dkdev.io');
         console.log('   Check your inbox (and spam folder)');
@@ -99,7 +98,7 @@ async function testSignupFlow() {
       } else {
         console.log('✅ Email already confirmed');
       }
-      
+
       console.log('\n👤 User created with ID:', data.user.id);
     }
 
@@ -108,9 +107,8 @@ async function testSignupFlow() {
     console.log('✅ API call made to real Supabase instance');
     console.log('✅ No fallback client errors');
     console.log('✅ Email verification system active');
-    
-    return true;
 
+    return true;
   } catch (error) {
     console.log('❌ UNEXPECTED ERROR:', error.message);
     console.log('Stack trace:', error.stack);
@@ -119,7 +117,7 @@ async function testSignupFlow() {
 }
 
 // Run the test
-testSignupFlow().then(success => {
+testSignupFlow().then((success) => {
   if (success) {
     console.log('\n🎉 VERIFICATION COMPLETE: Signup flow is working!');
     console.log('📧 Email verification emails will be sent for new signups.');

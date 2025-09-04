@@ -37,7 +37,7 @@ export default async function handler(req, res) {
         zip_code,
         country,
         occupation,
-        employer
+        employer,
       } = req.body;
 
       // Validate required fields
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
       if (Object.keys(errors).length > 0) {
         return res.status(400).json({
           error: 'Validation failed',
-          details: errors
+          details: errors,
         });
       }
 
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({
-          error: 'Invalid email format'
+          error: 'Invalid email format',
         });
       }
 
@@ -92,7 +92,7 @@ export default async function handler(req, res) {
         employer: employer || null,
         verification_status: 'pending',
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       const { data, error } = await supabase
@@ -105,28 +105,28 @@ export default async function handler(req, res) {
         console.error('Error creating KYC record:', error);
         return res.status(400).json({
           error: 'Failed to submit KYC information',
-          message: error.message
+          message: error.message,
         });
       }
 
       // Update contribution status
       await supabase
         .from('contributions')
-        .update({ 
+        .update({
           status: 'kyc_submitted',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq('id', contribution_id);
 
       return res.status(201).json({
         success: true,
-        kyc_record: data
+        kyc_record: data,
       });
     } catch (error) {
       console.error('KYC submission error:', error);
       return res.status(500).json({
         error: 'Failed to submit KYC information',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -138,7 +138,7 @@ export default async function handler(req, res) {
 
       if (!contribution_id) {
         return res.status(400).json({
-          error: 'Contribution ID is required'
+          error: 'Contribution ID is required',
         });
       }
 
@@ -151,19 +151,19 @@ export default async function handler(req, res) {
       if (error) {
         console.error('Error fetching KYC record:', error);
         return res.status(404).json({
-          error: 'KYC record not found'
+          error: 'KYC record not found',
         });
       }
 
       return res.status(200).json({
         success: true,
-        kyc_record: data
+        kyc_record: data,
       });
     } catch (error) {
       console.error('KYC fetch error:', error);
       return res.status(500).json({
         error: 'Failed to fetch KYC information',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -178,20 +178,20 @@ export default async function handler(req, res) {
 
       if (!kyc_id || !verification_status) {
         return res.status(400).json({
-          error: 'KYC ID and verification status are required'
+          error: 'KYC ID and verification status are required',
         });
       }
 
       const validStatuses = ['pending', 'verified', 'rejected', 'requires_additional_info'];
       if (!validStatuses.includes(verification_status)) {
         return res.status(400).json({
-          error: 'Invalid verification status'
+          error: 'Invalid verification status',
         });
       }
 
       const updateData = {
         verification_status,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
 
       if (notes) {
@@ -209,7 +209,7 @@ export default async function handler(req, res) {
         console.error('Error updating KYC record:', error);
         return res.status(400).json({
           error: 'Failed to update KYC record',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -217,28 +217,28 @@ export default async function handler(req, res) {
       if (verification_status === 'verified') {
         await supabase
           .from('contributions')
-          .update({ 
+          .update({
             status: 'completed',
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq('id', data.contribution_id);
       }
 
       return res.status(200).json({
         success: true,
-        kyc_record: data
+        kyc_record: data,
       });
     } catch (error) {
       console.error('KYC update error:', error);
       return res.status(500).json({
         error: 'Failed to update KYC record',
-        message: error.message
+        message: error.message,
       });
     }
   }
 
   // Method not allowed
   return res.status(405).json({
-    error: `Method ${req.method} not allowed`
+    error: `Method ${req.method} not allowed`,
   });
 }

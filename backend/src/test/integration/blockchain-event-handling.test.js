@@ -13,13 +13,13 @@ describe('Blockchain Event Handling Integration', () => {
       filters: {
         ContributionMade: jest.fn(() => ({
           address: '0x1234567890123456789012345678901234567890',
-          topics: ['0xabcdef...']
-        }))
+          topics: ['0xabcdef...'],
+        })),
       },
       queryFilter: jest.fn(),
       interface: {
-        parseLog: jest.fn()
-      }
+        parseLog: jest.fn(),
+      },
     };
 
     // Setup mock provider
@@ -28,7 +28,7 @@ describe('Blockchain Event Handling Integration', () => {
       getLogs: jest.fn(),
       getTransaction: jest.fn(),
       getTransactionReceipt: jest.fn(),
-      waitForTransaction: jest.fn()
+      waitForTransaction: jest.fn(),
     };
 
     // Setup mock Web3 service
@@ -39,7 +39,7 @@ describe('Blockchain Event Handling Integration', () => {
       initialize: jest.fn().mockResolvedValue(true),
       getContributorInfo: jest.fn(),
       getCampaignStats: jest.fn(),
-      waitForTransaction: jest.fn()
+      waitForTransaction: jest.fn(),
     };
 
     // Setup mock database service
@@ -52,12 +52,12 @@ describe('Blockchain Event Handling Integration', () => {
           eq: jest.fn().mockReturnThis(),
           single: jest.fn(),
           order: jest.fn().mockReturnThis(),
-          range: jest.fn()
-        }))
+          range: jest.fn(),
+        })),
       },
       createContributionLog: jest.fn(),
       updateContributionStatus: jest.fn(),
-      getContributionByTxHash: jest.fn()
+      getContributionByTxHash: jest.fn(),
     };
   });
 
@@ -74,14 +74,14 @@ describe('Blockchain Event Handling Integration', () => {
           contributor: TestHelpers.generateMockAddress(),
           amount: '1000000000000000000', // 1 ETH in wei
           totalContributed: '2000000000000000000', // 2 ETH total
-          contributionCount: 2
-        }
+          contributionCount: 2,
+        },
       };
 
       // Mock contract event parsing
       mockContract.interface.parseLog.mockReturnValue({
         name: 'ContributionMade',
-        args: contributionEvent.args
+        args: contributionEvent.args,
       });
 
       // Mock transaction receipt
@@ -90,7 +90,7 @@ describe('Blockchain Event Handling Integration', () => {
         blockNumber: contributionEvent.blockNumber,
         status: 1,
         gasUsed: '21000',
-        logs: [contributionEvent]
+        logs: [contributionEvent],
       };
 
       mockProvider.getTransactionReceipt.mockResolvedValue(mockReceipt);
@@ -101,19 +101,23 @@ describe('Blockchain Event Handling Integration', () => {
         contributor_address: contributionEvent.args.contributor,
         amount_wei: contributionEvent.args.amount,
         block_number: contributionEvent.blockNumber,
-        status: 'completed'
+        status: 'completed',
       });
 
       const dbChain = mockSupabaseService.client.from('contribution_logs');
       dbChain.insert.mockReturnThis();
       dbChain.select.mockReturnThis();
-      dbChain.single.mockResolvedValue({ 
-        data: mockContributionLog, 
-        error: null 
+      dbChain.single.mockResolvedValue({
+        data: mockContributionLog,
+        error: null,
       });
 
       // Simulate event processing
-      const result = await processContributionEvent(contributionEvent, mockWeb3Service, mockSupabaseService);
+      const result = await processContributionEvent(
+        contributionEvent,
+        mockWeb3Service,
+        mockSupabaseService
+      );
 
       expect(result.success).toBe(true);
       expect(result.contributionLog.transaction_hash).toBe(contributionEvent.transactionHash);
@@ -127,8 +131,8 @@ describe('Blockchain Event Handling Integration', () => {
         logIndex: 0,
         args: {
           contributor: TestHelpers.generateMockAddress(),
-          amount: '1000000000000000000'
-        }
+          amount: '1000000000000000000',
+        },
       };
 
       // Mock transaction failure
@@ -136,22 +140,26 @@ describe('Blockchain Event Handling Integration', () => {
         transactionHash: failedEvent.transactionHash,
         blockNumber: failedEvent.blockNumber,
         status: 0, // Failed transaction
-        gasUsed: '50000'
+        gasUsed: '50000',
       });
 
       // Mock database logging of failed transaction
       const dbChain = mockSupabaseService.client.from('contribution_logs');
       dbChain.insert.mockReturnThis();
       dbChain.select.mockReturnThis();
-      dbChain.single.mockResolvedValue({ 
+      dbChain.single.mockResolvedValue({
         data: MockFactories.contributionLog({
           transaction_hash: failedEvent.transactionHash,
-          status: 'failed'
-        }), 
-        error: null 
+          status: 'failed',
+        }),
+        error: null,
       });
 
-      const result = await processContributionEvent(failedEvent, mockWeb3Service, mockSupabaseService);
+      const result = await processContributionEvent(
+        failedEvent,
+        mockWeb3Service,
+        mockSupabaseService
+      );
 
       expect(result.success).toBe(false);
       expect(result.contributionLog.status).toBe('failed');
@@ -163,29 +171,33 @@ describe('Blockchain Event Handling Integration', () => {
         blockNumber: 12345,
         args: {
           contributor: TestHelpers.generateMockAddress(),
-          amount: '1000000000000000000'
-        }
+          amount: '1000000000000000000',
+        },
       };
 
       // Mock existing record in database
       const existingLog = MockFactories.contributionLog({
         transaction_hash: duplicateEvent.transactionHash,
-        status: 'completed'
+        status: 'completed',
       });
 
       const dbChain = mockSupabaseService.client.from('contribution_logs');
       dbChain.insert.mockRejectedValue({
         code: '23505',
-        message: 'duplicate key value violates unique constraint'
+        message: 'duplicate key value violates unique constraint',
       });
       dbChain.select.mockReturnThis();
       dbChain.eq.mockReturnThis();
-      dbChain.single.mockResolvedValue({ 
-        data: existingLog, 
-        error: null 
+      dbChain.single.mockResolvedValue({
+        data: existingLog,
+        error: null,
       });
 
-      const result = await processContributionEvent(duplicateEvent, mockWeb3Service, mockSupabaseService);
+      const result = await processContributionEvent(
+        duplicateEvent,
+        mockWeb3Service,
+        mockSupabaseService
+      );
 
       expect(result.success).toBe(true);
       expect(result.duplicate).toBe(true);
@@ -197,7 +209,7 @@ describe('Blockchain Event Handling Integration', () => {
     it('should sync missed events from blockchain', async () => {
       const fromBlock = 12340;
       const toBlock = 12350;
-      
+
       const missedEvents = [
         {
           transactionHash: TestHelpers.generateMockTransactionHash(),
@@ -205,8 +217,8 @@ describe('Blockchain Event Handling Integration', () => {
           logIndex: 0,
           args: {
             contributor: TestHelpers.generateMockAddress(),
-            amount: '500000000000000000' // 0.5 ETH
-          }
+            amount: '500000000000000000', // 0.5 ETH
+          },
         },
         {
           transactionHash: TestHelpers.generateMockTransactionHash(),
@@ -214,9 +226,9 @@ describe('Blockchain Event Handling Integration', () => {
           logIndex: 1,
           args: {
             contributor: TestHelpers.generateMockAddress(),
-            amount: '1500000000000000000' // 1.5 ETH
-          }
-        }
+            amount: '1500000000000000000', // 1.5 ETH
+          },
+        },
       ];
 
       // Mock contract event query
@@ -227,17 +239,22 @@ describe('Blockchain Event Handling Integration', () => {
         const dbChain = mockSupabaseService.client.from('contribution_logs');
         dbChain.insert.mockReturnThis();
         dbChain.select.mockReturnThis();
-        dbChain.single.mockResolvedValueOnce({ 
+        dbChain.single.mockResolvedValueOnce({
           data: MockFactories.contributionLog({
             transaction_hash: event.transactionHash,
             block_number: event.blockNumber,
-            status: 'completed'
-          }), 
-          error: null 
+            status: 'completed',
+          }),
+          error: null,
         });
       });
 
-      const result = await syncBlockchainEvents(fromBlock, toBlock, mockWeb3Service, mockSupabaseService);
+      const result = await syncBlockchainEvents(
+        fromBlock,
+        toBlock,
+        mockWeb3Service,
+        mockSupabaseService
+      );
 
       expect(result.success).toBe(true);
       expect(result.eventsProcessed).toBe(2);
@@ -253,27 +270,29 @@ describe('Blockchain Event Handling Integration', () => {
       const reorgBlock = 12345;
       const affectedTxHashes = [
         TestHelpers.generateMockTransactionHash(),
-        TestHelpers.generateMockTransactionHash()
+        TestHelpers.generateMockTransactionHash(),
       ];
 
       // Mock finding affected transactions
       const dbChain = mockSupabaseService.client.from('contribution_logs');
       dbChain.select.mockReturnThis();
       dbChain.eq.mockReturnThis();
-      dbChain.range.mockResolvedValue({ 
-        data: affectedTxHashes.map(hash => MockFactories.contributionLog({
-          transaction_hash: hash,
-          block_number: reorgBlock,
-          status: 'completed'
-        })),
-        error: null 
+      dbChain.range.mockResolvedValue({
+        data: affectedTxHashes.map((hash) =>
+          MockFactories.contributionLog({
+            transaction_hash: hash,
+            block_number: reorgBlock,
+            status: 'completed',
+          })
+        ),
+        error: null,
       });
 
       // Mock updating affected records
       dbChain.update.mockReturnThis();
-      dbChain.eq.mockResolvedValue({ 
-        data: [], 
-        error: null 
+      dbChain.eq.mockResolvedValue({
+        data: [],
+        error: null,
       });
 
       const result = await handleBlockchainReorg(reorgBlock, mockWeb3Service, mockSupabaseService);
@@ -287,7 +306,7 @@ describe('Blockchain Event Handling Integration', () => {
     it('should handle real-time event subscription', async () => {
       const eventSubscription = {
         on: jest.fn(),
-        removeAllListeners: jest.fn()
+        removeAllListeners: jest.fn(),
       };
 
       // Mock event subscription setup
@@ -302,10 +321,10 @@ describe('Blockchain Event Handling Integration', () => {
 
     it('should handle connection drops and reconnection', async () => {
       const connectionError = new Error('WebSocket connection lost');
-      
+
       // Mock connection failure
       mockProvider.getBlockNumber.mockRejectedValue(connectionError);
-      
+
       // Mock successful reconnection
       mockWeb3Service.initialize.mockResolvedValueOnce(false);
       mockWeb3Service.initialize.mockResolvedValueOnce(true);
@@ -325,23 +344,29 @@ describe('Blockchain Event Handling Integration', () => {
         logIndex: i,
         args: {
           contributor: TestHelpers.generateMockAddress(),
-          amount: '100000000000000000' // 0.1 ETH each
-        }
+          amount: '100000000000000000', // 0.1 ETH each
+        },
       }));
 
       // Mock batch database operations
       const dbChain = mockSupabaseService.client.from('contribution_logs');
       dbChain.insert.mockReturnThis();
-      dbChain.select.mockResolvedValue({ 
-        data: highFrequencyEvents.map(event => MockFactories.contributionLog({
-          transaction_hash: event.transactionHash,
-          block_number: event.blockNumber
-        })),
-        error: null 
+      dbChain.select.mockResolvedValue({
+        data: highFrequencyEvents.map((event) =>
+          MockFactories.contributionLog({
+            transaction_hash: event.transactionHash,
+            block_number: event.blockNumber,
+          })
+        ),
+        error: null,
       });
 
       const startTime = Date.now();
-      const result = await processBatchEvents(highFrequencyEvents, mockWeb3Service, mockSupabaseService);
+      const result = await processBatchEvents(
+        highFrequencyEvents,
+        mockWeb3Service,
+        mockSupabaseService
+      );
       const processingTime = Date.now() - startTime;
 
       expect(result.success).toBe(true);
@@ -356,7 +381,7 @@ async function processContributionEvent(event, web3Service, dbService) {
   try {
     const receipt = await web3Service.provider.getTransactionReceipt(event.transactionHash);
     const isSuccess = receipt.status === 1;
-    
+
     const contributionData = {
       transaction_hash: event.transactionHash,
       contributor_address: event.args.contributor,
@@ -364,20 +389,17 @@ async function processContributionEvent(event, web3Service, dbService) {
       amount_eth: (parseFloat(event.args.amount) / 1e18).toString(),
       block_number: event.blockNumber,
       status: isSuccess ? 'completed' : 'failed',
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     try {
       const dbChain = dbService.client.from('contribution_logs');
-      const { data } = await dbChain
-        .insert([contributionData])
-        .select()
-        .single();
-        
+      const { data } = await dbChain.insert([contributionData]).select().single();
+
       return {
         success: isSuccess,
         contributionLog: data,
-        duplicate: false
+        duplicate: false,
       };
     } catch (error) {
       if (error.code === '23505') {
@@ -387,11 +409,11 @@ async function processContributionEvent(event, web3Service, dbService) {
           .select('*')
           .eq('transaction_hash', event.transactionHash)
           .single();
-          
+
         return {
           success: true,
           contributionLog: data,
-          duplicate: true
+          duplicate: true,
         };
       }
       throw error;
@@ -399,7 +421,7 @@ async function processContributionEvent(event, web3Service, dbService) {
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }
@@ -425,7 +447,7 @@ async function syncBlockchainEvents(fromBlock, toBlock, web3Service, dbService) 
   return {
     success: true,
     eventsProcessed,
-    eventsStored
+    eventsStored,
   };
 }
 
@@ -437,13 +459,11 @@ async function handleBlockchainReorg(fromBlock, web3Service, dbService) {
     .eq('status', 'completed')
     .range(fromBlock, fromBlock + 100);
 
-  await dbChain
-    .update({ status: 'pending_reorg_check' })
-    .eq('block_number', fromBlock);
+  await dbChain.update({ status: 'pending_reorg_check' }).eq('block_number', fromBlock);
 
   return {
     success: true,
-    affectedTransactions: affectedLogs.length
+    affectedTransactions: affectedLogs.length,
   };
 }
 
@@ -455,7 +475,7 @@ async function setupEventMonitoring(web3Service, eventHandler) {
 async function handleConnectionFailure(web3Service) {
   let attempts = 0;
   const maxAttempts = 3;
-  
+
   while (attempts < maxAttempts) {
     try {
       const result = await web3Service.initialize();
@@ -464,23 +484,23 @@ async function handleConnectionFailure(web3Service) {
       }
     } catch (error) {
       attempts++;
-      await new Promise(resolve => setTimeout(resolve, 1000 * attempts));
+      await new Promise((resolve) => setTimeout(resolve, 1000 * attempts));
     }
   }
-  
+
   return { reconnected: false, attempts };
 }
 
 async function processBatchEvents(events, web3Service, dbService) {
   const results = await Promise.all(
-    events.map(event => processContributionEvent(event, web3Service, dbService))
+    events.map((event) => processContributionEvent(event, web3Service, dbService))
   );
-  
-  const successful = results.filter(r => r.success).length;
-  
+
+  const successful = results.filter((r) => r.success).length;
+
   return {
     success: true,
     eventsProcessed: results.length,
-    eventsSuccessful: successful
+    eventsSuccessful: successful,
   };
 }

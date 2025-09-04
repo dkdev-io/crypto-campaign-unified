@@ -5,7 +5,7 @@ test.describe('Contribution Form Visual Tests', () => {
     // Navigate to the contribution form page
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
+
     // Wait for React components to render
     await page.waitForSelector('[data-testid="donor-form"], .donor-form, form', { timeout: 10000 });
   });
@@ -19,7 +19,9 @@ test.describe('Contribution Form Visual Tests', () => {
 
   test('contribution form with validation errors', async ({ page }) => {
     // Try to submit empty form to trigger validation
-    const submitButton = page.locator('button[type="submit"], .submit-btn, [data-testid="submit-button"]').first();
+    const submitButton = page
+      .locator('button[type="submit"], .submit-btn, [data-testid="submit-button"]')
+      .first();
     if (await submitButton.isVisible()) {
       await submitButton.click();
       await page.waitForTimeout(1000); // Wait for validation to appear
@@ -32,22 +34,30 @@ test.describe('Contribution Form Visual Tests', () => {
 
   test('contribution form filled state', async ({ page }) => {
     // Fill out the form with test data
-    const nameInput = page.locator('input[name="name"], input[name="donorName"], [data-testid="name-input"]').first();
+    const nameInput = page
+      .locator('input[name="name"], input[name="donorName"], [data-testid="name-input"]')
+      .first();
     if (await nameInput.isVisible()) {
       await nameInput.fill('John Doe');
     }
 
-    const emailInput = page.locator('input[name="email"], input[type="email"], [data-testid="email-input"]').first();
+    const emailInput = page
+      .locator('input[name="email"], input[type="email"], [data-testid="email-input"]')
+      .first();
     if (await emailInput.isVisible()) {
       await emailInput.fill('john.doe@example.com');
     }
 
-    const amountInput = page.locator('input[name="amount"], input[type="number"], [data-testid="amount-input"]').first();
+    const amountInput = page
+      .locator('input[name="amount"], input[type="number"], [data-testid="amount-input"]')
+      .first();
     if (await amountInput.isVisible()) {
       await amountInput.fill('100');
     }
 
-    const messageInput = page.locator('textarea[name="message"], textarea, [data-testid="message-input"]').first();
+    const messageInput = page
+      .locator('textarea[name="message"], textarea, [data-testid="message-input"]')
+      .first();
     if (await messageInput.isVisible()) {
       await messageInput.fill('Supporting this great cause!');
     }
@@ -70,11 +80,14 @@ test.describe('Contribution Form Visual Tests', () => {
 
   test('contribution form with Web3 wallet connection', async ({ page }) => {
     // Look for wallet connection button
-    const walletButton = page.locator('button').filter({ hasText: /connect|wallet/i }).first();
+    const walletButton = page
+      .locator('button')
+      .filter({ hasText: /connect|wallet/i })
+      .first();
     if (await walletButton.isVisible()) {
       await walletButton.click();
       await page.waitForTimeout(2000);
-      
+
       await expect(page).toHaveScreenshot('contribution-form-wallet-connect.png', {
         fullPage: true,
       });
@@ -83,15 +96,17 @@ test.describe('Contribution Form Visual Tests', () => {
 
   test('contribution form payment methods', async ({ page }) => {
     // Look for different payment method options
-    const paymentMethods = page.locator('[data-testid*="payment"], .payment-method, input[type="radio"]');
+    const paymentMethods = page.locator(
+      '[data-testid*="payment"], .payment-method, input[type="radio"]'
+    );
     const count = await paymentMethods.count();
-    
+
     if (count > 0) {
       // Click through different payment methods
       for (let i = 0; i < count && i < 3; i++) {
         await paymentMethods.nth(i).click();
         await page.waitForTimeout(500);
-        
+
         await expect(page).toHaveScreenshot(`contribution-form-payment-method-${i}.png`, {
           fullPage: true,
         });

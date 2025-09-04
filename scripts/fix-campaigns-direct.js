@@ -11,20 +11,20 @@ async function fixCampaignsTable() {
     'postgresql://postgres.kmepcdsklnnxokoimvzo:SenecaCrypto2024!@aws-0-us-west-1.pooler.supabase.com:5432/postgres',
     'postgresql://postgres:SenecaCrypto2024!@db.kmepcdsklnnxokoimvzo.supabase.co:5432/postgres',
     'postgres://postgres.kmepcdsklnnxokoimvzo:SenecaCrypto2024!@aws-0-us-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true',
-    'postgresql://postgres.kmepcdsklnnxokoimvzo:SenecaCrypto2024%21@aws-0-us-west-1.pooler.supabase.com:5432/postgres'
+    'postgresql://postgres.kmepcdsklnnxokoimvzo:SenecaCrypto2024%21@aws-0-us-west-1.pooler.supabase.com:5432/postgres',
   ];
 
   for (const connStr of connectionStrings) {
     console.log(`Trying connection: ${connStr.substring(0, 50)}...`);
     const client = new Client({
       connectionString: connStr,
-      ssl: { rejectUnauthorized: false }
+      ssl: { rejectUnauthorized: false },
     });
 
     try {
       await client.connect();
       console.log('✅ CONNECTED! Fixing table now...');
-      
+
       // Execute the fix
       await client.query(`
         ALTER TABLE campaigns 
@@ -51,9 +51,9 @@ async function fixCampaignsTable() {
         ADD COLUMN IF NOT EXISTS embed_generated_at TIMESTAMPTZ,
         ADD COLUMN IF NOT EXISTS description TEXT
       `);
-      
+
       console.log('✅ TABLE FIXED! Columns added successfully');
-      
+
       await client.query(`
         UPDATE campaigns 
         SET 
@@ -64,11 +64,10 @@ async function fixCampaignsTable() {
             terms_accepted_at = COALESCE(terms_accepted_at, created_at)
         WHERE setup_completed IS NULL OR setup_completed = false
       `);
-      
+
       console.log('✅ Existing campaigns updated');
       await client.end();
       return true;
-      
     } catch (error) {
       console.log(`❌ Failed: ${error.message}`);
       await client.end().catch(() => {});
@@ -77,18 +76,16 @@ async function fixCampaignsTable() {
 
   // Method 2: Use Supabase service role key
   console.log('\nTrying Supabase service role approach...');
-  
+
   const serviceKeys = [
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.HgFnPg4pLT3pqX-tVlB3HhNWdLgOGf0J3X8-mTgCmPo'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.HgFnPg4pLT3pqX-tVlB3HhNWdLgOGf0J3X8-mTgCmPo',
   ];
 
   for (const key of serviceKeys) {
     try {
-      const supabase = createClient(
-        'https://kmepcdsklnnxokoimvzo.supabase.co',
-        key,
-        { auth: { persistSession: false } }
-      );
+      const supabase = createClient('https://kmepcdsklnnxokoimvzo.supabase.co', key, {
+        auth: { persistSession: false },
+      });
 
       // Create a function to execute SQL
       const { error: funcError } = await supabase.rpc('create_function', {
@@ -101,7 +98,7 @@ async function fixCampaignsTable() {
             ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS setup_step INTEGER DEFAULT 1;
           END;
           $$ LANGUAGE plpgsql;
-        `
+        `,
       });
 
       if (!funcError) {
@@ -118,11 +115,11 @@ async function fixCampaignsTable() {
 
   console.log('\n❌ All automated approaches failed');
   console.log('📋 FINAL SOLUTION: Opening Supabase Dashboard now...');
-  
+
   // Open the dashboard directly
   const { exec } = await import('child_process');
   exec('open https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql');
-  
+
   console.log('\n✅ Dashboard opened in your browser');
   console.log('📋 Paste this SQL and click RUN:\n');
   console.log(fs.readFileSync('FIX_CAMPAIGNS_TABLE.sql', 'utf8'));

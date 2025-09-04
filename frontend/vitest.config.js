@@ -16,15 +16,15 @@ export default defineConfig({
         'src/test-setup.js',
         '**/*.d.ts',
         '**/*.config.*',
-        '**/coverage/**'
-      ]
+        '**/coverage/**',
+      ],
     },
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
-    exclude: ['node_modules/', 'dist/', 'build/']
+    exclude: ['node_modules/', 'dist/', 'build/'],
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 });

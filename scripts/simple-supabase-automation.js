@@ -73,28 +73,30 @@ SELECT 'Database fixes applied successfully!' as result;`;
 
 async function applyFixes() {
   console.log('🚀 Starting Supabase automation...');
-  
+
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: { width: 1400, height: 900 },
-    args: ['--no-sandbox']
+    args: ['--no-sandbox'],
   });
 
   const page = await browser.newPage();
-  
+
   try {
-    await page.goto('https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8');
-    
+    await page.goto(
+      'https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql/e2827ec9-0ebc-492f-8083-a39d0fb23fb8'
+    );
+
     // Wait for page to load
     await page.waitForLoadState('networkidle');
-    
+
     await page.waitForTimeout(3000);
-    
+
     // Take initial screenshot
     await page.screenshot({ path: 'supabase-initial.png' });
-    
+
     // Find and clear editor
-    
+
     // Try multiple strategies
     const strategies = [
       // Strategy 1: Monaco editor
@@ -109,7 +111,7 @@ async function applyFixes() {
         }
         return false;
       },
-      
+
       // Strategy 2: Textarea
       async () => {
         const textarea = await page.$('textarea');
@@ -121,7 +123,7 @@ async function applyFixes() {
         }
         return false;
       },
-      
+
       // Strategy 3: Any input/contenteditable
       async () => {
         const editable = await page.$('[contenteditable="true"]');
@@ -132,40 +134,39 @@ async function applyFixes() {
           return true;
         }
         return false;
-      }
+      },
     ];
-    
+
     let success = false;
     for (const strategy of strategies) {
       try {
         success = await strategy();
         if (success) break;
-      } catch (err) {
-      }
+      } catch (err) {}
     }
-    
+
     if (!success) {
       console.log('❌ Could not find editor, manual intervention needed');
       await page.screenshot({ path: 'supabase-no-editor.png' });
-      
+
       // Keep browser open for manual entry
-      
+
       // Wait 60 seconds for manual intervention
       await page.waitForTimeout(60000);
       return;
     }
-    
+
     console.log('✅ SQL entered successfully');
-    
+
     // Look for Run button
-    
+
     const runSelectors = [
       'button[data-testid="run-sql"]',
       '.run-button',
       'button:has-text("Run")',
-      '[data-test="run"]'
+      '[data-test="run"]',
     ];
-    
+
     let runClicked = false;
     for (const selector of runSelectors) {
       try {
@@ -177,22 +178,20 @@ async function applyFixes() {
         // Continue to next selector
       }
     }
-    
+
     // Try keyboard shortcut as fallback
     if (!runClicked) {
       await page.keyboard.press('Control+Enter');
       runClicked = true;
     }
-    
+
     if (runClicked) {
       await page.waitForTimeout(5000);
-      
+
       // Take final screenshot
       await page.screenshot({ path: 'supabase-result.png' });
       console.log('📸 Result screenshot saved');
-      
     }
-    
   } catch (error) {
     console.error('❌ Error:', error.message);
     await page.screenshot({ path: 'supabase-error.png' });

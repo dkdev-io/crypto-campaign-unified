@@ -2,31 +2,30 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://owjvgdzmmlrdtpjdxgka.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4NTI4MTksImV4cCI6MjA0MjQyODgxOX0.dHyNtZfNzuaeBdrZiDzH4eMGYP4-FVWQd7F1Xf3VKz0';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93anZnZHptbWxyZHRwamR4Z2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4NTI4MTksImV4cCI6MjA0MjQyODgxOX0.dHyNtZfNzuaeBdrZiDzH4eMGYP4-FVWQd7F1Xf3VKz0';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function inspectNewDatabase() {
-
   const tables = [
-    'campaigns', 
-    'contributions', 
-    'kyc_data', 
+    'campaigns',
+    'contributions',
+    'kyc_data',
     'fec_committees',
     'committee_test_data',
     'donation_amounts',
     'blockchain_transactions',
-    'admin_users'
+    'admin_users',
   ];
 
   const report = {
     accessible: [],
     inaccessible: [],
     empty: [],
-    hasData: []
+    hasData: [],
   };
 
   for (const table of tables) {
-    
     try {
       // Test basic access
       const { data, error, count } = await supabase
@@ -42,7 +41,7 @@ async function inspectNewDatabase() {
 
       // Table is accessible
       report.accessible.push(table);
-      
+
       // Check if it has data
       const { count: totalCount } = await supabase
         .from(table)
@@ -50,11 +49,11 @@ async function inspectNewDatabase() {
 
       if (totalCount > 0) {
         report.hasData.push({ table, count: totalCount });
-        
+
         // Show structure if has data
         if (data && data.length > 0) {
           const columns = Object.keys(data[0]);
-          
+
           // Show sample for campaigns
           if (table === 'campaigns') {
           }
@@ -62,7 +61,6 @@ async function inspectNewDatabase() {
       } else {
         report.empty.push(table);
       }
-
     } catch (err) {
       console.log(`  ❌ Unexpected error: ${err.message}`);
       report.inaccessible.push({ table, error: err.message });
@@ -76,7 +74,7 @@ async function inspectNewDatabase() {
     campaign_name: `Schema Test ${Date.now()}`,
     email: 'schema-test@example.com',
     website: 'https://schema-test.com',
-    wallet_address: `schema-test-${Date.now()}`
+    wallet_address: `schema-test-${Date.now()}`,
   };
 
   const { data: inserted, error: insertError } = await supabase
@@ -87,7 +85,7 @@ async function inspectNewDatabase() {
 
   if (inserted && !insertError) {
     console.log(`✅ INSERT test successful: ${inserted.campaign_name}`);
-    
+
     // Clean up
     await supabase.from('campaigns').delete().eq('id', inserted.id);
   } else {
@@ -100,7 +98,7 @@ async function inspectNewDatabase() {
       .from('contributions')
       .select('*')
       .limit(1);
-    
+
     if (!contribError) {
       console.log('✅ Contributions table is accessible');
     } else {
@@ -110,11 +108,8 @@ async function inspectNewDatabase() {
 
   // Test if kyc_data table is accessible now
   if (report.accessible.includes('kyc_data')) {
-    const { data: kycData, error: kycError } = await supabase
-      .from('kyc_data')
-      .select('*')
-      .limit(1);
-    
+    const { data: kycData, error: kycError } = await supabase.from('kyc_data').select('*').limit(1);
+
     if (!kycError) {
       console.log('✅ KYC data table is accessible');
     } else {

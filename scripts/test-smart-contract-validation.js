@@ -18,71 +18,68 @@ class SmartContractValidationTester {
   }
 
   async initialize() {
-    
-    this.browser = await puppeteer.launch({ 
+    this.browser = await puppeteer.launch({
       headless: false, // Show browser to see validation
       slowMo: 500,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      defaultViewport: { width: 1400, height: 900 }
+      defaultViewport: { width: 1400, height: 900 },
     });
   }
 
   async runValidationTests() {
-    
     // Test 1: No wallet connected should block validation
     await this.testNoWalletValidation();
-    
+
     // Test 2: With wallet but no KYC should fail
     await this.testNoKYCValidation();
-    
+
     // Test 3: Over cumulative limit should fail
     await this.testOverLimitValidation();
-    
+
     // Generate report
     this.generateReport();
   }
 
   async testNoWalletValidation() {
-    
     const page = await this.browser.newPage();
-    
+
     try {
       await page.goto(FORM_URL, { waitUntil: 'domcontentloaded' });
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Fill in amount without connecting wallet
       const amountField = await page.$('input[name*="amount"], input[placeholder*="amount"]');
       if (amountField) {
         await amountField.type('100');
       }
-      
+
       // Check for wallet warning message
       const warningCheck = await page.evaluate(() => {
-        const warnings = Array.from(document.querySelectorAll('div')).filter(el => 
-          el.textContent.includes('Wallet Connection Required') ||
-          el.textContent.includes('wallet') && el.textContent.includes('required')
+        const warnings = Array.from(document.querySelectorAll('div')).filter(
+          (el) =>
+            el.textContent.includes('Wallet Connection Required') ||
+            (el.textContent.includes('wallet') && el.textContent.includes('required'))
         );
         return warnings.length > 0;
       });
-      
+
       const result = {
         test: 'No Wallet Connection',
         expected: 'Show wallet required warning',
         actual: warningCheck ? 'Warning shown ✅' : 'No warning ❌',
-        passed: warningCheck
+        passed: warningCheck,
       };
-      
+
       console.log(`Result: ${result.actual}\n`);
       this.testResults.push(result);
-      
+
       await page.screenshot({ path: 'test-results/validation-test-no-wallet.png' });
-      
     } catch (error) {
       console.log(`Error: ${error.message}\n`);
       this.testResults.push({
         test: 'No Wallet Connection',
         error: error.message,
-        passed: false
+        passed: false,
       });
     } finally {
       await page.close();
@@ -90,53 +87,52 @@ class SmartContractValidationTester {
   }
 
   async testNoKYCValidation() {
-    
     const page = await this.browser.newPage();
-    
+
     try {
       await page.goto(FORM_URL, { waitUntil: 'domcontentloaded' });
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Note: In real test, would connect MetaMask here
       // For now, check that validation message appears
-      
+
       // Fill form
       await this.fillBasicForm(page);
-      
+
       // Try to submit
       const submitButton = await page.$('button[type="submit"]');
       if (submitButton) {
         await submitButton.click();
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       }
-      
+
       // Check for KYC error message
       const kycCheck = await page.evaluate(() => {
-        const errors = Array.from(document.querySelectorAll('div')).filter(el => 
-          el.textContent.includes('KYC') && 
-          (el.textContent.includes('required') || el.textContent.includes('verification'))
+        const errors = Array.from(document.querySelectorAll('div')).filter(
+          (el) =>
+            el.textContent.includes('KYC') &&
+            (el.textContent.includes('required') || el.textContent.includes('verification'))
         );
         return errors.length > 0;
       });
-      
+
       const result = {
         test: 'No KYC Verification',
         expected: 'Show KYC required error',
         actual: kycCheck ? 'KYC error shown ✅' : 'No KYC error ❌',
-        passed: kycCheck
+        passed: kycCheck,
       };
-      
+
       console.log(`Result: ${result.actual}\n`);
       this.testResults.push(result);
-      
+
       await page.screenshot({ path: 'test-results/validation-test-no-kyc.png' });
-      
     } catch (error) {
       console.log(`Error: ${error.message}\n`);
       this.testResults.push({
         test: 'No KYC Verification',
         error: error.message,
-        passed: false
+        passed: false,
       });
     } finally {
       await page.close();
@@ -144,44 +140,43 @@ class SmartContractValidationTester {
   }
 
   async testOverLimitValidation() {
-    
     const page = await this.browser.newPage();
-    
+
     try {
       await page.goto(FORM_URL, { waitUntil: 'domcontentloaded' });
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Fill form with large amount
       await this.fillBasicForm(page, '3500'); // Over $3300 limit
-      
+
       // Check for limit error
       const limitCheck = await page.evaluate(() => {
-        const errors = Array.from(document.querySelectorAll('div')).filter(el => 
-          el.textContent.includes('exceed') && el.textContent.includes('limit') ||
-          el.textContent.includes('3300') ||
-          el.textContent.includes('remaining capacity')
+        const errors = Array.from(document.querySelectorAll('div')).filter(
+          (el) =>
+            (el.textContent.includes('exceed') && el.textContent.includes('limit')) ||
+            el.textContent.includes('3300') ||
+            el.textContent.includes('remaining capacity')
         );
         return errors.length > 0;
       });
-      
+
       const result = {
         test: 'Over Contribution Limit',
         expected: 'Show limit exceeded error',
         actual: limitCheck ? 'Limit error shown ✅' : 'No limit error ❌',
-        passed: limitCheck
+        passed: limitCheck,
       };
-      
+
       console.log(`Result: ${result.actual}\n`);
       this.testResults.push(result);
-      
+
       await page.screenshot({ path: 'test-results/validation-test-over-limit.png' });
-      
     } catch (error) {
       console.log(`Error: ${error.message}\n`);
       this.testResults.push({
         test: 'Over Contribution Limit',
         error: error.message,
-        passed: false
+        passed: false,
       });
     } finally {
       await page.close();
@@ -199,26 +194,25 @@ class SmartContractValidationTester {
       { selector: 'input[name*="zip"]', value: '12345' },
       { selector: 'input[name*="employer"]', value: 'Test Company' },
       { selector: 'input[name*="occupation"]', value: 'Tester' },
-      { selector: 'input[name*="amount"]', value: amount }
+      { selector: 'input[name*="amount"]', value: amount },
     ];
 
     for (const mapping of fieldMappings) {
       const element = await page.$(mapping.selector);
       if (element) {
         await element.click();
-        await element.evaluate(el => el.value = '');
+        await element.evaluate((el) => (el.value = ''));
         await element.type(mapping.value);
       }
     }
   }
 
   generateReport() {
-    
-    const passed = this.testResults.filter(r => r.passed).length;
-    const failed = this.testResults.filter(r => !r.passed).length;
-    
+    const passed = this.testResults.filter((r) => r.passed).length;
+    const failed = this.testResults.filter((r) => !r.passed).length;
+
     console.log(`Total Tests: ${this.testResults.length}`);
-    
+
     console.log('\n📋 DETAILED RESULTS:');
     this.testResults.forEach((result, i) => {
       const status = result.passed ? '✅' : '❌';
@@ -230,7 +224,7 @@ class SmartContractValidationTester {
         console.log(`   Actual: ${result.actual}`);
       }
     });
-    
+
     // Check if validation is now working
     if (passed === this.testResults.length) {
       console.log('\n✅ SUCCESS: Validation is now working properly!');
@@ -238,7 +232,7 @@ class SmartContractValidationTester {
       console.log('\n⚠️ PARTIAL SUCCESS: Some validation is working');
     } else {
     }
-    
+
     // Save results
     const reportPath = `test-results/smart-contract-validation-report-${Date.now()}.json`;
     fs.writeFileSync(reportPath, JSON.stringify(this.testResults, null, 2));
@@ -254,7 +248,7 @@ class SmartContractValidationTester {
 // Run tests
 async function main() {
   const tester = new SmartContractValidationTester();
-  
+
   try {
     await tester.initialize();
     await tester.runValidationTests();

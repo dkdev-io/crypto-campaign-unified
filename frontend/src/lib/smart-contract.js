@@ -17,11 +17,11 @@ export class SmartContractHandler {
         // Mock wallet connection for testing
         this.walletAddress = '0x742d35Cc' + Math.random().toString(16).substring(2, 10);
         this.isConnected = true;
-        
+
         console.log('🧪 TESTING MODE: Mock wallet connected:', this.walletAddress);
         return { success: true, address: this.walletAddress };
       }
-      
+
       if (typeof window.ethereum !== 'undefined') {
         // Request account access
         console.log('⚠️ Wallet extension calls disabled in testing mode');
@@ -39,12 +39,12 @@ export class SmartContractHandler {
   async executeContribution(contributionData) {
     try {
       console.log('🚀 TESTING MODE: Initiating smart contract transaction...', contributionData);
-      
+
       // Validate required data
       if (!contributionData.amount || contributionData.amount <= 0) {
         throw new Error('Invalid contribution amount');
       }
-      
+
       if (!contributionData.contributorWallet) {
         throw new Error('Contributor wallet address required');
       }
@@ -65,11 +65,11 @@ export class SmartContractHandler {
 
       // Mock smart contract execution with realistic delays
       const mockTransactionHash = '0x' + Math.random().toString(16).substring(2, 66);
-      
+
       // Simulate transaction processing time (shorter for testing)
       console.log('⏳ Processing transaction through smart contract...');
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const transactionResult = {
         success: true,
         transactionHash: mockTransactionHash,
@@ -80,12 +80,11 @@ export class SmartContractHandler {
         campaignAddress: this.contractAddress,
         timestamp: new Date().toISOString(),
         testingMode: true,
-        limitsChecked: limitChecks
+        limitsChecked: limitChecks,
       };
 
       console.log('✅ TESTING MODE: Smart contract transaction completed:', transactionResult);
       return transactionResult;
-      
     } catch (error) {
       console.error('❌ Smart contract execution failed:', error);
       throw error;
@@ -95,52 +94,52 @@ export class SmartContractHandler {
   // Check contribution limits and required info
   checkContributionLimits(contributionData) {
     const amount = parseFloat(contributionData.amount);
-    
+
     console.log('🔍 Checking contribution limits and requirements:', {
       amount,
       maxLimit: this.maxContributionLimit,
-      hasCompleteInfo: this.validateCompleteInfo(contributionData)
+      hasCompleteInfo: this.validateCompleteInfo(contributionData),
     });
-    
+
     // Check if all required info is complete
     const completeInfoCheck = this.validateCompleteInfo(contributionData);
     if (!completeInfoCheck.isComplete) {
       return {
         allowed: false,
         reason: `Missing required information: ${completeInfoCheck.missingFields.join(', ')}`,
-        limitType: 'INCOMPLETE_INFO'
+        limitType: 'INCOMPLETE_INFO',
       };
     }
-    
+
     // Check if compliance checkbox is selected (required for smart contract)
     if (!contributionData.acknowledgmentSigned) {
       return {
         allowed: false,
         reason: 'FEC compliance acknowledgment must be signed',
-        limitType: 'COMPLIANCE_NOT_SIGNED'
+        limitType: 'COMPLIANCE_NOT_SIGNED',
       };
     }
-    
+
     // Check maximum individual contribution limit (FEC $3300 cumulative per election)
     if (amount > this.maxContributionLimit) {
       return {
         allowed: false,
         reason: `Amount $${amount} exceeds FEC individual limit of $${this.maxContributionLimit} per election (cumulative)`,
-        limitType: 'FEC_MAX_INDIVIDUAL'
+        limitType: 'FEC_MAX_INDIVIDUAL',
       };
     }
-    
+
     // Check minimum contribution
     if (amount < 1) {
       return {
         allowed: false,
         reason: 'Minimum contribution is $1',
-        limitType: 'MIN_CONTRIBUTION'
+        limitType: 'MIN_CONTRIBUTION',
       };
     }
-    
+
     // KYC verification will be implemented in future version
-    
+
     // All checks passed
     return {
       allowed: true,
@@ -149,32 +148,32 @@ export class SmartContractHandler {
         fecMaxIndividual: this.maxContributionLimit,
         contributionAmount: amount,
         completeInfo: true,
-        complianceSigned: true
-      }
+        complianceSigned: true,
+      },
     };
   }
-  
+
   // Validate that all required information is provided
   validateCompleteInfo(contributionData) {
     const requiredFields = [
       { field: 'firstName', name: 'First Name' },
-      { field: 'lastName', name: 'Last Name' }, 
+      { field: 'lastName', name: 'Last Name' },
       { field: 'email', name: 'Email' },
       { field: 'contributorWallet', name: 'Wallet Address' },
-      { field: 'amount', name: 'Amount' }
+      { field: 'amount', name: 'Amount' },
     ];
-    
+
     const missingFields = [];
-    
+
     for (const { field, name } of requiredFields) {
       if (!contributionData[field] || contributionData[field].toString().trim() === '') {
         missingFields.push(name);
       }
     }
-    
+
     return {
       isComplete: missingFields.length === 0,
-      missingFields
+      missingFields,
     };
   }
 
@@ -189,7 +188,7 @@ export class SmartContractHandler {
         contributorCount: Math.floor(Math.random() * 500),
         isActive: true,
         maxContribution: 3300,
-        supportedTokens: ['ETH', 'USDC', 'USDT']
+        supportedTokens: ['ETH', 'USDC', 'USDT'],
       };
     } catch (error) {
       console.error('Failed to get campaign details:', error);
@@ -208,14 +207,14 @@ export class SmartContractHandler {
   async getTransactionStatus(txHash) {
     try {
       // Mock transaction status check
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       return {
         hash: txHash,
         status: 'confirmed',
         confirmations: Math.floor(Math.random() * 20) + 1,
         blockNumber: Math.floor(Math.random() * 1000000) + 18000000,
-        gasUsed: '21000'
+        gasUsed: '21000',
       };
     } catch (error) {
       console.error('Failed to get transaction status:', error);
@@ -231,32 +230,31 @@ export const smartContract = new SmartContractHandler();
 export async function processContribution(formData, campaignId) {
   try {
     console.log('Processing contribution through smart contract...', { formData, campaignId });
-    
+
     const contributionData = {
       amount: parseFloat(formData.amount),
       contributorWallet: formData.walletAddress || formData.contributorWallet,
       campaignId: campaignId,
       contributorName: `${formData.firstName} ${formData.lastName}`,
-      contributorEmail: formData.email
+      contributorEmail: formData.email,
     };
 
     // Execute smart contract transaction
     const result = await smartContract.executeContribution(contributionData);
-    
+
     return {
       success: true,
       transactionHash: result.transactionHash,
       blockNumber: result.blockNumber,
       gasUsed: result.gasUsed,
-      message: 'Contribution processed successfully via smart contract'
+      message: 'Contribution processed successfully via smart contract',
     };
-    
   } catch (error) {
     console.error('Contribution processing failed:', error);
     return {
       success: false,
       error: error.message,
-      message: 'Failed to process contribution through smart contract'
+      message: 'Failed to process contribution through smart contract',
     };
   }
 }

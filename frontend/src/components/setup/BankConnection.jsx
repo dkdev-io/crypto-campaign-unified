@@ -11,13 +11,15 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
   useEffect(() => {
     // Load existing bank info if available
     loadBankInfo();
-    
+
     // Load Plaid script
     loadPlaidScript();
 
     // Listen for Plaid events
     const handlePlaidSuccess = (event) => {
-      setSuccess(`Bank account connected successfully: ${event.detail.accountName} (...${event.detail.lastFour})`);
+      setSuccess(
+        `Bank account connected successfully: ${event.detail.accountName} (...${event.detail.lastFour})`
+      );
       loadBankInfo(); // Reload to get updated info
     };
 
@@ -56,11 +58,11 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
     try {
       const info = await plaidService.getBankAccountInfo(campaignId);
       setBankInfo(info);
-      
+
       if (info.isVerified) {
-        updateFormData({ 
+        updateFormData({
           bankAccountVerified: true,
-          bankAccountInfo: info 
+          bankAccountInfo: info,
         });
       }
     } catch (err) {
@@ -84,17 +86,13 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       setError('');
 
       // Initialize Plaid Link
-      const linkHandler = await plaidService.initializePlaidLink(
-        campaignId,
-        formData.email
-      );
+      const linkHandler = await plaidService.initializePlaidLink(campaignId, formData.email);
 
       // Open Plaid Link modal
       linkHandler.open();
-
     } catch (err) {
       console.error('Plaid connection error:', err);
-      
+
       if (err.message.includes('backend integration required')) {
         setError(`
           Plaid backend integration is required to connect bank accounts.
@@ -118,9 +116,9 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       await plaidService.removeBankAccount(campaignId);
       setBankInfo(null);
       setSuccess('Bank account disconnected successfully');
-      updateFormData({ 
+      updateFormData({
         bankAccountVerified: false,
-        bankAccountInfo: null 
+        bankAccountInfo: null,
       });
     } catch (err) {
       setError('Failed to remove bank account: ' + err.message);
@@ -135,25 +133,24 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
   const handleSkipForDev = async () => {
     console.log('Skip button clicked, current formData:', formData);
-    
+
     try {
       setLoading(true);
       setError('');
-      
+
       // Update form data first
-      await updateFormData({ 
+      await updateFormData({
         skipBankConnection: true,
-        bankAccountVerified: false
+        bankAccountVerified: false,
       });
-      
+
       setSuccess('Bank connection skipped - proceeding to next step');
-      
+
       // Call onNext directly without timeout
       setTimeout(() => {
         console.log('Calling onNext() after brief delay');
         onNext();
       }, 500);
-      
     } catch (err) {
       console.error('Error in handleSkipForDev:', err);
       setError('Failed to skip bank connection: ' + err.message);
@@ -164,16 +161,36 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
   return (
     <div>
-      <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontFamily: 'Inter, sans-serif' }}>
+      <h2
+        style={{
+          fontSize: '2rem',
+          fontWeight: '700',
+          textAlign: 'center',
+          marginBottom: '0.5rem',
+          color: 'hsl(var(--crypto-white))',
+          fontFamily: 'Inter, sans-serif',
+        }}
+      >
         Bank Account Connection
       </h2>
-      <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'hsl(var(--crypto-gold))', fontSize: '1rem', fontWeight: '500' }}>
+      <p
+        style={{
+          textAlign: 'center',
+          marginBottom: '2rem',
+          color: 'hsl(var(--crypto-gold))',
+          fontSize: '1rem',
+          fontWeight: '500',
+        }}
+      >
         Step 3 of 8: Securely connect your campaign's bank account
       </p>
 
       {/* Status Messages */}
       {error && (
-        <div className="bg-destructive/10 border border-destructive/20 text-destructive p-4 rounded-lg mb-4" style={{whiteSpace: 'pre-line'}}>
+        <div
+          className="bg-destructive/10 border border-destructive/20 text-destructive p-4 rounded-lg mb-4"
+          style={{ whiteSpace: 'pre-line' }}
+        >
           {error}
         </div>
       )}
@@ -187,15 +204,13 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       {/* Current Bank Account Status */}
       {bankInfo?.isVerified ? (
         <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
-          <h4 className="text-green-700 mt-0">
-            Bank Account Connected
-          </h4>
-          
+          <h4 className="text-green-700 mt-0">Bank Account Connected</h4>
+
           <div className="bg-white p-4 rounded mb-4">
             <div className="text-base font-medium mb-2">
               {bankInfo.details?.institution_name || 'Connected Bank'}
             </div>
-            <div className="text-muted-foreground text-sm">
+            <div className="text-muted-foreground text-base">
               Account: {bankInfo.accountName} (...{bankInfo.lastFour})
             </div>
             <div className="text-muted-foreground text-xs mt-2">
@@ -214,7 +229,7 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
               borderRadius: '4px',
               cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '14px',
-              opacity: loading ? 0.7 : 1
+              opacity: loading ? 0.7 : 1,
             }}
           >
             {loading ? 'Removing...' : 'Remove Bank Account'}
@@ -226,23 +241,22 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           <p className="text-muted-foreground mb-8">
             Connect your campaign's bank account to process contributions securely through Plaid.
           </p>
-          
+
           <button
             onClick={handleConnectBank}
             disabled={loading || !plaidReady}
             className="bg-primary text-primary-foreground px-8 py-4 rounded-md text-base font-medium mb-4 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {loading ? 'Connecting...' : !plaidReady ? 'Loading...' : 'Connect Bank Account - Powered by Plaid'}
+            {loading
+              ? 'Connecting...'
+              : !plaidReady
+                ? 'Loading...'
+                : 'Connect Bank Account - Powered by Plaid'}
           </button>
-          
-          {!plaidReady && (
-            <div className="text-sm text-muted-foreground">
-              Loading Plaid SDK...
-            </div>
-          )}
+
+          {!plaidReady && <div className="text-base text-muted-foreground">Loading Plaid SDK...</div>}
         </div>
       )}
-
 
       {/* Skip Option */}
       <div className="bg-accent/20 border border-accent rounded-lg p-6 mb-8">
@@ -255,20 +269,15 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
         </button>
       </div>
 
-
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
           Back
         </button>
-        <button 
-          className="btn btn-primary"
-          onClick={handleNext}
-        >
+        <button className="btn btn-primary" onClick={handleNext}>
           Next: Website Style
         </button>
       </div>
-
     </div>
   );
 };

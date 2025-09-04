@@ -5,12 +5,14 @@
 The donation form had a **critical security vulnerability** where it bypassed smart contract validation entirely:
 
 ### Root Cause
+
 1. **Smart contract had proper validation** (`CampaignContributions.sol`)
 2. **Frontend bypassed it completely** for traditional payments
 3. **Database fallback defaulted to ALLOW** when tables didn't exist
 4. **No KYC or cumulative limit checking** in the database path
 
 ### The Dangerous Code (BEFORE)
+
 ```javascript
 // contributions.js - Line 131-142
 if (error.message && error.message.includes('relation')) {
@@ -24,12 +26,14 @@ if (error.message && error.message.includes('relation')) {
 ## The Fix Applied
 
 ### 1. Updated `contributions.js`
+
 - **Always uses smart contract validation** via `web3Service`
 - **Removed dangerous database fallback**
 - **Fails closed (rejects) instead of open (allows)**
 - **Requires wallet connection for validation**
 
 ### Key Changes:
+
 ```javascript
 // NOW: Always validates through smart contract
 const contractValidation = await web3Service.canContribute(addressToCheck, ethAmount);
@@ -39,17 +43,19 @@ const contributorInfo = await web3Service.getContributorInfo(addressToCheck);
 if (!addressToCheck) {
   return {
     canContribute: false, // REJECT by default
-    message: 'Wallet connection required for validation'
+    message: 'Wallet connection required for validation',
   };
 }
 ```
 
 ### 2. Updated `EnhancedDonorForm.jsx`
+
 - **Passes wallet address to validation**
 - **Shows warning when wallet not connected**
 - **Never defaults to allowing**
 
 ### Key Changes:
+
 ```javascript
 // NOW: Passes wallet for smart contract validation
 const result = await contributionService.checkContributionLimits(
@@ -64,13 +70,14 @@ const result = await contributionService.checkContributionLimits(
 // NOW: Never defaults to allowing
 setLimitCheck({
   canContribute: false, // Changed from true to false
-  message: 'Validation required. Please connect wallet.'
+  message: 'Validation required. Please connect wallet.',
 });
 ```
 
 ## Validation Now Enforced
 
 ### ✅ What's Now Checked:
+
 1. **KYC Verification** - Must be verified in smart contract
 2. **Cumulative Limits** - Total donations tracked per wallet
 3. **Per-Transaction Limits** - $3300 max per transaction
@@ -78,6 +85,7 @@ setLimitCheck({
 5. **Wallet Connection** - Required for ALL validations
 
 ### ❌ What's Now Rejected:
+
 - Donations without wallet connection
 - Donations from non-KYC verified addresses
 - Donations exceeding $3300 cumulative limit
@@ -87,6 +95,7 @@ setLimitCheck({
 ## Security Improvements
 
 ### Before Fix:
+
 - **100% acceptance rate** (everything passed)
 - **No KYC checking**
 - **No cumulative limit enforcement**
@@ -94,6 +103,7 @@ setLimitCheck({
 - **Smart contract validation bypassed**
 
 ### After Fix:
+
 - **Proper rejection of invalid donations**
 - **KYC verification required**
 - **Cumulative limits enforced**
@@ -103,6 +113,7 @@ setLimitCheck({
 ## Testing the Fix
 
 ### Run Validation Test:
+
 ```bash
 cd scripts
 npm install
@@ -110,6 +121,7 @@ node test-smart-contract-validation.js
 ```
 
 ### Expected Results:
+
 - ✅ Wallet connection required warning appears
 - ✅ KYC verification errors shown
 - ✅ Over-limit donations rejected
@@ -118,12 +130,14 @@ node test-smart-contract-validation.js
 ## Critical Security Notes
 
 ### 🚨 NEVER:
+
 - Default to allowing when validation fails
 - Bypass smart contract validation
 - Trust database over smart contract
 - Allow contributions without proper validation
 
 ### ✅ ALWAYS:
+
 - Validate through smart contract
 - Fail closed (reject) not open (allow)
 - Require wallet connection for validation
@@ -145,6 +159,7 @@ Before deploying to production:
 ## Summary
 
 The critical validation bypass has been fixed by:
+
 1. **Forcing all validation through the smart contract**
 2. **Removing dangerous database fallbacks**
 3. **Failing closed instead of open**

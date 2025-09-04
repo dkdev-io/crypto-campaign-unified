@@ -7,7 +7,7 @@ const supabase = createClient(
 
 async function fixCampaignsTable() {
   console.log('🚀 FIXING CAMPAIGNS TABLE NOW...\n');
-  
+
   // Step 1: Create the exec function first
   console.log('Step 1: Creating exec function...');
   try {
@@ -22,7 +22,7 @@ async function fixCampaignsTable() {
       END;
       $$;
     `;
-    
+
     // Try to create it via RPC (might fail but worth trying)
     const { error: execError } = await supabase.rpc('exec', { query: createExecSQL });
     if (execError) {
@@ -34,7 +34,7 @@ async function fixCampaignsTable() {
 
   // Step 2: Try alternate approach - create a stored procedure
   console.log('\nStep 2: Creating stored procedure to fix campaigns table...');
-  
+
   const createProcedureSQL = `
     CREATE OR REPLACE FUNCTION fix_campaigns_table()
     RETURNS text
@@ -80,13 +80,13 @@ async function fixCampaignsTable() {
     END;
     $$;
   `;
-  
+
   // This will fail too but let's try
   try {
     const { error } = await supabase.rpc('exec', { query: createProcedureSQL });
     if (!error) {
       console.log('✅ Created fix_campaigns_table function!');
-      
+
       // Now call it
       const { data, error: callError } = await supabase.rpc('fix_campaigns_table');
       if (!callError) {
@@ -99,44 +99,44 @@ async function fixCampaignsTable() {
 
   // Step 3: Direct approach - just try to use the columns
   console.log('\nStep 3: Testing if columns can be added via insert/update...');
-  
+
   // Get a campaign to work with
   const { data: campaigns, error: fetchError } = await supabase
     .from('campaigns')
     .select('*')
     .limit(1);
-    
+
   if (fetchError || !campaigns || campaigns.length === 0) {
     console.log('❌ Could not fetch campaigns');
     return;
   }
-  
+
   const testCampaign = campaigns[0];
   console.log('Found test campaign:', testCampaign.id);
-  
+
   // Try to update with new columns
   const updateData = {
     setup_completed: false,
     setup_step: 1,
     user_full_name: 'Test User',
-    terms_accepted: false
+    terms_accepted: false,
   };
-  
+
   const { error: updateError } = await supabase
     .from('campaigns')
     .update(updateData)
     .eq('id', testCampaign.id);
-    
+
   if (updateError) {
     console.log('\n❌ COLUMNS STILL MISSING!');
     console.log('Error:', updateError.message);
-    
+
     console.log('\n📋 MANUAL FIX REQUIRED');
     console.log('================================');
     console.log('You need to run this SQL directly in Supabase Dashboard:');
     console.log('1. Go to: https://supabase.com/dashboard/project/kmepcdsklnnxokoimvzo/sql');
     console.log('2. Run the following SQL:\n');
-    
+
     const manualSQL = `
 -- Fix campaigns table for setup wizard
 ALTER TABLE campaigns 
@@ -173,16 +173,15 @@ SET
     terms_accepted_at = created_at
 WHERE setup_completed IS NULL OR setup_completed = false;
     `;
-    
+
     console.log(manualSQL);
     console.log('================================\n');
-    
+
     // Save the SQL to a file for easy copy
     const fs = await import('fs');
     fs.writeFileSync('FIX_CAMPAIGNS_TABLE.sql', manualSQL);
     console.log('✅ SQL saved to: FIX_CAMPAIGNS_TABLE.sql');
     console.log('📋 Copy the SQL from this file and run it in Supabase Dashboard');
-    
   } else {
     console.log('✅ SUCCESS! Columns exist and update worked!');
   }

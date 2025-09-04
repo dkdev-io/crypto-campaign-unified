@@ -1,0 +1,33 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-console": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    "coverage/",
+    "*.css",
+    "*.scss",
+    "*.sass",
+    "frontend/src/**/*.css",
+    "src/**/*.css"
+  ],
+  "overrides": [
+    {
+      "files": ["*.css", "*.scss", "*.sass"],
+      "rules": {}
+    }
+  ]
+}

@@ -12,7 +12,7 @@ class Web3DemoService {
     return {
       address: this.mockAddress,
       network: 'Demo Network',
-      chainId: 1337
+      chainId: 1337,
     };
   }
 
@@ -30,7 +30,7 @@ class Web3DemoService {
       value: amount,
       status: 'success',
       blockNumber: Math.floor(Math.random() * 1000000),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -39,7 +39,7 @@ class Web3DemoService {
     return {
       success: true,
       data: 'Demo response',
-      transactionHash: '0x' + Math.random().toString(16).substr(2, 64)
+      transactionHash: '0x' + Math.random().toString(16).substr(2, 64),
     };
   }
 
@@ -52,7 +52,7 @@ class Web3DemoService {
       amount: amount,
       donor: this.mockAddress,
       timestamp: Date.now(),
-      message: 'Demo donation completed successfully'
+      message: 'Demo donation completed successfully',
     };
   }
 
@@ -72,7 +72,7 @@ class Web3DemoService {
       name: 'Demo Network',
       chainId: 1337,
       currency: 'ETH',
-      explorerUrl: '#'
+      explorerUrl: '#',
     };
   }
 }

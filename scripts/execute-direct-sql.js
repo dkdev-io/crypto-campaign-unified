@@ -12,7 +12,8 @@ const __dirname = path.dirname(__filename);
 
 // Configuration
 const SUPABASE_URL = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 
 console.log('🚀 Executing SQL migration directly via REST API...');
 
@@ -20,7 +21,7 @@ async function executeSQL() {
   try {
     // Create the minimal committee test table first
     console.log('📊 Creating committee_test_data table...');
-    
+
     const createTableSQL = `
       CREATE TABLE IF NOT EXISTS committee_test_data (
           id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -31,56 +32,55 @@ async function executeSQL() {
           is_active BOOLEAN DEFAULT true
       );
     `;
-    
+
     // Use direct PostgreSQL connection via HTTP
     const createResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_ANON_KEY,
       },
-      body: JSON.stringify({ sql_query: createTableSQL })
+      body: JSON.stringify({ sql_query: createTableSQL }),
     });
-    
+
     if (!createResponse.ok) {
       console.log('⚠️  RPC method not available, trying direct table creation...');
-      
+
       // Try inserting into an existing table structure
       await createTestCommitteeDirectly();
       return;
     }
-    
+
     console.log('✅ Table created successfully');
-    
+
     // Insert the test committee data
-    
+
     const insertSQL = `
       INSERT INTO committee_test_data (committee_name, test_purpose, added_by_email) 
       VALUES ('Testy Test for Chancellor', 'User requested test committee for development', 'admin@example.com')
       ON CONFLICT (committee_name) DO NOTHING;
     `;
-    
+
     const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_ANON_KEY,
       },
-      body: JSON.stringify({ sql_query: insertSQL })
+      body: JSON.stringify({ sql_query: insertSQL }),
     });
-    
+
     if (insertResponse.ok) {
       console.log('✅ Test committee inserted successfully');
     } else {
       console.log('⚠️  Insert via RPC failed, trying direct approach...');
       await createTestCommitteeDirectly();
     }
-    
+
     // Verify the data
     await verifyTestCommittee();
-    
   } catch (error) {
     console.error('💥 SQL execution failed:', error);
     await createTestCommitteeDirectly();
@@ -88,33 +88,32 @@ async function executeSQL() {
 }
 
 async function createTestCommitteeDirectly() {
-  
   try {
     // Try inserting directly into the table using REST API
     const testCommittee = {
       committee_name: 'Testy Test for Chancellor',
       test_purpose: 'User requested test committee for development',
-      added_by_email: 'admin@example.com'
+      added_by_email: 'admin@example.com',
     };
-    
+
     const response = await fetch(`${SUPABASE_URL}/rest/v1/committee_test_data`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY,
-        'Prefer': 'return=representation'
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_ANON_KEY,
+        Prefer: 'return=representation',
       },
-      body: JSON.stringify(testCommittee)
+      body: JSON.stringify(testCommittee),
     });
-    
+
     if (response.ok) {
       const data = await response.json();
       console.log('🎉 SUCCESS! Test committee created directly:', data);
     } else {
       const error = await response.text();
       console.error('❌ Direct insertion failed:', error);
-      
+
       if (error.includes('does not exist')) {
         await createViaExistingTable();
       }
@@ -126,7 +125,6 @@ async function createTestCommitteeDirectly() {
 }
 
 async function createViaExistingTable() {
-  
   try {
     // Create a test campaign that represents our test committee
     const testCampaign = {
@@ -137,20 +135,20 @@ async function createViaExistingTable() {
       suggested_amounts: [25, 50, 100, 250],
       max_donation_limit: 3300,
       theme_color: '#2a2a72',
-      supported_cryptos: ['ETH']
+      supported_cryptos: ['ETH'],
     };
-    
+
     const response = await fetch(`${SUPABASE_URL}/rest/v1/campaigns`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY,
-        'Prefer': 'return=representation'
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_ANON_KEY,
+        Prefer: 'return=representation',
       },
-      body: JSON.stringify(testCampaign)
+      body: JSON.stringify(testCampaign),
     });
-    
+
     if (response.ok) {
       const data = await response.json();
       console.log('🎉 SUCCESS! Test committee created as campaign:', data);
@@ -164,17 +162,19 @@ async function createViaExistingTable() {
 }
 
 async function verifyTestCommittee() {
-  
   try {
     // Check committee_test_data table
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/committee_test_data?committee_name=eq.Testy Test for Chancellor`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/committee_test_data?committee_name=eq.Testy Test for Chancellor`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
       }
-    });
-    
+    );
+
     if (response.ok) {
       const data = await response.json();
       if (data.length > 0) {
@@ -193,16 +193,18 @@ async function verifyTestCommittee() {
 }
 
 async function checkCampaignsTable() {
-  
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/campaigns?campaign_name=eq.Testy Test for Chancellor`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'apikey': SUPABASE_ANON_KEY
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/campaigns?campaign_name=eq.Testy Test for Chancellor`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
       }
-    });
-    
+    );
+
     if (response.ok) {
       const data = await response.json();
       if (data.length > 0) {

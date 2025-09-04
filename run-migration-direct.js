@@ -2,14 +2,15 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
+const supabaseServiceKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function runMigration() {
   try {
     console.log('🔄 Running database migration...');
-    
+
     const sql = `
       ALTER TABLE campaigns 
       ADD COLUMN IF NOT EXISTS user_id UUID,
@@ -35,36 +36,37 @@ async function runMigration() {
       ADD COLUMN IF NOT EXISTS embed_generated_at TIMESTAMPTZ,
       ADD COLUMN IF NOT EXISTS description TEXT;
     `;
-    
+
     const { data, error } = await supabase.rpc('exec_sql', { sql });
-    
+
     if (error) {
       console.error('❌ Migration failed:', error);
       return false;
     }
-    
+
     console.log('✅ Migration completed successfully!');
-    
+
     // Test the new schema
     const { data: testData, error: testError } = await supabase
       .from('campaigns')
       .select('setup_step, setup_completed')
       .limit(1);
-      
+
     if (testError) {
       console.warn('⚠️ Test query failed:', testError.message);
     } else {
       console.log('✅ New columns accessible:', testData);
     }
-    
+
     return true;
-    
   } catch (error) {
     console.error('💥 Migration error:', error);
     return false;
   }
 }
 
-runMigration().then(success => {
-  console.log(success ? '\n🎉 Database migration completed!' : '\n❌ Migration failed - manual SQL required');
+runMigration().then((success) => {
+  console.log(
+    success ? '\n🎉 Database migration completed!' : '\n❌ Migration failed - manual SQL required'
+  );
 });

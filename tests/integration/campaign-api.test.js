@@ -2,14 +2,14 @@ import { test, expect } from '@playwright/test';
 
 /**
  * Campaign API Integration Tests
- * 
+ *
  * Tests the complete campaign management API functionality
  * including creation, updates, and contribution processing.
  */
 
 test.describe('Campaign API Integration Tests', () => {
   const API_BASE_URL = process.env.API_URL || 'http://localhost:3001';
-  
+
   test.beforeEach(async ({ page }) => {
     // Set up test environment
     await page.goto('/');
@@ -21,19 +21,19 @@ test.describe('Campaign API Integration Tests', () => {
     await page.route(`${API_BASE_URL}/api/campaigns`, async (route) => {
       if (route.request().method() === 'POST') {
         const postData = JSON.parse(route.request().postData());
-        
+
         // Validate required fields
         const requiredFields = ['title', 'description', 'goal', 'treasury_address'];
-        const missingFields = requiredFields.filter(field => !postData[field]);
-        
+        const missingFields = requiredFields.filter((field) => !postData[field]);
+
         if (missingFields.length > 0) {
           await route.fulfill({
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({
               error: 'Missing required fields',
-              missing: missingFields
-            })
+              missing: missingFields,
+            }),
           });
           return;
         }
@@ -44,8 +44,8 @@ test.describe('Campaign API Integration Tests', () => {
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({
-              error: 'Invalid treasury address format'
-            })
+              error: 'Invalid treasury address format',
+            }),
           });
           return;
         }
@@ -58,8 +58,8 @@ test.describe('Campaign API Integration Tests', () => {
             id: 'campaign_123',
             ...postData,
             created_at: new Date().toISOString(),
-            status: 'active'
-          })
+            status: 'active',
+          }),
         });
       }
     });
@@ -68,17 +68,26 @@ test.describe('Campaign API Integration Tests', () => {
     const setupWizard = page.locator('[data-testid="setup-wizard"], .setup-wizard').first();
     if (await setupWizard.isVisible()) {
       // Fill campaign details
-      await page.fill('input[name="title"], input[placeholder*="title" i]', 'Test Environmental Campaign');
-      await page.fill('textarea[name="description"], textarea[placeholder*="description" i]', 'A comprehensive environmental protection initiative');
+      await page.fill(
+        'input[name="title"], input[placeholder*="title" i]',
+        'Test Environmental Campaign'
+      );
+      await page.fill(
+        'textarea[name="description"], textarea[placeholder*="description" i]',
+        'A comprehensive environmental protection initiative'
+      );
       await page.fill('input[name="goal"], input[type="number"]', '50000');
-      await page.fill('input[name="treasury"], input[placeholder*="address" i]', '0x1234567890123456789012345678901234567890');
+      await page.fill(
+        'input[name="treasury"], input[placeholder*="address" i]',
+        '0x1234567890123456789012345678901234567890'
+      );
 
       // Submit form
       const submitButton = page.locator('button[type="submit"], .submit-btn').first();
       await submitButton.click();
-      
+
       await page.waitForTimeout(2000);
-      
+
       // Verify success response
       await expect(page).toHaveScreenshot('campaign-creation-success.png', {
         fullPage: true,
@@ -91,19 +100,34 @@ test.describe('Campaign API Integration Tests', () => {
     const invalidDataTests = [
       {
         name: 'Empty title',
-        data: { title: '', description: 'Test', goal: 1000, treasury_address: '0x1234567890123456789012345678901234567890' },
-        expectedError: 'Title is required'
+        data: {
+          title: '',
+          description: 'Test',
+          goal: 1000,
+          treasury_address: '0x1234567890123456789012345678901234567890',
+        },
+        expectedError: 'Title is required',
       },
       {
         name: 'Invalid goal amount',
-        data: { title: 'Test', description: 'Test', goal: -100, treasury_address: '0x1234567890123456789012345678901234567890' },
-        expectedError: 'Goal must be positive'
+        data: {
+          title: 'Test',
+          description: 'Test',
+          goal: -100,
+          treasury_address: '0x1234567890123456789012345678901234567890',
+        },
+        expectedError: 'Goal must be positive',
       },
       {
         name: 'Invalid treasury address',
-        data: { title: 'Test', description: 'Test', goal: 1000, treasury_address: 'invalid-address' },
-        expectedError: 'Invalid treasury address'
-      }
+        data: {
+          title: 'Test',
+          description: 'Test',
+          goal: 1000,
+          treasury_address: 'invalid-address',
+        },
+        expectedError: 'Invalid treasury address',
+      },
     ];
 
     for (const testCase of invalidDataTests) {
@@ -111,12 +135,14 @@ test.describe('Campaign API Integration Tests', () => {
         await route.fulfill({
           status: 400,
           contentType: 'application/json',
-          body: JSON.stringify({ error: testCase.expectedError })
+          body: JSON.stringify({ error: testCase.expectedError }),
         });
       });
 
       // Test the invalid data scenario
-      await expect(page).toHaveScreenshot(`campaign-validation-${testCase.name.toLowerCase().replace(' ', '-')}.png`);
+      await expect(page).toHaveScreenshot(
+        `campaign-validation-${testCase.name.toLowerCase().replace(' ', '-')}.png`
+      );
     }
   });
 
@@ -125,13 +151,13 @@ test.describe('Campaign API Integration Tests', () => {
     await page.route(`${API_BASE_URL}/api/contributions`, async (route) => {
       if (route.request().method() === 'POST') {
         const postData = JSON.parse(route.request().postData());
-        
+
         // Validate contribution data
         if (!postData.amount || !postData.campaign_id || !postData.wallet_address) {
           await route.fulfill({
             status: 400,
             contentType: 'application/json',
-            body: JSON.stringify({ error: 'Missing required contribution data' })
+            body: JSON.stringify({ error: 'Missing required contribution data' }),
           });
           return;
         }
@@ -141,10 +167,10 @@ test.describe('Campaign API Integration Tests', () => {
           await route.fulfill({
             status: 400,
             contentType: 'application/json',
-            body: JSON.stringify({ 
+            body: JSON.stringify({
               error: 'Contribution exceeds FEC limit of $3,300',
-              code: 'FEC_LIMIT_EXCEEDED'
-            })
+              code: 'FEC_LIMIT_EXCEEDED',
+            }),
           });
           return;
         }
@@ -158,8 +184,8 @@ test.describe('Campaign API Integration Tests', () => {
             ...postData,
             status: 'pending',
             transaction_hash: '0x' + 'a'.repeat(64),
-            created_at: new Date().toISOString()
-          })
+            created_at: new Date().toISOString(),
+          }),
         });
       }
     });
@@ -173,9 +199,9 @@ test.describe('Campaign API Integration Tests', () => {
 
       const submitButton = page.locator('button[type="submit"]').first();
       await submitButton.click();
-      
+
       await page.waitForTimeout(2000);
-      
+
       // Verify contribution processing
       await expect(page).toHaveScreenshot('contribution-processing-success.png', {
         fullPage: true,
@@ -187,19 +213,19 @@ test.describe('Campaign API Integration Tests', () => {
     // Mock KYC API
     await page.route(`${API_BASE_URL}/api/kyc/verify`, async (route) => {
       const postData = JSON.parse(route.request().postData());
-      
+
       // Simulate KYC verification process
       const kycResult = {
         wallet_address: postData.wallet_address,
         status: 'verified',
         verified_at: new Date().toISOString(),
-        verification_level: 'full'
+        verification_level: 'full',
       };
 
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify(kycResult)
+        body: JSON.stringify(kycResult),
       });
     });
 
@@ -213,12 +239,15 @@ test.describe('Campaign API Integration Tests', () => {
             return ['0x1234567890123456789012345678901234567890'];
           }
           return null;
-        }
+        },
       };
     });
 
     // Test KYC verification flow
-    const kycButton = page.locator('button').filter({ hasText: /verify.*kyc|kyc.*verify/i }).first();
+    const kycButton = page
+      .locator('button')
+      .filter({ hasText: /verify.*kyc|kyc.*verify/i })
+      .first();
     if (await kycButton.isVisible()) {
       await kycButton.click();
       await page.waitForTimeout(2000);
@@ -236,26 +265,27 @@ test.describe('Campaign API Integration Tests', () => {
     // Mock rate-limited API
     await page.route(`${API_BASE_URL}/api/campaigns`, async (route) => {
       requestCount++;
-      
-      if (requestCount > 5) { // Simulate rate limit after 5 requests
+
+      if (requestCount > 5) {
+        // Simulate rate limit after 5 requests
         await route.fulfill({
           status: 429,
           contentType: 'application/json',
           body: JSON.stringify({
             error: 'Rate limit exceeded',
-            retry_after: 60
+            retry_after: 60,
           }),
           headers: {
             'X-RateLimit-Limit': '5',
             'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': String(Date.now() + 60000)
-          }
+            'X-RateLimit-Reset': String(Date.now() + 60000),
+          },
         });
       } else {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ campaigns: [] })
+          body: JSON.stringify({ campaigns: [] }),
         });
       }
     });
@@ -267,8 +297,10 @@ test.describe('Campaign API Integration Tests', () => {
     }
 
     // Verify rate limiting handling
-    const rateLimitError = page.locator('.rate-limit, .error').filter({ hasText: /rate limit|too many requests/i });
-    if (await rateLimitError.count() > 0) {
+    const rateLimitError = page
+      .locator('.rate-limit, .error')
+      .filter({ hasText: /rate limit|too many requests/i });
+    if ((await rateLimitError.count()) > 0) {
       await expect(page).toHaveScreenshot('rate-limit-handling.png', {
         fullPage: true,
       });
@@ -279,16 +311,16 @@ test.describe('Campaign API Integration Tests', () => {
     // Mock webhook endpoint
     await page.route(`${API_BASE_URL}/api/webhooks/contribution`, async (route) => {
       const postData = JSON.parse(route.request().postData());
-      
+
       // Validate webhook signature (mock validation)
       const expectedSignature = 'sha256=test-signature';
       const actualSignature = route.request().headers()['x-signature'];
-      
+
       if (actualSignature !== expectedSignature) {
         await route.fulfill({
           status: 401,
           contentType: 'application/json',
-          body: JSON.stringify({ error: 'Invalid webhook signature' })
+          body: JSON.stringify({ error: 'Invalid webhook signature' }),
         });
         return;
       }
@@ -297,7 +329,7 @@ test.describe('Campaign API Integration Tests', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ status: 'processed' })
+        body: JSON.stringify({ status: 'processed' }),
       });
     });
 
@@ -309,15 +341,15 @@ test.describe('Campaign API Integration Tests', () => {
           type: 'contribution',
           transaction_hash: '0x' + 'b'.repeat(64),
           amount: '100',
-          contributor: '0x1234567890123456789012345678901234567890'
+          contributor: '0x1234567890123456789012345678901234567890',
         };
-        
+
         // Trigger webhook processing
       }
     });
 
     await page.waitForTimeout(1000);
-    
+
     // Verify webhook processing
     await expect(page).toHaveScreenshot('webhook-processing.png');
   });
@@ -329,23 +361,23 @@ test.describe('Campaign API Integration Tests', () => {
         status: 'healthy',
         connections: {
           primary: 'connected',
-          replica: 'connected'
+          replica: 'connected',
         },
         tables: {
           campaigns: { exists: true, count: 150 },
           contributions: { exists: true, count: 1203 },
-          users: { exists: true, count: 892 }
+          users: { exists: true, count: 892 },
         },
         performance: {
           avg_query_time: '12ms',
-          slow_queries: 2
-        }
+          slow_queries: 2,
+        },
       };
 
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify(healthStatus)
+        body: JSON.stringify(healthStatus),
       });
     });
 
@@ -365,15 +397,15 @@ test.describe('Campaign API Integration Tests', () => {
   test('should handle concurrent contribution processing', async ({ page }) => {
     // Mock concurrent contributions
     let concurrentCount = 0;
-    
+
     await page.route(`${API_BASE_URL}/api/contributions`, async (route) => {
       concurrentCount++;
-      
+
       // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const postData = JSON.parse(route.request().postData());
-      
+
       await route.fulfill({
         status: 201,
         contentType: 'application/json',
@@ -381,8 +413,8 @@ test.describe('Campaign API Integration Tests', () => {
           id: 'contrib_' + concurrentCount,
           ...postData,
           processed_at: new Date().toISOString(),
-          queue_position: concurrentCount
-        })
+          queue_position: concurrentCount,
+        }),
       });
     });
 
@@ -399,8 +431,8 @@ test.describe('Campaign API Integration Tests', () => {
               body: JSON.stringify({
                 amount: 50 + i * 10,
                 campaign_id: 'campaign_123',
-                wallet_address: `0x${i}234567890123456789012345678901234567890`
-              })
+                wallet_address: `0x${i}234567890123456789012345678901234567890`,
+              }),
             })
           );
         }

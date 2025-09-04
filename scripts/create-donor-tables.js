@@ -18,32 +18,34 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function createDonorTables() {
   console.log('📋 Instructions for creating donor tables:\n');
   console.log('Since we need admin access to create tables, please follow these steps:\n');
-  
+
   console.log('1. Go to your Supabase Dashboard:');
-  console.log(`   ${supabaseUrl.replace('.supabase.co', '.supabase.com/project/').replace('https://', 'https://app.')}\n`);
-  
+  console.log(
+    `   ${supabaseUrl.replace('.supabase.co', '.supabase.com/project/').replace('https://', 'https://app.')}\n`
+  );
+
   console.log('2. Navigate to the SQL Editor (left sidebar)\n');
-  
+
   console.log('3. Copy and paste the migration script from:');
   console.log('   scripts/apply-donor-migrations.sql\n');
-  
+
   console.log('4. Click "Run" to execute the migration\n');
-  
+
   console.log('5. After running, verify the tables were created by checking the Table Editor\n');
-  
+
   console.log('Alternative: Use Supabase CLI');
   console.log('   supabase db push --db-url "postgresql://..."');
   console.log('   (Get the connection string from Settings > Database in Supabase Dashboard)\n');
-  
+
   // Test if tables exist
   console.log('Testing current state of tables...\n');
-  
+
   try {
     const { data: donors, error: donorsError } = await supabase
       .from('donors')
       .select('count')
       .limit(1);
-    
+
     if (!donorsError) {
       console.log('✅ Donors table exists!');
     } else {
@@ -52,13 +54,13 @@ async function createDonorTables() {
   } catch (e) {
     console.log('❌ Error checking donors table:', e.message);
   }
-  
+
   try {
     const { data: profiles, error: profilesError } = await supabase
       .from('donor_profiles')
       .select('count')
       .limit(1);
-    
+
     if (!profilesError) {
       console.log('✅ Donor_profiles table exists!');
     } else {
@@ -69,10 +71,12 @@ async function createDonorTables() {
   }
 }
 
-createDonorTables().then(() => {
-  console.log('\n✨ Done');
-  process.exit(0);
-}).catch(err => {
-  console.error('\n❌ Error:', err);
-  process.exit(1);
-});
+createDonorTables()
+  .then(() => {
+    console.log('\n✨ Done');
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error('\n❌ Error:', err);
+    process.exit(1);
+  });

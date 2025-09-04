@@ -2,38 +2,36 @@ import { createClient } from '@supabase/supabase-js';
 
 // Create client with service role if available, otherwise anon key
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
+const supabaseKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTU0NjI0OCwiZXhwIjoyMDcxMTIyMjQ4fQ.2Jx6qRkGGQ0s4kPMgvM6LNkF4aWy2PQofvV9Ky1V5u0';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function fixCampaignsTable() {
   try {
     console.log('🔧 Fixing campaigns table schema...');
-    
+
     // Create the missing columns using individual UPDATE operations
     // Since we can't use ALTER TABLE directly, we'll work around it
-    
-    const testQuery = await supabase
-      .from('campaigns')
-      .select('user_id')
-      .limit(1);
-    
+
+    const testQuery = await supabase.from('campaigns').select('user_id').limit(1);
+
     if (testQuery.error && testQuery.error.code === 'PGRST116') {
       console.log('user_id column missing - need to add columns');
-      
+
       // Try using a function to add columns if it exists
       try {
         const { data, error } = await supabase.rpc('add_campaigns_columns');
         if (error) {
           console.log('RPC function not available, trying direct SQL...');
-          
+
           // Create a simple edge function inline
           const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
             method: 'POST',
             headers: {
-              'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
-              'Content-Type': 'application/json'
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               sql: `
@@ -60,10 +58,10 @@ async function fixCampaignsTable() {
                 ADD COLUMN IF NOT EXISTS embed_code TEXT,
                 ADD COLUMN IF NOT EXISTS embed_generated_at TIMESTAMPTZ,
                 ADD COLUMN IF NOT EXISTS description TEXT;
-              `
-            })
+              `,
+            }),
           });
-          
+
           if (response.ok) {
             console.log('✅ Columns added via REST API');
           } else {
@@ -78,19 +76,18 @@ async function fixCampaignsTable() {
     } else {
       console.log('✅ user_id column exists, table likely already updated');
     }
-    
+
     // Test the updated table
     const { data: updatedCampaign, error: testError } = await supabase
       .from('campaigns')
       .select('id, user_id, setup_completed, setup_step')
       .limit(1);
-      
+
     if (testError) {
       console.log('❌ Table still has issues:', testError.message);
     } else {
       console.log('✅ Table working! Sample:', updatedCampaign[0]);
     }
-    
   } catch (error) {
     console.error('❌ Error:', error.message);
   }

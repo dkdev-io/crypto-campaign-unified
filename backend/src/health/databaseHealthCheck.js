@@ -12,14 +12,14 @@ export class DatabaseHealthCheck {
     this.supabaseKey = process.env.SUPABASE_ANON_KEY;
     this.requiredTables = [
       'campaigns',
-      'contributions', 
+      'contributions',
       'recurring_payments',
-      'contribution_limits'
+      'contribution_limits',
     ];
     this.requiredFunctions = [
       'generate_transaction_code',
       'calculate_recurring_projection',
-      'update_updated_at_column'
+      'update_updated_at_column',
     ];
     this.client = null;
   }
@@ -31,7 +31,7 @@ export class DatabaseHealthCheck {
     if (!this.supabaseUrl || !this.supabaseKey) {
       throw new Error('Missing Supabase configuration: SUPABASE_URL or SUPABASE_ANON_KEY not set');
     }
-    
+
     this.client = createClient(this.supabaseUrl, this.supabaseKey);
     return this.client;
   }
@@ -55,13 +55,13 @@ export class DatabaseHealthCheck {
 
       return {
         status: 'connected',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       return {
         status: 'failed',
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -74,7 +74,7 @@ export class DatabaseHealthCheck {
       status: 'success',
       tables: {},
       missingTables: [],
-      errors: []
+      errors: [],
     };
 
     try {
@@ -92,20 +92,20 @@ export class DatabaseHealthCheck {
           if (error) {
             results.tables[tableName] = {
               exists: false,
-              error: error.message
+              error: error.message,
             };
             results.missingTables.push(tableName);
             results.errors.push(`Table '${tableName}' error: ${error.message}`);
           } else {
             results.tables[tableName] = {
               exists: true,
-              accessible: true
+              accessible: true,
             };
           }
         } catch (tableError) {
           results.tables[tableName] = {
             exists: false,
-            error: tableError.message
+            error: tableError.message,
           };
           results.missingTables.push(tableName);
           results.errors.push(`Table '${tableName}' validation failed: ${tableError.message}`);
@@ -121,7 +121,7 @@ export class DatabaseHealthCheck {
       return {
         status: 'failed',
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -134,7 +134,7 @@ export class DatabaseHealthCheck {
       status: 'success',
       functions: {},
       missingFunctions: [],
-      errors: []
+      errors: [],
     };
 
     try {
@@ -146,7 +146,7 @@ export class DatabaseHealthCheck {
       for (const functionName of this.requiredFunctions) {
         try {
           let testResult;
-          
+
           switch (functionName) {
             case 'generate_transaction_code':
               testResult = await this.client.rpc('generate_transaction_code');
@@ -155,7 +155,7 @@ export class DatabaseHealthCheck {
               testResult = await this.client.rpc('calculate_recurring_projection', {
                 p_amount: 100,
                 p_frequency: 'monthly',
-                p_start_date: '2024-01-01'
+                p_start_date: '2024-01-01',
               });
               break;
             case 'update_updated_at_column':
@@ -167,20 +167,20 @@ export class DatabaseHealthCheck {
           if (testResult.error) {
             results.functions[functionName] = {
               exists: false,
-              error: testResult.error.message
+              error: testResult.error.message,
             };
             results.missingFunctions.push(functionName);
             results.errors.push(`Function '${functionName}' error: ${testResult.error.message}`);
           } else {
             results.functions[functionName] = {
               exists: true,
-              functional: true
+              functional: true,
             };
           }
         } catch (funcError) {
           results.functions[functionName] = {
             exists: false,
-            error: funcError.message
+            error: funcError.message,
           };
           results.missingFunctions.push(functionName);
           results.errors.push(`Function '${functionName}' validation failed: ${funcError.message}`);
@@ -196,7 +196,7 @@ export class DatabaseHealthCheck {
       return {
         status: 'failed',
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -212,7 +212,7 @@ export class DatabaseHealthCheck {
         issue: 'Database Connectivity Failed',
         severity: 'critical',
         action: 'Verify SUPABASE_URL and SUPABASE_ANON_KEY environment variables',
-        details: 'Check your .env file and ensure Supabase credentials are correct'
+        details: 'Check your .env file and ensure Supabase credentials are correct',
       });
     }
 
@@ -222,7 +222,7 @@ export class DatabaseHealthCheck {
         severity: 'critical',
         action: 'Apply database schema',
         details: `Missing tables: ${healthResults.tables.missingTables.join(', ')}`,
-        command: 'Apply docs/supabase-contributions-schema.sql to your Supabase database'
+        command: 'Apply docs/supabase-contributions-schema.sql to your Supabase database',
       });
     }
 
@@ -232,7 +232,7 @@ export class DatabaseHealthCheck {
         severity: 'high',
         action: 'Apply database functions',
         details: `Missing functions: ${healthResults.functions.missingFunctions.join(', ')}`,
-        command: 'Functions are included in docs/supabase-contributions-schema.sql'
+        command: 'Functions are included in docs/supabase-contributions-schema.sql',
       });
     }
 
@@ -241,7 +241,7 @@ export class DatabaseHealthCheck {
         issue: 'None',
         severity: 'info',
         action: 'Database is healthy',
-        details: 'All required tables and functions are present and accessible'
+        details: 'All required tables and functions are present and accessible',
       });
     }
 
@@ -260,7 +260,7 @@ export class DatabaseHealthCheck {
       tables: null,
       functions: null,
       suggestions: [],
-      duration: 0
+      duration: 0,
     };
 
     try {
@@ -269,7 +269,7 @@ export class DatabaseHealthCheck {
       // Check connectivity
       logger.info('📡 Checking database connectivity...');
       results.connectivity = await this.checkConnectivity();
-      
+
       if (results.connectivity.status === 'failed') {
         results.status = 'failed';
         results.suggestions = this.generateRecoverySuggestions(results);
@@ -311,14 +311,14 @@ export class DatabaseHealthCheck {
    */
   logResults(results) {
     const duration = `${results.duration}ms`;
-    
+
     if (results.status === 'healthy') {
       logger.info(`✅ Database health check passed (${duration})`);
       logger.info(`📊 Tables: ${Object.keys(results.tables.tables).length} validated`);
       logger.info(`⚙️ Functions: ${Object.keys(results.functions.functions).length} validated`);
     } else {
       logger.error(`❌ Database health check failed (${duration})`);
-      
+
       if (results.connectivity?.status === 'failed') {
         logger.error('🔌 Connectivity: FAILED');
         logger.error(`   Error: ${results.connectivity.error}`);
@@ -326,14 +326,14 @@ export class DatabaseHealthCheck {
 
       if (results.tables?.missingTables?.length > 0) {
         logger.error(`📋 Missing tables (${results.tables.missingTables.length}):`);
-        results.tables.missingTables.forEach(table => {
+        results.tables.missingTables.forEach((table) => {
           logger.error(`   - ${table}`);
         });
       }
 
       if (results.functions?.missingFunctions?.length > 0) {
         logger.error(`⚙️ Missing functions (${results.functions.missingFunctions.length}):`);
-        results.functions.missingFunctions.forEach(func => {
+        results.functions.missingFunctions.forEach((func) => {
           logger.error(`   - ${func}`);
         });
       }

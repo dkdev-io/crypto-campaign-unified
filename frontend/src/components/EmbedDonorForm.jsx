@@ -43,20 +43,19 @@ const EmbedDonorForm = ({ campaignId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setIsSubmitting(true);
     setErrorMessage('');
-    
+
     try {
       const effectiveCampaignId = campaignId || 'standalone-form';
-      
+
       if (!formData.amount || parseFloat(formData.amount) <= 0) {
         throw new Error('Please enter a valid contribution amount');
       }
 
-      const { data, error } = await supabase
-        .from('form_submissions')
-        .insert([{
+      const { data, error } = await supabase.from('form_submissions').insert([
+        {
           campaign_id: effectiveCampaignId,
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -74,16 +73,19 @@ const EmbedDonorForm = ({ campaignId }) => {
           payment_method: 'pending',
           is_us_citizen: true,
           is_prohibited_source: false,
-          acknowledgment_signed: true
-        }]);
+          acknowledgment_signed: true,
+        },
+      ]);
 
       if (error) {
         throw new Error(error.message || 'Failed to save contribution');
       }
-      
+
       setSubmitted(true);
     } catch (err) {
-      setErrorMessage(err.message || 'An error occurred while processing your contribution. Please try again.');
+      setErrorMessage(
+        err.message || 'An error occurred while processing your contribution. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -122,70 +124,70 @@ const EmbedDonorForm = ({ campaignId }) => {
     <div style={styles.container}>
       <div style={styles.formCard}>
         <h1 style={styles.title}>{campaignName}</h1>
-        
+
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.row}>
             <div style={styles.field}>
               <label style={styles.label}>First Name *</label>
-              <input 
+              <input
                 style={styles.input}
                 required
                 value={formData.firstName || ''}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
               />
             </div>
             <div style={styles.field}>
               <label style={styles.label}>Last Name *</label>
-              <input 
+              <input
                 style={styles.input}
                 required
                 value={formData.lastName || ''}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
               />
             </div>
           </div>
 
           <div style={styles.field}>
             <label style={styles.label}>Email *</label>
-            <input 
+            <input
               type="email"
               style={styles.input}
               required
               value={formData.email || ''}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
 
           <div style={styles.field}>
             <label style={styles.label}>Address *</label>
-            <input 
+            <input
               placeholder="Street Address"
-              style={{...styles.input, marginBottom: '8px'}}
+              style={{ ...styles.input, marginBottom: '8px' }}
               required
               value={formData.street || ''}
-              onChange={(e) => setFormData({...formData, street: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, street: e.target.value })}
             />
             <div style={styles.addressRow}>
-              <input 
+              <input
                 placeholder="City"
-                style={{...styles.input, flex: '2'}}
+                style={{ ...styles.input, flex: '2' }}
                 required
                 value={formData.city || ''}
-                onChange={(e) => setFormData({...formData, city: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
               />
-              <input 
+              <input
                 placeholder="State"
-                style={{...styles.input, flex: '1'}}
+                style={{ ...styles.input, flex: '1' }}
                 required
                 value={formData.state || ''}
-                onChange={(e) => setFormData({...formData, state: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
               />
-              <input 
+              <input
                 placeholder="ZIP"
-                style={{...styles.input, flex: '1'}}
+                style={{ ...styles.input, flex: '1' }}
                 required
                 value={formData.zip || ''}
-                onChange={(e) => setFormData({...formData, zip: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
               />
             </div>
           </div>
@@ -193,20 +195,20 @@ const EmbedDonorForm = ({ campaignId }) => {
           <div style={styles.row}>
             <div style={styles.field}>
               <label style={styles.label}>Employer *</label>
-              <input 
+              <input
                 style={styles.input}
                 required
                 value={formData.employer || ''}
-                onChange={(e) => setFormData({...formData, employer: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, employer: e.target.value })}
               />
             </div>
             <div style={styles.field}>
               <label style={styles.label}>Occupation *</label>
-              <input 
+              <input
                 style={styles.input}
                 required
                 value={formData.occupation || ''}
-                onChange={(e) => setFormData({...formData, occupation: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
               />
             </div>
           </div>
@@ -214,21 +216,21 @@ const EmbedDonorForm = ({ campaignId }) => {
           <div style={styles.field}>
             <label style={styles.label}>Contribution Amount * (Max: ${maxDonation})</label>
             <div style={styles.amountButtons}>
-              {suggestedAmounts.map(amount => (
-                <button 
+              {suggestedAmounts.map((amount) => (
+                <button
                   key={amount}
                   type="button"
-                  onClick={() => setFormData({...formData, amount})}
+                  onClick={() => setFormData({ ...formData, amount })}
                   style={{
                     ...styles.amountButton,
-                    ...(formData.amount === amount ? styles.amountButtonActive : {})
+                    ...(formData.amount === amount ? styles.amountButtonActive : {}),
                   }}
                 >
                   ${amount}
                 </button>
               ))}
             </div>
-            <input 
+            <input
               type="number"
               placeholder="Custom amount"
               min="1"
@@ -241,7 +243,7 @@ const EmbedDonorForm = ({ campaignId }) => {
                   setErrorMessage(`Maximum contribution is $${maxDonation}`);
                 } else {
                   setErrorMessage('');
-                  setFormData({...formData, amount: e.target.value});
+                  setFormData({ ...formData, amount: e.target.value });
                 }
               }}
             />
@@ -249,31 +251,23 @@ const EmbedDonorForm = ({ campaignId }) => {
 
           <div style={styles.disclaimerBox}>
             <label style={styles.checkboxLabel}>
-              <input 
-                type="checkbox"
-                required
-                style={styles.checkbox}
-              />
+              <input type="checkbox" required style={styles.checkbox} />
               <span style={styles.disclaimerText}>
-                I certify that I am a U.S. citizen or lawfully admitted permanent resident, 
-                this contribution is made from my own funds, I am not a federal contractor, 
-                and I am at least 18 years old.
+                I certify that I am a U.S. citizen or lawfully admitted permanent resident, this
+                contribution is made from my own funds, I am not a federal contractor, and I am at
+                least 18 years old.
               </span>
             </label>
           </div>
 
-          {errorMessage && (
-            <div style={styles.errorBox}>
-              ⚠️ {errorMessage}
-            </div>
-          )}
-          
-          <button 
+          {errorMessage && <div style={styles.errorBox}>⚠️ {errorMessage}</div>}
+
+          <button
             type="submit"
             disabled={isSubmitting}
             style={{
               ...styles.submitButton,
-              ...(isSubmitting ? styles.submitButtonDisabled : {})
+              ...(isSubmitting ? styles.submitButtonDisabled : {}),
             }}
           >
             {isSubmitting ? '⏳ Processing...' : '💝 Contribute Now'}
@@ -287,7 +281,8 @@ const EmbedDonorForm = ({ campaignId }) => {
 // Self-contained styles - no dependencies on external CSS
 const styles = {
   container: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     maxWidth: '600px',
     margin: '0 auto',
     padding: '20px',
@@ -297,7 +292,7 @@ const styles = {
     fontSize: '16px',
     boxSizing: 'border-box',
   },
-  
+
   loading: {
     textAlign: 'center',
     padding: '40px 20px',
@@ -305,7 +300,7 @@ const styles = {
     color: '#666666',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
-  
+
   errorContainer: {
     backgroundColor: '#ffebee',
     border: '1px solid #f44336',
@@ -316,7 +311,7 @@ const styles = {
     margin: '20px auto',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
-  
+
   errorTitle: {
     fontSize: '20px',
     fontWeight: 'bold',
@@ -324,14 +319,14 @@ const styles = {
     marginBottom: '12px',
     margin: '0 0 12px 0',
   },
-  
+
   errorText: {
     fontSize: '16px',
     color: '#d32f2f',
     marginBottom: '16px',
     margin: '0 0 16px 0',
   },
-  
+
   retryButton: {
     backgroundColor: '#f44336',
     color: 'white',
@@ -342,7 +337,7 @@ const styles = {
     fontSize: '14px',
     fontFamily: 'inherit',
   },
-  
+
   successContainer: {
     backgroundColor: '#e8f5e8',
     border: '1px solid #4caf50',
@@ -353,7 +348,7 @@ const styles = {
     margin: '20px auto',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
-  
+
   successTitle: {
     fontSize: '24px',
     fontWeight: 'bold',
@@ -361,13 +356,13 @@ const styles = {
     marginBottom: '16px',
     margin: '0 0 16px 0',
   },
-  
+
   successText: {
     fontSize: '16px',
     color: '#388e3c',
     margin: '0',
   },
-  
+
   formCard: {
     backgroundColor: '#ffffff',
     border: '1px solid #e0e0e0',
@@ -375,7 +370,7 @@ const styles = {
     padding: '32px',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
   },
-  
+
   title: {
     fontSize: '28px',
     fontWeight: 'bold',
@@ -384,36 +379,36 @@ const styles = {
     textAlign: 'center',
     margin: '0 0 24px 0',
   },
-  
+
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
   },
-  
+
   field: {
     display: 'flex',
     flexDirection: 'column',
     gap: '6px',
   },
-  
+
   row: {
     display: 'flex',
     gap: '16px',
   },
-  
+
   addressRow: {
     display: 'flex',
     gap: '12px',
   },
-  
+
   label: {
     fontSize: '14px',
     fontWeight: '600',
     color: '#333333',
     marginBottom: '6px',
   },
-  
+
   input: {
     padding: '12px 16px',
     border: '2px solid #e0e0e0',
@@ -426,14 +421,14 @@ const styles = {
     transition: 'border-color 0.2s ease',
     boxSizing: 'border-box',
   },
-  
+
   amountButtons: {
     display: 'flex',
     gap: '8px',
     marginBottom: '12px',
     flexWrap: 'wrap',
   },
-  
+
   amountButton: {
     padding: '10px 20px',
     border: '2px solid #1a237e',
@@ -446,39 +441,39 @@ const styles = {
     transition: 'all 0.2s ease',
     fontFamily: 'inherit',
   },
-  
+
   amountButtonActive: {
     backgroundColor: '#1a237e',
     color: '#ffffff',
   },
-  
+
   disclaimerBox: {
     backgroundColor: '#f8f9fa',
     border: '1px solid #e9ecef',
     borderRadius: '8px',
     padding: '16px',
   },
-  
+
   checkboxLabel: {
     display: 'flex',
     alignItems: 'flex-start',
     gap: '12px',
     cursor: 'pointer',
   },
-  
+
   checkbox: {
     marginTop: '2px',
     width: '16px',
     height: '16px',
     accentColor: '#1a237e',
   },
-  
+
   disclaimerText: {
     fontSize: '14px',
     color: '#555555',
     lineHeight: '1.4',
   },
-  
+
   errorBox: {
     backgroundColor: '#ffebee',
     border: '1px solid #f44336',
@@ -488,7 +483,7 @@ const styles = {
     fontSize: '14px',
     fontWeight: '500',
   },
-  
+
   submitButton: {
     backgroundColor: '#1a237e',
     color: '#ffffff',
@@ -501,7 +496,7 @@ const styles = {
     transition: 'all 0.2s ease',
     fontFamily: 'inherit',
   },
-  
+
   submitButtonDisabled: {
     backgroundColor: '#9e9e9e',
     cursor: 'not-allowed',

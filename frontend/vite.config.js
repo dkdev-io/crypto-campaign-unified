@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
   base: '/',
   server: {
-    port: 5173
+    port: 5173,
   },
   build: {
     outDir: 'dist',
@@ -13,11 +13,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-        }
-      }
-    }
+        },
+      },
+    },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom']
-  }
-})
+    include: ['react', 'react-dom'],
+  },
+});

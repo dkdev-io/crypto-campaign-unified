@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import { writeFileSync } from 'fs';
 
 const supabaseUrl = 'https://kmepcdsklnnxokoimvzo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZXBjZHNrbG5ueG9rb2ltdnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NDYyNDgsImV4cCI6MjA3MTEyMjI0OH0.7fa_fy4aWlz0PZvwC90X1r_6UMHzBujnN0fIngva1iI';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Test report structure
@@ -11,7 +12,7 @@ const report = {
   timestamp: new Date().toISOString(),
   working: [],
   broken: [],
-  summary: {}
+  summary: {},
 };
 
 console.log('🚀 CRUD OPERATIONS TEST - ACTUAL SCHEMA');
@@ -28,7 +29,6 @@ function log(operation, success, details) {
 
 // TEST 1: CREATE Campaign
 async function testCreate() {
-  
   const testCampaign = {
     campaign_name: `Test Campaign ${Date.now()}`,
     email: 'test@example.com',
@@ -37,14 +37,10 @@ async function testCreate() {
     suggested_amounts: [25, 50, 100, 250, 500],
     max_donation_limit: 3300,
     theme_color: '#4a90e2',
-    supported_cryptos: ['BTC', 'ETH', 'USDC', 'SOL']
+    supported_cryptos: ['BTC', 'ETH', 'USDC', 'SOL'],
   };
 
-  const { data, error } = await supabase
-    .from('campaigns')
-    .insert(testCampaign)
-    .select()
-    .single();
+  const { data, error } = await supabase.from('campaigns').insert(testCampaign).select().single();
 
   if (data && !error) {
     log('CREATE campaign', true, `Created: ${data.campaign_name} (ID: ${data.id})`);
@@ -58,7 +54,6 @@ async function testCreate() {
 
 // TEST 2: READ Operations
 async function testRead() {
-
   // Read all campaigns
   const { data: allCampaigns, error: allError } = await supabase
     .from('campaigns')
@@ -114,7 +109,6 @@ async function testRead() {
 
 // TEST 3: UPDATE Operations
 async function testUpdate() {
-
   if (!report.testCampaignId) {
     log('UPDATE campaign', false, 'No test campaign to update');
     return;
@@ -139,7 +133,7 @@ async function testUpdate() {
   const multiUpdate = {
     max_donation_limit: 5000,
     theme_color: '#ff6b6b',
-    supported_cryptos: ['BTC', 'ETH', 'USDC', 'SOL', 'MATIC']
+    supported_cryptos: ['BTC', 'ETH', 'USDC', 'SOL', 'MATIC'],
   };
 
   const { data: updated2, error: error2 } = await supabase
@@ -150,7 +144,11 @@ async function testUpdate() {
     .single();
 
   if (updated2 && !error2) {
-    log('UPDATE multiple fields', true, `Max: $${updated2.max_donation_limit}, Cryptos: ${updated2.supported_cryptos.length}`);
+    log(
+      'UPDATE multiple fields',
+      true,
+      `Max: $${updated2.max_donation_limit}, Cryptos: ${updated2.supported_cryptos.length}`
+    );
   } else {
     log('UPDATE multiple fields', false, error2?.message || 'Update failed');
   }
@@ -173,7 +171,6 @@ async function testUpdate() {
 
 // TEST 4: DELETE Operations
 async function testDelete() {
-
   if (!report.testCampaignId) {
     log('DELETE campaign', false, 'No test campaign to delete');
     return;
@@ -219,7 +216,6 @@ async function testDelete() {
 
 // TEST 5: Complex Queries
 async function testComplexQueries() {
-
   // Query 1: Campaigns with high donation limits
   const { data: highLimit, error: err1 } = await supabase
     .from('campaigns')
@@ -276,9 +272,9 @@ async function testComplexQueries() {
 
   if (allCampaigns && !err5) {
     const cryptoCount = {};
-    allCampaigns.forEach(c => {
+    allCampaigns.forEach((c) => {
       if (c.supported_cryptos) {
-        c.supported_cryptos.forEach(crypto => {
+        c.supported_cryptos.forEach((crypto) => {
           cryptoCount[crypto] = (cryptoCount[crypto] || 0) + 1;
         });
       }
@@ -291,7 +287,6 @@ async function testComplexQueries() {
 
 // TEST 6: Edge Cases
 async function testEdgeCases() {
-
   // Test 1: Invalid ID
   const { data: invalid, error: invErr } = await supabase
     .from('campaigns')
@@ -306,10 +301,7 @@ async function testEdgeCases() {
   }
 
   // Test 2: Empty insert (should fail)
-  const { error: emptyErr } = await supabase
-    .from('campaigns')
-    .insert({})
-    .select();
+  const { error: emptyErr } = await supabase.from('campaigns').insert({}).select();
 
   if (emptyErr) {
     log('EDGE empty insert', true, 'Properly rejects empty insert');
@@ -322,7 +314,7 @@ async function testEdgeCases() {
   const campaign1 = {
     campaign_name: 'Campaign 1',
     email: 'test1@example.com',
-    wallet_address: wallet
+    wallet_address: wallet,
   };
 
   const { data: first, error: firstErr } = await supabase
@@ -335,14 +327,10 @@ async function testEdgeCases() {
     const campaign2 = {
       campaign_name: 'Campaign 2',
       email: 'test2@example.com',
-      wallet_address: wallet
+      wallet_address: wallet,
     };
 
-    const { error: dupErr } = await supabase
-      .from('campaigns')
-      .insert(campaign2)
-      .select()
-      .single();
+    const { error: dupErr } = await supabase.from('campaigns').insert(campaign2).select().single();
 
     if (dupErr) {
       log('EDGE duplicate wallet', true, 'Wallet uniqueness enforced');
@@ -362,7 +350,7 @@ async function testEdgeCases() {
       campaign_name: 'Large Array Test',
       email: 'large@test.com',
       suggested_amounts: largeAmounts,
-      wallet_address: `large-${Date.now()}`
+      wallet_address: `large-${Date.now()}`,
     })
     .select()
     .single();
@@ -380,13 +368,11 @@ async function testEdgeCases() {
 function generateReport() {
   console.log('📊 FINAL REPORT');
 
-  report.working.forEach(item => {
-  });
+  report.working.forEach((item) => {});
 
   if (report.broken.length === 0) {
   } else {
-    report.broken.forEach(item => {
-    });
+    report.broken.forEach((item) => {});
   }
 
   const total = report.working.length + report.broken.length;
@@ -402,7 +388,6 @@ function generateReport() {
 
 // Run all tests
 async function runTests() {
-
   try {
     const campaignId = await testCreate();
     await testRead();

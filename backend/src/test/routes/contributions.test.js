@@ -17,12 +17,12 @@ beforeEach(() => {
     canContribute: jest.fn(),
     getMaxContributionWei: jest.fn(),
     waitForTransaction: jest.fn(),
-    getNetworkInfo: jest.fn()
+    getNetworkInfo: jest.fn(),
   };
-  
+
   // Mock Web3Service module
   jest.unstable_mockModule('../../services/web3Service.js', () => ({
-    default: jest.fn(() => mockWeb3Service)
+    default: jest.fn(() => mockWeb3Service),
   }));
 });
 
@@ -40,22 +40,22 @@ describe('Contributions Routes', () => {
       const mockStats = {
         totalContributions: 10,
         totalAmount: '5.5',
-        contributorCount: 8
+        contributorCount: 8,
       };
       const mockDbStats = [{ status: 'completed' }];
 
       mockWeb3Service.getCampaignStats.mockResolvedValue(mockStats);
-      mockSupabaseClient.from().select().eq().mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockDbStats)
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockDbStats));
 
-      const response = await request(app)
-        .get('/api/contributions/stats')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/stats').expect(200);
 
       expect(response.body).toMatchObject({
         ...mockStats,
-        databaseRecords: 1
+        databaseRecords: 1,
       });
       expect(response.body.lastUpdated).toBeDefined();
     });
@@ -64,9 +64,7 @@ describe('Contributions Routes', () => {
       mockWeb3Service.initialize.mockRejectedValue(new Error('Web3 initialization failed'));
       mockWeb3Service.initialized = false;
 
-      const response = await request(app)
-        .get('/api/contributions/stats')
-        .expect(500);
+      const response = await request(app).get('/api/contributions/stats').expect(500);
 
       expect(response.body.error).toBe('Failed to retrieve contribution statistics');
     });
@@ -74,13 +72,15 @@ describe('Contributions Routes', () => {
     it('should handle database errors gracefully', async () => {
       const mockStats = { totalContributions: 5 };
       mockWeb3Service.getCampaignStats.mockResolvedValue(mockStats);
-      mockSupabaseClient.from().select().eq().mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { message: 'Database error' })
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .mockResolvedValue(
+          TestHelpers.createMockSupabaseResponse(null, { message: 'Database error' })
+        );
 
-      const response = await request(app)
-        .get('/api/contributions/stats')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/stats').expect(200);
 
       expect(response.body.databaseRecords).toBe(0);
       expect(response.body.totalContributions).toBe(5);
@@ -92,15 +92,18 @@ describe('Contributions Routes', () => {
     const mockContributorInfo = {
       totalContributed: '2.5',
       contributionCount: 3,
-      isKYCVerified: true
+      isKYCVerified: true,
     };
     const mockHistory = [MockFactories.contributionLog()];
 
     it('should return contributor information successfully', async () => {
       mockWeb3Service.getContributorInfo.mockResolvedValue(mockContributorInfo);
-      mockSupabaseClient.from().select().eq().order().mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockHistory)
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockHistory));
 
       const response = await request(app)
         .get(`/api/contributions/contributor/${validAddress}`)
@@ -109,7 +112,7 @@ describe('Contributions Routes', () => {
       expect(response.body).toMatchObject({
         ...mockContributorInfo,
         history: mockHistory,
-        historyCount: 1
+        historyCount: 1,
       });
     });
 
@@ -134,9 +137,14 @@ describe('Contributions Routes', () => {
 
     it('should handle missing history gracefully', async () => {
       mockWeb3Service.getContributorInfo.mockResolvedValue(mockContributorInfo);
-      mockSupabaseClient.from().select().eq().order().mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { message: 'No records found' })
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .mockResolvedValue(
+          TestHelpers.createMockSupabaseResponse(null, { message: 'No records found' })
+        );
 
       const response = await request(app)
         .get(`/api/contributions/contributor/${validAddress}`)
@@ -150,7 +158,7 @@ describe('Contributions Routes', () => {
   describe('POST /api/contributions/check', () => {
     const validCheckData = {
       address: TestHelpers.generateMockAddress(),
-      amount: 1.0
+      amount: 1.0,
     };
 
     it('should check contribution eligibility successfully', async () => {
@@ -161,9 +169,10 @@ describe('Contributions Routes', () => {
       mockWeb3Service.canContribute.mockResolvedValue(mockEligibility);
       mockWeb3Service.getContributorInfo.mockResolvedValue(mockContributorInfo);
       mockWeb3Service.getMaxContributionWei.mockResolvedValue(mockMaxContribution);
-      mockSupabaseClient.from().insert().mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse({ id: 1 })
-      );
+      mockSupabaseClient
+        .from()
+        .insert()
+        .mockResolvedValue(TestHelpers.createMockSupabaseResponse({ id: 1 }));
 
       const response = await request(app)
         .post('/api/contributions/check')
@@ -173,7 +182,7 @@ describe('Contributions Routes', () => {
       expect(response.body).toMatchObject({
         ...mockEligibility,
         contributorInfo: mockContributorInfo,
-        maxContribution: mockMaxContribution
+        maxContribution: mockMaxContribution,
       });
       expect(response.body.checkTimestamp).toBeDefined();
     });
@@ -242,19 +251,17 @@ describe('Contributions Routes', () => {
     it('should return maximum contribution amount', async () => {
       const mockMaxContribution = {
         maxWei: '3300000000000000000',
-        maxEth: '3.3'
+        maxEth: '3.3',
       };
 
       mockWeb3Service.getMaxContributionWei.mockResolvedValue(mockMaxContribution);
 
-      const response = await request(app)
-        .get('/api/contributions/max-amount')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/max-amount').expect(200);
 
       expect(response.body).toMatchObject({
         ...mockMaxContribution,
         fecLimit: 3300,
-        currency: 'USD'
+        currency: 'USD',
       });
       expect(response.body.lastUpdated).toBeDefined();
     });
@@ -262,9 +269,7 @@ describe('Contributions Routes', () => {
     it('should handle web3 service errors', async () => {
       mockWeb3Service.getMaxContributionWei.mockRejectedValue(new Error('Contract error'));
 
-      const response = await request(app)
-        .get('/api/contributions/max-amount')
-        .expect(500);
+      const response = await request(app).get('/api/contributions/max-amount').expect(500);
 
       expect(response.body.error).toBe('Failed to retrieve maximum contribution amount');
     });
@@ -274,17 +279,22 @@ describe('Contributions Routes', () => {
     const validTransactionData = {
       transactionHash: TestHelpers.generateMockTransactionHash(),
       contributorAddress: TestHelpers.generateMockAddress(),
-      expectedAmount: '1.0'
+      expectedAmount: '1.0',
     };
 
     it('should monitor transaction successfully', async () => {
-      const mockReceipt = TestHelpers.createMockWeb3Receipt(true, validTransactionData.transactionHash);
+      const mockReceipt = TestHelpers.createMockWeb3Receipt(
+        true,
+        validTransactionData.transactionHash
+      );
       const mockLogRecord = MockFactories.contributionLog();
 
       mockWeb3Service.waitForTransaction.mockResolvedValue(mockReceipt);
-      mockSupabaseClient.from().insert().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockLogRecord)
-      );
+      mockSupabaseClient
+        .from()
+        .insert()
+        .select()
+        .single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockLogRecord));
 
       const response = await request(app)
         .post('/api/contributions/transaction/monitor')
@@ -294,7 +304,7 @@ describe('Contributions Routes', () => {
       expect(response.body).toMatchObject({
         transactionHash: validTransactionData.transactionHash,
         success: true,
-        logged: true
+        logged: true,
       });
     });
 
@@ -312,9 +322,15 @@ describe('Contributions Routes', () => {
     it('should handle failed transactions', async () => {
       const mockReceipt = TestHelpers.createMockWeb3Receipt(false);
       mockWeb3Service.waitForTransaction.mockResolvedValue(mockReceipt);
-      mockSupabaseClient.from().insert().select().single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(MockFactories.contributionLog({ status: 'failed' }))
-      );
+      mockSupabaseClient
+        .from()
+        .insert()
+        .select()
+        .single.mockResolvedValue(
+          TestHelpers.createMockSupabaseResponse(
+            MockFactories.contributionLog({ status: 'failed' })
+          )
+        );
 
       const response = await request(app)
         .post('/api/contributions/transaction/monitor')
@@ -341,30 +357,34 @@ describe('Contributions Routes', () => {
   describe('GET /api/contributions/recent', () => {
     const mockContributions = [
       MockFactories.contributionLog(),
-      MockFactories.contributionLog({ status: 'completed' })
+      MockFactories.contributionLog({ status: 'completed' }),
     ];
 
     it('should return recent contributions successfully', async () => {
-      mockSupabaseClient.from().select().eq().order().range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockContributions)
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .range.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockContributions));
 
-      const response = await request(app)
-        .get('/api/contributions/recent')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/recent').expect(200);
 
       expect(response.body).toMatchObject({
         contributions: mockContributions,
         count: 2,
         limit: 10,
-        offset: 0
+        offset: 0,
       });
     });
 
     it('should handle custom limit and offset', async () => {
-      mockSupabaseClient.from().select().eq().order().range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([mockContributions[0]])
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .range.mockResolvedValue(TestHelpers.createMockSupabaseResponse([mockContributions[0]]));
 
       const response = await request(app)
         .get('/api/contributions/recent?limit=1&offset=5')
@@ -376,31 +396,33 @@ describe('Contributions Routes', () => {
     });
 
     it('should return 400 for limit exceeding maximum', async () => {
-      const response = await request(app)
-        .get('/api/contributions/recent?limit=150')
-        .expect(400);
+      const response = await request(app).get('/api/contributions/recent?limit=150').expect(400);
 
       expect(response.body.error).toBe('Limit cannot exceed 100');
     });
 
     it('should handle database errors', async () => {
-      mockSupabaseClient.from().select().eq().order().range.mockRejectedValue(new Error('DB error'));
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .range.mockRejectedValue(new Error('DB error'));
 
-      const response = await request(app)
-        .get('/api/contributions/recent')
-        .expect(500);
+      const response = await request(app).get('/api/contributions/recent').expect(500);
 
       expect(response.body.error).toBe('Failed to retrieve recent contributions');
     });
 
     it('should handle empty results', async () => {
-      mockSupabaseClient.from().select().eq().order().range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([])
-      );
+      mockSupabaseClient
+        .from()
+        .select()
+        .eq()
+        .order()
+        .range.mockResolvedValue(TestHelpers.createMockSupabaseResponse([]));
 
-      const response = await request(app)
-        .get('/api/contributions/recent')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/recent').expect(200);
 
       expect(response.body.contributions).toEqual([]);
       expect(response.body.count).toBe(0);
@@ -413,14 +435,12 @@ describe('Contributions Routes', () => {
         network: 'localhost',
         chainId: 31337,
         blockNumber: 12345,
-        gasPrice: '20000000000'
+        gasPrice: '20000000000',
       };
 
       mockWeb3Service.getNetworkInfo.mockResolvedValue(mockNetworkInfo);
 
-      const response = await request(app)
-        .get('/api/contributions/network')
-        .expect(200);
+      const response = await request(app).get('/api/contributions/network').expect(200);
 
       expect(response.body).toEqual(mockNetworkInfo);
     });
@@ -428,9 +448,7 @@ describe('Contributions Routes', () => {
     it('should handle web3 service errors', async () => {
       mockWeb3Service.getNetworkInfo.mockRejectedValue(new Error('Network error'));
 
-      const response = await request(app)
-        .get('/api/contributions/network')
-        .expect(500);
+      const response = await request(app).get('/api/contributions/network').expect(500);
 
       expect(response.body.error).toBe('Failed to retrieve network information');
     });

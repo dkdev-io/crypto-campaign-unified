@@ -1,6 +1,6 @@
 /**
  * Security Test Suite Index
- * 
+ *
  * This file serves as the main entry point for all security tests.
  * It provides an overview of the security testing strategy and
  * can be used to run all security tests together.
@@ -12,13 +12,13 @@ describe('Security Test Suite Overview', () => {
   it('should verify security test coverage completeness', () => {
     const securityTestCategories = [
       'XSS Prevention',
-      'CSRF Protection', 
+      'CSRF Protection',
       'SQL Injection Prevention',
       'Input Validation',
       'JWT Security',
       'Rate Limiting',
       'OWASP Top 10 Coverage',
-      'Security Integration'
+      'Security Integration',
     ];
 
     // Verify all major security categories are covered
@@ -44,7 +44,7 @@ describe('Security Test Suite Overview', () => {
       'A07: Identification and Authentication Failures',
       'A08: Software and Data Integrity Failures',
       'A09: Security Logging and Monitoring Failures',
-      'A10: Server-Side Request Forgery (SSRF)'
+      'A10: Server-Side Request Forgery (SSRF)',
     ];
 
     // Verify complete OWASP Top 10 coverage
@@ -61,9 +61,9 @@ describe('Security Test Suite Overview', () => {
       standards: ['OWASP Top 10 2021', 'NIST Cybersecurity Framework'],
       testTypes: [
         'Unit Tests',
-        'Integration Tests', 
+        'Integration Tests',
         'End-to-End Security Tests',
-        'Attack Simulation Tests'
+        'Attack Simulation Tests',
       ],
       coverageAreas: [
         'Authentication & Authorization',
@@ -75,8 +75,8 @@ describe('Security Test Suite Overview', () => {
         'Rate Limiting & DDoS Protection',
         'File Upload Security',
         'Error Handling',
-        'Security Headers'
-      ]
+        'Security Headers',
+      ],
     };
 
     expect(testingMethodology.approach).toBe('Defense in Depth');
@@ -93,11 +93,11 @@ describe('Security Test Suite Overview', () => {
         'X-Frame-Options',
         'X-XSS-Protection',
         'Content-Security-Policy',
-        'Strict-Transport-Security'
+        'Strict-Transport-Security',
       ],
       authenticationMethods: ['JWT'],
       rateLimitingStrategies: ['IP-based', 'User-based', 'Endpoint-specific'],
-      inputValidationRules: ['Whitelist-based', 'Server-side', 'Type validation']
+      inputValidationRules: ['Whitelist-based', 'Server-side', 'Type validation'],
     };
 
     expect(securityRequirements.minimumTestCoverage).toBeGreaterThanOrEqual(95);
@@ -113,7 +113,7 @@ describe('Security Test Suite Overview', () => {
       testDataIsolation: true,
       networkSecurity: 'Localhost only',
       dataEncryption: 'Test keys only',
-      auditLogging: true
+      auditLogging: true,
     };
 
     expect(testEnvironmentSecurity.secretsManagement).toBe('Environment Variables');

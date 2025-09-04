@@ -17,8 +17,8 @@ describe('Database Integration Tests - Fixed', () => {
         single: jest.fn(),
         order: jest.fn().mockReturnThis(),
         range: jest.fn(),
-        limit: jest.fn()
-      }))
+        limit: jest.fn(),
+      })),
     };
 
     supabaseService = new SupabaseService();
@@ -28,9 +28,7 @@ describe('Database Integration Tests - Fixed', () => {
   describe('Connection Tests', () => {
     it('should test database connection successfully', async () => {
       const mockChain = mockSupabaseClient.from('campaigns');
-      mockChain.limit.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([{ count: 5 }])
-      );
+      mockChain.limit.mockResolvedValue(TestHelpers.createMockSupabaseResponse([{ count: 5 }]));
 
       const result = await supabaseService.testConnection();
 
@@ -67,9 +65,7 @@ describe('Database Integration Tests - Fixed', () => {
 
     it('should create campaign successfully', async () => {
       const mockChain = mockSupabaseClient.from('campaigns');
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockCampaign));
 
       const result = await supabaseService.createCampaign(mockCampaignData);
 
@@ -83,17 +79,15 @@ describe('Database Integration Tests - Fixed', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Insert failed' })
       );
 
-      await expect(
-        supabaseService.createCampaign(mockCampaignData)
-      ).rejects.toThrow('Insert failed');
+      await expect(supabaseService.createCampaign(mockCampaignData)).rejects.toThrow(
+        'Insert failed'
+      );
     });
 
     it('should get campaign successfully', async () => {
       const campaignId = mockCampaign.id;
       const mockChain = mockSupabaseClient.from('campaigns');
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockCampaign)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockCampaign));
 
       const result = await supabaseService.getCampaign(campaignId);
 
@@ -107,23 +101,19 @@ describe('Database Integration Tests - Fixed', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Not found' })
       );
 
-      await expect(
-        supabaseService.getCampaign(campaignId)
-      ).rejects.toThrow('Not found');
+      await expect(supabaseService.getCampaign(campaignId)).rejects.toThrow('Not found');
     });
   });
 
   describe('KYC Operations', () => {
     const mockKYCData = TestHelpers.generateMockKYCData();
     const mockKYCRecord = MockFactories.kycRecord({
-      wallet_address: mockKYCData.address.toLowerCase()
+      wallet_address: mockKYCData.address.toLowerCase(),
     });
 
     it('should create KYC record successfully', async () => {
       const mockChain = mockSupabaseClient.from('kyc_verifications');
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockKYCRecord)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockKYCRecord));
 
       const result = await supabaseService.createKYCRecord(mockKYCData);
 
@@ -137,17 +127,13 @@ describe('Database Integration Tests - Fixed', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Insert failed' })
       );
 
-      await expect(
-        supabaseService.createKYCRecord(mockKYCData)
-      ).rejects.toThrow('Insert failed');
+      await expect(supabaseService.createKYCRecord(mockKYCData)).rejects.toThrow('Insert failed');
     });
 
     it('should get KYC status successfully', async () => {
       const walletAddress = mockKYCData.address;
       const mockChain = mockSupabaseClient.from('kyc_verifications');
-      mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockKYCRecord)
-      );
+      mockChain.single.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockKYCRecord));
 
       const result = await supabaseService.getKYCStatus(walletAddress);
 
@@ -171,14 +157,12 @@ describe('Database Integration Tests - Fixed', () => {
     const campaignId = '123e4567-e89b-12d3-a456-426614174000';
     const mockContributions = [
       MockFactories.formSubmission({ campaign_id: campaignId }),
-      MockFactories.formSubmission({ campaign_id: campaignId })
+      MockFactories.formSubmission({ campaign_id: campaignId }),
     ];
 
     it('should get contributions successfully', async () => {
       const mockChain = mockSupabaseClient.from('form_submissions');
-      mockChain.range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(mockContributions)
-      );
+      mockChain.range.mockResolvedValue(TestHelpers.createMockSupabaseResponse(mockContributions));
 
       const result = await supabaseService.getContributions(campaignId);
 
@@ -192,16 +176,12 @@ describe('Database Integration Tests - Fixed', () => {
         TestHelpers.createMockSupabaseResponse(null, { message: 'Query failed' })
       );
 
-      await expect(
-        supabaseService.getContributions(campaignId)
-      ).rejects.toThrow('Query failed');
+      await expect(supabaseService.getContributions(campaignId)).rejects.toThrow('Query failed');
     });
 
     it('should handle empty contributions', async () => {
       const mockChain = mockSupabaseClient.from('form_submissions');
-      mockChain.range.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse([])
-      );
+      mockChain.range.mockResolvedValue(TestHelpers.createMockSupabaseResponse([]));
 
       const result = await supabaseService.getContributions(campaignId);
 
@@ -223,9 +203,9 @@ describe('Database Integration Tests - Fixed', () => {
     it('should handle authentication errors', async () => {
       const mockChain = mockSupabaseClient.from('campaigns');
       mockChain.limit.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: 'PGRST301', 
-          message: 'JWT expired' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: 'PGRST301',
+          message: 'JWT expired',
         })
       );
 
@@ -240,50 +220,50 @@ describe('Database Integration Tests - Fixed', () => {
     it('should handle database transaction failures', async () => {
       const campaignData = TestHelpers.generateMockCampaignData();
       const mockChain = mockSupabaseClient.from('campaigns');
-      
+
       // Simulate a transaction failure
       mockChain.single.mockRejectedValue(new Error('Transaction failed'));
 
-      await expect(
-        supabaseService.createCampaign(campaignData)
-      ).rejects.toThrow('Transaction failed');
+      await expect(supabaseService.createCampaign(campaignData)).rejects.toThrow(
+        'Transaction failed'
+      );
     });
 
     it('should handle concurrent modification errors', async () => {
       const campaignId = 'test-campaign-id';
       const updateData = { campaign_name: 'Updated Name' };
       const mockChain = mockSupabaseClient.from('campaigns');
-      
+
       // Simulate optimistic locking failure
       mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: '23505', 
-          message: 'duplicate key value violates unique constraint' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: '23505',
+          message: 'duplicate key value violates unique constraint',
         })
       );
 
-      await expect(
-        supabaseService.updateCampaign(campaignId, updateData)
-      ).rejects.toThrow('duplicate key value violates unique constraint');
+      await expect(supabaseService.updateCampaign(campaignId, updateData)).rejects.toThrow(
+        'duplicate key value violates unique constraint'
+      );
     });
 
     it('should handle constraint violation errors', async () => {
-      const invalidCampaignData = { 
+      const invalidCampaignData = {
         campaign_name: null, // Violates not-null constraint
-        email: 'invalid-email'
+        email: 'invalid-email',
       };
       const mockChain = mockSupabaseClient.from('campaigns');
-      
+
       mockChain.single.mockResolvedValue(
-        TestHelpers.createMockSupabaseResponse(null, { 
-          code: '23502', 
-          message: 'null value in column "campaign_name" violates not-null constraint' 
+        TestHelpers.createMockSupabaseResponse(null, {
+          code: '23502',
+          message: 'null value in column "campaign_name" violates not-null constraint',
         })
       );
 
-      await expect(
-        supabaseService.createCampaign(invalidCampaignData)
-      ).rejects.toThrow('null value in column "campaign_name" violates not-null constraint');
+      await expect(supabaseService.createCampaign(invalidCampaignData)).rejects.toThrow(
+        'null value in column "campaign_name" violates not-null constraint'
+      );
     });
   });
 });

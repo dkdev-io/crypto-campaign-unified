@@ -17,28 +17,28 @@ async function updateTestyStyles() {
         { name: 'Pink Light', hex: '#FF7EB0', usage: 'highlight' },
         { name: 'Orange Light', hex: '#FF8E63', usage: 'complement' },
         { name: 'Background', hex: '#FCFBF8', usage: 'background' },
-        { name: 'Text', hex: '#000000', usage: 'text' }
+        { name: 'Text', hex: '#000000', usage: 'text' },
       ],
-      primary: '#FF66F4'
+      primary: '#FF66F4',
     },
     fonts: {
       primary: 'Inter, sans-serif',
       heading: { family: 'Inter', weight: '700' },
-      body: { family: 'Inter', weight: '400' }
+      body: { family: 'Inter', weight: '400' },
     },
     confidence: 95,
-    websiteAnalyzed: 'https://testy-pink-chancellor.lovable.app/'
+    websiteAnalyzed: 'https://testy-pink-chancellor.lovable.app/',
   };
 
   try {
     const { data, error } = await supabase
       .from('campaigns')
       .update({
-        theme_color: '#FF66F4'
+        theme_color: '#FF66F4',
       })
       .eq('campaign_name', 'Testy')
       .select();
-      
+
     if (error) {
       console.error('❌ Error updating campaign:', error.message);
       return;
@@ -55,11 +55,10 @@ async function updateTestyStyles() {
     console.log('Secondary color: #4B73FF (Blue)');
     console.log('Font: Inter');
     console.log('Confidence: 95%');
-    
+
     console.log('\n🔗 Test the updated styling:');
     console.log('Local: http://localhost:5174/testy');
     console.log('Live: https://cryptocampaign.netlify.app/testy');
-
   } catch (e) {
     console.error('❌ Failed to update:', e.message);
   }
