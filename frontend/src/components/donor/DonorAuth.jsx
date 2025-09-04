@@ -20,32 +20,19 @@ const DonorAuth = () => {
     }
   }, [donor, loading, navigate, location.state?.from?.pathname]);
   
-  // Show loading spinner while checking auth
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80 flex items-center justify-center">
-        <div className="text-center text-white">
-          <Spinner size="lg" className="mb-4" />
-          <p>Loading donor authentication...</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // Set initial tab based on route
+  // Set initial tab based on route - MUST be called before any early returns
   const getInitialTab = () => {
     if (location.pathname.includes('/register')) return 'signup';
     if (location.pathname.includes('/login')) return 'signin'; 
     return 'signin'; // default
   };
   
+  // ALL useState hooks MUST be called before any early returns
   const [activeTab, setActiveTab] = useState(getInitialTab());
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const from = location.state?.from?.pathname || '/donors/dashboard';
-
+  
   // Sign In Form Data
   const [signInData, setSignInData] = useState({
     email: '',
@@ -63,6 +50,20 @@ const DonorAuth = () => {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-primary/80 flex items-center justify-center">
+        <div className="text-center text-white">
+          <Spinner size="lg" className="mb-4" />
+          <p>Loading donor authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const from = location.state?.from?.pathname || '/donors/dashboard';
 
   const handleSignInChange = (e) => {
     const { name, value } = e.target;
