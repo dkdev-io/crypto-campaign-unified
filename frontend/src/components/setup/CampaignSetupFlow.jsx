@@ -181,13 +181,34 @@ const CampaignSetupFlow = () => {
 
   const generateEmbedCode = async () => {
     try {
-      const embedCode = `<!-- Crypto Campaign Donation Form -->
-<script src="${window.location.origin}/embed.js"></script>
-<div 
-  id="crypto-campaign-form" 
-  data-campaign-id="${formData.campaignId}"
-  data-styles="${formData.stylesApplied ? 'custom' : 'default'}"
-></div>`
+      const campaignUrl = `${window.location.origin}/campaign/${encodeURIComponent(formData.campaignName)}`
+      const embedCode = `<!-- NEXTRAISE Campaign Donation Form -->
+<iframe 
+  src="${campaignUrl}"
+  width="100%"
+  height="800"
+  frameborder="0"
+  style="border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+  title="${formData.campaignName} - Donation Form">
+</iframe>
+
+<!-- Alternative: Direct embed (advanced users) -->
+<!-- 
+<div id="nextraise-campaign-${formData.campaignId}"></div>
+<script>
+  (function() {
+    const script = document.createElement('script');
+    script.src = '${window.location.origin}/embed.js';
+    script.onload = function() {
+      window.NEXTRAISE.renderCampaign({
+        containerId: 'nextraise-campaign-${formData.campaignId}',
+        campaignId: '${formData.campaignId}'
+      });
+    };
+    document.head.appendChild(script);
+  })();
+</script>
+-->`
       
       await updateFormData({ embedCode })
     } catch (error) {

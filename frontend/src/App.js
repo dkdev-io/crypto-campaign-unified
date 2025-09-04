@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnalyticsProvider } from './components/analytics/AnalyticsProvider';
 import PrivacyBanner from './components/analytics/PrivacyBanner';
-import ContributionFormWithAnalytics from './components/analytics/ContributionFormWithAnalytics';
+import CampaignPage from './pages/CampaignPage';
 import './App.css';
 
 function App() {
@@ -44,12 +44,19 @@ function App() {
                     <h2>Welcome to NEXTRAISE</h2>
                     <p>Support innovative projects with cryptocurrency contributions.</p>
                     
-                    {/* Demo Campaign */}
-                    <div style={{ marginTop: '2rem' }}>
-                      <ContributionFormWithAnalytics
-                        campaignId="demo-campaign-123"
-                        onContribution={handleContribution}
-                      />
+                    <div className="text-center mt-8">
+                      <a 
+                        href="/campaigns" 
+                        className="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+                      >
+                        View Campaigns
+                      </a>
+                      <a 
+                        href="/campaigns/auth/setup" 
+                        className="inline-block ml-4 border border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors"
+                      >
+                        Create Campaign
+                      </a>
                     </div>
                   </div>
                 } 
@@ -66,16 +73,8 @@ function App() {
               />
               
               <Route 
-                path="/campaign/:campaignId" 
-                element={
-                  <div>
-                    <h2>Campaign Details</h2>
-                    <ContributionFormWithAnalytics
-                      campaignId="specific-campaign"
-                      onContribution={handleContribution}
-                    />
-                  </div>
-                } 
+                path="/campaign/:campaignName" 
+                element={<CampaignPage />} 
               />
               
               <Route 
