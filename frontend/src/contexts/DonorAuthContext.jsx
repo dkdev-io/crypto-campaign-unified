@@ -140,6 +140,7 @@ export const DonorAuthProvider = ({ children }) => {
   const signIn = async ({ email, password }) => {
     try {
       setError(null);
+      console.log('🔐 DonorAuth signIn called with:', email);
       
       // Attempt to sign in directly (no need to check donors table first)
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -148,11 +149,14 @@ export const DonorAuthProvider = ({ children }) => {
       });
 
       if (error) {
+        console.error('❌ Supabase signIn error:', error);
         if (error.message.includes('Invalid login credentials')) {
           throw new Error('Incorrect password. Please check your password and try again.');
         }
         throw error;
       }
+
+      console.log('✅ Supabase signIn successful:', data.user?.email);
 
       // Skip donor table check - use user_metadata instead
       if (data.user && data.user.user_metadata?.user_type !== 'donor') {
@@ -161,8 +165,10 @@ export const DonorAuthProvider = ({ children }) => {
       }
 
       await checkDonor();
+      console.log('✅ checkDonor completed');
       return { data, error: null };
     } catch (error) {
+      console.error('❌ DonorAuth signIn failed:', error);
       setError(error.message);
       return { data: null, error };
     }
