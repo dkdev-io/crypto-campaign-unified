@@ -39,7 +39,7 @@ const Signup = ({ formData, updateFormData, onNext }) => {
     <div className="container-responsive">
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2 style={{ color: 'hsl(var(--crypto-navy))', marginBottom: '1rem', fontSize: 'var(--text-heading-lg)' }}>
-          📋 Campaign Information
+          Campaign Information
         </h2>
         <p style={{ color: 'hsl(var(--crypto-medium-gray))', fontSize: 'var(--text-body-lg)', marginBottom: '0' }}>
           Tell us about yourself and your campaign
@@ -195,7 +195,7 @@ const Signup = ({ formData, updateFormData, onNext }) => {
       <div className="form-actions">
         <div></div>
         <button className="btn btn-primary" onClick={handleNext}>
-          Next: Find Your Committee →
+          Next: Find Your Committee
         </button>
       </div>
 
@@ -209,21 +209,21 @@ const Signup = ({ formData, updateFormData, onNext }) => {
         fontSize: '14px',
         color: '#6c757d'
       }}>
-        <h3>🔄 What Happens Next</h3>
+        <h3>What Happens Next</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
           <li><strong>Find Your FEC Committee:</strong> We'll search for your registered committee</li>
           <li><strong>Connect Bank Account:</strong> Secure connection via Plaid</li>
           <li><strong>Launch Your Form:</strong> Get your embed code and start collecting</li>
         </ul>
         
-        <h3 style={{ marginTop: '1rem' }}>🔒 Privacy & Security</h3>
+        <h3 style={{ marginTop: '1rem' }}>Privacy & Security</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
           <li><strong>Your information is encrypted</strong> and stored securely</li>
           <li><strong>FEC-compliant data handling</strong> with audit trails</li>
           <li><strong>You control your campaign data</strong> - export anytime</li>
         </ul>
         
-        <h3 style={{ marginTop: '1rem' }}>📋 Requirements</h3>
+        <h3 style={{ marginTop: '1rem' }}>Requirements</h3>
         <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.2rem' }}>
           <li><strong>Valid FEC committee</strong> registration required</li>
           <li><strong>Campaign bank account</strong> for processing donations</li>

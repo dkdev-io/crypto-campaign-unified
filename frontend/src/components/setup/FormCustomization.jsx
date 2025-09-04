@@ -21,7 +21,7 @@ const FormCustomization = ({ formData, updateFormData, onNext, onPrev }) => {
               alignItems: 'center',
               gap: '0.5rem'
             }}>
-              <span>✨</span>
+              <span></span>
               <span>From your website: {formData.appliedStyles.colors.primary}</span>
             </div>
           )}
@@ -46,7 +46,7 @@ const FormCustomization = ({ formData, updateFormData, onNext, onPrev }) => {
           className="form-input"
           value={formData.suggestedAmounts || '25, 50, 100, 250'}
           onChange={(e) => {
-            console.log('🎯 User entered custom amounts:', e.target.value);
+            console.log('User entered custom amounts:', e.target.value);
             updateFormData({ suggestedAmounts: e.target.value });
           }}
           placeholder="25, 50, 100, 250"

@@ -228,7 +228,7 @@ const CampaignInformationForm = () => {
                     Creating Campaign...
                   </>
                 ) : (
-                  'Continue to Committee Search →'
+                  'Continue to Committee Search'
                 )}
               </Button>
             </form>
@@ -239,10 +239,10 @@ const CampaignInformationForm = () => {
 What happens next?
               </h4>
               <ul className="text-xs text-muted-foreground space-y-1">
-                <li>• We'll search for your FEC committee information</li>
-                <li>• Connect your bank account securely via Plaid</li>
-                <li>• Match your website's styling to your donation form</li>
-                <li>• Generate your embed code and go live!</li>
+                <li>We'll search for your FEC committee information</li>
+                <li>Connect your bank account securely via Plaid</li>
+                <li>Match your website's styling to your donation form</li>
+                <li>Generate your embed code and go live!</li>
               </ul>
             </div>
           </div>

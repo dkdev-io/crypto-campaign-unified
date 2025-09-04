@@ -141,7 +141,7 @@ const StyleConfigurationForm = () => {
       setImportLoading(true);
       setError('');
       
-      console.log('🔍 Starting website style analysis for:', formData.website);
+      console.log('Starting website style analysis for:', formData.website);
 
       // Call backend API to analyze website with Puppeteer
       const response = await fetch('/api/analyze-website-styles', {
@@ -163,7 +163,7 @@ const StyleConfigurationForm = () => {
         throw new Error(data.error || 'Failed to analyze website');
       }
 
-      console.log('✅ Website analysis completed:', data);
+      console.log('Website analysis completed:', data);
 
       setImportedStyles(data);
       setStyleMethod('import');
@@ -178,7 +178,7 @@ const StyleConfigurationForm = () => {
       });
 
     } catch (err) {
-      console.error('❌ Website analysis failed:', err);
+      console.error('Website analysis failed:', err);
       setError(err.message || 'Failed to analyze website. Please try manual entry instead.');
     } finally {
       setImportLoading(false);
@@ -754,7 +754,7 @@ Import Successful
               
               <div className="text-center">
                 <div className="text-sm text-muted-foreground">
-                  Steps 4-5 of 7 • Style Configuration
+                  Steps 4-5 of 7 - Style Configuration
                 </div>
               </div>
               

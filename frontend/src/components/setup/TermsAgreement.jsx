@@ -195,7 +195,7 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back to Embed Code
+          Back to Embed Code
         </button>
       </div>
     </div>

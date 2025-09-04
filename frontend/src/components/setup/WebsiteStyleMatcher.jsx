@@ -223,7 +223,7 @@ const WebsiteStyleMatcher = ({ formData, updateFormData, onNext, onPrev }) => {
                 {fonts.primary || 'Default Font'}
               </div>
               <div style={{ fontSize: '0.8rem' }}>
-                Heading • Body • Buttons
+                Heading - Body - Buttons
               </div>
             </div>
           </div>
