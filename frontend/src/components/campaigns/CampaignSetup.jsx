@@ -36,7 +36,7 @@ const CampaignSetup = () => {
   }
 
   // User is authenticated, show the embedded contribution form
-  return <EmbedDonorForm campaignId="demo-campaign" />;
+  return <EmbedDonorForm campaignId={null} />;
 };
 
 export default CampaignSetup;
