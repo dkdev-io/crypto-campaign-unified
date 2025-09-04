@@ -9,11 +9,11 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 @layer base {
   :root {
     /* Crypto Campaign Brand Colors */
-    --crypto-navy: 214 100% 21%; /* Deep navy blue #1a237e */
-    --crypto-blue: 207 90% 54%; /* Bright blue #2196f3 */
-    --crypto-gold: 45 100% 51%; /* Gold #ffc107 */
+    --crypto-navy: 221 83% 39%; /* Professional blue #1e40af */
+    --crypto-blue: 217 91% 60%; /* Bright blue #3b82f6 */
+    --crypto-gold: 217 91% 60%; /* Blue for CTAs #3b82f6 */
     --crypto-white: 0 0% 100%; /* Pure white */
-    --crypto-light-gray: 210 20% 98%; /* Light gray #f8f9fa */
+    --crypto-light-gray: 213 94% 93%; /* Light blue #dbeafe */
     --crypto-medium-gray: 210 11% 71%; /* Medium gray #9e9e9e */
     --crypto-dark-gray: 210 9% 31%; /* Dark gray #424242 */
     
@@ -36,7 +36,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --muted: var(--crypto-light-gray);
     --muted-foreground: var(--crypto-medium-gray);
 
-    --accent: var(--crypto-gold); /* Gold for CTAs */
+    --accent: var(--crypto-blue); /* Gold for CTAs */
     --accent-foreground: var(--crypto-navy);
 
     --destructive: 0 84.2% 60.2%;
@@ -49,7 +49,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --radius: 0.5rem; /* 8px rounded corners */
     
     /* Crypto Campaign Design Tokens */
-    --gradient-hero: linear-gradient(135deg, #2D1B69, #1F0E52);
+    --gradient-hero: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
     --gradient-section: linear-gradient(135deg, hsl(var(--crypto-light-gray)), hsl(210 20% 95%));
     --shadow-card: 0 4px 20px -4px hsl(var(--crypto-navy) / 0.1);
     --shadow-button: 0 2px 12px -2px hsl(var(--crypto-gold) / 0.3);
@@ -110,7 +110,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     --muted: hsl(210 9% 20%);
     --muted-foreground: var(--crypto-medium-gray);
 
-    --accent: var(--crypto-gold);
+    --accent: var(--crypto-blue);
     --accent-foreground: var(--crypto-navy);
 
     --destructive: 0 62.8% 30.6%;
@@ -228,8 +228,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Card Component Styles */
   .crypto-card {
-    background-color: hsl(var(--crypto-navy)) !important;
-    color: hsl(var(--crypto-white)) !important;
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
     padding: var(--space-lg);
@@ -363,22 +363,22 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   /* Setup Wizard Styles */
   .setup-container {
     min-height: 100vh;
-    background-color: hsl(var(--crypto-navy));
+    background-color: #1e40af;
     padding: 2rem;
   }
 
   .setup-card {
     max-width: 800px;
     margin: 0 auto;
-    background: hsl(var(--crypto-navy));
+    background: #dbeafe;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
   }
 
   .step-indicator {
-    background: hsl(var(--crypto-navy));
+    background: #1e40af;
     padding: 2rem;
-    color: hsl(var(--crypto-white));
+    color: white;
     text-align: center;
     font-family: 'Inter', sans-serif;
   }
@@ -412,7 +412,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: hsl(var(--crypto-navy));
+    background-color: #1e40af;
     padding: var(--space-lg);
   }
 
@@ -498,12 +498,12 @@ body .setup-container input.form-input::placeholder {
 
 /* HOMEPAGE STYLING OVERRIDES - CONSISTENT BLUE THEME */
 body {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
 }
 
 body .hero-section,
 body .min-h-screen {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
 }
 
 /* Force all sections to have transparent background */
@@ -522,11 +522,11 @@ body .bg-transparent {
   background-color: transparent !important;
 }
 
-/* All cards use navy background with white text */
+/* All cards use light blue background with dark text */
 body .crypto-card {
-  background-color: hsl(var(--crypto-navy)) !important;
-  color: hsl(var(--crypto-white)) !important;
-  border: 1px solid hsl(var(--crypto-white) / 0.2) !important;
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+  border: 1px solid rgba(30, 64, 175, 0.2) !important;
 }
 
 body .crypto-card h1,
@@ -537,7 +537,7 @@ body .crypto-card h5,
 body .crypto-card p,
 body .crypto-card span,
 body .crypto-card div {
-  color: hsl(var(--crypto-white)) !important;
+  color: #1e40af !important;
 }
 
 /* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
@@ -553,7 +553,7 @@ body .donor-form,
 body .donor-dashboard,
 body .campaign-auth,
 body .donor-auth {
-  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
   color: hsl(var(--crypto-white)) !important;
 }
 

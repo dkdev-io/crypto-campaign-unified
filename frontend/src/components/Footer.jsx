@@ -140,7 +140,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/10 mt-16 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm text-primary-foreground/60 text-center sm:text-left">
-              © 2024 NEXTRAISE. All rights reserved.
+              © 2025 NEXTRAISE. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="/terms" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors duration-200">
