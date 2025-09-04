@@ -6,15 +6,22 @@ const DonorProtectedRoute = ({ children }) => {
   const { donor, loading } = useDonorAuth();
   const location = useLocation();
 
-  // Check for development bypass parameter
+  // Check for development bypass - use same system as AuthContext
+  const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+  const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development';
+  
+  // Also support legacy URL parameter bypass
   const searchParams = new URLSearchParams(location.search);
   const bypassParam = searchParams.get('bypass');
   const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app');
-  const shouldBypass = isDevelopment && bypassParam === 'true';
+  
+  const shouldBypass = (SKIP_AUTH && IS_DEVELOPMENT) || (isDevelopment && bypassParam === 'true');
   
   // Debug logging
   console.log('🔍 DONOR PROTECTED ROUTE DEBUG:');
   console.log('- URL:', location.pathname + location.search);
+  console.log('- VITE_SKIP_AUTH:', SKIP_AUTH);
+  console.log('- IS_DEVELOPMENT:', IS_DEVELOPMENT);
   console.log('- bypassParam:', bypassParam);
   console.log('- isDevelopment:', isDevelopment);
   console.log('- shouldBypass:', shouldBypass);

@@ -53,7 +53,7 @@ const SetupWizard = () => {
           const result = await supabase
             .from('campaigns')
             .select(
-              'id, title, email, website, wallet_address, status, created_at, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info'
+              'id, campaign_name, email, website, wallet_address, status, created_at, styles_applied, style_method, committee_name, fec_committee_id, committee_address, committee_city, committee_state, committee_zip, committee_contact_info'
             )
             .eq('email', user.email)
             .order('created_at', { ascending: false })
@@ -73,7 +73,6 @@ const SetupWizard = () => {
             campaignId: existingCampaign.id,
             userFullName: savedData?.userFullName || user.user_metadata?.full_name || '',
             campaignName:
-              existingCampaign.title ||
               existingCampaign.campaign_name ||
               savedData?.campaignName ||
               '',
@@ -130,7 +129,7 @@ const SetupWizard = () => {
           try {
             const newCampaignData = {
               email: newFormData.email,
-              title: newFormData.campaignName || 'New Campaign',
+              campaign_name: newFormData.campaignName || 'New Campaign',
               website: newFormData.website || '',
               wallet_address: 'temp-wallet-' + Date.now(),
               max_donation_limit: 3300,
@@ -216,7 +215,7 @@ const SetupWizard = () => {
         const dbData = {};
 
         // Only include fields that exist in current schema
-        if (updatedData.campaignName) dbData.title = updatedData.campaignName;
+        if (updatedData.campaignName) dbData.campaign_name = updatedData.campaignName;
         if (updatedData.email) dbData.email = updatedData.email;
         if (updatedData.website) dbData.website = updatedData.website;
         if (updatedData.themeColor) dbData.theme_color = updatedData.themeColor;
@@ -282,7 +281,7 @@ const SetupWizard = () => {
       try {
         const newCampaignData = {
           email: formData.email || user.email,
-          title: formData.campaignName || 'New Campaign',
+          campaign_name: formData.campaignName || 'New Campaign',
           website: formData.website || '',
           // Required existing fields
           wallet_address: 'temp-wallet-' + Date.now(),

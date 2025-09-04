@@ -7,6 +7,28 @@ const ProtectedRoute = ({ children, requireVerified = true }) => {
   const { user, loading, isEmailVerified, signOut } = useAuth();
   const location = useLocation();
 
+  // Check for development bypass - use same system as DonorProtectedRoute
+  const SKIP_AUTH = import.meta.env.VITE_SKIP_AUTH === 'true';
+  const IS_DEVELOPMENT = import.meta.env.DEV || import.meta.env.NODE_ENV === 'development';
+  
+  // Also support legacy URL parameter bypass
+  const searchParams = new URLSearchParams(location.search);
+  const bypassParam = searchParams.get('bypass');
+  const isDevelopment = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname.includes('netlify.app');
+  
+  const shouldBypass = (SKIP_AUTH && IS_DEVELOPMENT) || (isDevelopment && bypassParam === 'true');
+  
+  // Debug logging
+  console.log('🔍 CAMPAIGN PROTECTED ROUTE DEBUG:');
+  console.log('- URL:', location.pathname + location.search);
+  console.log('- VITE_SKIP_AUTH:', SKIP_AUTH);
+  console.log('- IS_DEVELOPMENT:', IS_DEVELOPMENT);
+  console.log('- bypassParam:', bypassParam);
+  console.log('- isDevelopment:', isDevelopment);
+  console.log('- shouldBypass:', shouldBypass);
+  console.log('- user:', !!user);
+  console.log('- loading:', loading);
+
   // Show loading spinner while checking auth status
   if (loading) {
     return (
@@ -47,14 +69,14 @@ const ProtectedRoute = ({ children, requireVerified = true }) => {
     );
   }
 
-  // No user logged in - redirect to appropriate auth page based on context
-  if (!user) {
+  // No user logged in - redirect to appropriate auth page based on context (unless bypassed)
+  if (!user && !shouldBypass) {
     const authRoute = getAuthRoute(location.pathname, { from: location });
     return <Navigate to={authRoute.pathname} state={authRoute.state} replace />;
   }
 
-  // User logged in but email not verified when verification is required
-  if (requireVerified && !isEmailVerified()) {
+  // User logged in but email not verified when verification is required (unless bypassed)
+  if (requireVerified && !isEmailVerified() && !shouldBypass) {
     return (
       <div
         style={{
@@ -137,7 +159,11 @@ const ProtectedRoute = ({ children, requireVerified = true }) => {
     );
   }
 
-  // User is authenticated and meets all requirements
+  if (shouldBypass) {
+    console.log('🚨 CAMPAIGN PROTECTED ROUTE BYPASS ACTIVE');
+  }
+
+  // User is authenticated and meets all requirements (or bypassed)
   return children;
 };
 
