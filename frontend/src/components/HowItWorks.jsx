@@ -30,7 +30,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section id="how-it-works" className="content-section bg-background">
+    <section id="how-it-works" className="content-section">
       <div className="container-responsive">
         <div className="text-center mb-16">
           <h2 className="mb-6" style={{color: 'hsl(var(--crypto-navy))'}}>

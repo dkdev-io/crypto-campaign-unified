@@ -197,7 +197,7 @@ const CampaignAuth = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{background: 'var(--gradient-hero)'}}>
+    <div className="campaign-auth min-h-screen" style={{background: 'var(--gradient-hero)'}}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">

@@ -345,7 +345,7 @@ const SetupWizard = () => {
   }
 
   return (
-    <div>
+    <div className="setup-wizard">
       <CampaignAuthNav />
       <div className="setup-container">
         <div className="setup-card">

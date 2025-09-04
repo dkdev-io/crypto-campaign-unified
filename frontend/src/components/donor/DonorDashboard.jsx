@@ -143,7 +143,7 @@ const DonorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+    <div className="donor-dashboard min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
       {/* Header */}
       <div className="text-white" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

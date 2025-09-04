@@ -250,7 +250,7 @@ const DonorForm = ({ campaignId }) => {
   const secondaryButtonStyle = getCampaignButtonStyles(campaignData, 'secondary');
 
   return (
-    <div className="container-responsive crypto-card" style={{ maxWidth: '500px' }}>
+    <div className="donor-form container-responsive crypto-card" style={{ maxWidth: '500px' }}>
       <h1 style={{ 
         color: campaignStyles.colors.primary, 
         marginBottom: campaignStyles.layout.spacing,

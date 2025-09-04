@@ -19,7 +19,7 @@ const CampaignSetup = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
+      <div className="campaign-setup min-h-screen" style={{backgroundColor: 'hsl(var(--crypto-navy))'}}>
         <div className="flex items-center justify-center px-4 py-12">
           <div className="text-center">
             <Spinner size="lg" />

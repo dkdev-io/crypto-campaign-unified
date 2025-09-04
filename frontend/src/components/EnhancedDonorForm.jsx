@@ -397,7 +397,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
   });
 
   return (
-    <div className="container-responsive crypto-card" style={{ maxWidth: '600px' }}>
+    <div className="donor-form container-responsive crypto-card" style={{ maxWidth: '600px' }}>
       <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
         {campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>

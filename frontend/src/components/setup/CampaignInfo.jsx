@@ -60,7 +60,7 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
         Step 1 of 8: Campaign Info
       </p>
       
-      <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+      <div className="crypto-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
         {/* Campaign Name */}
         <div className="form-group" style={{ marginBottom: '1.5rem' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--crypto-white))', fontSize: 'var(--text-body-sm)', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>

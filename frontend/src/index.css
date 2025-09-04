@@ -219,10 +219,11 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     padding: var(--space-2xl) 0;
     max-width: var(--container-xl);
     margin: 0 auto;
+    background: transparent !important;
   }
   
   .content-section:nth-child(even) {
-    background: var(--gradient-section);
+    background: transparent !important;
   }
 
   /* Card Component Styles */
@@ -505,6 +506,22 @@ body .min-h-screen {
   background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
 }
 
+/* Force all sections to have transparent background */
+body .content-section,
+body #features,
+body #how-it-works {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Override any white/light backgrounds */
+body .bg-background,
+body .bg-white,
+body .bg-transparent {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
 /* All cards use navy background with white text */
 body .crypto-card {
   background-color: hsl(var(--crypto-navy)) !important;
@@ -526,3 +543,77 @@ body .crypto-card div {
 /* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
 /* TEST CHANGE Thu Sep  4 12:30:52 PDT 2025 */
 /* BYPASS AUTO-SYNC - STYLING OVERRIDES ACTIVE */
+/* BLUE THEME ENFORCEMENT - Thu Sep  4 2025 */
+
+/* CAMPAIGN AND DONOR WORKFLOW UNIVERSAL STYLING */
+/* Apply navy theme to all workflow containers */
+body .setup-wizard,
+body .campaign-setup,
+body .donor-form,
+body .donor-dashboard,
+body .campaign-auth,
+body .donor-auth {
+  background: linear-gradient(135deg, #2D1B69, #1F0E52) !important;
+  color: hsl(var(--crypto-white)) !important;
+}
+
+/* All headings in workflow get white text */
+body .setup-wizard h1,
+body .setup-wizard h2,
+body .setup-wizard h3,
+body .setup-wizard h4,
+body .setup-wizard h5,
+body .campaign-setup h1,
+body .campaign-setup h2,
+body .campaign-setup h3,
+body .campaign-setup h4,
+body .campaign-setup h5,
+body .donor-form h1,
+body .donor-form h2,
+body .donor-form h3,
+body .donor-form h4,
+body .donor-form h5,
+body .donor-dashboard h1,
+body .donor-dashboard h2,
+body .donor-dashboard h3,
+body .donor-dashboard h4,
+body .donor-dashboard h5,
+body .campaign-auth h1,
+body .campaign-auth h2,
+body .campaign-auth h3,
+body .campaign-auth h4,
+body .campaign-auth h5,
+body .donor-auth h1,
+body .donor-auth h2,
+body .donor-auth h3,
+body .donor-auth h4,
+body .donor-auth h5 {
+  color: hsl(var(--crypto-white)) !important;
+}
+
+/* All paragraphs and labels in workflow get white text */
+body .setup-wizard p,
+body .setup-wizard label,
+body .campaign-setup p,
+body .campaign-setup label,
+body .donor-form p,
+body .donor-form label,
+body .donor-dashboard p,
+body .donor-dashboard label,
+body .campaign-auth p,
+body .campaign-auth label,
+body .donor-auth p,
+body .donor-auth label {
+  color: hsl(var(--crypto-white)) !important;
+}
+
+/* Step indicators get white text */
+body .step-indicator,
+body .breadcrumb {
+  color: hsl(var(--crypto-white)) !important;
+}
+
+body .step-indicator *,
+body .breadcrumb * {
+  color: hsl(var(--crypto-white)) !important;
+}
