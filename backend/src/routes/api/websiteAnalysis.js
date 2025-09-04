@@ -383,4 +383,4 @@ process.on('SIGINT', async () => {
   await analyzer.cleanup();
 });
 
-module.exports = router;
+export default router;

@@ -301,7 +301,7 @@ function parseArgs() {
 }
 
 function showHelp() {
-${colors.bold}GitHub Pages Watch & Auto-Deploy${colors.reset}
+  console.log(`${colors.bold}GitHub Pages Watch & Auto-Deploy${colors.reset}
 
 ${colors.cyan}Usage:${colors.reset}
   node scripts/watch-and-deploy.js [options]
@@ -316,7 +316,7 @@ ${colors.cyan}Options:${colors.reset}
 
 ${colors.cyan}Examples:${colors.reset}
   node scripts/watch-and-deploy.js
-  node scripts/watch-and-deploy.js --debounce 10 --cooldown 120
+  node scripts/watch-and-deploy.js --debounce 10 --cooldown 120`);
   node scripts/watch-and-deploy.js --skip-lint --watch-paths "frontend/src,backend/src"
 
 ${colors.cyan}What this does:${colors.reset}
