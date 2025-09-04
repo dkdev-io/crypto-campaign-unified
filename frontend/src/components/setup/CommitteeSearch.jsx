@@ -303,13 +303,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       </p>
 
       {/* Search Section */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '1.5rem', 
-        borderRadius: '8px', 
-        marginBottom: '2rem',
-        border: '1px solid #e9ecef'
-      }}>
+      <div className="crypto-card mb-8">
         <div className="form-group" style={{ marginBottom: '1rem' }}>
           <label>Search for Committee</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -326,7 +320,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
               onClick={() => handleSearch()}
               disabled={loading || !searchTerm.trim()}
               style={{
-                background: '#2a2a72',
+                background: 'hsl(var(--crypto-navy))',
                 color: 'white',
                 border: 'none',
                 padding: '0.75rem 1rem',
@@ -342,7 +336,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         </div>
 
         {searched && (
-          <div style={{ fontSize: '14px', color: '#6c757d' }}>
+          <div className="text-sm text-muted-foreground">
             Searching: "{searchTerm}" • Found {committees.length} result{committees.length !== 1 ? 's' : ''}
           </div>
         )}
@@ -351,12 +345,12 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Error Message */}
       {error && (
         <div style={{ 
-          background: '#fee', 
-          color: '#c33', 
+          background: 'hsl(var(--destructive) / 0.1)', 
+          color: 'hsl(var(--destructive))', 
           padding: '1rem', 
           borderRadius: '4px', 
           marginBottom: '1rem',
-          border: '1px solid #fcc'
+          border: '1px solid hsl(var(--destructive) / 0.2)'
         }}>
           ❌ {error}
         </div>
@@ -365,26 +359,19 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Success Message */}
       {success && (
         <div style={{ 
-          background: '#efe', 
-          color: '#393', 
+          background: 'hsl(120 60% 95%)', 
+          color: 'hsl(120 60% 25%)', 
           padding: '1rem', 
           borderRadius: '4px', 
           marginBottom: '1rem',
-          border: '1px solid #cfc'
+          border: '1px solid hsl(120 60% 80%)'
         }}>
           ✅ {success}
         </div>
       )}
 
       {/* Simple Committee Entry */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '1.5rem', 
-        borderRadius: '8px', 
-        marginBottom: '2rem',
-        border: '1px solid #e9ecef',
-        textAlign: 'center'
-      }}>
+      <div className="crypto-card mb-8 text-center">
         <h4 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
           Add Committee Name
         </h4>
@@ -484,14 +471,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Committee Results */}
       {committees.length > 0 && (
         <div style={{ marginBottom: '2rem' }}>
-          <h4 style={{ color: '#495057', marginBottom: '1rem' }}>
+          <h4 className="text-foreground" style={{marginBottom: '1rem', fontSize: 'var(--text-heading-sm)'}}>
             Select Your Committee ({committees.length} found)
           </h4>
           
           <div style={{ 
             maxHeight: '400px', 
             overflowY: 'auto',
-            border: '1px solid #e9ecef',
+            border: '1px solid hsl(var(--border))',
             borderRadius: '6px'
           }}>
             {committees.map((committee, index) => (
@@ -500,14 +487,14 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                 onClick={() => handleSelectCommittee(committee)}
                 style={{
                   padding: '1rem',
-                  borderBottom: index < committees.length - 1 ? '1px solid #e9ecef' : 'none',
+                  borderBottom: index < committees.length - 1 ? '1px solid hsl(var(--border))' : 'none',
                   cursor: 'pointer',
                   background: selectedCommittee?.id === committee.id ? '#e3f2fd' : 'white',
                   borderLeft: selectedCommittee?.id === committee.id ? '4px solid #2a2a72' : 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (selectedCommittee?.id !== committee.id) {
-                    e.target.style.background = '#f8f9fa';
+                    e.target.style.background = 'hsl(var(--muted))';
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -523,7 +510,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                       color: '#2a2a72',
                       fontSize: '16px'
                     }}>
-                      {committee.source === 'test' ? '🧪' : '🏛️'} {committee.name}
+                      {committee.name}
                     </h5>
                     
                     <div style={{ marginBottom: '0.5rem' }}>
@@ -553,7 +540,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                       )}
                     </div>
 
-                    <div style={{ fontSize: '14px', color: '#6c757d' }}>
+                    <div className="text-sm text-muted-foreground">
                       <div><strong>ID:</strong> {committee.id}</div>
                       {committee.candidateName && (
                         <div><strong>Candidate:</strong> {committee.candidateName}</div>
@@ -577,7 +564,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                         SELECTED
                       </span>
                     ) : (
-                      <span style={{ color: '#6c757d', fontSize: '14px' }}>
+                      <span className="text-sm text-muted-foreground">
                         Click to select
                       </span>
                     )}
@@ -602,7 +589,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
             color: validation.isValid ? '#155724' : '#721c24',
             margin: '0 0 1rem 0'
           }}>
-            {validation.isValid ? '✅ Committee Validation Passed' : '⚠️ Committee Validation Issues'}
+            {validation.isValid ? 'Committee Validation Passed' : 'Committee Validation Issues'}
           </h5>
 
           {validation.errors.length > 0 && (
@@ -653,26 +640,26 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         <div style={{ 
           textAlign: 'center', 
           padding: '3rem 1rem',
-          background: '#f8f9fa',
+          background: 'hsl(var(--muted))',
           borderRadius: '8px',
-          border: '1px solid #e9ecef'
+          border: '1px solid hsl(var(--border))'
         }}>
           <div style={{ fontSize: '48px', marginBottom: '1rem' }}>Search</div>
-          <h4 style={{ color: '#495057', marginBottom: '1rem' }}>No committees found</h4>
-          <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
+          <h4 className="text-foreground" style={{marginBottom: '1rem', fontSize: 'var(--text-heading-sm)'}}>No committees found</h4>
+          <p className="text-muted-foreground" style={{marginBottom: '2rem'}}>
             We couldn't find any committees matching "{searchTerm}". Try:
           </p>
           <ul style={{ 
             textAlign: 'left', 
             maxWidth: '400px', 
             margin: '0 auto 2rem auto',
-            color: '#6c757d'
+            color: 'hsl(var(--muted-foreground))'
           }}>
             <li>Different keywords or abbreviations</li>
             <li>Just the candidate's last name</li>
             <li>The committee's short name</li>
           </ul>
-          <p style={{ color: '#6c757d', fontSize: '14px' }}>
+          <p className="text-sm text-muted-foreground">
             <strong>For testing:</strong> Admin can add test committees via the admin panel
           </p>
         </div>
@@ -689,7 +676,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
           textAlign: 'center'
         }}>
           <h4 style={{ color: '#155724', margin: '0 0 1rem 0' }}>
-            ✅ Committee Information Saved!
+            Committee Information Saved!
           </h4>
           <p style={{ color: '#155724', margin: '0 0 2rem 0' }}>
             {success}
@@ -708,7 +695,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
               fontWeight: '600'
             }}
           >
-            Continue to Next Step →
+            Continue to Next Step
           </button>
         </div>
       )}
@@ -716,7 +703,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back
+          Back
         </button>
         
         {/* Only show standard next button if no committee saved yet */}
@@ -727,7 +714,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
               onClick={handleConfirmCommittee}
               disabled={!selectedCommittee || (validation && !validation.isValid)}
             >
-              Next →
+              Next
             </button>
             
             {/* Always show skip button for testing */}
@@ -749,7 +736,7 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
                 width: '100%'
               }}
             >
-              Continue Without Committee (Can Update Later) →
+              Continue Without Committee (Can Update Later)
             </button>
           </>
         )}

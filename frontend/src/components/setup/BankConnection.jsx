@@ -259,13 +259,13 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       {/* Navigation */}
       <div className="form-actions">
         <button className="btn btn-secondary" onClick={onPrev}>
-          ← Back
+          Back
         </button>
         <button 
           className="btn btn-primary"
           onClick={handleNext}
         >
-          Next: Website Style →
+          Next: Website Style
         </button>
       </div>
 
