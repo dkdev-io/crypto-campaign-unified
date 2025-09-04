@@ -344,4 +344,4 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-}
+}/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
