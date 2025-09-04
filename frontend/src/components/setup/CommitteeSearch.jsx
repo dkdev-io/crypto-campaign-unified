@@ -295,10 +295,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
 
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
+      <h2 className="text-center mb-4 font-bold text-foreground" style={{fontSize: 'var(--text-heading-xl)', color: 'hsl(var(--crypto-navy))'}}>
         Find Your Committee - Step 2
       </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
+      <p className="text-center mb-8 text-muted-foreground">
         Search for your FEC committee to complete registration
       </p>
 
@@ -385,10 +385,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev }) => {
         border: '1px solid #e9ecef',
         textAlign: 'center'
       }}>
-        <h4 style={{ color: '#495057', marginBottom: '1rem' }}>
+        <h4 className="text-foreground mb-4" style={{fontSize: 'var(--text-heading-md)'}}>
           Add Committee Name
         </h4>
-        <p style={{ color: '#6c757d', marginBottom: '1rem', fontSize: '14px' }}>
+        <p className="text-muted-foreground mb-4 text-sm">
           Can't find your committee? Add it manually
         </p>
         
