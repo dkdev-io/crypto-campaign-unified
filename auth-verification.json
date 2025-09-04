@@ -9,9 +9,6 @@
     "https://cryptocampaign.netlify.app/donors/dashboard",
     "https://cryptocampaign.netlify.app/donors/auth/verify-email",
     "https://cryptocampaign.netlify.app/setup",
-    "http://localhost:3000/auth",
-    "http://localhost:3000/campaigns/auth",
-    "http://localhost:3000/donors/dashboard",
     "http://localhost:5173/auth",
     "http://localhost:5173/campaigns/auth",
     "http://localhost:5173/donors/dashboard"

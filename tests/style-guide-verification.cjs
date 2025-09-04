@@ -206,7 +206,7 @@ class StyleGuideVerificationTest {
       await this.ensureServerRunning();
       
       // Navigate to form with test campaign
-      const formUrl = `http://localhost:3000/form/${campaignData.campaignId}`;
+      const formUrl = `http://localhost:5173/form/${campaignData.campaignId}`;
       console.log(`🌐 Loading form at: ${formUrl}`);
       
       await this.page.goto(formUrl, { waitUntil: 'networkidle0', timeout: 30000 });
@@ -294,14 +294,14 @@ class StyleGuideVerificationTest {
   async ensureServerRunning() {
     try {
       // Check if server is running
-      const response = await fetch('http://localhost:3000/');
+      const response = await fetch('http://localhost:5173/');
       if (!response.ok) throw new Error('Server not responding');
       console.log('✅ Development server is running');
     } catch (error) {
       console.log('🚀 Starting development server...');
       // In a real scenario, you'd start the server here
       // For now, just log that it should be started manually
-      console.log('⚠️  Please ensure development server is running on http://localhost:3000');
+      console.log('⚠️  Please ensure development server is running on http://localhost:5173');
       throw new Error('Development server not running. Please start with: npm run dev');
     }
   }

@@ -85,12 +85,12 @@ Object.defineProperty(window, 'sessionStorage', { value: localStorageMock });
 // Mock window.location
 Object.defineProperty(window, 'location', {
   value: {
-    href: 'http://localhost:3000',
-    origin: 'http://localhost:3000',
+    href: 'http://localhost:5173',
+    origin: 'http://localhost:5173',
     protocol: 'http:',
-    host: 'localhost:3000',
+    host: 'localhost:5173',
     hostname: 'localhost',
-    port: '3000',
+    port: '5173',
     pathname: '/',
     search: '',
     hash: '',
@@ -117,10 +117,10 @@ if (!global.URL) {
   global.URL = class URL {
     constructor(url, base) {
       this.href = url;
-      this.origin = base || 'http://localhost:3000';
+      this.origin = base || 'http://localhost:5173';
       this.protocol = 'http:';
       this.hostname = 'localhost';
-      this.port = '3000';
+      this.port = '5173';
       this.pathname = '/';
       this.search = '';
       this.hash = '';

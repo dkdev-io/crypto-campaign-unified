@@ -218,7 +218,7 @@ class DonorPageAutomationService {
       const { data, error } = await supabase
         .rpc('generate_embed_code', {
           p_campaign_id: campaignId,
-          p_base_url: process.env.BASE_URL || 'http://localhost:3000'
+          p_base_url: process.env.BASE_URL || 'http://localhost:5173'
         });
 
       if (error) throw error;
@@ -233,7 +233,7 @@ class DonorPageAutomationService {
    * Fallback embed code generation
    */
   generateFallbackEmbedCode(campaignId) {
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
     return `<!-- Campaign Contribution Form Embed -->
 <div id="crypto-campaign-embed-${campaignId}"></div>
 <script>

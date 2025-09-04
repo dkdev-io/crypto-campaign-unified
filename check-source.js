@@ -9,7 +9,7 @@ async function checkPageSource() {
   const page = await browser.newPage();
   
   try {
-    await page.goto('http://localhost:3000/campaigns/auth');
+    await page.goto('http://localhost:5173/campaigns/auth');
     
     // Check if emoji exists in initial HTML
     const initialHTML = await page.content();

@@ -125,7 +125,7 @@ npm run deploy:local
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see the application.
+Visit `http://localhost:5173` to see the application.
 
 ## 🔧 Environment Setup
 

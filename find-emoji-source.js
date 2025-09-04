@@ -9,7 +9,7 @@ async function findEmojiSource() {
   const page = await browser.newPage();
   
   try {
-    await page.goto('http://localhost:3000/campaigns/auth', { waitUntil: 'networkidle0' });
+    await page.goto('http://localhost:5173/campaigns/auth', { waitUntil: 'networkidle0' });
     
     // Find all elements containing the wrench emoji
     const emojiElements = await page.evaluate(() => {

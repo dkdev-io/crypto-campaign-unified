@@ -17,7 +17,7 @@ async function testFixedAuth() {
     });
     
     console.log('1. Navigating to /donors/auth...');
-    await page.goto('http://localhost:3000/donors/auth', { 
+    await page.goto('http://localhost:5173/donors/auth', { 
       waitUntil: 'networkidle0',
       timeout: 15000
     });
