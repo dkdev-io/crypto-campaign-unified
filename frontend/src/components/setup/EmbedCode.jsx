@@ -15,13 +15,14 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
     if (campaignId) {
       generateEmbedCode();
     } else {
-      console.warn('⚠️ EmbedCode mounted without campaignId, will wait...');
-      // Generate fallback code even without campaignId
-      const fallbackId = 'temp-' + Date.now();
+      console.warn('⚠️ EmbedCode mounted without campaignId, using default...');
+      // Generate proper UUID format for fallback
+      const fallbackId = '00000000-0000-4000-8000-' + Date.now().toString().slice(-12).padStart(12, '0');
       const fallbackCode = generateFallbackEmbedCode(fallbackId);
       setEmbedCode(fallbackCode);
       
-      const baseUrl = window.location.origin;
+      const baseUrl = import.meta.env.VITE_APP_URL || 
+                     (window.location.hostname.includes('netlify.app') ? window.location.origin : 'https://cryptocampaign.netlify.app');
       const donationUrl = `${baseUrl}/embed-form.html?campaign=${fallbackId}`;
       setTestUrl(donationUrl);
       

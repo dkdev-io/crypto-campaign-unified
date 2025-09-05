@@ -397,7 +397,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
             <h4 style={{
               fontFamily: selectedFont,
               fontWeight: '600',
-              color: selectedColors.primary,
+              color: '#333333',
               marginBottom: '1rem',
               fontSize: '1.5rem',
               textAlign: 'center',
@@ -408,6 +408,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
             <p style={{
               fontFamily: selectedFont,
               fontWeight: '400',
+              color: '#555555',
               marginBottom: '2rem',
               textAlign: 'center',
               lineHeight: '1.5',

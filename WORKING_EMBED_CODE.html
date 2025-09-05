@@ -1,0 +1,61 @@
+<!-- NEXTRAISE Campaign Contribution Form Embed - TESTED WORKING VERSION -->
+<div id="nextraise-campaign-embed-test"></div>
+<script>
+(function() {
+    var iframe = document.createElement("iframe");
+    iframe.src = "https://cryptocampaign.netlify.app/embed-form.html?campaign=test-campaign-123";
+    iframe.width = "100%";
+    iframe.height = "700";
+    iframe.frameBorder = "0";
+    iframe.style.border = "1px solid #ddd";
+    iframe.style.borderRadius = "8px";
+    iframe.style.backgroundColor = "white";
+    iframe.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+    iframe.style.maxWidth = "600px";
+    iframe.style.margin = "0 auto";
+    iframe.style.display = "block";
+    
+    document.getElementById("nextraise-campaign-embed-test").appendChild(iframe);
+    
+    // Auto-resize iframe based on content
+    window.addEventListener("message", function(event) {
+        if (event.data && event.data.type === "resize") {
+            iframe.height = event.data.height + "px";
+        }
+    });
+    
+    // Set initial height and auto-adjust
+    setTimeout(function() {
+        iframe.height = "700px";
+    }, 1000);
+    
+    // Fallback: ensure minimum height
+    setTimeout(function() {
+        if (iframe.height < 500) {
+            iframe.height = "600px";
+        }
+    }, 3000);
+})();
+</script>
+
+<!-- Direct Link Alternative (if iframe doesn't work) -->
+<!-- 
+<div style="text-align: center; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+    <h3>Support Our Campaign</h3>
+    <p>Click below to make a secure contribution:</p>
+    <a href="https://cryptocampaign.netlify.app/embed-form.html?campaign=test-campaign-123" 
+       target="_blank" 
+       style="background: #ffd700; color: #000; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+       DONATE NOW
+    </a>
+</div>
+-->
+
+<!-- Simple HTML Fallback (if all else fails) -->
+<!--
+<div style="border: 2px solid #ffd700; padding: 20px; text-align: center; border-radius: 10px; background: linear-gradient(135deg, #1e40af, #2563eb);">
+    <h2 style="color: white; margin: 0 0 10px 0;">NEXTRAISE Campaign</h2>
+    <p style="color: white; margin: 0 0 15px 0;">Secure cryptocurrency donations</p>
+    <a href="https://cryptocampaign.netlify.app" target="_blank" style="background: #ffd700; color: #000; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">CONTRIBUTE NOW</a>
+</div>
+-->

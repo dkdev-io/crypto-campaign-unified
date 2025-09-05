@@ -29,6 +29,11 @@ const SetupWizard = () => {
 
   const totalSteps = 7;
 
+  // Generate valid UUID for fallback campaigns
+  const generateValidUUID = () => {
+    return '00000000-0000-4000-8000-' + Date.now().toString().slice(-12).padStart(12, '0');
+  };
+
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
     const initializeSetup = async () => {
@@ -166,7 +171,7 @@ const SetupWizard = () => {
 
           // If database creation failed, use fallback mechanism
           if (!campaignCreated) {
-            const fallbackId = 'fallback-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            const fallbackId = generateValidUUID();
             console.log('🔄 USING FALLBACK CAMPAIGN ID:', fallbackId);
             setCampaignId(fallbackId);
             newFormData.campaignId = fallbackId;
@@ -319,7 +324,7 @@ const SetupWizard = () => {
 
         if (error) {
           console.warn('Failed to create campaign, using fallback:', error);
-          const fallbackId = 'nextStep-fallback-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+          const fallbackId = generateValidUUID();
           setCampaignId(fallbackId);
           setFormData((prev) => ({ ...prev, campaignId: fallbackId }));
           console.log('🔄 Using fallback campaign ID for nextStep:', fallbackId);
@@ -330,7 +335,7 @@ const SetupWizard = () => {
         }
       } catch (error) {
         console.warn('Error creating campaign, using fallback:', error);
-        const fallbackId = 'nextStep-fallback-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const fallbackId = generateValidUUID();
         setCampaignId(fallbackId);
         setFormData((prev) => ({ ...prev, campaignId: fallbackId }));
         console.log('🔄 Using fallback campaign ID for nextStep (catch):', fallbackId);
