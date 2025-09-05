@@ -318,25 +318,35 @@ for a full-page donation experience.
 
       {/* Embed Code Section */}
       <div
+        className="crypto-card"
         style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
+          background: 'hsl(var(--crypto-navy))',
+          border: '1px solid hsl(var(--crypto-white) / 0.2)',
           marginBottom: '2rem',
         }}
       >
         <div
           style={{
-            background: '#f8f9fa',
+            background: 'hsl(var(--crypto-blue) / 0.2)',
             padding: '1rem',
-            borderBottom: '1px solid #e9ecef',
-            borderRadius: '8px 8px 0 0',
+            borderBottom: '1px solid hsl(var(--crypto-white) / 0.2)',
+            borderRadius: 'var(--radius) var(--radius) 0 0',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
-          <h4 style={{ margin: 0, color: '#495057' }}>Your Embed Code</h4>
+          <h4 
+            style={{ 
+              margin: 0, 
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            Your Embed Code
+          </h4>
           <button
             onClick={handleCopyCode}
             disabled={loading || !embedCode}
@@ -745,79 +755,34 @@ for a full-page donation experience.
           Go to Campaign Dashboard
         </a>
 
-        <button
-          onClick={handleTestForm}
-          style={{
-            background: '#28a745',
-            color: 'white',
-            border: 'none',
-            padding: '1rem 1.5rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '16px',
-            fontWeight: '500',
-          }}
-        >
-          🚀 Test Form Again
-        </button>
       </div>
 
-      {/* Navigation */}
-      <div className="form-actions">
+      {/* Simple Navigation */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center',
+        marginTop: '2rem' 
+      }}>
         <button
           onClick={onPrev}
           style={{
             background: 'hsl(var(--crypto-gold))',
             color: 'hsl(var(--crypto-navy))',
             border: 'none',
-            padding: 'var(--space-sm) var(--space-lg)',
+            padding: '0.75rem 2rem',
             borderRadius: 'var(--radius)',
             cursor: 'pointer',
             fontSize: '1rem',
             fontFamily: 'Inter, sans-serif',
             fontWeight: '600',
-            transition: 'var(--transition-smooth)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.025em',
           }}
         >
           ← Back to Terms
         </button>
-        <button
-          onClick={handleStartOver}
-          style={{
-            background: 'hsl(var(--crypto-navy))',
-            color: 'hsl(var(--crypto-white))',
-            border: 'none',
-            padding: 'var(--space-sm) var(--space-lg)',
-            borderRadius: 'var(--radius)',
-            cursor: 'pointer',
-            fontSize: '1rem',
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: '600',
-            transition: 'var(--transition-smooth)',
-          }}
-        >
-          Setup New Campaign
-        </button>
       </div>
 
-      {/* Final Success Message */}
-      <div
-        style={{
-          marginTop: '2rem',
-          padding: '1.5rem',
-          background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          textAlign: 'center',
-        }}
-      >
-        <div style={{ marginBottom: '1rem' }}></div>
-        <h4 style={{ color: '#495057', margin: '0 0 0.5rem 0' }}>Congratulations!</h4>
-        <p style={{ color: '#6c757d', margin: 0 }}>
-          Your campaign contribution system is now live and ready to help you raise funds for your
-          political campaign in compliance with FEC regulations.
-        </p>
-      </div>
     </div>
   );
 };
