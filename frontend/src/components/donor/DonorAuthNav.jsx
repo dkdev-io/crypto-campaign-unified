@@ -22,7 +22,7 @@ const DonorAuthNav = () => {
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/">
-                <span className="font-bold" style={{ fontSize: 'var(--text-heading-lg)' }}>
+                <span className="text-2xl font-bold">
                   <span className="text-white">NEXT</span>
                   <span className="text-accent">RAISE</span>
                 </span>
