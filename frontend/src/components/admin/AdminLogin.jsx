@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
-    email: 'test@dkdev.io',
-    password: 'TestDonor123!',
+    email: '',
+    password: '',
   });
   const [setupData, setSetupData] = useState({
-    email: 'test@dkdev.io',
+    email: '',
     password: '',
     confirmPassword: '',
-    fullName: 'Test Admin',
+    fullName: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -156,6 +156,23 @@ const AdminLogin = () => {
                 <p className="text-base font-medium text-red-800">{error}</p>
               </div>
             </div>
+          </div>
+        )}
+
+        {!showSetup && (
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => {
+                setFormData({
+                  email: 'test@dkdev.io',
+                  password: 'TestDonor123!'
+                });
+              }}
+              className="w-full text-sm text-muted-foreground hover:text-foreground border border-border hover:border-primary rounded-lg py-2 px-4 transition-colors"
+            >
+              Fill Test Credentials
+            </button>
           </div>
         )}
 
