@@ -9,12 +9,12 @@ const AdminLayout = () => {
   const navigate = useNavigate();
 
   if (!isAdmin()) {
-    return <Navigate to="/minda" replace />;
+    return <Navigate to="/minda/login" replace />;
   }
 
   const handleLogout = async () => {
     await logout();
-    navigate('/minda');
+    navigate('/minda/login');
   };
 
   const navigationItems = [

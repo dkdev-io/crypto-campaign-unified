@@ -208,19 +208,14 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="flex">
-      {/* Left Column - Dashboard Overview */}
-      <div className="w-64 pr-6 shrink-0">
-        <div className="crypto-card">
-          <h2 className="text-2xl font-bold text-foreground">Dashboard Overview</h2>
-          <p className="text-muted-foreground mt-1">
-            Monitor your platform's performance and key metrics
-          </p>
-        </div>
+    <div className="space-y-6">
+      {/* Dashboard Header */}
+      <div className="crypto-card">
+        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+        <p className="text-muted-foreground mt-1">
+          Monitor your platform's performance and key metrics
+        </p>
       </div>
-      
-      {/* Right Column - Main Content */}
-      <div className="flex-1 space-y-6">
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -457,7 +452,6 @@ const AdminDashboard = () => {
             Settings
           </button>
         </div>
-      </div>
       </div>
     </div>
   );

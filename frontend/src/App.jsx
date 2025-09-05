@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate } from 'react-router-dom';
+import { useAdmin } from './contexts/AdminContext';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import CampaignPage from './pages/CampaignPage';
@@ -35,6 +36,22 @@ import TransactionMonitoring from './components/admin/TransactionMonitoring';
 import CampaignManagement from './components/admin/CampaignManagement';
 import Analytics from './components/admin/Analytics';
 import SystemSettings from './components/admin/SystemSettings';
+
+// Admin Redirect Component
+const AdminRedirect = () => {
+  const { isAdmin } = useAdmin();
+  const navigate = useNavigate();
+  
+  React.useEffect(() => {
+    if (isAdmin()) {
+      navigate('/minda/dashboard', { replace: true });
+    } else {
+      navigate('/minda/login', { replace: true });
+    }
+  }, [navigate, isAdmin]);
+  
+  return null;
+};
 
 // Donor Components
 import { DonorAuthProvider } from './contexts/DonorAuthContext';
@@ -84,7 +101,11 @@ function App() {
                 {/* <Route path="/donation-test" element={<DonationTest />} /> */}
 
                 {/* Admin Routes - MUST be before /:campaignName to prevent conflicts */}
-                <Route path="/minda" element={<AdminLogin />} />
+                <Route 
+                  path="/minda" 
+                  element={<AdminRedirect />} 
+                />
+                <Route path="/minda/login" element={<AdminLogin />} />
                 <Route path="/minda/*" element={<AdminLayout />}>
                   <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="users" element={<UserManagement />} />
