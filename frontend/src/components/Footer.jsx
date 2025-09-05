@@ -135,7 +135,7 @@ const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li>
                 <a
-                  href="#contact"
+                  href="mailto:dan@dkdev.io"
                   className="text-primary-foreground/70 hover:text-accent transition-colors duration-200"
                 >
                   Contact Us
