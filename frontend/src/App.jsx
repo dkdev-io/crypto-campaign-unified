@@ -46,6 +46,15 @@ import DonorVerifyEmail from './components/donor/DonorVerifyEmail';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TestBypass from './pages/TestBypass';
+import About from './pages/About';
+import Support from './pages/Support';
+import Legal from './pages/Legal';
+import Pricing from './pages/Pricing';
+import Demo from './pages/Demo';
+import Integrations from './pages/Integrations';
+import ApiDocumentation from './pages/ApiDocumentation';
+import Blog from './pages/Blog';
+import Help from './pages/Help';
 
 function App() {
   return (
@@ -145,6 +154,17 @@ function App() {
                     />
                   }
                 />
+
+                {/* Footer Page Routes */}
+                <Route path="/about" element={<About />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/legal" element={<Legal />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/demo" element={<Demo />} />
+                <Route path="/integrations" element={<Integrations />} />
+                <Route path="/api" element={<ApiDocumentation />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/help" element={<Help />} />
 
                 {/* Dynamic Campaign Pages - must be last before 404 */}
                 <Route path="/:campaignName" element={<CampaignPage />} />
