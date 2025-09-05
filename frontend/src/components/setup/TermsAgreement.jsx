@@ -29,90 +29,41 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
       setupCompleted: true,
     });
 
-    // This could redirect to dashboard or show success
-    alert('Campaign setup completed successfully! Your campaign is now live.');
+    // Proceed to final embed code screen
+    onNext();
   };
 
   return (
     <div>
-      <h2
-        style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          textAlign: 'center',
-          marginBottom: '0.5rem',
-          color: 'hsl(var(--crypto-white))',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        Terms & Conditions
-      </h2>
-      <p
-        style={{
-          textAlign: 'center',
-          marginBottom: '3rem',
-          color: 'hsl(var(--crypto-gold))',
-          fontSize: '1rem',
-          fontWeight: '500',
-        }}
-      >
-        Step 6 of 7: Accept terms to complete your campaign setup
-      </p>
-
-      {/* Campaign Summary */}
-      <div
-        style={{
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '3rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>Setup Summary</h4>
-        <div className="text-base text-muted-foreground">
-          <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Campaign:</strong> {formData.campaignName || 'Not specified'}
-          </div>
-          <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Setup by:</strong> {formData.userFullName || 'Not specified'} (
-            {formData.email || 'Not specified'})
-          </div>
-          <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Committee:</strong> {formData.committeeName || 'Not specified'}
-          </div>
-          <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Bank Account:</strong>{' '}
-            {formData.bankAccountVerified
-              ? `Connected (${formData.bankAccountInfo?.accountName})`
-              : formData.skipBankConnection
-                ? 'Skipped (Dev Mode)'
-                : 'Not connected'}
-          </div>
-          <div style={{ marginBottom: '0.5rem' }}>
-            <strong>Embed Code:</strong> Generated and ready
-          </div>
-        </div>
-      </div>
 
       {/* Simplified Terms */}
       <div
+        className="crypto-card"
         style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
+          maxWidth: '500px',
+          margin: '0 auto 2rem auto',
           padding: '2rem',
-          marginBottom: '3rem',
           textAlign: 'center',
         }}
       >
-        <h3 style={{ color: '#495057', marginBottom: '2rem' }}>Terms & Conditions</h3>
+        <h3 
+          style={{ 
+            color: 'hsl(var(--crypto-white))',
+            marginBottom: '1.5rem',
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}
+        >
+          Terms & Conditions
+        </h3>
         <p
           style={{
-            fontSize: 'var(--text-body-lg)',
-            color: '#6c757d',
+            fontSize: '1rem',
+            color: 'hsl(var(--crypto-white) / 0.7)',
             marginBottom: '2rem',
             fontStyle: 'italic',
+            fontFamily: 'Inter, sans-serif',
           }}
         >
           You agree to a lot of terms.
@@ -125,9 +76,9 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
             justifyContent: 'center',
             cursor: 'pointer',
             fontSize: '1rem',
-            fontWeight: '600',
+            fontWeight: '500',
             fontFamily: 'Inter, sans-serif',
-            color: termsAccepted ? '#28a745' : 'hsl(var(--crypto-navy))',
+            color: 'hsl(var(--crypto-white))',
           }}
         >
           <input
@@ -137,10 +88,10 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
             style={{
               marginRight: '1rem',
               transform: 'scale(1.5)',
-              accentColor: '#2a2a72',
+              accentColor: 'hsl(var(--crypto-gold))',
             }}
           />
-          <span style={{ fontWeight: '500' }}>I accept the Terms & Conditions</span>
+          <span>I accept the Terms & Conditions</span>
         </label>
       </div>
 
@@ -148,78 +99,108 @@ const TermsAgreement = ({ formData, updateFormData, onNext, onPrev }) => {
       {showErrors && !termsAccepted && (
         <div
           style={{
-            background: '#fee',
-            color: '#c33',
-            padding: '1rem',
-            borderRadius: '4px',
+            background: 'hsl(var(--destructive) / 0.1)',
+            color: 'hsl(var(--destructive))',
+            padding: '1.5rem',
+            borderRadius: 'var(--radius)',
             marginBottom: '2rem',
-            border: '1px solid #fcc',
+            border: '1px solid hsl(var(--destructive) / 0.3)',
             textAlign: 'center',
+            fontFamily: 'Inter, sans-serif',
+            maxWidth: '500px',
+            margin: '0 auto 2rem auto',
           }}
         >
-          You must accept the terms and conditions to complete setup
+          <h3
+            style={{
+              color: 'hsl(var(--destructive))',
+              marginBottom: '0.5rem',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            Accept Terms to Launch
+          </h3>
+          <p
+            style={{
+              color: 'hsl(var(--destructive))',
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+              margin: 0,
+            }}
+          >
+            Please accept the terms above to complete your campaign setup.
+          </p>
         </div>
       )}
 
-      {/* Final Launch Section */}
-      <div
-        style={{
-          background: termsAccepted ? '#d4edda' : '#f8f9fa',
-          border: `1px solid ${termsAccepted ? '#c3e6cb' : '#e9ecef'}`,
-          borderRadius: '8px',
-          padding: '3rem',
-          textAlign: 'center',
-          marginBottom: '2rem',
-        }}
-      >
-        <div style={{ marginBottom: '1rem' }}>{termsAccepted ? '' : ''}</div>
-        <h3
-          style={{
-            color: termsAccepted ? '#155724' : '#495057',
-            marginBottom: '1rem',
-            fontSize: 'var(--text-heading-sm)',
-          }}
-        >
-          {termsAccepted ? 'Campaign Setup Complete!' : 'Accept Terms to Launch'}
-        </h3>
-        <p
-          style={{
-            color: termsAccepted ? '#155724' : '#6c757d',
-            marginBottom: '2rem',
-            fontSize: 'var(--text-body)',
-          }}
-        >
-          {termsAccepted
-            ? 'Your campaign contribution system is now live and ready to accept donations!'
-            : 'Please accept the terms above to complete your campaign setup.'}
-        </p>
-
-        <button
-          onClick={handleComplete}
-          disabled={!termsAccepted}
-          style={{
-            background: termsAccepted ? '#28a745' : '#6c757d',
-            color: 'white',
-            border: 'none',
-            padding: '1.5rem 3rem',
-            borderRadius: '8px',
-            cursor: termsAccepted ? 'pointer' : 'not-allowed',
-            fontSize: 'var(--text-body-lg)',
-            fontWeight: '600',
-            opacity: termsAccepted ? 1 : 0.6,
-            transform: termsAccepted ? 'scale(1)' : 'scale(0.95)',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          {termsAccepted ? 'Launch Campaign!' : 'Accept Terms First'}
-        </button>
-      </div>
-
       {/* Navigation */}
-      <div className="form-actions">
-        <button className="btn btn-secondary" onClick={onPrev}>
-          Back to Embed Code
-        </button>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        marginTop: '2rem' 
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <button
+            onClick={onPrev}
+            style={{
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              border: 'none',
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+            }}
+          >
+            BACK
+          </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            ←
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <button
+            onClick={handleComplete}
+            disabled={!termsAccepted}
+            style={{
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              border: '2px solid hsl(var(--crypto-gold))',
+              background: termsAccepted ? 'hsl(var(--crypto-gold))' : 'hsl(var(--crypto-white) / 0.1)',
+              color: termsAccepted ? 'hsl(var(--crypto-navy))' : 'hsl(var(--crypto-white) / 0.5)',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: termsAccepted ? 'pointer' : 'not-allowed',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+              opacity: termsAccepted ? 1 : 0.6,
+            }}
+          >
+            FINISH
+          </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            →
+          </div>
+        </div>
       </div>
     </div>
   );

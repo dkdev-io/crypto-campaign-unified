@@ -363,9 +363,50 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
             </div>
           </div>
 
-          {/* Color Selection */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-            <div>
+        </div>
+
+        {/* Submit button for website analysis */}
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <button
+            onClick={analyzeWebsite}
+            disabled={analyzing || !websiteUrl || validationError}
+            style={{
+              background: validationError || !websiteUrl ? 'hsl(var(--crypto-blue) / 0.3)' : 'hsl(var(--crypto-gold))',
+              color: validationError || !websiteUrl ? 'hsl(var(--crypto-white) / 0.5)' : 'hsl(var(--crypto-navy))',
+              border: 'none',
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              cursor: validationError || !websiteUrl ? 'not-allowed' : 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+              opacity: validationError || !websiteUrl ? 0.6 : 1,
+            }}
+          >
+            {analyzing ? 'Analyzing...' : 'Submit'}
+          </button>
+        </div>
+      </div>
+
+      {/* Manual Styling Section */}
+      <div>
+        <h3 style={{
+          fontSize: '1.5rem',
+          fontWeight: '600',
+          textAlign: 'center',
+          marginBottom: '2rem',
+          color: 'hsl(var(--crypto-white))',
+          fontFamily: 'Inter, sans-serif',
+        }}>
+          Or Select Styling
+        </h3>
+
+        <div className="crypto-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
+          {/* Color Selection - Only 2 colors */}
+          <div style={{ marginBottom: '2rem' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
               <label
                 style={{
                   display: 'block',
@@ -377,31 +418,35 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
               >
                 Primary Color
               </label>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    backgroundColor: primaryColor,
+                    border: '2px solid hsl(var(--crypto-white) / 0.3)',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => document.getElementById('color-primary-analyzer').click()}
+                />
                 <input
+                  id="color-primary-analyzer"
                   type="color"
                   value={primaryColor}
                   onChange={(e) => handleColorChange('primary', e.target.value)}
-                  style={{
-                    width: '50px',
-                    height: '40px',
-                    border: '1px solid hsl(var(--crypto-blue) / 0.4)',
-                    borderRadius: 'var(--radius)',
-                    cursor: 'pointer',
-                    background: 'none',
-                  }}
+                  style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
                 />
                 <input
                   type="text"
                   value={primaryColor}
                   onChange={(e) => handleColorChange('primary', e.target.value)}
-                  placeholder="#2a2a72"
                   style={{
                     flex: 1,
                     padding: '0.5rem',
                     border: '1px solid hsl(var(--crypto-blue) / 0.4)',
                     borderRadius: 'var(--radius)',
-                    fontSize: '0.9rem',
+                    fontSize: '0.875rem',
                     fontFamily: 'Inter, sans-serif',
                     background: 'hsl(223 57% 25% / 0.5)',
                     color: 'hsl(var(--crypto-white))',
@@ -410,7 +455,7 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
               </div>
             </div>
 
-            <div>
+            <div style={{ marginBottom: '1.5rem' }}>
               <label
                 style={{
                   display: 'block',
@@ -422,31 +467,35 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
               >
                 Secondary Color
               </label>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    backgroundColor: secondaryColor,
+                    border: '2px solid hsl(var(--crypto-white) / 0.3)',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => document.getElementById('color-secondary-analyzer').click()}
+                />
                 <input
+                  id="color-secondary-analyzer"
                   type="color"
                   value={secondaryColor}
                   onChange={(e) => handleColorChange('secondary', e.target.value)}
-                  style={{
-                    width: '50px',
-                    height: '40px',
-                    border: '1px solid hsl(var(--crypto-blue) / 0.4)',
-                    borderRadius: 'var(--radius)',
-                    cursor: 'pointer',
-                    background: 'none',
-                  }}
+                  style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
                 />
                 <input
                   type="text"
                   value={secondaryColor}
                   onChange={(e) => handleColorChange('secondary', e.target.value)}
-                  placeholder="#ff6b6b"
                   style={{
                     flex: 1,
                     padding: '0.5rem',
                     border: '1px solid hsl(var(--crypto-blue) / 0.4)',
                     borderRadius: 'var(--radius)',
-                    fontSize: '0.9rem',
+                    fontSize: '0.875rem',
                     fontFamily: 'Inter, sans-serif',
                     background: 'hsl(223 57% 25% / 0.5)',
                     color: 'hsl(var(--crypto-white))',
@@ -456,7 +505,7 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
             </div>
           </div>
 
-          {/* Font Selection */}
+          {/* Font Selection - Only 1 font */}
           <div style={{ marginBottom: '2rem' }}>
             <label
               style={{
@@ -555,42 +604,25 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
+          {/* Submit button for manual styling */}
+          <div style={{ textAlign: 'center' }}>
             <button
-              onClick={analyzeWebsite}
-              disabled={analyzing || !websiteUrl || validationError}
-              style={{
-                background: validationError || !websiteUrl ? 'hsl(var(--crypto-blue) / 0.3)' : 'hsl(var(--crypto-gold))',
-                color: validationError || !websiteUrl ? 'hsl(var(--crypto-white) / 0.5)' : 'hsl(var(--crypto-navy))',
-                border: 'none',
-                padding: '0.75rem 2rem',
-                borderRadius: 'var(--radius)',
-                cursor: validationError || !websiteUrl ? 'not-allowed' : 'pointer',
-                fontSize: '1rem',
-                fontWeight: '600',
-                fontFamily: 'Inter, sans-serif',
-                textTransform: 'uppercase',
-                letterSpacing: '0.025em',
-                opacity: validationError || !websiteUrl ? 0.6 : 1,
+              onClick={() => {
+                // Save manual styling data and proceed
+                updateFormData({
+                  primaryColor,
+                  secondaryColor,
+                  selectedFont,
+                  logoImage,
+                  styleMethod: 'manual',
+                  stylesApplied: true,
+                });
+                onNext();
               }}
-            >
-              {analyzing ? 'Analyzing...' : 'Analyze Website'}
-            </button>
-
-            <button
-              onClick={skipStyleMatching}
               style={{
-                background: 'transparent',
-                color: 'hsl(var(--crypto-gold))',
-                border: '1px solid hsl(var(--crypto-gold))',
+                background: 'hsl(var(--crypto-gold))',
+                color: 'hsl(var(--crypto-navy))',
+                border: 'none',
                 padding: '0.75rem 2rem',
                 borderRadius: 'var(--radius)',
                 cursor: 'pointer',
@@ -601,7 +633,7 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
                 letterSpacing: '0.025em',
               }}
             >
-              Skip Styling
+              Submit
             </button>
           </div>
         </div>
@@ -958,7 +990,7 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
       {renderError()}
 
       {/* Navigation */}
-      <div className="form-actions" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between' }}>
         <button
           onClick={onPrev}
           disabled={applying}
@@ -980,26 +1012,35 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
           Back
         </button>
 
-        {!showConfirmation && !analysis && (
-          <button
-            onClick={skipStyleMatching}
-            style={{
-              background: 'hsl(var(--crypto-navy))',
-              color: 'hsl(var(--crypto-white))',
-              border: 'none',
-              padding: '0.75rem 2rem',
-              borderRadius: 'var(--radius)',
-              cursor: 'pointer',
-              fontSize: '1rem',
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.025em',
-            }}
-          >
-            Skip Step
-          </button>
-        )}
+        <button
+          onClick={() => {
+            // Save current styling data and proceed
+            updateFormData({
+              primaryColor,
+              secondaryColor,
+              selectedFont,
+              logoImage,
+              styleMethod: 'manual',
+              stylesApplied: true,
+            });
+            onNext();
+          }}
+          style={{
+            background: 'hsl(var(--crypto-gold))',
+            color: 'hsl(var(--crypto-navy))',
+            border: 'none',
+            padding: '0.75rem 2rem',
+            borderRadius: 'var(--radius)',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            letterSpacing: '0.025em',
+          }}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );

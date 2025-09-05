@@ -1,439 +1,511 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
-  const [selectedColors, setSelectedColors] = useState({
-    primary: 'hsl(var(--crypto-navy))',
-    secondary: 'hsl(var(--crypto-blue))',
-    accent: 'hsl(var(--crypto-gold))',
-    background: 'hsl(var(--crypto-white))',
-    text: 'hsl(var(--crypto-dark-gray))',
-  });
-
-  const [selectedFonts, setSelectedFonts] = useState({
-    heading: {
-      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-      weight: '600',
-    },
-    body: {
-      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-      weight: '400',
-    },
-    button: {
-      family: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-      weight: '500',
-    },
-  });
-
+  const [formTitle, setFormTitle] = useState(formData.formTitle || formData.campaignName || 'Campaign Title');
+  const [formDescription, setFormDescription] = useState(formData.formDescription || 'Support our campaign with your contribution');
+  const [donateButtonText, setDonateButtonText] = useState(formData.donateButtonText || 'DONATE NOW');
+  const [amountMode, setAmountMode] = useState(formData.amountMode || 'defaults');
+  const [customAmounts, setCustomAmounts] = useState(formData.customAmounts || '');
   const [applying, setApplying] = useState(false);
 
-  // Font options
-  const fontOptions = [
-    'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
-    'Helvetica, sans-serif',
-    'Georgia, serif',
-    'Times New Roman, serif',
-    'Verdana, sans-serif',
-    'Trebuchet MS, sans-serif',
-    'Impact, sans-serif',
-    'Courier New, monospace',
-    'Roboto, sans-serif',
-    'Open Sans, sans-serif',
-    'Lato, sans-serif',
-    'Montserrat, sans-serif',
-    'Poppins, sans-serif',
-    'Source Sans Pro, sans-serif',
-  ];
+  // Default suggested amounts
+  const defaultAmounts = [10, 25, 50, 100, 250, 500, 1000, 2000, 3300];
 
-  // Initialize from existing applied styles if available
-  useEffect(() => {
-    if (formData.appliedStyles?.colors) {
-      setSelectedColors(formData.appliedStyles.colors);
-    }
-    if (formData.appliedStyles?.fonts) {
-      setSelectedFonts(formData.appliedStyles.fonts);
-    }
-  }, [formData]);
+  // Get colors and font from previous step (WebsiteStyleAnalyzer)
+  const selectedColors = {
+    primary: formData.primaryColor || '#2a2a72',
+    secondary: formData.secondaryColor || '#ffd700',
+  };
+  
+  const selectedFont = formData.selectedFont || 'Inter';
 
-  const handleColorChange = (category, color) => {
-    setSelectedColors((prev) => ({
-      ...prev,
-      [category]: color,
-    }));
+  const parseSuggestedAmounts = () => {
+    if (amountMode === 'defaults') {
+      return defaultAmounts;
+    } else {
+      // Parse custom amounts from comma-separated string
+      const amounts = customAmounts
+        .split(',')
+        .map(amount => parseFloat(amount.trim()))
+        .filter(amount => !isNaN(amount) && amount > 0)
+        .sort((a, b) => a - b);
+      
+      return amounts.length > 0 ? amounts : defaultAmounts;
+    }
   };
 
-  const handleFontChange = (category, family) => {
-    setSelectedFonts((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        family: family,
-        suggested: family,
-      },
-    }));
-  };
-
-  const applyStyles = async () => {
+  const handleSubmit = async () => {
     try {
       setApplying(true);
 
-      const finalStyles = {
-        colors: selectedColors,
-        fonts: selectedFonts,
-        appliedAt: new Date().toISOString(),
-        method: 'manual_input',
-      };
+      const suggestedAmounts = parseSuggestedAmounts();
 
-      // Update form data with selected styles
+      // Update form data with form customization
       await updateFormData({
-        appliedStyles: finalStyles,
+        formTitle,
+        formDescription,
+        donateButtonText,
+        amountMode,
+        customAmounts,
+        suggestedAmounts,
         stylesApplied: true,
-        themeColor: selectedColors.primary,
-        customColors: selectedColors,
-        customFonts: selectedFonts,
-        styleMethod: 'manual',
+        setupStep: 5,
       });
 
       // Continue to next step
       onNext();
     } catch (error) {
-      console.error('Failed to apply styles:', error);
-      alert('Failed to apply styles. Please try again.');
+      console.error('Failed to save form preferences:', error);
     } finally {
       setApplying(false);
     }
   };
 
-  const skipStyles = () => {
-    updateFormData({
-      stylesApplied: false,
-      styleApplicationSkipped: true,
-    });
-    onNext();
-  };
-
-  // Render form preview
-  const renderFormPreview = () => {
-    const previewStyles = {
-      backgroundColor: selectedColors.background,
-      color: selectedColors.text,
-      fontFamily: selectedFonts.body.family,
-      padding: '2rem',
-      borderRadius: '8px',
-      border: '1px solid #e9ecef',
-    };
-
-    const buttonStyles = {
-      backgroundColor: selectedColors.primary,
-      color: 'white',
-      border: 'none',
-      padding: '0.75rem 2rem',
-      borderRadius: '4px',
-      fontFamily: selectedFonts.button.family,
-      fontWeight: selectedFonts.button.weight,
-      fontSize: '1rem',
-      cursor: 'pointer',
-    };
-
-    const headingStyles = {
-      fontFamily: selectedFonts.heading.family,
-      fontWeight: selectedFonts.heading.weight,
-      fontSize: '1.5rem',
-      color: selectedColors.primary,
-      marginBottom: '1rem',
-    };
-
-    return (
-      <div
-        style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>Preview Your Donation Form</h4>
-
-        <div style={previewStyles}>
-          <h3 style={headingStyles}>{formData.campaignName || 'Support Our Campaign'}</h3>
-          <div style={{ marginBottom: '1rem' }}>
-            <label
-              style={{
-                display: 'block',
-                marginBottom: '0.5rem',
-                fontWeight: '500',
-                fontFamily: selectedFonts.body.family,
-                color: selectedColors.text,
-              }}
-            >
-              Donation Amount
-            </label>
-            <input
-              type="text"
-              placeholder="$100"
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: `1px solid ${selectedColors.secondary}`,
-                borderRadius: '4px',
-                fontFamily: selectedFonts.body.family,
-                fontSize: '1rem',
-              }}
-              readOnly
-            />
-          </div>
-          <button style={buttonStyles}>Donate Now</button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div>
-      <h2 style={{ color: '#2a2a72', textAlign: 'center', marginBottom: '1rem' }}>
-        Customize Your Form Style - Step 5 of 7
-      </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
-        Choose colors and fonts for your donation form
-      </p>
-
-      {/* Color Palette Section */}
-      <div
-        style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
+      <div className="crypto-card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <h3 style={{
+          fontSize: '1.5rem',
+          fontWeight: '600',
+          textAlign: 'center',
           marginBottom: '2rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>Color Palette</h4>
+          color: 'hsl(var(--crypto-white))',
+          fontFamily: 'Inter, sans-serif',
+        }}>
+          Customize Your Form Content
+        </h3>
 
+        {/* Form Content Fields */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsl(var(--crypto-white))',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Campaign Title
+          </label>
+          <input
+            type="text"
+            value={formTitle}
+            onChange={(e) => setFormTitle(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              borderRadius: 'var(--radius)',
+              border: '1px solid hsl(var(--crypto-blue) / 0.4)',
+              background: 'hsl(223 57% 25% / 0.5)',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsl(var(--crypto-white))',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Form Description
+          </label>
+          <textarea
+            value={formDescription}
+            onChange={(e) => setFormDescription(e.target.value)}
+            rows={3}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              borderRadius: 'var(--radius)',
+              border: '1px solid hsl(var(--crypto-blue) / 0.4)',
+              background: 'hsl(223 57% 25% / 0.5)',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+              resize: 'vertical',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsl(var(--crypto-white))',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Donate Button Text
+          </label>
+          <input
+            type="text"
+            value={donateButtonText}
+            onChange={(e) => setDonateButtonText(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              borderRadius: 'var(--radius)',
+              border: '1px solid hsl(var(--crypto-blue) / 0.4)',
+              background: 'hsl(223 57% 25% / 0.5)',
+              color: 'hsl(var(--crypto-white))',
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          />
+        </div>
+
+        {/* Suggested Amounts */}
         <div style={{ marginBottom: '2rem' }}>
-          {[
-            {
-              key: 'primary',
-              label: 'Primary Brand Color',
-              description: 'Main color for buttons and highlights',
-            },
-            {
-              key: 'secondary',
-              label: 'Secondary Color',
-              description: 'Supporting color for borders and accents',
-            },
-            { key: 'accent', label: 'Accent Color', description: 'Call-to-action highlights' },
-            { key: 'background', label: 'Background Color', description: 'Form background color' },
-            { key: 'text', label: 'Text Color', description: 'Main text color' },
-          ].map(({ key, label, description }) => (
-            <div key={key} style={{ marginBottom: '1.5rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  fontWeight: '500',
-                  marginBottom: '0.5rem',
-                  color: '#495057',
-                }}
-              >
-                {label}
-              </label>
-              <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
-                {description}
-              </p>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsl(var(--crypto-white))',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Suggested Donation Amounts
+          </label>
+          
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem',
+              marginBottom: '0.75rem',
+              cursor: 'pointer',
+            }}>
+              <input
+                type="radio"
+                name="amountMode"
+                value="defaults"
+                checked={amountMode === 'defaults'}
+                onChange={(e) => setAmountMode(e.target.value)}
+                style={{ margin: 0 }}
+              />
+              <span style={{
+                color: 'hsl(var(--crypto-white))',
+                fontSize: '0.875rem',
+                fontFamily: 'Inter, sans-serif',
+              }}>
+                Use default amounts
+              </span>
+            </label>
+            <div style={{
+              marginLeft: '1.5rem',
+              marginBottom: '0.75rem',
+              color: 'hsl(var(--crypto-white) / 0.7)',
+              fontSize: '0.8rem',
+              fontFamily: 'Inter, sans-serif',
+            }}>
+              ${defaultAmounts.join(', $')}
+            </div>
+          </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <input
-                  type="color"
-                  value={selectedColors[key]}
-                  onChange={(e) => handleColorChange(key, e.target.value)}
-                  style={{
-                    width: '60px',
-                    height: '40px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
-                />
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem',
+              marginBottom: '0.75rem',
+              cursor: 'pointer',
+            }}>
+              <input
+                type="radio"
+                name="amountMode"
+                value="custom"
+                checked={amountMode === 'custom'}
+                onChange={(e) => setAmountMode(e.target.value)}
+                style={{ margin: 0 }}
+              />
+              <span style={{
+                color: 'hsl(var(--crypto-white))',
+                fontSize: '0.875rem',
+                fontFamily: 'Inter, sans-serif',
+              }}>
+                Enter custom amounts
+              </span>
+            </label>
+            
+            {amountMode === 'custom' && (
+              <div style={{ marginLeft: '1.5rem' }}>
                 <input
                   type="text"
-                  value={selectedColors[key]}
-                  onChange={(e) => handleColorChange(key, e.target.value)}
+                  value={customAmounts}
+                  onChange={(e) => setCustomAmounts(e.target.value)}
+                  placeholder="25, 50, 100, 250, 500"
                   style={{
-                    padding: '0.5rem',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    fontFamily: 'monospace',
-                    width: '100px',
+                    width: '100%',
+                    padding: '0.75rem',
+                    borderRadius: 'var(--radius)',
+                    border: '1px solid hsl(var(--crypto-blue) / 0.4)',
+                    background: 'hsl(223 57% 25% / 0.5)',
+                    color: 'hsl(var(--crypto-white))',
+                    fontSize: '1rem',
+                    fontFamily: 'Inter, sans-serif',
                   }}
                 />
-                <div
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    backgroundColor: selectedColors[key],
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                  }}
-                ></div>
+                <p style={{
+                  marginTop: '0.5rem',
+                  color: 'hsl(var(--crypto-white) / 0.7)',
+                  fontSize: '0.75rem',
+                  fontFamily: 'Inter, sans-serif',
+                }}>
+                  Enter amounts separated by commas (e.g., 25, 50, 100, 250)
+                </p>
               </div>
-            </div>
-          ))}
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Typography Section */}
-      <div
-        style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>🔤 Typography</h4>
-
-        <div style={{ marginBottom: '1rem' }}>
-          {[
-            {
-              key: 'heading',
-              label: 'Headings',
-              description: 'For titles and section headers',
-              sample: 'Campaign Title',
-            },
-            {
-              key: 'body',
-              label: 'Body Text',
-              description: 'For form labels and descriptions',
-              sample: 'Enter your information below',
-            },
-            {
-              key: 'button',
-              label: 'Buttons',
-              description: 'For button text and CTAs',
-              sample: 'DONATE NOW',
-            },
-          ].map(({ key, label, description, sample }) => (
-            <div key={key} style={{ marginBottom: '2rem' }}>
-              <label
-                style={{
-                  display: 'block',
-                  fontWeight: '500',
-                  marginBottom: '0.5rem',
-                  color: '#495057',
-                }}
-              >
-                {label}
-              </label>
-              <p style={{ fontSize: '0.85rem', color: '#6c757d', margin: '0 0 0.75rem 0' }}>
-                {description}
-              </p>
-
-              <select
-                value={selectedFonts[key].family}
-                onChange={(e) => handleFontChange(key, e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  fontFamily: selectedFonts[key].family,
-                  marginBottom: '0.75rem',
-                }}
-              >
-                {fontOptions.map((font) => (
-                  <option key={font} value={font} style={{ fontFamily: font }}>
-                    {font}
-                  </option>
-                ))}
-              </select>
-
-              {/* Font preview */}
-              <div
-                style={{
-                  background: '#f8f9fa',
-                  border: '1px solid #e9ecef',
-                  borderRadius: '4px',
-                  padding: '1rem',
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: selectedFonts[key].family,
-                    fontSize: key === 'heading' ? '1.5rem' : '1rem',
-                    fontWeight: selectedFonts[key].weight,
-                    color: selectedColors.text,
-                  }}
-                >
-                  {sample}
+        {/* Form Preview */}
+        <div style={{ marginBottom: '2rem' }}>
+          <h4 style={{
+            color: 'hsl(var(--crypto-white))',
+            marginBottom: '1rem',
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Preview Your Donation Form
+          </h4>
+          
+          <div style={{
+            background: '#ffffff',
+            color: '#333333',
+            padding: '2rem',
+            borderRadius: 'var(--radius)',
+            border: `1px solid ${selectedColors.secondary}`,
+            textAlign: 'center',
+          }}>
+            {/* Logo display area */}
+            {formData.logoImage && (
+              <div style={{
+                marginBottom: '1rem',
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+                <div style={{
+                  width: '60px',
+                  height: '60px',
+                  backgroundColor: selectedColors.secondary,
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ffffff',
+                  fontSize: '1.5rem',
+                  fontWeight: 'bold',
+                  fontFamily: selectedFont,
+                }}>
+                  LOGO
                 </div>
               </div>
+            )}
+
+            <h4 style={{
+              fontFamily: selectedFont,
+              fontWeight: '600',
+              color: selectedColors.primary,
+              marginBottom: '1rem',
+              fontSize: '1.5rem',
+              textAlign: 'center',
+              width: '100%',
+            }}>
+              {formTitle || 'Campaign Title'}
+            </h4>
+            <p style={{
+              fontFamily: selectedFont,
+              fontWeight: '400',
+              marginBottom: '2rem',
+              textAlign: 'center',
+              lineHeight: '1.5',
+              width: '100%',
+            }}>
+              {formDescription || 'Support our campaign with your contribution'}
+            </p>
+            
+            {/* Suggested Amounts Preview */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.75rem',
+                marginBottom: '1rem',
+                maxWidth: '350px',
+                margin: '0 auto 1rem auto',
+              }}>
+                {parseSuggestedAmounts().slice(0, 8).map((amount, index) => (
+                  <button
+                    key={index}
+                    style={{
+                      fontFamily: selectedFont,
+                      background: selectedColors.secondary,
+                      color: '#ffffff',
+                      border: `2px solid ${selectedColors.secondary}`,
+                      padding: '0.75rem',
+                      borderRadius: 'var(--radius)',
+                      fontSize: '0.9rem',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      width: '75px',
+                      height: '40px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    ${amount}
+                  </button>
+                ))}
+                
+                {/* Fill remaining grid spots if needed */}
+                {parseSuggestedAmounts().length < 8 && 
+                  Array.from({ length: 8 - parseSuggestedAmounts().length }, (_, index) => (
+                    <div key={`empty-${index}`} style={{ width: '75px', height: '40px' }} />
+                  ))
+                }
+              </div>
+              
+              {/* Other Amount Option */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '0.75rem',
+                marginTop: '1rem',
+              }}>
+                <button
+                  style={{
+                    fontFamily: selectedFont,
+                    background: 'transparent',
+                    color: selectedColors.primary,
+                    border: `2px solid ${selectedColors.primary}`,
+                    padding: '0.75rem',
+                    borderRadius: 'var(--radius)',
+                    fontSize: '0.9rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    width: '75px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Other
+                </button>
+                <input
+                  type="number"
+                  placeholder="$"
+                  style={{
+                    fontFamily: selectedFont,
+                    width: '75px',
+                    height: '40px',
+                    padding: '0.5rem',
+                    border: `2px solid ${selectedColors.secondary}`,
+                    borderRadius: 'var(--radius)',
+                    fontSize: '0.9rem',
+                    textAlign: 'center',
+                    background: '#f9f9f9',
+                  }}
+                />
+              </div>
             </div>
-          ))}
+
+            <button style={{
+              fontFamily: selectedFont,
+              fontWeight: '600',
+              background: selectedColors.primary,
+              color: '#ffffff',
+              padding: '1rem 3rem',
+              border: `2px solid ${selectedColors.primary}`,
+              borderRadius: 'var(--radius)',
+              fontSize: '1.1rem',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              marginTop: '1rem',
+            }}>
+              {donateButtonText}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Form Preview */}
-      {renderFormPreview()}
-
-      {/* Action Buttons */}
-      <div
-        style={{
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '2rem',
-          textAlign: 'center',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>Ready to Apply These Styles?</h4>
-        <p style={{ color: '#6c757d', marginBottom: '2rem' }}>
-          Your form will be updated with the selected colors and fonts
-        </p>
-
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+      {/* Navigation with consistent button styling */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        marginTop: '2rem' 
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <button
-            onClick={applyStyles}
-            disabled={applying}
+            onClick={onPrev}
             style={{
-              background: applying ? '#ccc' : '#28a745',
-              color: 'white',
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
               border: 'none',
-              padding: '1rem 2rem',
-              borderRadius: '6px',
-              cursor: applying ? 'not-allowed' : 'pointer',
-              fontSize: '1.1rem',
-              fontWeight: '500',
-              opacity: applying ? 0.7 : 1,
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
             }}
           >
-            {applying ? '⏳ Applying Styles...' : '✨ Apply These Styles'}
+            BACK
           </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            ←
+          </div>
+        </div>
 
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <button
-            onClick={skipStyles}
+            onClick={handleSubmit}
             disabled={applying}
             style={{
-              background: 'transparent',
-              color: '#6c757d',
-              border: '1px solid #6c757d',
-              padding: '1rem 2rem',
-              borderRadius: '6px',
-              cursor: applying ? 'not-allowed' : 'pointer',
-              fontSize: '1.1rem',
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              border: '2px solid hsl(var(--crypto-gold))',
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: applying ? 'wait' : 'pointer',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
               opacity: applying ? 0.7 : 1,
             }}
           >
-            Skip Styling
+            {applying ? 'APPLYING...' : 'NEXT'}
           </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            →
+          </div>
         </div>
-      </div>
-
-      {/* Navigation */}
-      <div className="form-actions" style={{ marginTop: '2rem' }}>
-        <button className="btn btn-secondary" onClick={onPrev} disabled={applying}>
-          ← Back
-        </button>
       </div>
     </div>
   );

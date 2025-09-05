@@ -68,8 +68,11 @@ const Header = () => {
             </Button>
             <Button
               size="default"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 text-base font-medium"
-              style={{ backgroundColor: 'hsl(var(--crypto-navy))', color: 'white' }}
+              className="bg-accent text-accent-foreground hover:bg-accent/90 text-base font-medium"
+              style={{
+                backgroundColor: 'hsl(var(--crypto-gold))',
+                color: 'hsl(var(--crypto-navy))',
+              }}
               onClick={() => navigate('/donors/auth')}
             >
               Donors

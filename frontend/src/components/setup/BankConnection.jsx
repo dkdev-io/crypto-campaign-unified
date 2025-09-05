@@ -161,29 +161,6 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
 
   return (
     <div>
-      <h2
-        style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          textAlign: 'center',
-          marginBottom: '0.5rem',
-          color: 'hsl(var(--crypto-white))',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        Bank Account Connection
-      </h2>
-      <p
-        style={{
-          textAlign: 'center',
-          marginBottom: '2rem',
-          color: 'hsl(var(--crypto-gold))',
-          fontSize: '1rem',
-          fontWeight: '500',
-        }}
-      >
-        Step 3 of 7: Securely connect your campaign's bank account
-      </p>
 
       {/* Status Messages */}
       {error && (
@@ -236,16 +213,45 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
           </button>
         </div>
       ) : (
-        <div className="bg-muted border border-border rounded-lg p-6 mb-8 text-center">
-          <div className="mb-4"></div>
-          <p className="text-muted-foreground mb-8">
+        <div
+          className="crypto-card"
+          style={{
+            background: 'hsl(var(--crypto-navy))',
+            border: '1px solid hsl(var(--crypto-white) / 0.2)',
+            padding: '2rem',
+            marginBottom: '2rem',
+            textAlign: 'center',
+          }}
+        >
+          <p
+            style={{
+              color: 'hsl(var(--crypto-white) / 0.8)',
+              marginBottom: '2rem',
+              fontSize: '1rem',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
             Connect your campaign's bank account to process contributions securely through Plaid.
           </p>
 
           <button
             onClick={handleConnectBank}
             disabled={loading || !plaidReady}
-            className="bg-primary text-primary-foreground px-8 py-4 rounded-md text-base font-medium mb-4 disabled:opacity-70 disabled:cursor-not-allowed"
+            style={{
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              border: '2px solid hsl(var(--crypto-gold))',
+              padding: '1rem 2rem',
+              borderRadius: 'var(--radius)',
+              fontSize: '1rem',
+              fontWeight: '600',
+              marginBottom: '1rem',
+              cursor: (loading || !plaidReady) ? 'not-allowed' : 'pointer',
+              opacity: (loading || !plaidReady) ? 0.7 : 1,
+              fontFamily: 'Inter, sans-serif',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+            }}
           >
             {loading
               ? 'Connecting...'
@@ -254,29 +260,88 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
                 : 'Connect Bank Account - Powered by Plaid'}
           </button>
 
-          {!plaidReady && <div className="text-base text-muted-foreground">Loading Plaid SDK...</div>}
+          {!plaidReady && (
+            <div
+              style={{
+                color: 'hsl(var(--crypto-white) / 0.6)',
+                fontSize: '1rem',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
+              Loading Plaid SDK...
+            </div>
+          )}
         </div>
       )}
 
-      {/* Skip Option */}
-      <div className="bg-accent/20 border border-accent rounded-lg p-6 mb-8">
-        <button
-          onClick={handleSkipForDev}
-          disabled={loading}
-          className="bg-accent text-accent-foreground px-4 py-3 rounded text-sm font-medium disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Skipping...' : 'Skip Bank Connection'}
-        </button>
-      </div>
-
       {/* Navigation */}
-      <div className="form-actions">
-        <button className="btn btn-secondary" onClick={onPrev}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: '2rem',
+          gap: '1rem',
+        }}
+      >
+        <button
+          onClick={onPrev}
+          style={{
+            padding: '0.75rem 2rem',
+            borderRadius: 'var(--radius)',
+            border: 'none',
+            background: 'hsl(var(--crypto-gold))',
+            color: 'hsl(var(--crypto-navy))',
+            fontSize: '1rem',
+            fontWeight: '700',
+            fontFamily: 'Inter, sans-serif',
+            cursor: 'pointer',
+            textTransform: 'uppercase',
+            letterSpacing: '0.025em',
+          }}
+        >
           Back
         </button>
-        <button className="btn btn-primary" onClick={handleNext}>
-          Next: Website Style
-        </button>
+
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button
+            onClick={handleSkipForDev}
+            disabled={loading}
+            style={{
+              background: 'hsl(var(--crypto-blue))',
+              color: 'hsl(var(--crypto-white))',
+              border: '1px solid hsl(var(--crypto-blue))',
+              padding: '0.75rem 1.5rem',
+              borderRadius: 'var(--radius)',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              opacity: loading ? 0.7 : 1,
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            {loading ? 'Skipping...' : 'Skip Bank Connection'}
+          </button>
+
+          <button
+            onClick={handleNext}
+            style={{
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              border: '2px solid hsl(var(--crypto-gold))',
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+            }}
+          >
+            Next: Website Style
+          </button>
+        </div>
       </div>
     </div>
   );

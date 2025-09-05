@@ -26,14 +26,6 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="/careers"
-                  className="text-primary-foreground/70 hover:text-accent transition-colors duration-200"
-                >
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a
                   href="/privacy"
                   className="text-primary-foreground/70 hover:text-accent transition-colors duration-200"
                 >
@@ -163,14 +155,6 @@ const Footer = () => {
                   className="text-primary-foreground/70 hover:text-accent transition-colors duration-200"
                 >
                   Legal
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/status"
-                  className="text-primary-foreground/70 hover:text-accent transition-colors duration-200"
-                >
-                  System Status
                 </a>
               </li>
               <li>

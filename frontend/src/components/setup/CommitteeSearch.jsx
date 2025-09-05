@@ -415,18 +415,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
   return (
     <div>
-      <h2
-        style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          textAlign: 'center',
-          marginBottom: '0.5rem',
-          color: 'hsl(var(--crypto-white))',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        Committee Search
-      </h2>
       <p
         className="text-center mb-8"
         style={{
@@ -1009,32 +997,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </div>
       )}
 
-      {/* Success Message (without duplicate button) */}
-      {success && (
-        <div
-          style={{
-            background: 'hsl(120 60% 95%)',
-            border: '1px solid hsl(120 60% 80%)',
-            borderRadius: '6px',
-            padding: '1.5rem',
-            marginBottom: '2rem',
-            textAlign: 'center',
-          }}
-        >
-          <h4
-            style={{
-              color: 'hsl(var(--crypto-navy))',
-              margin: '0 0 0.5rem 0',
-              fontSize: 'var(--text-heading-md)',
-            }}
-          >
-            ✅ Committee Information Saved!
-          </h4>
-          <p style={{ color: 'hsl(var(--crypto-navy))', margin: '0', fontSize: '16px' }}>
-            {success} You can now continue to the next step.
-          </p>
-        </div>
-      )}
 
       {/* Navigation */}
       <div
@@ -1046,74 +1008,70 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           gap: '1rem',
         }}
       >
-        <button
-          className="btn btn-secondary"
-          onClick={onPrev}
-          style={{
-            background: 'hsl(var(--crypto-gold))',
-            color: 'hsl(var(--crypto-navy))',
-            border: 'none',
-            padding: 'var(--space-sm) var(--space-lg)',
-            borderRadius: 'var(--radius)',
-            cursor: 'pointer',
-            fontSize: 'var(--text-body)',
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: '600',
-            transition: 'var(--transition-smooth)',
-          }}
-        >
-          Back
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <button
+            className="btn btn-secondary"
+            onClick={onPrev}
+            style={{
+              padding: '0.75rem 2rem',
+              borderRadius: 'var(--radius)',
+              border: 'none',
+              background: 'hsl(var(--crypto-gold))',
+              color: 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+            }}
+          >
+            BACK
+          </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            ←
+          </div>
+        </div>
 
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          {/* Development bypass button (only in development) */}
-          {process.env.NODE_ENV === 'development' && (
-            <button
-              onClick={handleDevBypass}
-              style={{
-                background: 'hsl(var(--destructive))',
-                color: 'hsl(var(--crypto-white))',
-                border: 'none',
-                padding: 'var(--space-xs) var(--space-md)',
-                borderRadius: 'var(--radius)',
-                cursor: 'pointer',
-                fontSize: '0.8rem',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '600',
-                opacity: 0.8,
-              }}
-              title="Development only - bypass committee requirement"
-            >
-              DEV: Skip Committee
-            </button>
-          )}
-          
-          {/* Always show Next button when committee is selected */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <button
             className="btn btn-primary"
             onClick={handleConfirmCommittee}
             disabled={!selectedCommittee || (validation && !validation.isValid)}
             style={{
-              background:
-                !selectedCommittee || (validation && !validation.isValid)
-                  ? 'hsl(var(--crypto-medium-gray))'
-                  : 'hsl(var(--crypto-navy))',
-              color: 'hsl(var(--crypto-white))',
-              border: 'none',
-              padding: 'var(--space-sm) var(--space-lg)',
+              padding: '0.75rem 2rem',
               borderRadius: 'var(--radius)',
-              cursor:
-                !selectedCommittee || (validation && !validation.isValid)
-                  ? 'not-allowed'
-                  : 'pointer',
-              fontSize: 'var(--text-body)',
+              border: '2px solid hsl(var(--crypto-gold))',
+              background: (!selectedCommittee || (validation && !validation.isValid))
+                ? 'hsl(var(--crypto-white) / 0.1)'
+                : 'hsl(var(--crypto-gold))',
+              color: (!selectedCommittee || (validation && !validation.isValid))
+                ? 'hsl(var(--crypto-white) / 0.5)'
+                : 'hsl(var(--crypto-navy))',
+              fontSize: '1rem',
+              fontWeight: '700',
               fontFamily: 'Inter, sans-serif',
-              fontWeight: '600',
-              opacity: !selectedCommittee || (validation && !validation.isValid) ? 0.6 : 1,
+              cursor: (!selectedCommittee || (validation && !validation.isValid)) ? 'not-allowed' : 'pointer',
+              transition: 'var(--transition-smooth)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.025em',
+              opacity: (!selectedCommittee || (validation && !validation.isValid)) ? 0.6 : 1,
             }}
           >
-            {success ? 'Continue to Next Step' : 'Next'}
+            NEXT
           </button>
+          <div style={{
+            color: 'hsl(var(--crypto-gold))',
+            fontSize: '1.5rem',
+            marginTop: '0.5rem',
+          }}>
+            →
+          </div>
         </div>
       </div>
     </div>

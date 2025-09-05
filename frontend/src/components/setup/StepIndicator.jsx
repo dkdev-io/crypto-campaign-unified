@@ -2,13 +2,13 @@ import React from 'react';
 
 const StepIndicator = ({ currentStep, totalSteps }) => {
   const steps = [
-    'Campaign Info',
-    'Committee Search',
-    'Bank Connection',
-    'Form Customization',
-    'Style Confirmation',
-    'Launch & QR Code',
+    'Admin Setup',
+    'Campaign Setup',
+    'Connect Your Bank Account', 
+    'Create Your Form',
+    'Approve Your Form',
     'Terms Agreement',
+    'Embed Your Form and Start Fundraising',
   ];
 
   return (

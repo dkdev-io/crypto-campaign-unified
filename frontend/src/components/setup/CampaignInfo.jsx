@@ -53,29 +53,6 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
 
   return (
     <div>
-      <h2
-        style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          textAlign: 'center',
-          marginBottom: '0.5rem',
-          color: 'hsl(var(--crypto-white))',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        Campaign Setup
-      </h2>
-      <p
-        style={{
-          textAlign: 'center',
-          marginBottom: '2rem',
-          color: 'hsl(var(--crypto-gold))',
-          fontSize: '1rem',
-          fontWeight: '500',
-        }}
-      >
-        Step 1 of 7: Campaign Info
-      </p>
 
       <div className="crypto-card" style={{ maxWidth: '500px', margin: '0 auto' }}>
         {/* Campaign Name */}
@@ -349,46 +326,64 @@ const CampaignInfo = ({ formData, updateFormData, onNext, onPrev }) => {
           className="form-actions"
           style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}
         >
-          <button
-            className="btn btn-secondary"
-            onClick={onPrev}
-            style={{
-              padding: '0.75rem 2rem',
-              borderRadius: 'var(--radius)',
-              border: 'none',
-              background: 'hsl(var(--crypto-gold))',
-              color: 'hsl(var(--crypto-navy))',
-              fontSize: '1rem',
-              fontWeight: '700',
-              fontFamily: 'Inter, sans-serif',
-              cursor: 'pointer',
-              transition: 'var(--transition-smooth)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.025em',
-            }}
-          >
-            Back
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={validateAndProceed}
-            style={{
-              padding: '0.75rem 2rem',
-              borderRadius: 'var(--radius)',
-              border: '2px solid hsl(var(--crypto-gold))',
-              background: 'hsl(var(--crypto-gold))',
-              color: 'hsl(var(--crypto-navy))',
-              fontSize: '1rem',
-              fontWeight: '700',
-              fontFamily: 'Inter, sans-serif',
-              cursor: 'pointer',
-              transition: 'var(--transition-smooth)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.025em',
-            }}
-          >
-            Next
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <button
+              className="btn btn-secondary"
+              onClick={onPrev}
+              style={{
+                padding: '0.75rem 2rem',
+                borderRadius: 'var(--radius)',
+                border: 'none',
+                background: 'hsl(var(--crypto-gold))',
+                color: 'hsl(var(--crypto-navy))',
+                fontSize: '1rem',
+                fontWeight: '700',
+                fontFamily: 'Inter, sans-serif',
+                cursor: 'pointer',
+                transition: 'var(--transition-smooth)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.025em',
+              }}
+            >
+              BACK
+            </button>
+            <div style={{
+              color: 'hsl(var(--crypto-gold))',
+              fontSize: '1.5rem',
+              marginTop: '0.5rem',
+            }}>
+              ←
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <button
+              className="btn btn-primary"
+              onClick={validateAndProceed}
+              style={{
+                padding: '0.75rem 2rem',
+                borderRadius: 'var(--radius)',
+                border: '2px solid hsl(var(--crypto-gold))',
+                background: 'hsl(var(--crypto-gold))',
+                color: 'hsl(var(--crypto-navy))',
+                fontSize: '1rem',
+                fontWeight: '700',
+                fontFamily: 'Inter, sans-serif',
+                cursor: 'pointer',
+                transition: 'var(--transition-smooth)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.025em',
+              }}
+            >
+              NEXT
+            </button>
+            <div style={{
+              color: 'hsl(var(--crypto-gold))',
+              fontSize: '1.5rem',
+              marginTop: '0.5rem',
+            }}>
+              →
+            </div>
+          </div>
         </div>
       </div>
     </div>

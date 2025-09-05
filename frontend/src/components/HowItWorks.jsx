@@ -5,7 +5,7 @@ const steps = [
   {
     icon: CreditCard,
     title: 'Contribution Set-Up',
-    description: 'Credit/debit card processor and/or crypto wallet—guided setup',
+    description: 'Guided set-up for crypto contributions.',
     step: '01',
   },
   {
@@ -17,7 +17,7 @@ const steps = [
   {
     icon: Share,
     title: 'Embed & Share',
-    description: 'Add your form to your website, email, or social channels',
+    description: 'Embed a form or use a QR code to accept contributions today.',
     step: '03',
   },
   {

@@ -37,24 +37,21 @@ const Hero = () => {
 
       <div className="container-responsive relative">
         <div className="max-w-5xl mx-auto text-center animate-fade-in">
-          <div className="space-y-8">
+          <div className="space-y-6">
             <h1 className="text-4xl md:text-6xl text-balance leading-relaxed font-bold">
-              Raise More—Faster.
               <span className="block" style={{ color: 'hsl(var(--crypto-gold))' }}>
-                The Easiest Way
+                Reach Crypto Donors
               </span>
-              <span className="block">for Campaigns to Accept</span>
-              <span className="block">Cryptocurrency Donations</span>
+              <span className="block">or Become One</span>
             </h1>
 
-            <div className="space-y-4 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center gap-3 text-xl md:text-2xl text-white font-semibold">
-                <span className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
-                <span>Onboard in minutes. No setup fees, ever.</span>
-              </div>
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <p className="text-xl md:text-2xl text-white font-semibold leading-relaxed">
+                Set Up in Minutes With the Tools You Need to Raise or Give. Do more with lower processing fees than credit card donations.
+              </p>
             </div>
 
-            <div className="flex justify-center pt-8">
+            <div className="flex justify-center pt-4">
               <button
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl px-12 py-4 rounded transition-colors shadow-lg disabled:opacity-50"
                 onClick={handleGetStarted}

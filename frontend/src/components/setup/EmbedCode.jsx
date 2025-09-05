@@ -11,7 +11,29 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState('');
 
   useEffect(() => {
-    generateEmbedCode();
+    console.log('🎯 EmbedCode component mounted with campaignId:', campaignId);
+    if (campaignId) {
+      generateEmbedCode();
+    } else {
+      console.warn('⚠️ EmbedCode mounted without campaignId, will wait...');
+      // Generate fallback code even without campaignId
+      const fallbackId = 'temp-' + Date.now();
+      const fallbackCode = generateFallbackEmbedCode(fallbackId);
+      setEmbedCode(fallbackCode);
+      
+      const baseUrl = window.location.origin;
+      const donationUrl = `${baseUrl}/embed-form.html?campaign=${fallbackId}`;
+      setTestUrl(donationUrl);
+      
+      // Generate QR code for fallback
+      QRCode.toDataURL(donationUrl, {
+        width: 200,
+        margin: 2,
+        color: { dark: '#2a2a72', light: '#FFFFFF' },
+      })
+      .then(qrDataUrl => setQrCodeDataUrl(qrDataUrl))
+      .catch(err => console.error('QR generation failed:', err));
+    }
   }, [campaignId]);
 
   const generateEmbedCode = async () => {
@@ -118,25 +140,25 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
     }
   };
 
-  const generateFallbackEmbedCode = () => {
+  const generateFallbackEmbedCode = (id = campaignId) => {
     const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
     return `<!-- Campaign Contribution Form Embed -->
-<div id="crypto-campaign-embed-${campaignId}"></div>
+<div id="crypto-campaign-embed-${id}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
-    iframe.src = "${baseUrl}/embed-form.html?campaign=${campaignId}";
+    iframe.src = "${baseUrl}/embed-form.html?campaign=${id}";
     iframe.width = "100%";
     iframe.height = "700";
     iframe.frameBorder = "0";
     iframe.style.border = "1px solid #ddd";
     iframe.style.borderRadius = "8px";
     iframe.style.backgroundColor = "white";
-    document.getElementById("crypto-campaign-embed-${campaignId}").appendChild(iframe);
+    document.getElementById("crypto-campaign-embed-${id}").appendChild(iframe);
     
     // Auto-resize iframe based on content
     window.addEventListener("message", function(event) {
-        if (event.data && event.data.type === "resize" && event.data.campaignId === "${campaignId}") {
+        if (event.data && event.data.type === "resize" && event.data.campaignId === "${id}") {
             iframe.height = event.data.height + "px";
         }
     });
