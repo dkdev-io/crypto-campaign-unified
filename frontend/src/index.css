@@ -216,7 +216,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Content Section Styles */
   .content-section {
-    padding: 1.5rem 0;
+    padding: 0.5rem 0;
     max-width: var(--container-xl);
     margin: 0 auto;
     background: transparent !important;
