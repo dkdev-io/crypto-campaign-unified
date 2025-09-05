@@ -39,11 +39,10 @@ const Hero = () => {
 
             <div className="flex justify-center pt-4">
               <button
-                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl px-12 py-4 rounded transition-colors shadow-lg disabled:opacity-50"
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xl px-12 py-4 rounded transition-colors shadow-lg"
                 onClick={handleGetStarted}
-                disabled={loading}
               >
-                {loading ? 'LOADING...' : 'GET STARTED—NO SETUP FEE'}
+                GET STARTED—NO SETUP FEE
               </button>
             </div>
           </div>
