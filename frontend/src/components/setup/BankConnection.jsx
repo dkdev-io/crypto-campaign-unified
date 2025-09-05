@@ -165,32 +165,98 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
       {/* Status Messages */}
       {error && (
         <div
-          className="bg-destructive/10 border border-destructive/20 text-destructive p-4 rounded-lg mb-4"
-          style={{ whiteSpace: 'pre-line' }}
+          style={{ 
+            background: 'hsl(var(--destructive) / 0.1)',
+            border: '1px solid hsl(var(--destructive) / 0.2)',
+            color: 'hsl(var(--destructive))',
+            padding: '1rem',
+            borderRadius: 'var(--radius)',
+            marginBottom: '1rem',
+            whiteSpace: 'pre-line',
+            fontFamily: 'Inter, sans-serif',
+          }}
         >
           {error}
         </div>
       )}
 
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-4">
+        <div
+          style={{
+            background: 'hsl(120 60% 50% / 0.1)',
+            border: '1px solid hsl(120 60% 50% / 0.2)',
+            color: 'hsl(120 60% 40%)',
+            padding: '1rem',
+            borderRadius: 'var(--radius)',
+            marginBottom: '1rem',
+            fontFamily: 'Inter, sans-serif',
+          }}
+        >
           {success}
         </div>
       )}
 
       {/* Current Bank Account Status */}
       {bankInfo?.isVerified ? (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
-          <h4 className="text-green-700 mt-0">Bank Account Connected</h4>
+        <div
+          className="crypto-card"
+          style={{
+            background: 'hsl(120 60% 50% / 0.1)',
+            border: '1px solid hsl(120 60% 50% / 0.3)',
+            padding: '1.5rem',
+            marginBottom: '2rem',
+          }}
+        >
+          <h4 
+            style={{ 
+              color: 'hsl(120 60% 70%)',
+              marginTop: 0,
+              marginBottom: '1rem',
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              fontFamily: 'Inter, sans-serif',
+            }}
+          >
+            Bank Account Connected
+          </h4>
 
-          <div className="bg-white p-4 rounded mb-4">
-            <div className="text-base font-medium mb-2">
+          <div
+            style={{
+              background: 'hsl(var(--crypto-navy) / 0.3)',
+              padding: '1rem',
+              borderRadius: 'var(--radius)',
+              marginBottom: '1rem',
+              border: '1px solid hsl(var(--crypto-white) / 0.1)',
+            }}
+          >
+            <div
+              style={{
+                color: 'hsl(var(--crypto-white))',
+                fontSize: '1rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
               {bankInfo.details?.institution_name || 'Connected Bank'}
             </div>
-            <div className="text-muted-foreground text-base">
+            <div
+              style={{
+                color: 'hsl(var(--crypto-white) / 0.7)',
+                fontSize: '1rem',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
               Account: {bankInfo.accountName} (...{bankInfo.lastFour})
             </div>
-            <div className="text-muted-foreground text-xs mt-2">
+            <div
+              style={{
+                color: 'hsl(var(--crypto-white) / 0.5)',
+                fontSize: '0.75rem',
+                marginTop: '0.5rem',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
               Connected: {new Date(bankInfo.details?.created_at).toLocaleDateString()}
             </div>
           </div>
@@ -203,10 +269,11 @@ const BankConnection = ({ formData, updateFormData, onNext, onPrev, campaignId }
               color: 'white',
               border: 'none',
               padding: '0.5rem 1rem',
-              borderRadius: '4px',
+              borderRadius: 'var(--radius)',
               cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
+              fontSize: '0.875rem',
               opacity: loading ? 0.7 : 1,
+              fontFamily: 'Inter, sans-serif',
             }}
           >
             {loading ? 'Removing...' : 'Remove Bank Account'}
