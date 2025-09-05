@@ -415,18 +415,6 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
 
   return (
     <div>
-      <p
-        className="text-center mb-8"
-        style={{
-          fontSize: '1rem',
-          color: 'hsl(var(--crypto-gold))',
-          fontWeight: '500',
-          textAlign: 'center',
-          marginBottom: '2rem',
-        }}
-      >
-        Step 2 of 7: Search for your FEC committee
-      </p>
 
       {/* Search Section */}
       <div

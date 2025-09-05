@@ -269,17 +269,6 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
       >
         Website Style Analyzer
       </h2>
-      <p
-        style={{
-          textAlign: 'center',
-          marginBottom: '2rem',
-          color: 'hsl(var(--crypto-gold))',
-          fontSize: '1rem',
-          fontWeight: '500',
-        }}
-      >
-        Step 4 of 7: Analyze your website to match form styling
-      </p>
 
       {/* URL Input Section */}
       <div className="crypto-card" style={{ maxWidth: '600px', margin: '0 auto' }}>
@@ -703,17 +692,6 @@ const WebsiteStyleAnalyzer = ({ formData, updateFormData, onNext, onPrev }) => {
         >
           Review & Apply Styles
         </h2>
-        <p
-          style={{
-            textAlign: 'center',
-            marginBottom: '2rem',
-            color: 'hsl(var(--crypto-gold))',
-            fontSize: '1rem',
-            fontWeight: '500',
-          }}
-        >
-          Step 4 of 7: Review extracted styles and apply them
-        </p>
 
         {/* Website Info */}
         <div
