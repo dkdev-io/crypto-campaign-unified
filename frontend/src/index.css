@@ -667,5 +667,13 @@ div[style*="backgroundColor: 'rgba(255, 255, 255"],
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
+/* ULTIMATE OVERRIDE - TARGET THE EXACT ELEMENT */
+body .setup-wizard div.crypto-card,
+body div.crypto-card[style*="max-width: 500px"],
+body .crypto-card {
+  background: #1e40af !important;
+  background-color: #1e40af !important;
+}
+
 /* Clean deployment marker */
-/* CLEAN STYLING IMPLEMENTATION - NUCLEAR OPTION APPLIED */
+/* CLEAN STYLING IMPLEMENTATION - ULTIMATE OVERRIDE APPLIED */
