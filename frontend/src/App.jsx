@@ -22,6 +22,9 @@ import PrivacyBanner from './components/analytics/PrivacyBanner';
 // Auth Context for Campaign Users
 import { AuthProvider } from './contexts/AuthContext';
 
+// Style Context for Campaign Theming
+import CampaignStyleProvider from './contexts/CampaignStyleContext';
+
 // Admin Components
 import { AdminProvider } from './contexts/AdminContext';
 import AdminLogin from './components/admin/AdminLogin';
@@ -46,9 +49,10 @@ import TestBypass from './pages/TestBypass';
 
 function App() {
   return (
-    <AuthProvider>
-      <AdminProvider>
-        <DonorAuthProvider>
+    <CampaignStyleProvider>
+      <AuthProvider>
+        <AdminProvider>
+          <DonorAuthProvider>
           <AnalyticsProvider
             config={{
               debug: process.env.NODE_ENV === 'development',
@@ -153,6 +157,7 @@ function App() {
         </DonorAuthProvider>
       </AdminProvider>
     </AuthProvider>
+    </CampaignStyleProvider>
   );
 }
 

@@ -7,8 +7,15 @@ import {
   getCampaignButtonStyles,
   debugCampaignStyles,
 } from '../utils/styleGuide';
+import { useCampaignStyles } from '../hooks/useCampaignStyles';
 
 const DonorForm = ({ campaignId }) => {
+  const {
+    getCardStyle,
+    getHeadingStyle,
+    getTextStyle,
+    getButtonStyle
+  } = useCampaignStyles();
   const [formData, setFormData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

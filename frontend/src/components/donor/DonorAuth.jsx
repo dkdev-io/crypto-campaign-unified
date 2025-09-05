@@ -7,13 +7,21 @@ import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 import DonorAuthNav from './DonorAuthNav';
 import { extractCampaignStyles, generateCSSProperties, getCampaignButtonStyles } from '../../utils/styleGuide';
+import { useCampaignStyleContext } from '../../contexts/CampaignStyleContext';
 
 const DonorAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, error, donor, loading } = useDonorAuth();
-  const [campaignStyles, setCampaignStyles] = useState(null);
-  const [cssProperties, setCssProperties] = useState({});
+  const {
+    getContainerStyle,
+    getCardStyle,
+    getHeadingStyle,
+    getTextStyle,
+    getLinkStyle,
+    getButtonStyle,
+    getTabStyle
+  } = useCampaignStyleContext();
 
   // Only redirect if user is genuinely authenticated (not just bypass enabled)
   React.useEffect(() => {
@@ -78,40 +86,6 @@ const DonorAuth = () => {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
-
-  // Load campaign styles
-  useEffect(() => {
-    const loadCampaignStyles = async () => {
-      try {
-        // Check if there's a campaign ID in the URL or localStorage
-        const urlParams = new URLSearchParams(window.location.search);
-        const campaignId = urlParams.get('campaignId') || localStorage.getItem('currentCampaignId');
-        
-        if (campaignId) {
-          // Fetch campaign data from Supabase
-          const response = await fetch(`/api/campaigns/${campaignId}`);
-          if (response.ok) {
-            const campaignData = await response.json();
-            const styles = extractCampaignStyles(campaignData);
-            const cssProps = generateCSSProperties(campaignData);
-            
-            setCampaignStyles(styles);
-            setCssProperties(cssProps);
-            
-            console.log('🎨 Applied campaign styles to DonorAuth:', {
-              campaignId,
-              primaryColor: styles.colors.primary,
-              headingFont: styles.fonts.heading.family
-            });
-          }
-        }
-      } catch (error) {
-        console.warn('Could not load campaign styles, using defaults:', error);
-      }
-    };
-
-    loadCampaignStyles();
-  }, []);
 
   // Show loading spinner while checking auth
   if (loading) {
@@ -278,56 +252,24 @@ const DonorAuth = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // Generate dynamic styles based on campaign theme
-  const containerStyle = {
-    background: campaignStyles ? 
-      `linear-gradient(135deg, ${campaignStyles.colors.primary} 0%, ${campaignStyles.colors.secondary} 100%)` : 
-      'var(--gradient-hero)',
-    ...cssProperties
-  };
-
-  const cardStyle = {
-    backgroundColor: campaignStyles?.colors.background || 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(10px)',
-    color: campaignStyles?.colors.text || 'inherit',
-    fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-  };
-
-  const headingStyle = {
-    color: campaignStyles?.colors.primary || 'var(--foreground)',
-    fontFamily: campaignStyles?.fonts.heading.family || 'Inter, system-ui, sans-serif',
-    fontSize: campaignStyles?.fonts.heading.size || 'var(--text-heading-xl)',
-    fontWeight: campaignStyles?.fonts.heading.weight || '700'
-  };
-
-  const buttonPrimaryStyle = campaignStyles ? 
-    getCampaignButtonStyles(campaignStyles, 'primary') : 
-    {};
-
   return (
-    <div className="donor-auth min-h-screen" style={containerStyle}>
+    <div className="donor-auth min-h-screen" style={getContainerStyle()}>
       <DonorAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
           <div
             className="rounded-2xl shadow-2xl p-8"
-            style={{
-              ...cardStyle,
-              borderRadius: campaignStyles?.layout.borderRadius || '1rem'
-            }}
+            style={getCardStyle()}
           >
             {/* Header */}
             <div className="text-center mb-8">
               <h1
                 className="font-bold mb-2"
-                style={headingStyle}
+                style={getHeadingStyle()}
               >
                 Donor Portal
               </h1>
-              <p style={{
-                color: campaignStyles?.colors.secondary || 'var(--muted-foreground)',
-                fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-              }}>Sign in to your account or create a new one</p>
+              <p style={getTextStyle()}>Sign in to your account or create a new one</p>
             </div>
 
             {/* Tab Navigation */}
@@ -338,16 +280,10 @@ const DonorAuth = () => {
                   setActiveTab('signin');
                   setValidationErrors({});
                 }}
-                className="flex-1 py-3 px-4 text-base font-medium rounded-l-lg transition-colors"
+                className="flex-1 py-3 px-4 text-base font-medium transition-colors"
                 style={{
-                  backgroundColor: activeTab === 'signin' ? 
-                    (campaignStyles?.colors.primary || 'var(--primary)') : 
-                    (campaignStyles?.colors.background || 'var(--muted)'),
-                  color: activeTab === 'signin' ? 
-                    (campaignStyles?.colors.background || 'var(--primary-foreground)') : 
-                    (campaignStyles?.colors.secondary || 'var(--muted-foreground)'),
-                  fontFamily: campaignStyles?.fonts.button.family || 'Inter, system-ui, sans-serif',
-                  borderRadius: `${campaignStyles?.layout.borderRadius || '0.5rem'} 0 0 ${campaignStyles?.layout.borderRadius || '0.5rem'}`
+                  ...getTabStyle(activeTab === 'signin'),
+                  borderRadius: `${getTabStyle().borderRadius} 0 0 ${getTabStyle().borderRadius}`
                 }}
               >
                 Sign In
@@ -358,16 +294,10 @@ const DonorAuth = () => {
                   setActiveTab('signup');
                   setValidationErrors({});
                 }}
-                className="flex-1 py-3 px-4 text-base font-medium rounded-r-lg transition-colors"
+                className="flex-1 py-3 px-4 text-base font-medium transition-colors"
                 style={{
-                  backgroundColor: activeTab === 'signup' ? 
-                    (campaignStyles?.colors.primary || 'var(--primary)') : 
-                    (campaignStyles?.colors.background || 'var(--muted)'),
-                  color: activeTab === 'signup' ? 
-                    (campaignStyles?.colors.background || 'var(--primary-foreground)') : 
-                    (campaignStyles?.colors.secondary || 'var(--muted-foreground)'),
-                  fontFamily: campaignStyles?.fonts.button.family || 'Inter, system-ui, sans-serif',
-                  borderRadius: `0 ${campaignStyles?.layout.borderRadius || '0.5rem'} ${campaignStyles?.layout.borderRadius || '0.5rem'} 0`
+                  ...getTabStyle(activeTab === 'signup'),
+                  borderRadius: `0 ${getTabStyle().borderRadius} ${getTabStyle().borderRadius} 0`
                 }}
               >
                 Sign Up
@@ -448,11 +378,7 @@ const DonorAuth = () => {
                   type="submit" 
                   disabled={submitting} 
                   className="w-full"
-                  style={{
-                    ...buttonPrimaryStyle,
-                    fontFamily: campaignStyles?.fonts.button.family || 'Inter, system-ui, sans-serif',
-                    borderRadius: campaignStyles?.layout.borderRadius || '0.5rem'
-                  }}
+                  style={getButtonStyle('primary')}
                 >
                   {submitting ? (
                     <>
@@ -468,10 +394,7 @@ const DonorAuth = () => {
                   <Link 
                     to="/forgot-password" 
                     className="text-base hover:underline"
-                    style={{
-                      color: campaignStyles?.colors.primary || 'var(--primary)',
-                      fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-                    }}
+                    style={getLinkStyle()}
                   >
                     Forgot your password?
                   </Link>
@@ -630,19 +553,13 @@ const DonorAuth = () => {
                     />
                     <span 
                       className="text-base"
-                      style={{
-                        color: campaignStyles?.colors.secondary || 'var(--muted-foreground)',
-                        fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-                      }}
+                      style={getTextStyle()}
                     >
                       I agree to the{' '}
                       <Link 
                         to="/donors/auth/terms" 
                         className="hover:underline"
-                        style={{
-                          color: campaignStyles?.colors.primary || 'var(--primary)',
-                          fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-                        }}
+                        style={getLinkStyle()}
                       >
                         Terms of Service
                       </Link>{' '}
@@ -650,10 +567,7 @@ const DonorAuth = () => {
                       <Link 
                         to="/donors/auth/privacy" 
                         className="hover:underline"
-                        style={{
-                          color: campaignStyles?.colors.primary || 'var(--primary)',
-                          fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif'
-                        }}
+                        style={getLinkStyle()}
                       >
                         Privacy Policy
                       </Link>
@@ -668,11 +582,7 @@ const DonorAuth = () => {
                   type="submit" 
                   disabled={submitting} 
                   className="w-full"
-                  style={{
-                    ...buttonPrimaryStyle,
-                    fontFamily: campaignStyles?.fonts.button.family || 'Inter, system-ui, sans-serif',
-                    borderRadius: campaignStyles?.layout.borderRadius || '0.5rem'
-                  }}
+                  style={getButtonStyle('primary')}
                 >
                   {submitting ? (
                     <>

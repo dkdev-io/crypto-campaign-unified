@@ -11,11 +11,17 @@ import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
 import CampaignAuthNav from '../campaigns/CampaignAuthNav';
 import { supabase } from '../../lib/supabase';
-// All styles now consolidated in index.css
+import { useCampaignStyles } from '../../hooks/useCampaignStyles';
+// All styles now consolidated in index.css with campaign-specific theming
 
 const SetupWizard = () => {
   const { user } = useAuth();
   const location = useLocation();
+  const {
+    getContainerStyle,
+    getCardStyle,
+    isLoading: stylesLoading
+  } = useCampaignStyles();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [campaignId, setCampaignId] = useState(null);
@@ -381,10 +387,10 @@ const SetupWizard = () => {
 
   if (loading) {
     return (
-      <div>
+      <div className="setup-wizard" style={getContainerStyle()}>
         <CampaignAuthNav />
         <div className="setup-container">
-          <div className="setup-card">
+          <div className="setup-card" style={getCardStyle()}>
             <div className="form-content" style={{ textAlign: 'center', padding: '2rem' }}>
               <div>Loading your campaign setup...</div>
               <div style={{ marginTop: '1rem' }}>
@@ -409,10 +415,10 @@ const SetupWizard = () => {
   }
 
   return (
-    <div className="setup-wizard">
+    <div className="setup-wizard" style={getContainerStyle()}>
       <CampaignAuthNav />
       <div className="setup-container">
-        <div className="setup-card">
+        <div className="setup-card" style={getCardStyle()}>
           <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
           <div className="form-content">{renderStep()}</div>
         </div>

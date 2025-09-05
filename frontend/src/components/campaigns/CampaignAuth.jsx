@@ -6,11 +6,21 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Spinner } from '../ui/spinner';
 import CampaignAuthNav from './CampaignAuthNav';
+import { useCampaignStyles } from '../../hooks/useCampaignStyles';
 
 const CampaignAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signIn, signUp, error, clearError, devBypass } = useAuth();
+  const {
+    getContainerStyle,
+    getCardStyle,
+    getHeadingStyle,
+    getTextStyle,
+    getLinkStyle,
+    getButtonStyle,
+    getTabStyle
+  } = useCampaignStyles();
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -205,27 +215,23 @@ const CampaignAuth = () => {
   };
 
   return (
-    <div className="campaign-auth min-h-screen" style={{ background: 'var(--gradient-hero)' }}>
+    <div className="campaign-auth min-h-screen" style={getContainerStyle()}>
       <CampaignAuthNav />
       <div className="flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
           <div
             className="auth-card rounded-2xl shadow-2xl p-8"
-            style={{ backgroundColor: '#1e40af', backdropFilter: 'blur(10px)' }}
+            style={getCardStyle()}
           >
             {/* Header */}
             <div className="text-center mb-8">
               <h2
-                className="font-bold text-foreground mb-2"
-                style={{
-                  fontSize: 'var(--text-heading-xl)',
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: '800',
-                }}
+                className="font-bold mb-2"
+                style={getHeadingStyle()}
               >
                 Campaign Portal
               </h2>
-              <p className="text-muted-foreground">Sign in to your account or create a new one</p>
+              <p style={getTextStyle()}>Sign in to your account or create a new one</p>
             </div>
 
             {/* Tab Navigation */}
@@ -237,11 +243,11 @@ const CampaignAuth = () => {
                   setValidationErrors({});
                   if (error) clearError();
                 }}
-                className={`flex-1 py-3 px-4 text-base font-medium rounded-l-lg transition-colors ${
-                  activeTab === 'signin'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
+                className="flex-1 py-3 px-4 text-base font-medium transition-colors"
+                style={{
+                  ...getTabStyle(activeTab === 'signin'),
+                  borderRadius: `${getTabStyle().borderRadius} 0 0 ${getTabStyle().borderRadius}`
+                }}
               >
                 Sign In
               </button>
@@ -252,11 +258,11 @@ const CampaignAuth = () => {
                   setValidationErrors({});
                   if (error) clearError();
                 }}
-                className={`flex-1 py-3 px-4 text-base font-medium rounded-r-lg transition-colors ${
-                  activeTab === 'signup'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
+                className="flex-1 py-3 px-4 text-base font-medium transition-colors"
+                style={{
+                  ...getTabStyle(activeTab === 'signup'),
+                  borderRadius: `0 ${getTabStyle().borderRadius} ${getTabStyle().borderRadius} 0`
+                }}
               >
                 Sign Up
               </button>
@@ -306,7 +312,8 @@ const CampaignAuth = () => {
                 <div>
                   <label
                     htmlFor="signin-email"
-                    className="block text-base font-medium text-foreground mb-2"
+                    className="block text-base font-medium mb-2"
+                    style={getTextStyle()}
                   >
                     Email Address
                   </label>
@@ -330,7 +337,8 @@ const CampaignAuth = () => {
                 <div>
                   <label
                     htmlFor="signin-password"
-                    className="block text-base font-medium text-foreground mb-2"
+                    className="block text-base font-medium mb-2"
+                    style={getTextStyle()}
                   >
                     Password
                   </label>
@@ -358,7 +366,12 @@ const CampaignAuth = () => {
                   )}
                 </div>
 
-                <Button type="submit" disabled={loading} className="w-full">
+                <Button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="w-full"
+                  style={getButtonStyle('primary')}
+                >
                   {loading ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -386,7 +399,11 @@ const CampaignAuth = () => {
                 )}
 
                 <div className="text-center">
-                  <Link to="/forgot-password" className="text-base text-primary hover:underline">
+                  <Link 
+                    to="/forgot-password" 
+                    className="text-base hover:underline"
+                    style={getLinkStyle()}
+                  >
                     Forgot your password?
                   </Link>
                 </div>
@@ -537,7 +554,12 @@ const CampaignAuth = () => {
                   )}
                 </div>
 
-                <Button type="submit" disabled={loading} className="w-full">
+                <Button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="w-full"
+                  style={getButtonStyle('primary')}
+                >
                   {loading ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
