@@ -211,6 +211,52 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
     onNext();
   };
 
+  // Development bypass function
+  const handleDevBypass = () => {
+    const testCommittee = {
+      id: 'DEV-BYPASS-' + Date.now(),
+      name: 'Development Test Committee',
+      source: 'dev-bypass',
+      address: '123 Dev Street',
+      city: 'Test City',
+      state: 'CA',
+      zip: '90210',
+      type: 'TEST'
+    };
+
+    setSelectedCommittee(testCommittee);
+    setValidation({ isValid: true, errors: [], warnings: [], requiredFields: {} });
+    
+    updateFormData({
+      selectedCommittee: testCommittee,
+      committeeDetails: {
+        id: testCommittee.id,
+        name: testCommittee.name,
+        source: 'dev-bypass',
+        address: {
+          street1: testCommittee.address,
+          city: testCommittee.city,
+          state: testCommittee.state,
+          zipCode: testCommittee.zip,
+        },
+        isActive: true,
+      },
+      committeeName: testCommittee.name,
+      fecCommitteeId: testCommittee.id,
+      committeeAddress: testCommittee.address,
+      committeeCity: testCommittee.city,
+      committeeState: testCommittee.state,
+      committeeZip: testCommittee.zip,
+    });
+
+    setSuccess('Development committee created successfully!');
+    
+    // Auto-advance after a brief delay
+    setTimeout(() => {
+      onNext();
+    }, 1000);
+  };
+
   const logBypassUsage = async () => {
     try {
       // Try to create the table first if RPC function exists
@@ -314,9 +360,10 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
           const committeeData = {
             committee_name: manualCommittee.name.trim(),
             fec_committee_id: savedCommittee.id,
-            // Note: Storing address data in existing JSON column until 
-            // address columns (committee_address, committee_city, committee_state, committee_zip) are added
-            // TODO: Remove this workaround after running SQL: ALTER TABLE campaigns ADD COLUMN committee_address TEXT, etc.
+            committee_address: manualCommittee.address.trim(),
+            committee_city: manualCommittee.city.trim(),
+            committee_state: manualCommittee.state.trim(),
+            committee_zip: manualCommittee.zip.trim(),
           };
 
           const { data: updatedCampaign, error: updateError } = await supabase
@@ -1019,6 +1066,28 @@ const CommitteeSearch = ({ formData, updateFormData, onNext, onPrev, campaignId 
         </button>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
+          {/* Development bypass button (only in development) */}
+          {process.env.NODE_ENV === 'development' && (
+            <button
+              onClick={handleDevBypass}
+              style={{
+                background: 'hsl(var(--destructive))',
+                color: 'hsl(var(--crypto-white))',
+                border: 'none',
+                padding: 'var(--space-xs) var(--space-md)',
+                borderRadius: 'var(--radius)',
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: '600',
+                opacity: 0.8,
+              }}
+              title="Development only - bypass committee requirement"
+            >
+              DEV: Skip Committee
+            </button>
+          )}
+          
           {/* Always show Next button when committee is selected */}
           <button
             className="btn btn-primary"

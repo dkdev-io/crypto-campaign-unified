@@ -265,8 +265,9 @@ const DonorForm = ({ campaignId }) => {
         style={{
           color: campaignStyles.colors.primary,
           marginBottom: campaignStyles.layout.spacing,
-          fontFamily: campaignStyles.fonts.heading.family,
-          fontWeight: campaignStyles.fonts.heading.weight,
+          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          fontWeight: '800',
+          fontSize: 'var(--text-heading-xl)',
         }}
       >
         {campaignData?.campaign_name || 'Support Our Campaign'}

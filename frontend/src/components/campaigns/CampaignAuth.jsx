@@ -211,7 +211,7 @@ const CampaignAuth = () => {
         <div className="max-w-md w-full">
           <div
             className="auth-card rounded-2xl shadow-2xl p-8"
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(10px)' }}
+            style={{ backgroundColor: '#1e40af', backdropFilter: 'blur(10px)' }}
           >
             {/* Header */}
             <div className="text-center mb-8">

@@ -370,7 +370,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   .setup-card {
     max-width: 800px;
     margin: 0 auto;
-    background: #dbeafe;
+    background: #1e40af !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
   }
@@ -393,7 +393,8 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   .form-content {
     padding: 2rem;
-    color: hsl(var(--crypto-white));
+    color: hsl(var(--crypto-white)) !important;
+    background: transparent !important;
   }
 
   .form-group {
@@ -412,12 +413,13 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #1e40af;
+    background-color: #1e40af !important;
     padding: var(--space-lg);
   }
 
   .auth-card {
-    background: hsl(var(--crypto-white));
+    background: #1e40af !important;
+    color: hsl(var(--crypto-white)) !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
     padding: var(--space-2xl) var(--space-lg);
@@ -482,138 +484,166 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
   }
 }
 
-/* CRITICAL OVERRIDE: Force WHITE background for committee search form inputs */
-body .setup-container .crypto-card .form-input,
-body .setup-container .crypto-card input[type="text"],
-body .setup-container .form-input {
-  background-color: hsl(var(--crypto-white)) !important;
-  color: hsl(var(--crypto-navy)) !important;
-  border: 1px solid hsl(var(--border)) !important;
+/* UNIVERSAL WORKFLOW STYLING - CLEAN IMPLEMENTATION */
+
+/* All workflow containers get navy gradient background */
+.setup-wizard,
+.campaign-setup,
+.donor-form,
+.donor-dashboard,
+.campaign-auth,
+.donor-auth {
+  background: var(--gradient-hero) !important;
+  color: hsl(var(--crypto-white));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-body .setup-container .crypto-card input::placeholder,
-body .setup-container input.form-input::placeholder {
-  color: hsl(var(--crypto-navy) / 0.6) !important;
+/* All headings in workflows get white text and proper Inter font */
+.setup-wizard h1, .setup-wizard h2, .setup-wizard h3, .setup-wizard h4, .setup-wizard h5, .setup-wizard h6,
+.campaign-setup h1, .campaign-setup h2, .campaign-setup h3, .campaign-setup h4, .campaign-setup h5, .campaign-setup h6,
+.donor-form h1, .donor-form h2, .donor-form h3, .donor-form h4, .donor-form h5, .donor-form h6,
+.donor-dashboard h1, .donor-dashboard h2, .donor-dashboard h3, .donor-dashboard h4, .donor-dashboard h5, .donor-dashboard h6,
+.campaign-auth h1, .campaign-auth h2, .campaign-auth h3, .campaign-auth h4, .campaign-auth h5, .campaign-auth h6,
+.donor-auth h1, .donor-auth h2, .donor-auth h3, .donor-auth h4, .donor-auth h5, .donor-auth h6 {
+  color: hsl(var(--crypto-white)) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-/* HOMEPAGE STYLING OVERRIDES - CONSISTENT BLUE THEME */
-body {
-  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
+/* All text elements in workflows get white text and Inter font */
+.setup-wizard p, .setup-wizard label, .setup-wizard span,
+.campaign-setup p, .campaign-setup label, .campaign-setup span,
+.donor-form p, .donor-form label, .donor-form span,
+.donor-dashboard p, .donor-dashboard label, .donor-dashboard span,
+.campaign-auth p, .campaign-auth label, .campaign-auth span,
+.donor-auth p, .donor-auth label, .donor-auth span {
+  color: hsl(var(--crypto-white)) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 400;
 }
 
-body .hero-section,
-body .min-h-screen {
-  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
+/* Step indicators and navigation elements */
+.step-indicator, .breadcrumb {
+  color: hsl(var(--crypto-white)) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
-/* Force all sections to have transparent background */
-body .content-section,
-body #features,
-body #how-it-works {
-  background: transparent !important;
-  background-color: transparent !important;
+.step-indicator *, .breadcrumb * {
+  color: hsl(var(--crypto-white)) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
-/* Override any white/light backgrounds */
-body .bg-background,
-body .bg-white,
-body .bg-transparent {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-
-/* All cards use light blue background with dark text */
-body .crypto-card {
+/* Cards within workflows */
+.setup-wizard .crypto-card,
+.campaign-setup .crypto-card,
+.donor-form.crypto-card,
+.setup-container .crypto-card {
   background-color: #dbeafe !important;
   color: #1e40af !important;
   border: 1px solid rgba(30, 64, 175, 0.2) !important;
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
-body .crypto-card h1,
-body .crypto-card h2,
-body .crypto-card h3,
-body .crypto-card h4,
-body .crypto-card h5,
-body .crypto-card p,
-body .crypto-card span,
-body .crypto-card div {
+/* Card content gets navy text */
+.setup-wizard .crypto-card h1, .setup-wizard .crypto-card h2, .setup-wizard .crypto-card h3,
+.setup-wizard .crypto-card h4, .setup-wizard .crypto-card h5, .setup-wizard .crypto-card h6,
+.setup-wizard .crypto-card p, .setup-wizard .crypto-card span, .setup-wizard .crypto-card div,
+.campaign-setup .crypto-card h1, .campaign-setup .crypto-card h2, .campaign-setup .crypto-card h3,
+.campaign-setup .crypto-card h4, .campaign-setup .crypto-card h5, .campaign-setup .crypto-card h6,
+.campaign-setup .crypto-card p, .campaign-setup .crypto-card span, .campaign-setup .crypto-card div,
+.donor-form.crypto-card h1, .donor-form.crypto-card h2, .donor-form.crypto-card h3,
+.donor-form.crypto-card h4, .donor-form.crypto-card h5, .donor-form.crypto-card h6,
+.donor-form.crypto-card p, .donor-form.crypto-card span, .donor-form.crypto-card div {
   color: #1e40af !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
-/* Force deployment Thu Sep  4 09:32:36 PDT 2025 */
-/* TEST CHANGE Thu Sep  4 12:30:52 PDT 2025 */
-/* BYPASS AUTO-SYNC - STYLING OVERRIDES ACTIVE */
-/* BLUE THEME ENFORCEMENT - Thu Sep  4 2025 */
+/* Form inputs - WHITE backgrounds only */
+.setup-wizard .form-input, .setup-wizard input[type="text"], .setup-wizard input[type="email"],
+.setup-wizard input[type="password"], .setup-wizard input[type="url"], .setup-wizard input[type="number"],
+.setup-wizard input[type="tel"], .setup-wizard textarea, .setup-wizard select,
+.campaign-setup .form-input, .campaign-setup input[type="text"], .campaign-setup input[type="email"],
+.campaign-setup input[type="password"], .campaign-setup input[type="url"], .campaign-setup input[type="number"],
+.campaign-setup input[type="tel"], .campaign-setup textarea, .campaign-setup select,
+.donor-form .form-input, .donor-form input[type="text"], .donor-form input[type="email"],
+.donor-form input[type="password"], .donor-form input[type="url"], .donor-form input[type="number"],
+.donor-form input[type="tel"], .donor-form textarea, .donor-form select {
+  background-color: hsl(var(--crypto-white)) !important;
+  color: hsl(var(--crypto-navy)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-sm) !important;
+  font-size: var(--text-body) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 400 !important;
+}
 
-/* CAMPAIGN AND DONOR WORKFLOW UNIVERSAL STYLING */
-/* Apply navy theme to all workflow containers */
-body .setup-wizard,
-body .campaign-setup,
-body .donor-form,
-body .donor-dashboard,
-body .campaign-auth,
-body .donor-auth {
-  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
+/* Placeholder text */
+.setup-wizard input::placeholder, .setup-wizard textarea::placeholder,
+.campaign-setup input::placeholder, .campaign-setup textarea::placeholder,
+.donor-form input::placeholder, .donor-form textarea::placeholder {
+  color: hsl(var(--crypto-navy) / 0.6) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Focus states for inputs */
+.setup-wizard input:focus, .setup-wizard textarea:focus, .setup-wizard select:focus,
+.campaign-setup input:focus, .campaign-setup textarea:focus, .campaign-setup select:focus,
+.donor-form input:focus, .donor-form textarea:focus, .donor-form select:focus {
+  outline: none !important;
+  border-color: hsl(var(--crypto-blue)) !important;
+  box-shadow: 0 0 0 2px hsl(var(--crypto-blue) / 0.2) !important;
+}
+
+/* Homepage sections stay transparent */
+.hero-section, .content-section, #features, #how-it-works {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Universal page background */
+body {
+  background: var(--gradient-hero) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ADDITIONAL OVERRIDES TO ELIMINATE WHITE BACKGROUNDS */
+
+/* Force ALL cards in workflows to use dark navy background */
+.setup-wizard .setup-card,
+.campaign-setup .setup-card,
+.auth-card,
+div[style*="background-color: rgba(255, 255, 255"],
+div[style*="backgroundColor: 'rgba(255, 255, 255"],
+div[class*="bg-white"],
+.bg-white {
+  background: #1e40af !important;
+  background-color: #1e40af !important;
   color: hsl(var(--crypto-white)) !important;
 }
 
-/* All headings in workflow get white text */
-body .setup-wizard h1,
-body .setup-wizard h2,
-body .setup-wizard h3,
-body .setup-wizard h4,
-body .setup-wizard h5,
-body .campaign-setup h1,
-body .campaign-setup h2,
-body .campaign-setup h3,
-body .campaign-setup h4,
-body .campaign-setup h5,
-body .donor-form h1,
-body .donor-form h2,
-body .donor-form h3,
-body .donor-form h4,
-body .donor-form h5,
-body .donor-dashboard h1,
-body .donor-dashboard h2,
-body .donor-dashboard h3,
-body .donor-dashboard h4,
-body .donor-dashboard h5,
-body .campaign-auth h1,
-body .campaign-auth h2,
-body .campaign-auth h3,
-body .campaign-auth h4,
-body .campaign-auth h5,
-body .donor-auth h1,
-body .donor-auth h2,
-body .donor-auth h3,
-body .donor-auth h4,
-body .donor-auth h5 {
+/* Ensure step content areas are transparent */
+.step-content {
+  background: transparent !important;
+  background-color: transparent !important;
   color: hsl(var(--crypto-white)) !important;
 }
 
-/* All paragraphs and labels in workflow get white text */
-body .setup-wizard p,
-body .setup-wizard label,
-body .campaign-setup p,
-body .campaign-setup label,
-body .donor-form p,
-body .donor-form label,
-body .donor-dashboard p,
-body .donor-dashboard label,
-body .campaign-auth p,
-body .campaign-auth label,
-body .donor-auth p,
-body .donor-auth label {
-  color: hsl(var(--crypto-white)) !important;
+/* Override any remaining white backgrounds */
+*[style*="background: white"],
+*[style*="background-color: white"],
+*[style*="background: #fff"],
+*[style*="background-color: #fff"],
+*[style*="background: #ffffff"],
+*[style*="background-color: #ffffff"] {
+  background: #1e40af !important;
+  background-color: #1e40af !important;
 }
 
-/* Step indicators get white text */
-body .step-indicator,
-body .breadcrumb {
-  color: hsl(var(--crypto-white)) !important;
-}
-
-body .step-indicator *,
-body .breadcrumb * {
-  color: hsl(var(--crypto-white)) !important;
-}
+/* Clean deployment marker */
+/* CLEAN STYLING IMPLEMENTATION - Updated with WHITE ELIMINATION */
