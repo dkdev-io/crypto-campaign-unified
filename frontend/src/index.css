@@ -228,8 +228,9 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 
   /* Card Component Styles */
   .crypto-card {
-    background-color: #dbeafe !important;
-    color: #1e40af !important;
+    background: #1e40af !important;
+    background-color: #1e40af !important;
+    color: hsl(var(--crypto-white)) !important;
     border-radius: var(--radius);
     box-shadow: var(--shadow-card);
     padding: var(--space-lg);
@@ -541,15 +542,16 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 .campaign-setup .crypto-card,
 .donor-form.crypto-card,
 .setup-container .crypto-card {
-  background-color: #dbeafe !important;
-  color: #1e40af !important;
+  background: #1e40af !important;
+  background-color: #1e40af !important;
+  color: hsl(var(--crypto-white)) !important;
   border: 1px solid rgba(30, 64, 175, 0.2) !important;
   border-radius: var(--radius);
   padding: var(--space-lg);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
-/* Card content gets navy text */
+/* Card content gets WHITE text on dark navy background */
 .setup-wizard .crypto-card h1, .setup-wizard .crypto-card h2, .setup-wizard .crypto-card h3,
 .setup-wizard .crypto-card h4, .setup-wizard .crypto-card h5, .setup-wizard .crypto-card h6,
 .setup-wizard .crypto-card p, .setup-wizard .crypto-card span, .setup-wizard .crypto-card div,
@@ -559,7 +561,7 @@ All colors MUST be HSL for consistency with Tailwind and CSS custom properties.
 .donor-form.crypto-card h1, .donor-form.crypto-card h2, .donor-form.crypto-card h3,
 .donor-form.crypto-card h4, .donor-form.crypto-card h5, .donor-form.crypto-card h6,
 .donor-form.crypto-card p, .donor-form.crypto-card span, .donor-form.crypto-card div {
-  color: #1e40af !important;
+  color: hsl(var(--crypto-white)) !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
@@ -645,5 +647,25 @@ div[class*="bg-white"],
   background-color: #1e40af !important;
 }
 
+/* NUCLEAR OPTION - ELIMINATE ALL WHITE BACKGROUNDS IN SETUP WIZARD */
+.setup-wizard .setup-card,
+.setup-wizard [style*="backgroundColor"],
+.setup-wizard [style*="background-color"],
+.setup-wizard [style*="background: rgba(255"],
+.setup-wizard [style*="backgroundColor: rgba(255"],
+div[style*="backgroundColor: rgba(255, 255, 255"],
+div[style*="background-color: rgba(255, 255, 255"],
+div[style*="backgroundColor: 'rgba(255, 255, 255"],
+*[style*="backgroundColor: rgba(255, 255, 255"] {
+  background: #1e40af !important;
+  background-color: #1e40af !important;
+  color: hsl(var(--crypto-white)) !important;
+}
+
+/* Force all setup wizard elements to dark navy */
+.setup-wizard * {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
 /* Clean deployment marker */
-/* CLEAN STYLING IMPLEMENTATION - Updated with WHITE ELIMINATION */
+/* CLEAN STYLING IMPLEMENTATION - NUCLEAR OPTION APPLIED */

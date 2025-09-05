@@ -117,24 +117,24 @@ export const useCampaignStyles = () => {
   });
 
   const getCardStyle = () => ({
-    backgroundColor: campaignStyles?.colors.background || 'rgba(255, 255, 255, 0.95)',
-    color: campaignStyles?.colors.text || 'inherit',
-    fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif',
-    borderRadius: campaignStyles?.layout.borderRadius || '1rem',
+    backgroundColor: '#1e40af',
+    color: 'hsl(var(--crypto-white))',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    borderRadius: 'var(--radius)',
     backdropFilter: 'blur(10px)'
   });
 
   const getHeadingStyle = (level = 'heading') => ({
-    color: campaignStyles?.colors.primary || 'var(--foreground)',
-    fontFamily: campaignStyles?.fonts.heading.family || 'Inter, system-ui, sans-serif',
-    fontSize: campaignStyles?.fonts.heading.size || 'var(--text-heading-xl)',
-    fontWeight: campaignStyles?.fonts.heading.weight || '700'
+    color: 'hsl(var(--crypto-white))',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    fontSize: 'var(--text-heading-xl)',
+    fontWeight: '800'
   });
 
   const getTextStyle = () => ({
-    color: campaignStyles?.colors.text || 'inherit',
-    fontFamily: campaignStyles?.fonts.body.family || 'Inter, system-ui, sans-serif',
-    fontSize: campaignStyles?.fonts.body.size || '1rem'
+    color: 'hsl(var(--crypto-white))',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    fontSize: 'var(--text-body)'
   });
 
   const getLinkStyle = () => ({
