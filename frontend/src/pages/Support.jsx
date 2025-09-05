@@ -48,18 +48,24 @@ const Support = () => {
                 </div>
                 
                 <div className="pt-6">
-                  <p 
-                    className="text-sm"
-                    style={{ color: 'hsl(var(--crypto-white) / 0.7)' }}
+                  <a
+                    href="mailto:dan@dkdev.io?subject=Support Request"
+                    style={{
+                      background: 'hsl(var(--crypto-gold))',
+                      color: 'hsl(var(--crypto-navy))',
+                      padding: '0.75rem 2rem',
+                      borderRadius: 'var(--radius)',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      fontFamily: 'Inter, sans-serif',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.025em',
+                      display: 'inline-block',
+                    }}
                   >
-                    Need help now? Contact us at{' '}
-                    <a 
-                      href="mailto:dan@dkdev.io"
-                      style={{ color: 'hsl(var(--crypto-gold))' }}
-                    >
-                      dan@dkdev.io
-                    </a>
-                  </p>
+                    Contact Support
+                  </a>
                 </div>
               </div>
             </div>

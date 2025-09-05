@@ -46,6 +46,27 @@ const About = () => {
                     <li>• Partnership opportunities</li>
                   </ul>
                 </div>
+                
+                <div className="pt-6">
+                  <a
+                    href="mailto:dan@dkdev.io?subject=About NEXTRAISE - Question"
+                    style={{
+                      background: 'hsl(var(--crypto-gold))',
+                      color: 'hsl(var(--crypto-navy))',
+                      padding: '0.75rem 2rem',
+                      borderRadius: 'var(--radius)',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      fontFamily: 'Inter, sans-serif',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.025em',
+                      display: 'inline-block',
+                    }}
+                  >
+                    Contact Us
+                  </a>
+                </div>
               </div>
             </div>
           </div>
