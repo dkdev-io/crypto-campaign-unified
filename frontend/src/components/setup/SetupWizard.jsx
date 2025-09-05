@@ -5,8 +5,7 @@ import StepIndicator from './StepIndicator';
 import CampaignInfo from './CampaignInfo';
 import CommitteeSearch from './CommitteeSearch';
 import BankConnection from './BankConnection';
-import WebsiteStyleAnalyzer from './WebsiteStyleAnalyzer';
-import StylePreferences from './StylePreferences';
+import StyleChoice from './StyleChoice';
 import TermsAgreement from './TermsAgreement';
 import EmbedCode from './EmbedCode';
 import CampaignAuthNav from '../campaigns/CampaignAuthNav';
@@ -27,7 +26,7 @@ const SetupWizard = () => {
   const [campaignId, setCampaignId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const totalSteps = 7;
+  const totalSteps = 6;
 
   // Initialize setup wizard with fallbacks for missing DB columns
   useEffect(() => {
@@ -373,12 +372,10 @@ const SetupWizard = () => {
       case 3:
         return <BankConnection {...stepProps} />;
       case 4:
-        return <WebsiteStyleAnalyzer {...stepProps} />;
+        return <StyleChoice {...stepProps} />;
       case 5:
-        return <StylePreferences {...stepProps} />;
-      case 6:
         return <TermsAgreement {...stepProps} />;
-      case 7:
+      case 6:
         return <EmbedCode {...stepProps} />;
       default:
         return <CampaignInfo {...stepProps} />;
