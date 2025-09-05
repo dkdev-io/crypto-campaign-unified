@@ -237,6 +237,12 @@ const SetupWizard = () => {
         if (updatedData.stylesApplied !== undefined)
           dbData.styles_applied = updatedData.stylesApplied;
         if (updatedData.styleMethod) dbData.style_method = updatedData.styleMethod;
+        
+        // Form customization fields - CRITICAL for donation form display
+        if (updatedData.formTitle !== undefined) dbData.form_title = updatedData.formTitle;
+        if (updatedData.formDescription !== undefined) dbData.form_description = updatedData.formDescription;
+        if (updatedData.donateButtonText !== undefined) dbData.donate_button_text = updatedData.donateButtonText;
+        if (updatedData.logoImageUrl !== undefined) dbData.logo_image_url = updatedData.logoImageUrl;
 
         // Committee information fields
         if (updatedData.committeeName) dbData.committee_name = updatedData.committeeName;

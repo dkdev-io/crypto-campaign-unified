@@ -6,6 +6,8 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   const [donateButtonText, setDonateButtonText] = useState(formData.donateButtonText || 'DONATE NOW');
   const [amountMode, setAmountMode] = useState(formData.amountMode || 'defaults');
   const [customAmounts, setCustomAmounts] = useState(formData.customAmounts || '');
+  const [logoImage, setLogoImage] = useState(formData.logoImage || null);
+  const [logoImageUrl, setLogoImageUrl] = useState(formData.logoImageUrl || null);
   const [applying, setApplying] = useState(false);
 
   // Default suggested amounts
@@ -18,6 +20,19 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
   };
   
   const selectedFont = formData.selectedFont || 'Inter';
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogoImage(file);
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setLogoImageUrl(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const parseSuggestedAmounts = () => {
     if (amountMode === 'defaults') {
@@ -48,6 +63,8 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
         amountMode,
         customAmounts,
         suggestedAmounts,
+        logoImage,
+        logoImageUrl,
         stylesApplied: true,
         setupStep: 5,
       });
@@ -159,6 +176,78 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               fontFamily: 'Inter, sans-serif',
             }}
           />
+        </div>
+
+        {/* Logo Upload */}
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsl(var(--crypto-white))',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}>
+            Campaign Logo (Optional)
+          </label>
+          <div
+            style={{
+              border: '2px dashed hsl(var(--crypto-blue) / 0.4)',
+              borderRadius: 'var(--radius)',
+              padding: '1.5rem',
+              textAlign: 'center',
+              background: 'hsl(223 57% 25% / 0.3)',
+              cursor: 'pointer',
+            }}
+            onClick={() => document.getElementById('logo-upload-preferences').click()}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: 'none' }}
+              id="logo-upload-preferences"
+            />
+            {logoImage ? (
+              <div>
+                <div style={{ 
+                  fontSize: '1.2rem', 
+                  marginBottom: '0.5rem',
+                  color: 'hsl(var(--crypto-gold))'
+                }}>✓</div>
+                <div style={{
+                  color: 'hsl(var(--crypto-white))',
+                  fontFamily: 'Inter, sans-serif',
+                }}>{logoImage.name}</div>
+                <div style={{ 
+                  fontSize: '0.8rem', 
+                  color: 'hsl(var(--crypto-gold))',
+                  marginTop: '0.5rem',
+                }}>
+                  Click to change
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div style={{ 
+                  fontSize: '2rem', 
+                  marginBottom: '0.5rem',
+                  color: 'hsl(var(--crypto-white))',
+                }}>📁</div>
+                <div style={{
+                  color: 'hsl(var(--crypto-white))',
+                  fontFamily: 'Inter, sans-serif',
+                  marginBottom: '0.5rem',
+                }}>Click to upload campaign logo</div>
+                <div style={{ 
+                  fontSize: '0.8rem', 
+                  color: 'hsl(var(--crypto-gold))',
+                }}>
+                  PNG, JPG, GIF up to 5MB
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Suggested Amounts */}
@@ -285,28 +374,23 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
             border: `1px solid ${selectedColors.secondary}`,
             textAlign: 'center',
           }}>
-            {/* Logo display area */}
-            {formData.logoImage && (
+            {/* Logo display area - use live state */}
+            {logoImageUrl && (
               <div style={{
                 marginBottom: '1rem',
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  backgroundColor: selectedColors.secondary,
-                  borderRadius: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold',
-                  fontFamily: selectedFont,
-                }}>
-                  LOGO
-                </div>
+                <img 
+                  src={logoImageUrl} 
+                  alt="Campaign Logo"
+                  style={{
+                    maxWidth: '120px',
+                    maxHeight: '80px',
+                    borderRadius: '8px',
+                    objectFit: 'contain',
+                  }}
+                />
               </div>
             )}
 
@@ -319,7 +403,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               textAlign: 'center',
               width: '100%',
             }}>
-              {formTitle || 'Campaign Title'}
+              {formTitle}
             </h4>
             <p style={{
               fontFamily: selectedFont,
@@ -329,7 +413,7 @@ const StylePreferences = ({ formData, updateFormData, onNext, onPrev }) => {
               lineHeight: '1.5',
               width: '100%',
             }}>
-              {formDescription || 'Support our campaign with your contribution'}
+              {formDescription}
             </p>
             
             {/* Suggested Amounts Preview */}

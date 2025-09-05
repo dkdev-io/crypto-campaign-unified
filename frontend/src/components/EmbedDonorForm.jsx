@@ -116,14 +116,45 @@ const EmbedDonorForm = ({ campaignId }) => {
     );
   }
 
-  const campaignName = campaignData?.campaign_name || 'Support Our Campaign';
+  const campaignName = campaignData?.form_title || campaignData?.campaign_name || 'Support Our Campaign';
+  const campaignDescription = campaignData?.form_description;
+  const donateButtonText = campaignData?.donate_button_text || 'DONATE NOW';
+  const logoImageUrl = campaignData?.logo_image_url;
   const suggestedAmounts = campaignData?.suggested_amounts || [25, 50, 100, 250];
   const maxDonation = campaignData?.max_donation_limit || 3300;
 
   return (
     <div style={styles.container}>
       <div style={styles.formCard}>
-        <h1 style={styles.title}>{campaignName}</h1>
+        {/* Campaign Logo */}
+        {logoImageUrl && (
+          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            <img 
+              src={logoImageUrl} 
+              alt="Campaign Logo"
+              style={{
+                maxWidth: '120px',
+                maxHeight: '80px',
+                objectFit: 'contain',
+              }}
+            />
+          </div>
+        )}
+
+        <h1 style={{...styles.title, textAlign: 'center'}}>{campaignName}</h1>
+
+        {/* Campaign Description */}
+        {campaignDescription && (
+          <p style={{ 
+            textAlign: 'center',
+            marginBottom: '1.5rem',
+            fontSize: '1rem',
+            lineHeight: '1.5',
+            color: '#666',
+          }}>
+            {campaignDescription}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.row}>
@@ -270,7 +301,7 @@ const EmbedDonorForm = ({ campaignId }) => {
               ...(isSubmitting ? styles.submitButtonDisabled : {}),
             }}
           >
-            {isSubmitting ? '⏳ Processing...' : '💝 Contribute Now'}
+            {isSubmitting ? '⏳ Processing...' : donateButtonText}
           </button>
         </form>
       </div>

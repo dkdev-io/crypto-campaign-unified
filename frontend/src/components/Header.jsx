@@ -61,6 +61,7 @@ const Header = () => {
               style={{
                 backgroundColor: 'hsl(var(--crypto-gold))',
                 color: 'hsl(var(--crypto-navy))',
+                fontWeight: '600',
               }}
               onClick={() => navigate('/campaigns/auth')}
             >
@@ -70,7 +71,7 @@ const Header = () => {
               size="default"
               className="bg-accent text-accent-foreground hover:bg-accent/90 text-base font-medium"
               style={{
-                backgroundColor: 'hsl(var(--crypto-gold))',
+                backgroundColor: 'lightblue',
                 color: 'hsl(var(--crypto-navy))',
               }}
               onClick={() => navigate('/donors/auth')}

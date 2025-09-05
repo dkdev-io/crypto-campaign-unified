@@ -39,7 +39,7 @@ const Features = () => {
   return (
     <section id="features" className="content-section">
       <div className="container-responsive">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2
             className="text-3xl md:text-5xl mb-6 font-bold leading-tight"
             style={{ color: 'hsl(var(--crypto-white))' }}

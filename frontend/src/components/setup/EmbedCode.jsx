@@ -141,9 +141,12 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
   };
 
   const generateFallbackEmbedCode = (id = campaignId) => {
-    const baseUrl = import.meta.env.VITE_APP_URL || window.location.origin;
-    return `<!-- Campaign Contribution Form Embed -->
-<div id="crypto-campaign-embed-${id}"></div>
+    // Prioritize production URL for embed code
+    const baseUrl = import.meta.env.VITE_APP_URL || 
+                   (window.location.hostname.includes('netlify.app') ? window.location.origin : 'https://cryptocampaign.netlify.app');
+    
+    return `<!-- NEXTRAISE Campaign Contribution Form Embed -->
+<div id="nextraise-campaign-embed-${id}"></div>
 <script>
 (function() {
     var iframe = document.createElement("iframe");
@@ -154,7 +157,8 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
     iframe.style.border = "1px solid #ddd";
     iframe.style.borderRadius = "8px";
     iframe.style.backgroundColor = "white";
-    document.getElementById("crypto-campaign-embed-${id}").appendChild(iframe);
+    iframe.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+    document.getElementById("nextraise-campaign-embed-${id}").appendChild(iframe);
     
     // Auto-resize iframe based on content
     window.addEventListener("message", function(event) {
@@ -163,12 +167,18 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         }
     });
     
-    // Set a reasonable initial height
+    // Set initial height and auto-adjust
     setTimeout(function() {
         iframe.height = "700px";
     }, 1000);
 })();
-</script>`;
+</script>
+
+<!-- Direct Link Alternative -->
+<!-- 
+You can also direct users to: ${baseUrl}/campaigns/${id}
+for a full-page donation experience.
+-->`;
   };
 
   const handleCopyCode = async () => {
@@ -202,48 +212,62 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
 
   return (
     <div>
-      <h2
-        className="text-center mb-4 font-bold text-foreground"
-        style={{ fontSize: 'var(--text-heading-lg)', color: 'hsl(var(--crypto-navy))' }}
-      >
-        Setup Complete! - Step 8
-      </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem' }}>
-        Your contribution form is ready to embed on your website
-      </p>
-
       {/* Success Banner */}
       <div
+        className="crypto-card"
         style={{
-          background: 'linear-gradient(135deg, #28a745, #20c997)',
-          color: 'white',
+          background: 'linear-gradient(135deg, hsl(120 60% 50%), hsl(120 60% 60%))',
+          color: 'hsl(var(--crypto-white))',
           padding: '2rem',
-          borderRadius: '12px',
           textAlign: 'center',
           marginBottom: '2rem',
-          boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+          border: '1px solid hsl(120 60% 50% / 0.3)',
         }}
       >
-        <div style={{ marginBottom: '1rem' }}></div>
-        <h3 style={{ margin: '0 0 1rem 0', fontSize: 'var(--text-heading-sm)' }}>
-          Campaign Setup Completed Successfully!
+        <h3 
+          style={{ 
+            margin: '0 0 1rem 0', 
+            fontSize: '1.75rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}
+        >
+          🎉 Campaign Setup Complete!
         </h3>
-        <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
+        <p 
+          style={{ 
+            margin: 0, 
+            fontSize: '1.1rem', 
+            opacity: 0.9,
+            fontFamily: 'Inter, sans-serif',
+          }}
+        >
           Your contribution form is live and ready to accept donations
         </p>
       </div>
 
       {/* Campaign Summary */}
       <div
+        className="crypto-card"
         style={{
-          background: '#f8f9fa',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
+          background: 'hsl(var(--crypto-gold) / 0.1)',
+          border: '1px solid hsl(var(--crypto-gold) / 0.3)',
           padding: '1.5rem',
           marginBottom: '2rem',
         }}
       >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>Campaign Details</h4>
+        <h4 
+          style={{ 
+            color: 'hsl(var(--crypto-gold))',
+            marginTop: 0,
+            marginBottom: '1rem',
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+          }}
+        >
+          Campaign Details
+        </h4>
         <div
           style={{
             display: 'grid',
@@ -497,89 +521,73 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       </div>
 
-      {/* Implementation Instructions */}
-      <div
-        style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>How to Add to Your Website</h4>
-        <div style={{ fontSize: '14px', color: '#6c757d', lineHeight: '1.6' }}>
-          <ol style={{ paddingLeft: '1.2rem' }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>Copy the embed code above</strong> using the "Copy Code" button
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>Paste it into your website's HTML</strong> where you want the form to appear
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>Test the form</strong> to make sure it loads correctly
-            </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <strong>Share your donation page</strong> with supporters
-            </li>
-          </ol>
-        </div>
 
-        <div
-          style={{
-            background: '#fff3cd',
-            border: '1px solid #ffeaa7',
-            borderRadius: '4px',
-            padding: '1rem',
-            marginTop: '1rem',
-          }}
-        >
-          <strong style={{ color: '#856404' }}>Pro Tip:</strong>
-          <span style={{ color: '#856404', fontSize: '14px' }}>
-            {' '}
-            The form automatically resizes to fit your content and matches your campaign's branding.
-          </span>
-        </div>
-      </div>
-
-      {/* Donor Page Section */}
+      {/* NEXTRAISE Profile Section */}
       {formData.donorPageGenerated && formData.donorPageUrl && (
         <div
+          className="crypto-card"
           style={{
-            background: 'linear-gradient(135deg, #e7f3ff, #f0f9ff)',
-            border: '1px solid #b6d7ff',
-            borderRadius: '8px',
+            background: 'linear-gradient(135deg, hsl(var(--crypto-blue) / 0.2), hsl(var(--crypto-blue) / 0.1))',
+            border: '1px solid hsl(var(--crypto-blue) / 0.3)',
             padding: '2rem',
             marginBottom: '2rem',
           }}
         >
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <div style={{ marginBottom: '1rem' }}></div>
-            <h3 style={{ color: '#0066cc', margin: '0 0 0.5rem 0' }}>Your Donor Page is Live!</h3>
-            <p style={{ color: '#004499', margin: 0 }}>
+            <h3 
+              style={{ 
+                color: 'hsl(var(--crypto-white))',
+                margin: '0 0 0.5rem 0',
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
+              🎉 Your NEXTRAISE Profile is Live!
+            </h3>
+            <p 
+              style={{ 
+                color: 'hsl(var(--crypto-white) / 0.8)',
+                margin: 0,
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
               We've automatically created a dedicated donation page for your campaign
             </p>
           </div>
 
           <div
             style={{
-              background: 'white',
+              background: 'hsl(var(--crypto-navy) / 0.5)',
               padding: '1.5rem',
-              borderRadius: '8px',
+              borderRadius: 'var(--radius)',
               textAlign: 'center',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              border: '1px solid hsl(var(--crypto-white) / 0.2)',
             }}
           >
-            <h5 style={{ color: '#495057', marginTop: 0 }}>Your Dedicated Donor Page</h5>
+            <h5 
+              style={{ 
+                color: 'hsl(var(--crypto-gold))',
+                marginTop: 0,
+                marginBottom: '1rem',
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                fontFamily: 'Inter, sans-serif',
+              }}
+            >
+              Your NEXTRAISE Profile URL
+            </h5>
             <div
               style={{
-                background: '#f8f9fa',
+                background: 'hsl(var(--crypto-navy) / 0.8)',
                 padding: '1rem',
-                borderRadius: '4px',
+                borderRadius: 'var(--radius)',
                 marginBottom: '1rem',
-                fontFamily: 'monospace',
+                fontFamily: 'Monaco, Consolas, monospace',
                 fontSize: '14px',
                 wordBreak: 'break-all',
+                color: 'hsl(var(--crypto-white))',
+                border: '1px solid hsl(var(--crypto-white) / 0.2)',
               }}
             >
               {window.location.origin}
@@ -593,38 +601,41 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  background: '#0066cc',
-                  color: 'white',
+                  background: 'hsl(var(--crypto-gold))',
+                  color: 'hsl(var(--crypto-navy))',
                   border: 'none',
                   padding: '0.75rem 1.5rem',
-                  borderRadius: '4px',
+                  borderRadius: 'var(--radius)',
                   textDecoration: 'none',
-                  fontSize: '16px',
-                  fontWeight: '500',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  fontFamily: 'Inter, sans-serif',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.025em',
                 }}
               >
-                View Your Page
+                View Your Profile
               </a>
               <button
                 onClick={() => {
                   const url = `${window.location.origin}${formData.donorPageUrl}`;
                   navigator.clipboard.writeText(url);
-                  alert('Page URL copied to clipboard!');
                 }}
                 style={{
-                  background: '#28a745',
+                  background: 'hsl(var(--crypto-blue))',
                   color: 'hsl(var(--crypto-white))',
                   border: 'none',
-                  padding: 'var(--space-sm) var(--space-lg)',
+                  padding: '0.75rem 1.5rem',
                   borderRadius: 'var(--radius)',
                   cursor: 'pointer',
                   fontSize: '1rem',
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: '600',
-                  transition: 'var(--transition-smooth)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.025em',
                 }}
               >
-                Copy Page URL
+                Copy Profile URL
               </button>
             </div>
           </div>
@@ -702,65 +713,6 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         </div>
       )}
 
-      {/* Next Steps */}
-      <div
-        style={{
-          background: 'white',
-          border: '1px solid #e9ecef',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          marginBottom: '2rem',
-        }}
-      >
-        <h4 style={{ color: '#495057', marginTop: 0 }}>What's Next?</h4>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
-            fontSize: '14px',
-          }}
-        >
-          {formData.donorPageGenerated && formData.donorPageUrl ? (
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ marginBottom: '0.5rem' }}></div>
-              <strong>Share Donor Page</strong>
-              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-                Direct supporters to your custom page
-              </div>
-            </div>
-          ) : (
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ marginBottom: '0.5rem' }}></div>
-              <strong>Embed on Website</strong>
-              <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-                Add the form to your campaign website
-              </div>
-            </div>
-          )}
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.5rem' }}></div>
-            <strong>Share on Social</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Share your donation page on social media
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.5rem' }}></div>
-            <strong>Monitor Donations</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Track contributions in your dashboard
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.5rem' }}></div>
-            <strong>Stay Compliant</strong>
-            <div style={{ color: '#6c757d', marginTop: '0.25rem' }}>
-              Regular FEC reporting and compliance
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Action Buttons */}
       <div
@@ -775,18 +727,21 @@ const EmbedCode = ({ formData, updateFormData, onPrev, campaignId }) => {
         <a
           href="/campaigns/dashboard"
           style={{
-            background: '#2a2a72',
-            color: 'white',
-            border: 'none',
-            padding: '1rem 1.5rem',
-            borderRadius: '6px',
+            background: 'hsl(var(--crypto-gold))',
+            color: 'hsl(var(--crypto-navy))',
+            border: '2px solid hsl(var(--crypto-gold))',
+            padding: '1rem 2rem',
+            borderRadius: 'var(--radius)',
             textDecoration: 'none',
             display: 'inline-block',
-            fontSize: '16px',
-            fontWeight: '500',
+            fontSize: '1rem',
+            fontWeight: '600',
+            fontFamily: 'Inter, sans-serif',
+            textTransform: 'uppercase',
+            letterSpacing: '0.025em',
           }}
         >
-          Go to Dashboard
+          Go to Campaign Dashboard
         </a>
 
         <button

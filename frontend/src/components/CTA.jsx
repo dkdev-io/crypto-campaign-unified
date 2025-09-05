@@ -13,23 +13,9 @@ const CTA = () => {
       verified: user ? isEmailVerified() : false,
     });
 
-    // Check if user is authenticated
-    if (!loading && user) {
-      // Check if email is verified
-      if (isEmailVerified()) {
-        // User is authenticated and verified, proceed to campaign setup
-        console.log('Navigating to /setup (user verified)');
-        navigate('/campaigns/auth/setup');
-      } else {
-        // User is authenticated but not verified, go to auth page for verification
-        console.log('Navigating to /campaigns/auth (user not verified)');
-        navigate('/campaigns/auth');
-      }
-    } else {
-      // User is not authenticated, redirect to sign up/sign in
-      console.log('Navigating to /campaigns/auth (user not authenticated)');
-      navigate('/campaigns/auth');
-    }
+    // Always navigate to campaigns/auth regardless of loading state
+    // This prevents the button from being stuck on loading
+    navigate('/campaigns/auth');
   };
 
   return (

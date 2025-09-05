@@ -455,9 +455,37 @@ const EnhancedDonorForm = ({ campaignId }) => {
 
   return (
     <div className="donor-form container-responsive crypto-card" style={{ maxWidth: '600px' }}>
-      <h1 style={{ color: themeColor, marginBottom: '1rem' }}>
-        {campaignData?.campaign_name || 'Support Our Campaign'}
+      {/* Campaign Logo */}
+      {campaignData?.logo_image_url && (
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <img 
+            src={campaignData.logo_image_url} 
+            alt="Campaign Logo"
+            style={{
+              maxWidth: '120px',
+              maxHeight: '80px',
+              objectFit: 'contain',
+            }}
+          />
+        </div>
+      )}
+
+      <h1 style={{ color: themeColor, marginBottom: '1rem', textAlign: 'center' }}>
+        {campaignData?.form_title || campaignData?.campaign_name || 'Support Our Campaign'}
       </h1>
+
+      {/* Campaign Description */}
+      {campaignData?.form_description && (
+        <p style={{ 
+          textAlign: 'center',
+          marginBottom: '2rem',
+          fontSize: '1.1rem',
+          lineHeight: '1.5',
+          color: '#555',
+        }}>
+          {campaignData.form_description}
+        </p>
+      )}
 
       {/* CRITICAL: Show warning if wallet not connected for validation */}
       {!walletInfo?.isConnected && formData.amount && (
@@ -1114,7 +1142,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
                   : 'pointer',
             }}
           >
-            {isSubmitting ? '⏳ Processing...' : `💳 Contribute $${formData.amount || '0'}`}
+            {isSubmitting ? '⏳ Processing...' : (campaignData?.donate_button_text || `💳 Contribute $${formData.amount || '0'}`)}
           </button>
         )}
 
@@ -1140,7 +1168,7 @@ const EnhancedDonorForm = ({ campaignId }) => {
           >
             {isProcessingCrypto
               ? '⏳ Processing Crypto Payment...'
-              : `🔗 Pay $${formData.amount || '0'} via Smart Contract`}
+              : (campaignData?.donate_button_text || `🔗 Pay $${formData.amount || '0'} via Smart Contract`)}
           </button>
         )}
       </form>
